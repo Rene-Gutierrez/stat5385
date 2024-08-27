@@ -1,0 +1,3 @@
+# Stat 5385/6385
+
+This is the page for STAT5385. It will contain the lecture notes and code seen in class.
