@@ -1,3 +1,6 @@
 # Stat 5385/6385
 
-This is the page for STAT5385. It will contain the lecture notes and code seen in class.
+This is the website for STAT5385. It will contain the relevant information for
+the course and lecture notes and code seen in class.
+
+Find the syllabus here: [Syllabus](https://github.com/Rene-Gutierrez/stat5385/blob/main/Syllabus%205385-6285-3.pdf)
