@@ -1,0 +1,68 @@
+# Prerequisites
+
+As any course there is some knowledge that is needed to understand the concepts
+and ideas that we are going to see in class. These knowledge can be categorized
+into 4 different topics:
+
+* [General Math](#general-math)
+* [Linear Algebra](#linear-algebra)
+* [Probability](#probability)
+* [Statistics](#statistics)
+* [Calculus](#calculus)
+
+## General Math
+
+You have to be familiar with the **summation operator** $\sum$.
+
+The summation operator is defined as follows:
+
+$$\sum_{i=1}^n x_i = x_1 + x_2 + \ldots + x_n $$
+Some important properties of the operator are:
+
+* Linearity:
+$$\sum_{i=1}^N(a + bx_i) = a + b \sum_{i=1}^N x_i$$
+* Additivity:
+$$\sum_{i=1}^N(x_i + y_i) = \sum_{i=1}^n x_i + \sum_{i=1}^n y_i$$
+
+## Linear Algebra
+
+In terms of linear algebra you have to be familiar with the following concepts:
+
+* Matrices
+* Determinants
+* Eigenvalues and Eigenvectors
+* Diagonalization
+* Vector Spaces
+* Linear transformations
+
+## Probability
+
+* Expected Value.
+* Variance.
+* Covariance.
+* Correlation.
+* Joint, marginal and conditional distributions.
+* Independence.
+* Central Limit Theorem.
+* Distributions:
+  + Normal
+  + Chi Squared ($\chi^2$) distribution.
+  + t distribution
+  + F distribution
+  
+## Statistics
+
+* Point Estimation
+  + Maximum likelihood
+  + Least squares estimation
+* Properties of Point estimators:
+  + Unbiased
+  + Consistent
+  + Minimum Variance
+* Interval Estimation
+* Hypothesis Testing
+
+## Calculus
+
+* Gradients
+* Optimization
