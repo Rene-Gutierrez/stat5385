@@ -1,5 +1,7 @@
 # Introduction
 
+Check cahpters 2.1-2.2 of the textbook.
+
 Linear regression is a statistical method used to analyze the relationship between at least two variables: one dependent variable and at least one independent variable. This technique is closely tied to the correlation coefficient, which measures the strength and direction of a linear relationship between variables. In this document, we will explore how these concepts are connected.
 
 Linear regression is typically applied for three main purposes:
