@@ -1,29 +1,20 @@
 # Introduction
 
-Linear regression can be used when you have at least two variables varaibles,
-one dependent and at least one independent. Linear regression is linked to the correlation
-coeficcient of the variables, we will see where the link is at.
+Linear regression is a statistical method used to analyze the relationship between at least two variables: one dependent variable and at least one independent variable. This technique is closely tied to the correlation coefficient, which measures the strength and direction of a linear relationship between variables. In this document, we will explore how these concepts are connected.
 
-While you can do linear regression for a varaiety of raesons, there are usually
-3 main resons:
-  
-* Description: You want to describe the relationship between the variables that
-you are analizing.
-* Control: You want to know how the dependent variable is going to change based
-on changes you do on the independent variables.
-* Predicition: You want to know how the independent variable will be when you have
-a new observation of the independent variables.
+Linear regression is typically applied for three main purposes:
+
+- **Description:** To describe the relationship between the variables under analysis.
+- **Control:** To predict how changes in the independent variables will affect the dependent variable.
+- **Prediction:** To forecast the value of the dependent variable based on new observations of the independent variables.
 
 ## Examples
 
 ### Ad Spending
 
-Suppose you are a new data scientiest of a matress company. Your manager wants
-you to analyze the relationship between the ad spending on Google search results
-and the revenue for matress sales.
+Imagine you are a newly hired data scientist at a mattress company. Your manager asks you to analyze the relationship between Google ad spending and mattress sales revenue.
 
-I have simulated a data set corresponding to this situation:
-  
+To illustrate this scenario, I have simulated a dataset:
 ```
 # Ad Spending Example
 
@@ -47,13 +38,13 @@ write.csv(x    = datAd[, c(1, 2)],
           file = "Ad spending Data.csv", row.names = FALSE)
 ```
 
-If you are only provided the data set, you can read it as follows:
+You can load the dataset as follows:
 
 ```
 dat <- read.csv(file = "Ad spending Data.csv")
 ```
 
-You can plot the data as follows:
+To visualize the data:
 
 ```{r}
 plot(x = dat$Ad.Spending,
@@ -62,26 +53,21 @@ plot(x = dat$Ad.Spending,
      ylab = "Revenue ($)")
 ```
 
-And you can perform linear regression analysis as follows:
+Next, you can perform a linear regression analysis:
+
 ```{r}
 outReg <- lm(Revenue ~ Ad.Spending, data = dat)
 ```
 
-You can check out the most important results of the regression analysis as
-follows:
+The most important results from the regression analysis can be summarized as follows:
 
 ```{r}
 summary(outReg)
 ```
 
-For now, we will focus on the **Estimate** of the `intercept` and `Ad.Spending` 
-coefficient. The intercept is telling you what happens when there is 0 ad 
-spending. In this case through your analysis you see that when there is no ad 
-campaing you still see sales of matresses for \$`r outReg$coefficients[1]`. And 
-according to the value of the coefficient for `Ad.Spending`, for each dollar 
-spent on ads you increase your revenue by \$`r outReg$coefficients[2]`.
+For now, let’s focus on the **estimate** for the intercept and the Ad.Spending coefficient. The **intercept** indicates the expected revenue when ad spending is zero. Based on your analysis, you observe that even without an ad campaign, mattress sales generate $r outReg$coefficients[1]. The **coefficient** for Ad.Spending shows that each dollar spent on ads increases revenue by $r outReg$coefficients[2].
 
-We can plot the regression line on top of the plot as follows:
+To visualize the regression line:
 
 ```{r}
 plot(x = dat$Ad.Spending,
@@ -94,12 +80,9 @@ abline(a   = outReg$coefficients[1],
        lwd = 2)
 ```
 
-The regression line here is the "best line" for this variables. The "best line"
-in this case means it is the line that minimizes the sum of the squared 
-distances of each point to the line. Here are some other examples of other lines
-that we can see visually that are not the best lines:
+The red regression line represents the "best fit" for these variables. In this context, "best fit" means the line that minimizes the sum of the squared distances from each point to the line. For comparison, here are examples of other lines that do not fit as well:
 
-Different **slope** (that is the coefficient for the `Ad.spending` variable)
+Different **slope** (coefficient for the Ad.Spending variable):
 
 ```{r}
 plot(x = dat$Ad.Spending,
@@ -116,7 +99,7 @@ abline(a   = outReg$coefficients[1],
        lwd = 2)
 ```
 
-And different **intercept**:
+Different **intercept**:
 
 ```{r}
 plot(x = dat$Ad.Spending,
