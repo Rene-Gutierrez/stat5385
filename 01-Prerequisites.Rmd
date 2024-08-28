@@ -8,6 +8,8 @@ Before diving into the course, it’s important to have a solid understanding of
 * [Statistics](#statistics)
 * [Calculus](#calculus)
 
+You can check some of the requirements on Chapter 1 of the textbook.
+
 ## General Math
 
 You should be familiar with the **summation operator** $\sum$. This operator is defined as follows:

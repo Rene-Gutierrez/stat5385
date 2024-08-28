@@ -8,3 +8,5 @@ calculus
 introduction
 examples
 ad-spending
+wine-and-life-expectancy
+burger-demand

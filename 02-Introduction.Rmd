@@ -46,7 +46,8 @@ dat <- read.csv(file = "Ad spending Data.csv")
 
 To visualize the data:
 
-```{r}
+```{r ad-plot}
+dat <- read.csv(file = "Ad spending Data.csv")
 plot(x = dat$Ad.Spending,
      y = dat$Revenue,
      xlab = "Ad Spending ($)",
@@ -115,3 +116,119 @@ abline(a   = 1100,
        col = 'blue',
        lwd = 2)
 ```
+
+We can expand the range for ad spending and revenue on the plot, as follows:
+```{r}
+plot(x = dat$Ad.Spending,
+     y = dat$Revenue,
+     xlab = "Ad Spending ($)",
+     ylab = "Revenue ($)",
+     ylim = c(800, 2500),
+     xlim = c(0, 200))
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'red',
+       lwd = 2)
+abline(h = 0,
+       v = 0)
+```
+
+Within the range of observed ad spending values (r round(min(dat$Ad.Spending)) to r round(max(dat$Ad.Spending))), we can be reasonably confident in the relationship between ad spending and revenue. However, what happens when we consider values outside this range?
+
+While we can predict and control revenue to some extent by adjusting ad spending within the observed range, this confidence may not extend to values beyond it. For instance, it’s plausible that after reaching a certain level of ad spending, the market could become saturated, resulting in diminishing or even no additional revenue despite increased ad spending. Therefore, we should be cautious when extrapolating beyond the observed data, as the relationship may not hold under different conditions.
+
+### Wine and Life Expectancy
+
+In the previous example, we were able to manipulate the independent variable to influence the outcome. However, there are situations where our primary goal is simply to describe the relationship between two variables, without aiming to control them. In the following example, I generate a dataset that illustrates the relationship between wine consumption and life expectancy in years for an imaginary country. Here’s how the data is simulated:
+
+```{r}
+# Wine and Life Expectancy
+
+# Set Seed
+set.seed(8272024)
+
+# Data Simulation
+x <- rbinom(n = 20, size = 20, prob = 0.1)
+y <- 75 + 1.5 * x + rnorm(n = 20, mean = 0, sd = 3)
+
+# Creates the Data Frame
+datWin           <- data.frame(cbind(y,x))
+
+# Names the Variables
+colnames(datWin) <- c("Years", "Glasses")
+
+# Saves to csv
+write.csv(datWin[, c(1, 2)], file = "Wine Data.csv", row.names = FALSE)
+```
+
+Here’s an improved version of your text:
+
+---
+
+You should be able to generate the exact same data if you copy and paste the code and run it on your computer. Although the data is randomly simulated, I’ve set a **seed** to ensure that the simulation can be replicated consistently.
+
+We can read and plot the data in the as follows:
+
+```{r wine-plot}
+# Reads the Data
+dat <- read.csv(file = "Wine Data.csv")
+
+# Plots the Data
+plot(x    = dat$Glasses,
+     y    = dat$Years,
+     xlab = "Avg. Glasses of Wine per Week",
+     ylab = "Life Expectancy (Years)")
+```
+
+Once again, we can perform a linear regression to examine the relationship between the variables and visualize it with a regression line:
+
+```{r regression-wine}
+# Performs Linear Regression
+outReg <- lm(Years ~ Glasses, data = dat)
+
+# Plots
+plot(x    = dat$Glasses,
+     y    = dat$Years,
+     xlab = "Avg. Glasses of Wine per Week",
+     ylab = "Life Expectancy (Years)")
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'red',
+       lwd = 2)
+```
+
+Given the regression line, can we confidently conclude that increasing wine consumption leads to a longer life expectancy?
+
+### Burger Demand
+
+Imagine you work at a burger franchise where prices change daily. As the franchise manager, you want to predict the demand for burgers at a given price. Over the past 100 days, you’ve collected data on the number of burgers sold at each price set by the franchise’s main office. Here’s what your data looks like:
+
+```{r burger-plot}
+# Reads the Data
+dat <- read.csv(file = "Burger Data.csv")
+
+# Plots the Data
+plot(x    = dat$Price,
+     y    = dat$Burgers,
+     xlab = "Price ($)",
+     ylab = "Burgers Sold")
+```
+
+Is this dataset a good candidate for linear regression? While it's true that we can always fit a line to any dataset, the real question is whether that line meaningfully represents the relationship between the variables. Here’s what happens when we apply linear regression to this data:
+
+```{r regression-burgers}
+# Performs Linear Regression
+outReg <- lm(Burgers ~ Price, data = dat)
+
+# Plots
+plot(x    = dat$Price,
+     y    = dat$Burgers,
+     xlab = "Price ($)",
+     ylab = "Burgers Sold")
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'red',
+       lwd = 2)
+```
+
+Do you think this is a good fit for the data? The regression line appears to be inadequate for both low and high price points. Additionally, since the number of burgers sold must be positive, the regression line should not intersect the x-axis.
