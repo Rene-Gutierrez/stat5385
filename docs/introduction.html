@@ -169,27 +169,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="introduction" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">3</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Linear regression can be used when you have at least two variables varaibles,
-one dependent and at least one independent. Linear regression is linked to the correlation
-coeficcient of the variables, we will see where the link is at.</p>
-<p>While you can do linear regression for a varaiety of raesons, there are usually
-3 main resons:</p>
+<p>Linear regression is a statistical method used to analyze the relationship between at least two variables: one dependent variable and at least one independent variable. This technique is closely tied to the correlation coefficient, which measures the strength and direction of a linear relationship between variables. In this document, we will explore how these concepts are connected.</p>
+<p>Linear regression is typically applied for three main purposes:</p>
 <ul>
-<li>Description: You want to describe the relationship between the variables that
-you are analizing.</li>
-<li>Control: You want to know how the dependent variable is going to change based
-on changes you do on the independent variables.</li>
-<li>Predicition: You want to know how the independent variable will be when you have
-a new observation of the independent variables.</li>
+<li><strong>Description:</strong> To describe the relationship between the variables under analysis.</li>
+<li><strong>Control:</strong> To predict how changes in the independent variables will affect the dependent variable.</li>
+<li><strong>Prediction:</strong> To forecast the value of the dependent variable based on new observations of the independent variables.</li>
 </ul>
 <div id="examples" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Examples<a href="introduction.html#examples" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="ad-spending" class="section level3 hasAnchor" number="3.1.1">
 <h3><span class="header-section-number">3.1.1</span> Ad Spending<a href="introduction.html#ad-spending" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Suppose you are a new data scientiest of a matress company. Your manager wants
-you to analyze the relationship between the ad spending on Google search results
-and the revenue for matress sales.</p>
-<p>I have simulated a data set corresponding to this situation:</p>
+<p>Imagine you are a newly hired data scientist at a mattress company. Your manager asks you to analyze the relationship between Google ad spending and mattress sales revenue.</p>
+<p>To illustrate this scenario, I have simulated a dataset:</p>
 <pre><code># Ad Spending Example
 
 # Set Seed
@@ -210,18 +202,17 @@ colnames(datAd) &lt;- c(&quot;Revenue&quot;, &quot;Ad Spending&quot;)
 # Saves to csv
 write.csv(x    = datAd[, c(1, 2)],
           file = &quot;Ad spending Data.csv&quot;, row.names = FALSE)</code></pre>
-<p>If you are only provided the data set, you can read it as follows:</p>
+<p>You can load the dataset as follows:</p>
 <pre><code>dat &lt;- read.csv(file = &quot;Ad spending Data.csv&quot;)</code></pre>
-<p>You can plot the data as follows:</p>
+<p>To visualize the data:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="introduction.html#cb3-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Ad.Spending,</span>
 <span id="cb3-2"><a href="introduction.html#cb3-2" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Revenue,</span>
 <span id="cb3-3"><a href="introduction.html#cb3-3" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad Spending ($)&quot;</span>,</span>
 <span id="cb3-4"><a href="introduction.html#cb3-4" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue ($)&quot;</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<p>And you can perform linear regression analysis as follows:</p>
+<p>Next, you can perform a linear regression analysis:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="introduction.html#cb4-1" tabindex="-1"></a>outReg <span class="ot">&lt;-</span> <span class="fu">lm</span>(Revenue <span class="sc">~</span> Ad.Spending, <span class="at">data =</span> dat)</span></code></pre></div>
-<p>You can check out the most important results of the regression analysis as
-follows:</p>
+<p>The most important results from the regression analysis can be summarized as follows:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="introduction.html#cb5-1" tabindex="-1"></a><span class="fu">summary</span>(outReg)</span></code></pre></div>
 <pre><code>## 
 ## Call:
@@ -241,13 +232,8 @@ follows:</p>
 ## Residual standard error: 89.01 on 98 degrees of freedom
 ## Multiple R-squared:  0.6386, Adjusted R-squared:  0.6349 
 ## F-statistic: 173.2 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>For now, we will focus on the <strong>Estimate</strong> of the <code>intercept</code> and <code>Ad.Spending</code>
-coefficient. The intercept is telling you what happens when there is 0 ad
-spending. In this case through your analysis you see that when there is no ad
-campaing you still see sales of matresses for $997.3893514. And
-according to the value of the coefficient for <code>Ad.Spending</code>, for each dollar
-spent on ads you increase your revenue by $5.0247439.</p>
-<p>We can plot the regression line on top of the plot as follows:</p>
+<p>For now, let’s focus on the <strong>estimate</strong> for the intercept and the Ad.Spending coefficient. The <strong>intercept</strong> indicates the expected revenue when ad spending is zero. Based on your analysis, you observe that even without an ad campaign, mattress sales generate <span class="math inline">\(r outReg\)</span>coefficients[1]. The <strong>coefficient</strong> for Ad.Spending shows that each dollar spent on ads increases revenue by <span class="math inline">\(r outReg\)</span>coefficients[2].</p>
+<p>To visualize the regression line:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="introduction.html#cb7-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Ad.Spending,</span>
 <span id="cb7-2"><a href="introduction.html#cb7-2" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Revenue,</span>
 <span id="cb7-3"><a href="introduction.html#cb7-3" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad Spending ($)&quot;</span>,</span>
@@ -257,11 +243,8 @@ spent on ads you increase your revenue by $5.0247439.</p>
 <span id="cb7-7"><a href="introduction.html#cb7-7" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
 <span id="cb7-8"><a href="introduction.html#cb7-8" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>The regression line here is the “best line” for this variables. The “best line”
-in this case means it is the line that minimizes the sum of the squared
-distances of each point to the line. Here are some other examples of other lines
-that we can see visually that are not the best lines:</p>
-<p>Different <strong>slope</strong> (that is the coefficient for the <code>Ad.spending</code> variable)</p>
+<p>The red regression line represents the “best fit” for these variables. In this context, “best fit” means the line that minimizes the sum of the squared distances from each point to the line. For comparison, here are examples of other lines that do not fit as well:</p>
+<p>Different <strong>slope</strong> (coefficient for the Ad.Spending variable):</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="introduction.html#cb8-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Ad.Spending,</span>
 <span id="cb8-2"><a href="introduction.html#cb8-2" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Revenue,</span>
 <span id="cb8-3"><a href="introduction.html#cb8-3" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad Spending ($)&quot;</span>,</span>
@@ -275,7 +258,7 @@ that we can see visually that are not the best lines:</p>
 <span id="cb8-11"><a href="introduction.html#cb8-11" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;blue&#39;</span>,</span>
 <span id="cb8-12"><a href="introduction.html#cb8-12" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p>And different inttercept:</p>
+<p>Different <strong>intercept</strong>:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="introduction.html#cb9-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Ad.Spending,</span>
 <span id="cb9-2"><a href="introduction.html#cb9-2" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Revenue,</span>
 <span id="cb9-3"><a href="introduction.html#cb9-3" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad Spending ($)&quot;</span>,</span>
