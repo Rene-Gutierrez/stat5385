@@ -1,1 +1,10 @@
 stat-53856385
+prerequisites
+general-math
+linear-algebra
+probability
+statistics
+calculus
+introduction
+examples
+ad-spending
