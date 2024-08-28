@@ -1,0 +1,134 @@
+# Introduction
+
+Linear regression can be used when you have at least two variables varaibles,
+one dependent and at least one independent. Linear regression is linked to the correlation
+coeficcient of the variables, we will see where the link is at.
+
+While you can do linear regression for a varaiety of raesons, there are usually
+3 main resons:
+  
+* Description: You want to describe the relationship between the variables that
+you are analizing.
+* Control: You want to know how the dependent variable is going to change based
+on changes you do on the independent variables.
+* Predicition: You want to know how the independent variable will be when you have
+a new observation of the independent variables.
+
+## Examples
+
+### Ad Spending
+
+Suppose you are a new data scientiest of a matress company. Your manager wants
+you to analyze the relationship between the ad spending on Google search results
+and the revenue for matress sales.
+
+I have simulated a data set corresponding to this situation:
+  
+```
+# Ad Spending Example
+
+# Set Seed
+set.seed(8272024)
+
+# Data Simulation
+x <- rnorm(n    = 100,
+           mean = 70,
+           sd   = 30)
+y <- 1000 + 5 * x + rnorm(n = 100, mean = 0, sd = 100)
+
+# Creates the Data Frame
+datAd <- data.frame(cbind(y,x))
+
+# Names the Variables
+colnames(datAd) <- c("Revenue", "Ad Spending")
+
+# Saves to csv
+write.csv(x    = datAd[, c(1, 2)],
+          file = "Ad spending Data.csv", row.names = FALSE)
+```
+
+If you are only provided the data set, you can read it as follows:
+
+```
+dat <- read.csv(file = "Ad spending Data.csv")
+```
+
+You can plot the data as follows:
+
+```{r}
+plot(x = dat$Ad.Spending,
+     y = dat$Revenue,
+     xlab = "Ad Spending ($)",
+     ylab = "Revenue ($)")
+```
+
+And you can perform linear regression analysis as follows:
+```{r}
+outReg <- lm(Revenue ~ Ad.Spending, data = dat)
+```
+
+You can check out the most important results of the regression analysis as
+follows:
+
+```{r}
+summary(outReg)
+```
+
+For now, we will focus on the **Estimate** of the `intercept` and `Ad.Spending` 
+coefficient. The intercept is telling you what happens when there is 0 ad 
+spending. In this case through your analysis you see that when there is no ad 
+campaing you still see sales of matresses for \$`r outReg$coefficients[1]`. And 
+according to the value of the coefficient for `Ad.Spending`, for each dollar 
+spent on ads you increase your revenue by \$`r outReg$coefficients[2]`.
+
+We can plot the regression line on top of the plot as follows:
+
+```{r}
+plot(x = dat$Ad.Spending,
+     y = dat$Revenue,
+     xlab = "Ad Spending ($)",
+     ylab = "Revenue ($)")
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'red',
+       lwd = 2)
+```
+
+The regression line here is the "best line" for this variables. The "best line"
+in this case means it is the line that minimizes the sum of the squared 
+distances of each point to the line. Here are some other examples of other lines
+that we can see visually that are not the best lines:
+
+Different **slope** (that is the coefficient for the `Ad.spending` variable)
+
+```{r}
+plot(x = dat$Ad.Spending,
+     y = dat$Revenue,
+     xlab = "Ad Spending ($)",
+     ylab = "Revenue ($)")
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'red',
+       lwd = 2)
+abline(a   = outReg$coefficients[1],
+       b   = 6,
+       col = 'blue',
+       lwd = 2)
+```
+
+And different **intercept**:
+
+```{r}
+plot(x = dat$Ad.Spending,
+     y = dat$Revenue,
+     xlab = "Ad Spending ($)",
+     ylab = "Revenue ($)")
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'red',
+       lwd = 2)
+abline(a   = 1100,
+       b   = outReg$coefficients[2],
+       col = 'blue',
+       lwd = 2)
+```
