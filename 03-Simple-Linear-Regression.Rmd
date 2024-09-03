@@ -4,6 +4,8 @@
 \newcommand{\hy}{\hat{y}}
 \newcommand{\he}{\hat{e}}
 \newcommand{\hgb}{\hat{\beta}}
+\newcommand{\hby}{\hat{\mathbf{y}}}
+\newcommand{\hbe}{\hat{\mathbf{e}}}
 
 # Simple Linear Regression
 
@@ -198,12 +200,12 @@ The estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ are linear combinations of
 $\mathbf{y} = (y_1,\ldots,y_n)'$. To see this, notice the following:
 
 \begin{align*}
-\sum{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) \\
-  &= \sum{i=1}^n x_i y_i - n \bar{x} \bar{y} \\
-  &= \sum{i=1}^n x_i y_i - \bar{x} \sum_{i=1}^n y_i \\
-  &= \sum{i=1}^n x_i y_i - \sum_{i=1}^n \bar{x} y_i \\
-  &= \sum{i=1}^n (x_i y_i - \bar{x} y_i) \\
-  &= \sum{i=1}^n (x_i - \bar{x}) y_i \\
+\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) \\
+  &= \sum_{i=1}^n x_i y_i - n \bar{x} \bar{y} \\
+  &= \sum_{i=1}^n x_i y_i - \bar{x} \sum_{i=1}^n y_i \\
+  &= \sum_{i=1}^n x_i y_i - \sum_{i=1}^n \bar{x} y_i \\
+  &= \sum_{i=1}^n (x_i y_i - \bar{x} y_i) \\
+  &= \sum_{i=1}^n (x_i - \bar{x}) y_i \\
 \end{align*}
 
 Then
@@ -232,7 +234,7 @@ That is:
 
 
 \begin{align*}
-\langle \hat{\be}, \bx \rangle 
+\langle \hat{\hbe}, \bx \rangle 
   &= \sum_{i=1}^{n} \he_i x_i \\
   &= \sum_{i=1}^{n}  (y_i - \hgb_0 - \hgb_1 x_i)x_i \\
   &= \sum_{i=1}^{n}  (y_i x_i - \hgb_0x_i - \hgb_1 x_i x_i) \\
@@ -245,3 +247,31 @@ That is:
   &= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} -  (\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x})  \\
   &=0
 \end{align*}
+
+The same applies to $\hby = (\hy_1,\ldots,\hby_n)'$ and $\hbe$, as we can see:
+
+\begin{align*}
+\langle \hat{\hbe}, \hby \rangle 
+  &= \sum_{i=1}^{n} \he_i \hy_i \\
+  &= \sum_{i=1}^{n} \he_i(\hgb_0 + \hgb_1 x_i) \\
+  &= \sum_{i=1}^{n} (he_i \hgb_0 + he_i \hgb_1 x_i) \\
+  &= \hgb_0 \sum_{i=1}^{n} he_i + \hgb_1 \sum_{i=1}^{n} he_i x_i \\
+  &= \hgb_1 \langle \hat{\hbe}, \bx \rangle  \\
+  &= 0
+\end{align*}
+
+Finally, the average of $\hby$ and $\by$ are the same, to see this notice:
+
+\begin{align*}
+\frac{1}{n} \sum_{i=1}^n \hy_i 
+  &= \frac{1}{n} \sum_{i=1}^n (\hgb_0 + \hgb_1 x_i) \\
+  &= \frac{1}{n} (n \hgb_0 + \hgb_1 \sum_{i=1}^n x_i) \\
+  &= \frac{1}{n} (n \hgb_0 + n \hgb_1 \bx) \\
+  &= \hgb_0 + \hgb_1 \bx \\
+  &= \by - \hgb_1 \bx  + \hgb_1 \bx \\
+  &= \by\\
+\end{align*}
+
+### Centering and Standarizing the Data
+
+Some transformations of the data can help the regression analysis

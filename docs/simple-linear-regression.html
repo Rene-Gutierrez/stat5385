@@ -159,6 +159,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="4.2.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#other-estimated-quantites"><i class="fa fa-check"></i><b>4.2.1</b> Other estimated quantites</a></li>
 <li class="chapter" data-level="4.2.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#properties-of-the-estimates"><i class="fa fa-check"></i><b>4.2.2</b> Properties of the Estimates</a></li>
+<li class="chapter" data-level="4.2.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centering-and-standarizing-the-data"><i class="fa fa-check"></i><b>4.2.3</b> Centering and Standarizing the Data</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -328,12 +329,12 @@ regression line (red) in the following as follows:</p>
 <p>The estimates <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> are linear combinations of
 <span class="math inline">\(\mathbf{y} = (y_1,\ldots,y_n)&#39;\)</span>. To see this, notice the following:</p>
 <p><span class="math display">\[\begin{align*}
-\sum{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) \\
-  &amp;= \sum{i=1}^n x_i y_i - n \bar{x} \bar{y} \\
-  &amp;= \sum{i=1}^n x_i y_i - \bar{x} \sum_{i=1}^n y_i \\
-  &amp;= \sum{i=1}^n x_i y_i - \sum_{i=1}^n \bar{x} y_i \\
-  &amp;= \sum{i=1}^n (x_i y_i - \bar{x} y_i) \\
-  &amp;= \sum{i=1}^n (x_i - \bar{x}) y_i \\
+\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) \\
+  &amp;= \sum_{i=1}^n x_i y_i - n \bar{x} \bar{y} \\
+  &amp;= \sum_{i=1}^n x_i y_i - \bar{x} \sum_{i=1}^n y_i \\
+  &amp;= \sum_{i=1}^n x_i y_i - \sum_{i=1}^n \bar{x} y_i \\
+  &amp;= \sum_{i=1}^n (x_i y_i - \bar{x} y_i) \\
+  &amp;= \sum_{i=1}^n (x_i - \bar{x}) y_i \\
 \end{align*}\]</span></p>
 <p>Then</p>
 <p><span class="math display">\[ \hat{\beta}_1 =  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{\sum_{i=1}^n (x_i - \bar{x}) y_i}{\sum_{i=1}^n (x_i - \bar{x})^2} = \sum_{i=1}^n\frac{(x_i - \bar{x}) }{\sum_{i=1}^n (x_i - \bar{x})^2}y_i \]</span></p>
@@ -353,7 +354,7 @@ regression line (red) in the following as follows:</p>
 two vectors of size <span class="math inline">\(n\)</span>, then we have that <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> are orthogonal.
 That is:</p>
 <p><span class="math display">\[\begin{align*}
-\langle \hat{\mathbf{e}}, \mathbf{x}\rangle
+\langle \hat{\hat{\mathbf{e}}}, \mathbf{x}\rangle
   &amp;= \sum_{i=1}^{n} \hat{e}_i x_i \\
   &amp;= \sum_{i=1}^{n}  (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)x_i \\
   &amp;= \sum_{i=1}^{n}  (y_i x_i - \hat{\beta}_0x_i - \hat{\beta}_1 x_i x_i) \\
@@ -366,6 +367,30 @@ That is:</p>
   &amp;= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} -  (\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x})  \\
   &amp;=0
 \end{align*}\]</span></p>
+<p>The same applies to <span class="math inline">\(\hat{\mathbf{y}}= (\hat{y}_1,\ldots,\hat{\mathbf{y}}_n)&#39;\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span>, as we can see:</p>
+<p><span class="math display">\[\begin{align*}
+\langle \hat{\hat{\mathbf{e}}}, \hat{\mathbf{y}}\rangle
+  &amp;= \sum_{i=1}^{n} \hat{e}_i \hat{y}_i \\
+  &amp;= \sum_{i=1}^{n} \hat{e}_i(\hat{\beta}_0 + \hat{\beta}_1 x_i) \\
+  &amp;= \sum_{i=1}^{n} (he_i \hat{\beta}_0 + he_i \hat{\beta}_1 x_i) \\
+  &amp;= \hat{\beta}_0 \sum_{i=1}^{n} he_i + \hat{\beta}_1 \sum_{i=1}^{n} he_i x_i \\
+  &amp;= \hat{\beta}_1 \langle \hat{\hat{\mathbf{e}}}, \mathbf{x}\rangle  \\
+  &amp;= 0
+\end{align*}\]</span></p>
+<p>Finally, the average of <span class="math inline">\(\hat{\mathbf{y}}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> are the same, to see this notice:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{1}{n} \sum_{i=1}^n \hat{y}_i
+  &amp;= \frac{1}{n} \sum_{i=1}^n (\hat{\beta}_0 + \hat{\beta}_1 x_i) \\
+  &amp;= \frac{1}{n} (n \hat{\beta}_0 + \hat{\beta}_1 \sum_{i=1}^n x_i) \\
+  &amp;= \frac{1}{n} (n \hat{\beta}_0 + n \hat{\beta}_1 \mathbf{x}) \\
+  &amp;= \hat{\beta}_0 + \hat{\beta}_1 \mathbf{x}\\
+  &amp;= \mathbf{y}- \hat{\beta}_1 \mathbf{x}+ \hat{\beta}_1 \mathbf{x}\\
+  &amp;= \mathbf{y}\\
+\end{align*}\]</span></p>
+</div>
+<div id="centering-and-standarizing-the-data" class="section level3 hasAnchor" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Centering and Standarizing the Data<a href="simple-linear-regression.html#centering-and-standarizing-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Some transformations of the data can help the regression analysis</p>
 
 </div>
 </div>
