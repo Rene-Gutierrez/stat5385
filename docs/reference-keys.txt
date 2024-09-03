@@ -8,5 +8,10 @@ calculus
 introduction
 examples
 ad-spending
-wine-and-life-expectancy
+winw-example
 burger-demand
+simple-linear-regression
+model
+least-squares-estimation
+other-estimated-quantites
+properties-of-the-estimates

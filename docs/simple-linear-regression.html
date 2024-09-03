@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 Simple Linear Regression | _main.knit</title>
+  <meta name="description" content="" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4 Simple Linear Regression | _main.knit" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 Simple Linear Regression | _main.knit" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Stat 5385/6385</a></li>
+<li class="chapter" data-level="2" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>2</b> Prerequisites</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="prerequisites.html"><a href="prerequisites.html#general-math"><i class="fa fa-check"></i><b>2.1</b> General Math</a></li>
+<li class="chapter" data-level="2.2" data-path="prerequisites.html"><a href="prerequisites.html#linear-algebra"><i class="fa fa-check"></i><b>2.2</b> Linear Algebra</a></li>
+<li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.3</b> Probability</a></li>
+<li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.4</b> Statistics</a></li>
+<li class="chapter" data-level="2.5" data-path="prerequisites.html"><a href="prerequisites.html#calculus"><i class="fa fa-check"></i><b>2.5</b> Calculus</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="introduction.html"><a href="introduction.html#examples"><i class="fa fa-check"></i><b>3.1</b> Examples</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="introduction.html"><a href="introduction.html#ad-spending"><i class="fa fa-check"></i><b>3.1.1</b> Ad Spending</a></li>
+<li class="chapter" data-level="3.1.2" data-path="introduction.html"><a href="introduction.html#winw-example"><i class="fa fa-check"></i><b>3.1.2</b> Wine and Life Expectancy</a></li>
+<li class="chapter" data-level="3.1.3" data-path="introduction.html"><a href="introduction.html#burger-demand"><i class="fa fa-check"></i><b>3.1.3</b> Burger Demand</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model"><i class="fa fa-check"></i><b>4.1</b> Model</a></li>
+<li class="chapter" data-level="4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#least-squares-estimation"><i class="fa fa-check"></i><b>4.2</b> Least Squares Estimation</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#other-estimated-quantites"><i class="fa fa-check"></i><b>4.2.1</b> Other estimated quantites</a></li>
+<li class="chapter" data-level="4.2.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#properties-of-the-estimates"><i class="fa fa-check"></i><b>4.2.2</b> Properties of the Estimates</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="simple-linear-regression" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">4</span> Simple Linear Regression<a href="simple-linear-regression.html#simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Simple linear regression (<strong>SLR</strong>) is a linear regression model with a single explanatory variable. It focuses on the linear relationship between one independent variable and one dependent variable, making it the most basic form of linear regression analysis.</p>
+<div id="model" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Model<a href="simple-linear-regression.html#model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The model for simple linear regression is as follows:</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1 x_i + e_i, \quad i\in\{1,\ldots,n\}\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(y_i\)</span> represents the <span class="math inline">\(i\)</span>-th observation of the dependent variable.</li>
+<li><span class="math inline">\(x_i\)</span> represents the <span class="math inline">\(i\)</span>-th observation of the independent variable.</li>
+<li><span class="math inline">\(e_i\)</span> represents the <span class="math inline">\(i\)</span>-th observation of the error term.</li>
+<li><span class="math inline">\(\beta_0\)</span> is the intercept of the linear model, or regression line.</li>
+<li><span class="math inline">\(\beta_1\)</span> is the slope of the linear model, or regression line.</li>
+<li><span class="math inline">\(n\)</span> is the number of observations for both variables.</li>
+</ul>
+<p>Note that we are not making any assumptions about the error terms.</p>
+<p>In the case of the <a href="#wine-example">wine example</a>, we generated the data based on the following linear model:</p>
+<p><span class="math display">\[y_i = 75 + 1.5 x_i + e_i \]</span></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="simple-linear-regression.html#cb16-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Wine Data.csv&quot;</span>)</span>
+<span id="cb16-2"><a href="simple-linear-regression.html#cb16-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> dat<span class="sc">$</span>Glasses,</span>
+<span id="cb16-3"><a href="simple-linear-regression.html#cb16-3" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>Years,</span>
+<span id="cb16-4"><a href="simple-linear-regression.html#cb16-4" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Avg. Glasses of Wine per Week&quot;</span>,</span>
+<span id="cb16-5"><a href="simple-linear-regression.html#cb16-5" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Life Expectancy (Years)&quot;</span>)</span>
+<span id="cb16-6"><a href="simple-linear-regression.html#cb16-6" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> <span class="dv">75</span>,</span>
+<span id="cb16-7"><a href="simple-linear-regression.html#cb16-7" tabindex="-1"></a>       <span class="at">b   =</span> <span class="fl">1.5</span>,</span>
+<span id="cb16-8"><a href="simple-linear-regression.html#cb16-8" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb16-9"><a href="simple-linear-regression.html#cb16-9" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb16-10"><a href="simple-linear-regression.html#cb16-10" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="dv">0</span>,</span>
+<span id="cb16-11"><a href="simple-linear-regression.html#cb16-11" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb16-12"><a href="simple-linear-regression.html#cb16-12" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> <span class="fl">0.25</span>, <span class="at">y =</span> <span class="dv">76</span>, <span class="fu">expression</span>(beta[<span class="dv">0</span>] <span class="sc">~</span> <span class="st">&quot;=75&quot;</span>))</span>
+<span id="cb16-13"><a href="simple-linear-regression.html#cb16-13" tabindex="-1"></a><span class="fu">text</span>(<span class="at">x =</span> <span class="fl">3.25</span>, <span class="at">y =</span> <span class="dv">79</span>, <span class="fu">expression</span>(beta[<span class="dv">1</span>] <span class="sc">~</span> <span class="st">&quot;=1.5&quot;</span>))</span>
+<span id="cb16-14"><a href="simple-linear-regression.html#cb16-14" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0 =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>),</span>
+<span id="cb16-15"><a href="simple-linear-regression.html#cb16-15" tabindex="-1"></a>         <span class="at">x1 =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">3</span>),</span>
+<span id="cb16-16"><a href="simple-linear-regression.html#cb16-16" tabindex="-1"></a>         <span class="at">y0 =</span> <span class="fu">c</span>(<span class="dv">78</span>, <span class="dv">78</span>),</span>
+<span id="cb16-17"><a href="simple-linear-regression.html#cb16-17" tabindex="-1"></a>         <span class="at">y1 =</span> <span class="fu">c</span>(<span class="dv">78</span>, <span class="fl">79.5</span>),</span>
+<span id="cb16-18"><a href="simple-linear-regression.html#cb16-18" tabindex="-1"></a>         <span class="at">lwd =</span> <span class="dv">2</span>,</span>
+<span id="cb16-19"><a href="simple-linear-regression.html#cb16-19" tabindex="-1"></a>         <span class="at">col =</span> <span class="st">&#39;blue&#39;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/slr-parts-1.png" width="672" /></p>
+<p>In this case, the intercept <span class="math inline">\(\beta_0\)</span> is meaningful, as it represents the expected number of years a person would live if they didn’t drink wine at all. However, depending on the data, the intercept may or may not have a meaningful interpretation. The slope <span class="math inline">\(\beta_1\)</span> indicates that for each additional glass of wine consumed per week, our model predicts an increase of 1.5 years in life expectancy.</p>
+<p>In practice, we rarely know the true regression line. Instead, it must be estimated from the data. The goal is to find the “best” line that fits the data, where “best” means the line that minimizes the sum of squared errors (SSE) between the observed values and the values predicted by the model.</p>
+</div>
+<div id="least-squares-estimation" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Least Squares Estimation<a href="simple-linear-regression.html#least-squares-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As explained before, we want to minimize the SSE, we can create a function of
+<span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> with this sum as follows:</p>
+<p><span class="math display">\[Q(\beta_0, \beta_1) = \sum_{i=1}^n (e_i(\beta_0, \beta_1))^2
+= \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2  \]</span></p>
+<p>and we can find the minimum of this function easily since it is a differentiable function. We can find the both components of the gradient and equal them to zero to find the critical points. We start with <span class="math inline">\(\beta_0\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial Q}{\partial \beta_0}
+  &amp;= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
+  &amp;= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i^2 + \beta_0^2 + \beta_1^2 x_i^2 - 2 \beta_0 y_i - 2 \beta_1 x_i y_i + 2 \beta_0 \beta_1 x_i) \\
+  &amp;= \sum_{i = 1}^n (2 \beta_0 - 2 y_i + 2 \beta_1 x_i) \\
+  &amp;= -2 \left( n \beta_0 - n \bar{y} + n\beta_1 \bar{x} \right)
+\end{align*}\]</span></p>
+<p>where we have adopted the notation: <span class="math inline">\(\bar{x} = \frac{1}{n}\sum_{i}^n x_i\)</span> and <span class="math inline">\(\bar{y} = \frac{1}{n}\sum_{i}^n y_i\)</span>.</p>
+<p><span class="math display">\[\begin{align}
+\frac{\partial Q}{\partial \beta_0} = 0
+  &amp;\iff -2 \left( n \beta_0 - n \bar{y} + n\beta_1 \bar{x} \right) = 0 \notag \\
+  &amp;\iff \beta_0 = \bar{y} - \beta_1 \bar{x} \tag{1}
+\end{align}\]</span></p>
+<p>And we can do a similar thing for <span class="math inline">\(\beta_1\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial Q}{\partial \beta_1}
+  &amp;= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
+  &amp;= \sum_{i = 1}^n 2(y_i -\beta_0 - \beta_1 x_i)(-x_i) \\
+  &amp;= -2\sum_{i = 1}^n y_i x_i + 2 \beta_0 \sum_{i = 1}^n x_i + 2 \beta_1 \sum_{i = 1}^n x_i^2 \\
+  &amp;= -2\sum_{i = 1}^n y_i x_i + 2 n \beta_0 \bar{x} + 2 \beta_1 \sum_{i = 1}^n x_i^2
+\end{align*}\]</span></p>
+<p>then:</p>
+<p><span class="math display">\[\begin{align}
+\frac{\partial Q}{\partial \beta_1} = 0
+  &amp;\iff -2\sum_{i = 1}^n y_i x_i + 2 n \beta_0 \bar{x} + 2 \beta_1 \sum_{i = 1}^n x_i^2 = 0 \notag \\
+  &amp;\iff \sum_{i = 1}^n y_i x_i = n \beta_0 \bar{x} + \beta_1  \sum_{i = 1}^n x_i^2 \tag{2}
+\end{align}\]</span></p>
+<p>Now, substituting (1) into (2) we have that</p>
+<p><span class="math display">\[\begin{align*}
+\sum_{i = 1}^n y_i x_i
+  &amp;= n (\bar{y} - \beta_1 \bar{x}) \bar{x}  + \beta_1  \sum_{i = 1}^n x_i^2 \\
+  &amp;= n \bar{y} \bar{x} - n \beta_1 \bar{x}^2 + \beta_1  \sum_{i = 1}^n x_i^2 \\
+  &amp;= n \bar{y} \bar{x} + \beta_1 \left( \sum_{i = 1}^n x_i^2 - n \bar{x}^2 \right)
+\end{align*}\]</span></p>
+<p>Then,</p>
+<p><span class="math display">\[ \beta_1 = \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2} \]</span></p>
+<p>so, the only critical point for <span class="math inline">\(Q(\beta_0,\beta_1)\)</span> is when:</p>
+<p><span class="math display">\[ \hat{\beta}_1 = \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2} \]</span>
+<span class="math display">\[ \hat{\beta_0} = \bar{y} - \hat{\beta}_1 \bar{x}\]</span></p>
+<p>where we use <span class="math inline">\(\hat{}\)</span>, to denote the specific critical point. It remains to see
+if this is indeed a minimum. One can check the second order conditions.</p>
+<p>Now, if we introduce the notation for sample variance and covariance:</p>
+<p><span class="math display">\[ S^2_{xx} = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2 \]</span>
+<span class="math display">\[ S_{xy}   = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) \]</span></p>
+<p>and note the following:</p>
+<p><span class="math display">\[\begin{align*}
+\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i^2 - 2\bar{x}x_i + \bar{x}^2) \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - 2\bar{x}\sum_{i=1}^n x_i + \sum_{i=1}^n \bar{x}^2 \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - 2\bar{x}(n\bar{x}) + n \bar{x}^2 \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - 2n\bar{x}^2 + n \bar{x}^2 \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - n\bar{x}^2
+\end{align*}\]</span></p>
+<p>and</p>
+<p><span class="math display">\[\begin{align*}
+\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_iy_i - \bar{x}y_i - \bar{y}x_i + \bar{x}\bar{y}) \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_iy_i - \bar{x} \sum_{i=1}^ny_i - \bar{y} \sum_{i=1}^n x_i + \sum_{i=1}^n \bar{x}\bar{y} \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} - n\bar{y} \bar{x} + n \bar{x}\bar{y} \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} \\
+\end{align*}\]</span></p>
+<p>then we can express <span class="math inline">\(\hat{\beta}_1\)</span> as:</p>
+<p><span class="math display">\[\hat{\beta}_1 = \frac{(n-1)S_{xy}}{(n-1)S_{xx}^2}=\frac{S_{xy}}{S_{xx}^2} \]</span></p>
+<p>Now notice that in order to find the Least Squares estimates you don’t require
+the complete data set, but only require the following quantities:</p>
+<ul>
+<li><span class="math inline">\(\bar{y}\)</span>.</li>
+<li><span class="math inline">\(\bar{x}\)</span>.</li>
+<li><span class="math inline">\(S_{xx}^2\)</span>.</li>
+<li><span class="math inline">\(S_{xy}\)</span>.</li>
+</ul>
+<div id="other-estimated-quantites" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Other estimated quantites<a href="simple-linear-regression.html#other-estimated-quantites" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If we use the Least squares estimates in the regression equation, we can derive
+other estimated quantities:</p>
+<p>The estimated value for observation <span class="math inline">\(i\)</span>:</p>
+<p><span class="math display">\[ \hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i \]</span></p>
+<p>and the estimated error:</p>
+<p><span class="math display">\[ \hat{e}_i = y_i - \hat{y}_i = y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i \]</span></p>
+<p>And we can also compare our estimated regression line (blue) with the real
+regression line (red) in the following as follows:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="simple-linear-regression.html#cb17-1" tabindex="-1"></a>outReg <span class="ot">&lt;-</span> <span class="fu">lm</span>(Years <span class="sc">~</span> Glasses, <span class="at">data =</span> dat)</span>
+<span id="cb17-2"><a href="simple-linear-regression.html#cb17-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> dat<span class="sc">$</span>Glasses,</span>
+<span id="cb17-3"><a href="simple-linear-regression.html#cb17-3" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>Years,</span>
+<span id="cb17-4"><a href="simple-linear-regression.html#cb17-4" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Avg. Glasses of Wine per Week&quot;</span>,</span>
+<span id="cb17-5"><a href="simple-linear-regression.html#cb17-5" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Life Expectancy (Years)&quot;</span>)</span>
+<span id="cb17-6"><a href="simple-linear-regression.html#cb17-6" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> <span class="dv">75</span>,</span>
+<span id="cb17-7"><a href="simple-linear-regression.html#cb17-7" tabindex="-1"></a>       <span class="at">b   =</span> <span class="fl">1.5</span>,</span>
+<span id="cb17-8"><a href="simple-linear-regression.html#cb17-8" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb17-9"><a href="simple-linear-regression.html#cb17-9" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb17-10"><a href="simple-linear-regression.html#cb17-10" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outReg<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb17-11"><a href="simple-linear-regression.html#cb17-11" tabindex="-1"></a>       <span class="at">b   =</span> outReg<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb17-12"><a href="simple-linear-regression.html#cb17-12" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;blue&#39;</span>,</span>
+<span id="cb17-13"><a href="simple-linear-regression.html#cb17-13" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/slr-real-vs-est-1.png" width="672" /></p>
+</div>
+<div id="properties-of-the-estimates" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Properties of the Estimates<a href="simple-linear-regression.html#properties-of-the-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The estimates <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> are linear combinations of
+<span class="math inline">\(\mathbf{y} = (y_1,\ldots,y_n)&#39;\)</span>. To see this, notice the following:</p>
+<p><span class="math display">\[\begin{align*}
+\sum{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) \\
+  &amp;= \sum{i=1}^n x_i y_i - n \bar{x} \bar{y} \\
+  &amp;= \sum{i=1}^n x_i y_i - \bar{x} \sum_{i=1}^n y_i \\
+  &amp;= \sum{i=1}^n x_i y_i - \sum_{i=1}^n \bar{x} y_i \\
+  &amp;= \sum{i=1}^n (x_i y_i - \bar{x} y_i) \\
+  &amp;= \sum{i=1}^n (x_i - \bar{x}) y_i \\
+\end{align*}\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[ \hat{\beta}_1 =  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{\sum_{i=1}^n (x_i - \bar{x}) y_i}{\sum_{i=1}^n (x_i - \bar{x})^2} = \sum_{i=1}^n\frac{(x_i - \bar{x}) }{\sum_{i=1}^n (x_i - \bar{x})^2}y_i \]</span></p>
+<p>and similarly:</p>
+<p><span class="math display">\[ \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x} = \sum_{i=1}^n \frac{y_i}{n} - \sum_{i=1}^n\frac{(x_i - \bar{x}) }{\sum_{j = 1}^n x_j^2 - n \bar{x}^2}y_i \bar{x} = \sum_{i=1}^n \left( \frac{1}{n} - \frac{(x_i - \bar{x}) }{\sum_{j = 1}^n x_j^2 - n \bar{x}^2} \bar{x} \right)y_i \]</span></p>
+<p>Also, notice that the sum of the errors is <span class="math inline">\(0\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
+\sum_{i=1}^n \hat{e}_i
+  &amp;= \sum_{i=1}^n(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) \\
+  &amp;= \sum_{i=1}^n y_i - \sum_{i=1}^n \hat{\beta}_0 - \hat{\beta}_1 \sum_{i=1}^n x_i \\
+  &amp;= n\bar{y} - n \hat{\beta}_0 - n \hat{\beta}_1 \bar{x} \\
+  &amp;= n\bar{y} - n (\bar{y} - \hat{\beta}_1 \bar{x}) - n \hat{\beta}_1 \bar{x} \\
+  &amp;= n\bar{y} - n \bar{y} + n \hat{\beta}_1 \bar{x} - n \hat{\beta}_1 \bar{x} \\
+  &amp;= 0
+\end{align*}\]</span></p>
+<p>If we let <span class="math inline">\(\hat{\mathbf{e}} = (\hat{e}_i,\ldots,\hat{e}_n)&#39;\)</span> and <span class="math inline">\(\mathbf{x}=(x_1,\ldots,x_n)&#39;\)</span>,
+two vectors of size <span class="math inline">\(n\)</span>, then we have that <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> are orthogonal.
+That is:</p>
+<p><span class="math display">\[\begin{align*}
+\langle \hat{\mathbf{e}}, \mathbf{x}\rangle
+  &amp;= \sum_{i=1}^{n} \hat{e}_i x_i \\
+  &amp;= \sum_{i=1}^{n}  (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)x_i \\
+  &amp;= \sum_{i=1}^{n}  (y_i x_i - \hat{\beta}_0x_i - \hat{\beta}_1 x_i x_i) \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - \sum_{i=1}^{n} \hat{\beta}_0x_i - \sum_{i=1}^{n} \hat{\beta}_1 x_i x_i \\
+  &amp;= \sum_{i=1}^{n} y_i - n \hat{\beta}_0 \bar{x} - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
+  &amp;= \sum_{i=1}^{n} y_i - n (\bar{y} - \hat{\beta}_1 \bar{x}) \bar{x} - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
+  &amp;= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} + n\hat{\beta}_1 \bar{x}^2 - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
+  &amp;= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} - \hat{\beta}_1 (\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
+  &amp;= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} -  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2}(\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
+  &amp;= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} -  (\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x})  \\
+  &amp;=0
+\end{align*}\]</span></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

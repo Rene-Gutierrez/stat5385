@@ -1,0 +1,247 @@
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\by}{\mathbf{y}}
+\newcommand{\be}{\mathbf{e}}
+\newcommand{\hy}{\hat{y}}
+\newcommand{\he}{\hat{e}}
+\newcommand{\hgb}{\hat{\beta}}
+
+# Simple Linear Regression
+
+Simple linear regression (**SLR**) is a linear regression model with a single explanatory variable. It focuses on the linear relationship between one independent variable and one dependent variable, making it the most basic form of linear regression analysis.
+
+## Model
+
+The model for simple linear regression is as follows:
+
+$$y_i = \beta_0 + \beta_1 x_i + e_i, \quad i\in\{1,\ldots,n\}$$
+
+where:
+
+* $y_i$ represents the $i$-th observation of the dependent variable.
+* $x_i$ represents the $i$-th observation of the independent variable.
+* $e_i$ represents the $i$-th observation of the error term.
+* $\beta_0$ is the intercept of the linear model, or regression line.
+* $\beta_1$ is the slope of the linear model, or regression line.
+* $n$ is the number of observations for both variables.
+
+Note that we are not making any assumptions about the error terms.
+
+In the case of the [wine example](#wine-example), we generated the data based on the following linear model:
+
+$$y_i = 75 + 1.5 x_i + e_i $$
+
+
+```{r slr-parts}
+dat <- read.csv(file = "Wine Data.csv")
+plot(x    = dat$Glasses,
+     y    = dat$Years,
+     xlab = "Avg. Glasses of Wine per Week",
+     ylab = "Life Expectancy (Years)")
+abline(a   = 75,
+       b   = 1.5,
+       col = 'red',
+       lwd = 2)
+abline(v   = 0,
+       lwd = 2)
+text(x = 0.25, y = 76, expression(beta[0] ~ "=75"))
+text(x = 3.25, y = 79, expression(beta[1] ~ "=1.5"))
+segments(x0 = c(2, 3),
+         x1 = c(3, 3),
+         y0 = c(78, 78),
+         y1 = c(78, 79.5),
+         lwd = 2,
+         col = 'blue')
+```
+
+In this case, the intercept $\beta_0$ is meaningful, as it represents the expected number of years a person would live if they didn’t drink wine at all. However, depending on the data, the intercept may or may not have a meaningful interpretation. The slope $\beta_1$ indicates that for each additional glass of wine consumed per week, our model predicts an increase of 1.5 years in life expectancy.
+
+In practice, we rarely know the true regression line. Instead, it must be estimated from the data. The goal is to find the "best" line that fits the data, where "best" means the line that minimizes the sum of squared errors (SSE) between the observed values and the values predicted by the model.
+
+## Least Squares Estimation
+
+As explained before, we want to minimize the SSE, we can create a function of 
+$\beta_0$ and $\beta_1$ with this sum as follows:
+
+$$Q(\beta_0, \beta_1) = \sum_{i=1}^n (e_i(\beta_0, \beta_1))^2 
+= \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2  $$
+
+and we can find the minimum of this function easily since it is a differentiable function. We can find the both components of the gradient and equal them to zero to find the critical points. We start with $\beta_0$:
+
+\begin{align*}
+\frac{\partial Q}{\partial \beta_0} 
+  &= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
+  &= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i^2 + \beta_0^2 + \beta_1^2 x_i^2 - 2 \beta_0 y_i - 2 \beta_1 x_i y_i + 2 \beta_0 \beta_1 x_i) \\
+  &= \sum_{i = 1}^n (2 \beta_0 - 2 y_i + 2 \beta_1 x_i) \\
+  &= -2 \left( n \beta_0 - n \bar{y} + n\beta_1 \bar{x} \right)
+\end{align*}
+
+where we have adopted the notation: $\bar{x} = \frac{1}{n}\sum_{i}^n x_i$ and $\bar{y} = \frac{1}{n}\sum_{i}^n y_i$.
+
+\begin{align}
+\frac{\partial Q}{\partial \beta_0} = 0 
+  &\iff -2 \left( n \beta_0 - n \bar{y} + n\beta_1 \bar{x} \right) = 0 \notag \\
+  &\iff \beta_0 = \bar{y} - \beta_1 \bar{x} \tag{1}
+\end{align}
+
+And we can do a similar thing for $\beta_1$:
+
+\begin{align*}
+\frac{\partial Q}{\partial \beta_1} 
+  &= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
+  &= \sum_{i = 1}^n 2(y_i -\beta_0 - \beta_1 x_i)(-x_i) \\
+  &= -2\sum_{i = 1}^n y_i x_i + 2 \beta_0 \sum_{i = 1}^n x_i + 2 \beta_1 \sum_{i = 1}^n x_i^2 \\
+  &= -2\sum_{i = 1}^n y_i x_i + 2 n \beta_0 \bar{x} + 2 \beta_1 \sum_{i = 1}^n x_i^2
+\end{align*}
+
+then:
+
+\begin{align}
+\frac{\partial Q}{\partial \beta_1} = 0 
+  &\iff -2\sum_{i = 1}^n y_i x_i + 2 n \beta_0 \bar{x} + 2 \beta_1 \sum_{i = 1}^n x_i^2 = 0 \notag \\
+  &\iff \sum_{i = 1}^n y_i x_i = n \beta_0 \bar{x} + \beta_1  \sum_{i = 1}^n x_i^2 \tag{2}
+\end{align}
+
+Now, substituting (1) into (2) we have that
+
+\begin{align*}
+\sum_{i = 1}^n y_i x_i 
+  &= n (\bar{y} - \beta_1 \bar{x}) \bar{x}  + \beta_1  \sum_{i = 1}^n x_i^2 \\
+  &= n \bar{y} \bar{x} - n \beta_1 \bar{x}^2 + \beta_1  \sum_{i = 1}^n x_i^2 \\
+  &= n \bar{y} \bar{x} + \beta_1 \left( \sum_{i = 1}^n x_i^2 - n \bar{x}^2 \right)
+\end{align*}
+
+Then, 
+
+$$ \beta_1 = \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2} $$
+
+so, the only critical point for $Q(\beta_0,\beta_1)$ is when:
+
+$$ \hat{\beta}_1 = \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2} $$
+$$ \hat{\beta_0} = \bar{y} - \hat{\beta}_1 \bar{x}$$
+
+where we use $\hat{}$, to denote the specific critical point. It remains to see
+if this is indeed a minimum. One can check the second order conditions.
+
+Now, if we introduce the notation for sample variance and covariance:
+
+$$ S^2_{xx} = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2 $$
+$$ S_{xy}   = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) $$
+
+and note the following:
+
+\begin{align*}
+\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_i^2 - 2\bar{x}x_i + \bar{x}^2) \\
+  &= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - 2\bar{x}\sum_{i=1}^n x_i + \sum_{i=1}^n \bar{x}^2 \\
+  &= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - 2\bar{x}(n\bar{x}) + n \bar{x}^2 \\
+  &= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - 2n\bar{x}^2 + n \bar{x}^2 \\
+  &= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - n\bar{x}^2
+\end{align*}
+
+and
+
+\begin{align*}
+\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_iy_i - \bar{x}y_i - \bar{y}x_i + \bar{x}\bar{y}) \\
+  &= \frac{1}{n-1} \sum_{i=1}^n x_iy_i - \bar{x} \sum_{i=1}^ny_i - \bar{y} \sum_{i=1}^n x_i + \sum_{i=1}^n \bar{x}\bar{y} \\
+  &= \frac{1}{n-1} \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} - n\bar{y} \bar{x} + n \bar{x}\bar{y} \\
+  &= \frac{1}{n-1} \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} \\
+\end{align*}
+
+then we can express $\hat{\beta}_1$ as:
+
+$$\hat{\beta}_1 = \frac{(n-1)S_{xy}}{(n-1)S_{xx}^2}=\frac{S_{xy}}{S_{xx}^2} $$
+
+Now notice that in order to find the Least Squares estimates you don't require
+the complete data set, but only require the following quantities:
+
+* $\bar{y}$.
+* $\bar{x}$.
+* $S_{xx}^2$.
+* $S_{xy}$.
+
+### Other estimated quantites
+
+If we use the Least squares estimates in the regression equation, we can derive
+other estimated quantities:
+
+The estimated value for observation $i$:
+
+$$ \hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i $$
+
+and the estimated error:
+
+$$ \hat{e}_i = y_i - \hat{y}_i = y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i $$
+
+And we can also compare our estimated regression line (blue) with the real 
+regression line (red) in the following as follows:
+
+```{r slr-real-vs-est}
+outReg <- lm(Years ~ Glasses, data = dat)
+plot(x    = dat$Glasses,
+     y    = dat$Years,
+     xlab = "Avg. Glasses of Wine per Week",
+     ylab = "Life Expectancy (Years)")
+abline(a   = 75,
+       b   = 1.5,
+       col = 'red',
+       lwd = 2)
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'blue',
+       lwd = 2)
+```
+
+### Properties of the Estimates
+
+The estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ are linear combinations of 
+$\mathbf{y} = (y_1,\ldots,y_n)'$. To see this, notice the following:
+
+\begin{align*}
+\sum{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) \\
+  &= \sum{i=1}^n x_i y_i - n \bar{x} \bar{y} \\
+  &= \sum{i=1}^n x_i y_i - \bar{x} \sum_{i=1}^n y_i \\
+  &= \sum{i=1}^n x_i y_i - \sum_{i=1}^n \bar{x} y_i \\
+  &= \sum{i=1}^n (x_i y_i - \bar{x} y_i) \\
+  &= \sum{i=1}^n (x_i - \bar{x}) y_i \\
+\end{align*}
+
+Then
+
+$$ \hat{\beta}_1 =  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{\sum_{i=1}^n (x_i - \bar{x}) y_i}{\sum_{i=1}^n (x_i - \bar{x})^2} = \sum_{i=1}^n\frac{(x_i - \bar{x}) }{\sum_{i=1}^n (x_i - \bar{x})^2}y_i $$
+
+and similarly:
+
+$$ \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x} = \sum_{i=1}^n \frac{y_i}{n} - \sum_{i=1}^n\frac{(x_i - \bar{x}) }{\sum_{j = 1}^n x_j^2 - n \bar{x}^2}y_i \bar{x} = \sum_{i=1}^n \left( \frac{1}{n} - \frac{(x_i - \bar{x}) }{\sum_{j = 1}^n x_j^2 - n \bar{x}^2} \bar{x} \right)y_i $$
+
+Also, notice that the sum of the errors is $0$.
+
+\begin{align*}
+\sum_{i=1}^n \hat{e}_i 
+  &= \sum_{i=1}^n(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) \\
+  &= \sum_{i=1}^n y_i - \sum_{i=1}^n \hat{\beta}_0 - \hat{\beta}_1 \sum_{i=1}^n x_i \\
+  &= n\bar{y} - n \hat{\beta}_0 - n \hat{\beta}_1 \bar{x} \\
+  &= n\bar{y} - n (\bar{y} - \hat{\beta}_1 \bar{x}) - n \hat{\beta}_1 \bar{x} \\
+  &= n\bar{y} - n \bar{y} + n \hat{\beta}_1 \bar{x} - n \hat{\beta}_1 \bar{x} \\
+  &= 0
+\end{align*}
+
+If we let $\hat{\mathbf{e}} = (\hat{e}_i,\ldots,\hat{e}_n)'$ and $\mathbf{x}=(x_1,\ldots,x_n)'$,
+two vectors of size $n$, then we have that $\hat{\mathbf{e}}$ and $\mathbf{x}$ are orthogonal.
+That is:
+
+
+\begin{align*}
+\langle \hat{\be}, \bx \rangle 
+  &= \sum_{i=1}^{n} \he_i x_i \\
+  &= \sum_{i=1}^{n}  (y_i - \hgb_0 - \hgb_1 x_i)x_i \\
+  &= \sum_{i=1}^{n}  (y_i x_i - \hgb_0x_i - \hgb_1 x_i x_i) \\
+  &= \sum_{i=1}^{n} y_i x_i - \sum_{i=1}^{n} \hgb_0x_i - \sum_{i=1}^{n} \hgb_1 x_i x_i \\
+  &= \sum_{i=1}^{n} y_i - n \hgb_0 \bar{x} - \hgb_1 \sum_{i=1}^{n} x_i^2 \\
+  &= \sum_{i=1}^{n} y_i - n (\bar{y} - \hat{\beta}_1 \bar{x}) \bar{x} - \hgb_1 \sum_{i=1}^{n} x_i^2 \\
+  &= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} + n\hat{\beta}_1 \bar{x}^2 - \hgb_1 \sum_{i=1}^{n} x_i^2 \\
+  &= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} - \hat{\beta}_1 (\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
+  &= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} -  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2}(\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
+  &= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} -  (\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x})  \\
+  &=0
+\end{align*}

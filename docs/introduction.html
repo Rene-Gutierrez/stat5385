@@ -29,7 +29,7 @@
   
   
 <link rel="prev" href="prerequisites.html"/>
-
+<link rel="next" href="simple-linear-regression.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -148,8 +148,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="introduction.html"><a href="introduction.html#examples"><i class="fa fa-check"></i><b>3.1</b> Examples</a>
 <ul>
 <li class="chapter" data-level="3.1.1" data-path="introduction.html"><a href="introduction.html#ad-spending"><i class="fa fa-check"></i><b>3.1.1</b> Ad Spending</a></li>
-<li class="chapter" data-level="3.1.2" data-path="introduction.html"><a href="introduction.html#wine-and-life-expectancy"><i class="fa fa-check"></i><b>3.1.2</b> Wine and Life Expectancy</a></li>
+<li class="chapter" data-level="3.1.2" data-path="introduction.html"><a href="introduction.html#winw-example"><i class="fa fa-check"></i><b>3.1.2</b> Wine and Life Expectancy</a></li>
 <li class="chapter" data-level="3.1.3" data-path="introduction.html"><a href="introduction.html#burger-demand"><i class="fa fa-check"></i><b>3.1.3</b> Burger Demand</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model"><i class="fa fa-check"></i><b>4.1</b> Model</a></li>
+<li class="chapter" data-level="4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#least-squares-estimation"><i class="fa fa-check"></i><b>4.2</b> Least Squares Estimation</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#other-estimated-quantites"><i class="fa fa-check"></i><b>4.2.1</b> Other estimated quantites</a></li>
+<li class="chapter" data-level="4.2.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#properties-of-the-estimates"><i class="fa fa-check"></i><b>4.2.2</b> Properties of the Estimates</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -171,6 +180,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="introduction" class="section level1 hasAnchor" number="3">
 <h1><span class="header-section-number">3</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Check chapters 2.1-2.2 of the textbook.</p>
 <p>Linear regression is a statistical method used to analyze the relationship between at least two variables: one dependent variable and at least one independent variable. This technique is closely tied to the correlation coefficient, which measures the strength and direction of a linear relationship between variables. In this document, we will explore how these concepts are connected.</p>
 <p>Linear regression is typically applied for three main purposes:</p>
 <ul>
@@ -292,8 +302,8 @@ write.csv(x    = datAd[, c(1, 2)],
 <p>Within the range of observed ad spending values (r round(min(dat<span class="math inline">\(Ad.Spending)) to r round(max(dat\)</span>Ad.Spending))), we can be reasonably confident in the relationship between ad spending and revenue. However, what happens when we consider values outside this range?</p>
 <p>While we can predict and control revenue to some extent by adjusting ad spending within the observed range, this confidence may not extend to values beyond it. For instance, it’s plausible that after reaching a certain level of ad spending, the market could become saturated, resulting in diminishing or even no additional revenue despite increased ad spending. Therefore, we should be cautious when extrapolating beyond the observed data, as the relationship may not hold under different conditions.</p>
 </div>
-<div id="wine-and-life-expectancy" class="section level3 hasAnchor" number="3.1.2">
-<h3><span class="header-section-number">3.1.2</span> Wine and Life Expectancy<a href="introduction.html#wine-and-life-expectancy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="winw-example" class="section level3 hasAnchor" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Wine and Life Expectancy<a href="introduction.html#winw-example" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>In the previous example, we were able to manipulate the independent variable to influence the outcome. However, there are situations where our primary goal is simply to describe the relationship between two variables, without aiming to control them. In the following example, I generate a dataset that illustrates the relationship between wine consumption and life expectancy in years for an imaginary country. Here’s how the data is simulated:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="introduction.html#cb11-1" tabindex="-1"></a><span class="co"># Wine and Life Expectancy</span></span>
 <span id="cb11-2"><a href="introduction.html#cb11-2" tabindex="-1"></a></span>
@@ -377,8 +387,8 @@ write.csv(x    = datAd[, c(1, 2)],
           </div>
         </div>
       </div>
-<a href="prerequisites.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="prerequisites.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="simple-linear-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
