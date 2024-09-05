@@ -194,7 +194,7 @@ abline(a   = outReg$coefficients[1],
        lwd = 2)
 ```
 
-### Properties of the Estimates
+## Properties of the Estimates
 
 The estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ are linear combinations of 
 $\mathbf{y} = (y_1,\ldots,y_n)'$. To see this, notice the following:
@@ -234,7 +234,7 @@ That is:
 
 
 \begin{align*}
-\langle \hat{\hbe}, \bx \rangle 
+\langle \hbe, \bx \rangle 
   &= \sum_{i=1}^{n} \he_i x_i \\
   &= \sum_{i=1}^{n}  (y_i - \hgb_0 - \hgb_1 x_i)x_i \\
   &= \sum_{i=1}^{n}  (y_i x_i - \hgb_0x_i - \hgb_1 x_i x_i) \\
@@ -251,12 +251,12 @@ That is:
 The same applies to $\hby = (\hy_1,\ldots,\hby_n)'$ and $\hbe$, as we can see:
 
 \begin{align*}
-\langle \hat{\hbe}, \hby \rangle 
+\langle \hbe, \hby \rangle 
   &= \sum_{i=1}^{n} \he_i \hy_i \\
   &= \sum_{i=1}^{n} \he_i(\hgb_0 + \hgb_1 x_i) \\
-  &= \sum_{i=1}^{n} (he_i \hgb_0 + he_i \hgb_1 x_i) \\
-  &= \hgb_0 \sum_{i=1}^{n} he_i + \hgb_1 \sum_{i=1}^{n} he_i x_i \\
-  &= \hgb_1 \langle \hat{\hbe}, \bx \rangle  \\
+  &= \sum_{i=1}^{n} (\he_i \hgb_0 + he_i \hgb_1 x_i) \\
+  &= \hgb_0 \sum_{i=1}^{n} \he_i + \hgb_1 \sum_{i=1}^{n} he_i x_i \\
+  &= \hgb_1 \langle \hbe, \bx \rangle  \\
   &= 0
 \end{align*}
 
@@ -268,10 +268,309 @@ Finally, the average of $\hby$ and $\by$ are the same, to see this notice:
   &= \frac{1}{n} (n \hgb_0 + \hgb_1 \sum_{i=1}^n x_i) \\
   &= \frac{1}{n} (n \hgb_0 + n \hgb_1 \bx) \\
   &= \hgb_0 + \hgb_1 \bx \\
-  &= \by - \hgb_1 \bx  + \hgb_1 \bx \\
-  &= \by\\
+  &= \bar{y} - \hgb_1 \bx  + \hgb_1 \bx \\
+  &= \bar{y} \\
 \end{align*}
 
-### Centering and Standarizing the Data
+## Centering and Standarizing the Data
 
-Some transformations of the data can help the regression analysis
+Some transformations of the data can help the regression analysis 
+or make it more intuitive. There are 2 main transformations of the data: 
+**centering** and **standardization**.
+
+Consider observations $x_1,\ldots,x_n$, then the centered version of observation
+$i$ is given by:
+
+$$x_i' = x_i - \bar{x}$$
+
+The new observations $x_1',\ldots,x_n'$ are centered and their mean is $0$.
+
+$$\bar{x}' = \frac{1}{n} \sum_{i=1}^n x_i' = \frac{1}{n} \sum_{i=1}^n (x_i - \bar{x}) = \frac{1}{n} \left(\sum_{i=1}^n x_i - \sum_{i=1}^n \bar{x} \right) = \frac{1}{n} \left(n\bar{x} - n \bar{x} \right) = 0$$
+Also, let us see that the variance of the standardized variables is the same as 
+the variance of the original observations.
+
+$$ S_{xx}' = \frac{1}{n-1} \sum_{i=1}^n (x_i' - \bar{x}') = \frac{1}{n-1} \sum_{i=1}^n (x_i') = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x}) = S_{xx} $$
+So the variance of the observations is not affected by the centering.
+
+If we center another set of observations $y_1,\ldots,y_n$, and compute the covariance,
+we have that it also doesn't change.
+
+$$S_{xy}' = \frac{1}{n-1} \sum_{i=1}^n (x_i' - \bar{x})(y_i' - \bar{x}) = \frac{1}{n-1} \sum_{i=1}^n (x_i')(y_i') = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{x}) = S_{xy}$$
+
+The standardized version of observation $i$ is given by:
+
+$$x_i'' = \frac{x_i - \bar{x}}{\sqrt{S_{xx}}} = \frac{x_i'}{\sqrt{S_{xx}}}$$
+
+
+
+The standardized observations have mean of 0 and variance 1. Let's see first that
+the sample mean is 
+
+$$ \bar{x}_i'' =  \frac{1}{n} \sum_{i=1}^n x_i'' =  \frac{1}{n} \sum_{i=1}^n \frac{x_i'}{\sqrt{S_{xx}}} = \frac{1}{\sqrt{S_{xx}}}\frac{1}{n} \sum_{i=1}^n x_i' = \frac{1}{\sqrt{S_{xx}}} \bar{x}' = 0$$
+
+Now let us see that the variance of the standardized  observations is 1.
+
+\begin{align*}
+S_{xx}'' 
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_i'' - \bar{x}'')^2 \\
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_i'')^2 \\
+  &= \frac{1}{n-1} \sum_{i=1}^n \left(\frac{x_i - \bar{x}}{\sqrt{S_{xx}}}\right)^2 \\
+  &= \frac{1}{n-1} \sum_{i=1}^n \frac{(x_i - \bar{x})^2}{S_{xx}} \\
+  &= \frac{1}{S_{xx}} \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2 \\
+  &= \frac{1}{S_{xx}}S_{xx} \\
+  &= 1
+\end{align*}
+
+Now, let us introduce the sample correlation as:
+
+$$ r_{xy} = \frac{S_{xy}}{\sqrt{S_{xx}{S_{yy}}}} $$
+If we standardize two sets of observations, then the covaraince of the standardized version
+is the correlation of the standardized version. Let us see it:
+
+\begin{align*}
+S_{xy}'' 
+  &= \frac{1}{n-1} \sum_{i=1} (x_i'' - \bar{x}'')(y_i'' - \bar{x}'') \\
+  &= \frac{1}{n-1} \sum_{i=1} (x_i'')(y_i'') \\
+  &= \frac{1}{n-1} \sum_{i=1} \left(\frac{x_i - \bar{x}}{\sqrt{S_{xx}}}\right) \left(\frac{y_i - \bar{y}}{\sqrt{S_{yy}}}\right) \\
+  &= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}}\frac{1}{n-1} \sum_{i=1} (x_i - \bar{x}) (y_i - \bar{y}) \\
+  &= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}} S_{xy} \\
+  &= r_{xy}
+\end{align*}
+
+With this results, we can analyze the effects of following 3 scenarios on the
+estimated coefficients:
+
+* Independent variable centered.
+* Both, Independent and dependent variable centered.
+* Both, Independent and dependent variable standardized.
+
+### Independent variable centered
+
+Lets compute the value for $\beta_1$ when the data is centered.
+
+$$\hgb_1' = \frac{S_{xy}'}{S_{xx}'} = \frac{S_{xy}}{S_{xx}} = \hgb_1 $$
+So centering the data doesn't change the value of the estimated slope.
+
+$$ \hgb_0' = \bar{y} - \hgb_1' \bar{x}' = \bar{y} - \hgb_1' 0 = \bar{y} $$
+So centering the data, makes the estimated intercept to coincide with the mean of
+the independent variable.
+
+We can see this in one of our example data sets, looking at the ad spending data
+we can perform linear regression on the original data and the centered data:
+
+```{r center-x}
+# Read Data
+dat <- read.csv("Ad spending Data.csv")
+# Assign data
+x <- dat$Ad.Spending
+y <- dat$Revenue
+# Centers x
+xCen <- x - mean(x)
+# Linear regression on the original data
+outRegOri <- lm(y ~ x)
+# Linear regression on the centered independent variable data
+outRegCen <- lm(y ~ xCen)
+# Plots
+## Two plots in the same image
+par(mfrow = c(1, 2))
+## Original data
+# Plots the points
+plot(x    = x,
+     y    = y,
+     xlab = "Ad spending",
+     ylab = "Revenue")
+# Plots the regression line
+abline(a   = outRegOri$coefficients[1],
+       b   = outRegOri$coefficients[2],
+       col = 'red',
+       lwd = 2)
+## Independent Variable centered data
+# Plots the points
+plot(x    = xCen,
+     y    = y,
+     xlab = "Ad spending (Centered)",
+     ylab = "Revenue")
+# Plots the regression line
+abline(a   = outRegCen$coefficients[1],
+       b   = outRegCen$coefficients[2],
+       col = 'red',
+       lwd = 2)
+abline(v   = 0,
+       lwd = 2)
+```
+
+So we can appreciate that centering the independent variable just shifts the data
+horizontally so the mean will be at zero.
+
+### Both Variables centered
+
+Now lets see the effects when both variables are centered. Here, we will denote
+the estimates again with one prime, that is $\hgb'$.
+
+Again, the estimate of the slope doesn't change:
+
+$$\hgb_1' = \frac{S_{xy}'}{S_{xx}'} = \frac{S_{xy}}{S_{xx}} = \hgb_1 $$
+while the estimate of the intercept becomes zero (the new mean of the centered
+dependent variable)
+
+$$ \hgb_0' = \bar{y}' - \hgb_1' \bar{x}' = \bar{y}' = 0 $$
+The effect of this transformation can be observed, here:
+
+```{r center-xy}
+# Read Data
+dat <- read.csv("Ad spending Data.csv")
+# Assign data
+x <- dat$Ad.Spending
+y <- dat$Revenue
+# Centers x and y
+xCen <- x - mean(x)
+yCen <- y - mean(y)
+# Linear regression on the original data
+outRegOri <- lm(y ~ x)
+# Linear regression on the centered data
+outRegCen <- lm(yCen ~ xCen)
+# Plots
+## Two plots in the same image
+par(mfrow = c(1, 2))
+## Original data
+# Plots the points
+plot(x    = x,
+     y    = y,
+     xlab = "Ad spending",
+     ylab = "Revenue")
+# Plots the regression line
+abline(a   = outRegOri$coefficients[1],
+       b   = outRegOri$coefficients[2],
+       col = 'red',
+       lwd = 2)
+## Centered data
+# Plots the points
+plot(x    = xCen,
+     y    = yCen,
+     xlab = "Ad spending (Centered)",
+     ylab = "Revenue")
+# Plots the regression line
+abline(a   = outRegCen$coefficients[1],
+       b   = outRegCen$coefficients[2],
+       col = 'red',
+       lwd = 2)
+abline(v   = 0,
+       lwd = 2)
+abline(h   = 0,
+       lwd = 2)
+```
+
+### Independent and dependent variable standardized
+
+Again we start we the slope estimate:
+
+$$\hgb_1'' = \frac{S_{xy}''}{S_{xx}''} = \frac{r_{xy}}{1} =r_{xy} $$
+so, the estimate of the slope is the sample correlation of the original observations.
+
+Again, we can see this graphically:
+
+```{r slr-standarize-xy}
+# Read Data
+dat <- read.csv("Ad spending Data.csv")
+# Assign data
+x <- dat$Ad.Spending
+y <- dat$Revenue
+# Standardizes x and y
+xSta <- (x - mean(x))/sqrt(var(x))
+ySta <- (y - mean(y))/sqrt(var(y))
+# Linear regression on the original data
+outRegOri <- lm(y ~ x)
+# Linear regression on the standard data
+outRegSta <- lm(ySta ~ xSta)
+# Plots
+## Two plots in the same image
+par(mfrow = c(1, 2))
+## Original data
+# Plots the points
+plot(x    = x,
+     y    = y,
+     xlab = "Ad spending",
+     ylab = "Revenue")
+# Plots the regression line
+abline(a   = outRegOri$coefficients[1],
+       b   = outRegOri$coefficients[2],
+       col = 'red',
+       lwd = 2)
+## Standard data
+# Plots the points
+plot(x    = xSta,
+     y    = ySta,
+     xlab = "Ad spending (Centered)",
+     ylab = "Revenue")
+# Plots the regression line
+abline(a   = outRegSta$coefficients[1],
+       b   = outRegSta$coefficients[2],
+       col = 'red',
+       lwd = 2)
+abline(v   = 0,
+       lwd = 2)
+abline(h   = 0,
+       lwd = 2)
+```
+
+Now, let us see that the correlation is always in the interval $(-1,1)$. To see
+this, notice the following:
+
+\begin{align*}
+\frac{1}{n-1} \sum_{i=1}^n (x_i'' + y_i'')^2 
+  &= \frac{1}{n-1} \sum_{i=1}^n \left((x_i'')^2 + 2x_i'' y_i'' + (y_i'')^2 \right) \\
+  &= \frac{\sum_{i=1}^n (x_i'')^2}{n-1}  + 2\frac{\sum_{i=1}^n x_i''y_i''}{n-1}  + \frac{\sum_{i=1}^n (y_i'')^2}{n-1} \\
+  &= \frac{\sum_{i=1}^n (x_i'' - \bar{x}'')^2}{n-1}  + 2\frac{\sum_{i=1}^n (x_i'' - \bar{x}'')(y_i'' - \bar{y}'')}{n-1}  + \frac{\sum_{i=1}^n (y_i'' - \bar{y}'')^2}{n-1} \\
+  &= S_{xx}'' + 2 S_{xy}'' + S_{yy}'' \\
+  &= 1 + 2r_{xy} + 1 \\
+  &= 2(1 + r_{xy})
+\end{align*}
+
+In a similar way it can be shown that:
+
+$$\frac{1}{n-1} \sum_{i=1}^n (x_i'' + y_i'')^2 = 2(1 - r_{xy})$$
+
+Now since, $$\frac{1}{n-1} \sum_{i=1}^n (x_i'' + y_i'')^2 \geq 0$$
+then we have that
+
+\begin{align*}
+\frac{1}{n-1} \sum_{i=1}^n (x_i'' + y_i'')^2 \geq 0
+  &\implies 2(1 + r_{xy}) \geq 0 \\
+  &\implies 1 + r_{xy} \geq 0 \\
+  &\implies r_{xy} \geq -1 \\
+\end{align*}
+
+Similarly, since
+
+$$\frac{1}{n-1} \sum_{i=1}^n (x_i'' - y_i'')^2 \geq 0$$
+
+implies
+
+$$r_{xy} \leq 1 $$
+then, we have that:
+$$ -1 \leq r_{xy} \leq 1$$
+which implies that the slope of the regression analysis after standarizing both
+variables is going to be in the interval $(-1, 1)$.
+
+## Residual Analysis
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

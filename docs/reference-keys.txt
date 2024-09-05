@@ -16,3 +16,6 @@ least-squares-estimation
 other-estimated-quantites
 properties-of-the-estimates
 centering-and-standarizing-the-data
+independent-variable-centered
+both-variables-centered
+independent-and-dependent-variable-standardized
