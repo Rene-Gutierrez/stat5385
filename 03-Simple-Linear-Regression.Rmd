@@ -6,6 +6,8 @@
 \newcommand{\hgb}{\hat{\beta}}
 \newcommand{\hby}{\hat{\mathbf{y}}}
 \newcommand{\hbe}{\hat{\mathbf{e}}}
+\newcommand{\sumin}{\sum_{i=1}^n}
+\newcommand{\sumjn}{\sum_{j=1}^n}
 
 # Simple Linear Regression
 
@@ -552,9 +554,212 @@ $$ -1 \leq r_{xy} \leq 1$$
 which implies that the slope of the regression analysis after standarizing both
 variables is going to be in the interval $(-1, 1)$.
 
-## Residual Analysis
+## Coefficient of Determination
+
+So far, we have been concerned on findin the "best" line, that is estimating the 
+coefficients that minimize the sum of squared errors. We have find some derivated
+estimated values and some properties of these values. However, we hanven't analized
+how good is our estimation. To see how well we are doing we will look at the 
+coeficient of determination. To do so we will first introduce some quantities:
+
+**Total Sum of Squares** 
+
+$$SS_{tot} = \sum_{i=1}^n (y_i - \bar{y})$$
+
+Is a measure of total variability of the dependent 
+variable. You can think of it in many ways:
+
+* As a proxy for uncertainty. The bigger the more uncertainty in the dependent
+varaible.
+* It is proportional to the sample varaince.
+* It is what you get if when you solve the following minimization problem:
+
+$$ \min_{a} \sum_{i=1}^n (y_i - \beta_0)^2 $$
+that is, the best you can do to minimize the sum of squares without having access
+to the independent variables $x_1,\ldots,x_n$.
+
+**Residual Sum of Squares**
+
+$$ SS_{res} = \sumin (\he_i)^2 = \sumin (y_i - \hy_i)^2$$
+
+The residual Sum of Squares is the minimum value of our optimization problem. It
+is the the amount of variability that no matter what we do we will have remaing 
+even after finding the "best" line.
+
+**Explained Sum of Squares**
+
+$$ SS_{reg} = \sumin (\hy_i - \bar{y}) = \sumin (\hy_i - \hat{\bar{y}}) $$
+
+The variability of the fitted value. This is the variability we can explain with
+our regression model.
+
+These 3 quantities are related by:
+
+$$ SS_{tot} = SS_{reg} + SS_{res} $$
+That is the total variability si the sum of the variability that is explained by
+the regression model and the variability we can't explain with the regression model.
 
 
+\begin{align*}
+SS_{tot} 
+  &= \sumin (y_i - \bar{y})^2 = \sumin (y_i - \hy_i + \hy_i - \bar{y})^2 \\
+  &= \sumin \left((y_i - \hy_i)^2 + 2(y_i - \hy_i)(\hy_i - \bar{y}) + (\hy_i - \bar{y})^2\right) \\
+  &= \sumin(y_i - \hy_i)^2 + 2 \sumin (y_i - \hy_i)(\hy_i - \bar{y}) + \sumin (\hy_i - \bar{y})^2 \\
+  &= SS_{res} + 2 \sumin (y_i - \hy_i)(\hy_i - \bar{y}) + SS_{reg} \\
+  &= SS_{res} + 2 \sumin \he_i(\hy_i - \bar{y}) + SS_{reg} \\
+  &= SS_{res} + 2 \sumin (\he_i\hy_i - \he_i\bar{y}) + SS_{reg} \\
+  &= SS_{res} + 2 \sumin \he_i\hy_i - 2 \sumin \he_i\bar{y} + SS_{reg} \\
+  &= SS_{res} + 2(0) - 2  \bar{y} \sumin \he_i + SS_{reg} \\
+  &= SS_{res} - 2 \bar{y} (0) + SS_{reg} \\
+  &= SS_{res} + SS_{reg} \\
+\end{align*}
+
+**Coefficient of Determination**
+
+$$ R^2 = \frac{SS_{reg}}{SS_{tot}} = 1 - \frac{SS_{res}}{SS_{tot}} $$
+The coefficient of determination then can be explained as the percentage of the
+total varaibility that can be explained with linear regression.
+
+As a percentage, it has to be a number between 0 and 1. To see this let us show 
+that:
+
+$$ R^2 = r_{xy}^2 $$
+To see this, first let us express $SS_{reg}$ in a more convinient way:
+
+\begin{align*}
+SS_{reg} 
+  &= \sumin (\hy_i - \bar{y})^2 \\
+  &= \sumin (\hgb_0 + \hgb_1 x_i - \bar{y})^2 \\
+  &= \sumin (\bar{y} - \hgb_1 \bar{x} + \hgb_1 x_i - \bar{y})^2 \\
+  &= \sumin (\hgb_1 x_i - \hgb_1 \bar{x})^2 \\
+  &= \sumin \hgb_1^2(x_i - \bar{x})^2 \\
+  &= \hgb_1^2 \sumin (x_i - \bar{x})^2 \\
+  &= \hgb_1^2 S_{xx} (n-1) \\
+  &= \left( \frac{S_{xy}}{S_{xx}} \right)^2 S_{xx} (n-1) \\
+  &= \frac{S_{xy}^2}{S_{xx}^2} S_{xx} (n-1) \\
+  &= \frac{S_{xy}^2}{S_{xx}} (n-1) \\
+\end{align*}
+
+Then, we can see that:
+
+\begin{align*}
+R^2 
+  &= \frac{SS_{reg}}{SS_{tot}} \\
+  &= \frac{\frac{S_{xy}^2}{S_{xx}} (n-1)}{\sumin(y_i - \bar{y})^2} \\
+  &= \frac{\frac{S_{xy}^2}{S_{xx}} (n-1)}{S_{yy}(n-1)} \\
+  &= \frac{S_{xy}^2}{S_{xx}S_{yy}} \\
+  &= \left( \frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}} \right)^2 \\
+  &= r_{xy}^2
+\end{align*}
+
+The bigger the $R^2$, the better is the fit of our linear model. The $R^2$ can 
+be low for 2 reasons:
+
+* The first one is if our data is not linear, then a linear 
+model will explain little about the relationship (some times a linear model can
+be a good approximation of a non-linear model).
+* The second reason, is when the
+data is noisy. This can reduce the $R^2$ even when we know the relationship 
+between the variables is linear.
+
+As an example of noisy data, recall the Ad spending data. I actually generated 
+the data under a linear model, so the relationship between the variables is linear.
+You can verify this be looking at the code where the data is generated in the introduction.
+Next I show the effects of adding additional noise to the data, at 3 levels:
+
+* Level1: Small Noise.
+* Level2: Medium Noise.
+* Level3: High noise.
+
+```{r r2-noise}
+# Read Data
+dat <- read.csv("Ad spending Data.csv")
+# Assign data
+x <- dat$Ad.Spending
+y <- dat$Revenue
+
+# Adds Noise
+yNoiLe1 <- y + rnorm(n = 100, sd =  50)
+yNoiLe2 <- y + rnorm(n = 100, sd = 200)
+yNoiLe3 <- y + rnorm(n = 100, sd = 500)
+
+# Auxiliary Variables
+ymax <- max(y, yNoiLe1, yNoiLe2, yNoiLe3)
+ymin <- min(y, yNoiLe1, yNoiLe2, yNoiLe3)
+xmax = max(x)
+xmin = min(x)
+
+# Performs Linear Regression
+outRegOri    <- lm(y ~ x)
+outRegNoiLe1 <- lm(yNoiLe1 ~ x)
+outRegNoiLe2 <- lm(yNoiLe2 ~ x)
+outRegNoiLe3 <- lm(yNoiLe3 ~ x)
+
+# Plots
+par(mfrow = c(2, 2))
+
+plot(x    = x,
+     y    = y,
+     xlab = "Ad spending",
+     ylab = "Revenue",
+     main = "Original Data",
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax))
+# Plots the regression line
+abline(a   = outRegOri$coefficients[1],
+       b   = outRegOri$coefficients[2],
+       col = 'red',
+       lwd = 2)
+plot(x    = x,
+     y    = yNoiLe1,
+     xlab = "Ad spending",
+     ylab = "Revenue",
+     main = "Small Noise Added",
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax))
+# Plots the regression line
+abline(a   = outRegNoiLe1$coefficients[1],
+       b   = outRegNoiLe1$coefficients[2],
+       col = 'red',
+       lwd = 2)
+plot(x    = x,
+     y    = yNoiLe2,
+     xlab = "Ad spending",
+     ylab = "Revenue",
+     main = "Medium Noise Added",
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax))
+# Plots the regression line
+abline(a   = outRegNoiLe2$coefficients[1],
+       b   = outRegNoiLe2$coefficients[2],
+       col = 'red',
+       lwd = 2)
+plot(x    = x,
+     y    = yNoiLe3,
+     xlab = "Ad spending",
+     ylab = "Revenue",
+     main = "High Noise Added",
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax))
+# Plots the regression line
+abline(a   = outRegNoiLe3$coefficients[1],
+       b   = outRegNoiLe3$coefficients[2],
+       col = 'red',
+       lwd = 2)
+
+print("Original Data LM summary")
+summary(outRegOri)
+print("Level 1 LM summary")
+summary(outRegNoiLe1)
+print("Level 2 LM summary")
+summary(outRegNoiLe2)
+print("Level 3 LM summary")
+summary(outRegNoiLe3)
+```
+
+where we observe that the point cloud is more dispersed and looks less than a line
+the more noise is added, but the estimated regression line changes only by a little.
+We can also see how the $R^2$ becomes smaller as more noise is added.
 
 
 

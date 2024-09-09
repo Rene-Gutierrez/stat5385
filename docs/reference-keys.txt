@@ -19,3 +19,4 @@ centering-and-standarizing-the-data
 independent-variable-centered
 both-variables-centered
 independent-and-dependent-variable-standardized
+coefficient-of-determination
