@@ -758,21 +758,389 @@ summary(outRegNoiLe3)
 ```
 
 where we observe that the point cloud is more dispersed and looks less than a line
-the more noise is added, but the estimated regression line changes only by a little.
+the more noise is added, but the estimated regression line changes only a little bit.
 We can also see how the $R^2$ becomes smaller as more noise is added.
 
+## Residual Analysis
 
+While the coefficient of determination can tell us how good is the fit of the
+data, it can't tell us why is it good or bad. The easiest way to check for any
+problems is to check the residuals or estimated errors. Right now, we will focus
+on 4 problems:
 
+* The regression function is not linear.
+* The variance of the error terms is not constant.
+* There are outliers.
+* Important variables are ommited.
 
+### Non-linear regression function
 
+Sometimes the relationship between the two variables that we are analyzing is 
+not linear. Looking at the example of the relationship between burger price and
+burgers sold we can look at the fitted regression line and the residuals plot.
 
+```{r burgers-residuals, echo=FALSE}
+dat <- read.csv("Burger Data.csv")
 
+outReg <- lm(Burgers ~ Price, data = dat)
 
+# Original Data
+par(mfrow = c(1, 2))
+plot(x    = dat$Price,
+     y    = dat$Burgers,
+     xlab = "Price ($)",
+     ylab = "Burgers Sold",
+     main = "Original Data")
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'red',
+       lwd = 2)
+# Residuals
+plot(x = dat$Price,
+     y = outReg$residuals,
+     xlab = "Price ($)",
+     ylab = "Residuals",
+     main = "Residuals")
+abline(h   = 0,
+       lwd = 2)
+```
+Here we can clearly appreciate that there is something wrong. The residuals clearly
+indicate that a non linear relationship is present in the data. One can solve these
+problem by transforming one or both of the variables and then applying linear
+regression. Common transformations functions $g$ are (but are not limited to):
 
+* $g(x) = x^2$
+* $g(x) = \sqrt{x}$
+* $g(x) = log(x)$
 
+This transformations can be applied to the independent variable, to the dependent
+variable of both.
 
+In the next example we work with $log(\text{Burgers Sold})$ instead of directly 
+working with "Burgers Sold".
 
+```{r burgers-residuals-tr2, echo=FALSE}
+dat <- read.csv("Burger Data.csv")
 
+outReg <- lm(log(Burgers) ~ Price, data = dat)
+
+# Original Data
+par(mfrow = c(1, 2))
+plot(x    = dat$Price,
+     y    = log(dat$Burgers),
+     xlab = "Price ($)",
+     ylab = "log(Burgers Sold)",
+     main = "Transformed Data")
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'red',
+       lwd = 2)
+# Residuals
+plot(x = dat$Price,
+     y = outReg$residuals,
+     xlab = "Price ($)",
+     ylab = "Residuals",
+     main = "Residuals")
+abline(h   = 0,
+       lwd = 2)
+```
+
+In this case there seems to be a much better fit. We can compare this to the
+following transformation $\log{(\text{Price})}$:
+
+```{r burgers-residuals-tr1, echo=FALSE}
+dat <- read.csv("Burger Data.csv")
+
+outReg <- lm(Burgers ~ log(Price), data = dat)
+
+# Original Data
+par(mfrow = c(1, 2))
+plot(x    = log(dat$Price),
+     y    = dat$Burgers,
+     xlab = "log(Price) (log($))",
+     ylab = "Burgers Sold",
+     main = "Transformed Data")
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'red',
+       lwd = 2)
+# Residuals
+plot(x = dat$Price,
+     y = outReg$residuals,
+     xlab = "log(Price) (log($))",
+     ylab = "Residuals",
+     main = "Residuals")
+abline(h   = 0,
+       lwd = 2)
+```
+
+It is this these transformations improve the fit of the model, however which one
+is the best one?
+
+One can check the $R^2$ of the different transformations:
+
+```{r burgers-residuals-R2}
+dat <- read.csv("Burger Data.csv")
+
+x <- dat$Price
+y <- dat$Burgers
+
+outRegOri <- lm(y ~ x)
+outRegTr1 <- lm(log(y) ~ x)
+outRegTr2 <- lm(y ~ log(x))
+
+summary(outRegOri)
+summary(outRegTr1)
+summary(outRegTr2)
+```
+We will see other ways to choose the transformation later.
+
+### Heteroscedasticity
+
+Sometimes, errors are expected to increase depending on the explanatory variable.
+For example, it could be expected that errors for bigger values of the explanatory
+variable will be also bigger.
+
+As an example, consider a new data set with the Height of several children. One
+could expect there is a linear relationship between the age of a child and the
+height. However, one also would expect that height difference are bigger for 
+older children than for younger children. We can see this in the following 
+simulated data:
+
+```{r height-data-residuals}
+dat <- read.csv("Height Data.csv")
+
+outReg <- lm(Height ~ Age, data = dat)
+
+# Original Data
+par(mfrow = c(1, 2))
+plot(x    = dat$Age,
+     y    = dat$Height,
+     xlab = "Age (years)",
+     ylab = "Height (in)",
+     main = "Original Data")
+abline(a   = outReg$coefficients[1],
+       b   = outReg$coefficients[2],
+       col = 'red',
+       lwd = 2)
+# Residuals
+plot(x = dat$Age,
+     y = outReg$residuals,
+     xlab = "Age (years)",
+     ylab = "Residuals (in)",
+     main = "Residuals")
+abline(h   = 0,
+       lwd = 2)
+```
+
+While one can infer this error behavior in the original scatter plot, the residual
+plot makes this pattern much more clearly. In the residual plot, it is pretty clear
+that the errors increase with the age of the children. While this is not a problem 
+in itself when doing least squares estimation, it might be better to consider 
+other alternatives that do not penalize the same way the errors at young age than
+the errors at a later age. We will see this with weighted least squares.
+
+### Outliers
+
+Sometimes the data follows a linear regression for most of the observations, but
+there might be some observations that do not follow the linear relationship.
+
+In the next example, we work with the Wine data set and add outliers, to see the
+effect this might have on the estimation.
+
+```{r wine-outliers}
+dat <- read.csv("Wine Data.csv")
+
+x <- dat$Glasses
+y <- dat$Years
+
+ymin <- min(y, max(y) - 22)
+ymax <- max(y, min(y) + 22)
+xmin <- min(x)
+xmax <- max(x)
+
+par(mfrow = c(2, 2))
+# No Outliers
+outRegNoo <- lm(y ~ x)
+plot(x    = x,
+     y    = y,
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax),
+     xlab = "Average Glasses per Week",
+     ylab = "Life Expectancy",
+     main = "No Outliers")
+abline(a   = outRegNoo$coefficients[1],
+       b   = outRegNoo$coefficients[2],
+       col = 'red',
+       lwd = 2)
+
+# Outlier on the left side
+# Adds Observation
+x <- c(x, 0)
+y <- c(y, 90)
+outRegLef <- lm(y ~ x)
+plot(x    = x,
+     y    = y,
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax),
+     xlab = "Average Glasses per Week",
+     ylab = "Life Expectancy",
+     main = "Outlier Left")
+points(x   = x[21],
+       y   = y[21],
+       pch = 16,
+       col = 'blue')
+abline(a   = outRegLef$coefficients[1],
+       b   = outRegLef$coefficients[2],
+       col = 'red',
+       lwd = 2)
+# Outlier on the right side
+# Adds Observation
+x[21] <- 4
+y[21] <- 68
+outRegRig <- lm(y ~ x)
+plot(x    = x,
+     y    = y,
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax),
+     xlab = "Average Glasses per Week",
+     ylab = "Life Expectancy",
+     main = "Right Outliers")
+points(x   = x[21],
+       y   = y[21],
+       pch = 16,
+       col = 'blue')
+abline(a   = outRegRig$coefficients[1],
+       b   = outRegRig$coefficients[2],
+       col = 'red',
+       lwd = 2)
+# Outlier on the right side
+# Adds Observation
+x[21] <- 2
+y[21] <- 95
+outRegCen <- lm(y ~ x)
+plot(x    = x,
+     y    = y,
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax),
+     xlab = "Average Glasses per Week",
+     ylab = "Life Expectancy",
+     main = "Center Outliers")
+points(x   = x[21],
+       y   = y[21],
+       pch = 16,
+       col = 'blue')
+abline(a   = outRegCen$coefficients[1],
+       b   = outRegCen$coefficients[2],
+       col = 'red',
+       lwd = 2)
+```
+The presence of outliers, will also be more clear when looking at the residuals.
+
+```{r wine-res}
+x <- dat$Glasses
+y <- dat$Years
+
+ymin <- min(outRegNoo$residuals, outRegLef$residuals, outRegRig$residuals, outRegCen$residuals)
+ymax <- max(outRegNoo$residuals, outRegLef$residuals, outRegRig$residuals, outRegCen$residuals)
+xmin <- min(x)
+xmax <- max(x)
+
+par(mfrow = c(2, 2))
+plot(x    = dat$Glasses,
+     y    = outRegNoo$residuals,
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax),
+     xlab = "Average Glasses per Week",
+     ylab = "Residuals",
+     main = "No Outliers")
+abline(h   = 0,
+       lwd = 2)
+
+# Outlier on the left side
+x[21] <- 0
+y[21] <- 90
+plot(x    = x,
+     y    = outRegLef$residuals,
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax),
+     xlab = "Average Glasses per Week",
+     ylab = "Residuals",
+     main = "Left Outlier")
+abline(h   = 0,
+       lwd = 2)
+# Outlier on the right side
+# Adds Observation
+x[21] <- 4
+y[21] <- 68
+plot(x    = x,
+     y    = outRegRig$residuals,
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax),
+     xlab = "Average Glasses per Week",
+     ylab = "Residuals",
+     main = "Left Outlier")
+abline(h   = 0,
+       lwd = 2)
+# Outlier on the right side
+# Adds Observation
+x[21] <- 2
+y[21] <- 95
+plot(x    = x,
+     y    = outRegCen$residuals,
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax),
+     xlab = "Average Glasses per Week",
+     ylab = "Residuals",
+     main = "Left Outlier")
+abline(h   = 0,
+       lwd = 2)
+```
+And we can also see how the $R^2$ changes:
+
+```{r wine-r2_change}
+summary(outRegNoo)
+summary(outRegLef)
+summary(outRegRig)
+summary(outRegCen)
+```
+
+### Variables Ommited
+
+When looking at the residuals, there should be no aparent pattern. Sometimes, 
+the pattern is only noticeable when considering other variables. We can see this
+with the Height data set. The data includes the sex of the children. If you fit
+least squares without taking this into consideration, a pattern is appears in the
+residuals when you look at the residuals for each sex.
+
+```{r height-other-var}
+dat <- read.csv("Height Data.csv")
+
+# Fits linear Model
+outReg <- lm(dat$Height ~ dat$Age)
+
+# Plots residuals for each sex
+ymin <- min(outReg$residuals)
+ymax <- max(outReg$residuals)
+
+par(mfrow=c(1, 2))
+plot(x = dat$Age[dat$Sex == 1],
+     y = outReg$residuals[dat$Sex == 1],
+     ylim = c(ymin, ymax),
+     xlab = "Age",
+     ylab = "Residuals",
+     main = "Males")
+abline(h   = 0,
+       lwd = 2)
+plot(x = dat$Age[dat$Sex == 0],
+     y = outReg$residuals[dat$Sex == 0],
+     ylim = c(ymin, ymax),
+     xlab = "Age",
+     ylab = "Residuals",
+     main = "Females")
+abline(h   = 0,
+       lwd = 2)
+```
 
 
 
