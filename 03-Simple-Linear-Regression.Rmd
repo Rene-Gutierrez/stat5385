@@ -1,6 +1,11 @@
 \newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bW}{\mathbf{W}}
+\newcommand{\bH}{\mathbf{H}}
 \newcommand{\by}{\mathbf{y}}
 \newcommand{\be}{\mathbf{e}}
+\newcommand{\bgb}{\boldsymbol{\beta}}
+\newcommand{\bzero}{\mathbf{0}}
 \newcommand{\hy}{\hat{y}}
 \newcommand{\he}{\hat{e}}
 \newcommand{\hgb}{\hat{\beta}}
@@ -1142,8 +1147,358 @@ abline(h   = 0,
        lwd = 2)
 ```
 
+## Cross-Validation
+
+When testing different models, a good idea to evaluate the performance of each
+model beyond $R^2$, is to separate your data set into a training set and a 
+validation or test set. Doing this is called cross-validation. There are several
+alternatives to doing cross-validation, here are a few of the most relevant ones:
+
+1. **Holdout Method (Train/Test Split)**
+   - **Description**: The data is split into two (or three) sets: training and test (and sometimes validation). The model is trained on the training set and evaluated on the test set.
+   - **Use Case**: 
+     - Simple to implement, but has high variance. The performance may depend on the specific split.
+
+2. **K-Fold Cross-Validation**
+   - **Description**: The data is divided into \( k \) equal-sized folds (subsets). The model is trained on \( k-1 \) folds and tested on the remaining fold. This process is repeated \( k \) times, with each fold used as the test set once.
+   - **Use Case**: 
+     - Works well for most applications and balances the bias-variance tradeoff.
+     - Common choices for \( k \): 5, 10.
+
+3. **Leave-One-Out Cross-Validation (LOOCV)**
+   - **Description**: Each data point is used once as a test set, and the rest of the data is used as the training set. This results in \( n \) iterations, where \( n \) is the number of samples.
+   - **Use Case**:
+     - Good when the dataset is small, but can be computationally expensive for large datasets.
+
+4. **Leave-P-Out Cross-Validation (LPOCV)**
+   - **Description**: Similar to LOOCV, but instead of leaving out one data point, \( p \) data points are left out. This creates \( \binom{n}{p} \) different training/testing splits.
+   - **Use Case**:
+     - Rarely used due to its high computational cost for large datasets but might be useful in specific scenarios.
+
+5. **Stratified K-Fold Cross-Validation**
+   - **Description**: Similar to K-fold cross-validation but ensures that each fold has the same proportion of each class in classification tasks (i.e., balanced classes in each fold).
+   - **Use Case**: 
+     - Useful for imbalanced datasets in classification problems.
+     
+6. **Repeated K-Fold Cross-Validation**
+   - **Description**: A variation of K-Fold Cross-Validation where the process is repeated multiple times with different random splits.
+   - **Use Case**:
+     - Provides more robust estimates of model performance, particularly when the dataset is small.
+     
+Here is an example of \(k\)-fold Cross-Validation using the "Burger Data" set.
+
+```{r cross-validation}
+### Cross Validation Example
+
+# Read Data
+dat <- read.csv(file = "Burger Data.csv")
+
+# Saves Variables
+x <- dat$Price
+y <- dat$Burgers
+
+# Number of Observations
+n <- length(y)
+
+# Number of Folds
+numFol <- 10
+# Fold Size
+sizFol <- round(n / numFol)
+
+# List Containing the Fold indices
+fol <- list()
+# Select Fold Indeces
+# Initialization
+ind <- 1:n
+for(i in 1:numFol){
+  # Computes the remaining number of indices
+  numInd   <- length(ind)
+  # Randomly selects indices from the remaining indeces
+  indFol   <- sample(x = 1:length(ind), size = sizFol, replace = FALSE)
+  # Saves the inidices to the list of Fold Indeces
+  fol[[i]] <- ind[indFol]
+  # Removes the indices from the indeces vector
+  ind      <- ind[- indFol]
+}
+
+# Models to try
+X <- cbind(x, log(x),      x, log(x))
+Y <- cbind(y,      y, log(y), log(y))
+
+# Number of Models to compare
+numMod <- dim(Y)[2]
+# Saves the validation metric for each model and each fold 
+matMet <- matrix(data = NA, nrow = numFol, ncol = numMod)
 
 
+par(mfrow=c(2, 2))
+# Loops through the models
+for(k in 1:numMod){
+  yMod <- Y[, k]
+  xMod <- X[, k]
+  plot(x = xMod,
+       y = yMod,
+       xlab = "Price ($)",
+       ylab = "Burgers",
+       main = paste0("Model ", k))
+  metFol <- numeric(length = numFol)
+  # Loops through the folds
+  for(i in 1:numFol){
+    # At Each Fold do Linear Regression without the test set
+    outReg   <- lm(yMod[-fol[[i]]] ~ xMod[-fol[[i]]])
+    # Evaluate Out of Sample
+    yHatOut   <- outReg$coefficients[1] + outReg$coefficients[2] * xMod[fol[[i]]] 
+    if(k >= 3 ){
+      metEva    <- mean((exp(yMod[fol[[i]]]) - exp(yHatOut))^2)
+    } else {
+      metEva    <- mean((yMod[fol[[i]]] - yHatOut)^2)
+    }
+    metFol[i] <- metEva
+  }
+  matMet[, k] <- metFol
+}
+```
 
+## Weighted Least Squares
 
+Weighted Least Squares (WLS) is an extension of ordinary least squares (OLS) used when the assumption of constant variance (homoscedasticity) is violated. In cases of heteroscedasticity (unequal variances), OLS produces inefficient estimates. 
 
+WLS solves this by assigning weights to each observation, giving more importance to data points with lower variance. This leads to more reliable estimates in the presence of heteroscedasticity, making WLS valuable for improving regression models when error variances vary.
+
+- **Lower variance** → **Higher weight**
+- **Higher variance** → **Lower weight**
+
+In a simple linear regression model with one independent variable, OLS minimizes the sum of squared residuals:
+
+$$ \min \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
+$$
+
+Weighted Least Squares (WLS) corrects for heteroscedasticity by minimizing the weighted sum of squared residuals:
+$$
+\min \sum_{i=1}^{n} w_i (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
+$$
+
+Step 1: Define the weighted residual sum of squares
+
+The objective function is:
+
+$$Q_w(\beta_0, \beta_1) = \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2$$
+
+We aim to minimize $Q(\beta_0, \beta_1)$ with respect to $\beta_0$ and $\beta_1$.
+
+Step 2: Take the partial derivatives with respect to $ \beta_0 $ and $ \beta_1 $:
+
+$$\frac{\partial Q_w}{\partial \beta_0} = -2 \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)$$
+
+Setting the derivative equal to zero:
+
+$$\sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i) = 0 $$
+$$\sum_{i=1}^{n} w_i y_i = \sum_{i=1}^{n} w_i (\beta_0 + \beta_1 x_i)$$
+$$\beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i = \sum_{i=1}^{n} w_i y_i \tag{3}$$
+
+Now with respect to \( \beta_1 \):
+
+$$\frac{\partial Q_w}{\partial \beta_1} = -2 \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i) x_i$$
+
+Setting the derivative equal to zero:
+
+$$-2 \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i) x_i = 0$$
+$$\sum_{i=1}^{n} w_i y_i x_i = \sum_{i=1}^{n} w_i (\beta_0 + \beta_1 x_i) x_i$$
+
+$$\beta_0 \sum_{i=1}^{n} w_i x_i + \beta_1 \sum_{i=1}^{n} w_i x_i^2 = \sum_{i=1}^{n} w_i y_i x_i \tag{4}$$
+
+Now we solve the system of two linear equations:
+
+1. \( \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i = \sum_{i=1}^{n} w_i y_i \)
+2. \( \beta_0 \sum_{i=1}^{n} w_i x_i + \beta_1 \sum_{i=1}^{n} w_i x_i^2 = \sum_{i=1}^{n} w_i y_i x_i \)
+
+Solve for \( \beta_1 \)
+
+Multiply equation (3) by $\frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i}$ and subtract it from equation (4) to eliminate $\beta_0$:
+
+$$\beta_1 \left( \sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i} \right) = \sum_{i=1}^{n} w_i y_i x_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}$$
+
+Thus, $\beta_1$ is:
+
+$$\beta_1 = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}}$$
+
+Then the weighted estimators for $\beta_0$ and $\beta_1$ are:
+
+$$\hgb_{w,1} = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}},$$
+
+$$\hgb_{w,0} = \frac{\sum_{i=1}^{n} w_i y_i - \beta_1 \sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}.$$
+
+## Model in Matrix Form
+
+We can specify the same model as in [Model](#model), in matrix form as follows:
+
+$$\by = \bX \bgb + \be$$
+where:
+
+* $\by={y_1,\ldots,y_n}'$
+* $\be={e_1,\ldots,e_n}'$
+* $\bgb={\beta_0,\beta_1}'$
+* $\bX=[\mathbb{1}_n \bx]$
+* $\mathbb{1}_n={1,\ldots,1}'$ (1 $n$-times).
+
+In this way we can re-write our minimization problem as follows:
+
+$$ \min \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
+= \min \sum_{i=1}^{n} (\by - \bX \bgb)'(\by - \bX \bgb)$$
+equivalent to:
+$$\min \by'\by - \by'\bX\bgb - \bgb'\bX'\by + \bgb'\bX'\bX\bgb$$
+
+The procedure to find the estimators is very similar, working with the gradient
+instead of the partial derivatives:
+
+$$\nabla_\beta Q = \mathbf{0} $$
+then:
+$$-\bX'\by -\bX'\by + 2 \bX' \bX \bgb = \bzero$$
+$$2 \bX' \bX \bgb = 2 \bX'\by$$
+$$\bX' \bX \bgb = \bX'\by$$
+$$\bgb = \left(\bX' \bX \right)^{-1}\bX'\by$$
+
+Notice how we find the estimates much easier. It is also easy to show that a
+minimum is attained by computing the **Hessian Matrix** of $Q$
+
+$$H_Q = 2 \bX' \bX$$
+
+and noticing that:
+
+$$\bX' \bX$$
+
+is positive-definite if $\bx$ is not a constant vector.
+
+We can verify that indeed the estimate $\hat{\bgb}$ is the same as before by
+manually doing the computations for this case:
+
+We have:
+
+   $$
+   \mathbf{X} = \begin{bmatrix}
+   1 & x_1 \\
+   1 & x_2 \\
+   \vdots & \vdots \\
+   1 & x_n
+   \end{bmatrix}
+   $$
+
+   $$
+   \mathbf{X}' = \begin{bmatrix}
+   1 & 1 & \cdots & 1 \\
+   x_1 & x_2 & \cdots & x_n
+   \end{bmatrix}
+   $$
+
+   Multiplying $\mathbf{X}'$ by $\mathbf{X}$:
+
+   $$
+   \mathbf{X}' \mathbf{X} = \begin{bmatrix}
+   n & \sum_{i=1}^n x_i \\
+   \sum_{i=1}^n x_i & \sum_{i=1}^n x_i^2
+   \end{bmatrix}
+   $$
+Similarly, we have:
+
+   $$
+   \mathbf{y} = \begin{bmatrix}
+   y_1 \\
+   y_2 \\
+   \vdots \\
+   y_n
+   \end{bmatrix}
+   $$
+
+   Multiplying $\mathbf{X}'$ by $\mathbf{y}$:
+
+   $$
+   \mathbf{X}' \mathbf{y} = \begin{bmatrix}
+   \sum_{i=1}^n y_i \\
+   \sum_{i=1}^n x_i y_i
+   \end{bmatrix}
+   $$
+
+To compute the inverse of $\mathbf{X}'\mathbf{X}$ we have that the determinant is:
+
+   $$
+   |\mathbf{X}' \mathbf{X}|=\text{det}(\mathbf{X}^\top \mathbf{X}) = n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2
+   $$
+
+   Then, the inverse is:
+
+   $$
+   (\mathbf{X}' \mathbf{X})^{-1} = \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2}
+   \begin{bmatrix}
+   \sum_{i=1}^n x_i^2 & - \sum_{i=1}^n x_i \\
+   - \sum_{i=1}^n x_i & n
+   \end{bmatrix}
+   $$
+
+Then, we have that:
+
+\begin{align*}
+   (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y} 
+      &= \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2}
+   \begin{bmatrix}
+   \sum_{i=1}^n x_i^2 & - \sum_{i=1}^n x_i \\
+   - \sum_{i=1}^n x_i & n
+   \end{bmatrix}
+   \begin{bmatrix}
+   \sum_{i=1}^n y_i \\
+   \sum_{i=1}^n x_i y_i
+   \end{bmatrix} \\
+      &= \begin{bmatrix}
+   \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2} \left( \sum_{i=1}^n x_i^2 \sum_{i=1}^n y_i - \sum_{i=1}^n x_i \sum_{i=1}^n x_i y_i \right) \\
+   \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2} \left( - \sum_{i=1}^n x_i \sum_{i=1}^n y_i + n \sum_{i=1}^n x_i y_i \right)
+   \end{bmatrix} \\
+      &= \begin{bmatrix}
+   \frac{1}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2} \left( n \bar{y} \sum_{i=1}^n x_i^2 - n \bar{x} \sum_{i=1}^n x_i y_i \right) \\
+   \frac{1}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2} \left( - n \bar{x}n \bar{y} + n \sum_{i=1}^n x_i y_i \right)
+   \end{bmatrix} \\ 
+
+\end{align*}
+
+Now simplifying, the first row, we have that:
+
+\begin{align*}
+\frac{n \bar{y} \sum_{i=1}^n x_i^2 - n \bar{x} \sum_{i=1}^n x_i y_i}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2}
+  &= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
+  &= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{y} n\bar{x}^2 + \bar{y} n\bar{x}^2   - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
+  &= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{y} n\bar{x}^2 + \bar{y} n\bar{x}^2   - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
+  &= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \left(\sum_{i=1}^n x_i^2 - n\bar{x}^2 \right) + \bar{x} \left(n\bar{y}\bar{x}   - \sum_{i=1}^n x_i y_i \right) \right) \\
+  &= \bar{y} + \bar{x} \frac{n\bar{y}\bar{x} - \sum_{i=1}^n x_i y_i}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \\
+  &= \bar{y} + \bar{x} \frac{-(n-1)S_{xy}}{(n-1)S_{xx}} \\
+  &= \bar{y} - \beta_1 \bar{x}
+\end{align*}
+
+And simplifying the second row, we have:
+
+$$\frac{1}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2} \left( - n \bar{x}n \bar{y} + n \sum_{i=1}^n x_i y_i \right) = \frac{1}{\sum_{i=1}^n x_i^2 - n \bar{x}^2} \left( - n\bar{x}\bar{y} + \sum_{i=1}^n x_i y_i \right) = \frac{S_{xy}}{S_{xx}} = \beta_1$$
+
+So both expressions are equivalent.
+
+### Weighted Least Squares in Matrix Form
+
+In a similar way we can solve the weighted least squares problem in matrix form
+as follows:
+
+$$Q_w = \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2 = (\by - \bX \bgb)'\bW (\by - \bX \bgb) = \by'\bW\by -\by'\bW\bX\bgb - \bgb'\bX'\bW\by + \bgb'\bX'\bW\bX \bgb $$
+
+where, $\bW$ is a diagonal matrix with diagonal entries $w_1,\ldots,w_n$.
+
+then the gradient is:
+
+$$ \nabla_\beta Q_w = -2 \bX'\bW\by + 2\bX'\bW\bX \bgb $$
+
+then, making it equal to zero, we have that:
+
+$$ 2\bX'\bW\bX \bgb = 2 \bX'\bW\by$$
+$$\bX'\bW\bX \bgb = \bX'\bW\by $$
+$$\bgb = \left(\bX'\bW\bX\right)^{-1}\bX'\bW\by $$
+
+And the Hessian Matrix is given by:
+
+$$H_{Q_w} = 2 \bX'\bW\bX$$
+
+which is positive-definite under the same conditions that before and if the entries
+of $\bW$ are positive.

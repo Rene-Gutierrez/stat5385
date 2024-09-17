@@ -25,3 +25,7 @@ non-linear-regression-function
 heteroscedasticity
 outliers
 variables-ommited
+cross-validation
+weighted-least-squares
+model-in-matrix-form
+weighted-least-squares-in-matrix-form
