@@ -1367,7 +1367,7 @@ and noticing that:
 
 $$\bX' \bX$$
 
-is positive-definite if $\bx$ is not a constant vector.
+is [positive-definite](#positive-definite-matrix) if $\bx$ is not a constant vector.
 
 We can verify that indeed the estimate $\hat{\bgb}$ is the same as before by
 manually doing the computations for this case:

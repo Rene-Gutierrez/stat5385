@@ -1,3 +1,22 @@
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bW}{\mathbf{W}}
+\newcommand{\bA}{\mathbf{A}}
+\newcommand{\bB}{\mathbf{B}}
+\newcommand{\bI}{\mathbf{I}}
+\newcommand{\bH}{\mathbf{H}}
+\newcommand{\by}{\mathbf{y}}
+\newcommand{\be}{\mathbf{e}}
+\newcommand{\bgb}{\boldsymbol{\beta}}
+\newcommand{\bzero}{\mathbf{0}}
+\newcommand{\hy}{\hat{y}}
+\newcommand{\he}{\hat{e}}
+\newcommand{\hgb}{\hat{\beta}}
+\newcommand{\hby}{\hat{\mathbf{y}}}
+\newcommand{\hbe}{\hat{\mathbf{e}}}
+\newcommand{\sumin}{\sum_{i=1}^n}
+\newcommand{\sumjn}{\sum_{j=1}^n}
+
 # Prerequisites
 
 Before diving into the course, it’s important to have a solid understanding of the following foundational concepts. These are categorized into five key topics:
@@ -34,6 +53,73 @@ You should be familiar with the following linear algebra concepts:
 * Diagonalization
 * Vector Spaces
 * Linear Transformations
+
+### Matrices
+
+#### Inverse Matrix
+
+An **inverse matrix** of a square matrix $\bA$, denoted as $\bA^{-1}$, is a matrix that, when multiplied by $\bA$, results in the identity matrix $I$. This relationship is expressed as:
+
+$$
+\bA \bA^{-1} = \bA^{-1} \bA = \bI
+$$
+
+where $\bI$ is the identity matrix, and its diagonal elements are 1, with all off-diagonal elements being 0.
+
+##### Conditions for a Matrix to Have an Inverse:
+- The matrix $\bA$ must be **square**, meaning it has the same number of rows and columns.
+- The matrix $\bA$ must be **non-singular**, meaning its **determinant** is non-zero ($|\bA| \neq 0$).
+
+##### Properties of the Inverse Matrix:
+1. **Uniqueness:** If a matrix has an inverse, it is unique.
+2. **Inverse of a Product:** The inverse of the product of two matrices $\bA$ and $\bB$ is given by $(\bA\bB)^{-1} = \bB^{-1} \bA^{-1}$.
+3. **Inverse of the Inverse:** $(\bA^{-1})^{-1} = \bA$.
+4. **Transpose of the Inverse:** $(\bA^{-1})' = (\bA')^{-1}$.
+
+##### Special Case:
+
+For a $2 \times 2$ matrix:
+
+$$
+\bA = \begin{bmatrix} a & b \\ c & d \end{bmatrix}
+$$
+
+The inverse of $\bA$ (if $|\bA|=\det(\bA) \neq 0$) is:
+
+$$
+A^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}
+$$
+
+where $ad - bc$ is the **determinant** of the matrix $\bA$.
+
+#### Positive Definite Matrix
+
+A **positive definite matrix** is a symmetric matrix $\bA$ where, for any non-zero vector $\mathbf{x}$, the following condition holds:
+
+$$
+\mathbf{x}' \bA \mathbf{x} > 0
+$$
+
+##### Key Properties:
+1. **Symmetry:** The matrix $\bA$ must be symmetric, meaning $\bA = \bA'$.
+2. **Positive quadratic form:** For any non-zero vector $\mathbf{x}$, the quadratic form $\mathbf{x}' \bA \mathbf{x}$ must yield a positive value.
+
+##### Characteristics of a Positive Definite Matrix:
+- All the **eigenvalues** of a positive definite matrix are **positive**.
+- The **determinants** of the leading principal minors (submatrices) of the matrix are positive.
+- The **diagonal elements** of a positive definite matrix are positive.
+
+##### Example:
+
+The matrix:
+$$
+\bA = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}
+$$
+is positive definite, because for any non-zero vector $\mathbf{x}$, $\mathbf{x}' \bA \mathbf{x} > 0$. For instance, if $\mathbf{x} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$, then:
+
+$$
+\mathbf{x}' \bA \mathbf{x} = \begin{bmatrix} 1 & 1 \end{bmatrix} \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = 6 > 0
+$$
 
 ## Probability
 

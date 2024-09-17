@@ -138,7 +138,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>2</b> Prerequisites</a>
 <ul>
 <li class="chapter" data-level="2.1" data-path="prerequisites.html"><a href="prerequisites.html#general-math"><i class="fa fa-check"></i><b>2.1</b> General Math</a></li>
-<li class="chapter" data-level="2.2" data-path="prerequisites.html"><a href="prerequisites.html#linear-algebra"><i class="fa fa-check"></i><b>2.2</b> Linear Algebra</a></li>
+<li class="chapter" data-level="2.2" data-path="prerequisites.html"><a href="prerequisites.html#linear-algebra"><i class="fa fa-check"></i><b>2.2</b> Linear Algebra</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="prerequisites.html"><a href="prerequisites.html#matrices"><i class="fa fa-check"></i><b>2.2.1</b> Matrices</a></li>
+</ul></li>
 <li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.3</b> Probability</a></li>
 <li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.4</b> Statistics</a></li>
 <li class="chapter" data-level="2.5" data-path="prerequisites.html"><a href="prerequisites.html#calculus"><i class="fa fa-check"></i><b>2.5</b> Calculus</a></li>
@@ -232,6 +235,78 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Vector Spaces</li>
 <li>Linear Transformations</li>
 </ul>
+<div id="matrices" class="section level3 hasAnchor" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Matrices<a href="prerequisites.html#matrices" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="inverse-matrix" class="section level4 hasAnchor" number="2.2.1.1">
+<h4><span class="header-section-number">2.2.1.1</span> Inverse Matrix<a href="prerequisites.html#inverse-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>An <strong>inverse matrix</strong> of a square matrix <span class="math inline">\(\mathbf{A}\)</span>, denoted as <span class="math inline">\(\mathbf{A}^{-1}\)</span>, is a matrix that, when multiplied by <span class="math inline">\(\mathbf{A}\)</span>, results in the identity matrix <span class="math inline">\(I\)</span>. This relationship is expressed as:</p>
+<p><span class="math display">\[
+\mathbf{A}\mathbf{A}^{-1} = \mathbf{A}^{-1} \mathbf{A}= \mathbf{I}
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{I}\)</span> is the identity matrix, and its diagonal elements are 1, with all off-diagonal elements being 0.</p>
+<div id="conditions-for-a-matrix-to-have-an-inverse" class="section level5 hasAnchor" number="2.2.1.1.1">
+<h5><span class="header-section-number">2.2.1.1.1</span> Conditions for a Matrix to Have an Inverse:<a href="prerequisites.html#conditions-for-a-matrix-to-have-an-inverse" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li>The matrix <span class="math inline">\(\mathbf{A}\)</span> must be <strong>square</strong>, meaning it has the same number of rows and columns.</li>
+<li>The matrix <span class="math inline">\(\mathbf{A}\)</span> must be <strong>non-singular</strong>, meaning its <strong>determinant</strong> is non-zero (<span class="math inline">\(|\mathbf{A}| \neq 0\)</span>).</li>
+</ul>
+</div>
+<div id="properties-of-the-inverse-matrix" class="section level5 hasAnchor" number="2.2.1.1.2">
+<h5><span class="header-section-number">2.2.1.1.2</span> Properties of the Inverse Matrix:<a href="prerequisites.html#properties-of-the-inverse-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ol style="list-style-type: decimal">
+<li><strong>Uniqueness:</strong> If a matrix has an inverse, it is unique.</li>
+<li><strong>Inverse of a Product:</strong> The inverse of the product of two matrices <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{B}\)</span> is given by <span class="math inline">\((\mathbf{A}\mathbf{B})^{-1} = \mathbf{B}^{-1} \mathbf{A}^{-1}\)</span>.</li>
+<li><strong>Inverse of the Inverse:</strong> <span class="math inline">\((\mathbf{A}^{-1})^{-1} = \mathbf{A}\)</span>.</li>
+<li><strong>Transpose of the Inverse:</strong> <span class="math inline">\((\mathbf{A}^{-1})&#39; = (\mathbf{A}&#39;)^{-1}\)</span>.</li>
+</ol>
+</div>
+<div id="special-case" class="section level5 hasAnchor" number="2.2.1.1.3">
+<h5><span class="header-section-number">2.2.1.1.3</span> Special Case:<a href="prerequisites.html#special-case" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>For a <span class="math inline">\(2 \times 2\)</span> matrix:</p>
+<p><span class="math display">\[
+\mathbf{A}= \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}
+\]</span></p>
+<p>The inverse of <span class="math inline">\(\mathbf{A}\)</span> (if <span class="math inline">\(|\mathbf{A}|=\det(\mathbf{A}) \neq 0\)</span>) is:</p>
+<p><span class="math display">\[
+A^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix}
+\]</span></p>
+<p>where <span class="math inline">\(ad - bc\)</span> is the <strong>determinant</strong> of the matrix <span class="math inline">\(\mathbf{A}\)</span>.</p>
+</div>
+</div>
+<div id="positive-definite-matrix" class="section level4 hasAnchor" number="2.2.1.2">
+<h4><span class="header-section-number">2.2.1.2</span> Positive Definite Matrix<a href="prerequisites.html#positive-definite-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>A <strong>positive definite matrix</strong> is a symmetric matrix <span class="math inline">\(\mathbf{A}\)</span> where, for any non-zero vector <span class="math inline">\(\mathbf{x}\)</span>, the following condition holds:</p>
+<p><span class="math display">\[
+\mathbf{x}&#39; \mathbf{A}\mathbf{x} &gt; 0
+\]</span></p>
+<div id="key-properties" class="section level5 hasAnchor" number="2.2.1.2.1">
+<h5><span class="header-section-number">2.2.1.2.1</span> Key Properties:<a href="prerequisites.html#key-properties" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ol style="list-style-type: decimal">
+<li><strong>Symmetry:</strong> The matrix <span class="math inline">\(\mathbf{A}\)</span> must be symmetric, meaning <span class="math inline">\(\mathbf{A}= \mathbf{A}&#39;\)</span>.</li>
+<li><strong>Positive quadratic form:</strong> For any non-zero vector <span class="math inline">\(\mathbf{x}\)</span>, the quadratic form <span class="math inline">\(\mathbf{x}&#39; \mathbf{A}\mathbf{x}\)</span> must yield a positive value.</li>
+</ol>
+</div>
+<div id="characteristics-of-a-positive-definite-matrix" class="section level5 hasAnchor" number="2.2.1.2.2">
+<h5><span class="header-section-number">2.2.1.2.2</span> Characteristics of a Positive Definite Matrix:<a href="prerequisites.html#characteristics-of-a-positive-definite-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<ul>
+<li>All the <strong>eigenvalues</strong> of a positive definite matrix are <strong>positive</strong>.</li>
+<li>The <strong>determinants</strong> of the leading principal minors (submatrices) of the matrix are positive.</li>
+<li>The <strong>diagonal elements</strong> of a positive definite matrix are positive.</li>
+</ul>
+</div>
+<div id="example" class="section level5 hasAnchor" number="2.2.1.2.3">
+<h5><span class="header-section-number">2.2.1.2.3</span> Example:<a href="prerequisites.html#example" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>The matrix:
+<span class="math display">\[
+\mathbf{A}= \begin{bmatrix} 2 &amp; 1 \\ 1 &amp; 2 \end{bmatrix}
+\]</span>
+is positive definite, because for any non-zero vector <span class="math inline">\(\mathbf{x}\)</span>, <span class="math inline">\(\mathbf{x}&#39; \mathbf{A}\mathbf{x} &gt; 0\)</span>. For instance, if <span class="math inline">\(\mathbf{x} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}\)</span>, then:</p>
+<p><span class="math display">\[
+\mathbf{x}&#39; \mathbf{A}\mathbf{x} = \begin{bmatrix} 1 &amp; 1 \end{bmatrix} \begin{bmatrix} 2 &amp; 1 \\ 1 &amp; 2 \end{bmatrix} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = 6 &gt; 0
+\]</span></p>
+</div>
+</div>
+</div>
 </div>
 <div id="probability" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Probability<a href="prerequisites.html#probability" class="anchor-section" aria-label="Anchor link to header"></a></h2>

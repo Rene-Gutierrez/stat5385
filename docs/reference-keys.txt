@@ -2,6 +2,15 @@ stat-53856385
 prerequisites
 general-math
 linear-algebra
+matrices
+inverse-matrix
+conditions-for-a-matrix-to-have-an-inverse
+properties-of-the-inverse-matrix
+special-case
+positive-definite-matrix
+key-properties
+characteristics-of-a-positive-definite-matrix
+example
 probability
 statistics
 calculus
