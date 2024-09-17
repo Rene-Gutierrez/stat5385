@@ -47,12 +47,62 @@ Key properties of the summation operator include:
 
 You should be familiar with the following linear algebra concepts:
 
+* Linear Independence
 * Matrices
 * Determinants
 * Eigenvalues and Eigenvectors
 * Diagonalization
 * Vector Spaces
 * Linear Transformations
+
+### Linear Independence
+
+**Linear independence** is a fundamental concept in linear algebra that describes a set of vectors where no vector can be written as a linear combination of the others. In other words, the vectors are not "redundant," meaning none of the vectors depends on any other in the set.
+
+#### Definition:
+A set of vectors $\{ \mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_n \}$ in a vector space is **linearly independent** if the only solution to the equation:
+
+$$
+c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + \cdots + c_n \mathbf{v}_n = \mathbf{0}
+$$
+
+is when all the scalar coefficients $c_1, c_2, \ldots, c_n$ are zero, i.e., $c_1 = c_2 = \cdots = c_n = 0$.
+
+If any of the coefficients can be non-zero while still satisfying this equation, then the vectors are **linearly dependent**.
+
+### Example:
+
+Consider two vectors in $\mathbb{R}^2$:
+
+$$
+\mathbf{v}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}, \quad \mathbf{v}_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}
+$$
+
+These vectors are **linearly independent** because there is no way to express one as a multiple of the other. The only solution to:
+
+$$
+c_1 \begin{bmatrix} 1 \\ 0 \end{bmatrix} + c_2 \begin{bmatrix} 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}
+$$
+
+is $c_1 = 0$ and $c_2 = 0$.
+
+In contrast, if:
+
+$$
+\mathbf{v}_1 = \begin{bmatrix} 1 \\ 2 \end{bmatrix}, \quad \mathbf{v}_2 = \begin{bmatrix} 2 \\ 4 \end{bmatrix}
+$$
+
+These vectors are **linearly dependent**, because $\mathbf{v}_2 = 2 \mathbf{v}_1$. Therefore, you can express $mathbf{v}_2$ as a linear combination of $\mathbf{v}_1$.
+
+### Key Points:
+- **Linearly independent** vectors carry distinct information and cannot be derived from each other.
+- **Linearly dependent** vectors are redundant because one or more can be expressed as a combination of others.
+- In a set of linearly independent vectors, removing any vector would reduce the span of the vector space they cover.
+
+### Importance:
+- Linear independence is crucial in determining the **rank** of a matrix.
+- In systems of equations, linear independence of the rows or columns determines if the system has a unique solution.
+- In vector spaces, the **dimension** of the space is the maximum number of linearly independent vectors.
 
 ### Matrices
 
@@ -120,6 +170,42 @@ is positive definite, because for any non-zero vector $\mathbf{x}$, $\mathbf{x}'
 $$
 \mathbf{x}' \bA \mathbf{x} = \begin{bmatrix} 1 & 1 \end{bmatrix} \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = 6 > 0
 $$
+#### Full Rank Matrix
+
+A **full rank matrix** is a matrix in which the rank is equal to the largest possible value for that matrix, meaning:
+
+- For an $m \times n$ matrix $A$, the rank is the maximum number of linearly independent rows or columns.
+  - If the rank is equal to $m$ (the number of rows), the matrix has **full row rank**.
+  - If the rank is equal to $n$ (the number of columns), the matrix has **full column rank**.
+
+##### For a square matrix ($m = n$):
+- A square matrix is **full rank** if its rank is equal to its dimension, i.e., if the matrix is invertible.
+- In this case, $\text{rank}(\bA) = n$, meaning all rows and columns are linearly independent, and the matrix has an inverse.
+
+##### For a rectangular matrix ($m \neq n$):
+- A matrix is **full rank** if the rank equals the smaller of the number of rows or columns. For an $m \times n$ matrix, the rank is at most $\min(m, n)$.
+  - If the matrix has full row rank, all rows are linearly independent.
+  - If the matrix has full column rank, all columns are linearly independent.
+
+##### Example:
+
+Consider the matrix:
+
+$$
+\bA = \begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{bmatrix}
+$$
+
+This is a $2 \times 3$ matrix. Since its two rows are linearly independent, it has **full row rank**, with rank = 2 (the number of rows). However, it does not have full column rank because it has only two independent rows for three columns.
+
+### Key Properties:
+- A full rank matrix has **no redundant rows or columns** (no row or column can be written as a linear combination of others).
+- A square matrix with full rank is **invertible** (non-singular).
+- For a rectangular matrix, full rank implies the matrix has **maximal independent information** in terms of its rows or columns.
+
+### Importance:
+- Full rank matrices are crucial in solving systems of linear equations. A system $\bA\mathbf{x} = \mathbf{b}$ has a unique solution if $\bA$ is a square, full rank matrix.
+- In linear algebra and machine learning, the rank provides insight into the dimensionality and the independence of the data or transformation matrix.
+
 
 ## Probability
 
@@ -160,3 +246,75 @@ Key calculus topics include:
 
 * Gradients
 * Optimization
+
+### Gradient
+
+The **gradient** of a function is a vector that contains the partial derivatives of the function with respect to each of its variables. It points in the direction of the steepest ascent of the function, and its magnitude indicates the rate of change in that direction.
+
+For a scalar function $f(x_1, x_2, \ldots, x_n)$, where $x_1, x_2, \ldots, x_n$ are the variables, the gradient is defined as:
+
+$$
+\nabla f = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \vdots \\ \frac{\partial f}{\partial x_n} \end{bmatrix}
+$$
+
+#### Key Points:
+- **Direction:** The gradient points in the direction of the greatest increase of the function.
+- **Magnitude:** The magnitude of the gradient represents how fast the function increases in that direction.
+- **Zero Gradient:** If $\nabla f = 0$, it indicates that the function has a critical point, which could be a local minimum, maximum, or saddle point.
+
+#### Example:
+
+For a function $f(x, y) = x^2 + y^2$, the gradient is:
+
+$$
+\nabla f = \begin{bmatrix} \frac{\partial}{\partial x} (x^2 + y^2) \\ \frac{\partial}{\partial y} (x^2 + y^2) \end{bmatrix} = \begin{bmatrix} 2x \\ 2y \end{bmatrix}
+$$
+
+This shows that the gradient points outward from the origin, and its magnitude increases as $x$ and $y$ increase.
+
+#### Applications:
+- In **optimization**, the gradient is used to find the minimum or maximum of a function (e.g., in gradient descent, a common optimization algorithm).
+- In **vector calculus**, the gradient is used to describe the slope or rate of change of scalar fields (such as temperature, pressure, or altitude in physical applications).
+
+### Hessian Matrix
+
+The **Hessian matrix** is a square matrix of second-order partial derivatives of a scalar-valued function. It describes the local curvature of a multivariable function and is used to assess the nature of critical points (i.e., whether they are minima, maxima, or saddle points).
+
+For a scalar function $f(x_1, x_2, \ldots, x_n)$, the Hessian matrix $\bH$ is defined as:
+
+$$
+\bH(f) = \begin{bmatrix}
+\frac{\partial^2 f}{\partial x_1^2} & \frac{\partial^2 f}{\partial x_1 \partial x_2} & \cdots & \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+\frac{\partial^2 f}{\partial x_2 \partial x_1} & \frac{\partial^2 f}{\partial x_2^2} & \cdots & \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial^2 f}{\partial x_n \partial x_1} & \frac{\partial^2 f}{\partial x_n \partial x_2} & \cdots & \frac{\partial^2 f}{\partial x_n^2}
+\end{bmatrix}
+$$
+
+#### Key Properties:
+- The Hessian is **symmetric** if the second-order partial derivatives are continuous (by Clairaut's theorem, also called Schwarz's theorem).
+- It provides important information about the local behavior of the function, particularly around critical points where the gradient is zero.
+- **Eigenvalues** of the Hessian matrix determine the type of critical points:
+  - If all eigenvalues are positive, the function has a **local minimum**.
+  - If all eigenvalues are negative, the function has a **local maximum**.
+  - If some eigenvalues are positive and others are negative, the function has a **saddle point**.
+
+#### Example:
+
+For a function $f(x, y) = x^2 + xy + y^2$, the Hessian matrix is:
+
+$$
+\bH(f) = \begin{bmatrix} 
+\frac{\partial^2 f}{\partial x^2} & \frac{\partial^2 f}{\partial x \partial y} \\ 
+\frac{\partial^2 f}{\partial y \partial x} & \frac{\partial^2 f}{\partial y^2} 
+\end{bmatrix} 
+= \begin{bmatrix} 
+2 & 1 \\ 
+1 & 2 
+\end{bmatrix}
+$$
+
+### Applications:
+- In **optimization**, the Hessian is used to assess the convexity or concavity of a function, which helps in identifying the nature of critical points.
+- In **machine learning**, it is used to optimize loss functions and can be part of second-order optimization methods like Newton's method.
+- In **economics** and **engineering**, the Hessian helps in analyzing systems involving multiple variables and understanding how they interact with each other.
