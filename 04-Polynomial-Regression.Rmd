@@ -144,5 +144,10 @@ curve(expr = outRegPolRes$coefficients[1] + outRegPolRes$coefficients[2] * x + o
       col  = 'blue',
       lwd  = 2)
 ```
+We can also check the $R^2$ of the restricted fit.
+
+```{r }
+```
+
 
 Although polynomial regression is technically a form of multivariate linear regression—since it involves multiple polynomial terms of a single independent variable—it can still be analyzed using the tools discussed in the next chapter. Despite having multiple polynomial terms, the model has only one original independent variable that has been transformed. Consequently, the relationship between the transformed variable and the dependent variable can be effectively visualized using a scatter plot.
