@@ -1,12 +1,14 @@
+\newcommand{\ba}{\mathbf{a}}
+\newcommand{\bc}{\mathbf{c}}
+\newcommand{\be}{\mathbf{e}}
 \newcommand{\bx}{\mathbf{x}}
-\newcommand{\bX}{\mathbf{X}}
-\newcommand{\bW}{\mathbf{W}}
+\newcommand{\by}{\mathbf{y}}
 \newcommand{\bA}{\mathbf{A}}
 \newcommand{\bB}{\mathbf{B}}
 \newcommand{\bI}{\mathbf{I}}
 \newcommand{\bH}{\mathbf{H}}
-\newcommand{\by}{\mathbf{y}}
-\newcommand{\be}{\mathbf{e}}
+\newcommand{\bW}{\mathbf{W}}
+\newcommand{\bX}{\mathbf{X}}
 \newcommand{\bgb}{\boldsymbol{\beta}}
 \newcommand{\bzero}{\mathbf{0}}
 \newcommand{\hy}{\hat{y}}
@@ -47,8 +49,10 @@ Key properties of the summation operator include:
 
 You should be familiar with the following linear algebra concepts:
 
-* Linear Independence
-* Matrices
+* [Linear Independence](#linear-independence)
+* [Full Rank Matrix](#full-rank-matrix)
+* [Inverse Matrix](#inverse-matrix)
+* [Positive Definite Matrix](#positive-definite-matrix)
 * Determinants
 * Eigenvalues and Eigenvectors
 * Diagonalization
@@ -70,7 +74,7 @@ is when all the scalar coefficients $c_1, c_2, \ldots, c_n$ are zero, i.e., $c_1
 
 If any of the coefficients can be non-zero while still satisfying this equation, then the vectors are **linearly dependent**.
 
-### Example:
+#### Example:
 
 Consider two vectors in $\mathbb{R}^2$:
 
@@ -94,19 +98,53 @@ $$
 
 These vectors are **linearly dependent**, because $\mathbf{v}_2 = 2 \mathbf{v}_1$. Therefore, you can express $mathbf{v}_2$ as a linear combination of $\mathbf{v}_1$.
 
-### Key Points:
+#### Key Points:
 - **Linearly independent** vectors carry distinct information and cannot be derived from each other.
 - **Linearly dependent** vectors are redundant because one or more can be expressed as a combination of others.
 - In a set of linearly independent vectors, removing any vector would reduce the span of the vector space they cover.
 
-### Importance:
+#### Importance:
 - Linear independence is crucial in determining the **rank** of a matrix.
 - In systems of equations, linear independence of the rows or columns determines if the system has a unique solution.
 - In vector spaces, the **dimension** of the space is the maximum number of linearly independent vectors.
 
-### Matrices
+### Full Rank Matrix
 
-#### Inverse Matrix
+A **full rank matrix** is a matrix in which the rank is equal to the largest possible value for that matrix, meaning:
+
+- For an $m \times n$ matrix $A$, the rank is the maximum number of linearly independent rows or columns.
+  - If the rank is equal to $m$ (the number of rows), the matrix has **full row rank**.
+  - If the rank is equal to $n$ (the number of columns), the matrix has **full column rank**.
+
+#### For a square matrix ($m = n$):
+- A square matrix is **full rank** if its rank is equal to its dimension, i.e., if the matrix is invertible.
+- In this case, $\text{rank}(\bA) = n$, meaning all rows and columns are linearly independent, and the matrix has an inverse.
+
+#### For a rectangular matrix ($m \neq n$):
+- A matrix is **full rank** if the rank equals the smaller of the number of rows or columns. For an $m \times n$ matrix, the rank is at most $\min(m, n)$.
+  - If the matrix has full row rank, all rows are linearly independent.
+  - If the matrix has full column rank, all columns are linearly independent.
+
+#### Example:
+
+Consider the matrix:
+
+$$
+\bA = \begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{bmatrix}
+$$
+
+This is a $2 \times 3$ matrix. Since its two rows are linearly independent, it has **full row rank**, with rank = 2 (the number of rows). However, it does not have full column rank because it has only two independent rows for three columns.
+
+#### Key Properties:
+- A full rank matrix has **no redundant rows or columns** (no row or column can be written as a linear combination of others).
+- A square matrix with full rank is **invertible** (non-singular).
+- For a rectangular matrix, full rank implies the matrix has **maximal independent information** in terms of its rows or columns.
+
+#### Importance:
+- Full rank matrices are crucial in solving systems of linear equations. A system $\bA\mathbf{x} = \mathbf{b}$ has a unique solution if $\bA$ is a square, full rank matrix.
+- In linear algebra and machine learning, the rank provides insight into the dimensionality and the independence of the data or transformation matrix.
+
+### Inverse Matrix
 
 An **inverse matrix** of a square matrix $\bA$, denoted as $\bA^{-1}$, is a matrix that, when multiplied by $\bA$, results in the identity matrix $I$. This relationship is expressed as:
 
@@ -116,7 +154,7 @@ $$
 
 where $\bI$ is the identity matrix, and its diagonal elements are 1, with all off-diagonal elements being 0.
 
-##### Conditions for a Matrix to Have an Inverse:
+#### Conditions for a Matrix to Have an Inverse:
 - The matrix $\bA$ must be **square**, meaning it has the same number of rows and columns.
 - The matrix $\bA$ must be **non-singular**, meaning its **determinant** is non-zero ($|\bA| \neq 0$).
 
@@ -126,7 +164,7 @@ where $\bI$ is the identity matrix, and its diagonal elements are 1, with all of
 3. **Inverse of the Inverse:** $(\bA^{-1})^{-1} = \bA$.
 4. **Transpose of the Inverse:** $(\bA^{-1})' = (\bA')^{-1}$.
 
-##### Special Case:
+#### Special Case:
 
 For a $2 \times 2$ matrix:
 
@@ -142,7 +180,7 @@ $$
 
 where $ad - bc$ is the **determinant** of the matrix $\bA$.
 
-#### Positive Definite Matrix
+### Positive Definite Matrix
 
 A **positive definite matrix** is a symmetric matrix $\bA$ where, for any non-zero vector $\mathbf{x}$, the following condition holds:
 
@@ -150,16 +188,16 @@ $$
 \mathbf{x}' \bA \mathbf{x} > 0
 $$
 
-##### Key Properties:
+#### Key Properties:
 1. **Symmetry:** The matrix $\bA$ must be symmetric, meaning $\bA = \bA'$.
 2. **Positive quadratic form:** For any non-zero vector $\mathbf{x}$, the quadratic form $\mathbf{x}' \bA \mathbf{x}$ must yield a positive value.
 
-##### Characteristics of a Positive Definite Matrix:
+#### Characteristics of a Positive Definite Matrix:
 - All the **eigenvalues** of a positive definite matrix are **positive**.
 - The **determinants** of the leading principal minors (submatrices) of the matrix are positive.
 - The **diagonal elements** of a positive definite matrix are positive.
 
-##### Example:
+#### Example:
 
 The matrix:
 $$
@@ -170,42 +208,6 @@ is positive definite, because for any non-zero vector $\mathbf{x}$, $\mathbf{x}'
 $$
 \mathbf{x}' \bA \mathbf{x} = \begin{bmatrix} 1 & 1 \end{bmatrix} \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = 6 > 0
 $$
-#### Full Rank Matrix
-
-A **full rank matrix** is a matrix in which the rank is equal to the largest possible value for that matrix, meaning:
-
-- For an $m \times n$ matrix $A$, the rank is the maximum number of linearly independent rows or columns.
-  - If the rank is equal to $m$ (the number of rows), the matrix has **full row rank**.
-  - If the rank is equal to $n$ (the number of columns), the matrix has **full column rank**.
-
-##### For a square matrix ($m = n$):
-- A square matrix is **full rank** if its rank is equal to its dimension, i.e., if the matrix is invertible.
-- In this case, $\text{rank}(\bA) = n$, meaning all rows and columns are linearly independent, and the matrix has an inverse.
-
-##### For a rectangular matrix ($m \neq n$):
-- A matrix is **full rank** if the rank equals the smaller of the number of rows or columns. For an $m \times n$ matrix, the rank is at most $\min(m, n)$.
-  - If the matrix has full row rank, all rows are linearly independent.
-  - If the matrix has full column rank, all columns are linearly independent.
-
-##### Example:
-
-Consider the matrix:
-
-$$
-\bA = \begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{bmatrix}
-$$
-
-This is a $2 \times 3$ matrix. Since its two rows are linearly independent, it has **full row rank**, with rank = 2 (the number of rows). However, it does not have full column rank because it has only two independent rows for three columns.
-
-### Key Properties:
-- A full rank matrix has **no redundant rows or columns** (no row or column can be written as a linear combination of others).
-- A square matrix with full rank is **invertible** (non-singular).
-- For a rectangular matrix, full rank implies the matrix has **maximal independent information** in terms of its rows or columns.
-
-### Importance:
-- Full rank matrices are crucial in solving systems of linear equations. A system $\bA\mathbf{x} = \mathbf{b}$ has a unique solution if $\bA$ is a square, full rank matrix.
-- In linear algebra and machine learning, the rank provides insight into the dimensionality and the independence of the data or transformation matrix.
-
 
 ## Probability
 
@@ -244,7 +246,9 @@ Essential statistical concepts include:
 
 Key calculus topics include:
 
-* Gradients
+* [Gradient](#gradient)
+* [Hessian](#hessian)
+* [Matrix Calculus](#matrix-calculus)
 * Optimization
 
 ### Gradient
@@ -254,7 +258,7 @@ The **gradient** of a function is a vector that contains the partial derivatives
 For a scalar function $f(x_1, x_2, \ldots, x_n)$, where $x_1, x_2, \ldots, x_n$ are the variables, the gradient is defined as:
 
 $$
-\nabla f = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \vdots \\ \frac{\partial f}{\partial x_n} \end{bmatrix}
+\nabla f = \frac{d}{d \mathbf{x}} f(\mathbf{x}) = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \vdots \\ \frac{\partial f}{\partial x_n} \end{bmatrix}
 $$
 
 #### Key Points:
@@ -283,7 +287,7 @@ The **Hessian matrix** is a square matrix of second-order partial derivatives of
 For a scalar function $f(x_1, x_2, \ldots, x_n)$, the Hessian matrix $\bH$ is defined as:
 
 $$
-\bH(f) = \begin{bmatrix}
+\bH(f) = \frac{d}{d \mathbf{x} d\bx'} f(\mathbf{x}) =\begin{bmatrix}
 \frac{\partial^2 f}{\partial x_1^2} & \frac{\partial^2 f}{\partial x_1 \partial x_2} & \cdots & \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
 \frac{\partial^2 f}{\partial x_2 \partial x_1} & \frac{\partial^2 f}{\partial x_2^2} & \cdots & \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
 \vdots & \vdots & \ddots & \vdots \\
@@ -318,3 +322,197 @@ $$
 - In **optimization**, the Hessian is used to assess the convexity or concavity of a function, which helps in identifying the nature of critical points.
 - In **machine learning**, it is used to optimize loss functions and can be part of second-order optimization methods like Newton's method.
 - In **economics** and **engineering**, the Hessian helps in analyzing systems involving multiple variables and understanding how they interact with each other.
+
+### Matrix Calculus
+
+You need to know the following matrix calculus operations:
+
+$$
+\frac{d}{d \mathbf{x}} \left(\bc'\bx \right)
+$$
+$$
+\frac{d}{d \mathbf{x}} \left(\bx'\bA \bx \right)
+$$
+$$
+\frac{d}{d \mathbf{x} d\bx'} \left(\bx'\bA \bx \right)
+$$
+
+Let $\mathbf{c}$ be a constant vector and $\mathbf{x}$ be a variable vector, both of size \( n \times 1 \). We want to compute the derivative of the product:
+
+$$
+f(\mathbf{x}) = \mathbf{c}' \mathbf{x}
+$$
+Where:
+$$
+\mathbf{c}' \mathbf{x} = \sum_{i=1}^{n} c_i x_i
+$$
+
+To differentiate $f(\mathbf{x}) = \mathbf{c}' \mathbf{x}$ with respect to the variable vector $\mathbf{x}$, we take the derivative of each component separately:
+
+$$
+\nabla f = \frac{d}{d \mathbf{x}} f(\mathbf{x}) = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \vdots \\ \frac{\partial f}{\partial x_n} \end{bmatrix} = \begin{bmatrix} \frac{\partial }{\partial x_1} (\mathbf{c}' \mathbf{x})  \\ \frac{\partial }{\partial x_2} (\mathbf{c}' \mathbf{x}) \\ \vdots \\ \frac{\partial }{\partial x_n} (\mathbf{c}' \mathbf{x}) \end{bmatrix} = \begin{bmatrix} \frac{\partial }{\partial x_1} \left(\sum_{i=1}^{n} c_i x_i\right)  \\ \frac{\partial }{\partial x_2} \left(\sum_{i=1}^{n} c_i x_i\right) \\ \vdots \\ \frac{\partial }{\partial x_n} \left(\sum_{i=1}^{n} c_i x_i\right) \end{bmatrix}
+$$
+
+Since $\mathbf{c}$ is a constant vector, the derivative of each term $c_i x_i$ is simply $c_i$, that is:
+
+$$
+\frac{d}{d x_j} \left(\sum_{i=1}^{n} c_i x_i\right) = c_j
+$$
+
+Thus, the derivative of the entire sum is the vector:
+
+$$
+\frac{d}{d \mathbf{x}} \left( \mathbf{c}' \mathbf{x} \right) = \begin{bmatrix} c_1  \\ c_2 \\ \vdots \\ c_n \end{bmatrix} = \mathbf{c}
+$$
+
+Now, let's go through the derivative of the quadratic form $f(\mathbf{x}) = \mathbf{x}' \bA \mathbf{x}$, where:
+
+- $\mathbf{x}$ is a variable vector of size $n \times 1$,
+- $\bA$ is a constant, symmetric matrix of size $n \times n$.
+
+$$
+f(\mathbf{x}) = \mathbf{x}' \bA \mathbf{x}
+$$
+First, expand the quadratic form:
+
+$$
+f(\mathbf{x}) = \sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j
+$$
+Then
+
+$$
+\nabla f = \frac{d}{d \mathbf{x}} f(\mathbf{x}) = \begin{bmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \vdots \\ \frac{\partial f}{\partial x_n} \end{bmatrix} = \begin{bmatrix} \frac{\partial }{\partial x_1} (\mathbf{x}' \bA \mathbf{x})  \\ \frac{\partial }{\partial x_2} (\mathbf{x}' \bA \mathbf{x}) \\ \vdots \\ \frac{\partial }{\partial x_n} (\mathbf{x}' \bA \mathbf{x}) \end{bmatrix} = \begin{bmatrix} \frac{\partial }{\partial x_1} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right)  \\ \frac{\partial }{\partial x_2} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right) \\ \vdots \\ \frac{\partial }{\partial x_n} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right) \end{bmatrix}
+$$
+For each component $x_k$ in the vector $\mathbf{x}$, the derivative of $f(\mathbf{x})$ is:
+
+$$
+\frac{\partial}{\partial x_k} f(\mathbf{x}) = \frac{\partial}{\partial x_k} \left( \sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j \right) = \sum_{i=1}^{n} \sum_{j=1}^{n} \frac{\partial}{\partial x_k}  x_i a_{ij} x_j
+$$
+
+Each term $x_i a_{ij} x_j$ has two components that depend on $\bx$:
+
+- If $i = j = k$, the derivative with respect to $x_k$ is:
+
+$$
+\frac{\partial}{\partial x_k} (x_i a_{ij} x_j) = 2 a_{kk} x_k
+$$
+
+- If $i \neq j$ and $i = k$, the derivative with respect to $x_k$ is:
+
+$$
+\frac{\partial}{\partial x_k} (x_i a_{ij} x_j) = a_{kj} x_j
+$$
+- Similarly, if $i \neq j$ and $j = k$, the derivative with respect to $x_k$ is:
+
+$$
+\frac{\partial}{\partial x_k} (x_i a_{ij} x_j) = a_{ik} x_i
+$$
+- Finally, if $i \neq k$ and $j \neq k$, then:
+
+$$
+\frac{\partial}{\partial x_k} (x_i a_{ij} x_j) = 0
+$$
+Then
+
+$$
+\frac{\partial}{\partial x_k} f(\mathbf{x}) = 2 a_{kk} x_k + \sum_{i \neq k} a_{ik} x_i + \sum_{j \neq k} a_{kj} x_j 
+$$
+
+Now since $\bA$ is symmetric ($a_{ij} = a_{ji}$), then:
+
+\begin{align*}
+\frac{\partial}{\partial x_k} f(\mathbf{x}) 
+  &= 2 a_{kk} x_k + \sum_{i \neq k} a_{ik} x_i + \sum_{i \neq k} a_{ik} x_i \\
+  &= 2 a_{kk} x_k + 2\sum_{i \neq k} a_{ik} x_i \\
+  &= 2 \left(\sum_{i \neq k} a_{ik} x_i + a_{kk}x_k \right) \\
+  &= 2 \left(\sum_{i = 1}^n a_{ki} x_i\right)   
+\end{align*}
+
+Then:
+
+$$
+\nabla f = \begin{bmatrix} \frac{\partial }{\partial x_1} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right)  \\ \frac{\partial }{\partial x_2} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right) \\ \vdots \\ \frac{\partial }{\partial x_n} \left(\sum_{i=1}^{n} \sum_{j=1}^{n} x_i a_{ij} x_j\right) \end{bmatrix} = \begin{bmatrix} 2 \sum_{i = 1}^n a_{1i} x_i  \\ 2 \sum_{i = 1}^n a_{2i} x_i \\ \vdots \\ 2 \sum_{i = 1}^n a_{ni} x_i \end{bmatrix} = 2 \bA \bx
+$$
+
+Finally for the second derivative we have that:
+
+In general, the Hessian matrix of a scalar function \( f(\mathbf{x}) \), where \( \mathbf{x} \in \mathbb{R}^n \) is a vector of variables, is a matrix that contains all the second-order partial derivatives of the function. It is defined as:
+
+$$
+H(f) = \frac{d^2 f}{d\bx d\bx'} =  \begin{bmatrix}
+\frac{\partial^2 f}{\partial x_1^2} & \frac{\partial^2 f}{\partial x_1 \partial x_2} & \cdots & \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+\frac{\partial^2 f}{\partial x_2 \partial x_1} & \frac{\partial^2 f}{\partial x_2^2} & \cdots & \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial^2 f}{\partial x_n \partial x_1} & \frac{\partial^2 f}{\partial x_n \partial x_2} & \cdots & \frac{\partial^2 f}{\partial x_n^2}
+\end{bmatrix} 
+= \begin{bmatrix}
+\frac{\partial }{\partial x_1}\left(\frac{d f}{d\bx}\right)' \\
+\frac{\partial }{\partial x_2}\left(\frac{d f}{d\bx}\right)' \\
+\vdots  \\
+\frac{\partial }{\partial x_n}\left(\frac{d f}{d\bx}\right)'
+\end{bmatrix} 
+= \begin{bmatrix}
+\frac{\partial }{\partial x_1}\left(2\bA\bx\right)' \\
+\frac{\partial }{\partial x_2}\left(2\bA\bx\right)' \\
+\vdots  \\
+\frac{\partial }{\partial x_n}\left(2\bA\bx\right)'
+\end{bmatrix} 
+$$
+
+Now
+
+$$
+\frac{\partial }{\partial x_k}\left(2\bA\bx\right)
+= 2\frac{\partial }{\partial x_k}\begin{bmatrix}
+\sum_{i = 1}^n a_{1i} x_i \\
+\sum_{i = 1}^n a_{2i} x_i \\
+\vdots  \\
+\sum_{i = 1}^n a_{ni} x_i
+\end{bmatrix}
+= 2 \begin{bmatrix}
+\frac{\partial }{\partial x_k} \left(\sum_{i = 1}^n a_{1i} x_i \right)\\
+\frac{\partial }{\partial x_k} \left(\sum_{i = 1}^n a_{2i} x_i \right)\\
+\vdots  \\
+\frac{\partial }{\partial x_k} \left(\sum_{i = 1}^n a_{ni} x_i \right)
+\end{bmatrix}
+= 2 \begin{bmatrix}
+a_{k1} \\
+a_{k2} \\
+\vdots \\
+a_{kn}
+\end{bmatrix}
+$$
+
+Then
+
+$$
+H(f) = \frac{d^2 f}{d\bx d\bx'} 
+= \begin{bmatrix}
+2\begin{bmatrix}
+a_{11} \\
+a_{12} \\
+\vdots \\
+a_{1n}
+\end{bmatrix}' \\
+2\begin{bmatrix}
+a_{21} \\
+a_{22} \\
+\vdots \\
+a_{2n}
+\end{bmatrix}' \\
+\vdots \\
+2\begin{bmatrix}
+a_{n1} \\
+a_{n2} \\
+\vdots \\
+a_{nn}
+\end{bmatrix}'
+\end{bmatrix}
+=  2\begin{bmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{bmatrix}
+= 2 \bA
+$$
