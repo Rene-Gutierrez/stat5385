@@ -57,3 +57,4 @@ cross-validation
 weighted-least-squares
 model-in-matrix-form
 weighted-least-squares-in-matrix-form
+polynomial-regression

@@ -439,7 +439,7 @@ Finally for the second derivative we have that:
 In general, the Hessian matrix of a scalar function \( f(\mathbf{x}) \), where \( \mathbf{x} \in \mathbb{R}^n \) is a vector of variables, is a matrix that contains all the second-order partial derivatives of the function. It is defined as:
 
 $$
-H(f) = \frac{d^2 f}{d\bx d\bx'} =  \begin{bmatrix}
+\bH(f) = \frac{d^2 f}{d\bx d\bx'} =  \begin{bmatrix}
 \frac{\partial^2 f}{\partial x_1^2} & \frac{\partial^2 f}{\partial x_1 \partial x_2} & \cdots & \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
 \frac{\partial^2 f}{\partial x_2 \partial x_1} & \frac{\partial^2 f}{\partial x_2^2} & \cdots & \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
 \vdots & \vdots & \ddots & \vdots \\
@@ -486,7 +486,7 @@ $$
 Then
 
 $$
-H(f) = \frac{d^2 f}{d\bx d\bx'} 
+\bH(f) = \frac{d^2 f}{d\bx d\bx'} 
 = \begin{bmatrix}
 2\begin{bmatrix}
 a_{11} \\

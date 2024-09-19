@@ -193,6 +193,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.9.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weighted-least-squares-in-matrix-form"><i class="fa fa-check"></i><b>4.9.1</b> Weighted Least Squares in Matrix Form</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="5" data-path="polynomial-regression.html"><a href="polynomial-regression.html"><i class="fa fa-check"></i><b>5</b> Polynomial Regression</a></li>
 </ul>
 
       </nav>
@@ -633,7 +634,7 @@ Then</p>
 <p>Finally for the second derivative we have that:</p>
 <p>In general, the Hessian matrix of a scalar function <span class="math inline">\(f(\mathbf{x})\)</span>, where <span class="math inline">\(\mathbf{x} \in \mathbb{R}^n\)</span> is a vector of variables, is a matrix that contains all the second-order partial derivatives of the function. It is defined as:</p>
 <p><span class="math display">\[
-H(f) = \frac{d^2 f}{d\mathbf{x}d\mathbf{x}&#39;} =  \begin{bmatrix}
+\mathbf{H}(f) = \frac{d^2 f}{d\mathbf{x}d\mathbf{x}&#39;} =  \begin{bmatrix}
 \frac{\partial^2 f}{\partial x_1^2} &amp; \frac{\partial^2 f}{\partial x_1 \partial x_2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
 \frac{\partial^2 f}{\partial x_2 \partial x_1} &amp; \frac{\partial^2 f}{\partial x_2^2} &amp; \cdots &amp; \frac{\partial^2 f}{\partial x_2 \partial x_n} \\
 \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
@@ -676,7 +677,7 @@ a_{kn}
 \]</span></p>
 <p>Then</p>
 <p><span class="math display">\[
-H(f) = \frac{d^2 f}{d\mathbf{x}d\mathbf{x}&#39;}
+\mathbf{H}(f) = \frac{d^2 f}{d\mathbf{x}d\mathbf{x}&#39;}
 = \begin{bmatrix}
 2\begin{bmatrix}
 a_{11} \\

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 Polynomial Regression | _main.knit</title>
+  <meta name="description" content="" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5 Polynomial Regression | _main.knit" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 Polynomial Regression | _main.knit" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="simple-linear-regression.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Stat 5385/6385</a></li>
+<li class="chapter" data-level="2" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>2</b> Prerequisites</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="prerequisites.html"><a href="prerequisites.html#general-math"><i class="fa fa-check"></i><b>2.1</b> General Math</a></li>
+<li class="chapter" data-level="2.2" data-path="prerequisites.html"><a href="prerequisites.html#linear-algebra"><i class="fa fa-check"></i><b>2.2</b> Linear Algebra</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="prerequisites.html"><a href="prerequisites.html#linear-independence"><i class="fa fa-check"></i><b>2.2.1</b> Linear Independence</a></li>
+<li class="chapter" data-level="2.2.2" data-path="prerequisites.html"><a href="prerequisites.html#full-rank-matrix"><i class="fa fa-check"></i><b>2.2.2</b> Full Rank Matrix</a></li>
+<li class="chapter" data-level="2.2.3" data-path="prerequisites.html"><a href="prerequisites.html#inverse-matrix"><i class="fa fa-check"></i><b>2.2.3</b> Inverse Matrix</a></li>
+<li class="chapter" data-level="2.2.4" data-path="prerequisites.html"><a href="prerequisites.html#positive-definite-matrix"><i class="fa fa-check"></i><b>2.2.4</b> Positive Definite Matrix</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.3</b> Probability</a></li>
+<li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.4</b> Statistics</a></li>
+<li class="chapter" data-level="2.5" data-path="prerequisites.html"><a href="prerequisites.html#calculus"><i class="fa fa-check"></i><b>2.5</b> Calculus</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="prerequisites.html"><a href="prerequisites.html#gradient"><i class="fa fa-check"></i><b>2.5.1</b> Gradient</a></li>
+<li class="chapter" data-level="2.5.2" data-path="prerequisites.html"><a href="prerequisites.html#hessian-matrix"><i class="fa fa-check"></i><b>2.5.2</b> Hessian Matrix</a></li>
+<li class="chapter" data-level="2.5.3" data-path="prerequisites.html"><a href="prerequisites.html#applications-1"><i class="fa fa-check"></i><b>2.5.3</b> Applications:</a></li>
+<li class="chapter" data-level="2.5.4" data-path="prerequisites.html"><a href="prerequisites.html#matrix-calculus"><i class="fa fa-check"></i><b>2.5.4</b> Matrix Calculus</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="introduction.html"><a href="introduction.html#examples"><i class="fa fa-check"></i><b>3.1</b> Examples</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="introduction.html"><a href="introduction.html#ad-spending"><i class="fa fa-check"></i><b>3.1.1</b> Ad Spending</a></li>
+<li class="chapter" data-level="3.1.2" data-path="introduction.html"><a href="introduction.html#winw-example"><i class="fa fa-check"></i><b>3.1.2</b> Wine and Life Expectancy</a></li>
+<li class="chapter" data-level="3.1.3" data-path="introduction.html"><a href="introduction.html#burger-demand"><i class="fa fa-check"></i><b>3.1.3</b> Burger Demand</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model"><i class="fa fa-check"></i><b>4.1</b> Model</a></li>
+<li class="chapter" data-level="4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#least-squares-estimation"><i class="fa fa-check"></i><b>4.2</b> Least Squares Estimation</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#other-estimated-quantites"><i class="fa fa-check"></i><b>4.2.1</b> Other estimated quantites</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#properties-of-the-estimates"><i class="fa fa-check"></i><b>4.3</b> Properties of the Estimates</a></li>
+<li class="chapter" data-level="4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centering-and-standarizing-the-data"><i class="fa fa-check"></i><b>4.4</b> Centering and Standarizing the Data</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#independent-variable-centered"><i class="fa fa-check"></i><b>4.4.1</b> Independent variable centered</a></li>
+<li class="chapter" data-level="4.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#both-variables-centered"><i class="fa fa-check"></i><b>4.4.2</b> Both Variables centered</a></li>
+<li class="chapter" data-level="4.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#independent-and-dependent-variable-standardized"><i class="fa fa-check"></i><b>4.4.3</b> Independent and dependent variable standardized</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#coefficient-of-determination"><i class="fa fa-check"></i><b>4.5</b> Coefficient of Determination</a></li>
+<li class="chapter" data-level="4.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#residual-analysis"><i class="fa fa-check"></i><b>4.6</b> Residual Analysis</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#non-linear-regression-function"><i class="fa fa-check"></i><b>4.6.1</b> Non-linear regression function</a></li>
+<li class="chapter" data-level="4.6.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#heteroscedasticity"><i class="fa fa-check"></i><b>4.6.2</b> Heteroscedasticity</a></li>
+<li class="chapter" data-level="4.6.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#outliers"><i class="fa fa-check"></i><b>4.6.3</b> Outliers</a></li>
+<li class="chapter" data-level="4.6.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#variables-ommited"><i class="fa fa-check"></i><b>4.6.4</b> Variables Ommited</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#cross-validation"><i class="fa fa-check"></i><b>4.7</b> Cross-Validation</a></li>
+<li class="chapter" data-level="4.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weighted-least-squares"><i class="fa fa-check"></i><b>4.8</b> Weighted Least Squares</a></li>
+<li class="chapter" data-level="4.9" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-in-matrix-form"><i class="fa fa-check"></i><b>4.9</b> Model in Matrix Form</a>
+<ul>
+<li class="chapter" data-level="4.9.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weighted-least-squares-in-matrix-form"><i class="fa fa-check"></i><b>4.9.1</b> Weighted Least Squares in Matrix Form</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="polynomial-regression.html"><a href="polynomial-regression.html"><i class="fa fa-check"></i><b>5</b> Polynomial Regression</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="polynomial-regression" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">5</span> Polynomial Regression<a href="polynomial-regression.html#polynomial-regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Polynomial regression is an extension of linear regression where the relationship between the independent variable <span class="math inline">\(x\)</span> and the dependent variable <span class="math inline">\(y\)</span> is modeled as an <span class="math inline">\(n\)</span>-th degree polynomial. Instead of fitting a straight line, it fits a curve that can capture more complex patterns in the data.</p>
+<p>In polynomial regression, the model takes the form:</p>
+<p><span class="math display">\[
+y = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_n x^n + \epsilon
+\]</span></p>
+<p>Where:
+- <span class="math inline">\(y\)</span> is the dependent variable,
+- <span class="math inline">\(x\)</span> is the independent variable,
+- <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_n\)</span> are the coefficients,
+- <span class="math inline">\(\epsilon\)</span> is the error term.</p>
+<p>Polynomial regression is useful when the data exhibits a nonlinear trend that cannot be well approximated by a straight line. By increasing the degree of the polynomial, the model can fit more complex patterns, though caution is needed to avoid overfitting.</p>
+<p>There are two main scenarios for using polynomial regression:</p>
+<p>The underlying process is inherently polynomial.
+A polynomial provides a good approximation for the relationship.
+If you know that the phenomenon you’re modeling follows a polynomial function, there’s no need to worry about overfitting. You can confidently use the polynomial degree that best fits the known relationship.</p>
+<p>However, if you’re using polynomial regression to approximate a nonlinear relationship between the independent and dependent variables, be cautious. Overfitting can become a significant issue, particularly outside the range of the data used for model fitting, where predictions can be unreliable.</p>
+<p>In the second scenario, it’s common to limit the polynomial degree to 2nd or 3rd order to prevent overfitting while still capturing key nonlinear patterns.</p>
+<p>We use our <code>Burger Data</code> set, to see an example of using polynomial regression
+to approximate a non-linear relationship. We will use a second degree polynomial
+to fit the data.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="polynomial-regression.html#cb57-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Burger Data.csv&quot;</span>)</span>
+<span id="cb57-2"><a href="polynomial-regression.html#cb57-2" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="polynomial-regression.html#cb57-3" tabindex="-1"></a><span class="co"># Polynomial Regression Fit</span></span>
+<span id="cb57-4"><a href="polynomial-regression.html#cb57-4" tabindex="-1"></a>outRegPol <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> dat)</span>
+<span id="cb57-5"><a href="polynomial-regression.html#cb57-5" tabindex="-1"></a></span>
+<span id="cb57-6"><a href="polynomial-regression.html#cb57-6" tabindex="-1"></a><span class="co"># Data Limits</span></span>
+<span id="cb57-7"><a href="polynomial-regression.html#cb57-7" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb57-8"><a href="polynomial-regression.html#cb57-8" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb57-9"><a href="polynomial-regression.html#cb57-9" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb57-10"><a href="polynomial-regression.html#cb57-10" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb57-11"><a href="polynomial-regression.html#cb57-11" tabindex="-1"></a></span>
+<span id="cb57-12"><a href="polynomial-regression.html#cb57-12" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Price,</span>
+<span id="cb57-13"><a href="polynomial-regression.html#cb57-13" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Burgers,</span>
+<span id="cb57-14"><a href="polynomial-regression.html#cb57-14" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb57-15"><a href="polynomial-regression.html#cb57-15" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb57-16"><a href="polynomial-regression.html#cb57-16" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
+<span id="cb57-17"><a href="polynomial-regression.html#cb57-17" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Burgers Sold&quot;</span>)</span>
+<span id="cb57-18"><a href="polynomial-regression.html#cb57-18" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb57-19"><a href="polynomial-regression.html#cb57-19" tabindex="-1"></a><span class="co"># Plots real non-linear relationship</span></span>
+<span id="cb57-20"><a href="polynomial-regression.html#cb57-20" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> <span class="dv">100</span> <span class="sc">-</span> <span class="dv">30</span> <span class="sc">*</span> <span class="fu">log</span>(x),</span>
+<span id="cb57-21"><a href="polynomial-regression.html#cb57-21" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb57-22"><a href="polynomial-regression.html#cb57-22" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb57-23"><a href="polynomial-regression.html#cb57-23" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb57-24"><a href="polynomial-regression.html#cb57-24" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb57-25"><a href="polynomial-regression.html#cb57-25" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb57-26"><a href="polynomial-regression.html#cb57-26" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb57-27"><a href="polynomial-regression.html#cb57-27" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb57-28"><a href="polynomial-regression.html#cb57-28" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
+<span id="cb57-29"><a href="polynomial-regression.html#cb57-29" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb57-30"><a href="polynomial-regression.html#cb57-30" tabindex="-1"></a><span class="co"># Plots approximated polynomial relationship</span></span>
+<span id="cb57-31"><a href="polynomial-regression.html#cb57-31" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> x<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb57-32"><a href="polynomial-regression.html#cb57-32" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb57-33"><a href="polynomial-regression.html#cb57-33" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb57-34"><a href="polynomial-regression.html#cb57-34" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb57-35"><a href="polynomial-regression.html#cb57-35" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb57-36"><a href="polynomial-regression.html#cb57-36" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb57-37"><a href="polynomial-regression.html#cb57-37" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb57-38"><a href="polynomial-regression.html#cb57-38" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;blue&#39;</span>,</span>
+<span id="cb57-39"><a href="polynomial-regression.html#cb57-39" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/poly-reg-burger-1.png" width="672" /></p>
+<p>The second-degree polynomial approximation provides a reasonably good fit to the data. The red line represents the true nonlinear relationship, while the blue line shows the polynomial approximation. However, if we restrict the dataset to prices below $10, the fit noticeably worsens. This demonstrates a limitation of the polynomial model: while it might fit well within certain ranges, it can lead to unrealistic predictions outside those bounds. For instance, the model might predict that burger sales will eventually rise again as prices increase, which contradicts typical market expectations.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="polynomial-regression.html#cb58-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Burger Data.csv&quot;</span>)</span>
+<span id="cb58-2"><a href="polynomial-regression.html#cb58-2" tabindex="-1"></a></span>
+<span id="cb58-3"><a href="polynomial-regression.html#cb58-3" tabindex="-1"></a><span class="co"># Select only Prices bellow 10 dollars</span></span>
+<span id="cb58-4"><a href="polynomial-regression.html#cb58-4" tabindex="-1"></a>sel <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price <span class="sc">&lt;</span> <span class="dv">10</span></span>
+<span id="cb58-5"><a href="polynomial-regression.html#cb58-5" tabindex="-1"></a></span>
+<span id="cb58-6"><a href="polynomial-regression.html#cb58-6" tabindex="-1"></a>datRes <span class="ot">&lt;-</span> dat[sel, ]</span>
+<span id="cb58-7"><a href="polynomial-regression.html#cb58-7" tabindex="-1"></a></span>
+<span id="cb58-8"><a href="polynomial-regression.html#cb58-8" tabindex="-1"></a><span class="co"># Polynomial Regression Fit</span></span>
+<span id="cb58-9"><a href="polynomial-regression.html#cb58-9" tabindex="-1"></a>outRegPolRes <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> datRes)</span>
+<span id="cb58-10"><a href="polynomial-regression.html#cb58-10" tabindex="-1"></a></span>
+<span id="cb58-11"><a href="polynomial-regression.html#cb58-11" tabindex="-1"></a><span class="co"># Data Limits</span></span>
+<span id="cb58-12"><a href="polynomial-regression.html#cb58-12" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb58-13"><a href="polynomial-regression.html#cb58-13" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb58-14"><a href="polynomial-regression.html#cb58-14" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb58-15"><a href="polynomial-regression.html#cb58-15" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb58-16"><a href="polynomial-regression.html#cb58-16" tabindex="-1"></a></span>
+<span id="cb58-17"><a href="polynomial-regression.html#cb58-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Price,</span>
+<span id="cb58-18"><a href="polynomial-regression.html#cb58-18" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Burgers,</span>
+<span id="cb58-19"><a href="polynomial-regression.html#cb58-19" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb58-20"><a href="polynomial-regression.html#cb58-20" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb58-21"><a href="polynomial-regression.html#cb58-21" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
+<span id="cb58-22"><a href="polynomial-regression.html#cb58-22" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Burgers Sold&quot;</span>,</span>
+<span id="cb58-23"><a href="polynomial-regression.html#cb58-23" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Polynomial fit with Restricted data (Price &lt; 10)&quot;</span>)</span>
+<span id="cb58-24"><a href="polynomial-regression.html#cb58-24" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb58-25"><a href="polynomial-regression.html#cb58-25" tabindex="-1"></a><span class="co"># Plots real non-linear relationship</span></span>
+<span id="cb58-26"><a href="polynomial-regression.html#cb58-26" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> <span class="dv">100</span> <span class="sc">-</span> <span class="dv">30</span> <span class="sc">*</span> <span class="fu">log</span>(x),</span>
+<span id="cb58-27"><a href="polynomial-regression.html#cb58-27" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb58-28"><a href="polynomial-regression.html#cb58-28" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb58-29"><a href="polynomial-regression.html#cb58-29" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb58-30"><a href="polynomial-regression.html#cb58-30" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb58-31"><a href="polynomial-regression.html#cb58-31" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb58-32"><a href="polynomial-regression.html#cb58-32" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb58-33"><a href="polynomial-regression.html#cb58-33" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb58-34"><a href="polynomial-regression.html#cb58-34" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
+<span id="cb58-35"><a href="polynomial-regression.html#cb58-35" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb58-36"><a href="polynomial-regression.html#cb58-36" tabindex="-1"></a><span class="co"># Plots approximated polynomial relationship</span></span>
+<span id="cb58-37"><a href="polynomial-regression.html#cb58-37" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> x<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb58-38"><a href="polynomial-regression.html#cb58-38" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb58-39"><a href="polynomial-regression.html#cb58-39" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb58-40"><a href="polynomial-regression.html#cb58-40" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb58-41"><a href="polynomial-regression.html#cb58-41" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb58-42"><a href="polynomial-regression.html#cb58-42" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb58-43"><a href="polynomial-regression.html#cb58-43" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb58-44"><a href="polynomial-regression.html#cb58-44" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;blue&#39;</span>,</span>
+<span id="cb58-45"><a href="polynomial-regression.html#cb58-45" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/poly-reg-burger-restricted-1.png" width="672" /></p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="simple-linear-regression.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
