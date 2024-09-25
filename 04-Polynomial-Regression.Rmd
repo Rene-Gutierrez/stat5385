@@ -26,7 +26,7 @@ Polynomial regression is an extension of linear regression where the relationshi
 In polynomial regression, the model takes the form:
 
 $$
-y = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_n x^n + \epsilon
+y = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_k x^k + \epsilon
 $$
 
 Where:
