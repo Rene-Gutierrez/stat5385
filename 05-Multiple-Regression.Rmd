@@ -1,0 +1,279 @@
+\newcommand{\ba}{\mathbf{a}}
+\newcommand{\bc}{\mathbf{c}}
+\newcommand{\be}{\mathbf{e}}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\by}{\mathbf{y}}
+\newcommand{\bA}{\mathbf{A}}
+\newcommand{\bB}{\mathbf{B}}
+\newcommand{\bI}{\mathbf{I}}
+\newcommand{\bH}{\mathbf{H}}
+\newcommand{\bW}{\mathbf{W}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bgb}{\boldsymbol{\beta}}
+\newcommand{\bzero}{\mathbf{0}}
+\newcommand{\hy}{\hat{y}}
+\newcommand{\he}{\hat{e}}
+\newcommand{\hgb}{\hat{\beta}}
+\newcommand{\hby}{\hat{\mathbf{y}}}
+\newcommand{\hbe}{\hat{\mathbf{e}}}
+\newcommand{\sumin}{\sum_{i=1}^n}
+\newcommand{\sumjn}{\sum_{j=1}^n}
+
+# Multiple Regression
+
+## Introduction
+
+Multiple regression is a statistical technique used to model the relationship between a dependent variable and two or more independent variables. It extends simple linear regression by allowing for a more complex analysis of how various factors impact an outcome. The general form of the multiple regression equation is:
+
+$$
+y_i = \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \ldots + \beta_p x_{p,i} + e_i \quad i=\{1,\ldots,n\}
+$$
+
+Where:
+- $y$ is the dependent variable.
+- $\beta_0$ is the intercept.
+- $\beta_1, \beta_2, \ldots, \beta_p$ are the coefficients of the independent variables $X_1, X_2, \ldots, X_p$.
+- $e represents the error term.
+
+This technique is widely used across various fields, including economics, social sciences, and healthcare, to control for multiple factors and enhance prediction accuracy. However, it requires careful attention to assumptions. Beyond linearity, now we have to consider issues like independence, multicollinearity, and variable selection which can affect the results.
+
+We already have seen an example of Multiple linear regression when we worked with
+Polynomial regression. However, multiple linear regression is more general.
+
+## Example
+
+Consider, for example, the task of explaining a country's GDP using other economic variables such as inflation, unemployment, reference interest rate, government spending (as a percentage of GDP), and exports (as a percentage of GDP).
+
+In this case, visualization is not as straightforward, and visually inspecting these relationships is much less practical. Nevertheless, with this number of variables, we can visually explore the relationships between them as follows:
+
+```{r paris-plot-gdp}
+# Reads Data
+dat <- read.csv(file = "Gdp Data.csv")
+
+# Plot the scatterplots for each pair of variables
+pairs(dat)
+```
+
+Here we can see, that some independent variables are more related to `GDP` and
+some independent variables are more related between themselves. This is valuable information that will help us
+to develop the right linear model with this variables.
+
+We can also observe the correlation between these variables as follows:
+
+```{r gdp-cor}
+# Computes the correlation between variables
+cor(dat)
+```
+We can also fit simple linear regression with each one of the independent
+variables.
+
+**Inflation Rate**
+
+```{r gdp-inf-fit}
+# Fits with Inflation
+outRegInf <- lm(gdp ~ inf, data = dat)
+varVal    <- dat$inf
+out       <- outRegInf
+varNam    <- "Inflation Rate"
+# Plots Regression Line and Scatterplot and residuals plot
+par(mfrow = c(1, 2))
+plot(x    = varVal,
+     y    = dat$gd,
+     xlab = varNam,
+     ylab = "GDP")
+abline(a   = out$coefficients[1],
+       b   = out$coefficients[2],
+       col = 'red',
+       lwd = 2)
+plot(x    = varVal,
+     y    = out$residuals,
+     xlab = varNam,
+     ylab = "Residuals")
+abline(h   = 0,
+       lwd = 2)
+```
+**Unemployment Rate**
+
+```{r gdp-unp-fit}
+# Fits with Inflation
+outRegUne <- lm(gdp ~ une, data = dat)
+varVal    <- dat$une
+out       <- outRegUne
+varNam    <- "Unemplyment Rate"
+# Plots Regression Line and Scatterplot and residuals plot
+par(mfrow = c(1, 2))
+plot(x    = varVal,
+     y    = dat$gd,
+     xlab = varNam,
+     ylab = "GDP")
+abline(a   = out$coefficients[1],
+       b   = out$coefficients[2],
+       col = 'red',
+       lwd = 2)
+plot(x    = varVal,
+     y    = out$residuals,
+     xlab = varNam,
+     ylab = "Residuals")
+abline(h   = 0,
+       lwd = 2)
+```
+**Interest Rate**
+
+```{r gdp-int-fit}
+# Fits with Inflation
+outRegInt <- lm(gdp ~ int, data = dat)
+varVal    <- dat$int
+out       <- outRegInt
+varNam    <- "Interest Rate"
+# Plots Regression Line and Scatterplot and residuals plot
+par(mfrow = c(1, 2))
+plot(x    = varVal,
+     y    = dat$gd,
+     xlab = varNam,
+     ylab = "GDP")
+abline(a   = out$coefficients[1],
+       b   = out$coefficients[2],
+       col = 'red',
+       lwd = 2)
+plot(x    = varVal,
+     y    = out$residuals,
+     xlab = varNam,
+     ylab = "Residuals")
+abline(h   = 0,
+       lwd = 2)
+```
+
+**Goverment Spending**
+
+```{r gdp-gov-fit}
+# Fits with Inflation
+outRegGov <- lm(gdp ~ gov, data = dat)
+varVal    <- dat$gov
+out       <- outRegGov
+varNam    <- "Goverment Spending"
+# Plots Regression Line and Scatterplot and residuals plot
+par(mfrow = c(1, 2))
+plot(x    = varVal,
+     y    = dat$gd,
+     xlab = varNam,
+     ylab = "GDP")
+abline(a   = out$coefficients[1],
+       b   = out$coefficients[2],
+       col = 'red',
+       lwd = 2)
+plot(x    = varVal,
+     y    = out$residuals,
+     xlab = varNam,
+     ylab = "Residuals")
+abline(h   = 0,
+       lwd = 2)
+```
+
+*Exports*
+
+```{r gdp-exp-fit}
+# Fits with Inflation
+outRegExp <- lm(gdp ~ exp, data = dat)
+varVal    <- dat$exp
+out       <- outRegExp
+varNam    <- "Exports"
+# Plots Regression Line and Scatterplot and residuals plot
+par(mfrow = c(1, 2))
+plot(x    = varVal,
+     y    = dat$gd,
+     xlab = varNam,
+     ylab = "GDP")
+abline(a   = out$coefficients[1],
+       b   = out$coefficients[2],
+       col = 'red',
+       lwd = 2)
+plot(x    = varVal,
+     y    = out$residuals,
+     xlab = varNam,
+     ylab = "Residuals")
+abline(h   = 0,
+       lwd = 2)
+```
+
+All of them seem like good candidates for a linear relationship with the GDP,
+however when we use them all toghther, a more careful analysis should be made.
+
+We can see the summary reports for the individual regressions and the regression
+with all independent variables as follows:
+
+```{r gdp-all-ind-com}
+outRegAll <- lm(gdp ~ inf + une + int + gov + exp, data = dat)
+
+# Summary All
+print("All Independent Variables")
+summary(outRegAll)
+print("Only Inflation Rate")
+summary(outRegInf)
+print("Only Unemployment Rate")
+summary(outRegUne)
+print("Only Interest Rate")
+summary(outRegInt)
+print("Only Government Spending")
+summary(outRegGov)
+print("Only Exports")
+summary(outRegExp)
+```
+
+As we can see, the values for the coefficients can change when doing simple linear
+regression and multiple linear regression. If the changes are very dramatic (like change
+in the sign of the coefficient) further inspection is necessary for that variable.
+
+## Least Squares Estimation
+
+For least squares estimation, we need to solve the problem:
+
+$$
+\min_\bgb Q(\bgb) = \sum_{i=1}^n (y_i - \hy(\bgb))^2 = (\by - \hat{\by})'(\by - \hat{\by}) = (\by - \bX\bgb)'(\by - \bX\bgb) 
+$$
+The representation in matrix notation of the problem, allows us to use the same
+expression to solve this problem as with simple linear regression. The solution
+is obtained in the exact same way, and is given by:
+
+$$
+\hat{\bgb} = (\bX' \bX)^{-1}\bX'\by
+$$
+however in this case:
+
+$$
+\hat{\bgb} = \left(\hat{\beta}_0, \hat{\beta}_1, \hat{\beta}_2,\ldots,\hat{\beta}_p\right)'
+$$
+this is the reason, working in matrix form is very useful.
+
+## Properties of the Estimates
+
+As with simple linear regression, we can consider several estimates:
+
+* $\hat{\by} = \bX \bgb$ the estimates of the observations,
+* $\hat{\be} = \by - \hat{\by} = \by - \bX \hat{\bgb}$ the estimates of the errors.
+
+We will see that:
+
+* $\hat{\bgb}$ is a linear combination of $y$.
+* The sum of the estimated errors is equal to zero, $\sum_{i=1}^n \hat{e_i} = 0$.
+* $\hat{\be}$ and $\hat{\bx_j}$ are orthogonal for $j=\{1,\ldots,p\}$.
+* $\hat{\be}$ and $\hat{\by}$ are orthogonal.
+* $\bar{y} = \hat{\bar{y}}$.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
