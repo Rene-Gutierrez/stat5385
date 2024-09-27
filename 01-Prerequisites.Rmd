@@ -11,6 +11,7 @@
 \newcommand{\bX}{\mathbf{X}}
 \newcommand{\bgb}{\boldsymbol{\beta}}
 \newcommand{\bzero}{\mathbf{0}}
+\newcommand{\bones}{\mathbf{1}}
 \newcommand{\hy}{\hat{y}}
 \newcommand{\he}{\hat{e}}
 \newcommand{\hgb}{\hat{\beta}}

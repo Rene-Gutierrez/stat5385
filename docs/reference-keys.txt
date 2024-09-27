@@ -58,8 +58,10 @@ weighted-least-squares
 model-in-matrix-form
 weighted-least-squares-in-matrix-form
 polynomial-regression
-multiple-regression
+multiple-linear-regression
 introduction-1
 example-5
 least-squares-estimation-1
 properties-of-the-estimates-1
+multiple-r2
+geometric-interpretation-of-multiple-linear-regression

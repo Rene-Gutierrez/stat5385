@@ -1,25 +1,4 @@
-\newcommand{\ba}{\mathbf{a}}
-\newcommand{\bc}{\mathbf{c}}
-\newcommand{\be}{\mathbf{e}}
-\newcommand{\bx}{\mathbf{x}}
-\newcommand{\by}{\mathbf{y}}
-\newcommand{\bA}{\mathbf{A}}
-\newcommand{\bB}{\mathbf{B}}
-\newcommand{\bI}{\mathbf{I}}
-\newcommand{\bH}{\mathbf{H}}
-\newcommand{\bW}{\mathbf{W}}
-\newcommand{\bX}{\mathbf{X}}
-\newcommand{\bgb}{\boldsymbol{\beta}}
-\newcommand{\bzero}{\mathbf{0}}
-\newcommand{\hy}{\hat{y}}
-\newcommand{\he}{\hat{e}}
-\newcommand{\hgb}{\hat{\beta}}
-\newcommand{\hby}{\hat{\mathbf{y}}}
-\newcommand{\hbe}{\hat{\mathbf{e}}}
-\newcommand{\sumin}{\sum_{i=1}^n}
-\newcommand{\sumjn}{\sum_{j=1}^n}
-
-# Multiple Regression
+# Multiple Linear Regression
 
 ## Introduction
 
@@ -196,7 +175,7 @@ abline(h   = 0,
 ```
 
 All of them seem like good candidates for a linear relationship with the GDP,
-however when we use them all toghther, a more careful analysis should be made.
+however when we use them all together, a more careful analysis should be made.
 
 We can see the summary reports for the individual regressions and the regression
 with all independent variables as follows:
@@ -251,6 +230,14 @@ As with simple linear regression, we can consider several estimates:
 * $\hat{\by} = \bX \bgb$ the estimates of the observations,
 * $\hat{\be} = \by - \hat{\by} = \by - \bX \hat{\bgb}$ the estimates of the errors.
 
+We also note that:
+
+$$
+\hat{\by} = \bX (\bX'\bX)^{-1}\bX' \by = \bH y
+$$
+where $\bH$ is called the hat matrix, because it transforms $\by$ into $\hat{\by}$,
+or the projection matrix.
+
 We will see that:
 
 * $\hat{\bgb}$ is a linear combination of $y$.
@@ -259,20 +246,441 @@ We will see that:
 * $\hat{\be}$ and $\hat{\by}$ are orthogonal.
 * $\bar{y} = \hat{\bar{y}}$.
 
+To see that $\hat{\bgb}$ is a linear combination of $y$, we need to express $\hat{\bgb}$
+as follows:
+
+$$
+\hat{\bgb} = \bA \by
+$$
+
+for some matrix $\bA$. This is very easy to do, we just let $\bA = (\bX'\bX)^{-1}\bX'$, so:
+
+$$
+\hat{\bgb} = (\bX'\bX)^{-1}\bX'\by = \bA \by
+$$
+Now to see that the sum of the estimated errors is equal to zero, $\sum_{i=1}^n \hat{e_i} = 0$, we
+notice that we need to show that:
+
+$$
+\hat{\be}' \bones = 0
+$$
+
+To do so we notice that:
+
+\begin{align*}
+\hat{\bgb} = (\bX'\bX)^{-1}\bX'\by 
+  &\implies (\bX'\bX)\hat{\bgb} = \bX'\by          \\
+  &\implies \bX'\by - \bX'\bX \hat{\bgb} = \bzero \\
+  &\implies \bX'\left(\by - \hat{\by}\right) = \bzero \\
+  &\implies \bX'\hat{\be} = \bzero 
+\end{align*}
+
+Now focusing on the product $\bX'\hat{\be}$ we have that:
+
+$$
+\bX'\hat{\be} =
+  \left[\begin{matrix}
+    \bones' \\
+    \bx_1   \\
+    \bx_2   \\
+    \vdots  \\
+    \bx_p
+  \end{matrix}\right] \hat{\be} =
+  \left[\begin{matrix}
+    \bones' \hat{\be} \\
+    \bx_1   \hat{\be} \\
+    \bx_2   \hat{\be} \\
+    \vdots            \\
+    \bx_p   \hat{\be}
+  \end{matrix}\right]
+$$
+So we have that:
+
+$$
+\left[\begin{matrix}
+    \bones' \hat{\be} \\
+    \bx_1   \hat{\be} \\
+    \bx_2   \hat{\be} \\
+    \vdots            \\
+    \bx_p   \hat{\be}
+  \end{matrix}\right] = 
+  \left[\begin{matrix}
+    0 \\
+    0 \\
+    0 \\
+    \vdots            \\
+    0
+  \end{matrix}\right]
+$$
+So from the first line of this result, we have that:
+
+$$
+\bones' \hat{\be} = 0
+$$
+which is the result we wanted to proof.
+
+Now, to show that $\hat{\be}$ and $\hat{\bx_j}$ are orthogonal for $j=\{1,\ldots,p\}$,
+we use again on:
+
+$$
+\left[\begin{matrix}
+    \bones' \hat{\be} \\
+    \bx_1   \hat{\be} \\
+    \bx_2   \hat{\be} \\
+    \vdots            \\
+    \bx_p   \hat{\be}
+  \end{matrix}\right] = 
+  \left[\begin{matrix}
+    0 \\
+    0 \\
+    0 \\
+    \vdots            \\
+    0
+  \end{matrix}\right]
+$$
+
+And notice that lines 2 to $p+1$ proof this results, that is
+
+$$
+\bx_i ' \hat{\be} = 0 \quad i=\{1,\ldots,p\}
+$$
+Now to show that $\hat{\be}$ and $\hat{\by}$ are orthogonal, we show that:
+
+$$
+\hat{\be}'\hat{\by} = 0
+$$
+Now
+
+\begin{align*}
+\hat{\be}'\hat{\by} 
+  &= (\by - \hat{\by})'\hat{\by} \\
+  &= \left(\by - \bX \hat{\bgb}\right)'\bX \hat{\bgb} \\
+  &= \left(\by - \bX (\bX'\bX)^{-1}\bX'\by \right)'\bX (\bX'\bX)^{-1}\bX'\by \\
+  &= \by' \bX (\bX'\bX)^{-1}\bX'\by - \by' \bX (\bX'\bX)^{-1}\bX' \bX (\bX'\bX)^{-1}\bX' \by \\
+  &= \by' \bX (\bX'\bX)^{-1}\bX'\by - \by' \bX (\bX'\bX)^{-1}\bX' \by \\
+  &= 0
+\end{align*}
+
+Finally, to show that $\bar{y} = \hat{\bar{y}}$, we use:
+
+$$
+\hat{\be}'\bones = (\by - \hat{\by})'\bones = \by'\bones - \hat{\by}'\bones = \sum_{i=1}^ny_i - \sum_{i=1}^n\hat{y}_i = n\bar{y} - n\hat{\bar{y}} 
+$$
+since $\hat{\be}'\bones = 0$, then we have that
+
+$$
+n\bar{y} - n\hat{\bar{y}} = 0 \implies n\bar{y} = n\hat{\bar{y}} \implies \bar{y} = \hat{\bar{y}}  
+$$
 
 
+## Multiple $R^2$
+
+As with simple linear regression we can explain the total variability, by decomposing the
+variability in two parts, the regression variability and the error variability.
+
+First, we define this concepts:
+
+1. **Total Sum of Squares $SS_{tot}$**:  
+   The total sum of squares measures the total variability in $\mathbf{y}$:
+   
+   $$
+   SS_{tot} = (\mathbf{y} - \bar{y} \mathbf{1})' (\mathbf{y} - \bar{y} \mathbf{1})
+   $$
+
+2. **Residual Sum of Squares $SS_{res}$**:  
+   The residual sum of squares measures the unexplained variability in the regression model:
+   
+   $$
+   SS_{res} = (\mathbf{y} - \hat{\mathbf{y}})' (\mathbf{y} - \hat{\mathbf{y}})
+   $$
+
+3. **Explained Sum of Squares $SS_{reg}$**
+
+The explained sum of squares measures how much of the total variability is explained by the regression model. It is the difference between the predicted values and the mean of $\mathbf{y}$:
+
+$$
+SS_{reg} = (\hat{\mathbf{y}} - \bar{y} \mathbf{1})' (\hat{\mathbf{y}} - \bar{y} \mathbf{1})
+$$
+As with simple linear regression, it can be shown that:
+
+$$
+SS_{tot} = SS_{reg} + SS_{res}
+$$
+To see this, we start form $SS_{tot}$, and do the adding and subtracting trick:
+
+\begin{align*}
+SS_{tot} 
+  &= (\mathbf{y} - \bar{y} \mathbf{1})' (\mathbf{y} - \bar{y} \mathbf{1}) \\
+  &= (\mathbf{y} - \hat{\by} + \hat{\by} - \bar{y} \mathbf{1})' (\mathbf{y} - \hat{\by} + \hat{\by} - \bar{y} \mathbf{1}) \\
+  &= (\mathbf{y} - \hat{\by})' (\mathbf{y} - \hat{\by}) + (\mathbf{y} - \hat{\by})' (\hat{\by} - \bar{y} \mathbf{1}) + (\hat{\by} - \bar{y} \mathbf{1})' (\mathbf{y} - \hat{\by}\mathbf{1}) + (\hat{\by} - \bar{y} \mathbf{1})' (\hat{\by} - \bar{y} \mathbf{1})
+\end{align*}
+
+Now, notice that:
+
+$$
+(\mathbf{y} - \hat{\by})' (\hat{\by} - \bar{y} \mathbf{1}) = \hat{\be}' (\hat{\by} - \bar{y} \mathbf{1}) = \hat{\be}'\hat{\by} - \bar{y}\hat{\be}' \mathbf{1} = 0 - \bar{y}0 = 0
+$$
+And similarly for $(\hat{\by} - \bar{y} \mathbf{1})' (\mathbf{y} - \hat{\by}\mathbf{1}) = 0$, then:
+
+$$
+SS_{tot} = (\mathbf{y} - \hat{\by})' (\mathbf{y} - \hat{\by}) + (\hat{\by} - \bar{y} \mathbf{1})' (\hat{\by} - \bar{y} \mathbf{1}) = SS_{reg} + SS_{res}
+$$
+The multiple $R^2$ is the variability explained by the regression with respect to the total variability
+and can be expressed as:
+
+$$
+R^2 = \frac{SS_{reg}}{SS_{tot}}
+$$
+or using the previous expression
+
+$$
+1 = \frac{SS_{tot}}{SS_{tot}} = \frac{SS_{reg}}{SS_{tot}} + \frac{SS_{res}}{SS_{tot}} = R^2 + \frac{SS_{res}}{SS_{tot}} \implies R^2 = 1 - \frac{SS_{res}}{SS_{tot}}  
+$$
+
+Finally, we work on the expressions of $SS_{res}$ and $SS_{tot}$, to express them
+in terms of projection matrices.
 
 
+First note that:
 
+$$
+\by - \hat{\by} = \by - \bX\hat{\bgb} = \by - \bH \by = (\bI - \bH)\by
+$$
+and also notice that $(\bI - \bH)$ is symmetric and:
 
+$$
+(\bI - \bH)(\bI - \bH) = \bI -\bH - \bH + \bH \bH
+$$
+and
 
+$$
+\bH \bH = \bX (\bX'\bX)^{-1}\bX' \bX (\bX'\bX)^{-1}\bX' = \bX (\bX'\bX)^{-1}\bX' = \bH
+$$
+this means $\bH$ is idempotent. In fact, all projection matrices are idempotent.
 
+Then, we have that:
 
+$$
+(\bI - \bH)(\bI - \bH) = \bI -\bH - \bH + \bH = \bI -\bH - \bH
+$$
+which makes $\bI - \bH$ also idempotent. Therefore:
 
+$$
+SS_{res} = (\by - \hat{\by})'(\by - \hat{\by}) = ((\bI - \bH)\by)'((\bI - \bH)\by) = \by'(\bI - \bH)'(\bI - \bH)\by = \by'(\bI - \bH)\by 
+$$
+And we can do a similar trick for the $SS_{tot}$ by writing $\bar{y} \bones$ as a result
+of projecting $\by$ with a design matrix $\bones$:
 
+$$
+\bar{y} \bones = \bones \bar{y} = \bones \frac{1}{n} \sum_{i=1}^n y_i = \bones \frac{1}{n}\bones' \by = \bones (\bones'\bones)^{-1}\bones' \by  
+$$
+where we use the fact that $\bones'\bones = n$.
 
+We call $\bH_0 = \bones (\bones'\bones)^{-1}\bones'$, since $\bones (\bones'\bones)^{-1}\bones'$
+is a projection matrix. And since it is a projection matrix it is idempotent (it is also not difficult to check this manually)
+and $\bI - \bH_0$ is also idempotent.
 
+So we can do:
 
+$$
+\by - \hat{y}\bones = \by - \bH_0 \by = (\bI-\bH_0)\by
+$$
+
+$$
+SS_{tot} = (\by - \bar{y}\bones)'(\by - \bar{y}\bones) = ((\bI - \bH_0)\by)'((\bI - \bH_0)\by) = \by'(\bI - \bH_0)'(\bI - \bH_0)\by = \by'(\bI - \bH_0)\by 
+$$
+
+so the $R^2$ can be expressed as follows:
+
+$$
+R^2 = 1 - \frac{\by'(\bI - \bH)\by}{\by'(\bI - \bH_0)\by}
+$$
+When written like this, it is easy to see that:
+
+$$
+\by'(\bI - \bH)\by = \min_\bgb (\by - \bX \bgb)'(\by - \bX \bgb)
+$$
+the solution to this minimization problem, since we are using the optimal value
+$\hat{\bgb}$. And
+
+$$
+\by'(\bI - \bH_0)\by = \min_{\beta_0} (\by - \bX_0 \beta_0)'(\by - \bX_0 \beta_0)
+$$
+
+where $\bX_0$ is just a matrix with one column $\bones$.
+
+Now, we also have that:
+
+$$
+\min_\bgb (\by - \bX \bgb)'(\by - \bX \bgb) \leq \min_{\beta_0} (\by - \bX_0 \beta_0)'(\by - \bX_0 \beta_0)
+$$
+
+therefore
+
+$$
+\by'(\bI - \bH)\by \leq \by'(\bI - \bH_0)\by
+$$
+and since both of them are quadratic forms, we have that:
+
+$\by'(\bI - \bH_0)\by, \by'(\bI - \bH)\by \geq 0$
+
+then:
+
+$$0 \leq \frac{\by'(\bI - \bH)\by}{\by'(\bI - \bH_0)\by} \leq 0$$
+then:
+
+$$0 \leq R^2 \leq 0$$.
+
+Where we use the fact that all symmetric idempotent matrices are symmetric positive semi-definite.
+
+Another interpretation of $R^2$ is the percentage of the variability explained 
+by multiple regression of a "*poor man's regression*" in which you don't have
+independent variables (that is you are independent variable poor). In this way,
+we can define
+
+$$
+\bar{y} \bones = \hat{\by}_0
+$$
+the "*poor man's prediction*", of which $\bH_0$ is it's projection matrix (or hat matrix).
+
+## Geometric Interpretation of Multiple Linear Regression
+
+Multiple linear regression can be thought as projecting $\by$ in the column 
+space of the design matrix $\bX$. The following diagram pictures multiple linear regression.
+
+```{r geo-int, echo=FALSE}
+par(mar = c(0,0,0,0))
+plot(NULL,
+     xlim = c(0,100),
+     ylim = c(0,100),
+     xaxt = "n",
+     yaxt = "n",
+     xlab = "",
+     ylab = "")
+xPad <- 20
+yPad <- 50
+polygon(x = c(0, xPad, 100, 100 - xPad, 0),
+        y = c(0, yPad, yPad,         0, 0),
+        col = rgb(0, 0, 0, 0.2),
+        border = NA)
+segments(x0  = xPad,
+         x1  = 100 - xPad - 10,
+         y0  = yPad,
+         y1  = 100 - 10,
+         lwd = 2)
+segments(x0  = 100 - xPad - 10,
+         x1  = 100 - xPad - 10,
+         y0  = 100 - 10,
+         y1  = yPad - 20,
+         lwd = 2,
+         col = 'red')
+segments(x0  = xPad,
+         x1  = 100 - xPad - 10,
+         y0  = yPad,
+         y1  = yPad - 20,
+         lwd = 2)
+segments(x0  = xPad,
+         x1  = 100 - xPad - 30,
+         y0  = yPad,
+         y1  = yPad - 40,
+         lwd = 2)
+segments(x0  = 100 - xPad - 10,
+         x1  = 100 - xPad - 30,
+         y0  = 100 - 10,
+         y1  = yPad - 40,
+         lwd = 2,
+         col = 'red')
+segments(x0  = 100 - xPad - 10,
+         x1  = 100 - xPad - 30,
+         y0  = yPad - 20,
+         y1  = yPad - 40,
+         lwd = 2,
+         col = 'red')
+segments(x0  = 100 - xPad - 13,
+         x1  = 100 - xPad - 13,
+         y0  = yPad - 23,
+         y1  = yPad - 18,
+         lwd = 2,
+         col = 'blue')
+segments(x0  = 100 - xPad - 13,
+         x1  = 100 - xPad - 10,
+         y0  = yPad - 18,
+         y1  = yPad - 15,
+         lwd = 2,
+         col = 'blue')
+segments(x0  = 100 - xPad - 10,
+         x1  = 100 - xPad - 15,
+         y0  = yPad - 15,
+         y1  = yPad - 13,
+         lwd = 2,
+         col = 'blue')
+segments(x0  = 100 - xPad - 15,
+         x1  = 100 - xPad - 15,
+         y0  = yPad - 18,
+         y1  = yPad - 13,
+         lwd = 2,
+         col = 'blue')
+text(x = 35,
+     y = 70,
+     labels = expression(y))
+text(x = 35,
+     y = 25,
+     labels = expression(hat(y)[0]))
+text(x = 35,
+     y = 50,
+     labels = expression(hat(y)))
+text(x = 35,
+     y = 50,
+     labels = expression(hat(y)))
+text(x = 35,
+     y = 50,
+     labels = expression(hat(y)))
+text(x      = 64,
+     y      = 20,
+     labels = expression(hat(y) - hat(y)[0]),
+     srt    = 40)
+text(x      = 73,
+     y      = 60,
+     labels = expression(y - hat(y)),
+     srt    = 90)
+text(x      = 55,
+     y      = 45,
+     labels = expression(y - hat(y)[0]),
+     srt    = 70)
+text(x = 20,
+     y =  5,
+     labels = expression(italic("Column Space X")))
+text(x = 90,
+     y = 90,
+     labels = expression(bold(R)^n))
+```
+
+Here we can see several components:
+
+* $\by$ is the vector of observations. Is a vector in $\mathbb{R}^n$.
+* The grey hyper-plane is the column space generated by $\bX$, a sub-space of $\mathbb{R}^n$.
+* The multiple regression prediction $\hat{\by}$ of $\by$ is the projection of $\by$
+  on the space generated by the column of $\bX$.
+* The poor man's prediction $\hat{\by}_0$, in the column space of $\bX$ (since,
+one of the columns is $\bones$), but in most cases it is different to $\hat{\by}$ (the closest vector in
+the column space of $\bX$ to $\by$).
+* We notice that the differences:
+  - $\by - \hat{\by}$.
+  - $\by - \hat{\by}_0$
+  - $\hat{\by} - \hat{\by}_0$
+  
+  form a right triangle, then it must be that:
+  $$
+  ||\by - \hat{\by}||^2 = ||\by - \hat{\by}_0||^2 + ||\hat{\by} - \hat{\by}_0||^2
+  $$
+  which is the same as
+  $$
+  (\by - \hat{\by})'(\by - \hat{\by}) = (\by - \hat{\by}_0)'(\by - \hat{\by}_0) + (\hat{\by} - \hat{\by}_0)'(\hat{\by} - \hat{\by}_0)
+  $$
+  that can be expressed as:
+  $$
+  SS_{tot} = SS_{res} + SS_{reg}
+  $$
 
 
 

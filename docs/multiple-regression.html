@@ -376,7 +376,7 @@ variables.</p>
 <span id="cb68-21"><a href="multiple-regression.html#cb68-21" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/gdp-exp-fit-1.png" width="672" /></p>
 <p>All of them seem like good candidates for a linear relationship with the GDP,
-however when we use them all toghther, a more careful analysis should be made.</p>
+however when we use them all together, a more careful analysis should be made.</p>
 <p>We can see the summary reports for the individual regressions and the regression
 with all independent variables as follows:</p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="multiple-regression.html#cb69-1" tabindex="-1"></a>outRegAll <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> inf <span class="sc">+</span> une <span class="sc">+</span> int <span class="sc">+</span> gov <span class="sc">+</span> exp, <span class="at">data =</span> dat)</span>
@@ -549,6 +549,20 @@ this is the reason, working in matrix form is very useful.</p>
 <li><span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> are orthogonal.</li>
 <li><span class="math inline">\(\bar{y} = \hat{\bar{y}}\)</span>.</li>
 </ul>
+<p>To see that <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is a linear combination of <span class="math inline">\(y\)</span>, we need to express <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>
+as follows:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}} = \mathbf{A}\mathbf{y}
+\]</span></p>
+<p>for some matrix <span class="math inline">\(\mathbf{A}\)</span>. This is very easy to do, we just let <span class="math inline">\(\mathbf{A}= (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\)</span>, so:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}} = (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbf{y}= \mathbf{A}\mathbf{y}
+\]</span>
+Now to see that the sum of the estimated errors is equal to zero, <span class="math inline">\(\sum_{i=1}^n \hat{e_i} = 0\)</span>, we
+notice that we need to show that:</p>
+<p><span class="math display">\[
+\hat{\e}&#39; \mathbf{1}
+\]</span></p>
 
 </div>
 </div>
