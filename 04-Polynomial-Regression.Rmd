@@ -1,24 +1,3 @@
-\newcommand{\ba}{\mathbf{a}}
-\newcommand{\bc}{\mathbf{c}}
-\newcommand{\be}{\mathbf{e}}
-\newcommand{\bx}{\mathbf{x}}
-\newcommand{\by}{\mathbf{y}}
-\newcommand{\bA}{\mathbf{A}}
-\newcommand{\bB}{\mathbf{B}}
-\newcommand{\bI}{\mathbf{I}}
-\newcommand{\bH}{\mathbf{H}}
-\newcommand{\bW}{\mathbf{W}}
-\newcommand{\bX}{\mathbf{X}}
-\newcommand{\bgb}{\boldsymbol{\beta}}
-\newcommand{\bzero}{\mathbf{0}}
-\newcommand{\hy}{\hat{y}}
-\newcommand{\he}{\hat{e}}
-\newcommand{\hgb}{\hat{\beta}}
-\newcommand{\hby}{\hat{\mathbf{y}}}
-\newcommand{\hbe}{\hat{\mathbf{e}}}
-\newcommand{\sumin}{\sum_{i=1}^n}
-\newcommand{\sumjn}{\sum_{j=1}^n}
-
 # Polynomial Regression
 
 Polynomial regression is an extension of linear regression where the relationship between the independent variable $x$ and the dependent variable $y$ is modeled as an $n$-th degree polynomial. Instead of fitting a straight line, it fits a curve that can capture more complex patterns in the data.
