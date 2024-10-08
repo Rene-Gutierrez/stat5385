@@ -51,6 +51,8 @@ Key properties of the summation operator include:
 You should be familiar with the following linear algebra concepts:
 
 * [Linear Independence](#linear-independence)
+* [Column Space of a Matrix](#column-space-of-a-matrix)
+* [Rank of a Matrix](#rank-of-a-matrix)
 * [Full Rank Matrix](#full-rank-matrix)
 * [Inverse Matrix](#inverse-matrix)
 * [Positive Definite Matrix](#positive-definite-matrix)
@@ -108,6 +110,64 @@ These vectors are **linearly dependent**, because $\mathbf{v}_2 = 2 \mathbf{v}_1
 - Linear independence is crucial in determining the **rank** of a matrix.
 - In systems of equations, linear independence of the rows or columns determines if the system has a unique solution.
 - In vector spaces, the **dimension** of the space is the maximum number of linearly independent vectors.
+
+### Column Space of a Matrix
+
+The **column space** of a matrix is the set of all possible linear combinations of its columns. If you have a matrix $\mathbf{A}$ with $n$ rows and $p$ columns, the column space of $\mathbf{A}$, denoted as **Col($\mathbf{A}$)**, consists of all vectors in $\mathbb{R}^n$ that can be expressed as a linear combination of the columns of $\mathbf{A}$. 
+
+#### Definition:
+Given a matrix $\mathbf{A}$ with columns $\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_p$, the column space of $\mathbf{A}$ is defined as:
+
+$$
+\text{Col}(\mathbf{A}) = \left\{ \mathbf{y} \in \mathbb{R}^n \mid \mathbf{y} = \mathbf{A} \mathbf{c} \text{ for some } \mathbf{c} \in \mathbb{R}^p \right\}
+$$
+
+This means the column space is the span of the columns of $\mathbf{A}$, or equivalently, all vectors that can be written as $\mathbf{y} = c_1 \mathbf{a}_1 + c_2 \mathbf{a}_2 + \dots + c_p \mathbf{a}_p$, where $c_1, c_2, \dots, c_p$ are scalars.
+
+#### Properties:
+- The column space of $\mathbf{A}$ is a **subspace** of $\mathbb{R}^n$.
+- The **dimension** of the column space of $\mathbf{A}$ is called the **rank** of the matrix and corresponds to the number of linearly independent columns in $\mathbf{A}$.
+- The column space provides valuable information about the linear independence and span of the columns of a matrix.
+
+#### Geometric Interpretation:
+In geometric terms, the column space represents the set of all possible vectors that can be "reached" by linearly combining the columns of the matrix. For example:
+- For a matrix with 2 columns in $\mathbb{R}^3$, the column space will be a plane in $\mathbb{R}^3$ if the columns are linearly independent.
+- For a matrix with 3 columns in $\mathbb{R}^2$, the column space will span all of $\mathbb{R}^2$ (if the columns are linearly independent) or a line (if they are dependent).
+
+### Rank of a Matrix
+
+The **rank** of a matrix is the dimension of its column space, which is the number of linearly independent columns in the matrix. Alternatively, it is also the dimension of the row space, which is the number of linearly independent rows.
+
+#### Definition:
+For a matrix $\mathbf{A}$, the rank is defined as:
+
+$$
+\text{rank}(\mathbf{A}) = \dim(\text{Col}(\mathbf{A})) = \dim(\text{Row}(\mathbf{A}))
+$$
+
+This is the maximum number of linearly independent rows or columns in the matrix. In other words, it tells you how many of the matrix's columns (or rows) are not redundant and cannot be written as a linear combination of the others.
+
+#### Key Points:
+- The rank of a matrix $\mathbf{A}$ is denoted as **rank($\mathbf{A}$)**.
+- It measures the number of independent directions in the column space or row space.
+- **Full rank**: A matrix is said to have full rank if its rank is equal to the smaller of the number of rows or columns. For an $m \times n$ matrix:
+  - If $\text{rank}(\mathbf{A}) = m$ (number of rows), it has full row rank.
+  - If $\text{rank}(\mathbf{A}) = n$ (number of columns), it has full column rank.
+- **Rank-deficient**: If the rank of the matrix is less than the smaller of the number of rows or columns, the matrix is called rank-deficient, meaning that some of its rows or columns are linearly dependent.
+
+#### Example:
+Consider the matrix:
+$$
+\mathbf{A} = \begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \\ 7 & 8 & 9 \end{bmatrix}
+$$
+
+The rank of $\mathbf{A}$ is 2 because two of the rows (or columns) are linearly independent, but the third row (or column) is a linear combination of the others.
+
+#### Properties:
+- The rank of a matrix is always less than or equal to the minimum of the number of rows and columns:
+  $$ \text{rank}(\mathbf{A}) \leq \min(m, n) $$
+- The rank of a matrix is equal to the number of non-zero singular values in its singular value decomposition (SVD).
+- In square matrices, the rank gives insight into whether the matrix is **invertible**. A square matrix is invertible if and only if it has full rank.
 
 ### Full Rank Matrix
 
@@ -209,6 +269,164 @@ is positive definite, because for any non-zero vector $\mathbf{x}$, $\mathbf{x}'
 $$
 \mathbf{x}' \bA \mathbf{x} = \begin{bmatrix} 1 & 1 \end{bmatrix} \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = 6 > 0
 $$
+### Singular Value Decomposition
+
+**Singular Value Decomposition (SVD)** is a fundamental matrix factorization technique used in linear algebra to break down a matrix into three distinct components. It provides valuable insight into the structure of a matrix and is widely used in applications like data compression, signal processing, and dimensionality reduction.
+
+#### Definition:
+For any real (or complex) matrix $\mathbf{A}$ of size $m \times n$, the Singular Value Decomposition is given by:
+
+$$
+\mathbf{A} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}'
+$$
+
+where:
+- $\mathbf{U}$ is an $m \times m$ orthogonal matrix, whose columns are called the **left singular vectors**.
+- $\mathbf{\Sigma}$ is an $m \times n$ diagonal matrix, where the diagonal entries are the **singular values** of $\mathbf{A}$. The singular values are always non-negative and arranged in decreasing order.
+- $\mathbf{V}$ is an $n \times n$ orthogonal matrix, whose columns are called the **right singular vectors**.
+
+#### Interpretation of the Components:
+- $\mathbf{U}$ represents the orthonormal basis for the **column space** of $\mathbf{A}$.
+- $\mathbf{V}$ represents the orthonormal basis for the **row space** of $\mathbf{A}$.
+- $\mathbf{\Sigma}$ contains the singular values, which provide information about the importance or magnitude of the corresponding singular vectors. Large singular values indicate directions with significant data spread, while small or zero singular values correspond to directions with little or no data variation.
+
+#### Geometric Interpretation:
+SVD can be viewed geometrically as a transformation where:
+1. $\mathbf{V}$ applies a rotation or reflection in the input space.
+2. $\mathbf{\Sigma}$ stretches or compresses the data along certain axes.
+3. $\mathbf{U}$ applies a final rotation or reflection in the output space.
+
+#### Key Points:
+- **Rank**: The number of non-zero singular values in $\mathbf{\Sigma}$ equals the rank of the matrix $\mathbf{A}$.
+- **Dimensionality Reduction**: By truncating small singular values in $\mathbf{\Sigma}$, we can approximate $\mathbf{A}$ with a lower-rank matrix, which is useful in compressing data while retaining most of its structure.
+- **Condition Number**: The ratio of the largest to the smallest non-zero singular value gives the condition number of the matrix, which indicates how sensitive a matrix is to numerical errors or perturbations.
+
+#### Example:
+For a matrix $\mathbf{A}$ of size $3 \times 2$, the SVD would look like:
+
+$$
+\mathbf{A} = \mathbf{U}
+\begin{bmatrix}
+\sigma_1 & 0 \\
+0 & \sigma_2 \\
+0 & 0
+\end{bmatrix}
+\mathbf{V}'
+$$
+
+where $\sigma_1$ and $\sigma_2$ are the singular values, and $\mathbf{U}$ and $\mathbf{V}$ are orthogonal matrices.
+
+#### Applications of SVD:
+- **Dimensionality Reduction**: SVD is widely used in Principal Component Analysis (PCA) for reducing the dimensionality of large datasets.
+- **Low-Rank Approximations**: In data compression, SVD helps to approximate matrices with fewer dimensions while maintaining the core structure.
+- **Solving Linear Systems**: In cases where a matrix is close to singular, SVD can be used to solve linear systems more stably.
+- **Latent Semantic Analysis (LSA)**: In natural language processing, SVD is used to reduce the dimensionality of word-document matrices to capture latent relationships between words and documents.
+
+### Eigendecomposition
+
+**Eigendecomposition** is a matrix factorization technique used in linear algebra, where a square matrix is decomposed into its eigenvalues and eigenvectors. It is applicable to square matrices and provides deep insight into the matrix's structure, particularly in understanding transformations, systems of linear equations, and differential equations.
+
+#### Definition:
+Given a square matrix $\mathbf{A}$ of size $n \times n$, eigendecomposition is a factorization of the matrix into the following form:
+
+$$
+\mathbf{A} = \mathbf{V} \mathbf{\Lambda} \mathbf{V}^{-1}
+$$
+
+where:
+- $\mathbf{V}$ is the matrix of **eigenvectors** of $\mathbf{A}$, and each column of $\mathbf{V}$ is an eigenvector.
+- $\mathbf{\Lambda}$ is a diagonal matrix of **eigenvalues** of $\mathbf{A}$, with each diagonal element corresponding to an eigenvalue of $\mathbf{A}$.
+- $\mathbf{V}^{-1}$ is the inverse of the matrix of eigenvectors.
+
+#### Eigenvalues and Eigenvectors:
+- **Eigenvalue** ($\lambda$): A scalar $\lambda$ is an eigenvalue of $\mathbf{A}$ if there exists a non-zero vector $\mathbf{v}$ such that:
+  
+  $$
+  \mathbf{A} \mathbf{v} = \lambda \mathbf{v}
+  $$
+
+  In this case, $\mathbf{v}$ is called the eigenvector corresponding to the eigenvalue $\lambda$.
+
+- **Eigenvector**: A non-zero vector $\mathbf{v}$ that remains parallel to itself (i.e., only scaled) when multiplied by $\mathbf{A}$ is called an eigenvector.
+
+#### Conditions for Eigendecomposition:
+- A matrix $\mathbf{A}$ is **diagonalizable** (i.e., it can be factored into $\mathbf{A} = \mathbf{V} \mathbf{\Lambda} \mathbf{V}^{-1}$) if and only if it has $n$ linearly independent eigenvectors.
+- Not all matrices are diagonalizable. However, if $\mathbf{A}$ has $n$ distinct eigenvalues, then it is guaranteed to be diagonalizable.
+- Symmetric matrices are always diagonalizable.
+
+### Geometric Interpretation:
+Eigendecomposition reveals the directions (eigenvectors) along which the matrix transformation $\mathbf{A}$ acts as a simple scaling by the eigenvalues. Geometrically:
+- Eigenvectors point in directions that remain invariant under the transformation by $\mathbf{A}$.
+- The corresponding eigenvalues tell us how much the matrix stretches or compresses vectors in the direction of those eigenvectors.
+
+#### Example:
+For a matrix $\mathbf{A}$:
+$$
+\mathbf{A} = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}
+$$
+The eigenvalues $\lambda_1 = 5$ and $\lambda_2 = 2$ can be found by solving the characteristic equation $\det(\mathbf{A} - \lambda \mathbf{I}) = 0$. Corresponding eigenvectors can then be computed, allowing the matrix to be diagonalized as:
+
+$$
+\mathbf{A} = \mathbf{V} \mathbf{\Lambda} \mathbf{V}^{-1}
+$$
+
+where $\mathbf{\Lambda} = \text{diag}(5, 2)$ and $\mathbf{V}$ is the matrix of eigenvectors.
+
+#### Applications of Eigendecomposition:
+- **Diagonalization**: Eigendecomposition allows matrices to be diagonalized, simplifying many computations (such as raising matrices to powers).
+- **Principal Component Analysis (PCA)**: In data science, eigendecomposition is used in PCA to find directions of maximum variance in data.
+- **Solving Differential Equations**: Eigenvalues and eigenvectors are useful in solving systems of linear differential equations.
+- **Quantum Mechanics**: In physics, eigenvalues and eigenvectors describe the measurable properties (like energy levels) of systems.
+
+In summary, eigendecomposition is a powerful tool in linear algebra that provides insight into how a matrix transforms space, offering valuable properties through its eigenvalues and eigenvectors.
+
+### Idempotent Matrix
+
+An **idempotent matrix** is a matrix that, when multiplied by itself, yields the same matrix. In other words, a matrix $\mathbf{M}$ is idempotent if it satisfies the condition:
+
+$$
+\mathbf{M}^2 = \mathbf{M}
+$$
+
+### Key Properties of Idempotent Matrices:
+
+1. **Eigenvalues**: The eigenvalues of an idempotent matrix are either 0 or 1. This is because for an eigenvector $\mathbf{v}$ with eigenvalue $\lambda$, the equation $\mathbf{M}^2 \mathbf{v} = \mathbf{M} \mathbf{v}$ simplifies to $\lambda^2 \mathbf{v} = \lambda \mathbf{v}$, meaning $\lambda(\lambda - 1) = 0$, so $\lambda = 0$ or $\lambda = 1$.
+
+2. **Rank**: The rank of an idempotent matrix $\mathbf{M}$ is equal to the trace of the matrix (the sum of the diagonal elements), which is also the number of eigenvalues equal to 1.
+
+3. **Projection Interpretation**: Idempotent matrices often represent projection matrices in linear algebra. A projection matrix projects vectors onto a subspace, and applying the projection multiple times doesn't change the result beyond the first application, which is why it satisfies $\mathbf{M}^2 = \mathbf{M}$.
+
+### Examples:
+
+1. **Identity Matrix**: The identity matrix $\mathbf{I}$ is idempotent because:
+   $$
+   \mathbf{I}^2 = \mathbf{I}
+   $$
+
+2. **Zero Matrix**: The zero matrix $\mathbf{0}$ is also idempotent because:
+   $$
+   \mathbf{0}^2 = \mathbf{0}
+   $$
+
+3. **Projection Matrix**: Consider a projection matrix onto the x-axis in 2D:
+   $$
+   \mathbf{P} = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}
+   $$
+   This matrix is idempotent since:
+   $$
+   \mathbf{P}^2 = \mathbf{P}
+   $$
+
+### Use in Statistics:
+Idempotent matrices are commonly used in statistics, particularly in the context of regression analysis. For example, the **hat matrix** $\mathbf{H}$ in linear regression, which transforms the observed values into the predicted values, is idempotent:
+
+$$
+\mathbf{H} = \mathbf{X}(\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top
+$$
+where $\mathbf{X}$ is the design matrix.
+
+In summary, idempotent matrices have unique properties and are frequently encountered in linear algebra, projections, and statistical applications.
+
 
 ## Probability
 
