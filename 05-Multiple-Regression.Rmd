@@ -682,6 +682,772 @@ the column space of $\bX$ to $\by$).
   SS_{tot} = SS_{res} + SS_{reg}
   $$
 
+## Centered and Standarized Variables
+
+### Centered Variables
+
+Like with simple linear regression we can center and standardize our variables.
+
+For this section, let us use the notation:
+
+$$\bX = \left[\bx_1, \bx_2, \ldots \bx_p \right]$$
+a matrix with $p$ variables in which each column is a variable $\bx_i$. In the 
+context of linear regression you can this is similar to the design matrix except
+that it doesn't have the column of ones. In this way, we will rename the design 
+matrix as
+
+$$\bX_{*} = \left[\bones \bX \right] $$
+we introduce this notation, since we don't want to center or standardize the 
+column of ones.
+
+To center matrix $\bX$ we need to remove the mean of every column. Notice that the
+vector of means is given by:
+
+$$\bar{\bx} = 
+  \left[\begin{matrix}
+    \bar{\bx}_1 \\
+    \bar{\bx}_2 \\
+    \vdots      \\
+    \bar{\bx}_p
+  \end{matrix}\right] =
+  \left[\begin{matrix}
+    \frac{1}{n} \bx_1'\bones \\
+    \frac{1}{n} \bx_2'\bones \\
+    \vdots                   \\
+    \frac{1}{n} \bx_p'\bones
+  \end{matrix}\right] = \frac{1}{n}
+  \left[\begin{matrix}
+    \bx_1'\bones \\
+    \bx_2'\bones \\
+    \vdots                   \\
+    \bx_p'\bones
+  \end{matrix}\right] = \frac{1}{n} \bX' \bones $$
+  
+then the centered data $\bX_c$ is given by:
+
+$$\bX_c = \bX - \left[\begin{matrix}
+    \bar{\bx}_1 & \bar{\bx}_2 & \dots  & \bar{\bx}_p\\
+    \bar{\bx}_1 & \bar{\bx}_2 & \dots  & \bar{\bx}_p\\
+    \vdots      & \vdots      & \ddots & \vdots     \\
+    \bar{\bx}_1 & \bar{\bx}_2 & \dots  & \bar{\bx}_p
+  \end{matrix}\right] = \bX - \bones \bar{\bx}' = \bX - \bones \left(\frac{1}{n} \bX' \bones\right)' = \bX - \frac{1}{n}\bones \bones' \bX = \left(\bI - \frac{1}{n}\bones \bones' \right)\bX $$
+
+We call $$\bC =  \left(\bI - \frac{1}{n}\bones \bones' \right) = \bI - \bH_0 $$ the centering
+matrix, since it centers the variables of matrix $\bX$. Note also, that $\bC$ also
+centers any matrix with $n$ rows, in particular a vector of size $n$ is also centered
+by $\bC$. So we can center $y$ the dependent variable, the same way:
+
+$$\by_c = \bC \by $$
+
+### Sample Covariance
+
+Having defined, the centered matrix $\bX_c$ we can define the sample covariance
+of $\bX$, $\bS_{XX} \in \mathbb{R}^{p \times p}$ as follows:
+
+$$ \bS_{XX} = \frac{1}{n-1} \left(\bX - \bones \bar{\bx}'\right)'\left(\bX - \bones \bar{\bx}'\right) = \frac{1}{n-1} \bX_c'\bX_c = \frac{1}{n-1} \bX'\bC' \bC \bX $$
+Now, since $\bC = \bI - \bH_0$ is idempotent and symmetric we have that:
+
+$$ \bS_{XX} = \frac{1}{n-1} \bX'\bC' \bC \bX = \frac{1}{n-1} \bX' \bC \bX = \frac{1}{n-1} \bX_c'\bX = \frac{1}{n-1} \bX'\bX_c $$
+So the sample covariance, is the same for the original variables and the centered variables.
+
+We can also define the covariance vector between variables $\bx_1, \bx_2, \ldots \bx_p$ and variable $\by$, 
+$\bS_{Xy} \in \dR^{p \times 1}$, as follows:
+
+$$ \bS_{Xy} = \frac{1}{n-1} \left(\bX - \bones \bar{\bx}'\right)'\left(\by - \bones \bar{y}\right) = \frac{1}{n-1} \bX_c'\by_c = \frac{1}{n-1} \bX'\bC' \bC \by$$
+
+and, in the same way than before, we have that:
+
+$$\bS_{Xy} = \frac{1}{n-1} \bX' \bC' \bC \by = \frac{1}{n-1} \bX' \bC \by = \frac{1}{n-1} \bX_c'\by = \frac{1}{n-1} \bX'\by_c$$
+
+so, you don't need to center both variables. As long as you center one of them
+the result will be the same.
+
+With this measures, we can focus on splitting the vector of estimated coefficients $\hat{\bgb}$, into the estimate for
+the intercept and the estimates for the independent variables, as follows:
+
+$$\hat{\bgb} = 
+  \left[\begin{matrix}
+    \hat{\beta}_0 \\
+    \hat{\bgb}_{-0} 
+  \end{matrix}\right]$$
+  
+with $\hat{\beta}_0$ the estimate of the intercept and $\hat{\bgb}_{-0}$ the coefficients
+for all independent variables. That is:
+
+$$\hat{\bgb}_{-0} = 
+  \left[\begin{matrix}
+    \hat{\beta}_1 \\
+    \hat{\beta}_2 \\
+    \vdots        \\
+    \hat{\beta}_p  
+  \end{matrix}\right] \in \dR^{p \times 1}$$
+  
+Under the new notation, $\bX_{*}$ for the design matrix, we have that:
+
+$$ \hat{\bgb} = \left(\bX_{*}'\bX_{*}\right)^{-1}\bX_{*}'\by $$
+so:
+
+$$ \hat{\bgb} = \left[\begin{matrix}
+    \hat{\beta}_0 \\
+    \hat{\bgb}_{-0} 
+  \end{matrix}\right] = 
+  \left( \left[\bones \bX \right]' \left[\bones \bX \right] \right)^{-1} \left[\bones \bX \right]' \by $$
+
+so we need to compute $\left( \left[\bones \bX \right]' \left[\bones \bX \right] \right)^{-1}$.
+
+We start by computing:
+
+$$\left[\bones \bX \right]' \left[\bones \bX \right] = 
+  \left[\begin{matrix}
+    \bones' \\
+    \bX'  
+  \end{matrix}\right] \left[\bones \bX \right] =
+  \left[\begin{matrix}
+    \bones' \bones & \bones' \bX \\
+    \bX'\bones     & \bX' \bX'  
+  \end{matrix}\right] =
+  \left[\begin{matrix}
+    n          & n\bar{\bx}' \\
+    n\bar{\bx} & \bX' \bX'  
+  \end{matrix}\right]
+$$
+Now, we need to invert a 2 by 2 block matrix (luckily there is a formula for this).
+The formula is in the prerequisites section, however note that in this case
+one of the blocks is of height 1, since the first value we are looking for $\hat{\beta}_0$
+is a scalar. After applying the formula, we have:
+
+\begin{align*}
+\left( \left[\bones \bX \right]' \left[\bones \bX \right] \right)^{-1} 
+  &= \left[\begin{matrix}
+    n^{-1} + n^{-1} n\bar{\bx}' \left(\bX' \bX' -  n\bar{\bx} n^{-1} n\bar{\bx}' \right)^{-1}n\bar{\bx} n^{-1} & -n^{-1} n\bar{\bx}' \left(\bX' \bX' -  n\bar{\bx} n^{-1} n\bar{\bx}'     \right)^{-1} \\
+    -\left(\bX' \bX' -  n\bar{\bx} n^{-1} n\bar{\bx}' \right)^{-1}n\bar{\bx} n^{-1} & \left(\bX' \bX' -  n\bar{\bx} n^{-1} n\bar{\bx}' \right)^{-1}  
+  \end{matrix}\right] \\
+  &= \left[\begin{matrix}
+    n^{-1} + \bar{\bx}' \left(\bX' \bX -  n\bar{\bx}\bar{\bx}' \right)^{-1}\bar{\bx} & \bar{\bx}' \left(\bX' \bX -  n\bar{\bx} \bar{\bx}' \right)^{-1} \\
+    -\left(\bX' \bX -  n\bar{\bx} \bar{\bx}' \right)^{-1}\bar{\bx}                   & \left(\bX' \bX -  n\bar{\bx} \bar{\bx}' \right)^{-1}  
+  \end{matrix}\right]  
+\end{align*}
+
+Now, notice that:
+
+\begin{align*}
+\bX' \bX -  n\bar{\bx} \bar{\bx}' 
+  &= \bX' \bX -  n\left(\frac{\bX'\bones}{n}\right)\left(\frac{\bX'\bones}{n}\right)' \\
+  &= \bX' \bX -  \frac{1}{n}\bX'\bones \bones' \bX                                    \\
+  &= \bX'\left(\bI - \frac{1}{n}\bones \bones'\right) \bX                             \\
+  &= \bX'\bC\bX                                                                       \\
+  &= (n-1)\bS_{XX}
+\end{align*}
+
+then:
+
+\begin{align*}
+\left( \left[\bones \bX \right]' \left[\bones \bX \right] \right)^{-1}  
+  &= 
+  \left[\begin{matrix}
+    n^{-1} + \bar{\bx}' \left((n-1)\bS_{XX} \right)^{-1}\bar{\bx} & -\bar{\bx}' \left((n-1)\bS_{XX} \right)^{-1} \\
+    -\left((n-1)\bS_{XX} \right)^{-1}\bar{\bx}                    & \left((n-1)\bS_{XX} \right)^{-1}   
+  \end{matrix}\right] \\
+  &=
+  \left[\begin{matrix}
+    n^{-1} + \frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1} \bar{\bx} & -\frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1} \\
+    -\frac{1}{n-1}\bS_{XX}^{-1} \bar{\bx}                    & \frac{1}{n-1}\bS_{XX}^{-1}   
+  \end{matrix}\right]
+\end{align*}
+
+
+In a similar way we can easily compute:
+
+$$\left[\bones \bX \right]' \by = 
+  \left[\begin{matrix}
+    \bones' \by\\
+    \bX'\by  
+  \end{matrix}\right] =
+  \left[\begin{matrix}
+    n\bar{y} \\
+    \bX'\by  
+  \end{matrix}\right]$$
+
+Then, we have that:
+
+\begin{align*}
+\hat{\bgb} 
+  &= \left[\begin{matrix} \\
+    \hat{\beta}_0 \\
+    \hat{\bgb}_{-0} 
+  \end{matrix}\right] \\
+  &=
+  \left[\begin{matrix}
+    n^{-1} + \frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1} \bar{\bx} & -\frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1} \\
+    -\frac{1}{n-1}\bS_{XX}^{-1} \bar{\bx}                    & \frac{1}{n-1}\bS_{XX}^{-1}   
+  \end{matrix}\right]
+  \left[\begin{matrix}
+    n\bar{y} \\
+    \bX'\by  
+  \end{matrix}\right] \\ 
+  &= 
+  \left[\begin{matrix}
+    n^{-1}n\bar{y} + \frac{n\bar{y}}{n-1}\bar{\bx}' \bS_{XX}^{-1} \bar{\bx} - \frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1}\bX'\by \\
+    -\frac{n\bar{y}}{n-1}\bS_{XX}^{-1} \bar{\bx} + \frac{1}{n-1}\bS_{XX}^{-1}\bX'\by  
+  \end{matrix}\right]
+\end{align*}
+
+Then, working first with the second row-block:
+
+\begin{align*}
+\hat{\bgb}_{-0} 
+  &=  -\frac{n\bar{y}}{n-1}\bS_{XX}^{-1} \bar{\bx} + \frac{1}{n-1}\bS_{XX}^{-1}\bX'y \\
+  &= \frac{1}{n-1}\bS_{XX}^{-1}\bX'y -\frac{1}{n-1}\bS_{XX}^{-1} \bar{\bx}n\bar{y}   \\
+  &= \frac{1}{n-1}\bS_{XX}^{-1}\left(\bX'y - n\bar{\bx}\bar{y}\right)
+\end{align*}
+
+Now, we note that:
+
+\begin{align*}
+\bX'\by - n\bar{\bx}\bar{y} 
+  &= \bX'\by - n\bar{\bx}\bar{y}                                                   \\
+  &= \bX'\by - n\left(\frac{\bX'\bones}{n}\right)\left(\frac{\bones'\by}{n}\right) \\
+  &= \bX'\by - \frac{1}{n}\bX'\bones \bones'\by                                    \\
+  &= \bX' \left(\bI - \frac{1}{n} \bones \bones' \right) \by                       \\
+  &= \bX' \bC \by                                                                  \\
+  &= (n-1)\bS_{Xy}
+\end{align*}
+
+Then, we have that:
+
+$$\hat{\bgb}_{-0} = \frac{1}{n-1}\bS_{XX}^{-1}(n-1)\bS_{Xy} = \bS_{XX}^{-1}\bS_{Xy}$$
+An equivalent result to that of simple linear regression, both using the covariance
+matrix of the independent variables and the covariance vector of the independent
+variables and the dependent variable.
+
+This way of writing the coefficients shows the influence of each component:
+
+* $\bS_{XX}^{-1}$: The relationship between the independent variables.
+* $\bS_{Xy}$: The relationship between the independent variables and the dependent variables.
+
+Also notice that, since centralizing doesn't change the values of $\bS_{X_cX_c}^{-1}$ and $\bS_{X_cy_c}$, centralizing
+the independent variables or the dependent variable (or both), doesn't change the 
+value of the coefficients of the independent variables.
+
+Now, we can work more easily with the intercept estimate:
+
+\begin{align*}
+\hat{\beta}_0 
+  &= n^{-1}n\bar{y} + \frac{n\bar{y}}{n-1}\bar{\bx}' \bS_{XX}^{-1} \bar{\bx} - \frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1}\bX'\by \\
+  &= \bar{y} + \frac{1}{n-1}\bar{\bx}'\bS_{XX}^{-1} n\bar{\bx}\bar{y} - \frac{1}{n-1}\bar{\bx}'\bS_{XX}^{-1}\bX'\by         \\
+  &= \bar{y} + \frac{1}{n-1}\bar{\bx}'\bS_{XX}^{-1} \left(n\bar{\bx}\bar{y}  - \bX'\by \right)                              \\
+  &= \bar{y} - \frac{1}{n-1}\bar{\bx}'\bS_{XX}^{-1} \left(\bX'\by - n\bar{\bx}\bar{y} \right)                               \\
+  &= \bar{y} - \frac{1}{n-1}\bar{\bx}'\bS_{XX}^{-1} (n-1)\bS_{Xy}                                                           \\
+  &= \bar{y} - \bar{\bx}'\bS_{XX}^{-1} \bS_{Xy}                                                                             \\
+  &= \bar{y} - \bar{\bx}' \hat{\bgb}_{-0}
+\end{align*}
+
+Again, an equivalent result to that of simple linear regression. Like in simple
+linear regression, centering the independent variables does affect the intercept
+estimate, since $\bar{\bx}=\bzero$, we have that the coefficient after centering
+the independent variables is $\bar{y}$ the mean of the dependent variable. And
+if we also center the dependent variable, then $\bar{y}=0$ so the estimate of the
+intercept is $0$ also. Therefore, if you are centering all variables, it is not
+necessary to add the column of ones in the design matrix, since the estimate of the
+intercept is $0$.
+
+### Satandard Variables
+
+In the same way we worked with centered variables, we can work with standard variables
+to define the sample correlations.
+
+The standardization of $\bX$, $\bX_s$, is given by:
+
+\begin{align*}
+\bX_s 
+  &=
+  \left[\begin{matrix}
+    \frac{x_{11} - \bar{\bx}_1}{S_{x_1x_1}^{1/2}} & \frac{x_{12} - \bar{\bx}_2}{S_{x_2x_2}^{1/2}} & \dots  & \frac{x_{1p} - \bar{\bx}_p}{S_{x_px_p}^{1/2}} \\
+    \frac{x_{21} - \bar{\bx}_1}{S_{x_1x_1}^{1/2}} & \frac{x_{22} - \bar{\bx}_2}{S_{x_2x_2}^{1/2}} & \dots  & \frac{x_{2p} - \bar{\bx}_p}{S_{x_px_p}^{1/2}} \\
+    \vdots                                        & \vdots                                        & \ddots & \vdots                                        \\
+    \frac{x_{n1} - \bar{\bx}_1}{S_{x_1x_1}^{1/2}} & \frac{x_{n2} - \bar{\bx}_2}{S_{x_2x_2}^{1/2}} & \dots  & \frac{x_{np} - \bar{\bx}_p}{S_{x_px_p}^{1/2}}
+  \end{matrix}\right] \\
+  &=
+  \left[\begin{matrix}
+    x_{11} - \bar{\bx}_1 & x_{12} - \bar{\bx}_2 & \dots  & x_{1p} - \bar{\bx}_p \\
+    x_{21} - \bar{\bx}_1 & x_{22} - \bar{\bx}_2 & \dots  & x_{2p} - \bar{\bx}_p \\
+    \vdots               & \vdots               & \ddots & \vdots               \\
+    x_{n1} - \bar{\bx}_1 & x_{n2} - \bar{\bx}_2 & \dots  & x_{np} - \bar{\bx}_p
+  \end{matrix}\right]
+  \left[\begin{matrix}
+    \frac{1}{S_{x_1x_1}^{1/2}} & 0                                             & \dots  & 0 \\
+    0                          & \frac{x_{22} - \bar{\bx}_2}{S_{x_2x_2}^{1/2}} & \dots  & 0 \\
+    \vdots                     & \vdots                                        & \ddots & \vdots                                        \\
+    0                          & 0                                             & \dots  & \frac{x_{np} - \bar{\bx}_p}{S_{x_px_p}^{1/2}}
+  \end{matrix}\right]
+  &= \bX_c \bD_X
+  &= \bC \bX \bD_X
+\end{align*}
+
+where
+
+$$ \bD_X =  \left[\begin{matrix}
+    \frac{1}{S_{x_1x_1}^{1/2}} & 0                                             & \dots  & 0 \\
+    0                          & \frac{x_{22} - \bar{\bx}_2}{S_{x_2x_2}^{1/2}} & \dots  & 0 \\
+    \vdots                     & \vdots                                        & \ddots & \vdots                                        \\
+    0                          & 0                                             & \dots  & \frac{x_{np} - \bar{\bx}_p}{S_{x_px_p}^{1/2}}
+  \end{matrix}\right]$$
+
+is the matrix that standardizes $\bX$. Notice that unlike $\bC$, that centers
+any matrix with the appropriate number of rows, $\bD_X$ only standardizes $\bX$.
+
+### Sample Correlation Matrix
+
+We define the sample correlation matrix as:
+
+$$ r_{XX} = \frac{\bX_s'\bX_s}{n-1} $$
+where we break a little our notation convention of using bold capital letters for 
+matrices. Entry at row $i$ and column $j$ of $r_{XX}$ is given by:
+
+$$ \left[r_{XX}\right]_{ij} = \frac{S_{x_i x_j}}{S_{x_ix_i}^{1/2}S_{x_jx_j}^{1/2}} $$
+
+We can also define the sample correlation between $\bX$ and $\by$ as follows:
+
+$$r_{Xy} = \frac{\bX_s' \by_s}{n-1} $$
+
+where $\by_s$ is the standardization of $\by$.
+
+With this definitions in hand, we can see how the coefficients look like with 
+standardized variables. Since, standardized variables are also centered, it is not
+necessary to include the column of ones in the design matrix, as the intercept
+estimate is always 0. Then the estimate of the coefficients of the independent 
+variables is given by:
+
+$$\hat{\bgb_s} = \left(\bX_s' \bX_s \right)^{-1} \bX_s' \by_s = \frac{1}{n-1}r_{XX}^{-1}(n-1)r_{Xy}=r_{XX}^{-1}r_{Xy}$$
+Notice that the coefficients estimates do change for standardized variables, since
+in general $r_{XX}\neq\bS_{XX}$ and $r_{Xy}\neq\bS_{Xy}$. In the case of standardized
+variables the coefficient estimates depend in part from the correlation between
+independent variables $r_{XX}$ and the correlations between independent and
+dependent variables $r_{Xy}$. 
+
+Working with standardized variables is useful, since standardized variables are unit-less, 
+so the estimated coefficients magnitudes are comparable.
+
+We can see these results in practice with our GDP data:
+
+```{r gdp-centering}
+# Read Data
+dat <- read.csv("Gdp data.csv")
+
+# Design Matrix Independent Variables
+X <- as.matrix(dat[, -1])
+# Dependent Variable
+y <- dat$gdp
+# NUmber of Observations
+n <- nrow(X)
+# Design Matrix with the column of Ones
+Z <- cbind(rep(1, n), X)
+
+# Centering
+# Vector of Ones
+v1 <- rep(1, n)
+# Centering Matrix
+C  <- diag(n) - (1/n) * v1 %*% t(v1)
+# Independent Variables Centered
+Xc <- C %*% X
+# Dependent Variable Centered
+yc <- C %*% y
+# Design Matrix with Independent Variables Centered
+Zc <- cbind(rep(1, n), Xc)
+
+# Checks that the Variables are actually centered
+print(round(colMeans(Xc), 8))
+print(round(mean(yc), 8))
+
+# Shows the Mean of y
+print(round(mean(y), 8))
+
+# Compute the Estimates of the Coefficients with Original Variables
+b   <- solve(t(Z) %*% Z, t(Z) %*% y)
+# Compute the Estimates of the Coefficients with Centered Independent Variables Only
+bs1 <- solve(t(Zc) %*% Zc, t(Zc) %*% y)
+# Compute the Estimates of the Coefficients with All Variables Centered
+bs2 <- solve(t(Zc) %*% Zc, t(Zc) %*% yc)
+# Compute the Estimates of the Coefficients with All variables Centered and no column of ones
+bs3 <- solve(t(Xc) %*% Xc, t(Xc) %*% yc)
+
+# Shows the Estimated Coefficients Side-by-Side
+print(round(cbind(b, bs1, bs2, c(0, bs3)), 8))
+```
+Here we can appreciate that the estimated coefficients for the independent variables
+do not change, however the estimate for the intercept changes depending on if the
+independent variables are centered or the dependent variable is centered of both. Also, notice that
+this are the that we had using the `lm` function of `R`.
+
+We can also check that computing the sample covariance matrix using our formula
+results in the same quantities that using the `cov` function in `R`.
+
+```{r gdp-sample-covariance}
+# Sample Covariance of X
+SXX <- t(Xc) %*% Xc / (n-1)
+# Sample Covariance between X and y
+SXy <- t(Xc) %*% yc / (n-1)
+
+# Shows the comparison in covariance matrices
+print(SXX)
+print(cov(X))
+
+# Shows the comparison in covariance vectors
+print(SXy)
+print(cov(X, y))
+```
+
+Finally, we can test our new formulas for the estimates:
+
+```{r gdp-sample-covariance-estimation}
+# Computes the estimates of the coefficients using the covariance matrices
+b1 <- solve(SXX, SXy)
+b0 <- mean(y) - t(colMeans(X)) %*% b1
+
+# Shows the Estimates Side by Side
+print(round(cbind(b, c(b0, b1)), 8))
+```
+
+In the same way, we can work with the sample correlations
+
+```{r gdp-sample-correlation}
+# Standardizing matrix of X
+DX <- diag(1/sqrt(diag(SXX)))
+# Standardize X
+Xs <- Xc %*% D
+# Shows that Xs is indeed standardize
+print(round(colMeans(Xs), 8))
+print(apply(X = Xs, MARGIN = 2, FUN = sd))
+
+# Standardizes y
+ys <- yc / sd(y)
+# Shows that ys is standardized
+print(round(mean(ys), 8))
+print(round(sd(ys), 8))
+
+# Sample Correlation of X
+rXX <- t(Xs) %*% Xs / (n-1)
+# Sample Correlation between X and y
+rXy <- t(Xs) %*% ys / (n-1)
+
+# Shows the comparison in correlation matrices
+print(rXX)
+print(cor(X))
+
+# Shows the comparison in correlation vectors
+print(rXy)
+print(cor(X, y))
+```
+and can test that:
+
+$$\hat{\bgb_s} = r_{XX}^{-1}r_{Xy}$$
+
+```{r gdp-sample-correlation-estimation}
+# Computes the estimates of the coefficients using the covariance matrices
+bs1 <- solve(t(Xs) %*% Xs, t(Xs) %*% ys)
+bs2 <- solve(rXX, rXy)
+
+# Shows the Estimates Side by Side
+print(round(cbind(bs1, bs2), 8))
+```
+
+We can also contrast the effects of the standarization on the coefficients
+
+```{r gdp-sample-standardization-comparisson}
+# Computes the estimates of the coefficients using the covariance matrices
+bs1 <- lm(y ~ X)$coefficients
+bs2 <- lm(ys ~ Xs)$coefficients
+
+# Shows the Estimates Side by Side
+print(round(cbind(bs1, bs2), 8))
+```
+
+First, we can observe the 0 intercept estimate on the standardize values, so it
+is not necessary to estimate it, we could have done so by using `lm(ys ~ Xs - 1)` 
+instead of `lm(ys ~ Xs)`. Next we observe, the change in magnitudes for the 
+estimated coefficients of the independent variables.
+
+## Variable Cross-Effects
+
+For this sub-section we will work with standardized values so there is no need to 
+estimate the intercept. Since all variables are standardized, we will not use
+the $\bX_s$ notation, but instead only $\bX$, to make notation less confusing.
+
+The same goes with $\hat{\bgb}_s$, it will be only $\hat{\bgb}$.
+
+The idea is to analyze the estimated coefficients when you divide the independent 
+variables in to groups $1$ and $2$. So we can divide the design matrix in two:
+
+$$\bX = [\bX_1 \bX_2]$$
+Then, we can compute the coefficient estimates:
+
+$$\hat{\bgb} = 
+  \left[\begin{matrix}
+    \hat{\bgb}_1 \\
+    \hat{\bgb}_2  
+  \end{matrix}\right] =
+  \left([\bX_1 \bX_2]'[\bX_1 \bX_2]\right)^{-1}[\bX_1 \bX_2]' \by$$
+
+So, we can work with these computations in the same way we did before:
+
+\begin{align*}
+[\bX_1 \bX_2]'[\bX_1 \bX_2] 
+  &= 
+  \left[\begin{matrix}
+    \bX_1' \\
+    \bX_2'  
+  \end{matrix}\right] [\bX_1 \bX_2] \\
+  &= 
+  \left[\begin{matrix}
+    \bX_1'\bX_1 & \bX_1'\bX_2 \\
+    \bX_2'\bX_1 & \bX_2'\bX_2  
+  \end{matrix}\right] \\
+  &= \frac{1}{n-1} 
+  \left[\begin{matrix}
+    \frac{\bX_1'\bX_1}{n-1} & \frac{\bX_1'\bX_2}{n-1} \\
+    \frac{\bX_2'\bX_1}{n-1} & \frac{\bX_2'\bX_2}{n-1}  
+  \end{matrix}\right] \\
+  &= \frac{1}{n-1} 
+  \left[\begin{matrix}
+    r_{X_1X_1} & r_{X_1X_2} \\
+    r_{X_2X_1} & r_{X_2X_2}  
+  \end{matrix}\right]
+\end{align*}
+
+In the same way, we have that:
+
+\begin{align*}
+[\bX_1 \bX_2]'\by 
+  &= 
+  \left[\begin{matrix}
+    \bX_1' \\
+    \bX_2'  
+  \end{matrix}\right] \by \\
+  &= 
+  \left[\begin{matrix}
+    \bX_1'\by \\
+    \bX_2'\by  
+  \end{matrix}\right] \\
+  &= \frac{1}{n-1} 
+  \left[\begin{matrix}
+    \frac{\bX_1'\by}{n-1} \\
+    \frac{\bX_2'\by}{n-1}   
+  \end{matrix}\right] \\
+  &= \frac{1}{n-1} 
+  \left[\begin{matrix}
+    r_{X_1y} \\
+    r_{X_2y}  
+  \end{matrix}\right]
+\end{align*}
+
+Then we have that:
+
+$$
+\hat{\bgb} = 
+  \left[\begin{matrix}
+    \hat{\bgb}_1 \\
+    \hat{\bgb}_2  
+  \end{matrix}\right] =
+  \left(\frac{1}{n-1} 
+  \left[\begin{matrix}
+    r_{X_1X_1} & r_{X_1X_2} \\
+    r_{X_2X_1} & r_{X_2X_2}  
+  \end{matrix}\right]\right)^{-1} \frac{1}{n-1} 
+  \left[\begin{matrix}
+    r_{Xy,1} \\
+    r_{Xy,2}  
+  \end{matrix}\right] =
+  \left[\begin{matrix}
+    r_{X_1X_1} & r_{X_1X_2} \\
+    r_{X_2X_1} & r_{X_2X_2}  
+  \end{matrix}\right]^{-1}  
+  \left[\begin{matrix}
+    r_{X_1y} \\
+    r_{X_2y}  
+  \end{matrix}\right]
+$$
+
+Now we can compute the inverse of the 2 by 2 block matrix as before with, but 
+first we define:
+
+$$r_{X_1|X_2} = r_{X_1X_1} - r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2X_1}$$
+this is also, the Schur component. This can also be seen as the sample correlation
+matrix of $X_1$ after accounting by the relationships with $X_2$.
+
+$$
+\left[\begin{matrix}
+    r_{XX,11} & r_{XX,12} \\
+    r_{XX,12} & r_{XX,22}  
+  \end{matrix}\right]^{-1} =
+\left[\begin{matrix}
+                              r_{X_1|X_2}^{-1} &                         -r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1} \\
+    -r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1} & r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1}  \end{matrix}\right]
+$$
+Then, we have that:
+
+\begin{align*}
+\hat{\bgb} 
+  &= 
+  \left[\begin{matrix}
+    \hat{\bgb}_1 \\
+    \hat{\bgb}_2  
+  \end{matrix}\right] \\
+  &=
+  \left[\begin{matrix}
+                              r_{X_1|X_2}^{-1} &                         -r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1} \\
+    -r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1} & r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1}
+  \end{matrix}\right] 
+  \left[\begin{matrix}
+    r_{X_1y} \\
+    r_{X_2y}  
+  \end{matrix}\right] \\
+  &= 
+  \left[\begin{matrix}
+    r_{X_1|X_2}^{-1}r_{X_1y} -r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2y} \\
+    -r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1}r_{X_1y} + r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2y}
+  \end{matrix}\right]
+\end{align*}
+
+Since the variables in the groupings 1 and 2 can be switched and have no special 
+characteristics, we only need to analyze the structure of $\hat{\bgb}_1$ in relation
+to the variables of group 2, the results would be analogous for $\hat{\bgb}_1$.  
+  
+Then we have that:
+
+$$
+\hat{\bgb}_1 
+  = r_{X_1|X_2}^{-1}r_{X_1y} -r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2y}
+  = r_{X_1|X_2}^{-1}\left(r_{X_1y} -r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2y}\right)
+$$
+Now, suppose that we want to fit the following linear models:
+
+$$\by = \bX_1 \bgb_1 + \be \quad \text{and} \quad \by = \bX_2 \bgb_2 + \be$$
+that is a linear model of $\by$ using only the variables in group 1 for one model
+and only variables from the group 2 in the second model. Then, 
+the coefficient estimates will be:
+
+$$\tilde{\bgb}_1 = r_{X_1X_1}^{-1}r_{X_1y} \quad \text{and} \quad \tilde{\bgb}_2 = r_{X_2X_2}^{-1}r_{X_2y}$$
+Note that, in general, this estimates will be different to the estimates using
+all the variables, that is:
+
+$$\tilde{\bgb}_1 \neq \hat{\bgb}_1 \quad \text{and} \quad \tilde{\bgb}_2 \neq \hat{\bgb}_2$$
+Then, we can re-write, our coefficient estimate for $\bgb_1$ as follows:
+
+$$
+\hat{\bgb}_1 
+  = r_{X_1|X_2}^{-1}\left(r_{X_1y} -r_{X_1X_2}\tilde{\bgb}_2\right)
+$$
+Now, if $r_{X_1X_2} = \bzero$, that is the variables in group 1 and group 2 are 
+uncorrelated, then
+
+$$r_{X_1|X_2} = r_{X_1X_1} - r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2X_1} = r_{X_1X_1}$$
+so:
+$$\hat{\bgb}_1 
+  = r_{X_1|X_2}^{-1}\left(r_{X_1y} -r_{X_1X_2}\tilde{\bgb}_2\right)
+  = r_{X_1X_1}^{-1}r_{X_1y}
+  = \tilde{\bgb}_1$$
+So, when the variables in 1 group are uncorrelated with the other the coefficient
+estimates are the same for the full and partial model.
+
+We can also deduce that even when the sample correlation between
+$X_1$ and $y$ is $\bzero$, that is $r_{X_1y} = \bzero$, the estimated coefficients
+will not be $\bzero$ in general. In fact, we have that:
+
+$$
+\hat{\bgb}_1 
+  = -r_{X_1|X_2}^{-1}r_{X_1X_2}\tilde{\bgb}_2
+$$
+
+### Single Variable Cross-Effects
+
+In the special case where group 1 consists of only 1 variable, we have that:
+
+$\hat{\beta}_1, \quad \tilde{\beta}_1, \quad r_{X_1X_1} = r_{x_1x_1}=1, \quad r_{X_1|X_2}=r_{x_1|X_2}, \quad r_{X_1y}=r_{x_1y}$
+
+are scalars, while
+
+$$r_{X_1X_2} = r_{x_1X_2}=r_{X_2X_1}' = r_{X_2x_1}', \quad r_{X_2y}, \quad \tilde{\bgb}_2$$
+are vectors of size $p-1$.
+
+Now, consider the following linear model:
+
+$$\bx_1 = \bX_2 \bga_2 + \be$$
+
+that is, fitting the single variable in group 1, as the dependent variable, and
+the variables in group 2, as the independent variables. Then we have that the
+estimated coefficients are:
+
+$$ \hat{\bga}_2 = r_{X_2X_2}^{-1}r_{X_2x_1}$$
+then, we notice the following
+
+$$r_{x_1|X_2} 
+  = r_{X_1X_1} - r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2X_1} 
+  = r_{x_1X_1} - r_{x_1X_2}r_{X_2X_2}^{-1}r_{X_2x_1}
+  = 1 - r_{x_1X_2}\hat{\bga}_2
+  = 1 - r_{x_1X_2}r_{X_2X_2}^{-1}r_{X_2X_2}\hat{\bga}_2
+  = 1 - \hat{\bga}_2'r_{X_2X_2}\hat{\bga}_2
+  = 1 - R^2_1
+$$
+
+where, $R^2_1$ is the multiple coefficient of determination for model:
+
+$$\bx_1 = \bX_2 \bga_2 + \be$$
+
+that is, how much of $\bx_1$ is explained by $\bX_2$.
+
+Then, we have that:
+
+$$\hat{\beta}_1 = r_{1_1|X_2}^{-1}\left(r_{x_1y} -r_{x_1X_2}\tilde{\bgb}_2\right) = \frac{1}{1-R^2_1} \left(r_{x_1y} -r_{x_1X_2}\tilde{\bgb}_2\right)$$
+We name $\frac{1}{1 - R^2_1}$ as:
+
+$$VIF_1 = \frac{1}{1 - R^2_1} $$
+the bigger, the more distorted is the value of $\hat{\beta}_1$. This number increases
+as $R^2_1$ in creases.
+
+If $R^2_1 = 0$, that is $\bX_2$ explains nothing of $\bx_1$, then
+
+$$ VIF_1 = 1 $$
+that represents no distortion. If $R^2_1 \to 1$, then:
+
+$$ VIF_1 \to 1 $$
+which represents infinite distortion.
+
+The name $VIF$ stands for variance inflation factor. We will see that later, how
+it relates to the variance of the estimate $\hat{\beta}_1$.
+
+Of course, variable 1, didn't have any particular property, so we can generalize
+this to any variable $k$.
+
+On the other hand, we also have an effect $r_{x_1X_2}\tilde{\bgb}_2$ on the
+coefficient
 
 
 
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

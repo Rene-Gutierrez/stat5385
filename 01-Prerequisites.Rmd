@@ -5,11 +5,16 @@
 \newcommand{\by}{\mathbf{y}}
 \newcommand{\bA}{\mathbf{A}}
 \newcommand{\bB}{\mathbf{B}}
+\newcommand{\bC}{\mathbf{C}}
+\newcommand{\bD}{\mathbf{D}}
 \newcommand{\bI}{\mathbf{I}}
 \newcommand{\bH}{\mathbf{H}}
+\newcommand{\bS}{\mathbf{S}}
 \newcommand{\bW}{\mathbf{W}}
 \newcommand{\bX}{\mathbf{X}}
+\newcommand{\dR}{\mathbb{R}}
 \newcommand{\bgb}{\boldsymbol{\beta}}
+\newcommand{\bga}{\boldsymbol{\alpha}}
 \newcommand{\bzero}{\mathbf{0}}
 \newcommand{\bones}{\mathbf{1}}
 \newcommand{\hy}{\hat{y}}
@@ -240,6 +245,48 @@ A^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}
 $$
 
 where $ad - bc$ is the **determinant** of the matrix $\bA$.
+
+#### Inverse of a 2 by 2 Block Matrix
+
+The inverse of a $2 \times 2$ **block matrix** can be expressed under certain conditions. Let’s consider a block matrix $\mathbf{M}$ of the form:
+
+$$
+\mathbf{M} =
+\begin{bmatrix}
+\mathbf{A} & \mathbf{B} \\
+\mathbf{C} & \mathbf{D}
+\end{bmatrix}
+$$
+
+where:
+- $\mathbf{A}$ and $\mathbf{D}$ are themselves square matrices, and $\mathbf{B}$ and $\mathbf{C}$ are matrices (not necessarily square).
+
+
+Then the inverse of $\mathbf{M}$ is given by:
+
+$$
+\mathbf{M}^{-1} =
+\begin{bmatrix}
+\mathbf{A}^{-1} + \mathbf{A}^{-1} \mathbf{B} \mathbf{S}^{-1} \mathbf{C} \mathbf{A}^{-1} & -\mathbf{A}^{-1} \mathbf{B} \mathbf{S}^{-1} \\
+-\mathbf{S}^{-1} \mathbf{C} \mathbf{A}^{-1} & \mathbf{S}^{-1}
+\end{bmatrix}
+$$
+
+where $\mathbf{S}$ is the **Schur complement** of $\mathbf{A}$ and is defined as:
+
+$$
+\mathbf{S} = \mathbf{D} - \mathbf{C} \mathbf{A}^{-1} \mathbf{B}
+$$
+
+### Conditions for the Inverse to Exist:
+- $\mathbf{A}$ must be invertible,
+- The Schur complement $\mathbf{S}$ must also be invertible.
+
+### Explanation of the Terms:
+- $\mathbf{A}^{-1}$: The inverse of matrix $\mathbf{A}$,
+- $\mathbf{S}^{-1}$: The inverse of the Schur complement $\mathbf{S}$, which can be interpreted as the "effective" part of matrix $\mathbf{D}$ once the contribution of $\mathbf{A}$ has been removed.
+
+This formula generalizes the concept of inverting a matrix when it's partitioned into blocks.
 
 ### Positive Definite Matrix
 
