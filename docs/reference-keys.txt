@@ -1,4 +1,4 @@
-stat-53856385
+stat-53856385-fall-2024
 prerequisites
 general-math
 linear-algebra
@@ -25,14 +25,18 @@ importance-1
 inverse-matrix
 conditions-for-a-matrix-to-have-an-inverse
 properties-of-the-inverse-matrix
-special-case
-inverse-of-a-2-by-2-block-matrix
+special-case-2-by-2-matrix
+special-case-2-by-2-block-matrix
 conditions-for-the-inverse-to-exist
 explanation-of-the-terms
+sherman-morrison-formula
+requirements
+explanation-of-the-terms-1
 positive-definite-matrix
 key-properties-1
 characteristics-of-a-positive-definite-matrix
 example-3
+singular-value-decomposition
 definition-3
 interpretation-of-the-components
 geometric-interpretation-1
@@ -101,3 +105,7 @@ satandard-variables
 sample-correlation-matrix
 variable-cross-effects
 single-variable-cross-effects
+single-variable-cross-effects-example
+outliers-and-leverage
+leverage
+outliers-identification

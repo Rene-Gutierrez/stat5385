@@ -671,11 +671,11 @@ the column space of $\bX$ to $\by$).
   
   form a right triangle, then it must be that:
   $$
-  ||\by - \hat{\by}||^2 = ||\by - \hat{\by}_0||^2 + ||\hat{\by} - \hat{\by}_0||^2
+  ||\by - \hat{\by}_0||^2 = ||\by - \hat{\by}||^2 + ||\hat{\by} - \hat{\by}_0||^2
   $$
   which is the same as
   $$
-  (\by - \hat{\by})'(\by - \hat{\by}) = (\by - \hat{\by}_0)'(\by - \hat{\by}_0) + (\hat{\by} - \hat{\by}_0)'(\hat{\by} - \hat{\by}_0)
+  (\by - \hat{\by})'(\by - \hat{\by}_0) = (\by - \hat{\by})'(\by - \hat{\by}) + (\hat{\by} - \hat{\by}_0)'(\hat{\by} - \hat{\by}_0)
   $$
   that can be expressed as:
   $$
@@ -1362,7 +1362,7 @@ $$
 
 In the special case where group 1 consists of only 1 variable, we have that:
 
-$\hat{\beta}_1, \quad \tilde{\beta}_1, \quad r_{X_1X_1} = r_{x_1x_1}=1, \quad r_{X_1|X_2}=r_{x_1|X_2}, \quad r_{X_1y}=r_{x_1y}$
+$\hat{\beta}_1, \quad r_{X_1X_1} = r_{x_1x_1}=1, \quad r_{X_1|X_2}=r_{x_1|X_2}, \quad r_{X_1y}=r_{x_1y}=\tilde{\beta}_1$
 
 are scalars, while
 
@@ -1397,7 +1397,7 @@ that is, how much of $\bx_1$ is explained by $\bX_2$.
 
 Then, we have that:
 
-$$\hat{\beta}_1 = r_{1_1|X_2}^{-1}\left(r_{x_1y} -r_{x_1X_2}\tilde{\bgb}_2\right) = \frac{1}{1-R^2_1} \left(r_{x_1y} -r_{x_1X_2}\tilde{\bgb}_2\right)$$
+$$\hat{\beta}_1 = r_{1_1|X_2}^{-1}\left(r_{x_1y} -r_{x_1X_2}\tilde{\bgb}_2\right) = \frac{1}{1-R^2_1} \left(\tilde{\beta}_1 -r_{x_1X_2}\tilde{\bgb}_2\right)$$
 We name $\frac{1}{1 - R^2_1}$ as:
 
 $$VIF_1 = \frac{1}{1 - R^2_1} $$
@@ -1421,22 +1421,417 @@ this to any variable $k$.
 On the other hand, we also have an effect $r_{x_1X_2}\tilde{\bgb}_2$ on the
 coefficient
 
+#### Single Variable Cross-effects example
 
+We can see the effects the other variables have in changing the coefficients in
+our GDP data set, by computing $R^2_k$ for each variable.
 
+```{r gdp-cross-effects}
+# Re-names Standardized Variables
+y <- ys
+X <- Xs
 
+# Coefficients for the Full Model
+b <- lm(y ~ X -1)$coefficients
 
+# Individual Coefficients
+# Number of Variables
+P <- ncol(X)
+# Vector to Save Individual Coefficients
+bi <- numeric(length = P)
+for(k in 1:P){
+  bi[k] <- lm(y ~ X[, k] - 1)$coefficients
+}
 
+# Coefficients without variable k
+bt <- matrix(data = NA, nrow = P-1, ncol = P)
+for(k in 1:P){
+  bt[, k] <- lm(y ~ X[, -k] - 1)$coefficients
+}
 
+# Coefficient of Determination of X_k ~ X_{-k} models and coefficients
+R2k <- numeric(length = P)
+for(k in 1:P){
+  outReg <- lm(X[, k] ~ X[, -k] - 1)
+  R2k[k] <- summary(outReg)$r.squared
+}
 
+# Cross product of correlation and coefficients
+rbt <- numeric(length = P)
+rXX <- cor(X)
+for(k in 1:P){
+  rbt[k] <- rXX[k, -k] %*% bt[, k]
+}
 
+# Formats and Show Info Table
+tab           <- cbind(b, bi, R2k, 1/(1-R2k), rbt)
+colnames(tab) <- c("b_full", "b_ind", "R2k", "VIF", "rb_ind")
+rownames(tab) <- colnames(dat)[2:6]
+knitr::kable(tab)
+```
 
+## Outliers and Leverage
 
+It is harder to identify outliers visually in multiple linear regression, specially
+if the number of variables is big. The effect of an observation $i$ on the 
+linear regression fit will depend on 2 things:
+
+* The size of the residual for observation $i$, that is $\hat{e}_i^2$.
+* How "close" is observation $i$ to other observations.
+
+**Note**: For this section, we are going to use $X_i\in\dR^{1 \times p}$ as the $i-th$ row of the
+design matrix. That is the $i$-th observation of the independent varaibles.
+
+### Leverage
+
+In multiple linear regression, **leverage** refers to the influence that a 
+particular data point has on the estimation of the regression model. 
+Specifically, it measures how far an observation's values for the independent 
+variables deviate from the mean of those variables. Leverage identifies data 
+points that could potentially have a significant effect on the regression line,
+particularly those that are outliers in terms of the input variables.
+
+Leverage values are calculated from the **hat matrix** $\bH$, which is derived
+from the design matrix $\bX$ used in the regression. The diagonal elements of 
+the hat matrix, $h_{ii}$, represent the leverage of each data point. 
+These values range from 0 to 1, where:
+
+- A leverage value close to 0 indicates that the point is not influential in
+determining the regression line.
+- A leverage value closer to 1 suggests that the point has a higher influence on
+the fitted model.
+
+High-leverage points are those whose independent variable values are far from 
+the average, and they may disproportionately affect the slope and intercept of 
+the regression line. These points can distort the regression model, leading to 
+biased estimates if not handled properly.
+
+A high-leverage point may not necessarily be an outlier in the response variable
+(dependent variable), but it could have a significant impact on the overall 
+model fit, making leverage a critical diagnostic in regression analysis.
+
+Lets analyze the structure of the hat matrix.
+
+First let us see that the diagonal elements are between 0 and 1.
+
+To see this, consider leverage $i$ ($h_{ii}$), and the basis vectors $v_j \in \dR^n$ such
+that are full of zeros except for entry $j$. Then:
+
+$$h_{ij} = v_i '\bH v_j$$
+in particular, leverage $i$ is given by:
+
+$$h_{ii} = v_i '\bH v_i$$
+Now, consider $\bH v_i$ and notice that:
+
+\begin{align*}
+||v_i - \bH v_i||_2^2 
+  &= (v_i - \bH v_i)'(v_i - \bH v_i) \\
+  &= v_i'v_i - v_i'\bH v_i - v_i'\bH v_i + v_i' \bH \bH v_i \\
+  &= v_i'v_i - v_i'\bH\bH v_i - v_i'\bH\bH v_i + v_i' \bH \bH v_i \\
+  &= v_i'v_i - v_i'\bH\bH v_i \\
+  &= ||v_i||_2^2 - ||\bH v_i||_2^2 \\
+  &= 1 - ||\bH v_i||_2^2
+\end{align*}
+
+Then
+
+\begin{align*}
+||v_i - \bH v_i||_2^2 = 1 - ||\bH v_i||_2^2
+  & \implies ||v_i - \bH v_i||_2^2 + ||\bH v_i||_2^2 = 1 \\
+  & \implies ||\bH v_i||_2^2 \leq 1 \\
+  & \implies v_i' \bH \bH v_i  \leq 1 \\
+  & \implies v_i' \bH v_i  \leq 1 \\
+  & \implies h_{ii}  \leq 1 \\
+\end{align*}
+
+Since $h_{ii}=||\bH v_i||_2^2$ is a norm then $h_{ii} \geq 0$, then:
+
+$$ 0 \leq h_{ii} \leq 1 $$
+So, leverages are bounded.
+
+Now, recall that the hat matrix is given by:
+
+$$\bH = \bX(\bX'\bX)^{-1}\bX' $$
+and we can express the design matrix as follows:
+
+$$ \bX = \left[\begin{matrix}
+    X_1    \\
+    X_2    \\
+    \vdots \\
+    X_n
+  \end{matrix}\right] $$
   
+and
+
+$$ \bX' = [X_1' X_2' \ldots X_n'] $$
+
+Then, the hat matrix is given by:
+
+\begin{align*}
+\bH 
+  &= \bX(\bX'\bX)^{-1}\bX'                                                                 \\
+  &= \bX(\bX'\bX)^{-1} [X_1' X_2' \ldots X_n']                                             \\
+  &= \bX [(\bX'\bX)^{-1}X_1' (\bX'\bX)^{-1}X_2' \ldots (\bX'\bX)^{-1}X_n']                 \\
+  &= \left[\begin{matrix}
+      X_1    \\
+      X_2    \\
+      \vdots \\
+      X_n
+     \end{matrix}\right] [(\bX'\bX)^{-1}X_1' (\bX'\bX)^{-1}X_2' \ldots (\bX'\bX)^{-1}X_n'] \\
+  &= \left[\begin{matrix}
+      X_1 (\bX'\bX)^{-1}X_1' & X_1 (\bX'\bX)^{-1}X_2' & \ldots & X_1 (\bX'\bX)^{-1}X_n'    \\
+      X_2 (\bX'\bX)^{-1}X_1' & X_2 (\bX'\bX)^{-1}X_2' & \ldots & X_2 (\bX'\bX)^{-1}X_n'    \\
+      \vdots                 & \vdots                 & \vdots                             \\
+      X_n (\bX'\bX)^{-1}X_1' & X_n (\bX'\bX)^{-1}X_2' & \ldots & X_n (\bX'\bX)^{-1}X_n'    \\
+     \end{matrix}\right]
+\end{align*}
+
+we are going to use this expression latter, but we can also notice that:
+
+$$h_{ij} = X_i (\bX'\bX)^{-1}X_j'$$
+
+### Outliers identification
+
+Identifying outliers in multiple regression is hard. One way to measure the influence
+of an observation is to see how different are the predicted values if an observation
+is removed. We will call:
+
+* $\bX_{(i)}$ the design matrix, when the $i$-th observation is removed.
+* $\by_{(i)}$ the dependent variables without the observation $i$.
+* $\hat{\by}_{(i)}$ the predicted values when the $i$-th observation is removed.
+* $\bH_{(i)}$ the hat matrix when the $i$-th observation is removed.
+
+Then a measure of influence can be:
+
+$$||\by - \hat{\by}_{(i)}||^2_2 = (\by - \hat{\by}_{(i)})'(\by - \hat{\by}_{(i)}) = \sum_{j=1}^n (\by_j - \hat{\by}_{(i),j})$$
+Notice that:
+
+$$\hat{\by}_i = \bH \by$$
+and, similarly
+
+$$\hat{\by}_{(i)} = \bH_{(i)} \by_{(i)}$$
+
+Now, let us compute:
+
+\begin{align*}
+\hat{\by} 
+  &= \bH \by \\
+  &= \left[\begin{matrix}
+      X_1 (\bX'\bX)^{-1}X_1' & X_1 (\bX'\bX)^{-1}X_2' & \ldots & X_1 (\bX'\bX)^{-1}X_n'    \\
+      X_2 (\bX'\bX)^{-1}X_1' & X_2 (\bX'\bX)^{-1}X_2' & \ldots & X_2 (\bX'\bX)^{-1}X_n'    \\
+      \vdots                 & \vdots                 & \vdots                             \\
+      X_n (\bX'\bX)^{-1}X_1' & X_n (\bX'\bX)^{-1}X_2' & \ldots & X_n (\bX'\bX)^{-1}X_n'    \\
+     \end{matrix}\right] \left[\begin{matrix}
+      y_1    \\
+      y_2    \\
+      \vdots \\
+      y_n
+      \end{matrix}\right] \\
+  &=
+      \left[\begin{matrix}
+        \sum_{k=1}^n X_1 (\bX'\bX)^{-1}X_k'y_k  \\
+        \sum_{k=1}^n X_2 (\bX'\bX)^{-1}X_k'y_k    \\
+        \vdots \\
+        \sum_{k=1}^n X_n (\bX'\bX)^{-1}X_k'y_k
+      \end{matrix}\right]
+\end{align*}
+
+$$
+$$
+
+Then
+
+$$\hat{y}_j = \sum_{k=1}^n X_j (\bX'\bX)^{-1}X_k'y_k = X_j (\bX'\bX)^{-1} \sum_{k=1}^n X_k'y_k$$
+in a similar way, observation :
+
+$$\hat{y}_{(i)j} = \sum_{k=1}^n X_j (\bX_{(i)}'\bX_{(i)})^{-1}X_k'y_k = X_j (\bX_{(i)}'\bX_{(i)})^{-1} \sum_{k=1}^n X_k'y_k$$
+Notice that it is not necessary to use the subscript $(i)$ when we are dealing
+with single observations.
+
+Now, we will relate $(\bX'\bX)^{-1}$ to $(\bX_{(i)}'\bX_{(i)})^{-1}$ using the 
+[Sherman–Morrison formula](#sherman-morrison-formula). First notice that:
+
+$$\bX' \bX = \bX_{(i)}'\bX_{(i)} + X_i'X_i$$
+
+then
+
+$$\bX_{(i)}'\bX_{(i)} = \bX' \bX - X_i'X_i$$
+
+Now we apply the [Sherman–Morrison formula](#sherman-morrison-formula).
+
+\begin{align*}
+\left(\bX_{(i)}'\bX_{(i)}\right)^{-1} = \left(\bX' \bX - X_i'X_i\right)^{-1}
+  &= \left(\bX' \bX + (-X_i)'X_i\right)^{-1} \\
+  &= \left(\bX' \bX\right)^{-1} - \frac{\left(\bX' \bX\right)^{-1}(-X_i)'X_i\left(\bX' \bX\right)^{-1}}{1 + (-X_i)'\left(\bX' \bX\right)^{-1}X_i} \\
+  &= \left(\bX' \bX\right)^{-1} + \frac{\left(\bX' \bX\right)^{-1}X_i'X_i\left(\bX' \bX\right)^{-1}}{1 - X_i'\left(\bX' \bX\right)^{-1}X_i} \\
+  &= \left(\bX' \bX\right)^{-1} + \frac{\left(\bX' \bX\right)^{-1}X_i'X_i\left(\bX' \bX\right)^{-1}}{1 - h_{ii}}
+\end{align*}
+
+Then,
+
+$$\hat{y}_{(i)j} = X_j \left(\bX_{(i)}'\bX_{(i)}\right)^{-1} \sum_{k \neq i}X_k'y_k = X_j\left(\bX' \bX\right)^{-1}\sum_{k \neq i}X_k'y_k + \frac{X_j\left(\bX' \bX\right)^{-1}X_i'X_i\left(\bX' \bX\right)^{-1}\sum_{k \neq i}X_k'y_k}{1 - h_{ii}}$$
+Now
+
+\begin{align*}
+X_j\left(\bX' \bX\right)^{-1}\sum_{k \neq i}X_k'y_k 
+  &= X_j\left(\bX' \bX\right)^{-1}\left(\sum_{k \neq i}X_k'y_k + X_i'y_i - X_i'y_i\right) \\
+  &= X_j\left(\bX' \bX\right)^{-1}\left(\sum_{k = 1}^nX_k'y_k - X_i'y_i\right) \\
+  &= X_j\left(\bX' \bX\right)^{-1}\sum_{k = 1}^nX_k'y_k - X_j\left(\bX' \bX\right)^{-1}X_i'y_i \\
+  &= \hat{y}_j - h_{ij}y_i
+\end{align*}
+
+and
+
+\begin{align*}
+X_j\left(\bX' \bX\right)^{-1}X_i'X_i\left(\bX' \bX\right)^{-1}\sum_{k \neq i}X_k'y_k 
+  &= h_{ij}X_i\left(\bX' \bX\right)^{-1}\sum_{k \neq i}X_k'y_k \\
+  &= h_{ij}\sum_{k \neq i}X_i\left(\bX' \bX\right)^{-1}X_k'y_k \\
+  &= h_{ij}\sum_{k \neq i}h_{ik}y_k
+\end{align*}
+
+Then
+
+\begin{align*}
+\hat{y}_{(i)j} = \hat{y}_j - h_{ij}y_i + \frac{h_{ij}\sum_{k \neq i}h_{ik}y_k}{1 - h_{ii}}
+  &= \hat{y}_j - h_{ij}\left(y_i  - \frac{\sum_{k \neq i}h_{ik}y_k}{1 - h_{ii}} \right) \\
+  &= \hat{y}_j - h_{ij}\left(\frac{y_i - y_ih_{ii}}{1 - h_{ii}} - \frac{\sum_{k \neq i}h_{ik}y_k}{1 - h_{ii}} \right) \\
+  &= \hat{y}_j - h_{ij}\left(\frac{y_i - y_ih_{ii} - \sum_{k \neq i}h_{ik}y_k}{1 - h_{ii}} \right) \\
+  &= \hat{y}_j - h_{ij}\left(\frac{y_i - \sum_{k=1}^n h_{ik}y_k}{1 - h_{ii}} \right) \\
+  &= \hat{y}_j - h_{ij}\left(\frac{y_i - \hat{y}_i}{1 - h_{ii}} \right) \\
+  &= \hat{y}_j - h_{ij}\left(\frac{\hat{e}_i}{1 - h_{ii}} \right)
+\end{align*}
+
+Then
+
+\begin{align*}
+\hat{y}_{(i)j} - \hat{y}_j = - h_{ij}\left(\frac{\hat{e}_i}{1 - h_{ii}} \right)
+  &\implies \left(\hat{y}_{(i)j} - \hat{y}_j \right)^2= \left(h_{ij}\left(\frac{\hat{e}_i}{1 - h_{ii}} \right) \right)^2 = \frac{\hat{e}_i^2}{(1 - h_{ii})^2}h_{ij}^2 \\
+  &\implies \left(\hat{\by}_{(i)} - \hat{\by} \right)'\left(\hat{\by}_{(i)} - \hat{\by} \right) = \sum_{j=1}^n \frac{\hat{e}_i^2}{(1 - h_{ii})^2}h_{ij}^2 \\
+  &\implies ||\hat{\by}_{(i)} - \hat{\by}||_2^2 = \frac{\hat{e}_i^2}{(1 - h_{ii})^2} \sum_{j=1}^n h_{ij}^2 
+\end{align*}
+
+Now for any symmetric and idempotent matrix $\bM \in \dR^{n \times n}$ we have that:
+
+$$m_{ii} = \sum_{j = 1}^n h_{ij}^2$$
+Then
+
+$$||\hat{\by}_{(i)} - \hat{\by}||_2^2 = \frac{\hat{e}_i^2}{(1 - h_{ii})^2} h_{ii}^2 = \frac{h_{ii}^2}{(1 - h_{ii})^2}\hat{e}_i^2 $$
+That is the change in the predictions is the result of a function of the leverages
+and a function of the error of observation $i$.
   
+We can see this with our GDP dataset. We generate new observations, in which
+
+```{r gdp-leverage-outliers}
+# Reads Data
+dat <- read.csv(file = "Gdp data.csv")
+
+# Extracts the Data
+y <- as.numeric(dat[,  1])
+X <- as.matrix(dat[, -1])
+n <- nrow(X)
+X <- cbind(rep(1, n), X)
+
+# Obtains the Estimates
+b <- solve(t(X) %*% X, t(X) %*% y)
+
+# Predicted Values
+yh <- X %*% b
+
+# Errors
+eh <- abs(y - yh)
+
+# Obtains the Minimum, Median and Maximum Errors
+err <- quantile(eh, probs = c(0, 0.5, 1))
+
+# Generates New Observations
+# An observation at one extreme of the Observed Independent Variables
+X1 <- apply(X = X, MARGIN = 2, FUN = max)
+# An observation at the center of the Observed Independent Variables
+X2 <- apply(X = X, MARGIN = 2, FUN = mean)
+# Dependent Variables with different Error levels
+y1 <- c(t(X1) %*% b) + c(0, err, err[3] * 2)
+y2 <- c(t(X2) %*% b) + c(0, err, err[3] * 2)
+
+# Outlier Level
+m <- length(y1)
+
+# Predictions without the Observations
+yhi <- yh
+bi  <- b
+yi  <- y
+Xi  <- X
+
+# Table with Changes
+tab <- matrix(data = NA, nrow = 0, ncol = 4)
+
+for(i in 1:m){
+  # Complete Data Set
+  X <- rbind(Xi, X2)
+  y <- c(yi, y2[i])
   
+  # Coefficients
+  b <- solve(t(X) %*% X, t(X) %*% y)
   
+  # Predictions
+  yh  <- c(X %*% b)
+  yhi <- c(rbind(Xi, X2) %*% bi)
   
+  # Hat matrix
+  H <- X %*% solve(t(X) %*% X, t(X))
   
+  # Leverage New Observation
+  h <- H[n+1, n+1]
+  
+  # Change in Predictions
+  preCha <- sum((yh - yhi)^2)
+  
+  # Leverage Component
+  levCom <- h / ((1 - h)^2)
+  
+  # Error Component
+  errCom <- (y[n+1] - yh[n+1])^2
+  
+  # Saves Values
+  tab <- rbind(tab, c(preCha, levCom, errCom, levCom * errCom))
+}
+
+for(i in 1:m){
+  # Complete Data Set
+  X <- rbind(Xi, X1)
+  y <- c(yi, y1[i])
+  
+  # Coefficients
+  b <- solve(t(X) %*% X, t(X) %*% y)
+  
+  # Predictions
+  yh  <- c(X %*% b)
+  yhi <- c(rbind(Xi, X1) %*% bi)
+  
+  # Hat matrix
+  H <- X %*% solve(t(X) %*% X, t(X))
+  
+  # Leverage New Observation
+  h <- H[n+1, n+1]
+  
+  # Change in Predictions
+  preCha <- sum((yh - yhi)^2)
+  
+  # Leverage Component
+  levCom <- h / ((1 - h)^2)
+  
+  # Error Component
+  errCom <- (y[n+1] - yh[n+1])^2
+  
+  # Saves Values
+  tab <- rbind(tab, c(preCha, levCom, errCom, levCom * errCom))
+}
+
+  tab <- data.frame(tab)
+  tab <- cbind(c(rep("Low", 5), rep("High", 5)), tab)
+  tab <- cbind(rep(c("Minimum", "Low", "Medium", "High", "Very High"), 2), tab)
+  colnames(tab) <- c("Error Level", "Leverage Level", "Sum of Sq. Diff.", "Lev. Comp.", "Err. Comp.", "Using Formula")
+  knitr::kable(tab, digits = 5)
+```
   
   
   

@@ -9,6 +9,7 @@
 \newcommand{\bD}{\mathbf{D}}
 \newcommand{\bI}{\mathbf{I}}
 \newcommand{\bH}{\mathbf{H}}
+\newcommand{\bM}{\mathbf{M}}
 \newcommand{\bS}{\mathbf{S}}
 \newcommand{\bW}{\mathbf{W}}
 \newcommand{\bX}{\mathbf{X}}
@@ -61,6 +62,9 @@ You should be familiar with the following linear algebra concepts:
 * [Full Rank Matrix](#full-rank-matrix)
 * [Inverse Matrix](#inverse-matrix)
 * [Positive Definite Matrix](#positive-definite-matrix)
+* [Singular Value Decomposition](#singular-value-decomposition)
+* [Eigendecomposition](#eigendecomposition)
+* [Idempotent Matrix](#idempotent-matrix)
 * Determinants
 * Eigenvalues and Eigenvectors
 * Diagonalization
@@ -224,13 +228,13 @@ where $\bI$ is the identity matrix, and its diagonal elements are 1, with all of
 - The matrix $\bA$ must be **square**, meaning it has the same number of rows and columns.
 - The matrix $\bA$ must be **non-singular**, meaning its **determinant** is non-zero ($|\bA| \neq 0$).
 
-##### Properties of the Inverse Matrix:
+#### Properties of the Inverse Matrix:
 1. **Uniqueness:** If a matrix has an inverse, it is unique.
 2. **Inverse of a Product:** The inverse of the product of two matrices $\bA$ and $\bB$ is given by $(\bA\bB)^{-1} = \bB^{-1} \bA^{-1}$.
 3. **Inverse of the Inverse:** $(\bA^{-1})^{-1} = \bA$.
 4. **Transpose of the Inverse:** $(\bA^{-1})' = (\bA')^{-1}$.
 
-#### Special Case:
+#### Special Case 2 by 2 Matrix
 
 For a $2 \times 2$ matrix:
 
@@ -246,7 +250,7 @@ $$
 
 where $ad - bc$ is the **determinant** of the matrix $\bA$.
 
-#### Inverse of a 2 by 2 Block Matrix
+#### Special Case 2 by 2 Block Matrix
 
 The inverse of a $2 \times 2$ **block matrix** can be expressed under certain conditions. Let’s consider a block matrix $\mathbf{M}$ of the form:
 
@@ -278,15 +282,35 @@ $$
 \mathbf{S} = \mathbf{D} - \mathbf{C} \mathbf{A}^{-1} \mathbf{B}
 $$
 
-### Conditions for the Inverse to Exist:
+##### Conditions for the Inverse to Exist:
 - $\mathbf{A}$ must be invertible,
 - The Schur complement $\mathbf{S}$ must also be invertible.
 
-### Explanation of the Terms:
+##### Explanation of the Terms:
 - $\mathbf{A}^{-1}$: The inverse of matrix $\mathbf{A}$,
 - $\mathbf{S}^{-1}$: The inverse of the Schur complement $\mathbf{S}$, which can be interpreted as the "effective" part of matrix $\mathbf{D}$ once the contribution of $\mathbf{A}$ has been removed.
 
 This formula generalizes the concept of inverting a matrix when it's partitioned into blocks.
+
+#### Sherman-Morrison Formula
+
+The **Sherman-Morrison formula** provides a way to compute the inverse of a matrix after it has been updated by a rank-one modification. Specifically, it addresses the situation where a matrix **A** has been updated by the outer product of two vectors **u** and **v**. The formula is:
+
+$$
+(\mathbf{A} + \mathbf{u} \mathbf{v}^T)^{-1} = \mathbf{A}^{-1} - \frac{\mathbf{A}^{-1} \mathbf{u} \mathbf{v}^T \mathbf{A}^{-1}}{1 + \mathbf{v}^T \mathbf{A}^{-1} \mathbf{u}}
+$$
+
+##### Requirements:
+- **A** must be an invertible matrix.
+- The scalar $1 + \mathbf{v}^T \mathbf{A}^{-1} \mathbf{u}$ must not be zero.
+
+##### Explanation of the terms:
+- **A** is an invertible $n \times n$ matrix.
+- **u** and **v** are $n \times 1$ column vectors.
+- The outer product $\mathbf{u} \mathbf{v}^T$ is an $n \times n$ rank-one matrix.
+- The term $1 + \mathbf{v}^T \mathbf{A}^{-1} \mathbf{u}$ is a scalar.
+
+This formula is useful in situations where you need to efficiently update the inverse of a matrix after a low-rank modification, rather than recomputing the inverse from scratch.
 
 ### Positive Definite Matrix
 
@@ -316,6 +340,7 @@ is positive definite, because for any non-zero vector $\mathbf{x}$, $\mathbf{x}'
 $$
 \mathbf{x}' \bA \mathbf{x} = \begin{bmatrix} 1 & 1 \end{bmatrix} \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = 6 > 0
 $$
+
 ### Singular Value Decomposition
 
 **Singular Value Decomposition (SVD)** is a fundamental matrix factorization technique used in linear algebra to break down a matrix into three distinct components. It provides valuable insight into the structure of a matrix and is widely used in applications like data compression, signal processing, and dimensionality reduction.
@@ -401,7 +426,7 @@ where:
 - Not all matrices are diagonalizable. However, if $\mathbf{A}$ has $n$ distinct eigenvalues, then it is guaranteed to be diagonalizable.
 - Symmetric matrices are always diagonalizable.
 
-### Geometric Interpretation:
+#### Geometric Interpretation:
 Eigendecomposition reveals the directions (eigenvectors) along which the matrix transformation $\mathbf{A}$ acts as a simple scaling by the eigenvalues. Geometrically:
 - Eigenvectors point in directions that remain invariant under the transformation by $\mathbf{A}$.
 - The corresponding eigenvalues tell us how much the matrix stretches or compresses vectors in the direction of those eigenvectors.
@@ -435,7 +460,7 @@ $$
 \mathbf{M}^2 = \mathbf{M}
 $$
 
-### Key Properties of Idempotent Matrices:
+#### Key Properties of Idempotent Matrices:
 
 1. **Eigenvalues**: The eigenvalues of an idempotent matrix are either 0 or 1. This is because for an eigenvector $\mathbf{v}$ with eigenvalue $\lambda$, the equation $\mathbf{M}^2 \mathbf{v} = \mathbf{M} \mathbf{v}$ simplifies to $\lambda^2 \mathbf{v} = \lambda \mathbf{v}$, meaning $\lambda(\lambda - 1) = 0$, so $\lambda = 0$ or $\lambda = 1$.
 
@@ -443,7 +468,7 @@ $$
 
 3. **Projection Interpretation**: Idempotent matrices often represent projection matrices in linear algebra. A projection matrix projects vectors onto a subspace, and applying the projection multiple times doesn't change the result beyond the first application, which is why it satisfies $\mathbf{M}^2 = \mathbf{M}$.
 
-### Examples:
+#### Examples:
 
 1. **Identity Matrix**: The identity matrix $\mathbf{I}$ is idempotent because:
    $$
@@ -464,7 +489,7 @@ $$
    \mathbf{P}^2 = \mathbf{P}
    $$
 
-### Use in Statistics:
+#### Use in Statistics:
 Idempotent matrices are commonly used in statistics, particularly in the context of regression analysis. For example, the **hat matrix** $\mathbf{H}$ in linear regression, which transforms the observed values into the predicted values, is idempotent:
 
 $$
@@ -473,6 +498,8 @@ $$
 where $\mathbf{X}$ is the design matrix.
 
 In summary, idempotent matrices have unique properties and are frequently encountered in linear algebra, projections, and statistical applications.
+
+
 
 
 ## Probability
