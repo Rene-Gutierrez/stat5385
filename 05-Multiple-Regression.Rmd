@@ -1514,7 +1514,22 @@ model fit, making leverage a critical diagnostic in regression analysis.
 
 Lets analyze the structure of the hat matrix.
 
-First let us see that the diagonal elements are between 0 and 1.
+First, let us see that $\bH$ is symmetric semi-positive definite. Pick $z \in \dR^n$.
+Recall, that $\bX' \bX$ is positive definite, then $$(\bX'\bX)^{-1}$$ is positive
+definite. Then
+
+\begin{align*}
+z'Hz 
+   &= \bz'\bX(\bX'\bX)^{-1}\bX'z \\
+   &= (\bX'\bz)'(\bX'\bX)^{-1}(\bX'\bz) \\
+   &= \bw' (\bX'\bX)^{-1} \bw & \bw = \bX'\bz \\
+   &\geq 0
+\end{align*}
+
+Therefore, $\bH$ is semi-positive definite. This implies that all the eigenvalues
+of $\bH$ are non-negative, that is positive or $0$.
+
+Next, let us see that the diagonal elements are between 0 and 1.
 
 To see this, consider leverage $i$ ($h_{ii}$), and the basis vectors $v_j \in \dR^n$ such
 that are full of zeros except for entry $j$. Then:
@@ -1558,8 +1573,7 @@ $$ \sum_{i=1}^p h_{ii} = p $$
 To see this, we will need the following properties:
 
 1. $\text{rank}(\mathbf{H}) = p.$
-2. $\bH$ is symmetric semi-positive definite.
-3. All the eigenvalues of $\bH$ are either 0 or 1.
+2. All the eigenvalues of $\bH$ are either 0 or 1.
 
 As usual, we assume that $\text{rank}(\bX) = p$ and $n>p$, that is there are more observations
 than independent variables. Then
@@ -1571,21 +1585,6 @@ than independent variables. Then
   &\implies \text{rank}\left(\bX(\bX'\bX)^{-1}\bX'\right) = p \\
   &\implies \text{rank}\left(\bH\right) = p \\
 \end{align*}
-
-Now let us see that $\bH$ is symmetric semi-positive definite. Pick $z \in \dR^n$.
-Recall, that $\bX' \bX$ is positive definite, then $$(\bX'\bX)^{-1}$$ is positive
-definite. Then
-
-\begin{align*}
-z'Hz 
-   &= \bz'\bX(\bX'\bX)^{-1}\bX'z \\
-   &= (\bX'\bz)'(\bX'\bX)^{-1}(\bX'\bz) \\
-   &= \bw' (\bX'\bX)^{-1} \bw & \bw = \bX'\bz \\
-   &\geq 0
-\end{align*}
-
-Therefore, $\bH$ is semi-positive definite. This implies that all the eigenvalues
-of $\bH$ are non-negative, that is positive or $0$.
 
 Now, let $\lambda$ be an eigenvalue of $\bH$, with respective $\bv$ as eigenvector.
 Then:
@@ -1617,8 +1616,9 @@ $$\frac{n h_{ii}}{p}$$
 if this number is several times bigger than $1$, it will be an observation with
 considerable leverage.
 
+Another way to characterize the leverages can be found as follows:
 
-Now, recall that the hat matrix is given by:
+Recall that the hat matrix is given by:
 
 $$\bH = \bX(\bX'\bX)^{-1}\bX' $$
 and we can express the design matrix as follows:
@@ -1656,6 +1656,9 @@ Then, the hat matrix is given by:
 \end{align*}
 
 we are going to use this expression latter, but we can also notice that:
+
+$$h_{ij} = X_i (\bX'\bX)^{-1}X_j'$$
+So we can characterize the leverages as:
 
 $$h_{ij} = X_i (\bX'\bX)^{-1}X_j'$$
 

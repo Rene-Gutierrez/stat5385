@@ -1676,7 +1676,19 @@ model fit, making leverage a critical diagnostic in regression analysis.</p>
 <div id="properties-of-leverages" class="section level4 hasAnchor" number="6.9.1.1">
 <h4><span class="header-section-number">6.9.1.1</span> Properties of Leverages<a href="multiple-linear-regression.html#properties-of-leverages" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Lets analyze the structure of the hat matrix.</p>
-<p>First let us see that the diagonal elements are between 0 and 1.</p>
+<p>First, let us see that <span class="math inline">\(\mathbf{H}\)</span> is symmetric semi-positive definite. Pick <span class="math inline">\(z \in \mathbb{R}^n\)</span>.
+Recall, that <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span> is positive definite, then <span class="math display">\[(\mathbf{X}&#39;\mathbf{X})^{-1}\]</span> is positive
+definite. Then</p>
+<p><span class="math display">\[\begin{align*}
+z&#39;Hz
+   &amp;= \mathbf{z}&#39;\mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;z \\
+   &amp;= (\mathbf{X}&#39;\mathbf{z})&#39;(\mathbf{X}&#39;\mathbf{X})^{-1}(\mathbf{X}&#39;\mathbf{z}) \\
+   &amp;= \mathbf{w}&#39; (\mathbf{X}&#39;\mathbf{X})^{-1} \mathbf{w}&amp; \mathbf{w}= \mathbf{X}&#39;\mathbf{z}\\
+   &amp;\geq 0
+\end{align*}\]</span></p>
+<p>Therefore, <span class="math inline">\(\mathbf{H}\)</span> is semi-positive definite. This implies that all the eigenvalues
+of <span class="math inline">\(\mathbf{H}\)</span> are non-negative, that is positive or <span class="math inline">\(0\)</span>.</p>
+<p>Next, let us see that the diagonal elements are between 0 and 1.</p>
 <p>To see this, consider leverage <span class="math inline">\(i\)</span> (<span class="math inline">\(h_{ii}\)</span>), and the basis vectors <span class="math inline">\(v_j \in \mathbb{R}^n\)</span> such
 that are full of zeros except for entry <span class="math inline">\(j\)</span>. Then:</p>
 <p><span class="math display">\[h_{ij} = v_i &#39;\mathbf{H}v_j\]</span>
@@ -1709,7 +1721,6 @@ So, leverages are bounded.</p>
 <p>To see this, we will need the following properties:</p>
 <ol style="list-style-type: decimal">
 <li><span class="math inline">\(\text{rank}(\mathbf{H}) = p.\)</span></li>
-<li><span class="math inline">\(\mathbf{H}\)</span> is symmetric semi-positive definite.</li>
 <li>All the eigenvalues of <span class="math inline">\(\mathbf{H}\)</span> are either 0 or 1.</li>
 </ol>
 <p>As usual, we assume that <span class="math inline">\(\text{rank}(\mathbf{X}) = p\)</span> and <span class="math inline">\(n&gt;p\)</span>, that is there are more observations
@@ -1721,18 +1732,6 @@ than independent variables. Then</p>
   &amp;\implies \text{rank}\left(\mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\right) = p \\
   &amp;\implies \text{rank}\left(\mathbf{H}\right) = p \\
 \end{align*}\]</span></p>
-<p>Now let us see that <span class="math inline">\(\mathbf{H}\)</span> is symmetric semi-positive definite. Pick <span class="math inline">\(z \in \mathbb{R}^n\)</span>.
-Recall, that <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span> is positive definite, then <span class="math display">\[(\mathbf{X}&#39;\mathbf{X})^{-1}\]</span> is positive
-definite. Then</p>
-<p><span class="math display">\[\begin{align*}
-z&#39;Hz
-   &amp;= \mathbf{z}&#39;\mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;z \\
-   &amp;= (\mathbf{X}&#39;\mathbf{z})&#39;(\mathbf{X}&#39;\mathbf{X})^{-1}(\mathbf{X}&#39;\mathbf{z}) \\
-   &amp;= \mathbf{w}&#39; (\mathbf{X}&#39;\mathbf{X})^{-1} \mathbf{w}&amp; \mathbf{w}= \mathbf{X}&#39;\mathbf{z}\\
-   &amp;\geq 0
-\end{align*}\]</span></p>
-<p>Therefore, <span class="math inline">\(\mathbf{H}\)</span> is semi-positive definite. This implies that all the eigenvalues
-of <span class="math inline">\(\mathbf{H}\)</span> are non-negative, that is positive or <span class="math inline">\(0\)</span>.</p>
 <p>Now, let <span class="math inline">\(\lambda\)</span> be an eigenvalue of <span class="math inline">\(\mathbf{H}\)</span>, with respective <span class="math inline">\(\mathbf{v}\)</span> as eigenvector.
 Then:</p>
 <p><span class="math display">\[\begin{align*}
@@ -1755,7 +1754,8 @@ the proportion of the leverage <span class="math inline">\(i\)</span> out of “
 <p><span class="math display">\[\frac{n h_{ii}}{p}\]</span>
 if this number is several times bigger than <span class="math inline">\(1\)</span>, it will be an observation with
 considerable leverage.</p>
-<p>Now, recall that the hat matrix is given by:</p>
+<p>Another way to characterize the leverages can be found as follows:</p>
+<p>Recall that the hat matrix is given by:</p>
 <p><span class="math display">\[\mathbf{H}= \mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \]</span>
 and we can express the design matrix as follows:</p>
 <p><span class="math display">\[ \mathbf{X}= \left[\begin{matrix}
@@ -1786,6 +1786,8 @@ and we can express the design matrix as follows:</p>
      \end{matrix}\right]
 \end{align*}\]</span></p>
 <p>we are going to use this expression latter, but we can also notice that:</p>
+<p><span class="math display">\[h_{ij} = X_i (\mathbf{X}&#39;\mathbf{X})^{-1}X_j&#39;\]</span>
+So we can characterize the leverages as:</p>
 <p><span class="math display">\[h_{ij} = X_i (\mathbf{X}&#39;\mathbf{X})^{-1}X_j&#39;\]</span></p>
 </div>
 </div>
