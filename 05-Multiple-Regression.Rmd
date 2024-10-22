@@ -1038,7 +1038,7 @@ dat <- read.csv("Gdp data.csv")
 X <- as.matrix(dat[, -1])
 # Dependent Variable
 y <- dat$gdp
-# NUmber of Observations
+# Number of Observations
 n <- nrow(X)
 # Design Matrix with the column of Ones
 Z <- cbind(rep(1, n), X)
@@ -1202,12 +1202,12 @@ So, we can work with these computations in the same way we did before:
     \bX_1'\bX_1 & \bX_1'\bX_2 \\
     \bX_2'\bX_1 & \bX_2'\bX_2  
   \end{matrix}\right] \\
-  &= \frac{1}{n-1} 
+  &= (n-1) 
   \left[\begin{matrix}
     \frac{\bX_1'\bX_1}{n-1} & \frac{\bX_1'\bX_2}{n-1} \\
     \frac{\bX_2'\bX_1}{n-1} & \frac{\bX_2'\bX_2}{n-1}  
   \end{matrix}\right] \\
-  &= \frac{1}{n-1} 
+  &= (n-1)
   \left[\begin{matrix}
     r_{X_1X_1} & r_{X_1X_2} \\
     r_{X_2X_1} & r_{X_2X_2}  
@@ -1228,12 +1228,12 @@ In the same way, we have that:
     \bX_1'\by \\
     \bX_2'\by  
   \end{matrix}\right] \\
-  &= \frac{1}{n-1} 
+  &= (n-1) 
   \left[\begin{matrix}
     \frac{\bX_1'\by}{n-1} \\
     \frac{\bX_2'\by}{n-1}   
   \end{matrix}\right] \\
-  &= \frac{1}{n-1} 
+  &= (n-1) 
   \left[\begin{matrix}
     r_{X_1y} \\
     r_{X_2y}  
@@ -1248,11 +1248,11 @@ $$
     \hat{\bgb}_1 \\
     \hat{\bgb}_2  
   \end{matrix}\right] =
-  \left(\frac{1}{n-1} 
+  \left((n-1) 
   \left[\begin{matrix}
     r_{X_1X_1} & r_{X_1X_2} \\
     r_{X_2X_1} & r_{X_2X_2}  
-  \end{matrix}\right]\right)^{-1} \frac{1}{n-1} 
+  \end{matrix}\right]\right)^{-1} (n-1) 
   \left[\begin{matrix}
     r_{Xy,1} \\
     r_{Xy,2}  
@@ -1510,6 +1510,8 @@ A high-leverage point may not necessarily be an outlier in the response variable
 (dependent variable), but it could have a significant impact on the overall 
 model fit, making leverage a critical diagnostic in regression analysis.
 
+#### Properties of Leverages
+
 Lets analyze the structure of the hat matrix.
 
 First let us see that the diagonal elements are between 0 and 1.
@@ -1548,6 +1550,73 @@ Since $h_{ii}=||\bH v_i||_2^2$ is a norm then $h_{ii} \geq 0$, then:
 
 $$ 0 \leq h_{ii} \leq 1 $$
 So, leverages are bounded.
+
+Furthermore, we have that:
+
+$$ \sum_{i=1}^p h_{ii} = p $$
+
+To see this, we will need the following properties:
+
+1. $\text{rank}(\mathbf{H}) = p.$
+2. $\bH$ is symmetric semi-positive definite.
+3. All the eigenvalues of $\bH$ are either 0 or 1.
+
+As usual, we assume that $\text{rank}(\bX) = p$ and $n>p$, that is there are more observations
+than independent variables. Then
+
+\begin{align*}
+\text{rank}(\bX) = p 
+  &\implies \text{rank}(\bX'\bX) = p \\
+  &\implies \text{rank}\left((\bX'\bX)^{-1}\right) = p \\
+  &\implies \text{rank}\left(\bX(\bX'\bX)^{-1}\bX'\right) = p \\
+  &\implies \text{rank}\left(\bH\right) = p \\
+\end{align*}
+
+Now let us see that $\bH$ is symmetric semi-positive definite. Pick $z \in \dR^n$.
+Recall, that $\bX' \bX$ is positive definite, then $$(\bX'\bX)^{-1}$$ is positive
+definite. Then
+
+\begin{align*}
+z'Hz 
+   &= \bz'\bX(\bX'\bX)^{-1}\bX'z \\
+   &= (\bX'\bz)'(\bX'\bX)^{-1}(\bX'\bz) \\
+   &= \bw' (\bX'\bX)^{-1} \bw & \bw = \bX'\bz \\
+   &\geq 0
+\end{align*}
+
+Therefore, $\bH$ is semi-positive definite. This implies that all the eigenvalues
+of $\bH$ are non-negative, that is positive or $0$.
+
+Now, let $\lambda$ be an eigenvalue of $\bH$, with respective $\bv$ as eigenvector.
+Then:
+
+\begin{align*}
+\bH \bv = \lambda \bv \\
+  &\implies \bH \bH \bv = \bH \lambda \bv = \lambda \bH \bv \\
+  &\implies \bH \bv = \lambda \lambda \bv = \lambda^2 \bv\\
+  &\implies \lambda = 1 \land \lambda = 0
+\end{align*}
+
+Now since, $\bH$ is of rank $p$, then it must have $p$ non-zero eigenvalues. And,
+since all non-zero eigenvalues are 1, then we have that:
+
+$\sum_{i=1}^n \lambda_i = p$
+
+that is the sum of the eigenvalues is $p$. We also know that for any square
+matrix, the sum of the eigenvalues is equal to the trace of the matrix. Then:
+
+$$ \text{trace}(\bH) = p \implies \sum_{i=1}^n h_{ii} = p$$
+This is telling us important information about the leverages. You can compute a
+proportional leverage as:
+
+$$ \frac{h_{ii}}{p}$$
+the proportion of the leverage $i$ out of "all" the leverage. Or in terms of 
+"observations", you can compute:
+
+$$\frac{n h_{ii}}{p}$$
+if this number is several times bigger than $1$, it will be an observation with
+considerable leverage.
+
 
 Now, recall that the hat matrix is given by:
 
@@ -1832,10 +1901,202 @@ for(i in 1:m){
   colnames(tab) <- c("Error Level", "Leverage Level", "Sum of Sq. Diff.", "Lev. Comp.", "Err. Comp.", "Using Formula")
   knitr::kable(tab, digits = 5)
 ```
-  
-  
-  
-  
+
+## Stability of the Solution
+
+The results of the regression can be subject to numerical problems or the impact 
+of changes in the data. In general, the results would depend on the stability 
+of $\bX'\bX$. One way to measure the worst case scenario is the condition number
+of the matrix $\bX' \bX$, denoted $\kappa(\bX' \bX)$, and is equal to:
+
+$$ \kappa(\bX' \bX) = \frac{\lambda_{max}}{\lambda_{min}} $$
+where, $\lambda_{max}$ and $\lambda_{min}$ are the maximum and minimum eigenvalues
+of $\bX' \bX$.
+
+There are some considerations, about the condition number:
+
+- The condition number is a measure of the worst case scenario, a bigger condition
+number of a matrix, does not necessarily will be more unstable than a matrix with
+a lower condition number.
+- $\lambda_{max} = \max_i \sigma_i^2$ and $\lambda_{max} = \min_i \sigma_i^2$, where
+$\sigma_i$ are the singular values of $\bX$.
+
+The condition number will be affected by:
+
+1. Disparities in the magnitude of the variables.
+2. The level of multicoliniarity.
+3. Influential observations.
+
+Since, the condition number is affected by the magnitude of the variables, it is common
+to work with centered and standardized variables when inspecting this issues.
+
+Another approach is to check the determinant of a matrix. A matrix would be in general
+more unstable the close is it's determinant closer to 0. Indeed if the determinant is
+0, then $\bX'\bX$ will not be invertible and the solution
+$$ \hat{\bgb} = \left(\bX'\bX\right)^{-1}\bX' \by$$
+is not applicable. However, just by looking at the determinant is hard to know
+what is close to 0. Consider for example the determinant of a multiple of the identity,
+then:
+
+$\det(c\bI_n) = c^n \bI$
+
+if $c<1$ this will make the determinant closer to zero. However the matrix $c \bI$
+has condition number of $1$.
+
+It is better to evaluate the change in the determinant after some normalization
+to avoid this scenarios.
+
+Consider, for a moment, the standardized case, with estimated coefficients:
+
+$$ \hat{\bgb}=r_{XX}^{-1}r_{Xy}$$
+then we can see how the determinant the correlation matrix, changes when we remove
+a variable. Without loss of generality, we can assume we remove variable 1. Then, 
+the correlation matrix will be given by:
+
+$$r_{XX} = \left[ \begin{matrix}
+r_{X_2X_2} & r_{X_2x_{1}} \\
+r_{x_{1}X} & r_{x_{1}x_{1}} \\
+\end{matrix} \right]$$
+
+Then, using the [properties of the determinant](#properties-of-the-determinant)
+of a block matrix, and the results of the 
+[Single Variable Cross-Effects](#single-variable-cross-effects) subsection,
+we have that:
+
+\begin{align*}
+\det(r_{XX}) 
+  &= \det \left(
+    \left[ \begin{matrix}
+    r_{X_2X_2} & r_{X_2x_{1}} \\
+    r_{x_{1}X} & r_{x_{1}x_{1}} \\
+    \end{matrix} \right]\right) \\
+  &= \det(r_{X_2X_2})\det(r_{x_{1}x_{1}} - r_{X_2x_{1}}r_{X_2X_2}^{-1}r_{x_{1}X_2}) \\
+  &= \det(r_{X_2X_2})\det(r_{x_{1}|X_2}) \\
+  &= \det(r_{X_2X_2})\det(1-R^2_{1}) \\
+  &= \det(r_{X_2X_2})(1-R^2_{1})
+\end{align*}
+
+We can see that the determinant is closer to 0 the more correlated is the first 
+variable to the rest of the variables, that is:
+
+$$R^2_1 \to 1 \implies \det(r_{XX}) \to 0$$
+
+In a similar way, assume that we are working with centered values, we can analyze
+what would happen if we remove an observation $X_{i}$. Here we analyze $\bX' \bX$.
+Again, using [properties of the determinant](#properties-of-the-determinant), and results of the 
+[Outliers Identification](#outliers-identification) we have that:
+
+$$\det(\bX_{(i)}'\bX_{(i)}) = \det(\bX_{(i)}'\bX_{(i)}) \\
+  =\det(\bX'\bX' - X_iX_i') \\
+  =\det(\bX'\bX')\det(1 - X_i(\bX'\bX)^{-1}X_i') \\
+  =\det(\bX'\bX')\det(1 - h_{ii}) \\
+  =\det(\bX'\bX')(1 - h_{ii}) \\$$
+
+So, the determinant deteriorates the more leverage observation $i$ has.
+
+We can see examples of the previous operations with our GDP data.
+
+```{r condition-number-standarized}
+# Read Data
+dat <- read.csv("Gdp data.csv")
+
+# Design Matrix Independent Variables
+X <- as.matrix(dat[, -1])
+
+# Centering
+# Vector of Ones
+v1 <- rep(1, n)
+# Centering Matrix
+C  <- diag(n) - (1/n) * v1 %*% t(v1)
+# Independent Variables Centered
+Xc <- C %*% X
+
+# Standardizing matrix of X
+DX <- diag(1/sqrt(diag(SXX)))
+# Standardize X
+Xs <- Xc %*% D
+
+# Condition numbers
+
+print(paste0("Condition number of X'X = ",   round(kappa(t(X) %*% X), 2)))
+print(paste0("Condition number of Xc'Xc = ", round(kappa(t(Xc) %*% Xc), 2)))
+print(paste0("Condition number of Xs'Xs = ", round(kappa(t(Xs) %*% Xs), 2)))
+```
+as we can see the condition number improves as with the centering and the standardization.
+However, this is not necessarily so.
+
+Now we evaluate the effect of each variable on the determinant.
+
+```{r condition-number-correlation}
+P      <- ncol(X)
+vecDet <- numeric(length = P)
+vecR2  <- numeric(length = P)
+
+# Computes
+for(i in 1:P){
+  vecDet[i] <- det(cor(X[, -i]))
+  vecR2[i]  <- summary(lm(Xs[, i] ~ Xs[, -i] - 1))$r.squared
+}
+
+# Formats and Show Info Table
+tab           <- cbind(rep(det(cor(X)), P), vecDet, vecR2)
+colnames(tab) <- c("r_{X'X}", "r_{X_(i)'X_(i)}", "R2")
+rownames(tab) <- colnames(dat)[2:6]
+knitr::kable(tab)
+```
+
+Finally we can evaluate the effects of a new observations depending on the leverage:
+
+```{r condition-number-new-variable}
+# Read Data
+dat <- read.csv("Gdp data.csv")
+
+# Design Matrix Independent Variables
+X <- as.matrix(dat[, -1])
+P <- ncol(X)
+n <- nrow(X)
+
+# Centering
+# Vector of Ones
+v1 <- rep(1, n)
+# Centering Matrix
+C  <- diag(n) - (1/n) * v1 %*% t(v1)
+# Independent Variables Centered
+Xc <- C %*% X
+
+# Standardizing matrix of X
+DX <- diag(1/sqrt(diag(SXX)))
+# Standardize X
+Xs <- Xc %*% D
+
+# New Observations
+# Very Leveraged Observation
+Xn <- t(rep(3, P))
+# Mildly Leveraged Observation
+Xn <- rbind(Xn, t(rep(1, P)))
+# No Leverage
+Xn <- rbind(Xn, t(rep(0, P)))
+
+# Number of New Observations
+m <- nrow(Xn)
+
+# Computes the Effects of the New Observation
+vecDet <- numeric(length = m)
+vecLev <- numeric(length = m)
+for(i in 1:m){
+  Z         <- rbind(Xs, Xn[i, ])
+  vecDet[i] <- det(t(Z) %*% Z)
+  vecLev[i] <- t(Xn[i, ]) %*% solve(t(Z) %*% Z, Xn[i, ])
+}
+
+# Formats and Show Info Table
+tab           <- cbind(rep(det(t(Xs) %*% Xs), 3), vecDet, vecLev, vecLev * n / P)
+colnames(tab) <- c("det(Xs_(i)'Xs_(i))","det(Xs'Xs)", "Leverage", "Obs. Equivalent")
+rownames(tab) <- c("Big Leverage", "Medium Leverage", "No Leverage")
+knitr::kable(tab)
+```
+
+
   
   
   

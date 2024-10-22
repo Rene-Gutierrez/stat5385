@@ -1,8 +1,11 @@
 \newcommand{\ba}{\mathbf{a}}
 \newcommand{\bc}{\mathbf{c}}
 \newcommand{\be}{\mathbf{e}}
+\newcommand{\bv}{\mathbf{v}}
 \newcommand{\bx}{\mathbf{x}}
 \newcommand{\by}{\mathbf{y}}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\bz}{\mathbf{z}}
 \newcommand{\bA}{\mathbf{A}}
 \newcommand{\bB}{\mathbf{B}}
 \newcommand{\bC}{\mathbf{C}}
@@ -65,11 +68,8 @@ You should be familiar with the following linear algebra concepts:
 * [Singular Value Decomposition](#singular-value-decomposition)
 * [Eigendecomposition](#eigendecomposition)
 * [Idempotent Matrix](#idempotent-matrix)
-* Determinants
-* Eigenvalues and Eigenvectors
-* Diagonalization
+* [Determinant of a Matrix](#determinant-of-a-matrix)
 * Vector Spaces
-* Linear Transformations
 
 ### Linear Independence
 
@@ -163,6 +163,7 @@ This is the maximum number of linearly independent rows or columns in the matrix
   - If $\text{rank}(\mathbf{A}) = m$ (number of rows), it has full row rank.
   - If $\text{rank}(\mathbf{A}) = n$ (number of columns), it has full column rank.
 - **Rank-deficient**: If the rank of the matrix is less than the smaller of the number of rows or columns, the matrix is called rank-deficient, meaning that some of its rows or columns are linearly dependent.
+- $\text{rank}(\bA) = \text{rank}(\bA') = \text{rank}(\bA' \bA) = \text{rank}(\bA \bA')$ 
 
 #### Example:
 Consider the matrix:
@@ -328,6 +329,8 @@ $$
 - All the **eigenvalues** of a positive definite matrix are **positive**.
 - The **determinants** of the leading principal minors (submatrices) of the matrix are positive.
 - The **diagonal elements** of a positive definite matrix are positive.
+- $\bA$ is invertible.
+- $\bA^{-1}$ is also **positive definite matrix**.
 
 #### Example:
 
@@ -499,6 +502,70 @@ where $\mathbf{X}$ is the design matrix.
 
 In summary, idempotent matrices have unique properties and are frequently encountered in linear algebra, projections, and statistical applications.
 
+### Determinant of a Matrix
+
+The **determinant** of a matrix is a scalar value that provides important information about the properties of a square matrix. It is a fundamental concept in linear algebra, often used to determine whether a matrix is invertible, as well as to describe geometric transformations and volume scaling.
+
+#### Key Charachteristics of the Determinant:
+
+1. **Square Matrices Only**: The determinant is only defined for square matrices (i.e., matrices with the same number of rows and columns).
+
+2. **Invertibility**: A matrix is **invertible** (i.e., it has an inverse) if and only if its determinant is **non-zero**. If the determinant is **zero**, the matrix is **singular** and does not have an inverse.
+
+3. **Geometric Interpretation**: The determinant represents the **scaling factor** of the linear transformation described by the matrix. For example, in two or three dimensions, the determinant tells you how much the matrix scales area or volume:
+   - A determinant of 1 means the matrix preserves the area (in 2D) or volume (in 3D).
+   - A determinant greater than 1 means the matrix scales the area or volume by that factor.
+   - A negative determinant indicates that the transformation also includes a **reflection**.
+
+4. **Significance of Zero Determinant**: If the determinant is zero, it means that the matrix maps some vectors to a lower-dimensional space. For instance, in 2D, it might map points onto a line, collapsing the area to zero.
+
+#### Definition:
+
+For a **2x2 matrix**:
+$$
+\mathbf{A} = \begin{bmatrix} a & b \\ c & d \end{bmatrix}
+$$
+The determinant of $\mathbf{A}$ is:
+$$
+\det(\mathbf{A}) = ad - bc
+$$
+This formula gives the area scaling factor for the linear transformation represented by the matrix $\mathbf{A}$.
+
+For a **3x3 matrix**:
+$$
+\mathbf{B} = \begin{bmatrix} a & b & c \\ d & e & f \\ g & h & i \end{bmatrix}
+$$
+The determinant of $\mathbf{B}$ is:
+$$
+\det(\mathbf{B}) = a(ei - fh) - b(di - fg) + c(dh - eg)
+$$
+This formula can be extended to higher dimensions using recursive expansion (called cofactor expansion or Laplace expansion).
+
+#### Applications of the Determinant:
+
+1. **Solving Linear Systems**: The determinant is used in Cramer's Rule, a method for solving systems of linear equations. If the determinant of the coefficient matrix is non-zero, the system has a unique solution.
+  
+2. **Eigenvalues and Eigenvectors**: The determinant plays a key role in computing the eigenvalues of a matrix. The determinant of a matrix $\mathbf{A} - \lambda \mathbf{I}$, where $\lambda$ is a scalar and $\mathbf{I}$ is the identity matrix, gives the characteristic equation whose solutions are the eigenvalues.
+
+3. **Volume and Area Calculations**: In geometry, the determinant helps calculate the area (in 2D) or volume (in 3D) of a region after applying a linear transformation.
+
+4. **Singular Value Decomposition (SVD)** and **Principal Component Analysis (PCA)**: The determinant is important in these techniques for understanding data structures, transformations, and dimensionality reduction.
+
+#### Properties of the Determinant
+
+For a general block matrix of the form:
+$$
+\mathbf{M} = \begin{bmatrix} \mathbf{A} & \mathbf{B} \\ \mathbf{C} & \mathbf{D} \end{bmatrix}
+$$
+where $\mathbf{A}$, $\mathbf{B}$, $\mathbf{C}$, and $\mathbf{D}$ are submatrices, the determinant formula is more complex. If $\mathbf{D}$ is invertible, we can use the **Schur complement** to compute the determinant:
+$$
+\det(\mathbf{M}) = \det(\mathbf{D}) \det(\mathbf{A} - \mathbf{B} \mathbf{D}^{-1} \mathbf{C})
+$$
+Here, $\mathbf{A} - \mathbf{B} \mathbf{D}^{-1} \mathbf{C}$ is called the **Schur complement** of $\mathbf{D}$ in $\mathbf{M}$.
+
+For any invertible matrix $\bX \in \dR^{p \times p}$ and matrices $\bA\in\dR^{p\times q}$ and $\bB \in\dR^{q\times p}$ we have, that:
+
+$$\det(\bX + \bA \bB) = det(\bX)\det(\bI_q + \bB\bX^{-1}\bA) $$
 
 
 

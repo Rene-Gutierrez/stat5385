@@ -54,6 +54,11 @@ idempotent-matrix
 key-properties-of-idempotent-matrices
 examples
 use-in-statistics
+determinant-of-a-matrix
+key-charachteristics-of-the-determinant
+definition-5
+applications-of-the-determinant
+properties-of-the-determinant
 probability
 statistics
 calculus
@@ -108,4 +113,6 @@ single-variable-cross-effects
 single-variable-cross-effects-example
 outliers-and-leverage
 leverage
+properties-of-leverages
 outliers-identification
+stability-of-the-solution

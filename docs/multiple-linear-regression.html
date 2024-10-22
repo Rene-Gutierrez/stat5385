@@ -64,7 +64,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -149,6 +149,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2.7" data-path="prerequisites.html"><a href="prerequisites.html#singular-value-decomposition"><i class="fa fa-check"></i><b>2.2.7</b> Singular Value Decomposition</a></li>
 <li class="chapter" data-level="2.2.8" data-path="prerequisites.html"><a href="prerequisites.html#eigendecomposition"><i class="fa fa-check"></i><b>2.2.8</b> Eigendecomposition</a></li>
 <li class="chapter" data-level="2.2.9" data-path="prerequisites.html"><a href="prerequisites.html#idempotent-matrix"><i class="fa fa-check"></i><b>2.2.9</b> Idempotent Matrix</a></li>
+<li class="chapter" data-level="2.2.10" data-path="prerequisites.html"><a href="prerequisites.html#determinant-of-a-matrix"><i class="fa fa-check"></i><b>2.2.10</b> Determinant of a Matrix</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.3</b> Probability</a></li>
 <li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.4</b> Statistics</a></li>
@@ -223,6 +224,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.9.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#leverage"><i class="fa fa-check"></i><b>6.9.1</b> Leverage</a></li>
 <li class="chapter" data-level="6.9.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#outliers-identification"><i class="fa fa-check"></i><b>6.9.2</b> Outliers identification</a></li>
 </ul></li>
+<li class="chapter" data-level="6.10" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#stability-of-the-solution"><i class="fa fa-check"></i><b>6.10</b> Stability of the Solution</a></li>
 </ul></li>
 </ul>
 
@@ -1140,7 +1142,7 @@ so the estimated coefficients magnitudes are comparable.</p>
 <span id="cb93-5"><a href="multiple-linear-regression.html#cb93-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
 <span id="cb93-6"><a href="multiple-linear-regression.html#cb93-6" tabindex="-1"></a><span class="co"># Dependent Variable</span></span>
 <span id="cb93-7"><a href="multiple-linear-regression.html#cb93-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> dat<span class="sc">$</span>gdp</span>
-<span id="cb93-8"><a href="multiple-linear-regression.html#cb93-8" tabindex="-1"></a><span class="co"># NUmber of Observations</span></span>
+<span id="cb93-8"><a href="multiple-linear-regression.html#cb93-8" tabindex="-1"></a><span class="co"># Number of Observations</span></span>
 <span id="cb93-9"><a href="multiple-linear-regression.html#cb93-9" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
 <span id="cb93-10"><a href="multiple-linear-regression.html#cb93-10" tabindex="-1"></a><span class="co"># Design Matrix with the column of Ones</span></span>
 <span id="cb93-11"><a href="multiple-linear-regression.html#cb93-11" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), X)</span>
@@ -1354,12 +1356,12 @@ Then, we can compute the coefficient estimates:</p>
     \mathbf{X}_1&#39;\mathbf{X}_1 &amp; \mathbf{X}_1&#39;\mathbf{X}_2 \\
     \mathbf{X}_2&#39;\mathbf{X}_1 &amp; \mathbf{X}_2&#39;\mathbf{X}_2  
   \end{matrix}\right] \\
-  &amp;= \frac{1}{n-1}
+  &amp;= (n-1)
   \left[\begin{matrix}
     \frac{\mathbf{X}_1&#39;\mathbf{X}_1}{n-1} &amp; \frac{\mathbf{X}_1&#39;\mathbf{X}_2}{n-1} \\
     \frac{\mathbf{X}_2&#39;\mathbf{X}_1}{n-1} &amp; \frac{\mathbf{X}_2&#39;\mathbf{X}_2}{n-1}  
   \end{matrix}\right] \\
-  &amp;= \frac{1}{n-1}
+  &amp;= (n-1)
   \left[\begin{matrix}
     r_{X_1X_1} &amp; r_{X_1X_2} \\
     r_{X_2X_1} &amp; r_{X_2X_2}  
@@ -1378,12 +1380,12 @@ Then, we can compute the coefficient estimates:</p>
     \mathbf{X}_1&#39;\mathbf{y}\\
     \mathbf{X}_2&#39;\mathbf{y}
   \end{matrix}\right] \\
-  &amp;= \frac{1}{n-1}
+  &amp;= (n-1)
   \left[\begin{matrix}
     \frac{\mathbf{X}_1&#39;\mathbf{y}}{n-1} \\
     \frac{\mathbf{X}_2&#39;\mathbf{y}}{n-1}   
   \end{matrix}\right] \\
-  &amp;= \frac{1}{n-1}
+  &amp;= (n-1)
   \left[\begin{matrix}
     r_{X_1y} \\
     r_{X_2y}  
@@ -1396,11 +1398,11 @@ Then, we can compute the coefficient estimates:</p>
     \hat{\boldsymbol{\beta}}_1 \\
     \hat{\boldsymbol{\beta}}_2  
   \end{matrix}\right] =
-  \left(\frac{1}{n-1}
+  \left((n-1)
   \left[\begin{matrix}
     r_{X_1X_1} &amp; r_{X_1X_2} \\
     r_{X_2X_1} &amp; r_{X_2X_2}  
-  \end{matrix}\right]\right)^{-1} \frac{1}{n-1}
+  \end{matrix}\right]\right)^{-1} (n-1)
   \left[\begin{matrix}
     r_{Xy,1} \\
     r_{Xy,2}  
@@ -1671,6 +1673,8 @@ biased estimates if not handled properly.</p>
 <p>A high-leverage point may not necessarily be an outlier in the response variable
 (dependent variable), but it could have a significant impact on the overall
 model fit, making leverage a critical diagnostic in regression analysis.</p>
+<div id="properties-of-leverages" class="section level4 hasAnchor" number="6.9.1.1">
+<h4><span class="header-section-number">6.9.1.1</span> Properties of Leverages<a href="multiple-linear-regression.html#properties-of-leverages" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>Lets analyze the structure of the hat matrix.</p>
 <p>First let us see that the diagonal elements are between 0 and 1.</p>
 <p>To see this, consider leverage <span class="math inline">\(i\)</span> (<span class="math inline">\(h_{ii}\)</span>), and the basis vectors <span class="math inline">\(v_j \in \mathbb{R}^n\)</span> such
@@ -1700,6 +1704,57 @@ Now, consider <span class="math inline">\(\mathbf{H}v_i\)</span> and notice that
 <p>Since <span class="math inline">\(h_{ii}=||\mathbf{H}v_i||_2^2\)</span> is a norm then <span class="math inline">\(h_{ii} \geq 0\)</span>, then:</p>
 <p><span class="math display">\[ 0 \leq h_{ii} \leq 1 \]</span>
 So, leverages are bounded.</p>
+<p>Furthermore, we have that:</p>
+<p><span class="math display">\[ \sum_{i=1}^p h_{ii} = p \]</span></p>
+<p>To see this, we will need the following properties:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\text{rank}(\mathbf{H}) = p.\)</span></li>
+<li><span class="math inline">\(\mathbf{H}\)</span> is symmetric semi-positive definite.</li>
+<li>All the eigenvalues of <span class="math inline">\(\mathbf{H}\)</span> are either 0 or 1.</li>
+</ol>
+<p>As usual, we assume that <span class="math inline">\(\text{rank}(\mathbf{X}) = p\)</span> and <span class="math inline">\(n&gt;p\)</span>, that is there are more observations
+than independent variables. Then</p>
+<p><span class="math display">\[\begin{align*}
+\text{rank}(\mathbf{X}) = p
+  &amp;\implies \text{rank}(\mathbf{X}&#39;\mathbf{X}) = p \\
+  &amp;\implies \text{rank}\left((\mathbf{X}&#39;\mathbf{X})^{-1}\right) = p \\
+  &amp;\implies \text{rank}\left(\mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\right) = p \\
+  &amp;\implies \text{rank}\left(\mathbf{H}\right) = p \\
+\end{align*}\]</span></p>
+<p>Now let us see that <span class="math inline">\(\mathbf{H}\)</span> is symmetric semi-positive definite. Pick <span class="math inline">\(z \in \mathbb{R}^n\)</span>.
+Recall, that <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span> is positive definite, then <span class="math display">\[(\mathbf{X}&#39;\mathbf{X})^{-1}\]</span> is positive
+definite. Then</p>
+<p><span class="math display">\[\begin{align*}
+z&#39;Hz
+   &amp;= \mathbf{z}&#39;\mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;z \\
+   &amp;= (\mathbf{X}&#39;\mathbf{z})&#39;(\mathbf{X}&#39;\mathbf{X})^{-1}(\mathbf{X}&#39;\mathbf{z}) \\
+   &amp;= \mathbf{w}&#39; (\mathbf{X}&#39;\mathbf{X})^{-1} \mathbf{w}&amp; \mathbf{w}= \mathbf{X}&#39;\mathbf{z}\\
+   &amp;\geq 0
+\end{align*}\]</span></p>
+<p>Therefore, <span class="math inline">\(\mathbf{H}\)</span> is semi-positive definite. This implies that all the eigenvalues
+of <span class="math inline">\(\mathbf{H}\)</span> are non-negative, that is positive or <span class="math inline">\(0\)</span>.</p>
+<p>Now, let <span class="math inline">\(\lambda\)</span> be an eigenvalue of <span class="math inline">\(\mathbf{H}\)</span>, with respective <span class="math inline">\(\mathbf{v}\)</span> as eigenvector.
+Then:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{H}\mathbf{v}= \lambda \mathbf{v}\\
+  &amp;\implies \mathbf{H}\mathbf{H}\mathbf{v}= \mathbf{H}\lambda \mathbf{v}= \lambda \mathbf{H}\mathbf{v}\\
+  &amp;\implies \mathbf{H}\mathbf{v}= \lambda \lambda \mathbf{v}= \lambda^2 \mathbf{v}\\
+  &amp;\implies \lambda = 1 \land \lambda = 0
+\end{align*}\]</span></p>
+<p>Now since, <span class="math inline">\(\mathbf{H}\)</span> is of rank <span class="math inline">\(p\)</span>, then it must have <span class="math inline">\(p\)</span> non-zero eigenvalues. And,
+since all non-zero eigenvalues are 1, then we have that:</p>
+<p><span class="math inline">\(\sum_{i=1}^n \lambda_i = p\)</span></p>
+<p>that is the sum of the eigenvalues is <span class="math inline">\(p\)</span>. We also know that for any square
+matrix, the sum of the eigenvalues is equal to the trace of the matrix. Then:</p>
+<p><span class="math display">\[ \text{trace}(\mathbf{H}) = p \implies \sum_{i=1}^n h_{ii} = p\]</span>
+This is telling us important information about the leverages. You can compute a
+proportional leverage as:</p>
+<p><span class="math display">\[ \frac{h_{ii}}{p}\]</span>
+the proportion of the leverage <span class="math inline">\(i\)</span> out of “all” the leverage. Or in terms of
+“observations”, you can compute:</p>
+<p><span class="math display">\[\frac{n h_{ii}}{p}\]</span>
+if this number is several times bigger than <span class="math inline">\(1\)</span>, it will be an observation with
+considerable leverage.</p>
 <p>Now, recall that the hat matrix is given by:</p>
 <p><span class="math display">\[\mathbf{H}= \mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \]</span>
 and we can express the design matrix as follows:</p>
@@ -1732,6 +1787,7 @@ and we can express the design matrix as follows:</p>
 \end{align*}\]</span></p>
 <p>we are going to use this expression latter, but we can also notice that:</p>
 <p><span class="math display">\[h_{ij} = X_i (\mathbf{X}&#39;\mathbf{X})^{-1}X_j&#39;\]</span></p>
+</div>
 </div>
 <div id="outliers-identification" class="section level3 hasAnchor" number="6.9.2">
 <h3><span class="header-section-number">6.9.2</span> Outliers identification<a href="multiple-linear-regression.html#outliers-identification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -2046,8 +2102,260 @@ and a function of the error of observation <span class="math inline">\(i\)</span
 </tr>
 </tbody>
 </table>
-
 </div>
+</div>
+<div id="stability-of-the-solution" class="section level2 hasAnchor" number="6.10">
+<h2><span class="header-section-number">6.10</span> Stability of the Solution<a href="multiple-linear-regression.html#stability-of-the-solution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The results of the regression can be subject to numerical problems or the impact
+of changes in the data. In general, the results would depend on the stability
+of <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span>. One way to measure the worst case scenario is the condition number
+of the matrix <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span>, denoted <span class="math inline">\(\kappa(\mathbf{X}&#39; \mathbf{X})\)</span>, and is equal to:</p>
+<p><span class="math display">\[ \kappa(\mathbf{X}&#39; \mathbf{X}) = \frac{\lambda_{max}}{\lambda_{min}} \]</span>
+where, <span class="math inline">\(\lambda_{max}\)</span> and <span class="math inline">\(\lambda_{min}\)</span> are the maximum and minimum eigenvalues
+of <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span>.</p>
+<p>There are some considerations, about the condition number:</p>
+<ul>
+<li>The condition number is a measure of the worst case scenario, a bigger condition
+number of a matrix, does not necessarily will be more unstable than a matrix with
+a lower condition number.</li>
+<li><span class="math inline">\(\lambda_{max} = \max_i \sigma_i^2\)</span> and <span class="math inline">\(\lambda_{max} = \min_i \sigma_i^2\)</span>, where
+<span class="math inline">\(\sigma_i\)</span> are the singular values of <span class="math inline">\(\mathbf{X}\)</span>.</li>
+</ul>
+<p>The condition number will be affected by:</p>
+<ol style="list-style-type: decimal">
+<li>Disparities in the magnitude of the variables.</li>
+<li>The level of multicoliniarity.</li>
+<li>Influential observations.</li>
+</ol>
+<p>Since, the condition number is affected by the magnitude of the variables, it is common
+to work with centered and standardized variables when inspecting this issues.</p>
+<p>Another approach is to check the determinant of a matrix. A matrix would be in general
+more unstable the close is it’s determinant closer to 0. Indeed if the determinant is
+0, then <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> will not be invertible and the solution
+<span class="math display">\[ \hat{\boldsymbol{\beta}} = \left(\mathbf{X}&#39;\mathbf{X}\right)^{-1}\mathbf{X}&#39; \mathbf{y}\]</span>
+is not applicable. However, just by looking at the determinant is hard to know
+what is close to 0. Consider for example the determinant of a multiple of the identity,
+then:</p>
+<p><span class="math inline">\(\det(c\mathbf{I}_n) = c^n \mathbf{I}\)</span></p>
+<p>if <span class="math inline">\(c&lt;1\)</span> this will make the determinant closer to zero. However the matrix <span class="math inline">\(c \mathbf{I}\)</span>
+has condition number of <span class="math inline">\(1\)</span>.</p>
+<p>It is better to evaluate the change in the determinant after some normalization
+to avoid this scenarios.</p>
+<p>Consider, for a moment, the standardized case, with estimated coefficients:</p>
+<p><span class="math display">\[ \hat{\boldsymbol{\beta}}=r_{XX}^{-1}r_{Xy}\]</span>
+then we can see how the determinant the correlation matrix, changes when we remove
+a variable. Without loss of generality, we can assume we remove variable 1. Then,
+the correlation matrix will be given by:</p>
+<p><span class="math display">\[r_{XX} = \left[ \begin{matrix}
+r_{X_2X_2} &amp; r_{X_2x_{1}} \\
+r_{x_{1}X} &amp; r_{x_{1}x_{1}} \\
+\end{matrix} \right]\]</span></p>
+<p>Then, using the <a href="prerequisites.html#properties-of-the-determinant">properties of the determinant</a>
+of a block matrix, and the results of the
+<a href="multiple-linear-regression.html#single-variable-cross-effects">Single Variable Cross-Effects</a> subsection,
+we have that:</p>
+<p><span class="math display">\[\begin{align*}
+\det(r_{XX})
+  &amp;= \det \left(
+    \left[ \begin{matrix}
+    r_{X_2X_2} &amp; r_{X_2x_{1}} \\
+    r_{x_{1}X} &amp; r_{x_{1}x_{1}} \\
+    \end{matrix} \right]\right) \\
+  &amp;= \det(r_{X_2X_2})\det(r_{x_{1}x_{1}} - r_{X_2x_{1}}r_{X_2X_2}^{-1}r_{x_{1}X_2}) \\
+  &amp;= \det(r_{X_2X_2})\det(r_{x_{1}|X_2}) \\
+  &amp;= \det(r_{X_2X_2})\det(1-R^2_{1}) \\
+  &amp;= \det(r_{X_2X_2})(1-R^2_{1})
+\end{align*}\]</span></p>
+<p>We can see that the determinant is closer to 0 the more correlated is the first
+variable to the rest of the variables, that is:</p>
+<p><span class="math display">\[R^2_1 \to 1 \implies \det(r_{XX}) \to 0\]</span></p>
+<p>In a similar way, assume that we are working with centered values, we can analyze
+what would happen if we remove an observation <span class="math inline">\(X_{i}\)</span>. Here we analyze <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span>.
+Again, using <a href="prerequisites.html#properties-of-the-determinant">properties of the determinant</a>, and results of the
+<a href="multiple-linear-regression.html#outliers-identification">Outliers Identification</a> we have that:</p>
+<p><span class="math display">\[\det(\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)}) = \det(\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)}) \\
+  =\det(\mathbf{X}&#39;\mathbf{X}&#39; - X_iX_i&#39;) \\
+  =\det(\mathbf{X}&#39;\mathbf{X}&#39;)\det(1 - X_i(\mathbf{X}&#39;\mathbf{X})^{-1}X_i&#39;) \\
+  =\det(\mathbf{X}&#39;\mathbf{X}&#39;)\det(1 - h_{ii}) \\
+  =\det(\mathbf{X}&#39;\mathbf{X}&#39;)(1 - h_{ii}) \\\]</span></p>
+<p>So, the determinant deteriorates the more leverage observation <span class="math inline">\(i\)</span> has.</p>
+<p>We can see examples of the previous operations with our GDP data.</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="multiple-linear-regression.html#cb133-1" tabindex="-1"></a><span class="co"># Read Data</span></span>
+<span id="cb133-2"><a href="multiple-linear-regression.html#cb133-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Gdp data.csv&quot;</span>)</span>
+<span id="cb133-3"><a href="multiple-linear-regression.html#cb133-3" tabindex="-1"></a></span>
+<span id="cb133-4"><a href="multiple-linear-regression.html#cb133-4" tabindex="-1"></a><span class="co"># Design Matrix Independent Variables</span></span>
+<span id="cb133-5"><a href="multiple-linear-regression.html#cb133-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb133-6"><a href="multiple-linear-regression.html#cb133-6" tabindex="-1"></a></span>
+<span id="cb133-7"><a href="multiple-linear-regression.html#cb133-7" tabindex="-1"></a><span class="co"># Centering</span></span>
+<span id="cb133-8"><a href="multiple-linear-regression.html#cb133-8" tabindex="-1"></a><span class="co"># Vector of Ones</span></span>
+<span id="cb133-9"><a href="multiple-linear-regression.html#cb133-9" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, n)</span>
+<span id="cb133-10"><a href="multiple-linear-regression.html#cb133-10" tabindex="-1"></a><span class="co"># Centering Matrix</span></span>
+<span id="cb133-11"><a href="multiple-linear-regression.html#cb133-11" tabindex="-1"></a>C  <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>n) <span class="sc">*</span> v1 <span class="sc">%*%</span> <span class="fu">t</span>(v1)</span>
+<span id="cb133-12"><a href="multiple-linear-regression.html#cb133-12" tabindex="-1"></a><span class="co"># Independent Variables Centered</span></span>
+<span id="cb133-13"><a href="multiple-linear-regression.html#cb133-13" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
+<span id="cb133-14"><a href="multiple-linear-regression.html#cb133-14" tabindex="-1"></a></span>
+<span id="cb133-15"><a href="multiple-linear-regression.html#cb133-15" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
+<span id="cb133-16"><a href="multiple-linear-regression.html#cb133-16" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
+<span id="cb133-17"><a href="multiple-linear-regression.html#cb133-17" tabindex="-1"></a><span class="co"># Standardize X</span></span>
+<span id="cb133-18"><a href="multiple-linear-regression.html#cb133-18" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> D</span>
+<span id="cb133-19"><a href="multiple-linear-regression.html#cb133-19" tabindex="-1"></a></span>
+<span id="cb133-20"><a href="multiple-linear-regression.html#cb133-20" tabindex="-1"></a><span class="co"># Condition numbers</span></span>
+<span id="cb133-21"><a href="multiple-linear-regression.html#cb133-21" tabindex="-1"></a></span>
+<span id="cb133-22"><a href="multiple-linear-regression.html#cb133-22" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of X&#39;X = &quot;</span>,   <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X), <span class="dv">2</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;Condition number of X&#39;X = 28072.42&quot;</code></pre>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="multiple-linear-regression.html#cb135-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of Xc&#39;Xc = &quot;</span>, <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(Xc) <span class="sc">%*%</span> Xc), <span class="dv">2</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;Condition number of Xc&#39;Xc = 1186.14&quot;</code></pre>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="multiple-linear-regression.html#cb137-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of Xs&#39;Xs = &quot;</span>, <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs), <span class="dv">2</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;Condition number of Xs&#39;Xs = 105.68&quot;</code></pre>
+<p>as we can see the condition number improves as with the centering and the standardization.
+However, this is not necessarily so.</p>
+<p>Now we evaluate the effect of each variable on the determinant.</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="multiple-linear-regression.html#cb139-1" tabindex="-1"></a>P      <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb139-2"><a href="multiple-linear-regression.html#cb139-2" tabindex="-1"></a>vecDet <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
+<span id="cb139-3"><a href="multiple-linear-regression.html#cb139-3" tabindex="-1"></a>vecR2  <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
+<span id="cb139-4"><a href="multiple-linear-regression.html#cb139-4" tabindex="-1"></a></span>
+<span id="cb139-5"><a href="multiple-linear-regression.html#cb139-5" tabindex="-1"></a><span class="co"># Computes</span></span>
+<span id="cb139-6"><a href="multiple-linear-regression.html#cb139-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
+<span id="cb139-7"><a href="multiple-linear-regression.html#cb139-7" tabindex="-1"></a>  vecDet[i] <span class="ot">&lt;-</span> <span class="fu">det</span>(<span class="fu">cor</span>(X[, <span class="sc">-</span>i]))</span>
+<span id="cb139-8"><a href="multiple-linear-regression.html#cb139-8" tabindex="-1"></a>  vecR2[i]  <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(Xs[, i] <span class="sc">~</span> Xs[, <span class="sc">-</span>i] <span class="sc">-</span> <span class="dv">1</span>))<span class="sc">$</span>r.squared</span>
+<span id="cb139-9"><a href="multiple-linear-regression.html#cb139-9" tabindex="-1"></a>}</span>
+<span id="cb139-10"><a href="multiple-linear-regression.html#cb139-10" tabindex="-1"></a></span>
+<span id="cb139-11"><a href="multiple-linear-regression.html#cb139-11" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
+<span id="cb139-12"><a href="multiple-linear-regression.html#cb139-12" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="fu">det</span>(<span class="fu">cor</span>(X)), P), vecDet, vecR2)</span>
+<span id="cb139-13"><a href="multiple-linear-regression.html#cb139-13" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;r_{X&#39;X}&quot;</span>, <span class="st">&quot;r_{X_(i)&#39;X_(i)}&quot;</span>, <span class="st">&quot;R2&quot;</span>)</span>
+<span id="cb139-14"><a href="multiple-linear-regression.html#cb139-14" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(dat)[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb139-15"><a href="multiple-linear-regression.html#cb139-15" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">r_{X’X}</th>
+<th align="right">r_{X_(i)’X_(i)}</th>
+<th align="right">R2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">inf</td>
+<td align="right">0.0323914</td>
+<td align="right">0.8190564</td>
+<td align="right">0.9604527</td>
+</tr>
+<tr class="even">
+<td align="left">une</td>
+<td align="right">0.0323914</td>
+<td align="right">0.2800338</td>
+<td align="right">0.8843302</td>
+</tr>
+<tr class="odd">
+<td align="left">int</td>
+<td align="right">0.0323914</td>
+<td align="right">0.3451523</td>
+<td align="right">0.9061532</td>
+</tr>
+<tr class="even">
+<td align="left">gov</td>
+<td align="right">0.0323914</td>
+<td align="right">0.0408342</td>
+<td align="right">0.2067576</td>
+</tr>
+<tr class="odd">
+<td align="left">exp</td>
+<td align="right">0.0323914</td>
+<td align="right">0.0324190</td>
+<td align="right">0.0008505</td>
+</tr>
+</tbody>
+</table>
+<p>Finally we can evaluate the effects of a new observations depending on the leverage:</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="multiple-linear-regression.html#cb140-1" tabindex="-1"></a><span class="co"># Read Data</span></span>
+<span id="cb140-2"><a href="multiple-linear-regression.html#cb140-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Gdp data.csv&quot;</span>)</span>
+<span id="cb140-3"><a href="multiple-linear-regression.html#cb140-3" tabindex="-1"></a></span>
+<span id="cb140-4"><a href="multiple-linear-regression.html#cb140-4" tabindex="-1"></a><span class="co"># Design Matrix Independent Variables</span></span>
+<span id="cb140-5"><a href="multiple-linear-regression.html#cb140-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb140-6"><a href="multiple-linear-regression.html#cb140-6" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb140-7"><a href="multiple-linear-regression.html#cb140-7" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
+<span id="cb140-8"><a href="multiple-linear-regression.html#cb140-8" tabindex="-1"></a></span>
+<span id="cb140-9"><a href="multiple-linear-regression.html#cb140-9" tabindex="-1"></a><span class="co"># Centering</span></span>
+<span id="cb140-10"><a href="multiple-linear-regression.html#cb140-10" tabindex="-1"></a><span class="co"># Vector of Ones</span></span>
+<span id="cb140-11"><a href="multiple-linear-regression.html#cb140-11" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, n)</span>
+<span id="cb140-12"><a href="multiple-linear-regression.html#cb140-12" tabindex="-1"></a><span class="co"># Centering Matrix</span></span>
+<span id="cb140-13"><a href="multiple-linear-regression.html#cb140-13" tabindex="-1"></a>C  <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>n) <span class="sc">*</span> v1 <span class="sc">%*%</span> <span class="fu">t</span>(v1)</span>
+<span id="cb140-14"><a href="multiple-linear-regression.html#cb140-14" tabindex="-1"></a><span class="co"># Independent Variables Centered</span></span>
+<span id="cb140-15"><a href="multiple-linear-regression.html#cb140-15" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
+<span id="cb140-16"><a href="multiple-linear-regression.html#cb140-16" tabindex="-1"></a></span>
+<span id="cb140-17"><a href="multiple-linear-regression.html#cb140-17" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
+<span id="cb140-18"><a href="multiple-linear-regression.html#cb140-18" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
+<span id="cb140-19"><a href="multiple-linear-regression.html#cb140-19" tabindex="-1"></a><span class="co"># Standardize X</span></span>
+<span id="cb140-20"><a href="multiple-linear-regression.html#cb140-20" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> D</span>
+<span id="cb140-21"><a href="multiple-linear-regression.html#cb140-21" tabindex="-1"></a></span>
+<span id="cb140-22"><a href="multiple-linear-regression.html#cb140-22" tabindex="-1"></a><span class="co"># New Observations</span></span>
+<span id="cb140-23"><a href="multiple-linear-regression.html#cb140-23" tabindex="-1"></a><span class="co"># Very Leveraged Observation</span></span>
+<span id="cb140-24"><a href="multiple-linear-regression.html#cb140-24" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">3</span>, P))</span>
+<span id="cb140-25"><a href="multiple-linear-regression.html#cb140-25" tabindex="-1"></a><span class="co"># Mildly Leveraged Observation</span></span>
+<span id="cb140-26"><a href="multiple-linear-regression.html#cb140-26" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xn, <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">1</span>, P)))</span>
+<span id="cb140-27"><a href="multiple-linear-regression.html#cb140-27" tabindex="-1"></a><span class="co"># No Leverage</span></span>
+<span id="cb140-28"><a href="multiple-linear-regression.html#cb140-28" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xn, <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">0</span>, P)))</span>
+<span id="cb140-29"><a href="multiple-linear-regression.html#cb140-29" tabindex="-1"></a></span>
+<span id="cb140-30"><a href="multiple-linear-regression.html#cb140-30" tabindex="-1"></a><span class="co"># Number of New Observations</span></span>
+<span id="cb140-31"><a href="multiple-linear-regression.html#cb140-31" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">nrow</span>(Xn)</span>
+<span id="cb140-32"><a href="multiple-linear-regression.html#cb140-32" tabindex="-1"></a></span>
+<span id="cb140-33"><a href="multiple-linear-regression.html#cb140-33" tabindex="-1"></a><span class="co"># Computes the Effects of the New Observation</span></span>
+<span id="cb140-34"><a href="multiple-linear-regression.html#cb140-34" tabindex="-1"></a>vecDet <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> m)</span>
+<span id="cb140-35"><a href="multiple-linear-regression.html#cb140-35" tabindex="-1"></a>vecLev <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> m)</span>
+<span id="cb140-36"><a href="multiple-linear-regression.html#cb140-36" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
+<span id="cb140-37"><a href="multiple-linear-regression.html#cb140-37" tabindex="-1"></a>  Z         <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xs, Xn[i, ])</span>
+<span id="cb140-38"><a href="multiple-linear-regression.html#cb140-38" tabindex="-1"></a>  vecDet[i] <span class="ot">&lt;-</span> <span class="fu">det</span>(<span class="fu">t</span>(Z) <span class="sc">%*%</span> Z)</span>
+<span id="cb140-39"><a href="multiple-linear-regression.html#cb140-39" tabindex="-1"></a>  vecLev[i] <span class="ot">&lt;-</span> <span class="fu">t</span>(Xn[i, ]) <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(Z) <span class="sc">%*%</span> Z, Xn[i, ])</span>
+<span id="cb140-40"><a href="multiple-linear-regression.html#cb140-40" tabindex="-1"></a>}</span>
+<span id="cb140-41"><a href="multiple-linear-regression.html#cb140-41" tabindex="-1"></a></span>
+<span id="cb140-42"><a href="multiple-linear-regression.html#cb140-42" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
+<span id="cb140-43"><a href="multiple-linear-regression.html#cb140-43" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="fu">det</span>(<span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs), <span class="dv">3</span>), vecDet, vecLev, vecLev <span class="sc">*</span> n <span class="sc">/</span> P)</span>
+<span id="cb140-44"><a href="multiple-linear-regression.html#cb140-44" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;det(Xs_(i)&#39;Xs_(i))&quot;</span>,<span class="st">&quot;det(Xs&#39;Xs)&quot;</span>, <span class="st">&quot;Leverage&quot;</span>, <span class="st">&quot;Obs. Equivalent&quot;</span>)</span>
+<span id="cb140-45"><a href="multiple-linear-regression.html#cb140-45" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Big Leverage&quot;</span>, <span class="st">&quot;Medium Leverage&quot;</span>, <span class="st">&quot;No Leverage&quot;</span>)</span>
+<span id="cb140-46"><a href="multiple-linear-regression.html#cb140-46" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
+<table style="width:100%;">
+<colgroup>
+<col width="21%" />
+<col width="26%" />
+<col width="16%" />
+<col width="13%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">det(Xs_(i)’Xs_(i))</th>
+<th align="right">det(Xs’Xs)</th>
+<th align="right">Leverage</th>
+<th align="right">Obs. Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Big Leverage</td>
+<td align="right">9132788636</td>
+<td align="right">18778457801</td>
+<td align="right">0.5136561</td>
+<td align="right">20.135319</td>
+</tr>
+<tr class="even">
+<td align="left">Medium Leverage</td>
+<td align="right">9132788636</td>
+<td align="right">10204529654</td>
+<td align="right">0.1050260</td>
+<td align="right">4.117019</td>
+</tr>
+<tr class="odd">
+<td align="left">No Leverage</td>
+<td align="right">9132788636</td>
+<td align="right">9132788636</td>
+<td align="right">0.0000000</td>
+<td align="right">0.000000</td>
+</tr>
+</tbody>
+</table>
+
 </div>
 </div>
             </section>

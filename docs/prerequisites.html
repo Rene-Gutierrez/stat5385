@@ -64,7 +64,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -149,6 +149,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2.7" data-path="prerequisites.html"><a href="prerequisites.html#singular-value-decomposition"><i class="fa fa-check"></i><b>2.2.7</b> Singular Value Decomposition</a></li>
 <li class="chapter" data-level="2.2.8" data-path="prerequisites.html"><a href="prerequisites.html#eigendecomposition"><i class="fa fa-check"></i><b>2.2.8</b> Eigendecomposition</a></li>
 <li class="chapter" data-level="2.2.9" data-path="prerequisites.html"><a href="prerequisites.html#idempotent-matrix"><i class="fa fa-check"></i><b>2.2.9</b> Idempotent Matrix</a></li>
+<li class="chapter" data-level="2.2.10" data-path="prerequisites.html"><a href="prerequisites.html#determinant-of-a-matrix"><i class="fa fa-check"></i><b>2.2.10</b> Determinant of a Matrix</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.3</b> Probability</a></li>
 <li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.4</b> Statistics</a></li>
@@ -223,6 +224,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.9.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#leverage"><i class="fa fa-check"></i><b>6.9.1</b> Leverage</a></li>
 <li class="chapter" data-level="6.9.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#outliers-identification"><i class="fa fa-check"></i><b>6.9.2</b> Outliers identification</a></li>
 </ul></li>
+<li class="chapter" data-level="6.10" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#stability-of-the-solution"><i class="fa fa-check"></i><b>6.10</b> Stability of the Solution</a></li>
 </ul></li>
 </ul>
 
@@ -277,11 +279,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="prerequisites.html#singular-value-decomposition">Singular Value Decomposition</a></li>
 <li><a href="prerequisites.html#eigendecomposition">Eigendecomposition</a></li>
 <li><a href="prerequisites.html#idempotent-matrix">Idempotent Matrix</a></li>
-<li>Determinants</li>
-<li>Eigenvalues and Eigenvectors</li>
-<li>Diagonalization</li>
+<li><a href="prerequisites.html#determinant-of-a-matrix">Determinant of a Matrix</a></li>
 <li>Vector Spaces</li>
-<li>Linear Transformations</li>
 </ul>
 <div id="linear-independence" class="section level3 hasAnchor" number="2.2.1">
 <h3><span class="header-section-number">2.2.1</span> Linear Independence<a href="prerequisites.html#linear-independence" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -377,6 +376,7 @@ c_1 \begin{bmatrix} 1 \\ 0 \end{bmatrix} + c_2 \begin{bmatrix} 0 \\ 1 \end{bmatr
 <li>If <span class="math inline">\(\text{rank}(\mathbf{A}) = n\)</span> (number of columns), it has full column rank.</li>
 </ul></li>
 <li><strong>Rank-deficient</strong>: If the rank of the matrix is less than the smaller of the number of rows or columns, the matrix is called rank-deficient, meaning that some of its rows or columns are linearly dependent.</li>
+<li><span class="math inline">\(\text{rank}(\mathbf{A}) = \text{rank}(\mathbf{A}&#39;) = \text{rank}(\mathbf{A}&#39; \mathbf{A}) = \text{rank}(\mathbf{A}\mathbf{A}&#39;)\)</span></li>
 </ul>
 </div>
 <div id="example-1" class="section level4 hasAnchor" number="2.2.3.3">
@@ -567,6 +567,8 @@ A^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d &amp; -b \\ -c &amp; a \end{bmatrix
 <li>All the <strong>eigenvalues</strong> of a positive definite matrix are <strong>positive</strong>.</li>
 <li>The <strong>determinants</strong> of the leading principal minors (submatrices) of the matrix are positive.</li>
 <li>The <strong>diagonal elements</strong> of a positive definite matrix are positive.</li>
+<li><span class="math inline">\(\mathbf{A}\)</span> is invertible.</li>
+<li><span class="math inline">\(\mathbf{A}^{-1}\)</span> is also <strong>positive definite matrix</strong>.</li>
 </ul>
 </div>
 <div id="example-3" class="section level4 hasAnchor" number="2.2.6.3">
@@ -747,6 +749,68 @@ This matrix is idempotent since:
 \]</span>
 where <span class="math inline">\(\mathbf{X}\)</span> is the design matrix.</p>
 <p>In summary, idempotent matrices have unique properties and are frequently encountered in linear algebra, projections, and statistical applications.</p>
+</div>
+</div>
+<div id="determinant-of-a-matrix" class="section level3 hasAnchor" number="2.2.10">
+<h3><span class="header-section-number">2.2.10</span> Determinant of a Matrix<a href="prerequisites.html#determinant-of-a-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>determinant</strong> of a matrix is a scalar value that provides important information about the properties of a square matrix. It is a fundamental concept in linear algebra, often used to determine whether a matrix is invertible, as well as to describe geometric transformations and volume scaling.</p>
+<div id="key-charachteristics-of-the-determinant" class="section level4 hasAnchor" number="2.2.10.1">
+<h4><span class="header-section-number">2.2.10.1</span> Key Charachteristics of the Determinant:<a href="prerequisites.html#key-charachteristics-of-the-determinant" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Square Matrices Only</strong>: The determinant is only defined for square matrices (i.e., matrices with the same number of rows and columns).</p></li>
+<li><p><strong>Invertibility</strong>: A matrix is <strong>invertible</strong> (i.e., it has an inverse) if and only if its determinant is <strong>non-zero</strong>. If the determinant is <strong>zero</strong>, the matrix is <strong>singular</strong> and does not have an inverse.</p></li>
+<li><p><strong>Geometric Interpretation</strong>: The determinant represents the <strong>scaling factor</strong> of the linear transformation described by the matrix. For example, in two or three dimensions, the determinant tells you how much the matrix scales area or volume:</p>
+<ul>
+<li>A determinant of 1 means the matrix preserves the area (in 2D) or volume (in 3D).</li>
+<li>A determinant greater than 1 means the matrix scales the area or volume by that factor.</li>
+<li>A negative determinant indicates that the transformation also includes a <strong>reflection</strong>.</li>
+</ul></li>
+<li><p><strong>Significance of Zero Determinant</strong>: If the determinant is zero, it means that the matrix maps some vectors to a lower-dimensional space. For instance, in 2D, it might map points onto a line, collapsing the area to zero.</p></li>
+</ol>
+</div>
+<div id="definition-5" class="section level4 hasAnchor" number="2.2.10.2">
+<h4><span class="header-section-number">2.2.10.2</span> Definition:<a href="prerequisites.html#definition-5" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a <strong>2x2 matrix</strong>:
+<span class="math display">\[
+\mathbf{A} = \begin{bmatrix} a &amp; b \\ c &amp; d \end{bmatrix}
+\]</span>
+The determinant of <span class="math inline">\(\mathbf{A}\)</span> is:
+<span class="math display">\[
+\det(\mathbf{A}) = ad - bc
+\]</span>
+This formula gives the area scaling factor for the linear transformation represented by the matrix <span class="math inline">\(\mathbf{A}\)</span>.</p>
+<p>For a <strong>3x3 matrix</strong>:
+<span class="math display">\[
+\mathbf{B} = \begin{bmatrix} a &amp; b &amp; c \\ d &amp; e &amp; f \\ g &amp; h &amp; i \end{bmatrix}
+\]</span>
+The determinant of <span class="math inline">\(\mathbf{B}\)</span> is:
+<span class="math display">\[
+\det(\mathbf{B}) = a(ei - fh) - b(di - fg) + c(dh - eg)
+\]</span>
+This formula can be extended to higher dimensions using recursive expansion (called cofactor expansion or Laplace expansion).</p>
+</div>
+<div id="applications-of-the-determinant" class="section level4 hasAnchor" number="2.2.10.3">
+<h4><span class="header-section-number">2.2.10.3</span> Applications of the Determinant:<a href="prerequisites.html#applications-of-the-determinant" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Solving Linear Systems</strong>: The determinant is used in Cramer’s Rule, a method for solving systems of linear equations. If the determinant of the coefficient matrix is non-zero, the system has a unique solution.</p></li>
+<li><p><strong>Eigenvalues and Eigenvectors</strong>: The determinant plays a key role in computing the eigenvalues of a matrix. The determinant of a matrix <span class="math inline">\(\mathbf{A} - \lambda \mathbf{I}\)</span>, where <span class="math inline">\(\lambda\)</span> is a scalar and <span class="math inline">\(\mathbf{I}\)</span> is the identity matrix, gives the characteristic equation whose solutions are the eigenvalues.</p></li>
+<li><p><strong>Volume and Area Calculations</strong>: In geometry, the determinant helps calculate the area (in 2D) or volume (in 3D) of a region after applying a linear transformation.</p></li>
+<li><p><strong>Singular Value Decomposition (SVD)</strong> and <strong>Principal Component Analysis (PCA)</strong>: The determinant is important in these techniques for understanding data structures, transformations, and dimensionality reduction.</p></li>
+</ol>
+</div>
+<div id="properties-of-the-determinant" class="section level4 hasAnchor" number="2.2.10.4">
+<h4><span class="header-section-number">2.2.10.4</span> Properties of the Determinant<a href="prerequisites.html#properties-of-the-determinant" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For a general block matrix of the form:
+<span class="math display">\[
+\mathbf{M} = \begin{bmatrix} \mathbf{A} &amp; \mathbf{B} \\ \mathbf{C} &amp; \mathbf{D} \end{bmatrix}
+\]</span>
+where <span class="math inline">\(\mathbf{A}\)</span>, <span class="math inline">\(\mathbf{B}\)</span>, <span class="math inline">\(\mathbf{C}\)</span>, and <span class="math inline">\(\mathbf{D}\)</span> are submatrices, the determinant formula is more complex. If <span class="math inline">\(\mathbf{D}\)</span> is invertible, we can use the <strong>Schur complement</strong> to compute the determinant:
+<span class="math display">\[
+\det(\mathbf{M}) = \det(\mathbf{D}) \det(\mathbf{A} - \mathbf{B} \mathbf{D}^{-1} \mathbf{C})
+\]</span>
+Here, <span class="math inline">\(\mathbf{A} - \mathbf{B} \mathbf{D}^{-1} \mathbf{C}\)</span> is called the <strong>Schur complement</strong> of <span class="math inline">\(\mathbf{D}\)</span> in <span class="math inline">\(\mathbf{M}\)</span>.</p>
+<p>For any invertible matrix <span class="math inline">\(\mathbf{X}\in \mathbb{R}^{p \times p}\)</span> and matrices <span class="math inline">\(\mathbf{A}\in\mathbb{R}^{p\times q}\)</span> and <span class="math inline">\(\mathbf{B}\in\mathbb{R}^{q\times p}\)</span> we have, that:</p>
+<p><span class="math display">\[\det(\mathbf{X}+ \mathbf{A}\mathbf{B}) = det(\mathbf{X})\det(\mathbf{I}_q + \mathbf{B}\mathbf{X}^{-1}\mathbf{A}) \]</span></p>
 </div>
 </div>
 </div>
