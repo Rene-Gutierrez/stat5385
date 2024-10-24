@@ -80,7 +80,7 @@ And we can do a similar thing for $\beta_1$:
 
 \begin{align*}
 \frac{\partial Q}{\partial \beta_1} 
-  &= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
+  &= \frac{\partial}{\partial \beta_1} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
   &= \sum_{i = 1}^n 2(y_i -\beta_0 - \beta_1 x_i)(-x_i) \\
   &= -2\sum_{i = 1}^n y_i x_i + 2 \beta_0 \sum_{i = 1}^n x_i + 2 \beta_1 \sum_{i = 1}^n x_i^2 \\
   &= -2\sum_{i = 1}^n y_i x_i + 2 n \beta_0 \bar{x} + 2 \beta_1 \sum_{i = 1}^n x_i^2
@@ -230,12 +230,12 @@ That is:
   &= \sum_{i=1}^{n}  (y_i - \hgb_0 - \hgb_1 x_i)x_i \\
   &= \sum_{i=1}^{n}  (y_i x_i - \hgb_0x_i - \hgb_1 x_i x_i) \\
   &= \sum_{i=1}^{n} y_i x_i - \sum_{i=1}^{n} \hgb_0x_i - \sum_{i=1}^{n} \hgb_1 x_i x_i \\
-  &= \sum_{i=1}^{n} y_i - n \hgb_0 \bar{x} - \hgb_1 \sum_{i=1}^{n} x_i^2 \\
-  &= \sum_{i=1}^{n} y_i - n (\bar{y} - \hat{\beta}_1 \bar{x}) \bar{x} - \hgb_1 \sum_{i=1}^{n} x_i^2 \\
-  &= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} + n\hat{\beta}_1 \bar{x}^2 - \hgb_1 \sum_{i=1}^{n} x_i^2 \\
-  &= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} - \hat{\beta}_1 (\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
-  &= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} -  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2}(\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
-  &= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} -  (\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x})  \\
+  &= \sum_{i=1}^{n} y_i x_i - n \hgb_0 \bar{x} - \hgb_1 \sum_{i=1}^{n} x_i^2 \\
+  &= \sum_{i=1}^{n} y_i x_i - n (\bar{y} - \hat{\beta}_1 \bar{x}) \bar{x} - \hgb_1 \sum_{i=1}^{n} x_i^2 \\
+  &= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} + n\hat{\beta}_1 \bar{x}^2 - \hgb_1 \sum_{i=1}^{n} x_i^2 \\
+  &= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} - \hat{\beta}_1 (\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
+  &= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} -  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2}(\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
+  &= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} -  (\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x})  \\
   &=0
 \end{align*}
 
@@ -245,8 +245,8 @@ The same applies to $\hby = (\hy_1,\ldots,\hby_n)'$ and $\hbe$, as we can see:
 \langle \hbe, \hby \rangle 
   &= \sum_{i=1}^{n} \he_i \hy_i \\
   &= \sum_{i=1}^{n} \he_i(\hgb_0 + \hgb_1 x_i) \\
-  &= \sum_{i=1}^{n} (\he_i \hgb_0 + he_i \hgb_1 x_i) \\
-  &= \hgb_0 \sum_{i=1}^{n} \he_i + \hgb_1 \sum_{i=1}^{n} he_i x_i \\
+  &= \sum_{i=1}^{n} (\he_i \hgb_0 + \he_i \hgb_1 x_i) \\
+  &= \hgb_0 \sum_{i=1}^{n} \he_i + \hgb_1 \sum_{i=1}^{n} \he_i x_i \\
   &= \hgb_1 \langle \hbe, \bx \rangle  \\
   &= 0
 \end{align*}

@@ -308,7 +308,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>And we can do a similar thing for <span class="math inline">\(\beta_1\)</span>:</p>
 <p><span class="math display">\[\begin{align*}
 \frac{\partial Q}{\partial \beta_1}
-  &amp;= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
+  &amp;= \frac{\partial}{\partial \beta_1} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
   &amp;= \sum_{i = 1}^n 2(y_i -\beta_0 - \beta_1 x_i)(-x_i) \\
   &amp;= -2\sum_{i = 1}^n y_i x_i + 2 \beta_0 \sum_{i = 1}^n x_i + 2 \beta_1 \sum_{i = 1}^n x_i^2 \\
   &amp;= -2\sum_{i = 1}^n y_i x_i + 2 n \beta_0 \bar{x} + 2 \beta_1 \sum_{i = 1}^n x_i^2
@@ -424,12 +424,12 @@ That is:</p>
   &amp;= \sum_{i=1}^{n}  (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)x_i \\
   &amp;= \sum_{i=1}^{n}  (y_i x_i - \hat{\beta}_0x_i - \hat{\beta}_1 x_i x_i) \\
   &amp;= \sum_{i=1}^{n} y_i x_i - \sum_{i=1}^{n} \hat{\beta}_0x_i - \sum_{i=1}^{n} \hat{\beta}_1 x_i x_i \\
-  &amp;= \sum_{i=1}^{n} y_i - n \hat{\beta}_0 \bar{x} - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
-  &amp;= \sum_{i=1}^{n} y_i - n (\bar{y} - \hat{\beta}_1 \bar{x}) \bar{x} - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
-  &amp;= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} + n\hat{\beta}_1 \bar{x}^2 - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
-  &amp;= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} - \hat{\beta}_1 (\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
-  &amp;= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} -  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2}(\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
-  &amp;= \sum_{i=1}^{n} y_i - n \bar{y} \bar{x} -  (\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x})  \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n \hat{\beta}_0 \bar{x} - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n (\bar{y} - \hat{\beta}_1 \bar{x}) \bar{x} - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} + n\hat{\beta}_1 \bar{x}^2 - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} - \hat{\beta}_1 (\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} -  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2}(\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} -  (\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x})  \\
   &amp;=0
 \end{align*}\]</span></p>
 <p>The same applies to <span class="math inline">\(\hat{\mathbf{y}}= (\hat{y}_1,\ldots,\hat{\mathbf{y}}_n)&#39;\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span>, as we can see:</p>
@@ -437,8 +437,8 @@ That is:</p>
 \langle \hat{\mathbf{e}}, \hat{\mathbf{y}}\rangle
   &amp;= \sum_{i=1}^{n} \hat{e}_i \hat{y}_i \\
   &amp;= \sum_{i=1}^{n} \hat{e}_i(\hat{\beta}_0 + \hat{\beta}_1 x_i) \\
-  &amp;= \sum_{i=1}^{n} (\hat{e}_i \hat{\beta}_0 + he_i \hat{\beta}_1 x_i) \\
-  &amp;= \hat{\beta}_0 \sum_{i=1}^{n} \hat{e}_i + \hat{\beta}_1 \sum_{i=1}^{n} he_i x_i \\
+  &amp;= \sum_{i=1}^{n} (\hat{e}_i \hat{\beta}_0 + \hat{e}_i \hat{\beta}_1 x_i) \\
+  &amp;= \hat{\beta}_0 \sum_{i=1}^{n} \hat{e}_i + \hat{\beta}_1 \sum_{i=1}^{n} \hat{e}_i x_i \\
   &amp;= \hat{\beta}_1 \langle \hat{\mathbf{e}}, \mathbf{x}\rangle  \\
   &amp;= 0
 \end{align*}\]</span></p>
