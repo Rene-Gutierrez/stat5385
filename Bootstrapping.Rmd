@@ -212,6 +212,9 @@ for(i in 1:numPlo){
 print(paste0("Bootstrap Predictive Intervals Coverage = ", round(mean((y > booPreQua[1, ]) & (y < booPreQua[2, ])) * 100, 2) ))
 ```
 
+In the figure the thin intervals represent the 95\% predictive intervals and the
+thick intervals the 95\% mean confidence intervals.
+
 Notice here that the coverage of the Predictive Intervals is much closer to 95\%.
 
 Also, notice that if you run this code in your computer the results will be slightly

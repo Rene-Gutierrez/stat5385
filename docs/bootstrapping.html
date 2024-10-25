@@ -440,6 +440,8 @@ errors and add them to our bootstrap mean estimates to create prediction interva
 <div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="bootstrapping.html#cb147-1" tabindex="-1"></a><span class="co"># Coverage of the Boostrap Confidence Intervals</span></span>
 <span id="cb147-2"><a href="bootstrapping.html#cb147-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Bootstrap Predictive Intervals Coverage = &quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>((y <span class="sc">&gt;</span> booPreQua[<span class="dv">1</span>, ]) <span class="sc">&amp;</span> (y <span class="sc">&lt;</span> booPreQua[<span class="dv">2</span>, ])) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>) ))</span></code></pre></div>
 <pre><code>## [1] &quot;Bootstrap Predictive Intervals Coverage = 95.41&quot;</code></pre>
+<p>In the figure the thin intervals represent the 95% predictive intervals and the
+thick intervals the 95% mean confidence intervals.</p>
 <p>Notice here that the coverage of the Predictive Intervals is much closer to 95%.</p>
 <p>Also, notice that if you run this code in your computer the results will be slightly
 different, since this results depend on the random sampling used to create the
