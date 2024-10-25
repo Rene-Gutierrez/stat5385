@@ -1114,7 +1114,7 @@ In the same way, we can work with the sample correlations
 # Standardizing matrix of X
 DX <- diag(1/sqrt(diag(SXX)))
 # Standardize X
-Xs <- Xc %*% D
+Xs <- Xc %*% DX
 # Shows that Xs is indeed standardize
 print(round(colMeans(Xs), 8))
 print(apply(X = Xs, MARGIN = 2, FUN = sd))
@@ -2017,7 +2017,7 @@ Xc <- C %*% X
 # Standardizing matrix of X
 DX <- diag(1/sqrt(diag(SXX)))
 # Standardize X
-Xs <- Xc %*% D
+Xs <- Xc %*% DX
 
 # Condition numbers
 
@@ -2070,7 +2070,7 @@ Xc <- C %*% X
 # Standardizing matrix of X
 DX <- diag(1/sqrt(diag(SXX)))
 # Standardize X
-Xs <- Xc %*% D
+Xs <- Xc %*% DX
 
 # New Observations
 # Very Leveraged Observation

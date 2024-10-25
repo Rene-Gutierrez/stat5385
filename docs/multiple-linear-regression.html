@@ -29,7 +29,7 @@
   
   
 <link rel="prev" href="polynomial-regression.html"/>
-
+<link rel="next" href="bootstrapping.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -225,6 +225,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.9.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#outliers-identification"><i class="fa fa-check"></i><b>6.9.2</b> Outliers identification</a></li>
 </ul></li>
 <li class="chapter" data-level="6.10" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#stability-of-the-solution"><i class="fa fa-check"></i><b>6.10</b> Stability of the Solution</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="bootstrapping.html"><a href="bootstrapping.html"><i class="fa fa-check"></i><b>7</b> Bootstrapping</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="bootstrapping.html"><a href="bootstrapping.html#introduction-2"><i class="fa fa-check"></i><b>7.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.2" data-path="bootstrapping.html"><a href="bootstrapping.html#bootstrapping-example"><i class="fa fa-check"></i><b>7.2</b> Bootstrapping Example</a></li>
 </ul></li>
 </ul>
 
@@ -1245,7 +1250,7 @@ results in the same quantities that using the <code>cov</code> function in <code
 <div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="multiple-linear-regression.html#cb111-1" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
 <span id="cb111-2"><a href="multiple-linear-regression.html#cb111-2" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
 <span id="cb111-3"><a href="multiple-linear-regression.html#cb111-3" tabindex="-1"></a><span class="co"># Standardize X</span></span>
-<span id="cb111-4"><a href="multiple-linear-regression.html#cb111-4" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> D</span>
+<span id="cb111-4"><a href="multiple-linear-regression.html#cb111-4" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
 <span id="cb111-5"><a href="multiple-linear-regression.html#cb111-5" tabindex="-1"></a><span class="co"># Shows that Xs is indeed standardize</span></span>
 <span id="cb111-6"><a href="multiple-linear-regression.html#cb111-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">colMeans</span>(Xs), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>## [1] 0 0 0 0 0</code></pre>
@@ -2199,7 +2204,7 @@ Again, using <a href="prerequisites.html#properties-of-the-determinant">properti
 <span id="cb133-15"><a href="multiple-linear-regression.html#cb133-15" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
 <span id="cb133-16"><a href="multiple-linear-regression.html#cb133-16" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
 <span id="cb133-17"><a href="multiple-linear-regression.html#cb133-17" tabindex="-1"></a><span class="co"># Standardize X</span></span>
-<span id="cb133-18"><a href="multiple-linear-regression.html#cb133-18" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> D</span>
+<span id="cb133-18"><a href="multiple-linear-regression.html#cb133-18" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
 <span id="cb133-19"><a href="multiple-linear-regression.html#cb133-19" tabindex="-1"></a></span>
 <span id="cb133-20"><a href="multiple-linear-regression.html#cb133-20" tabindex="-1"></a><span class="co"># Condition numbers</span></span>
 <span id="cb133-21"><a href="multiple-linear-regression.html#cb133-21" tabindex="-1"></a></span>
@@ -2289,7 +2294,7 @@ However, this is not necessarily so.</p>
 <span id="cb140-17"><a href="multiple-linear-regression.html#cb140-17" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
 <span id="cb140-18"><a href="multiple-linear-regression.html#cb140-18" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
 <span id="cb140-19"><a href="multiple-linear-regression.html#cb140-19" tabindex="-1"></a><span class="co"># Standardize X</span></span>
-<span id="cb140-20"><a href="multiple-linear-regression.html#cb140-20" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> D</span>
+<span id="cb140-20"><a href="multiple-linear-regression.html#cb140-20" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
 <span id="cb140-21"><a href="multiple-linear-regression.html#cb140-21" tabindex="-1"></a></span>
 <span id="cb140-22"><a href="multiple-linear-regression.html#cb140-22" tabindex="-1"></a><span class="co"># New Observations</span></span>
 <span id="cb140-23"><a href="multiple-linear-regression.html#cb140-23" tabindex="-1"></a><span class="co"># Very Leveraged Observation</span></span>
@@ -2365,8 +2370,8 @@ However, this is not necessarily so.</p>
           </div>
         </div>
       </div>
-<a href="polynomial-regression.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="polynomial-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bootstrapping.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

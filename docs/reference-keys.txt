@@ -116,3 +116,6 @@ leverage
 properties-of-leverages
 outliers-identification
 stability-of-the-solution
+bootstrapping
+introduction-2
+bootstrapping-example
