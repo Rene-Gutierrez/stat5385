@@ -1892,9 +1892,9 @@ X_j\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}X_i&#39;X_i\left(\mathbf{X}&#39; 
   &amp;\implies ||\hat{\mathbf{y}}_{(i)} - \hat{\mathbf{y}}||_2^2 = \frac{\hat{e}_i^2}{(1 - h_{ii})^2} \sum_{j=1}^n h_{ij}^2
 \end{align*}\]</span></p>
 <p>Now for any symmetric and idempotent matrix <span class="math inline">\(\mathbf{M}\in \mathbb{R}^{n \times n}\)</span> we have that:</p>
-<p><span class="math display">\[m_{ii} = \sum_{j = 1}^n h_{ij}^2\]</span>
+<p><span class="math display">\[m_{ii} = \sum_{j = 1}^n m_{ij}^2\]</span>
 Then</p>
-<p><span class="math display">\[||\hat{\mathbf{y}}_{(i)} - \hat{\mathbf{y}}||_2^2 = \frac{\hat{e}_i^2}{(1 - h_{ii})^2} h_{ii}^2 = \frac{h_{ii}^2}{(1 - h_{ii})^2}\hat{e}_i^2 \]</span>
+<p><span class="math display">\[||\hat{\mathbf{y}}_{(i)} - \hat{\mathbf{y}}||_2^2 = \frac{\hat{e}_i^2}{(1 - h_{ii})^2} h_{ii}^2 = \frac{h_{ii}}{(1 - h_{ii})^2}\hat{e}_i^2 \]</span>
 That is the change in the predictions is the result of a function of the leverages
 and a function of the error of observation <span class="math inline">\(i\)</span>.</p>
 <p>We can see this with our GDP dataset. We generate new observations, in which</p>
