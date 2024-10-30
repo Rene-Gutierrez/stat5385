@@ -182,6 +182,9 @@ xmin <- 0
 xmax <- n / numPlo
 xSet <- matrix(data = 1:n, nrow = numPlo, ncol = n / numPlo)
 
+# Non-Covered Observations
+nonCov <- ((y > booPreQua[1, ]) & (y < booPreQua[2, ]))
+
 # Bootstrap Confidence Intervals Plot
 par(mfrow = c(numPlo, 1))
 par(mar = c(0, 3, 0, 0))
@@ -206,9 +209,13 @@ for(i in 1:numPlo){
          y   = y[xSet[i, ]],
          pch = 16,
          col = rgb(1, 0, 0, 0.75))
+  points(x   = xSet[i, ][!nonCov[xSet[i, ]]] - (i - 1),
+         y   = y[xSet[i, ][!nonCov[xSet[i, ]]]],
+         pch = 1,
+         col = rgb(0, 0, 1, 0.75))
 }
 
-# Coverage of the Boostrap Confidence Intervals
+# Coverage of the Bootstrap Confidence Intervals
 print(paste0("Bootstrap Predictive Intervals Coverage = ", round(mean((y > booPreQua[1, ]) & (y < booPreQua[2, ])) * 100, 2) ))
 ```
 

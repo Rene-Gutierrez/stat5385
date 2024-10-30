@@ -411,33 +411,40 @@ errors and add them to our bootstrap mean estimates to create prediction interva
 <span id="cb146-19"><a href="bootstrapping.html#cb146-19" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> n <span class="sc">/</span> numPlo</span>
 <span id="cb146-20"><a href="bootstrapping.html#cb146-20" tabindex="-1"></a>xSet <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">nrow =</span> numPlo, <span class="at">ncol =</span> n <span class="sc">/</span> numPlo)</span>
 <span id="cb146-21"><a href="bootstrapping.html#cb146-21" tabindex="-1"></a></span>
-<span id="cb146-22"><a href="bootstrapping.html#cb146-22" tabindex="-1"></a><span class="co"># Bootstrap Confidence Intervals Plot</span></span>
-<span id="cb146-23"><a href="bootstrapping.html#cb146-23" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(numPlo, <span class="dv">1</span>))</span>
-<span id="cb146-24"><a href="bootstrapping.html#cb146-24" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb146-25"><a href="bootstrapping.html#cb146-25" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numPlo){</span>
-<span id="cb146-26"><a href="bootstrapping.html#cb146-26" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NULL</span>,</span>
-<span id="cb146-27"><a href="bootstrapping.html#cb146-27" tabindex="-1"></a>       <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
-<span id="cb146-28"><a href="bootstrapping.html#cb146-28" tabindex="-1"></a>       <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
-<span id="cb146-29"><a href="bootstrapping.html#cb146-29" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;GDP % Growth&quot;</span>,</span>
-<span id="cb146-30"><a href="bootstrapping.html#cb146-30" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Countries&quot;</span>,</span>
-<span id="cb146-31"><a href="bootstrapping.html#cb146-31" tabindex="-1"></a>       <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
-<span id="cb146-32"><a href="bootstrapping.html#cb146-32" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="at">x0  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb146-33"><a href="bootstrapping.html#cb146-33" tabindex="-1"></a>           <span class="at">x1  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb146-34"><a href="bootstrapping.html#cb146-34" tabindex="-1"></a>           <span class="at">y0  =</span> booConQua[<span class="dv">1</span>, xSet[i, ]],</span>
-<span id="cb146-35"><a href="bootstrapping.html#cb146-35" tabindex="-1"></a>           <span class="at">y1  =</span> booConQua[<span class="dv">2</span>, xSet[i, ]],</span>
-<span id="cb146-36"><a href="bootstrapping.html#cb146-36" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">3</span>)</span>
-<span id="cb146-37"><a href="bootstrapping.html#cb146-37" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="at">x0  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb146-38"><a href="bootstrapping.html#cb146-38" tabindex="-1"></a>           <span class="at">x1  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb146-39"><a href="bootstrapping.html#cb146-39" tabindex="-1"></a>           <span class="at">y0  =</span> booPreQua[<span class="dv">1</span>, xSet[i, ]],</span>
-<span id="cb146-40"><a href="bootstrapping.html#cb146-40" tabindex="-1"></a>           <span class="at">y1  =</span> booPreQua[<span class="dv">2</span>, xSet[i, ]],</span>
-<span id="cb146-41"><a href="bootstrapping.html#cb146-41" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">1</span>)</span>
-<span id="cb146-42"><a href="bootstrapping.html#cb146-42" tabindex="-1"></a>  <span class="fu">points</span>(<span class="at">x   =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb146-43"><a href="bootstrapping.html#cb146-43" tabindex="-1"></a>         <span class="at">y   =</span> y[xSet[i, ]],</span>
-<span id="cb146-44"><a href="bootstrapping.html#cb146-44" tabindex="-1"></a>         <span class="at">pch =</span> <span class="dv">16</span>,</span>
-<span id="cb146-45"><a href="bootstrapping.html#cb146-45" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.75</span>))</span>
-<span id="cb146-46"><a href="bootstrapping.html#cb146-46" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb146-22"><a href="bootstrapping.html#cb146-22" tabindex="-1"></a><span class="co"># Non-Covered Observations</span></span>
+<span id="cb146-23"><a href="bootstrapping.html#cb146-23" tabindex="-1"></a>nonCov <span class="ot">&lt;-</span> ((y <span class="sc">&gt;</span> booPreQua[<span class="dv">1</span>, ]) <span class="sc">&amp;</span> (y <span class="sc">&lt;</span> booPreQua[<span class="dv">2</span>, ]))</span>
+<span id="cb146-24"><a href="bootstrapping.html#cb146-24" tabindex="-1"></a></span>
+<span id="cb146-25"><a href="bootstrapping.html#cb146-25" tabindex="-1"></a><span class="co"># Bootstrap Confidence Intervals Plot</span></span>
+<span id="cb146-26"><a href="bootstrapping.html#cb146-26" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(numPlo, <span class="dv">1</span>))</span>
+<span id="cb146-27"><a href="bootstrapping.html#cb146-27" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb146-28"><a href="bootstrapping.html#cb146-28" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numPlo){</span>
+<span id="cb146-29"><a href="bootstrapping.html#cb146-29" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NULL</span>,</span>
+<span id="cb146-30"><a href="bootstrapping.html#cb146-30" tabindex="-1"></a>       <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb146-31"><a href="bootstrapping.html#cb146-31" tabindex="-1"></a>       <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb146-32"><a href="bootstrapping.html#cb146-32" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;GDP % Growth&quot;</span>,</span>
+<span id="cb146-33"><a href="bootstrapping.html#cb146-33" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Countries&quot;</span>,</span>
+<span id="cb146-34"><a href="bootstrapping.html#cb146-34" tabindex="-1"></a>       <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb146-35"><a href="bootstrapping.html#cb146-35" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="at">x0  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb146-36"><a href="bootstrapping.html#cb146-36" tabindex="-1"></a>           <span class="at">x1  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb146-37"><a href="bootstrapping.html#cb146-37" tabindex="-1"></a>           <span class="at">y0  =</span> booConQua[<span class="dv">1</span>, xSet[i, ]],</span>
+<span id="cb146-38"><a href="bootstrapping.html#cb146-38" tabindex="-1"></a>           <span class="at">y1  =</span> booConQua[<span class="dv">2</span>, xSet[i, ]],</span>
+<span id="cb146-39"><a href="bootstrapping.html#cb146-39" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb146-40"><a href="bootstrapping.html#cb146-40" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="at">x0  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb146-41"><a href="bootstrapping.html#cb146-41" tabindex="-1"></a>           <span class="at">x1  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb146-42"><a href="bootstrapping.html#cb146-42" tabindex="-1"></a>           <span class="at">y0  =</span> booPreQua[<span class="dv">1</span>, xSet[i, ]],</span>
+<span id="cb146-43"><a href="bootstrapping.html#cb146-43" tabindex="-1"></a>           <span class="at">y1  =</span> booPreQua[<span class="dv">2</span>, xSet[i, ]],</span>
+<span id="cb146-44"><a href="bootstrapping.html#cb146-44" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">1</span>)</span>
+<span id="cb146-45"><a href="bootstrapping.html#cb146-45" tabindex="-1"></a>  <span class="fu">points</span>(<span class="at">x   =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb146-46"><a href="bootstrapping.html#cb146-46" tabindex="-1"></a>         <span class="at">y   =</span> y[xSet[i, ]],</span>
+<span id="cb146-47"><a href="bootstrapping.html#cb146-47" tabindex="-1"></a>         <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb146-48"><a href="bootstrapping.html#cb146-48" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.75</span>))</span>
+<span id="cb146-49"><a href="bootstrapping.html#cb146-49" tabindex="-1"></a>  <span class="fu">points</span>(<span class="at">x   =</span> xSet[i, ][<span class="sc">!</span>nonCov[xSet[i, ]]] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb146-50"><a href="bootstrapping.html#cb146-50" tabindex="-1"></a>         <span class="at">y   =</span> y[xSet[i, ][<span class="sc">!</span>nonCov[xSet[i, ]]]],</span>
+<span id="cb146-51"><a href="bootstrapping.html#cb146-51" tabindex="-1"></a>         <span class="at">pch =</span> <span class="dv">1</span>,</span>
+<span id="cb146-52"><a href="bootstrapping.html#cb146-52" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.75</span>))</span>
+<span id="cb146-53"><a href="bootstrapping.html#cb146-53" tabindex="-1"></a>}</span></code></pre></div>
 <p><img src="_main_files/figure-html/bootstrapping-prediction_intervales-1.png" width="672" /></p>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="bootstrapping.html#cb147-1" tabindex="-1"></a><span class="co"># Coverage of the Boostrap Confidence Intervals</span></span>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="bootstrapping.html#cb147-1" tabindex="-1"></a><span class="co"># Coverage of the Bootstrap Confidence Intervals</span></span>
 <span id="cb147-2"><a href="bootstrapping.html#cb147-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Bootstrap Predictive Intervals Coverage = &quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>((y <span class="sc">&gt;</span> booPreQua[<span class="dv">1</span>, ]) <span class="sc">&amp;</span> (y <span class="sc">&lt;</span> booPreQua[<span class="dv">2</span>, ])) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>) ))</span></code></pre></div>
 <pre><code>## [1] &quot;Bootstrap Predictive Intervals Coverage = 95.41&quot;</code></pre>
 <p>In the figure the thin intervals represent the 95% predictive intervals and the
