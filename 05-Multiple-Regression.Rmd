@@ -1675,10 +1675,10 @@ is removed. We will call:
 
 Then a measure of influence can be:
 
-$$||\by - \hat{\by}_{(i)}||^2_2 = (\by - \hat{\by}_{(i)})'(\by - \hat{\by}_{(i)}) = \sum_{j=1}^n (\by_j - \hat{\by}_{(i),j})$$
+$$||\by - \hat{\by}_{(i)}||^2_2 = (\by - \hat{\by}_{(i)})'(\by - \hat{\by}_{(i)}) = \sum_{j=1}^n (\by_j - \hat{\by}_{(i),j})^2$$
 Notice that:
 
-$$\hat{\by}_i = \bH \by$$
+$$\hat{\by} = \bH \by$$
 and, similarly
 
 $$\hat{\by}_{(i)} = \bH_{(i)} \by_{(i)}$$
