@@ -16,6 +16,9 @@
 \newcommand{\bS}{\mathbf{S}}
 \newcommand{\bW}{\mathbf{W}}
 \newcommand{\bX}{\mathbf{X}}
+\newcommand{\dC}{\mathbb{C}}
+\newcommand{\dE}{\mathbb{E}}
+\newcommand{\dV}{\mathbb{V}}
 \newcommand{\dR}{\mathbb{R}}
 \newcommand{\bgb}{\boldsymbol{\beta}}
 \newcommand{\bga}{\boldsymbol{\alpha}}
@@ -573,8 +576,8 @@ $$\det(\bX + \bA \bB) = det(\bX)\det(\bI_q + \bB\bX^{-1}\bA) $$
 
 Key probability concepts to understand include:
 
-* Expected Value
-* Variance
+* [Expected Value](#expected-value)
+* [Variance](#variance)
 * Covariance
 * Correlation
 * Joint, Marginal, and Conditional Distributions
@@ -585,6 +588,94 @@ Key probability concepts to understand include:
   * Chi-Squared ($\chi^2$)
   * t-distribution
   * F-distribution
+  
+### Expected Value
+
+The **expected value** (or **mean**) of a random vector is a fundamental concept in multivariate statistics. Just as the expected value of a random variable provides a measure of the "center" or "average" of the distribution, the expected value of a random vector captures the central location of a multidimensional distribution.
+
+#### Definition
+
+Let $\mathbf{X}$ be a random vector in $\mathbb{R}^n$, represented as:
+$$
+\mathbf{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_n \end{bmatrix},
+$$
+where $X_1, X_2, \dots, X_n$ are its components. The **expected value** of $\mathbf{X}$, denoted by $\mathbb{E}[\mathbf{X}]$, is defined as the vector of the expected values of each component:
+$$
+\mathbb{E}[\mathbf{X}] = \begin{bmatrix} \mathbb{E}[X_1] \\ \mathbb{E}[X_2] \\ \vdots \\ \mathbb{E}[X_n] \end{bmatrix}.
+$$
+
+This vector $\mathbb{E}[\mathbf{X}]$ is also called the **mean vector** of $\mathbf{X}$.
+
+#### Key Properties of the Expected Value of a Random Vector
+
+1. **Linearity**: For any scalar $a$ and random vectors $\mathbf{X}$ and $\mathbf{Y}$,
+   $$
+   \mathbb{E}[a\mathbf{X} + \mathbf{Y}] = a\mathbb{E}[\mathbf{X}] + \mathbb{E}[\mathbf{Y}].
+   $$
+   
+2. **Expectation of a Constant Vector**: If $\mathbf{c}$ is a constant vector in $\mathbb{R}^n$, then the expectation is simply the vector itself:
+   $$
+   \mathbb{E}[\mathbf{c}] = \mathbf{c}.
+   $$
+
+3. **Expectation of a Linear Transformation**: If $\mathbf{A}$ is an $m \times n$ constant matrix, then for a random vector $\mathbf{X}$ in $\mathbb{R}^n$,
+   $$
+   \mathbb{E}[\mathbf{A} \mathbf{X}] = \mathbf{A} \mathbb{E}[\mathbf{X}].
+   $$
+
+### Variance
+
+#### Definition
+
+Let $\mathbf{X}$ be a random vector in $\mathbb{R}^n$, represented as:
+$$
+\mathbf{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_n \end{bmatrix},
+$$
+where each $X_i$ is a random variable. The **variance-covariance matrix** of $\mathbf{X}$, denoted by $\dV(\mathbf{X})$ or $\boldsymbol{\Sigma}$, is defined as:
+$$
+\dV(\mathbf{X}) = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])(\mathbf{X} - \mathbb{E}[\mathbf{X}])'].
+$$
+The $(i, j)$ entry of $\dV(\mathbf{X})$ is given by $\dC(X_i, X_j)$, representing the covariance between components $X_i$ and $X_j$.
+
+If $\mathbf{X}$ has $n$ components, $\dV(\mathbf{X})$ will be an $n \times n$ symmetric matrix where:
+- Diagonal entries represent the variances of each component, i.e., $\dV(X_i) = \dC(X_i, X_i)$.
+- Off-diagonal entries represent the covariances between different components, i.e., $\dC(X_i, X_j)$ for $i \neq j$.
+
+#### Key Properties of the Variance-Covariance Matrix
+
+1. **Symmetry**: The variance-covariance matrix is symmetric, meaning:
+   $$
+   \dV(\mathbf{X}) = \dV(\mathbf{X})^T.
+   $$
+
+2. **Non-negativity**: The variance-covariance matrix is **positive semi-definite**, which implies:
+   $$
+   \mathbf{z}^T \dV(\mathbf{X}) \mathbf{z} \geq 0 \quad \text{for any vector } \mathbf{z} \in \mathbb{R}^n.
+   $$
+   This property indicates that variances (the diagonal entries) are always non-negative.
+
+3. **Variance of a Linear Transformation**: If $\mathbf{A}$ is an $m \times n$ matrix, then the variance of the transformed random vector $\mathbf{A} \mathbf{X}$ is given by:
+   $$
+   \dV(\mathbf{A} \mathbf{X}) = \mathbf{A} \, \dV(\mathbf{X}) \, \mathbf{A}^T.
+   $$
+
+4. **Variance of Independent Random Variables**: If the components of $\mathbf{X}$ are mutually independent, the off-diagonal entries of $\dV(\mathbf{X})$ (the covariances) are zero, resulting in a diagonal covariance matrix.
+
+5. **Variance of the Sum of Two Arbitrary Random Vectors**: If $\mathbf{X}$ and $\mathbf{Y}$ are two arbitrary random vectors in $\mathbb{R}^n$, the variance of their sum is given by:
+   $$
+   \dV(\mathbf{X} + \mathbf{Y}) = \dV(\mathbf{X}) + \dV(\mathbf{Y}) + 2 \, \dC(\mathbf{X}, \mathbf{Y}),
+   $$
+   where $\dC(\mathbf{X}, \mathbf{Y})$ is the **cross-covariance matrix** between $\mathbf{X}$ and $\mathbf{Y}$:
+   $$
+   \dC(\mathbf{X}, \mathbf{Y}) = \mathbb{E}\left[(\mathbf{X} - \mathbb{E}[\mathbf{X}])(\mathbf{Y} - \mathbb{E}[\mathbf{Y}])'\right].
+   $$
+
+6. **Variance of the Sum of Two Independent Random Vectors**: If $\mathbf{X}$ and $\mathbf{Y}$ are two independent random vectors in $\mathbb{R}^n$, then the variance of their sum is given by the sum of their individual variances:
+   $$
+   \dV(\mathbf{X} + \mathbf{Y}) = \dV(\mathbf{X}) + \dV(\mathbf{Y}).
+   $$
+   Since $\mathbf{X}$ and $\mathbf{Y}$ are independent, their covariance $\dC(\mathbf{X}, \mathbf{Y})$ is zero, simplifying the variance of the sum.
+
 
 ## Statistics
 

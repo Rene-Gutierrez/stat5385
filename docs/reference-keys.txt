@@ -60,6 +60,12 @@ definition-5
 applications-of-the-determinant
 properties-of-the-determinant
 probability
+expected-value
+definition-6
+key-properties-of-the-expected-value-of-a-random-vector
+variance
+definition-7
+key-properties-of-the-variance-covariance-matrix
 statistics
 calculus
 gradient

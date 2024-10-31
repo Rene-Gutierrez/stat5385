@@ -151,7 +151,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2.9" data-path="prerequisites.html"><a href="prerequisites.html#idempotent-matrix"><i class="fa fa-check"></i><b>2.2.9</b> Idempotent Matrix</a></li>
 <li class="chapter" data-level="2.2.10" data-path="prerequisites.html"><a href="prerequisites.html#determinant-of-a-matrix"><i class="fa fa-check"></i><b>2.2.10</b> Determinant of a Matrix</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.3</b> Probability</a></li>
+<li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.3</b> Probability</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="prerequisites.html"><a href="prerequisites.html#expected-value"><i class="fa fa-check"></i><b>2.3.1</b> Expected Value</a></li>
+<li class="chapter" data-level="2.3.2" data-path="prerequisites.html"><a href="prerequisites.html#variance"><i class="fa fa-check"></i><b>2.3.2</b> Variance</a></li>
+</ul></li>
 <li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.4</b> Statistics</a></li>
 <li class="chapter" data-level="2.5" data-path="prerequisites.html"><a href="prerequisites.html#calculus"><i class="fa fa-check"></i><b>2.5</b> Calculus</a>
 <ul>
@@ -823,8 +827,8 @@ Here, <span class="math inline">\(\mathbf{A} - \mathbf{B} \mathbf{D}^{-1} \mathb
 <h2><span class="header-section-number">2.3</span> Probability<a href="prerequisites.html#probability" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Key probability concepts to understand include:</p>
 <ul>
-<li>Expected Value</li>
-<li>Variance</li>
+<li><a href="prerequisites.html#expected-value">Expected Value</a></li>
+<li><a href="prerequisites.html#variance">Variance</a></li>
 <li>Covariance</li>
 <li>Correlation</li>
 <li>Joint, Marginal, and Conditional Distributions</li>
@@ -838,6 +842,89 @@ Here, <span class="math inline">\(\mathbf{A} - \mathbf{B} \mathbf{D}^{-1} \mathb
 <li>F-distribution</li>
 </ul></li>
 </ul>
+<div id="expected-value" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Expected Value<a href="prerequisites.html#expected-value" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>expected value</strong> (or <strong>mean</strong>) of a random vector is a fundamental concept in multivariate statistics. Just as the expected value of a random variable provides a measure of the “center” or “average” of the distribution, the expected value of a random vector captures the central location of a multidimensional distribution.</p>
+<div id="definition-6" class="section level4 hasAnchor" number="2.3.1.1">
+<h4><span class="header-section-number">2.3.1.1</span> Definition<a href="prerequisites.html#definition-6" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(\mathbf{X}\)</span> be a random vector in <span class="math inline">\(\mathbb{R}^n\)</span>, represented as:
+<span class="math display">\[
+\mathbf{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_n \end{bmatrix},
+\]</span>
+where <span class="math inline">\(X_1, X_2, \dots, X_n\)</span> are its components. The <strong>expected value</strong> of <span class="math inline">\(\mathbf{X}\)</span>, denoted by <span class="math inline">\(\mathbb{E}[\mathbf{X}]\)</span>, is defined as the vector of the expected values of each component:
+<span class="math display">\[
+\mathbb{E}[\mathbf{X}] = \begin{bmatrix} \mathbb{E}[X_1] \\ \mathbb{E}[X_2] \\ \vdots \\ \mathbb{E}[X_n] \end{bmatrix}.
+\]</span></p>
+<p>This vector <span class="math inline">\(\mathbb{E}[\mathbf{X}]\)</span> is also called the <strong>mean vector</strong> of <span class="math inline">\(\mathbf{X}\)</span>.</p>
+</div>
+<div id="key-properties-of-the-expected-value-of-a-random-vector" class="section level4 hasAnchor" number="2.3.1.2">
+<h4><span class="header-section-number">2.3.1.2</span> Key Properties of the Expected Value of a Random Vector<a href="prerequisites.html#key-properties-of-the-expected-value-of-a-random-vector" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Linearity</strong>: For any scalar <span class="math inline">\(a\)</span> and random vectors <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span>,
+<span class="math display">\[
+\mathbb{E}[a\mathbf{X} + \mathbf{Y}] = a\mathbb{E}[\mathbf{X}] + \mathbb{E}[\mathbf{Y}].
+\]</span></p></li>
+<li><p><strong>Expectation of a Constant Vector</strong>: If <span class="math inline">\(\mathbf{c}\)</span> is a constant vector in <span class="math inline">\(\mathbb{R}^n\)</span>, then the expectation is simply the vector itself:
+<span class="math display">\[
+\mathbb{E}[\mathbf{c}] = \mathbf{c}.
+\]</span></p></li>
+<li><p><strong>Expectation of a Linear Transformation</strong>: If <span class="math inline">\(\mathbf{A}\)</span> is an <span class="math inline">\(m \times n\)</span> constant matrix, then for a random vector <span class="math inline">\(\mathbf{X}\)</span> in <span class="math inline">\(\mathbb{R}^n\)</span>,
+<span class="math display">\[
+\mathbb{E}[\mathbf{A} \mathbf{X}] = \mathbf{A} \mathbb{E}[\mathbf{X}].
+\]</span></p></li>
+</ol>
+</div>
+</div>
+<div id="variance" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Variance<a href="prerequisites.html#variance" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="definition-7" class="section level4 hasAnchor" number="2.3.2.1">
+<h4><span class="header-section-number">2.3.2.1</span> Definition<a href="prerequisites.html#definition-7" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(\mathbf{X}\)</span> be a random vector in <span class="math inline">\(\mathbb{R}^n\)</span>, represented as:
+<span class="math display">\[
+\mathbf{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_n \end{bmatrix},
+\]</span>
+where each <span class="math inline">\(X_i\)</span> is a random variable. The <strong>variance-covariance matrix</strong> of <span class="math inline">\(\mathbf{X}\)</span>, denoted by <span class="math inline">\(\mathbb{V}(\mathbf{X})\)</span> or <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, is defined as:
+<span class="math display">\[
+\mathbb{V}(\mathbf{X}) = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])(\mathbf{X} - \mathbb{E}[\mathbf{X}])&#39;].
+\]</span>
+The <span class="math inline">\((i, j)\)</span> entry of <span class="math inline">\(\mathbb{V}(\mathbf{X})\)</span> is given by <span class="math inline">\(\mathbb{C}(X_i, X_j)\)</span>, representing the covariance between components <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_j\)</span>.</p>
+<p>If <span class="math inline">\(\mathbf{X}\)</span> has <span class="math inline">\(n\)</span> components, <span class="math inline">\(\mathbb{V}(\mathbf{X})\)</span> will be an <span class="math inline">\(n \times n\)</span> symmetric matrix where:
+- Diagonal entries represent the variances of each component, i.e., <span class="math inline">\(\mathbb{V}(X_i) = \mathbb{C}(X_i, X_i)\)</span>.
+- Off-diagonal entries represent the covariances between different components, i.e., <span class="math inline">\(\mathbb{C}(X_i, X_j)\)</span> for <span class="math inline">\(i \neq j\)</span>.</p>
+</div>
+<div id="key-properties-of-the-variance-covariance-matrix" class="section level4 hasAnchor" number="2.3.2.2">
+<h4><span class="header-section-number">2.3.2.2</span> Key Properties of the Variance-Covariance Matrix<a href="prerequisites.html#key-properties-of-the-variance-covariance-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Symmetry</strong>: The variance-covariance matrix is symmetric, meaning:
+<span class="math display">\[
+\mathbb{V}(\mathbf{X}) = \mathbb{V}(\mathbf{X})^T.
+\]</span></p></li>
+<li><p><strong>Non-negativity</strong>: The variance-covariance matrix is <strong>positive semi-definite</strong>, which implies:
+<span class="math display">\[
+\mathbf{z}^T \mathbb{V}(\mathbf{X}) \mathbf{z} \geq 0 \quad \text{for any vector } \mathbf{z} \in \mathbb{R}^n.
+\]</span>
+This property indicates that variances (the diagonal entries) are always non-negative.</p></li>
+<li><p><strong>Variance of a Linear Transformation</strong>: If <span class="math inline">\(\mathbf{A}\)</span> is an <span class="math inline">\(m \times n\)</span> matrix, then the variance of the transformed random vector <span class="math inline">\(\mathbf{A} \mathbf{X}\)</span> is given by:
+<span class="math display">\[
+\mathbb{V}(\mathbf{A} \mathbf{X}) = \mathbf{A} \, \mathbb{V}(\mathbf{X}) \, \mathbf{A}^T.
+\]</span></p></li>
+<li><p><strong>Variance of Independent Random Variables</strong>: If the components of <span class="math inline">\(\mathbf{X}\)</span> are mutually independent, the off-diagonal entries of <span class="math inline">\(\mathbb{V}(\mathbf{X})\)</span> (the covariances) are zero, resulting in a diagonal covariance matrix.</p></li>
+<li><p><strong>Variance of the Sum of Two Arbitrary Random Vectors</strong>: If <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> are two arbitrary random vectors in <span class="math inline">\(\mathbb{R}^n\)</span>, the variance of their sum is given by:
+<span class="math display">\[
+\mathbb{V}(\mathbf{X} + \mathbf{Y}) = \mathbb{V}(\mathbf{X}) + \mathbb{V}(\mathbf{Y}) + 2 \, \mathbb{C}(\mathbf{X}, \mathbf{Y}),
+\]</span>
+where <span class="math inline">\(\mathbb{C}(\mathbf{X}, \mathbf{Y})\)</span> is the <strong>cross-covariance matrix</strong> between <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span>:
+<span class="math display">\[
+\mathbb{C}(\mathbf{X}, \mathbf{Y}) = \mathbb{E}\left[(\mathbf{X} - \mathbb{E}[\mathbf{X}])(\mathbf{Y} - \mathbb{E}[\mathbf{Y}])&#39;\right].
+\]</span></p></li>
+<li><p><strong>Variance of the Sum of Two Independent Random Vectors</strong>: If <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> are two independent random vectors in <span class="math inline">\(\mathbb{R}^n\)</span>, then the variance of their sum is given by the sum of their individual variances:
+<span class="math display">\[
+\mathbb{V}(\mathbf{X} + \mathbf{Y}) = \mathbb{V}(\mathbf{X}) + \mathbb{V}(\mathbf{Y}).
+\]</span>
+Since <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> are independent, their covariance <span class="math inline">\(\mathbb{C}(\mathbf{X}, \mathbf{Y})\)</span> is zero, simplifying the variance of the sum.</p></li>
+</ol>
+</div>
+</div>
 </div>
 <div id="statistics" class="section level2 hasAnchor" number="2.4">
 <h2><span class="header-section-number">2.4</span> Statistics<a href="prerequisites.html#statistics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
