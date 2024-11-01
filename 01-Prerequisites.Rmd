@@ -22,6 +22,7 @@
 \newcommand{\dR}{\mathbb{R}}
 \newcommand{\bgb}{\boldsymbol{\beta}}
 \newcommand{\bga}{\boldsymbol{\alpha}}
+\newcommand{\bgt}{\boldsymbol{\theta}}
 \newcommand{\bzero}{\mathbf{0}}
 \newcommand{\bones}{\mathbf{1}}
 \newcommand{\hy}{\hat{y}}
@@ -72,7 +73,6 @@ You should be familiar with the following linear algebra concepts:
 * [Eigendecomposition](#eigendecomposition)
 * [Idempotent Matrix](#idempotent-matrix)
 * [Determinant of a Matrix](#determinant-of-a-matrix)
-* Vector Spaces
 
 ### Linear Independence
 
@@ -578,8 +578,6 @@ Key probability concepts to understand include:
 
 * [Expected Value](#expected-value)
 * [Variance](#variance)
-* Covariance
-* Correlation
 * Joint, Marginal, and Conditional Distributions
 * Independence
 * Central Limit Theorem
@@ -622,6 +620,7 @@ This vector $\mathbb{E}[\mathbf{X}]$ is also called the **mean vector** of $\mat
    $$
    \mathbb{E}[\mathbf{A} \mathbf{X}] = \mathbf{A} \mathbb{E}[\mathbf{X}].
    $$
+
 
 ### Variance
 
@@ -686,12 +685,94 @@ Essential statistical concepts include:
   * Least Squares Estimation
 
 * **Properties of Point Estimators**:
-  * Unbiased
+  * Unbiased Estimator
   * Consistent
   * Minimum Variance
 
 * **Interval Estimation**
 * **Hypothesis Testing**
+
+### Bias of an Estimator Estimator
+
+The **bias** of an estimator $\hat{\mathbf{\theta}}$ for a vector parameter $\mathbf{\theta}$ is defined as the difference between the expected value of the estimator and the true value of the parameter. Formally, if $\mathbf{\theta} \in \mathbb{R}^n$ is a vector parameter, then the **bias** of the estimator $\hat{\mathbf{\theta}}$ is:
+
+$$
+\text{Bias}(\hat{\mathbf{\theta}}) = \mathbb{E}[\hat{\mathbf{\theta}}] - \mathbf{\theta}.
+$$
+
+#### Key Points
+
+1. **Interpretation**: Bias measures how far, on average, the estimator $\hat{\mathbf{\theta}}$ is from the true parameter $\mathbf{\theta}$. If the bias is zero, the estimator is said to be **unbiased**.
+
+2. **Component-wise Bias**: For each component of the estimator $\hat{\mathbf{\theta}} = (\hat{\theta}_1, \dots, \hat{\theta}_n)^T$, the bias can be expressed as:
+   $$
+   \text{Bias}(\hat{\theta}_i) = \mathbb{E}[\hat{\theta}_i] - \theta_i, \quad \text{for each } i = 1, \dots, n.
+   $$
+   This component-wise breakdown is helpful for understanding how each part of the vector estimator deviates from the true values.
+
+3. **Total Bias**: The total bias can be viewed as a vector, summarizing the systematic error in each dimension of the estimator.
+
+#### Example
+
+In practice, if $\hat{\mathbf{\theta}}$ is the sample mean vector of a random vector $\mathbf{X}$, and $\mathbf{\theta} = \mathbb{E}[\mathbf{X}]$, then $\text{Bias}(\hat{\mathbf{\theta}})$ will be zero, making the sample mean an unbiased estimator of the population mean.
+
+### Unbiased Estimator
+
+An **unbiased estimator** of a vector parameter is an estimator that, on average, accurately estimates the true value of the parameter. Formally, let $\mathbf{\theta} \in \mathbb{R}^n$ be a vector parameter of interest, and let $\hat{\mathbf{\theta}}$ be an estimator of $\mathbf{\theta}$. Then, $\hat{\mathbf{\theta}}$ is an **unbiased estimator** of $\mathbf{\theta}$ if the following condition holds:
+
+$$
+\mathbb{E}[\hat{\mathbf{\theta}}] = \mathbf{\theta} \quad \forall \bgt \in \dR^n.
+$$
+
+#### Key Points
+
+1. **Component-wise Unbiasedness**: Each component of $\hat{\mathbf{\theta}}$, say $\hat{\theta}_i$, must be an unbiased estimator of the corresponding component $\theta_i$ of $\mathbf{\theta}$:
+   $$
+   \mathbb{E}[\hat{\theta}_i] = \theta_i, \quad \text{for all } i = 1, \dots, n.
+   $$
+
+2. **No Systematic Bias**: Unbiasedness implies that, on average, the estimator neither overestimates nor underestimates the true value of $\mathbf{\theta}$ across repeated sampling. 
+
+3. **Applications**: Unbiased estimators are crucial in statistics, as they provide estimations that are theoretically centered around the true parameter values, though they may vary due to sampling variation. 
+
+An example is the sample mean $\mathbf{\bar{X}}$ as an estimator for the population mean $\mathbf{\mu}$ of a random vector $\mathbf{X}$, where $\mathbb{E}[\mathbf{\bar{X}}] = \mathbf{\mu}$.
+
+#### Mean Square Error of an Estimator
+
+The **Mean Square Error (MSE)** of an estimator $\hat{\mathbf{\theta}}$ for a vector parameter $\mathbf{\theta}$ measures the average squared deviation of the estimator from the true parameter. Formally, for a parameter vector $\mathbf{\theta} \in \mathbb{R}^n$ and an estimator $\hat{\mathbf{\theta}}$, the MSE is defined as:
+
+$$
+\text{MSE}(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ \|\hat{\mathbf{\theta}} - \mathbf{\theta}\|^2 \right],
+$$
+
+where $\|\cdot\|$ denotes the Euclidean (or 2-norm) of a vector. Expanding this expression, we can write:
+
+$$
+\text{MSE}(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ (\hat{\mathbf{\theta}} - \mathbf{\theta})^T (\hat{\mathbf{\theta}} - \mathbf{\theta}) \right].
+$$
+
+#### Key Components
+
+The MSE can be decomposed into two main parts: **variance** and **squared bias**.
+
+$$
+\text{MSE}(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})) + \|\text{Bias}(\hat{\mathbf{\theta}})\|^2,
+$$
+
+where:
+- **Variance**: $\text{Var}(\hat{\mathbf{\theta}}) = \mathbb{E}[(\hat{\mathbf{\theta}} - \mathbb{E}[\hat{\mathbf{\theta}}])(\hat{\mathbf{\theta}} - \mathbb{E}[\hat{\mathbf{\theta}}])^T]$, representing the variability in the estimator.
+- **Bias**: $\text{Bias}(\hat{\mathbf{\theta}}) = \mathbb{E}[\hat{\mathbf{\theta}}] - \mathbf{\theta}$, representing the systematic deviation from the true parameter.
+
+#### Key Properties
+
+1. **Unbiased Estimator**: If $\hat{\mathbf{\theta}}$ is unbiased, then $\text{Bias}(\hat{\mathbf{\theta}}) = 0$, and the MSE is simply the trace of the covariance matrix of $\hat{\mathbf{\theta}}$:
+   $$
+   \text{MSE}(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})).
+   $$
+
+2. **Bias-Variance Trade-off**: The MSE quantifies the balance between bias and variance. Lowering bias often increases variance and vice versa, a key concept in statistical estimation.
+
+3. **Overall Error Metric**: The MSE provides a comprehensive measure of the estimator's accuracy, taking both variance and bias into account, making it an essential criterion in evaluating estimators.
 
 ## Calculus
 
