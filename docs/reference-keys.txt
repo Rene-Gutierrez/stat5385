@@ -67,7 +67,7 @@ variance
 definition-7
 key-properties-of-the-variance-covariance-matrix
 statistics
-bias-of-an-estimator-estimator
+bias-of-an-estimator
 key-points-3
 example-6
 unbiased-estimator

@@ -680,19 +680,16 @@ If $\mathbf{X}$ has $n$ components, $\dV(\mathbf{X})$ will be an $n \times n$ sy
 
 Essential statistical concepts include:
 
-* **Point Estimation**:
-  * Maximum Likelihood
-  * Least Squares Estimation
-
-* **Properties of Point Estimators**:
-  * Unbiased Estimator
+  * [Bias of an Estimator](#bias-of-an-estimator)
+  * [Unbiased Estimator](#unbiased-estimator)
+  * [Mean Square Error of an Estimator](#mean-square-error-of-an-estimator)
   * Consistent
   * Minimum Variance
 
 * **Interval Estimation**
 * **Hypothesis Testing**
 
-### Bias of an Estimator Estimator
+### Bias of an Estimator
 
 The **bias** of an estimator $\hat{\mathbf{\theta}}$ for a vector parameter $\mathbf{\theta}$ is defined as the difference between the expected value of the estimator and the true value of the parameter. Formally, if $\mathbf{\theta} \in \mathbb{R}^n$ is a vector parameter, then the **bias** of the estimator $\hat{\mathbf{\theta}}$ is:
 
@@ -716,6 +713,7 @@ $$
 
 In practice, if $\hat{\mathbf{\theta}}$ is the sample mean vector of a random vector $\mathbf{X}$, and $\mathbf{\theta} = \mathbb{E}[\mathbf{X}]$, then $\text{Bias}(\hat{\mathbf{\theta}})$ will be zero, making the sample mean an unbiased estimator of the population mean.
 
+
 ### Unbiased Estimator
 
 An **unbiased estimator** of a vector parameter is an estimator that, on average, accurately estimates the true value of the parameter. Formally, let $\mathbf{\theta} \in \mathbb{R}^n$ be a vector parameter of interest, and let $\hat{\mathbf{\theta}}$ be an estimator of $\mathbf{\theta}$. Then, $\hat{\mathbf{\theta}}$ is an **unbiased estimator** of $\mathbf{\theta}$ if the following condition holds:
@@ -737,7 +735,8 @@ $$
 
 An example is the sample mean $\mathbf{\bar{X}}$ as an estimator for the population mean $\mathbf{\mu}$ of a random vector $\mathbf{X}$, where $\mathbb{E}[\mathbf{\bar{X}}] = \mathbf{\mu}$.
 
-#### Mean Square Error of an Estimator
+
+### Mean Square Error of an Estimator
 
 The **Mean Square Error (MSE)** of an estimator $\hat{\mathbf{\theta}}$ for a vector parameter $\mathbf{\theta}$ measures the average squared deviation of the estimator from the true parameter. Formally, for a parameter vector $\mathbf{\theta} \in \mathbb{R}^n$ and an estimator $\hat{\mathbf{\theta}}$, the MSE is defined as:
 
