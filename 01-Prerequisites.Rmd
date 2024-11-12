@@ -578,14 +578,8 @@ Key probability concepts to understand include:
 
 * [Expected Value](#expected-value)
 * [Variance](#variance)
-* Joint, Marginal, and Conditional Distributions
-* Independence
-* Central Limit Theorem
-* Distributions:
-  * Normal
-  * Chi-Squared ($\chi^2$)
-  * t-distribution
-  * F-distribution
+* [Cross-Covariance Matrix](#cross-covariance-matrix)
+* [Multivariate Normal Distribution](#multivariate-normal-distribution)
   
 ### Expected Value
 
@@ -674,6 +668,103 @@ If $\mathbf{X}$ has $n$ components, $\dV(\mathbf{X})$ will be an $n \times n$ sy
    \dV(\mathbf{X} + \mathbf{Y}) = \dV(\mathbf{X}) + \dV(\mathbf{Y}).
    $$
    Since $\mathbf{X}$ and $\mathbf{Y}$ are independent, their covariance $\dC(\mathbf{X}, \mathbf{Y})$ is zero, simplifying the variance of the sum.
+   
+   
+### Cross-Covariance Matrix
+
+The **cross-covariance matrix** measures the covariance between two random vectors, providing insights into the linear relationships between different components of these vectors. Given two random vectors \( \mathbf{X} \in \mathbb{R}^n \) and \( \mathbf{Y} \in \mathbb{R}^m \), the cross-covariance matrix between \( \mathbf{X} \) and \( \mathbf{Y} \) captures how each component of \( \mathbf{X} \) varies with each component of \( \mathbf{Y} \).
+
+#### Definition
+
+Let \( \mathbf{X} \) and \( \mathbf{Y} \) be two random vectors with mean vectors \( \mathbb{E}[\mathbf{X}] = \boldsymbol{\mu}_{\mathbf{X}} \) and \( \mathbb{E}[\mathbf{Y}] = \boldsymbol{\mu}_{\mathbf{Y}} \). The cross-covariance matrix of \( \mathbf{X} \) and \( \mathbf{Y} \) is defined as:
+
+$$
+\dC(\mathbf{X}, \mathbf{Y}) = \mathbb{E}[(\mathbf{X} - \boldsymbol{\mu}_{\mathbf{X}})(\mathbf{Y} - \boldsymbol{\mu}_{\mathbf{Y}})^T].
+$$
+
+This matrix is of dimension \( n \times m \), where each element \( (\dC(\mathbf{X}, \mathbf{Y}))_{ij} \) represents the covariance between the \( i \)-th component of \( \mathbf{X} \) and the \( j \)-th component of \( \mathbf{Y} \):
+
+$$
+(\dC(\mathbf{X}, \mathbf{Y}))_{ij} = \dC(X_i, Y_j) = \mathbb{E}[(X_i - \mu_{X_i})(Y_j - \mu_{Y_j})].
+$$
+
+#### Key Properties
+
+1. **Symmetry in Covariance**:
+   - If \( \mathbf{X} = \mathbf{Y} \), then \( \dC(\mathbf{X}, \mathbf{Y}) \) reduces to the covariance matrix of \( \mathbf{X} \), which is symmetric. For distinct vectors \( \mathbf{X} \) and \( \mathbf{Y} \), the cross-covariance matrix \( \dC(\mathbf{X}, \mathbf{Y}) \) is generally not symmetric.
+
+2. **Relationship with Joint Covariance Matrix**:
+   - If \( \mathbf{Z} = \begin{bmatrix} \mathbf{X} \\ \mathbf{Y} \end{bmatrix} \) is a combined random vector, then the covariance matrix of \( \mathbf{Z} \) is:
+     $$
+     \dC(\mathbf{Z}) = \begin{bmatrix} \dC(\mathbf{X}) & \dC(\mathbf{X}, \mathbf{Y}) \\ \dC(\mathbf{Y}, \mathbf{X}) & \dC(\mathbf{Y}) \end{bmatrix}.
+     $$
+
+3. **Linearity**:
+   - If \( a \) and \( b \) are constants and \( \mathbf{X}_1 \) and \( \mathbf{X}_2 \) are random vectors of the same dimension as \( \mathbf{X} \), then:
+     $$
+     \dC(a\mathbf{X}_1 + b\mathbf{X}_2, \mathbf{Y}) = a \dC(\mathbf{X}_1, \mathbf{Y}) + b \dC(\mathbf{X}_2, \mathbf{Y}).
+     $$
+
+Furthermore, if \( \mathbf{A} \) and \( \mathbf{B} \) are matrices of compatible dimensions, and \( \mathbf{X} \) and \( \mathbf{Y} \) are random vectors then the cross-covariance of \( \mathbf{A}\mathbf{X} \) and \( \mathbf{B}\mathbf{Y} \) is given by:
+
+$$
+\dC(\mathbf{A}\mathbf{X}, \mathbf{B}\mathbf{Y}) = \mathbf{A} \dC(\mathbf{X}, \mathbf{Y}) \mathbf{B}^T.
+$$
+
+4. **Zero Cross-Covariance and Independence**:
+   - If \( \dC(\mathbf{X}, \mathbf{Y}) = \mathbf{0} \), it implies that \( \mathbf{X} \) and \( \mathbf{Y} \) are uncorrelated, but it does not necessarily imply independence unless \( \mathbf{X} \) and \( \mathbf{Y} \) are jointly normally distributed.
+   
+### Multivariate Normal Distribution
+
+The **multivariate normal distribution** generalizes the concept of the normal distribution to multiple dimensions, describing the behavior of random vectors whose elements are jointly normally distributed. It is widely used in statistics and machine learning due to its well-behaved properties and its applicability to modeling correlations between variables.
+
+#### Definition
+
+A random vector \( \mathbf{X} = (X_1, X_2, \dots, X_n)^T \) is said to follow a multivariate normal distribution if it has a probability density function of the form:
+
+$$
+f(\mathbf{X}) = \frac{1}{(2\pi)^{n/2} |\boldsymbol{\Sigma}|^{1/2}} \exp\left( -\frac{1}{2} (\mathbf{X} - \boldsymbol{\mu})^T \boldsymbol{\Sigma}^{-1} (\mathbf{X} - \boldsymbol{\mu}) \right),
+$$
+
+where:
+
+- \( \mathbf{X} \in \mathbb{R}^n \) is the random vector,
+- \( \boldsymbol{\mu} \in \mathbb{R}^n \) is the mean vector,
+- \( \boldsymbol{\Sigma} \in \mathbb{R}^{n \times n} \) is the covariance matrix, assumed to be symmetric and positive definite.
+
+This distribution is denoted as \( \mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma}) \).
+
+#### Key Properties
+
+1. **Marginal Distributions**:
+   - Any subset of the components of \( \mathbf{X} \) is also normally distributed.
+   - If \( \mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma}) \), then any partition of \( \mathbf{X} \) results in a marginal distribution that is also multivariate normal.
+
+2. **Affine Transformation**:
+   - For a matrix \( \mathbf{A} \) and vector \( \mathbf{b} \) of appropriate dimensions, the affine transformation \( \mathbf{Y} = \mathbf{A}\mathbf{X} + \mathbf{b} \) also follows a multivariate normal distribution, \( \mathbf{Y} \sim \mathcal{N}(\mathbf{A} \boldsymbol{\mu} + \mathbf{b}, \mathbf{A} \boldsymbol{\Sigma} \mathbf{A}^T) \).
+
+3. **Conditional Distributions**:
+   - For a partitioned vector \( \mathbf{X} = (\mathbf{X}_1, \mathbf{X}_2)^T \), with corresponding partitions of the mean vector and covariance matrix:
+     $$
+     \boldsymbol{\mu} = \begin{pmatrix} \boldsymbol{\mu}_1 \\ \boldsymbol{\mu}_2 \end{pmatrix}, \quad
+     \boldsymbol{\Sigma} = \begin{pmatrix} \boldsymbol{\Sigma}_{11} & \boldsymbol{\Sigma}_{12} \\ \boldsymbol{\Sigma}_{21} & \boldsymbol{\Sigma}_{22} \end{pmatrix},
+     $$
+   - the conditional distribution \( \mathbf{X}_1 | \mathbf{X}_2 = \mathbf{x}_2 \) is also multivariate normal:
+     $$
+     \mathbf{X}_1 | \mathbf{X}_2 = \mathbf{x}_2 \sim \mathcal{N}(\boldsymbol{\mu}_1 + \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} (\mathbf{x}_2 - \boldsymbol{\mu}_2), \boldsymbol{\Sigma}_{11} - \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} \boldsymbol{\Sigma}_{21}).
+     $$
+
+4. **Independence and Uncorrelatedness**:
+   - For a multivariate normal distribution, zero covariance implies independence. If two components \( X_i \) and \( X_j \) (or two subvectors) have a covariance of zero, they are independent.
+
+5. **Moment Generating Function**:
+   - The moment generating function of \( \mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma}) \) is:
+     $$
+     M_{\mathbf{X}}(\mathbf{t}) = \exp\left( \mathbf{t}^T \boldsymbol{\mu} + \frac{1}{2} \mathbf{t}^T \boldsymbol{\Sigma} \mathbf{t} \right).
+     $$
+
+6. **Maximum Entropy**:
+   - Among all distributions with a given mean vector and covariance matrix, the multivariate normal distribution has the maximum entropy, making it the most “uninformative” or spread out.
 
 
 ## Statistics
@@ -735,7 +826,7 @@ $$
 
 An example is the sample mean $\mathbf{\bar{X}}$ as an estimator for the population mean $\mathbf{\mu}$ of a random vector $\mathbf{X}$, where $\mathbb{E}[\mathbf{\bar{X}}] = \mathbf{\mu}$.
 
-
+ 
 ### Mean Square Error of an Estimator
 
 The **Mean Square Error (MSE)** of an estimator $\hat{\mathbf{\theta}}$ for a vector parameter $\mathbf{\theta}$ measures the average squared deviation of the estimator from the true parameter. Formally, for a parameter vector $\mathbf{\theta} \in \mathbb{R}^n$ and an estimator $\hat{\mathbf{\theta}}$, the MSE is defined as:
