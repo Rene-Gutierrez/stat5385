@@ -139,3 +139,11 @@ stability-of-the-solution
 bootstrapping
 introduction-2
 bootstrapping-example
+mean-and-varaince-assumptions
+mean-assumption
+expectation-of-mathbfy
+expectation-of-hatboldsymbolbeta
+expectation-of-hatmathbfy
+expectation-of-hatmathbfe
+variance-assumptions
+variance-of

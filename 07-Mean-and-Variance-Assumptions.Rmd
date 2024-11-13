@@ -1,0 +1,97 @@
+# Mean and Varaince Assumptions
+
+So far we have not made any probabilistic assumptions about the different 
+elements in our model. So the model errors are unknown but are not random.
+
+Now we will assume that the random errors are random variables. However, we will
+not specify the complete distribution of the errors and will limit ourselves to
+make assumptions about the mean and variance of the errors.
+
+## Mean Assumption
+
+We will begin by making the assumptions about the mean of the errors. 
+Specifically, we will assume that:
+
+$$ \dE[e_i] = 0 \in \dR \quad \forall i\in\{1,\ldots,n\}$$
+
+This can be expressed in vector form as follows:
+
+$$ \dE[\be] = \bzero \in \dR^n$$
+
+Note that $\bX$ is a known constant and $\bgb$ is an unknown constant (an unknown 
+parameter). This implies that \bX \bgb + $\by$ is a random vector. And therefor, any function
+of $\by$ will be a random varaible. In particular, our estimates:
+
+$$ \hat{\bgb} = (\bX'\bX)^{-1}\bX' \by$$
+$$ \hat{\by} = \bX(\bX'\bX)^{-1}\bX' \by = \bH \by$$
+$$ \hat{\be} = \by - \hat{\by} = (\bI - \bH)\by$$
+
+are random vectors. Then we can try to compute the mean of these values. This 
+should be possible since all 3 estimates are linear combinations of $\by$ and
+we can compute the mean of $\by$.
+
+### Expectation of $\by$:
+
+\begin{align*}
+\dE[\by] 
+  &=  \dE[\bX \bgb + \be] \\
+  &= \bX \bgb + \dE[\be] \\
+  &= \bX \bgb
+\end{align*}
+
+### Expectation of $\hat{\bgb}$
+
+\begin{align*}
+\dE[\hat{\bgb}] 
+  &= \dE[(\bX'\bX)^{-1}\bX' \by] \\
+  &= (\bX'\bX)^{-1}\bX'\dE[\by] \\
+  &= (\bX'\bX)^{-1}\bX' \bX \bgb \\
+  &= \bgb \\
+\end{align*}
+
+So, $\hat{\bgb}$ is an unbiased estimator of $\bgb$.
+
+### Expectation of $\hat{\by}$
+
+\begin{align*}
+\dE[\hat{\by}] 
+  &= \dE[\bX \hat{\bgb}] \\
+  &= \bX \dE[\hat{\bgb}] \\
+  &= \bX \bgb \\
+  &= \dE[\by] \\
+\end{align*}
+
+So $\by$ and $\hat{\by}$ have the same mean.
+
+### Expectation of $\hat{\be}$
+
+\begin{align*}
+\dE[\hat{\be}] 
+  &= \dE[\by - \hat{\by}] \\
+  &= \dE[\by] - \dE[\hat{\by}] \\
+  &= \bzero
+\end{align*}
+
+So $\by$ and $\hat{\by}$ have the same mean.
+
+Without any further assumptions, we can get more additional results. Next, we
+move to assumptions on the variance of the errors.
+
+## Variance Assumptions
+
+While the assumptions on the mean are assumptions about the first moment of the 
+errors, now we will make assumptions about the second moment of the errors. In
+particular, we will assume that all the errors have the same (finite) variance
+and are uncorrelated. That is:
+
+$$ \dV[e_i] = \sigma^2 < \infty \quad \forall i \in \{1,\ldots,n\}, \quad \text{and} \quad \dC[e_i, e_j] = 0 \quad \forall i \neq j$$
+
+We can express this assumption in vector form as:
+
+$$ \dV[\be] = \sigma^2 \bI \quad \sigma^2 < \infty $$
+
+As we did before, we can try to compute the variance of all the random quantities
+we have.
+
+### Variance of \by
+

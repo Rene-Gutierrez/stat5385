@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>1 Stat 5385/6385 Fall 2024 | _main.knit</title>
+  <title>8 Mean and Varaince Assumptions | _main.knit</title>
   <meta name="description" content="" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="1 Stat 5385/6385 Fall 2024 | _main.knit" />
+  <meta property="og:title" content="8 Mean and Varaince Assumptions | _main.knit" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="1 Stat 5385/6385 Fall 2024 | _main.knit" />
+  <meta name="twitter:title" content="8 Mean and Varaince Assumptions | _main.knit" />
   
   
   
@@ -28,8 +28,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="bootstrapping.html"/>
 
-<link rel="next" href="prerequisites.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -273,22 +273,97 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<!--bookdown:title:end-->
-<!--bookdown:title:start-->
-<div id="stat-53856385-fall-2024" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">1</span> Stat 5385/6385 Fall 2024<a href="index.html#stat-53856385-fall-2024" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This is the website for STAT5385. It will contain the relevant information for
-the course and lecture notes and code seen in class.</p>
-<p>Find the syllabus here: <a href="https://github.com/Rene-Gutierrez/stat5385/blob/main/Syllabus%205385-6285-3.pdf">Syllabus</a></p>
+<div id="mean-and-varaince-assumptions" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">8</span> Mean and Varaince Assumptions<a href="mean-and-varaince-assumptions.html#mean-and-varaince-assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>So far we have not made any probabilistic assumptions about the different
+elements in our model. So the model errors are unknown but are not random.</p>
+<p>Now we will assume that the random errors are random variables. However, we will
+not specify the complete distribution of the errors and will limit ourselves to
+make assumptions about the mean and variance of the errors.</p>
+<div id="mean-assumption" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Mean Assumption<a href="mean-and-varaince-assumptions.html#mean-assumption" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will begin by making the assumptions about the mean of the errors.
+Specifically, we will assume that:</p>
+<p><span class="math display">\[ \mathbb{E}[e_i] = 0 \in \mathbb{R}\quad \forall i\in\{1,\ldots,n\}\]</span></p>
+<p>This can be expressed in vector form as follows:</p>
+<p><span class="math display">\[ \mathbb{E}[\mathbf{e}] = \mathbf{0}\in \mathbb{R}^n\]</span></p>
+<p>Note that <span class="math inline">\(\mathbf{X}\)</span> is a known constant and <span class="math inline">\(\boldsymbol{\beta}\)</span> is an unknown constant (an unknown
+parameter). This implies that + <span class="math inline">\(\mathbf{y}\)</span> is a random vector. And therefor, any function
+of <span class="math inline">\(\mathbf{y}\)</span> will be a random varaible. In particular, our estimates:</p>
+<p><span class="math display">\[ \hat{\boldsymbol{\beta}} = (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \mathbf{y}\]</span>
+<span class="math display">\[ \hat{\mathbf{y}} = \mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \mathbf{y}= \mathbf{H}\mathbf{y}\]</span>
+<span class="math display">\[ \hat{\mathbf{e}} = \mathbf{y}- \hat{\mathbf{y}} = (\mathbf{I}- \mathbf{H})\mathbf{y}\]</span></p>
+<p>are random vectors. Then we can try to compute the mean of these values. This
+should be possible since all 3 estimates are linear combinations of <span class="math inline">\(\mathbf{y}\)</span> and
+we can compute the mean of <span class="math inline">\(\mathbf{y}\)</span>.</p>
+<div id="expectation-of-mathbfy" class="section level3 hasAnchor" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> Expectation of <span class="math inline">\(\mathbf{y}\)</span>:<a href="mean-and-varaince-assumptions.html#expectation-of-mathbfy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}[\mathbf{y}]
+  &amp;=  \mathbb{E}[\mathbf{X}\boldsymbol{\beta}+ \mathbf{e}] \\
+  &amp;= \mathbf{X}\boldsymbol{\beta}+ \mathbb{E}[\mathbf{e}] \\
+  &amp;= \mathbf{X}\boldsymbol{\beta}
+\end{align*}\]</span></p>
+</div>
+<div id="expectation-of-hatboldsymbolbeta" class="section level3 hasAnchor" number="8.1.2">
+<h3><span class="header-section-number">8.1.2</span> Expectation of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span><a href="mean-and-varaince-assumptions.html#expectation-of-hatboldsymbolbeta" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}[\hat{\boldsymbol{\beta}}]
+  &amp;= \mathbb{E}[(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \mathbf{y}] \\
+  &amp;= (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbb{E}[\mathbf{y}] \\
+  &amp;= (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \mathbf{X}\boldsymbol{\beta}\\
+  &amp;= \boldsymbol{\beta}\\
+\end{align*}\]</span></p>
+<p>So, <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is an unbiased estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
+</div>
+<div id="expectation-of-hatmathbfy" class="section level3 hasAnchor" number="8.1.3">
+<h3><span class="header-section-number">8.1.3</span> Expectation of <span class="math inline">\(\hat{\mathbf{y}}\)</span><a href="mean-and-varaince-assumptions.html#expectation-of-hatmathbfy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}[\hat{\mathbf{y}}]
+  &amp;= \mathbb{E}[\mathbf{X}\hat{\boldsymbol{\beta}}] \\
+  &amp;= \mathbf{X}\mathbb{E}[\hat{\boldsymbol{\beta}}] \\
+  &amp;= \mathbf{X}\boldsymbol{\beta}\\
+  &amp;= \mathbb{E}[\mathbf{y}] \\
+\end{align*}\]</span></p>
+<p>So <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> have the same mean.</p>
+</div>
+<div id="expectation-of-hatmathbfe" class="section level3 hasAnchor" number="8.1.4">
+<h3><span class="header-section-number">8.1.4</span> Expectation of <span class="math inline">\(\hat{\mathbf{e}}\)</span><a href="mean-and-varaince-assumptions.html#expectation-of-hatmathbfe" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}[\hat{\mathbf{e}}]
+  &amp;= \mathbb{E}[\mathbf{y}- \hat{\mathbf{y}}] \\
+  &amp;= \mathbb{E}[\mathbf{y}] - \mathbb{E}[\hat{\mathbf{y}}] \\
+  &amp;= \mathbf{0}
+\end{align*}\]</span></p>
+<p>So <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> have the same mean.</p>
+<p>Without any further assumptions, we can get more additional results. Next, we
+move to assumptions on the variance of the errors.</p>
+</div>
+</div>
+<div id="variance-assumptions" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Variance Assumptions<a href="mean-and-varaince-assumptions.html#variance-assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>While the assumptions on the mean are assumptions about the first moment of the
+errors, now we will make assumptions about the second moment of the errors. In
+particular, we will assume that all the errors have the same (finite) variance
+and are uncorrelated. That is:</p>
+<p><span class="math display">\[ \mathbb{V}[e_i] = \sigma^2 &lt; \infty \quad \forall i \in \{1,\ldots,n\}, \quad \text{and} \quad \mathbb{C}[e_i, e_j] = 0 \quad \forall i \neq j\]</span></p>
+<p>We can express this assumption in vector form as:</p>
+<p><span class="math display">\[ \mathbb{V}[\mathbf{e}] = \sigma^2 \mathbf{I}\quad \sigma^2 &lt; \infty \]</span></p>
+<p>As we did before, we can try to compute the variance of all the random quantities
+we have.</p>
+<div id="variance-of" class="section level3 hasAnchor" number="8.2.1">
+<h3><span class="header-section-number">8.2.1</span> Variance of <a href="mean-and-varaince-assumptions.html#variance-of" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
+<a href="bootstrapping.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="prerequisites.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
