@@ -244,7 +244,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="8" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html"><i class="fa fa-check"></i><b>8</b> Mean and Varaince Assumptions</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mean-assumption"><i class="fa fa-check"></i><b>8.1</b> Mean Assumption</a>
+<li class="chapter" data-level="8.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mean-assumptions"><i class="fa fa-check"></i><b>8.1</b> Mean Assumptions</a>
 <ul>
 <li class="chapter" data-level="8.1.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#expectation-of-mathbfy"><i class="fa fa-check"></i><b>8.1.1</b> Expectation of <span class="math inline">\(\mathbf{y}\)</span>:</a></li>
 <li class="chapter" data-level="8.1.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#expectation-of-hatboldsymbolbeta"><i class="fa fa-check"></i><b>8.1.2</b> Expectation of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span></a></li>
@@ -253,7 +253,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="8.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-assumptions"><i class="fa fa-check"></i><b>8.2</b> Variance Assumptions</a>
 <ul>
-<li class="chapter" data-level="8.2.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of"><i class="fa fa-check"></i><b>8.2.1</b> Variance of </a></li>
+<li class="chapter" data-level="8.2.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-mathbfy"><i class="fa fa-check"></i><b>8.2.1</b> Variance of <span class="math inline">\(\mathbf{y}\)</span></a></li>
+<li class="chapter" data-level="8.2.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-hatboldsymbolbeta"><i class="fa fa-check"></i><b>8.2.2</b> Variance of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span></a></li>
+<li class="chapter" data-level="8.2.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-hatmathbfy"><i class="fa fa-check"></i><b>8.2.3</b> Variance of <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
+<li class="chapter" data-level="8.2.4" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-hatmathbfe"><i class="fa fa-check"></i><b>8.2.4</b> Variance of <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#cross-covariances"><i class="fa fa-check"></i><b>8.3</b> Cross-Covariances</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#cross-covaraince-of-haty-and-hate"><i class="fa fa-check"></i><b>8.3.1</b> Cross-covaraince of <span class="math inline">\(\hat{y}\)</span> and <span class="math inline">\(\hat{e}\)</span></a></li>
+<li class="chapter" data-level="8.3.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#cross-covaraince-of-haty-and-hatboldsymbolbeta"><i class="fa fa-check"></i><b>8.3.2</b> Cross-covaraince of <span class="math inline">\(\hat{y}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#gauss-markov-theorem"><i class="fa fa-check"></i><b>8.4</b> Gauss-Markov Theorem</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#assumptions"><i class="fa fa-check"></i><b>8.4.1</b> Assumptions</a></li>
+<li class="chapter" data-level="8.4.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#statement"><i class="fa fa-check"></i><b>8.4.2</b> Statement</a></li>
+<li class="chapter" data-level="8.4.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#proof"><i class="fa fa-check"></i><b>8.4.3</b> Proof</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -320,10 +334,10 @@ interest. Let’s see this with our GDP data.</p>
 <span id="cb141-14"><a href="bootstrapping.html#cb141-14" tabindex="-1"></a><span class="co"># Number of Variables</span></span>
 <span id="cb141-15"><a href="bootstrapping.html#cb141-15" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
 <span id="cb141-16"><a href="bootstrapping.html#cb141-16" tabindex="-1"></a></span>
-<span id="cb141-17"><a href="bootstrapping.html#cb141-17" tabindex="-1"></a><span class="co"># Number of Bootstraping Samples</span></span>
+<span id="cb141-17"><a href="bootstrapping.html#cb141-17" tabindex="-1"></a><span class="co"># Number of Bootstrapping Samples</span></span>
 <span id="cb141-18"><a href="bootstrapping.html#cb141-18" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb141-19"><a href="bootstrapping.html#cb141-19" tabindex="-1"></a></span>
-<span id="cb141-20"><a href="bootstrapping.html#cb141-20" tabindex="-1"></a><span class="co"># Bootstraping Coefficient Estimates</span></span>
+<span id="cb141-20"><a href="bootstrapping.html#cb141-20" tabindex="-1"></a><span class="co"># Bootstrapping Coefficient Estimates</span></span>
 <span id="cb141-21"><a href="bootstrapping.html#cb141-21" tabindex="-1"></a>booCoe <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> m, <span class="at">ncol =</span> p)</span>
 <span id="cb141-22"><a href="bootstrapping.html#cb141-22" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
 <span id="cb141-23"><a href="bootstrapping.html#cb141-23" tabindex="-1"></a>  <span class="co"># Sample Selection</span></span>

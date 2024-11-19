@@ -7,7 +7,7 @@ Now we will assume that the random errors are random variables. However, we will
 not specify the complete distribution of the errors and will limit ourselves to
 make assumptions about the mean and variance of the errors.
 
-## Mean Assumption
+## Mean Assumptions
 
 We will begin by making the assumptions about the mean of the errors. 
 Specifically, we will assume that:
@@ -93,5 +93,142 @@ $$ \dV[\be] = \sigma^2 \bI \quad \sigma^2 < \infty $$
 As we did before, we can try to compute the variance of all the random quantities
 we have.
 
-### Variance of \by
+### Variance of $\by$
+
+\begin{align*}
+\dV[\by] 
+  &= \dV[\bX + \be] \\
+  &= \dV[\be]       \\
+  &= \sigma^2 \bI
+\end{align*}
+
+So, the observations $\by$ and the errors $\be$ have the same variance. This makes
+sense since they only differ by a non-random element $\bX \bgb$.
+
+### Variance of $\hat{\bgb}$
+
+\begin{align*}
+\dV[\hat{\bgb}] 
+  &= \dV[(\bX'\bX)^{-1}\bX' \by]                         \\
+  &= (\bX'\bX)^{-1}\bX' \dV[\by] \bX(\bX'\bX)^{-1}       \\
+  &= (\bX'\bX)^{-1}\bX' (\sigma^2 \bI) \bX(\bX'\bX)^{-1} \\
+  &= \sigma^2 (\bX'\bX)^{-1}\bX'\bX(\bX'\bX)^{-1}        \\
+  &= \sigma^2 (\bX'\bX)^{-1}                             \\
+\end{align*}
+
+### Variance of $\hat{\by}$
+
+\begin{align*}
+\dV[\hat{\by}] 
+  &= \dV[\bH \by]                                              \\
+  &= \bH \dV[\by] \bH'                                         \\
+  &= \bH (\sigma^2 \bI) \bH & \text{since $\bH$ is symmetric}  \\
+  &= \sigma^2 \bH\bH                                           \\
+  &= \sigma^2 \bH           & \text{since $\bH$ is idempotent} \\
+\end{align*}
+
+So, while $\by$ and $\hat{\by}$ have the same mean, they do not have the same
+variance. We will see that the variance of $\hat{\by}$ is "smaller" than the 
+variance of $\by$. I say "smaller" since for matrices it is not clear what does 
+it mean to be smaller or bigger.
+
+Not for now, that the diagonal elements of these matrices satisfy the following:
+
+$$[\dV[\by]]_{ii} = \sigma^2 \leq \sigma^2 h_{ii} = [\dV[\hat{\by}]]_{ii}$$
+since the leverages $h_{ii}$ satisfy $0 \leq h_{ii} \leq 1$.
+
+### Variance of $\hat{\be}$
+
+\begin{align*}
+\dV[\hat{\be}] 
+  &= \dV[(\bI - \bH) \by]                                                             \\
+  &= (\bI - \bH) \dV[\by] (\bI - \bH)'                                                \\
+  &= (\bI - \bH) (\sigma^2 \bI) (\bI - \bH) & \text{since $(\bI - \bH)$ is symmetric} \\
+  &= \sigma^2 (\bI - \bH)(\bI - \bH)                                                  \\
+  &= \sigma^2 (\bI - \bH)           & \text{since $(\bI - \bH)$ is idempotent}        \\
+\end{align*}
+
+Then we can see that $\by$, $\hat{\by}$ and $\hat{\be}$ have variances that are
+idempotent matrices multiplied by the scalar $\sigma^2$.
+
+## Cross-Covariances
+
+When we introduce the assumption of the variance, we can check the 
+cross-covariances of our estimators. This will help us later in the course.
+
+We can check several cross-covariances but for now I will only check 2.
+
+### Cross-covaraince of $\hat{y}$ and $\hat{e}$
+
+\begin{align*}
+\dC[\hat{\by}, \hat{\be}]
+  &=\dC[(\bI - \bH) \by, \bH \by]                                                           \\
+  &=(\bI - \bH)\dC[\by,\by] \bH'                                                            \\
+  &=(\bI - \bH)\dV[\by] \bH & \text{since $\bH$ is symmetric and $\dC[\by,\by] = \dV[\by]$} \\
+  &=(\bI - \bH)(\sigma^2 \bI) \bH & \text{since $\dV[\by] = \sigma^2 \bI$}                  \\
+  &=\sigma^2 (\bI - \bH) \bH                                                                \\
+  &=\sigma^2 (\bH - \bH \bH)                                                                \\
+  &=\sigma^2 (\bH - \bH) & \text{since $\bH$ is idempotent}                                 \\
+  &=\bzero \in \dR^{n \times n}                                                             \\
+\end{align*}
+
+Then, the residuals $\hat{\be}$ and the estimates of the observations 
+$\hat{\by}$ are uncorrelated. We had a similar result before, that however is not
+the same (we couldn't have even talked before expectation and covariance since we
+didn't have random variables). That result was:
+
+$$ \hat{\be}'\hat{\by} = 0 \in \dR $$
+
+Notice that, the dimension of the zero's.
+
+
+### Cross-covaraince of $\hat{y}$ and $\hat{\bgb}$
+
+\begin{align*}
+\dC[\hat{\be}, \hat{\bgb}]
+  &= \dC[(\bI - \bH) \by, (\bX' \bX)^{-1} \bX' \by]                \\
+  &= (\bI - \bH) \dC[\by, \by] \bX (\bX' \bX)^{-1}                 \\
+  &= (\bI - \bH) \dV[\by] \bX (\bX' \bX)^{-1}                      \\
+  &= (\bI - \bH) (\sigma^2 \bI) \bX (\bX' \bX)^{-1}                \\
+  &= \sigma^2 (\bI - \bH) \bX (\bX' \bX)^{-1}                      \\
+  &= \sigma^2 (\bI - \bX (\bX' \bX)^{-1} \bX') \bX (\bX' \bX)^{-1} \\
+  &= \sigma^2 (\bX - \bX (\bX' \bX)^{-1} \bX'\bX)(\bX' \bX)^{-1}   \\
+  &= \sigma^2 (\bX - \bX)(\bX' \bX)^{-1}                           \\
+  &= \bzero \in \dR^{n \times p}                                   \\
+\end{align*}
+
+So the residuals and the estimate of $\bgb$ are uncorrelated. We will use this
+result in the next chapter.
+
+## Gauss-Markov Theorem
+
+This theorem justifies the use of the Ordinary Least Squares (OLS) estimator,
+since it is the "best" estimator in a way.
+
+### Assumptions
+
+The theorem assumes that:
+
+- The errors have the same finite variance.
+- The errors are uncorrelated.
+
+This assumption is equivalent to our assumption of:
+
+$$ \dV[\be] = \sigma^2 \bI \quad \sigma^2 < \infty $$
+
+### Statement
+
+In the linear regression model, the OLS estimator $\hat{\bgb} = (\bX' \bX)^{-1} \bX' \by$
+has the smallest variance among all unbiased linear estimators.
+
+That is, if $\tilde{\bgb}$ is a linear estimator, then:
+
+$$ \dV[\tilde{\bgb}] - \dV[\hat{\bgb}] $$
+
+is semi-positive definite.
+
+Because of this, the OLS estimator is called the Best Linear Unbiased Estimator
+(BLUE), where best means smaller variance.
+
+### Proof
 

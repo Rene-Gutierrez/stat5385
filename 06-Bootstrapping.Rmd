@@ -51,10 +51,10 @@ X <- cbind(rep(1, n), X)
 # Number of Variables
 p <- ncol(X)
 
-# Number of Bootstraping Samples
+# Number of Bootstrapping Samples
 m <- 1000
 
-# Bootstraping Coefficient Estimates
+# Bootstrapping Coefficient Estimates
 booCoe <- matrix(data = NA, nrow = m, ncol = p)
 for(i in 1:m){
   # Sample Selection
