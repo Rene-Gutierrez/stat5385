@@ -269,6 +269,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.4.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#statement"><i class="fa fa-check"></i><b>8.4.2</b> Statement</a></li>
 <li class="chapter" data-level="8.4.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#proof"><i class="fa fa-check"></i><b>8.4.3</b> Proof</a></li>
 </ul></li>
+<li class="chapter" data-level="8.5" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#estimate-of-sigma2"><i class="fa fa-check"></i><b>8.5</b> Estimate of <span class="math inline">\(\sigma^2\)</span></a></li>
 </ul></li>
 </ul>
 
@@ -946,6 +947,10 @@ where <span class="math inline">\(\mathbb{C}(\mathbf{X}, \mathbf{Y})\)</span> is
 \mathbb{V}(\mathbf{X} + \mathbf{Y}) = \mathbb{V}(\mathbf{X}) + \mathbb{V}(\mathbf{Y}).
 \]</span>
 Since <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Y}\)</span> are independent, their covariance <span class="math inline">\(\mathbb{C}(\mathbf{X}, \mathbf{Y})\)</span> is zero, simplifying the variance of the sum.</p></li>
+<li><p><strong>Trace of the Variance</strong>: A related measure of the variance of a random vector <span class="math inline">\(\mathbf{X}\)</span>, is given by
+<span class="math display">\[
+\text{tr}(\mathbb{V}[\mathbf{X}]) = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])&#39;(\mathbf{X} - \mathbb{E}[\mathbf{X}])]
+\]</span></p></li>
 </ol>
 </div>
 </div>
@@ -1115,17 +1120,17 @@ This component-wise breakdown is helpful for understanding how each part of the 
 <h3><span class="header-section-number">2.4.3</span> Mean Square Error of an Estimator<a href="prerequisites.html#mean-square-error-of-an-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The <strong>Mean Square Error (MSE)</strong> of an estimator <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> for a vector parameter <span class="math inline">\(\mathbf{\theta}\)</span> measures the average squared deviation of the estimator from the true parameter. Formally, for a parameter vector <span class="math inline">\(\mathbf{\theta} \in \mathbb{R}^n\)</span> and an estimator <span class="math inline">\(\hat{\mathbf{\theta}}\)</span>, the MSE is defined as:</p>
 <p><span class="math display">\[
-\text{MSE}(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ \|\hat{\mathbf{\theta}} - \mathbf{\theta}\|^2 \right],
+\mathbb{M}(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ \|\hat{\mathbf{\theta}} - \mathbf{\theta}\|^2 \right],
 \]</span></p>
 <p>where <span class="math inline">\(\|\cdot\|\)</span> denotes the Euclidean (or 2-norm) of a vector. Expanding this expression, we can write:</p>
 <p><span class="math display">\[
-\text{MSE}(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ (\hat{\mathbf{\theta}} - \mathbf{\theta})^T (\hat{\mathbf{\theta}} - \mathbf{\theta}) \right].
+\mathbb{M}(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ (\hat{\mathbf{\theta}} - \mathbf{\theta})^T (\hat{\mathbf{\theta}} - \mathbf{\theta}) \right].
 \]</span></p>
 <div id="key-components" class="section level4 hasAnchor" number="2.4.3.1">
 <h4><span class="header-section-number">2.4.3.1</span> Key Components<a href="prerequisites.html#key-components" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>The MSE can be decomposed into two main parts: <strong>variance</strong> and <strong>squared bias</strong>.</p>
 <p><span class="math display">\[
-\text{MSE}(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})) + \|\text{Bias}(\hat{\mathbf{\theta}})\|^2,
+\mathbb{M}(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})) + \|\text{Bias}(\hat{\mathbf{\theta}})\|^2,
 \]</span></p>
 <p>where:
 - <strong>Variance</strong>: <span class="math inline">\(\text{Var}(\hat{\mathbf{\theta}}) = \mathbb{E}[(\hat{\mathbf{\theta}} - \mathbb{E}[\hat{\mathbf{\theta}}])(\hat{\mathbf{\theta}} - \mathbb{E}[\hat{\mathbf{\theta}}])^T]\)</span>, representing the variability in the estimator.
@@ -1136,7 +1141,7 @@ This component-wise breakdown is helpful for understanding how each part of the 
 <ol style="list-style-type: decimal">
 <li><p><strong>Unbiased Estimator</strong>: If <span class="math inline">\(\hat{\mathbf{\theta}}\)</span> is unbiased, then <span class="math inline">\(\text{Bias}(\hat{\mathbf{\theta}}) = 0\)</span>, and the MSE is simply the trace of the covariance matrix of <span class="math inline">\(\hat{\mathbf{\theta}}\)</span>:
 <span class="math display">\[
-\text{MSE}(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})).
+\mathbb{M}(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})).
 \]</span></p></li>
 <li><p><strong>Bias-Variance Trade-off</strong>: The MSE quantifies the balance between bias and variance. Lowering bias often increases variance and vice versa, a key concept in statistical estimation.</p></li>
 <li><p><strong>Overall Error Metric</strong>: The MSE provides a comprehensive measure of the estimator’s accuracy, taking both variance and bias into account, making it an essential criterion in evaluating estimators.</p></li>

@@ -269,6 +269,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.4.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#statement"><i class="fa fa-check"></i><b>8.4.2</b> Statement</a></li>
 <li class="chapter" data-level="8.4.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#proof"><i class="fa fa-check"></i><b>8.4.3</b> Proof</a></li>
 </ul></li>
+<li class="chapter" data-level="8.5" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#estimate-of-sigma2"><i class="fa fa-check"></i><b>8.5</b> Estimate of <span class="math inline">\(\sigma^2\)</span></a></li>
 </ul></li>
 </ul>
 
@@ -488,8 +489,124 @@ has the smallest variance among all unbiased linear estimators.</p>
 </div>
 <div id="proof" class="section level3 hasAnchor" number="8.4.3">
 <h3><span class="header-section-number">8.4.3</span> Proof<a href="mean-and-varaince-assumptions.html#proof" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-
+<p>Let <span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> be an unbiased linear estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span>. Then, we can write
+<span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> as follows:</p>
+<p><span class="math display">\[\tilde{\boldsymbol{\beta}} = \mathbf{A}\mathbf{y}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{A}\)</span> is a constant matrix of the appropriate dimensions. Then we can write
+<span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> as follows:</p>
+<p><span class="math display">\[\begin{align*}
+\tilde{\boldsymbol{\beta}}
+  &amp;=(\mathbf{A}- (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; + (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) \mathbf{y}\\
+  &amp;=(\mathbf{A}- (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;)\mathbf{y}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{y}\\
+  &amp;=(\mathbf{D}) + \hat{\boldsymbol{\beta}} &amp; \text{with $\mathbf{D}= \mathbf{A}- (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;$} \\
+\end{align*}\]</span></p>
+<p>Now, since <span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> is unbiased, we have that:</p>
+<p><span class="math display">\[\mathbb{E}[\tilde{\boldsymbol{\beta}}] = \boldsymbol{\beta}\quad \forall \boldsymbol{\beta}\in \mathbb{R}^p \]</span></p>
+<p>And</p>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}[\tilde{\boldsymbol{\beta}}]
+  &amp;= \mathbb{E}[\mathbf{D}\mathbf{y}+ \hat{\boldsymbol{\beta}}] \quad \forall \boldsymbol{\beta}\in \mathbb{R}^p      \\
+  &amp;= \mathbf{D}\mathbb{E}[\mathbf{y}] + \mathbb{E}[\hat{\boldsymbol{\beta}}] \quad \forall \boldsymbol{\beta}\in \mathbb{R}^p \\
+  &amp;= \mathbf{D}\mathbf{X}\boldsymbol{\beta}+ \boldsymbol{\beta}\quad \forall \boldsymbol{\beta}\in \mathbb{R}^p &amp; \text{since $\mathbb{E}[\mathbf{y}] = \mathbf{X}\boldsymbol{\beta}$ and $\mathbb{E}[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$} \\
+\end{align*}\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbb{E}[\tilde{\boldsymbol{\beta}}] = \boldsymbol{\beta}\quad \forall \boldsymbol{\beta}\in \mathbb{R}^p           \\
+  &amp;\implies \mathbf{D}\mathbf{X}\boldsymbol{\beta}+ \boldsymbol{\beta}= \boldsymbol{\beta}\quad \forall \boldsymbol{\beta}\in \mathbb{R}^p  \\
+  &amp;\implies \mathbf{D}\mathbf{X}\boldsymbol{\beta}= \mathbf{0}\quad \forall \boldsymbol{\beta}\in \mathbb{R}^p       \\
+  &amp;\implies \mathbf{D}\mathbf{X}= \mathbf{0}\\
+\end{align*}\]</span></p>
+<p>Now, we can analyze the variance of <span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbb{V}[\tilde{\boldsymbol{\beta}}]
+    &amp;= \mathbb{V}[\mathbf{D}\mathbf{y}+ \hat{\boldsymbol{\beta}}]                                                                                            \\
+    &amp;= \mathbb{V}[\mathbf{D}\mathbf{y}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{y}] &amp;&amp; \text{since $\hat{\boldsymbol{\beta}} = (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{y}$}                      \\
+    &amp;= \mathbb{V}[(\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) \mathbf{y}]                                                                                \\
+    &amp;= (\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) \mathbb{V}[\mathbf{y}] (\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;)&#39;                                                  \\
+    &amp;= (\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) \mathbb{V}[\mathbf{y}] (\mathbf{D}&#39; + \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1})                                                   \\
+    &amp;= (\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) (\sigma^2 \mathbf{I}) (\mathbf{D}&#39; + \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1}) &amp;&amp; \text{since $\mathbb{V}[\mathbf{y}] = \sigma^2 \mathbf{I}$}   \\
+    &amp;= \sigma^2 (\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) (\mathbf{D}&#39; + \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1})                                                   \\
+    &amp;= \sigma^2 (\mathbf{D}\mathbf{D}&#39; + (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{D}&#39;                                                                       \\
+    &amp;\quad + \mathbf{D}\mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1} + (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1})                                            \\
+    &amp;= \sigma^2 (\mathbf{D}\mathbf{D}&#39; + (\mathbf{X}&#39; \mathbf{X})^{-1}) &amp;&amp; \text{since $\mathbf{D}\mathbf{X}= \mathbf{0}$}                                             \\
+    &amp;= \sigma^2 (\mathbf{X}&#39; \mathbf{X})^{-1} + \sigma^2 (\mathbf{D}\mathbf{D}&#39;)                                                                       \\
+    &amp;= \mathbb{V}[\hat{\boldsymbol{\beta}}] + \sigma^2 (\mathbf{D}\mathbf{D}&#39;) &amp;&amp; \text{since $\mathbb{V}[\hat{\boldsymbol{\beta}}] = \sigma^2 (\mathbf{X}&#39; \mathbf{X})^{-1}$}                   \\
+\end{align*}\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{D}\mathbf{D}&#39;\)</span> is semi-positive definite, we have that:</p>
+<p><span class="math display">\[ \mathbb{V}[\tilde{\boldsymbol{\beta}}] - \mathbb{V}[\hat{\boldsymbol{\beta}}] = \sigma^2 (\mathbf{D}\mathbf{D}&#39;) \]</span></p>
+<p>is semi-positive definite. This concludes the end of the proof.</p>
+<p>So, as it turns out, the OLS estimator that came out of minimizing the least
+squares, and made no assumptions about the expectation and variances is a very
+good estimator, since it is:</p>
+<ul>
+<li>Unbiased</li>
+<li>Among the unbiased and linear estimators, it has the smallest variance.</li>
+</ul>
+<p>Another common measure of performance is the Mean Square Error (MSE) of an estimator
+with respect to a parameter. Using the Gauss-Markov Theorem we can conclude that,
+among the unbiased and linear estimators, the OLS estimator has the smallest MSE.</p>
+<p>Since, both estimators are unbiased, we have that:</p>
+<p><span class="math display">\[ \mathbb{M}(\hat{\mathbf{\boldsymbol{\beta}}}) = \text{tr}(\text{Var}(\hat{\mathbf{\boldsymbol{\beta}}})) + \|\text{Bias}(\hat{\mathbf{\boldsymbol{\beta}}})\|^2 = \text{tr}(\text{Var}(\hat{\mathbf{\boldsymbol{\beta}}})) \]</span>
+<span class="math display">\[ \mathbb{M}(\tilde{\mathbf{\boldsymbol{\beta}}}) = \text{tr}(\text{Var}(\tilde{\mathbf{\boldsymbol{\beta}}})) + \|\text{Bias}(\tilde{\mathbf{\boldsymbol{\beta}}})\|^2 = \text{tr}(\text{Var}(\tilde{\mathbf{\boldsymbol{\beta}}})) \]</span></p>
+<p>Then, by the Gauss-Markov theorem:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbb{M}[\tilde{\boldsymbol{\beta}}] - \mathbb{M}[\hat{\boldsymbol{\beta}}]
+    &amp;= \text{tr}(\text{Var}(\tilde{\mathbf{\boldsymbol{\beta}}})) - \text{tr}(\text{Var}(\hat{\mathbf{\boldsymbol{\beta}}}))                                     \\
+    &amp;= \text{tr}(\text{Var}(\tilde{\mathbf{\boldsymbol{\beta}}})) - \text{Var}(\hat{\mathbf{\boldsymbol{\beta}}})) &amp;&amp; \text{since the trace operator is linear.} \\
+    &amp;\geq 0          \\
+\end{align*}\]</span></p>
+<p>Where we use the fact that <span class="math inline">\(\text{Var}(\tilde{\mathbf{\boldsymbol{\beta}}})) - \text{Var}(\hat{\mathbf{\boldsymbol{\beta}}})\)</span>
+is positive semi-definite by the Gauss-Markov theorem and the trace of a positive
+semi-definite matrix is non-negative.</p>
 </div>
+</div>
+<div id="estimate-of-sigma2" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> Estimate of <span class="math inline">\(\sigma^2\)</span><a href="mean-and-varaince-assumptions.html#estimate-of-sigma2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Since we have introduced a new parameter <span class="math inline">\(\sigma^2\)</span>, we might be interested in
+estimate it. We will propose an estimate of <span class="math inline">\(\sigma^2\)</span> of the following shape:</p>
+<p><span class="math display">\[\hat{\sigma}^2 = a \hat{\mathbf{e}}&#39;\hat{\mathbf{e}}\]</span></p>
+<p>where we will choose the scalar <span class="math inline">\(a\)</span> later.</p>
+<p>In particular, we want to take the expectation of this estimate. To do so, we will
+take a roundabout way. First we will show that:</p>
+<p><span class="math display">\[(\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;(\mathbf{y}- \mathbb{E}[\mathbf{y}]) = \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])\]</span></p>
+<p>and we will use this fact to compute the expectation of <span class="math inline">\(\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;&amp; (\mathbf{y}- \mathbb{E}[\mathbf{y}])                                                                                           \\
+    &amp;= (\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) &amp;&amp; \text{since $\mathbb{E}[\mathbf{y}] = \mathbf{X}\boldsymbol{\beta}$}                                                  \\
+    &amp;= (\mathbf{y}- \mathbf{X}\hat{\boldsymbol{\beta}} + \mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\hat{\boldsymbol{\beta}} + \mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})                    \\
+    &amp;= (\mathbf{y}- \mathbf{X}\hat{\boldsymbol{\beta}})&#39;(\mathbf{y}- \mathbf{X}\hat{\boldsymbol{\beta}}) + 2(\mathbf{y}- \mathbf{X}\hat{\boldsymbol{\beta}})&#39;(\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})                      \\
+    &amp;\quad + (\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})                                                            \\
+    &amp;= (\mathbf{y}- \hat{\mathbf{y}})&#39;(\mathbf{y}- \hat{\mathbf{y}}) + 2(\mathbf{y}- \hat{\mathbf{y}})&#39;(\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})                                     \\
+    &amp;\quad + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])                                                          \\
+    &amp;= \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + 2\hat{\mathbf{e}}&#39;(\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta}) + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}]) \\
+    &amp;= \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + 2\hat{\mathbf{e}}&#39;\mathbf{X}(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}) + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])     \\
+    &amp;= \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}]) &amp;&amp; \text{since $\hat{\mathbf{e}}&#39;\mathbf{X}=\mathbf{0}$}   \\
+\end{align*}\]</span></p>
+<p>Since</p>
+<p><span class="math display">\[\mathbb{E}[(\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;(\mathbf{y}- \mathbb{E}[\mathbf{y}])] = \text{tr}(\mathbb{V}[\mathbf{y}]) = \text{tr}(\sigma^2 \mathbf{I}) = \sigma^2 \text{tr}(\mathbf{I}) = \sigma^2 n\]</span>
+<span class="math display">\[\mathbb{E}[(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])] = \text{tr}(\mathbb{V}[\hat{\mathbf{y}}]) = \text{tr}(\sigma^2 \mathbf{H}) = \sigma^2 \text{tr}(\mathbf{H}) = \sigma^2 p\]</span>
+where we use the fact that the trace of an idempotent matrix is equal to the rank of the matrix. Then we get that:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;&amp; (\mathbf{y}- \mathbb{E}[\mathbf{y}]) = \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])                          \\
+    &amp;\implies \mathbb{E}[(\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;(\mathbf{y}- \mathbb{E}[\mathbf{y}])] = \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}] + \mathbb{E}[(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])] \\
+    &amp;\implies \text{tr}(\mathbb{V}[\mathbf{y}]) = \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}] + \text{tr}(\mathbb{V}[\hat{\mathbf{y}}])                                                         \\
+    &amp;\implies \sigma^2 n = \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}] + \sigma^2 p                                                                                 \\
+    &amp;\implies \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}] = \sigma^2 n - \sigma^2 p                                                                                 \\
+    &amp;\implies \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}] = \sigma^2 (n - p)                                                                                        \\
+\end{align*}\]</span></p>
+<p>Then, if we set <span class="math inline">\(a=(\frac{1}{n-p})\)</span> we have that our proposed estimator <span class="math inline">\(\hat{\sigma}^2\)</span>
+is unbiased. Since:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbb{E}[a \hat{\sigma}^2]
+    &amp;= \mathbb{E}[a \hat{\mathbf{e}}&#39;\hat{\mathbf{e}}]   \\
+    &amp;= a \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}]   \\
+    &amp;= a \sigma^2 (n-p)             \\
+    &amp;= \frac{1}{n-p} \sigma^2 (n-p) \\
+    &amp;= \sigma^2                     \\
+\end{align*}\]</span></p>
+<p>We can choose or obtain other values for <span class="math inline">\(a\)</span>, however the estimator will not be
+unbiased.</p>
+
 </div>
 </div>
             </section>

@@ -232,3 +232,168 @@ Because of this, the OLS estimator is called the Best Linear Unbiased Estimator
 
 ### Proof
 
+Let $\tilde{\bgb}$ be an unbiased linear estimator of $\bgb$. Then, we can write
+$\tilde{\bgb}$ as follows:
+
+$$\tilde{\bgb} = \bA \by$$
+
+where $\bA$ is a constant matrix of the appropriate dimensions. Then we can write
+$\tilde{\bgb}$ as follows:
+
+\begin{align*}
+\tilde{\bgb}
+  &=(\bA - (\bX' \bX)^{-1} \bX' + (\bX' \bX)^{-1} \bX') \by             \\
+  &=(\bA - (\bX' \bX)^{-1} \bX')\by + (\bX' \bX)^{-1} \bX' \by          \\
+  &=(\bD) + \hat{\bgb} & \text{with $\bD = \bA - (\bX' \bX)^{-1} \bX'$} \\
+\end{align*}
+
+Now, since $\tilde{\bgb}$ is unbiased, we have that:
+
+$$\dE[\tilde{\bgb}] = \bgb \quad \forall \bgb \in \dR^p $$
+
+And
+
+\begin{align*}
+\dE[\tilde{\bgb}]
+  &= \dE[\bD \by + \hat{\bgb}] \quad \forall \bgb \in \dR^p      \\
+  &= \bD \dE[\by] + \dE[\hat{\bgb}] \quad \forall \bgb \in \dR^p \\
+  &= \bD \bX \bgb + \bgb \quad \forall \bgb \in \dR^p & \text{since $\dE[\by] = \bX \bgb$ and $\dE[\hat{\bgb}] = \bgb$} \\
+\end{align*}
+
+Then
+
+\begin{align*}
+  \dE[\tilde{\bgb}] = \bgb \quad \forall \bgb \in \dR^p           \\
+  &\implies \bD \bX \bgb + \bgb = \bgb \quad \forall \bgb \in \dR^p  \\
+  &\implies \bD \bX \bgb = \bzero \quad \forall \bgb \in \dR^p       \\
+  &\implies \bD \bX = \bzero                                         \\
+\end{align*}
+
+Now, we can analyze the variance of $\tilde{\bgb}$.
+
+\begin{align*}
+  \dV[\tilde{\bgb}]
+    &= \dV[\bD \by + \hat{\bgb}]                                                                                            \\
+    &= \dV[\bD \by + (\bX' \bX)^{-1} \bX' \by] && \text{since $\hat{\bgb} = (\bX' \bX)^{-1} \bX' \by$}                      \\
+    &= \dV[(\bD + (\bX' \bX)^{-1} \bX') \by]                                                                                \\
+    &= (\bD + (\bX' \bX)^{-1} \bX') \dV[\by] (\bD + (\bX' \bX)^{-1} \bX')'                                                  \\
+    &= (\bD + (\bX' \bX)^{-1} \bX') \dV[\by] (\bD' + \bX (\bX' \bX)^{-1})                                                   \\
+    &= (\bD + (\bX' \bX)^{-1} \bX') (\sigma^2 \bI) (\bD' + \bX (\bX' \bX)^{-1}) && \text{since $\dV[\by] = \sigma^2 \bI$}   \\
+    &= \sigma^2 (\bD + (\bX' \bX)^{-1} \bX') (\bD' + \bX (\bX' \bX)^{-1})                                                   \\
+    &= \sigma^2 (\bD \bD' + (\bX' \bX)^{-1} \bX' \bD'                                                                       \\
+    &\quad + \bD \bX (\bX' \bX)^{-1} + (\bX' \bX)^{-1} \bX' \bX (\bX' \bX)^{-1})                                            \\
+    &= \sigma^2 (\bD \bD' + (\bX' \bX)^{-1}) && \text{since $\bD \bX = \bzero$}                                             \\
+    &= \sigma^2 (\bX' \bX)^{-1} + \sigma^2 (\bD \bD')                                                                       \\
+    &= \dV[\hat{\bgb}] + \sigma^2 (\bD \bD') && \text{since $\dV[\hat{\bgb}] = \sigma^2 (\bX' \bX)^{-1}$}                   \\
+\end{align*}
+
+Since $\bD \bD'$ is semi-positive definite, we have that:
+
+$$ \dV[\tilde{\bgb}] - \dV[\hat{\bgb}] = \sigma^2 (\bD \bD') $$
+
+is semi-positive definite. This concludes the end of the proof.
+
+So, as it turns out, the OLS estimator that came out of minimizing the least
+squares, and made no assumptions about the expectation and variances is a very
+good estimator, since it is:
+
+- Unbiased
+- Among the unbiased and linear estimators, it has the smallest variance.
+
+Another common measure of performance is the Mean Square Error (MSE) of an estimator
+with respect to a parameter. Using the Gauss-Markov Theorem we can conclude that,
+among the unbiased and linear estimators, the OLS estimator has the smallest MSE.
+
+Since, both estimators are unbiased, we have that:
+
+$$ \dM(\hat{\mathbf{\bgb}}) = \text{tr}(\text{Var}(\hat{\mathbf{\bgb}})) + \|\text{Bias}(\hat{\mathbf{\bgb}})\|^2 = \text{tr}(\text{Var}(\hat{\mathbf{\bgb}})) $$
+$$ \dM(\tilde{\mathbf{\bgb}}) = \text{tr}(\text{Var}(\tilde{\mathbf{\bgb}})) + \|\text{Bias}(\tilde{\mathbf{\bgb}})\|^2 = \text{tr}(\text{Var}(\tilde{\mathbf{\bgb}})) $$
+
+Then, by the Gauss-Markov theorem:
+
+\begin{align*}
+  \dM[\tilde{\bgb}] - \dM[\hat{\bgb}]
+    &= \text{tr}(\text{Var}(\tilde{\mathbf{\bgb}})) - \text{tr}(\text{Var}(\hat{\mathbf{\bgb}}))                                     \\
+    &= \text{tr}(\text{Var}(\tilde{\mathbf{\bgb}})) - \text{Var}(\hat{\mathbf{\bgb}})) && \text{since the trace operator is linear.} \\
+    &\geq 0          \\
+\end{align*}
+
+Where we use the fact that $\text{Var}(\tilde{\mathbf{\bgb}})) - \text{Var}(\hat{\mathbf{\bgb}})$
+is positive semi-definite by the Gauss-Markov theorem and the trace of a positive
+semi-definite matrix is non-negative.
+
+## Estimate of $\sigma^2$
+
+Since we have introduced a new parameter $\sigma^2$, we might be interested in 
+estimate it. We will propose an estimate of $\sigma^2$ of the following shape:
+
+$$\hat{\sigma}^2 = a \hat{\be}'\hat{\be}$$
+
+where we will choose the scalar $a$ later.
+
+In particular, we want to take the expectation of this estimate. To do so, we will
+take a roundabout way. First we will show that:
+
+$$(\by - \dE[\by])'(\by - \dE[\by]) = \hat{\be}'\hat{\be} + (\hat{\by} - \dE[\hat{\by}])'(\hat{\by} - \dE[\hat{\by}])$$
+
+and we will use this fact to compute the expectation of $\hat{\be}'\hat{\be}$.
+
+\begin{align*}
+  (\by - \dE[\by])'& (\by - \dE[\by])                                                                                           \\
+    &= (\by - \bX \bgb)'(\by - \bX \bgb) && \text{since $\dE[\by] = \bX \bgb$}                                                  \\
+    &= (\by - \bX \hat{\bgb} + \bX \hat{\bgb} - \bX \bgb)'(\by - \bX \hat{\bgb} + \bX \hat{\bgb} - \bX \bgb)                    \\
+    &= (\by - \bX \hat{\bgb})'(\by - \bX \hat{\bgb}) + 2(\by - \bX \hat{\bgb})'(\bX \hat{\bgb} - \bX \bgb)                      \\
+    &\quad + (\bX \hat{\bgb} - \bX \bgb)'(\bX \hat{\bgb} - \bX \bgb)                                                            \\
+    &= (\by - \hat{\by})'(\by - \hat{\by}) + 2(\by - \hat{\by})'(\bX \hat{\bgb} - \bX \bgb)                                     \\
+    &\quad + (\hat{\by} - \dE[\hat{\by}])'(\hat{\by} - \dE[\hat{\by}])                                                          \\
+    &= \hat{\be}'\hat{\be} + 2\hat{\be}'(\bX \hat{\bgb} - \bX \bgb) + (\hat{\by} - \dE[\hat{\by}])'(\hat{\by} - \dE[\hat{\by}]) \\
+    &= \hat{\be}'\hat{\be} + 2\hat{\be}'\bX (\hat{\bgb} - \bgb) + (\hat{\by} - \dE[\hat{\by}])'(\hat{\by} - \dE[\hat{\by}])     \\
+    &= \hat{\be}'\hat{\be} + (\hat{\by} - \dE[\hat{\by}])'(\hat{\by} - \dE[\hat{\by}]) && \text{since $\hat{\be}'\bX=\bzero$}   \\
+\end{align*}
+
+Since
+
+$$\dE[(\by - \dE[\by])'(\by - \dE[\by])] = \text{tr}(\dV[\by]) = \text{tr}(\sigma^2 \bI) = \sigma^2 \text{tr}(\bI) = \sigma^2 n$$
+$$\dE[(\hat{\by} - \dE[\hat{\by}])'(\hat{\by} - \dE[\hat{\by}])] = \text{tr}(\dV[\hat{\by}]) = \text{tr}(\sigma^2 \bH) = \sigma^2 \text{tr}(\bH) = \sigma^2 p$$
+where we use the fact that the trace of an idempotent matrix is equal to the rank of the matrix.  Then we get that:
+
+\begin{align*}
+  (\by - \dE[\by])'& (\by - \dE[\by]) = \hat{\be}'\hat{\be} + (\hat{\by} - \dE[\hat{\by}])'(\hat{\by} - \dE[\hat{\by}])                          \\
+    &\implies \dE[(\by - \dE[\by])'(\by - \dE[\by])] = \dE[\hat{\be}'\hat{\be}] + \dE[(\hat{\by} - \dE[\hat{\by}])'(\hat{\by} - \dE[\hat{\by}])] \\
+    &\implies \text{tr}(\dV[\by]) = \dE[\hat{\be}'\hat{\be}] + \text{tr}(\dV[\hat{\by}])                                                         \\
+    &\implies \sigma^2 n = \dE[\hat{\be}'\hat{\be}] + \sigma^2 p                                                                                 \\
+    &\implies \dE[\hat{\be}'\hat{\be}] = \sigma^2 n - \sigma^2 p                                                                                 \\
+    &\implies \dE[\hat{\be}'\hat{\be}] = \sigma^2 (n - p)                                                                                        \\
+\end{align*}
+
+Then, if we set $a=(\frac{1}{n-p})$ we have that our proposed estimator $\hat{\sigma}^2$
+is unbiased. Since:
+
+\begin{align*}
+  \dE[a \hat{\sigma}^2] 
+    &= \dE[a \hat{\be}'\hat{\be}]   \\
+    &= a \dE[\hat{\be}'\hat{\be}]   \\
+    &= a \sigma^2 (n-p)             \\
+    &= \frac{1}{n-p} \sigma^2 (n-p) \\
+    &= \sigma^2                     \\
+\end{align*}
+
+We can choose or obtain other values for $a$, however the estimator will not be
+unbiased.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

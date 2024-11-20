@@ -18,6 +18,7 @@
 \newcommand{\bX}{\mathbf{X}}
 \newcommand{\dC}{\mathbb{C}}
 \newcommand{\dE}{\mathbb{E}}
+\newcommand{\dM}{\mathbb{M}}
 \newcommand{\dV}{\mathbb{V}}
 \newcommand{\dR}{\mathbb{R}}
 \newcommand{\bgb}{\boldsymbol{\beta}}
@@ -669,6 +670,11 @@ If $\mathbf{X}$ has $n$ components, $\dV(\mathbf{X})$ will be an $n \times n$ sy
    $$
    Since $\mathbf{X}$ and $\mathbf{Y}$ are independent, their covariance $\dC(\mathbf{X}, \mathbf{Y})$ is zero, simplifying the variance of the sum.
    
+7. **Trace of the Variance**: A related measure of the variance of a random vector $\mathbf{X}$, is given by
+   $$
+   \text{tr}(\dV[\mathbf{X}]) = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])'(\mathbf{X} - \mathbb{E}[\mathbf{X}])]
+   $$
+   
    
 ### Cross-Covariance Matrix
 
@@ -832,13 +838,13 @@ An example is the sample mean $\mathbf{\bar{X}}$ as an estimator for the populat
 The **Mean Square Error (MSE)** of an estimator $\hat{\mathbf{\theta}}$ for a vector parameter $\mathbf{\theta}$ measures the average squared deviation of the estimator from the true parameter. Formally, for a parameter vector $\mathbf{\theta} \in \mathbb{R}^n$ and an estimator $\hat{\mathbf{\theta}}$, the MSE is defined as:
 
 $$
-\text{MSE}(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ \|\hat{\mathbf{\theta}} - \mathbf{\theta}\|^2 \right],
+\dM(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ \|\hat{\mathbf{\theta}} - \mathbf{\theta}\|^2 \right],
 $$
 
 where $\|\cdot\|$ denotes the Euclidean (or 2-norm) of a vector. Expanding this expression, we can write:
 
 $$
-\text{MSE}(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ (\hat{\mathbf{\theta}} - \mathbf{\theta})^T (\hat{\mathbf{\theta}} - \mathbf{\theta}) \right].
+\dM(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ (\hat{\mathbf{\theta}} - \mathbf{\theta})^T (\hat{\mathbf{\theta}} - \mathbf{\theta}) \right].
 $$
 
 #### Key Components
@@ -846,7 +852,7 @@ $$
 The MSE can be decomposed into two main parts: **variance** and **squared bias**.
 
 $$
-\text{MSE}(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})) + \|\text{Bias}(\hat{\mathbf{\theta}})\|^2,
+\dM(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})) + \|\text{Bias}(\hat{\mathbf{\theta}})\|^2,
 $$
 
 where:
@@ -857,7 +863,7 @@ where:
 
 1. **Unbiased Estimator**: If $\hat{\mathbf{\theta}}$ is unbiased, then $\text{Bias}(\hat{\mathbf{\theta}}) = 0$, and the MSE is simply the trace of the covariance matrix of $\hat{\mathbf{\theta}}$:
    $$
-   \text{MSE}(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})).
+   \dM(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})).
    $$
 
 2. **Bias-Variance Trade-off**: The MSE quantifies the balance between bias and variance. Lowering bias often increases variance and vice versa, a key concept in statistical estimation.
