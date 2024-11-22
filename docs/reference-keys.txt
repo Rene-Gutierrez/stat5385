@@ -158,3 +158,13 @@ assumptions
 statement
 proof
 estimate-of-sigma2
+normality-assumption
+introduction-3
+maximum-likelihood-estimation
+distribution-of-estimates
+distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe
+distribution-of-hatsigma2
+distribution-of-hatsigma2-step-1
+distribution-of-hatsigma2-step-2
+distribution-of-hatsigma2-step-3
+independence-of-hatmathbfe-and-hatmathbfy

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | _main.knit</title>
+  <title>9 Normality Assumption | _main.knit</title>
   <meta name="description" content="" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | _main.knit" />
+  <meta property="og:title" content="9 Normality Assumption | _main.knit" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | _main.knit" />
+  <meta name="twitter:title" content="9 Normality Assumption | _main.knit" />
   
   
   
@@ -28,7 +28,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
+<link rel="prev" href="mean-and-varaince-assumptions.html"/>
 
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -299,18 +299,225 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="normality-assumption" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">9</span> Normality Assumption<a href="normality-assumption.html#normality-assumption" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-3" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Introduction<a href="normality-assumption.html#introduction-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To the mean and covariance assumptions, we can add the normality assumption. This
+is a very strong and powerful assumption, that will enable us to obtain the
+distribution of our data and several of our estimates.</p>
+<p>We will assume:</p>
+<p><span class="math display">\[\mathbf{e}\sim N(\mathbf{0}, \sigma^2 \mathbf{I})\]</span></p>
+<p>Also, note that the Normal distribution is completely characterized by its
+mean and variance, so if the distribution of our estimates is normal, we will
+already have the information to completely characterize their distribution since
+we have computed the mean and variance of the estimates in the previous chapter.</p>
+<p>Another thing, that assuming normality allows is to obtain the likelihood of our
+data, and in this way obtain Maximum Likelihood Estimates (MLE) of the parameters
+we have introduced <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma^2\)</span>.</p>
+</div>
+<div id="maximum-likelihood-estimation" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Maximum Likelihood Estimation<a href="normality-assumption.html#maximum-likelihood-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In order to perform the maximum likelihood estimates of <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma^2\)</span>, we
+need the distribution of <span class="math inline">\(\mathbf{y}\)</span>. This is very easy to obtain, since:</p>
+<p><span class="math display">\[\mathbf{y}= \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}\]</span>
+is a linear combination of <span class="math inline">\(\mathbf{e}\)</span> (in fact is just a translation of <span class="math inline">\(\mathbf{e}\)</span>), and
+therefore it is normally distributed. Since we have already computed its mean
+and variance in the previous chapter, using those computations, we can conclude
+that:</p>
+<p><span class="math display">\[\mathbf{y}\sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I})\]</span>
+This means that the likelihood of <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma^2\)</span> is given by:</p>
+<p><span class="math display">\[ \mathcal{L}(\boldsymbol{\beta}, \sigma^2 | \mathbf{y}) = N(\mathbf{y}| \mathbf{X}\mathbf{y}, \sigma^2 \mathbf{I}) \]</span>
+Then this means that:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathcal{L}(\boldsymbol{\beta}, \sigma^2 | \mathbf{y})
+    &amp;= (2 \pi)^{-\frac{n}{2}} |\sigma^2 \mathbf{I}|^{-\frac{1}{2}} \exp\left\{ -\frac{1}{2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\sigma^2 \mathbf{I})^{-1}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}    \\
+    &amp;= (2 \pi)^{-\frac{n}{2}} (\sigma^2)^{-\frac{n}{2}} |\mathbf{I}| \exp\left\{ -\frac{1}{2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;\frac{\mathbf{I}}{\sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\} \\
+    &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                   \\
+    &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                   \\
+    &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                   \\
+\end{align*}\]</span></p>
+<p>Now recalling from:</p>
+<p><span class="math display">\[(\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;(\mathbf{y}- \mathbb{E}[\mathbf{y}]) = \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])\]</span>
+that is:</p>
+<p><span class="math display">\[(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) = \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta}) = \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})&#39;\mathbf{X}\mathbf{X}( \hat{\boldsymbol{\beta}} - \boldsymbol{\beta})\]</span></p>
+<p>then, the likelihood can be written as:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathcal{L}(\boldsymbol{\beta}, \sigma^2 | \mathbf{y})
+    &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                                      \\
+    &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 \sigma^2} -\frac{(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})&#39;\mathbf{X}\mathbf{X}( \hat{\boldsymbol{\beta}} - \boldsymbol{\beta})}{2 \sigma^2} \right\} \\
+\end{align*}\]</span></p>
+<p>This is a useful way to write the likelihood, since it is easy to optimize with
+respect to <span class="math inline">\(\boldsymbol{\beta}\)</span>. Since, independently of the value of <span class="math inline">\(\sigma^2\)</span>, the value of
+<span class="math inline">\(\boldsymbol{\beta}\)</span> that maximizes the likelihood is the OLS estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, since it
+makes zero the following term:</p>
+<p><span class="math display">\[ -\frac{(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})&#39;\mathbf{X}\mathbf{X}( \hat{\boldsymbol{\beta}} - \boldsymbol{\beta})}{2 \sigma^2} \]</span>
+In this way, we only need to maximize the likelihood with respect to <span class="math inline">\(\sigma^2\)</span>,
+as the following marginal likelihood:</p>
+<p><span class="math display">\[ \mathcal{L}(\sigma^2 | \mathbf{y}, \boldsymbol{\beta}= \hat{\boldsymbol{\beta}} ) =  (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 \sigma^2} \right\}\]</span>
+Instead of maximizing the marginal likelihood directly, we will maximize the
+marginal log-likelihood:</p>
+<p><span class="math display">\[ \ell(\sigma^2 | \mathbf{y}, \boldsymbol{\beta}= \hat{\boldsymbol{\beta}}) = -\frac{n}{2} \log(2 \pi) -\frac{n}{2} \log(\sigma^2) -\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 \sigma^2}\]</span>
+We can do this maximization, by taking the derivative:</p>
+<p><span class="math display">\[\begin{align*}
+  \frac{d \ell}{d \sigma^2}
+    &amp;=        -\frac{n}{2 \sigma^2} + \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 (\sigma^2)^2}
+\end{align*}\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[\begin{align*}
+  \frac{d \ell}{d \sigma^2} =0
+    &amp;\implies -\frac{n}{2 \sigma^2} + \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 (\sigma^2)^2} = 0 \\
+    &amp;\implies -n + \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} = 0                          \\
+    &amp;\implies \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} = n                               \\
+    &amp;\implies \sigma^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n}                               \\
+\end{align*}\]</span></p>
+<p>So we have, that the Maximum Likelihood Estimate of <span class="math inline">\(\sigma^2\)</span> is given by:</p>
+<p><span class="math display">\[\tilde{\sigma}^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n}\]</span></p>
+<p>And, taking the second derivative to confirm it is a maximum we have that:</p>
+<p><span class="math display">\[\begin{align*}
+  \frac{d^2 \ell}{d (\sigma^2)^2} \bigg|_{\sigma^2 = \tilde{\sigma}^2}
+    &amp;= \frac{n}{2 (\tilde{\sigma}^2)^2} - \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{(\tilde{\sigma}^2)^3} \\
+    &amp;= \frac{n}{2 (\tilde{\sigma}^2)^2} - \frac{n}{(\tilde{\sigma}^2)^2}                   \\
+    &amp;= - \frac{n}{(2 \tilde{\sigma}^2)^2}                                                  \\
+    &amp;\leq 0                                                  
+\end{align*}\]</span></p>
+<p>So <span class="math inline">\(\tilde{\sigma}^2\)</span> is indeed maximizing the marginal likelihood.</p>
+<p>Note that, unlike with the <span class="math inline">\(\boldsymbol{\beta}\)</span> parameter, our OLS estimate <span class="math inline">\(\hat{\sigma}^2\)</span>
+of <span class="math inline">\(\sigma^2\)</span> is different to the MLE estimator <span class="math inline">\(\tilde{\sigma}^2\)</span>. In particular
+<span class="math inline">\(\tilde{\sigma}^2\)</span> is biased.</p>
+<p>This doesn’t mean that one estimate is better than the other, they just have
+different properties.</p>
+<p>We will work more with <span class="math inline">\(\hat{\sigma}^2\)</span> than <span class="math inline">\(\tilde{\sigma}^2\)</span>, since it is more
+useful to build certain statistics.</p>
+</div>
+<div id="distribution-of-estimates" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Distribution of Estimates<a href="normality-assumption.html#distribution-of-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the same way that in the last chapters we computed the mean and the variance
+of our estimates, we can obtain the distribution of the estimates:</p>
+<div id="distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe" class="section level3 hasAnchor" number="9.3.1">
+<h3><span class="header-section-number">9.3.1</span> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Most of our estimates are linear combinations of <span class="math inline">\(\mathbf{y}\)</span>, so they are normally
+distributed and we can use the mean and variances computed in the last chapter
+to fully characterize their distributions. This is the case for:</p>
+<p><span class="math display">\[ \hat{\boldsymbol{\beta}}, \quad \hat{\mathbf{y}}, \quad \hat{\mathbf{e}} \]</span>
+Their distributions are:</p>
+<p><span class="math display">\[ \hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2 (\mathbf{X}&#39;\mathbf{X})^{-1}) \]</span>
+<span class="math display">\[ \hat{\mathbf{y}} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{H}) \]</span>
+<span class="math display">\[ \hat{\mathbf{e}} \sim N(\mathbf{0}, \sigma^2 (\mathbf{I}-\mathbf{H})) \]</span></p>
+<p>This is not the case for the estimate <span class="math inline">\(\hat{\sigma}^2\)</span>, since it is not a linear
+transformation of <span class="math inline">\(\mathbf{y}\)</span>.</p>
+</div>
+<div id="distribution-of-hatsigma2" class="section level3 hasAnchor" number="9.3.2">
+<h3><span class="header-section-number">9.3.2</span> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span><a href="normality-assumption.html#distribution-of-hatsigma2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Obtaining the distribution of <span class="math inline">\(\hat{\sigma}^2\)</span> is not as straight forward. We
+will use 3 steps:</p>
+<ol style="list-style-type: decimal">
+<li>Express <span class="math inline">\(\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}\)</span> as quadratic form of standard
+normal with an idempotent matrix.</li>
+<li>Show that the quadratic form of standard normal with an idempotent matrix is
+distributed as a chi squared.</li>
+<li>Relate the distribution of <span class="math inline">\(\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}\)</span> to the
+distribution of <span class="math inline">\(\hat{\sigma}^2\)</span>.</li>
+</ol>
+<div id="distribution-of-hatsigma2-step-1" class="section level4 hasAnchor" number="9.3.2.1">
+<h4><span class="header-section-number">9.3.2.1</span> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span> Step 1<a href="normality-assumption.html#distribution-of-hatsigma2-step-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>First, note that:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{I}- \mathbf{H}) \mathbf{y}
+    &amp;= (\mathbf{I}- \mathbf{H}) (\mathbf{X}\boldsymbol{\beta}+ \mathbf{e})                    &amp;&amp; \text{since $\mathbf{y}= \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}$}  \\
+    &amp;= \mathbf{I}\mathbf{X}\boldsymbol{\beta}- \mathbf{H}\mathbf{X}\boldsymbol{\beta}+ \mathbf{I}\mathbf{e}- \mathbf{H}\mathbf{e}\\
+    &amp;= \mathbf{X}\boldsymbol{\beta}- \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}- \mathbf{H}\mathbf{e}&amp;&amp; \text{since $\mathbf{H}\mathbf{X}= \mathbf{X}$}         \\
+    &amp;= \mathbf{e}- \mathbf{H}\mathbf{e}\\
+    &amp;= (\mathbf{I}- \mathbf{H}) \mathbf{e}\\
+\end{align*}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}
+    &amp;= \mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) (\mathbf{I}- \mathbf{H}) \mathbf{y}&amp;&amp; \text{since $(\mathbf{I}- \mathbf{H})$ is idempotent}         \\
+    &amp;= \mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) (\mathbf{I}- \mathbf{H}) \mathbf{e}&amp;&amp; \text{since $(\mathbf{I}- \mathbf{H}) \mathbf{y}= (\mathbf{I}- \mathbf{H}) \mathbf{e}$} \\
+    &amp;= \mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{e}&amp;&amp; \text{since $(\mathbf{I}- \mathbf{H})$ is idempotent}         \\
+\end{align*}\]</span></p>
+<p>Then,</p>
+<p><span class="math display">\[\begin{align*}
+  \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}
+    &amp;= \frac{\mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}}{\sigma^2}  &amp;&amp; \text{since $\hat{\mathbf{e}}&#39;\hat{\mathbf{e}} = \mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}$}  \\
+    &amp;= \frac{\mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{e}}{\sigma^2}  &amp;&amp; \text{since $\mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{e}= \mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}$} \\
+    &amp;= \frac{\mathbf{e}}{\sqrt{\sigma^2}}&#39; (\mathbf{I}- \mathbf{H}) \frac{\mathbf{e}}{\sqrt{\sigma^2}}                                 \\
+\end{align*}\]</span></p>
+<p>Finally, note that <span class="math inline">\(\frac{\mathbf{e}}{\sqrt{\sigma^2}}\)</span> is a linear function of <span class="math inline">\(\mathbf{e}\)</span>
+that is normal, therefore it is normal also, with mean:</p>
+<p><span class="math display">\[ \mathbb{E}\left[\frac{\mathbf{e}}{\sqrt{\sigma^2}}\right] =  \frac{1}{\sqrt{\sigma^2}} \mathbb{E}[\mathbf{e}] = \frac{1}{\sqrt{\sigma^2}} \mathbf{0}= \mathbf{0}\]</span>
+<span class="math display">\[ \mathbb{V}\left[\frac{\mathbf{e}}{\sqrt{\sigma^2}}\right] =  \left(\frac{1}{\sqrt{\sigma^2}}\right)^2 \mathbb{V}[\mathbf{e}] = \frac{1}{\sigma^2} \sigma^2 \mathbf{I}= \mathbf{I}\]</span>
+So</p>
+<p><span class="math display">\[ \frac{\mathbf{e}}{\sqrt{\sigma^2}} \sim N(\mathbf{0}, \mathbf{I}) \]</span>
+is a multivariate standard normal. This concludes step 1.</p>
+</div>
+<div id="distribution-of-hatsigma2-step-2" class="section level4 hasAnchor" number="9.3.2.2">
+<h4><span class="header-section-number">9.3.2.2</span> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span> Step 2<a href="normality-assumption.html#distribution-of-hatsigma2-step-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(\mathbf{z}\in \mathbb{R}^{n}\)</span> a multivariate standard normal and <span class="math inline">\(\mathbf{M}\in \mathbb{R}^{n \times n}\)</span>
+and idempotent matrix of rank <span class="math inline">\(m\)</span>. Then, we will show that:</p>
+<p><span class="math display">\[ \mathbf{z}&#39; \mathbf{M}\mathbf{z}\sim \chi^2_{m} \]</span></p>
+<p>To show this result, we will use the spectral decomposition of <span class="math inline">\(\mathbf{M}\)</span>, that is:</p>
+<p><span class="math display">\[ \mathbf{M}= \mathbf{V}\boldsymbol{\Sigma}\mathbf{V}&#39; \]</span></p>
+<p>with <span class="math inline">\(\mathbf{V}\)</span> orthonormal and <span class="math inline">\(\boldsymbol{\Sigma}\)</span> diagonal. Since <span class="math inline">\(\mathbf{V}= [\mathbf{v}_1,\ldots,\mathbf{v}_n]\)</span> is
+orthonormal, then we have that:</p>
+<p><span class="math display">\[ \mathbf{v}_i&#39;\mathbf{v}_j = 0 \quad \forall i \neq j \quad \text{and} \quad ||\mathbf{v}_i||^2_2 = 1 \quad \forall i\]</span>
+and, since <span class="math inline">\(\mathbf{M}\)</span> is idempotent, then <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is diagonal with exactly <span class="math inline">\(m\)</span> entries
+equal to <span class="math inline">\(1\)</span> and the rest equal to <span class="math inline">\(0\)</span>. Without loss of generality, we
+can assume that the first <span class="math inline">\(m\)</span> entries of the diagonal are equal to <span class="math inline">\(1\)</span> and the
+next entries equal to <span class="math inline">\(0\)</span>.</p>
+<p>Then, first note that <span class="math inline">\(\mathbf{V}&#39; \mathbf{z}\)</span> is a linear combination of a normal distribution.
+We will show, that <span class="math inline">\(\mathbf{V}&#39; \mathbf{z}\in \mathbb{R}^{n}\)</span> is also standard normal.</p>
+<p>Note that:</p>
+<p><span class="math display">\[ \mathbb{E}[\mathbf{V}&#39; \mathbf{z}] =  \mathbf{V}&#39; \mathbb{E}[\mathbf{z}] = \mathbf{V}&#39; \mathbf{0}= \mathbf{0}\]</span>
+<span class="math display">\[ \mathbb{V}[\mathbf{V}&#39; \mathbf{z}] =  \mathbf{V}&#39; \mathbb{V}[\mathbf{z}] \mathbf{V}= \mathbf{V}&#39; \mathbf{I}\mathbf{V}= \mathbf{V}&#39; \mathbf{V}= \mathbf{I}\]</span></p>
+<p>Then <span class="math inline">\(\mathbf{V}&#39; \mathbf{z}\)</span> is also standard normal. Let’s name <span class="math inline">\(\mathbf{w}= \mathbf{V}&#39; \mathbf{z}\)</span>, then each of
+the components <span class="math inline">\(w_1,\ldots,w_n\)</span> of <span class="math inline">\(\mathbf{w}\)</span> are independent univariate standard normally
+distributed.</p>
+<p>Then</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{z}&#39; \mathbf{M}\mathbf{z}
+    &amp;= \mathbf{z}&#39; (\mathbf{V}\boldsymbol{\Sigma}\mathbf{V}&#39;) \mathbf{z}&amp;&amp; \text{using the spectral decomposition of $\mathbf{M}$}         \\
+    &amp;= (\mathbf{V}&#39; \mathbf{z})&#39; \boldsymbol{\Sigma}(\mathbf{V}&#39; \mathbf{z})                                                                \\
+    &amp;= \mathbf{w}&#39; \boldsymbol{\Sigma}\mathbf{w}&amp;&amp; \text{since $\mathbf{w}= \mathbf{V}&#39; \mathbf{z}$}                            \\
+    &amp;= \sum_{i=1}^n [\boldsymbol{\Sigma}]_{ii} w_i^2                                                             \\
+    &amp;= \sum_{i=1}^{m} w_i^2           &amp;&amp; \text{since only the first $m$ entries are equal to $1$} \\
+    &amp;\sim \chi^2_m                    &amp;&amp; \text{by definition of the $\chi^2$ distribution}        \\
+\end{align*}\]</span></p>
+</div>
+<div id="distribution-of-hatsigma2-step-3" class="section level4 hasAnchor" number="9.3.2.3">
+<h4><span class="header-section-number">9.3.2.3</span> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span> Step 3<a href="normality-assumption.html#distribution-of-hatsigma2-step-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Using step 1 and 2, we can conclude that:</p>
+<p><span class="math display">\[ \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p} \]</span>
+since the rank of the idempotent matrix <span class="math inline">\((\mathbf{I}- \mathbf{H})\)</span> is <span class="math inline">\(n-p\)</span>. Since:</p>
+<p><span class="math display">\[ \hat{\sigma}^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n-p} = \frac{\sigma^2}{n-p}\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \frac{\sigma^2}{n-p}\chi^2_{n-p} \]</span></p>
+</div>
+</div>
+<div id="independence-of-hatmathbfe-and-hatmathbfy" class="section level3 hasAnchor" number="9.3.3">
+<h3><span class="header-section-number">9.3.3</span> Independence of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span><a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We have seen that <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> are uncorrelated, that is</p>
+<p><span class="math display">\[ \mathbb{C}[\hat{\mathbf{e}}, \hat{\mathbf{y}}] = \mathbf{0}\]</span>
+however, this doesn’t necessarily mean they are independent. Independence is a
+much more stronger property. For example, if two random variables are independent
+then any function of this random variables will be independent. However, if two
+random variables are uncorrelated then not necessarily any function of this
+random variables will be uncorrelated.</p>
+<p>Now, after our assumption of normality, then <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> are
+independent, because uncorrelated random variables implies independence for
+normally distributed random variables, as is the case of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span>.</p>
+<p>Then, any variable that is a function of <span class="math inline">\(\hat{\mathbf{e}}\)</span> will be independent of any
+random variable that is a function of <span class="math inline">\(\hat{\mathbf{y}}\)</span>, even if these new random
+variables are not normal themselves.</p>
+
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
+<a href="mean-and-varaince-assumptions.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>

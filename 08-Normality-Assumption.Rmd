@@ -1,0 +1,299 @@
+# Normality Assumption
+
+## Introduction
+
+To the mean and covariance assumptions, we can add the normality assumption. This
+is a very strong and powerful assumption, that will enable us to obtain the 
+distribution of  our data and several of our estimates.
+
+We will assume:
+
+$$\be \sim N(\bzero, \sigma^2 \bI)$$
+
+Also, note that the Normal distribution is completely characterized by its 
+mean and variance, so if the distribution of our estimates is normal, we will
+already have the information to completely characterize their distribution since
+we have computed the mean and variance of the estimates in the previous chapter.
+
+Another thing, that assuming normality allows is to obtain the likelihood of our
+data, and in this way obtain Maximum Likelihood Estimates (MLE) of the parameters
+we have introduced $\bgb$ and $\sigma^2$.
+
+## Maximum Likelihood Estimation
+
+In order to perform the maximum likelihood estimates of $\bgb$ and $\sigma^2$, we
+need the distribution of $\by$. This is very easy to obtain, since:
+
+$$\by = \bX \bgb + \be$$
+is a linear combination of $\be$ (in fact is just a translation of $\be$), and
+therefore it is normally distributed. Since we have already computed its mean 
+and variance in the previous chapter, using those computations, we can conclude
+that:
+
+$$\by \sim N(\bX \bgb, \sigma^2 \bI)$$
+This means that the likelihood of $\bgb$ and $\sigma^2$ is given by:
+
+$$ \cL(\bgb, \sigma^2 | \by ) = N(\by | \bX \by, \sigma^2 \bI) $$
+Then this means that:
+
+\begin{align*}
+  \cL(\bgb, \sigma^2 | \by )
+    &= (2 \pi)^{-\frac{n}{2}} |\sigma^2 \bI|^{-\frac{1}{2}} \exp\left\{ -\frac{1}{2}(\by - \bX \bgb)'(\sigma^2 \bI)^{-1}(\by - \bX \bgb) \right\}    \\
+    &= (2 \pi)^{-\frac{n}{2}} (\sigma^2)^{-\frac{n}{2}} |\bI| \exp\left\{ -\frac{1}{2}(\by - \bX \bgb)'\frac{\bI}{\sigma^2}(\by - \bX \bgb) \right\} \\
+    &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\by - \bX \bgb)'(\by - \bX \bgb) \right\}                                   \\
+    &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\by - \bX \bgb)'(\by - \bX \bgb) \right\}                                   \\
+    &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\by - \bX \bgb)'(\by - \bX \bgb) \right\}                                   \\
+\end{align*}
+
+Now recalling from:
+
+$$(\by - \dE[\by])'(\by - \dE[\by]) = \hat{\be}'\hat{\be} + (\hat{\by} - \dE[\hat{\by}])'(\hat{\by} - \dE[\hat{\by}])$$
+that is:
+
+$$(\by - \bX \bgb)'(\by - \bX \bgb) = \hat{\be}'\hat{\be} + (\bX \hat{\bgb} - \bX \bgb)'(\bX \hat{\bgb} - \bX \bgb) = \hat{\be}'\hat{\be} + (\hat{\bgb} - \bgb)'\bX \bX( \hat{\bgb} - \bgb)$$
+
+then, the likelihood can be written as:
+
+\begin{align*}
+  \cL(\bgb, \sigma^2 | \by )
+    &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\by - \bX \bgb)'(\by - \bX \bgb) \right\}                                                      \\
+    &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{\hat{\be}'\hat{\be}}{2 \sigma^2} -\frac{(\hat{\bgb} - \bgb)'\bX \bX( \hat{\bgb} - \bgb)}{2 \sigma^2} \right\} \\
+\end{align*}
+
+This is a useful way to write the likelihood, since it is easy to optimize with
+respect to $\bgb$. Since, independently of the value of $\sigma^2$, the value of
+$\bgb$ that maximizes the likelihood is the OLS estimator $\hat{\bgb}$, since it
+makes zero the following term:
+
+$$ -\frac{(\hat{\bgb} - \bgb)'\bX \bX( \hat{\bgb} - \bgb)}{2 \sigma^2} $$
+In this way, we only need to maximize the likelihood with respect to $\sigma^2$,
+as the following marginal likelihood:
+
+$$ \cL(\sigma^2 | \by, \bgb = \hat{\bgb} ) =  (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{\hat{\be}'\hat{\be}}{2 \sigma^2} \right\}$$
+Instead of maximizing the marginal likelihood directly, we will maximize the 
+marginal log-likelihood:
+
+$$ \ell(\sigma^2 | \by, \bgb = \hat{\bgb}) = -\frac{n}{2} \log(2 \pi) -\frac{n}{2} \log(\sigma^2) -\frac{\hat{\be}'\hat{\be}}{2 \sigma^2}$$
+We can do this maximization, by taking the derivative:
+
+\begin{align*}
+  \frac{d \ell}{d \sigma^2} 
+    &=        -\frac{n}{2 \sigma^2} + \frac{\hat{\be}'\hat{\be}}{2 (\sigma^2)^2} 
+\end{align*}
+
+Then
+
+\begin{align*}
+  \frac{d \ell}{d \sigma^2} =0
+    &\implies -\frac{n}{2 \sigma^2} + \frac{\hat{\be}'\hat{\be}}{2 (\sigma^2)^2} = 0 \\
+    &\implies -n + \frac{\hat{\be}'\hat{\be}}{\sigma^2} = 0                          \\
+    &\implies \frac{\hat{\be}'\hat{\be}}{\sigma^2} = n                               \\
+    &\implies \sigma^2 = \frac{\hat{\be}'\hat{\be}}{n}                               \\
+\end{align*}
+
+So we have, that the Maximum Likelihood Estimate of $\sigma^2$ is given by:
+
+$$\tilde{\sigma}^2 = \frac{\hat{\be}'\hat{\be}}{n}$$
+
+And, taking the second derivative to confirm it is a maximum we have that:
+
+\begin{align*}
+  \frac{d^2 \ell}{d (\sigma^2)^2} \bigg|_{\sigma^2 = \tilde{\sigma}^2}
+    &= \frac{n}{2 (\tilde{\sigma}^2)^2} - \frac{\hat{\be}'\hat{\be}}{(\tilde{\sigma}^2)^3} \\
+    &= \frac{n}{2 (\tilde{\sigma}^2)^2} - \frac{n}{(\tilde{\sigma}^2)^2}                   \\
+    &= - \frac{n}{(2 \tilde{\sigma}^2)^2}                                                  \\
+    &\leq 0                                                  
+\end{align*}
+
+So $\tilde{\sigma}^2$ is indeed maximizing the marginal likelihood.
+
+Note that, unlike with the $\bgb$ parameter, our OLS estimate $\hat{\sigma}^2$
+of $\sigma^2$ is different to the MLE estimator $\tilde{\sigma}^2$. In particular
+$\tilde{\sigma}^2$ is biased.
+
+This doesn't mean that one estimate is better than the other, they just have 
+different properties.
+
+We will work more with $\hat{\sigma}^2$ than $\tilde{\sigma}^2$, since it is more
+useful to build certain statistics.
+
+## Distribution of Estimates
+
+In the same way that in the last chapters we computed the mean and the variance 
+of our estimates, we can obtain the distribution of the estimates:
+
+### Distribution of $\hat{\bgb}$, $\hat{\by}$ and $\hat{\be}$
+
+Most of our estimates are linear combinations of $\by$, so they are normally 
+distributed and we can use the mean and variances computed in the last chapter
+to fully characterize their distributions. This is the case for:
+
+$$ \hat{\bgb}, \quad \hat{\by}, \quad \hat{\be} $$
+Their distributions are:
+
+$$ \hat{\bgb} \sim N(\bgb, \sigma^2 (\bX'\bX)^{-1}) $$
+$$ \hat{\by} \sim N(\bX \bgb, \sigma^2 \bH) $$
+$$ \hat{\be} \sim N(\bzero, \sigma^2 (\bI-\bH)) $$
+
+This is not the case for the estimate $\hat{\sigma}^2$, since it is not a linear
+transformation of $\by$.
+
+### Distribution of $\hat{\sigma}^2$
+
+Obtaining the distribution of $\hat{\sigma}^2$ is not as straight forward. We
+will use 3 steps:
+
+1. Express $\frac{\hat{\be}'\hat{\be}}{\sigma^2}$ as quadratic form of standard
+normal with an idempotent matrix.
+2. Show that the quadratic form of standard normal with an idempotent matrix is
+distributed as a chi squared.
+3. Relate the distribution of $\frac{\hat{\be}'\hat{\be}}{\sigma^2}$ to the 
+distribution of $\hat{\sigma}^2$.
+
+#### Distribution of $\hat{\sigma}^2$ Step 1
+
+First, note that:
+
+\begin{align*}
+  (\bI - \bH) \by
+    &= (\bI - \bH) (\bX \bgb + \be)                    && \text{since $\by = \bX \bgb + \be$}  \\
+    &= \bI \bX \bgb - \bH \bX \bgb + \bI \be - \bH \be                                         \\
+    &= \bX \bgb - \bX \bgb + \be - \bH \be             && \text{since $\bH \bX = \bX$}         \\
+    &= \be - \bH \be                                                                           \\
+    &= (\bI - \bH) \be                                                                         \\
+\end{align*}
+
+Then:
+
+\begin{align*}
+  \by' (\bI - \bH) \by
+    &= \by' (\bI - \bH) (\bI - \bH) \by  && \text{since $(\bI - \bH)$ is idempotent}         \\
+    &= \be' (\bI - \bH) (\bI - \bH) \be  && \text{since $(\bI - \bH) \by = (\bI - \bH) \be$} \\
+    &= \be' (\bI - \bH) \be              && \text{since $(\bI - \bH)$ is idempotent}         \\
+\end{align*}
+
+Then,
+
+\begin{align*}
+  \frac{\hat{\be}'\hat{\be}}{\sigma^2}
+    &= \frac{\by' (\bI - \bH) \by}{\sigma^2}  && \text{since $\hat{\be}'\hat{\be} = \by' (\bI - \bH) \by$}  \\
+    &= \frac{\be' (\bI - \bH) \be}{\sigma^2}  && \text{since $\be' (\bI - \bH) \be = \by' (\bI - \bH) \by$} \\
+    &= \frac{\be}{\sqrt{\sigma^2}}' (\bI - \bH) \frac{\be}{\sqrt{\sigma^2}}                                 \\
+\end{align*}
+
+Finally, note that $\frac{\be}{\sqrt{\sigma^2}}$ is a linear function of $\be$ 
+that is normal, therefore it is normal also, with mean:
+
+$$ \dE\left[\frac{\be}{\sqrt{\sigma^2}}\right] =  \frac{1}{\sqrt{\sigma^2}} \dE[\be] = \frac{1}{\sqrt{\sigma^2}} \bzero = \bzero$$
+$$ \dV\left[\frac{\be}{\sqrt{\sigma^2}}\right] =  \left(\frac{1}{\sqrt{\sigma^2}}\right)^2 \dV[\be] = \frac{1}{\sigma^2} \sigma^2 \bI = \bI$$
+So
+
+$$ \frac{\be}{\sqrt{\sigma^2}} \sim N(\bzero, \bI) $$
+is a multivariate standard normal. This concludes step 1.
+
+#### Distribution of $\hat{\sigma}^2$ Step 2
+
+Let $\bz \in \dR^{n}$ a multivariate standard normal and $\bM \in \dR^{n \times n}$
+and idempotent matrix of rank $m$. Then, we will show that:
+
+$$ \bz' \bM \bz \sim \chi^2_{m} $$
+
+To show this result, we will use the spectral decomposition of $\bM$, that is:
+
+$$ \bM = \bV \bgS \bV' $$
+
+with $\bV$ orthonormal and $\bgS$ diagonal. Since $\bV = [\bv_1,\ldots,\bv_n]$ is
+orthonormal, then we have that:
+
+$$ \bv_i'\bv_j = 0 \quad \forall i \neq j \quad \text{and} \quad ||\bv_i||^2_2 = 1 \quad \forall i$$
+and, since $\bM$ is idempotent, then $\bgS$ is diagonal with exactly $m$ entries
+equal to $1$ and the rest equal to $0$. Without loss of generality, we
+can assume that the first $m$ entries of the diagonal are equal to $1$ and the 
+next entries equal to $0$.
+
+Then, first note that $\bV' \bz$ is a linear combination of a normal distribution.
+We will show, that $\bV' \bz \in \dR^{n}$ is also standard normal.
+
+Note that:
+
+$$ \dE[\bV' \bz] =  \bV' \dE[\bz] = \bV' \bzero = \bzero$$
+$$ \dV[\bV' \bz] =  \bV' \dV[\bz] \bV = \bV' \bI \bV = \bV' \bV = \bI$$
+
+Then $\bV' \bz$ is also standard normal. Let's name $\bw = \bV' \bz$, then each of
+the components $w_1,\ldots,w_n$ of $\bw$ are independent univariate standard normally
+distributed.
+
+Then
+
+\begin{align*}
+  \bz' \bM \bz
+    &= \bz' (\bV \bgS \bV') \bz       && \text{using the spectral decomposition of $\bM$}         \\
+    &= (\bV' \bz)' \bgS (\bV' \bz)                                                                \\
+    &= \bw' \bgS \bw                  && \text{since $\bw = \bV' \bz$}                            \\
+    &= \sum_{i=1}^n [\bgS]_{ii} w_i^2                                                             \\
+    &= \sum_{i=1}^{m} w_i^2           && \text{since only the first $m$ entries are equal to $1$} \\
+    &\sim \chi^2_m                    && \text{by definition of the $\chi^2$ distribution}        \\
+\end{align*} 
+
+#### Distribution of $\hat{\sigma}^2$ Step 3
+
+Using step 1 and 2, we can conclude that:
+
+$$ \frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \chi^2_{n-p} $$
+since the rank of the idempotent matrix $(\bI - \bH)$ is $n-p$. Since:
+
+$$ \hat{\sigma}^2 = \frac{\hat{\be}'\hat{\be}}{n-p} = \frac{\sigma^2}{n-p}\frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \frac{\sigma^2}{n-p}\chi^2_{n-p} $$
+
+### Independence of $\hat{\be}$ and $\hat{\by}$
+
+We have seen that $\hat{\be}$ and $\hat{\by}$ are uncorrelated, that is
+
+$$ \dC[\hat{\be}, \hat{\by}] = \bzero $$
+however, this doesn't necessarily mean they are independent. Independence is a 
+much more stronger property. For example, if two random variables are independent
+then any function of this random variables will be independent. However, if two 
+random variables are uncorrelated then not necessarily any function of this 
+random variables will be uncorrelated.
+
+Now, after our assumption of normality, then $\hat{\be}$ and $\hat{\by}$ are 
+independent, because uncorrelated random variables implies independence for
+normally distributed random variables, as is the case of $\hat{\be}$ and $\hat{\by}$.
+
+Then, any variable that is a function of $\hat{\be}$ will be independent of any
+random variable that is a function of $\hat{\by}$, even if these new random
+variables are not normal themselves.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
