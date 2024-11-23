@@ -168,3 +168,7 @@ distribution-of-hatsigma2-step-1
 distribution-of-hatsigma2-step-2
 distribution-of-hatsigma2-step-3
 independence-of-hatmathbfe-and-hatmathbfy
+interval-estimation
+confidence-intervals-for-coefficients
+confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new
+confidence-intervals-for-linear-combinations-of-boldsymbolbeta

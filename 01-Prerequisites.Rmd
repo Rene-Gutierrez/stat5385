@@ -20,6 +20,7 @@
 \newcommand{\dC}{\mathbb{C}}
 \newcommand{\dE}{\mathbb{E}}
 \newcommand{\dM}{\mathbb{M}}
+\newcommand{\dP}{\mathbb{P}}
 \newcommand{\dV}{\mathbb{V}}
 \newcommand{\cH}{\mathcal{H}}
 \newcommand{\cL}{\mathcal{L}}

@@ -263,35 +263,159 @@ Then, any variable that is a function of $\hat{\be}$ will be independent of any
 random variable that is a function of $\hat{\by}$, even if these new random
 variables are not normal themselves.
 
+## Interval Estimation
 
+So far, we have obtained point estimates of different quantities of interest, 
+$\bgb$, $\be$ and $\hat{\sigma}^2$, however the fact
+we have the distribution of estimates of this quantities will allow us to obtain
+interval estimators.
 
+### Confidence Intervals for Coefficients
 
+We know that the OLS estimate for the coefficients, has the following distribution:
 
+$$ \hat{\bgb} \sim N(\bzero, \sigma^2 (\bX'\bX)^{-1}) $$
 
+then, this means that each of the entries of $\hat{\bgb} = (\hat{\beta}_0, \hat{\beta}_1,\ldots,\hat{\beta}_{p-1})$
+is normally distributed, as follows:
 
+$$ \hat{\beta}_i \sim N(\beta_i, \sigma^2 [(\bX'\bX)^{-1}]_{ii}) $$
+we will call
 
+$$ \sigma^2_{\beta_i} =  \sigma^2 [(\bX'\bX)^{-1}]_{ii} $$
+then, we can re-write the distribution as follows:
 
+$$ \hat{\beta}_i \sim N \left(\beta_i, \sigma^2_{\beta_i} \right) $$
+unfortunately this distribution depends on $\sigma^2$ which is unknown, so we 
+can't use it to build a confidence interval. So we transform the statistic first
+by removing the mean $\beta_i$ and by diving by the standard deviation: 
 
+$$ t^0_{\beta_i}=\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} $$
+Then, this new quantity is normally distributed, since it a linear transformation
+of a random variable that is normally distributed, and has mean as variance as
+follows:
 
+$$ \dE[t^0_{\beta_i}] = \dE\left[\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}}\right]= \frac{\hat{\dE[\beta}_i] - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} = \frac{\beta_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} = 0  $$
+$$ \dV[t^0_{\beta_i}] = \dV\left[\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}}\right]= \left(\frac{1}{\sqrt{\sigma^2_{\beta_i}}}\right)^2 \dV[\hat{\beta}_i - \beta_i] = \frac{1}{\sigma^2_{\beta_i}} \dV[\hat{\beta}_i] = \frac{1}{\sigma^2_{\beta_i}} \sigma^2_{\beta_i} = 1  $$
+then:
 
+$$ t^0_{\beta_i} \sim N(0, 1) $$
+that is $t^0_{\beta_i}$ is distributed like a standard normal. Now the distribution
+doesn't depend on any unknown parameter (on top of $\beta_i$, that is the parameter
+of interest), but the quantity itself depends on $\sigma^2$ through $\sigma^2_{\beta_i}$,
+so we can't use it to build a confidence interval.
 
+We consider a new quantity
 
+$$ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} $$
+where $\hat{\sigma}^2_{\beta_i} = \hat{\sigma}^2 [(\bX'\bX)^{-1}]_{ii}$, so $t_{\beta_i}$
+doesn't depend on $\sigma^2$. Let's compute the distribution of this quantity,
+first lets re-write the statistic as follows:
 
+$$ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} 
+  = \frac{\sqrt{\frac{1}{\sigma^2}}}{\sqrt{\frac{1}{\sigma^2}}}\frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2[(\bX'\bX)^{-1}]_{ii}}}   
+  = \frac{\frac{\left(\hat{\beta}_i - \beta_i\right)}{\sqrt{\sigma^2[(\bX'\bX)^{-1}]_{ii}}}}{ \sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}}   
+  = \frac{\frac{\left(\hat{\beta}_i - \beta_i\right)}{\sqrt{\sigma^2_{\beta_i}}}}{            \sqrt{\frac{(n-p)\frac{\hat{\sigma}^2}{\sigma^2}}{n-p}}}
+  = \frac{t^0_{\beta_i}}{ \sqrt{\frac{\frac{\hat{\be}'\hat{\be}}{\sigma^2}}{n-p}}}$$
 
+Now, we know $t^0_{\beta_i}$ is standard normal distributed, and from 
+[the distribution of $\hat{\sigma}^2$](#distribution-of-hatsigma2-step-3) we 
+have that:
 
+$$ \frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \chi^2_{n-p} $$
+and from 
+[the independence of $\hat{\bgb}$ and $\hat{\be}$](#independence-of-hatmathbfe-and-hatmathbfy)
+we have that any function of both variables is independent, in particular
 
+$$ t^0_{\beta_i} \quad \text{and} \quad \frac{\hat{\be}'\hat{\be}}{\sigma^2} $$
+are independent. Therefore
 
+$$ t_{\beta_i} \sim t_{n-p} $$
+Now, let $t \sim t_m$ a random variable with a $t$ distribution with $m$ degrees
+of freedom. Then call:
 
+$$ t_m\left(a\right) \quad \text{such that} \quad \dP\left(t\leq t_m\left(a\right) \right) = a$$
+for any $a\in[0,1]$
 
+Then, we have that:
 
+\begin{align*}
+\dP 
+  &\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq t_{\beta_i} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha  
+    && \text{since the $t$ distribution is symmetric} \\
+  &\implies \dP\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha
+    && \text{since the $t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}}$} \\
+  &\implies \dP\left( -t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \hat{\beta}_i - \beta_i \leq t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
+  &\implies \dP\left( -t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \beta_i - \hat{\beta}_i \leq t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
+  &\implies \dP\left( \hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \beta_i \leq \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
+\end{align*}
 
+So
 
+$$ \left(\hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}}, \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) $$
+is a random interval, that is an interval that is a function of a random variables,
+in this case the random variables $\hat{\beta}_i$ and $\hat{\sigma}^2_{\beta_i}$.
+This random interval will capture the true parameter $\beta_i$ with probability
+$\alpha$. However, when data is observed and the interval is fixed (at the observed
+values), the interval either captures the true parameter or not (something we
+don't know in general).
 
+### Confidence intervals for the expected mean of a new observation $\bx_{new}$
 
+Note that the expected mean of a new observation $\bx_{new}$ is given by:
 
+$$ \dE[y_{new}] = \bx_{new}' \bgb $$
+then we can consider, an estimate of this parameter, as:
 
+$$ \bx_{new}' \hat{\bgb} $$
+this estimate is a linear combination of $\hat{\bgb}$, therefore it has a normal
+distribution with mean and variance as follows:
 
+$$\dE[\bx_{new} \hat{\bgb}] = \bx_{new} \dE[\hat{\bgb}] = \bx_{new}' \bgb$$
+$$\dV[\bx_{new}' \hat{\bgb}] = \bx_{new}' \dV[\hat{\bgb}] \bx_{new} = \bx_{new}' \sigma^2 (\bX' \bX)^{-1} \bx_{new} =  \sigma^2 \bx_{new}' (\bX' \bX)^{-1} \bx_{new} $$
+that is:
+$$ \bx_{new}' \hat{\bgb} \sim N \left(\bx_{new}' \bgb, \sigma^2 \bx_{new}' (\bX' \bX)^{-1} \bx_{new} \right)  $$
 
+so, similarly, we can consider
+
+$$ t_{\bx_{new}'\bgb} = \frac{\bx_{new}'\hat{\bgb} - \bx_{new}'\bgb}{\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}}}=\frac{\frac{\bx_{new}'\hat{\bgb} - \bx_{new}'\bgb}{\sqrt{\sigma^2_{\bx_{new}'\bgb}}}}{\sqrt{\frac{\frac{\hat{\be}'\hat{\be}}{\sigma^2}}{n-p}}} \sim \chi^2_{n-p} $$
+where $\hat{\sigma}^2_{\bx_{new}'\bgb} = \hat{\sigma}^2 \bx_{new}' (\bX' \bX)^{-1} \bx_{new}$.
+This quantity is distributed as a $t$ with $n-p$ degrees of freedom since:
+
+$$\frac{\bx_{new}'\hat{\bgb} - \bx_{new}'\bgb}{\sqrt{\sigma^2_{\bx_{new}'\bgb}}} \sim N(0, 1)$$
+$$ \frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \chi^2_{n-p}$$
+and this random variables are independent since one is a function of $\hat{\bgb}$
+and the other a function of $\hat{\be}$.
+
+Then we can conclude that:
+
+\begin{align*}
+\dP 
+  &\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq t_{\bx_{new}'\bgb} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha  \\
+  &\implies \dP\left( \bx_{new}'\hat{\bgb} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}} \leq \bx_{new}'\bgb \leq \bx_{new}'\hat{\bgb} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}} \right) = \alpha \\
+\end{align*}
+
+so, the random interval is given by:
+
+$$ \left( \bx_{new}'\hat{\bgb} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}} , \bx_{new}'\hat{\bgb} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}} \right) $$
+is a random interval that captures $\bx_{new}'\bgb$ with probability $\alpha$.
+
+### Confidence intervals for linear combinations of $\bgb$
+
+Note that if we consider the parameter
+
+$$ \ba' \hat{\bgb}$$
+then we note that $\beta_i$ and $\bx_{new} \bgb$ are particular cases, where the
+value of $\ba$ is a s follows:
+
+$$ \ba = (0,\ldots,0,1,0,\ldots,0) \quad \text{for} \quad \ba \bgb = \beta_i$$
+$$ \ba = \bx_{new} \quad \text{for} \quad \ba \bgb = \bx_{new}' \bgb$$
+then, performing similar operations as before, we can create random intervals to
+estimate $\ba' \bgb$ as follows:
+
+$$ \left( \ba'\hat{\bgb} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\ba'\bgb}} , \ba'\hat{\bgb} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\ba'\bgb}} \right) $$
+that captures $\ba' \bgb$ with probability $\alpha$. Where 
+$\hat{\sigma}^2_{\ba'\bgb} = \hat{\sigma}^2 \ba' (\bX' \bX)^{-1} \ba$.
 
 
 

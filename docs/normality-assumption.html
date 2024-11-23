@@ -281,6 +281,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.3.2" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatsigma2"><i class="fa fa-check"></i><b>9.3.2</b> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a></li>
 <li class="chapter" data-level="9.3.3" data-path="normality-assumption.html"><a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy"><i class="fa fa-check"></i><b>9.3.3</b> Independence of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
 </ul></li>
+<li class="chapter" data-level="9.4" data-path="normality-assumption.html"><a href="normality-assumption.html#interval-estimation"><i class="fa fa-check"></i><b>9.4</b> Interval Estimation</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-coefficients"><i class="fa fa-check"></i><b>9.4.1</b> Confidence Intervals for Coefficients</a></li>
+<li class="chapter" data-level="9.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>9.4.2</b> Confidence intervals for the expected mean of a new observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
+<li class="chapter" data-level="9.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>9.4.3</b> Confidence intervals for linear combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -508,6 +514,127 @@ normally distributed random variables, as is the case of <span class="math inlin
 <p>Then, any variable that is a function of <span class="math inline">\(\hat{\mathbf{e}}\)</span> will be independent of any
 random variable that is a function of <span class="math inline">\(\hat{\mathbf{y}}\)</span>, even if these new random
 variables are not normal themselves.</p>
+</div>
+</div>
+<div id="interval-estimation" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Interval Estimation<a href="normality-assumption.html#interval-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So far, we have obtained point estimates of different quantities of interest,
+<span class="math inline">\(\boldsymbol{\beta}\)</span>, <span class="math inline">\(\mathbf{e}\)</span> and <span class="math inline">\(\hat{\sigma}^2\)</span>, however the fact
+we have the distribution of estimates of this quantities will allow us to obtain
+interval estimators.</p>
+<div id="confidence-intervals-for-coefficients" class="section level3 hasAnchor" number="9.4.1">
+<h3><span class="header-section-number">9.4.1</span> Confidence Intervals for Coefficients<a href="normality-assumption.html#confidence-intervals-for-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We know that the OLS estimate for the coefficients, has the following distribution:</p>
+<p><span class="math display">\[ \hat{\boldsymbol{\beta}} \sim N(\mathbf{0}, \sigma^2 (\mathbf{X}&#39;\mathbf{X})^{-1}) \]</span></p>
+<p>then, this means that each of the entries of <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\hat{\beta}_0, \hat{\beta}_1,\ldots,\hat{\beta}_{p-1})\)</span>
+is normally distributed, as follows:</p>
+<p><span class="math display">\[ \hat{\beta}_i \sim N(\beta_i, \sigma^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii}) \]</span>
+we will call</p>
+<p><span class="math display">\[ \sigma^2_{\beta_i} =  \sigma^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii} \]</span>
+then, we can re-write the distribution as follows:</p>
+<p><span class="math display">\[ \hat{\beta}_i \sim N \left(\beta_i, \sigma^2_{\beta_i} \right) \]</span>
+unfortunately this distribution depends on <span class="math inline">\(\sigma^2\)</span> which is unknown, so we
+can’t use it to build a confidence interval. So we transform the statistic first
+by removing the mean <span class="math inline">\(\beta_i\)</span> and by diving by the standard deviation:</p>
+<p><span class="math display">\[ t^0_{\beta_i}=\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} \]</span>
+Then, this new quantity is normally distributed, since it a linear transformation
+of a random variable that is normally distributed, and has mean as variance as
+follows:</p>
+<p><span class="math display">\[ \mathbb{E}[t^0_{\beta_i}] = \mathbb{E}\left[\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}}\right]= \frac{\hat{\mathbb{E}[\beta}_i] - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} = \frac{\beta_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} = 0  \]</span>
+<span class="math display">\[ \mathbb{V}[t^0_{\beta_i}] = \mathbb{V}\left[\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}}\right]= \left(\frac{1}{\sqrt{\sigma^2_{\beta_i}}}\right)^2 \mathbb{V}[\hat{\beta}_i - \beta_i] = \frac{1}{\sigma^2_{\beta_i}} \mathbb{V}[\hat{\beta}_i] = \frac{1}{\sigma^2_{\beta_i}} \sigma^2_{\beta_i} = 1  \]</span>
+then:</p>
+<p><span class="math display">\[ t^0_{\beta_i} \sim N(0, 1) \]</span>
+that is <span class="math inline">\(t^0_{\beta_i}\)</span> is distributed like a standard normal. Now the distribution
+doesn’t depend on any unknown parameter (on top of <span class="math inline">\(\beta_i\)</span>, that is the parameter
+of interest), but the quantity itself depends on <span class="math inline">\(\sigma^2\)</span> through <span class="math inline">\(\sigma^2_{\beta_i}\)</span>,
+so we can’t use it to build a confidence interval.</p>
+<p>We consider a new quantity</p>
+<p><span class="math display">\[ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} \]</span>
+where <span class="math inline">\(\hat{\sigma}^2_{\beta_i} = \hat{\sigma}^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii}\)</span>, so <span class="math inline">\(t_{\beta_i}\)</span>
+doesn’t depend on <span class="math inline">\(\sigma^2\)</span>. Let’s compute the distribution of this quantity,
+first lets re-write the statistic as follows:</p>
+<p><span class="math display">\[ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}}
+  = \frac{\sqrt{\frac{1}{\sigma^2}}}{\sqrt{\frac{1}{\sigma^2}}}\frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2[(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii}}}   
+  = \frac{\frac{\left(\hat{\beta}_i - \beta_i\right)}{\sqrt{\sigma^2[(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii}}}}{ \sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}}   
+  = \frac{\frac{\left(\hat{\beta}_i - \beta_i\right)}{\sqrt{\sigma^2_{\beta_i}}}}{            \sqrt{\frac{(n-p)\frac{\hat{\sigma}^2}{\sigma^2}}{n-p}}}
+  = \frac{t^0_{\beta_i}}{ \sqrt{\frac{\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}}{n-p}}}\]</span></p>
+<p>Now, we know <span class="math inline">\(t^0_{\beta_i}\)</span> is standard normal distributed, and from
+<a href="normality-assumption.html#distribution-of-hatsigma2-step-3">the distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a> we
+have that:</p>
+<p><span class="math display">\[ \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p} \]</span>
+and from
+<a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy">the independence of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a>
+we have that any function of both variables is independent, in particular</p>
+<p><span class="math display">\[ t^0_{\beta_i} \quad \text{and} \quad \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \]</span>
+are independent. Therefore</p>
+<p><span class="math display">\[ t_{\beta_i} \sim t_{n-p} \]</span>
+Now, let <span class="math inline">\(t \sim t_m\)</span> a random variable with a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(m\)</span> degrees
+of freedom. Then call:</p>
+<p><span class="math display">\[ t_m\left(a\right) \quad \text{such that} \quad \mathbb{P}\left(t\leq t_m\left(a\right) \right) = a\]</span>
+for any <span class="math inline">\(a\in[0,1]\)</span></p>
+<p>Then, we have that:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbb{P}
+  &amp;\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq t_{\beta_i} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha  
+    &amp;&amp; \text{since the $t$ distribution is symmetric} \\
+  &amp;\implies \mathbb{P}\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha
+    &amp;&amp; \text{since the $t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}}$} \\
+  &amp;\implies \mathbb{P}\left( -t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \hat{\beta}_i - \beta_i \leq t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
+  &amp;\implies \mathbb{P}\left( -t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \beta_i - \hat{\beta}_i \leq t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
+  &amp;\implies \mathbb{P}\left( \hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \beta_i \leq \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
+\end{align*}\]</span></p>
+<p>So</p>
+<p><span class="math display">\[ \left(\hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}}, \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) \]</span>
+is a random interval, that is an interval that is a function of a random variables,
+in this case the random variables <span class="math inline">\(\hat{\beta}_i\)</span> and <span class="math inline">\(\hat{\sigma}^2_{\beta_i}\)</span>.
+This random interval will capture the true parameter <span class="math inline">\(\beta_i\)</span> with probability
+<span class="math inline">\(\alpha\)</span>. However, when data is observed and the interval is fixed (at the observed
+values), the interval either captures the true parameter or not (something we
+don’t know in general).</p>
+</div>
+<div id="confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new" class="section level3 hasAnchor" number="9.4.2">
+<h3><span class="header-section-number">9.4.2</span> Confidence intervals for the expected mean of a new observation <span class="math inline">\(\mathbf{x}_{new}\)</span><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Note that the expected mean of a new observation <span class="math inline">\(\mathbf{x}_{new}\)</span> is given by:</p>
+<p><span class="math display">\[ \mathbb{E}[y_{new}] = \mathbf{x}_{new}&#39; \boldsymbol{\beta}\]</span>
+then we can consider, an estimate of this parameter, as:</p>
+<p><span class="math display">\[ \mathbf{x}_{new}&#39; \hat{\boldsymbol{\beta}} \]</span>
+this estimate is a linear combination of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, therefore it has a normal
+distribution with mean and variance as follows:</p>
+<p><span class="math display">\[\mathbb{E}[\mathbf{x}_{new} \hat{\boldsymbol{\beta}}] = \mathbf{x}_{new} \mathbb{E}[\hat{\boldsymbol{\beta}}] = \mathbf{x}_{new}&#39; \boldsymbol{\beta}\]</span>
+<span class="math display">\[\mathbb{V}[\mathbf{x}_{new}&#39; \hat{\boldsymbol{\beta}}] = \mathbf{x}_{new}&#39; \mathbb{V}[\hat{\boldsymbol{\beta}}] \mathbf{x}_{new} = \mathbf{x}_{new}&#39; \sigma^2 (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new} =  \sigma^2 \mathbf{x}_{new}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new} \]</span>
+that is:
+<span class="math display">\[ \mathbf{x}_{new}&#39; \hat{\boldsymbol{\beta}} \sim N \left(\mathbf{x}_{new}&#39; \boldsymbol{\beta}, \sigma^2 \mathbf{x}_{new}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new} \right)  \]</span></p>
+<p>so, similarly, we can consider</p>
+<p><span class="math display">\[ t_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}} = \frac{\mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - \mathbf{x}_{new}&#39;\boldsymbol{\beta}}{\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}}}=\frac{\frac{\mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - \mathbf{x}_{new}&#39;\boldsymbol{\beta}}{\sqrt{\sigma^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}}}}{\sqrt{\frac{\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}}{n-p}}} \sim \chi^2_{n-p} \]</span>
+where <span class="math inline">\(\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}} = \hat{\sigma}^2 \mathbf{x}_{new}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new}\)</span>.
+This quantity is distributed as a <span class="math inline">\(t\)</span> with <span class="math inline">\(n-p\)</span> degrees of freedom since:</p>
+<p><span class="math display">\[\frac{\mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - \mathbf{x}_{new}&#39;\boldsymbol{\beta}}{\sqrt{\sigma^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}}} \sim N(0, 1)\]</span>
+<span class="math display">\[ \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p}\]</span>
+and this random variables are independent since one is a function of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>
+and the other a function of <span class="math inline">\(\hat{\mathbf{e}}\)</span>.</p>
+<p>Then we can conclude that:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbb{P}
+  &amp;\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq t_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha  \\
+  &amp;\implies \mathbb{P}\left( \mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}} \leq \mathbf{x}_{new}&#39;\boldsymbol{\beta}\leq \mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}} \right) = \alpha \\
+\end{align*}\]</span></p>
+<p>so, the random interval is given by:</p>
+<p><span class="math display">\[ \left( \mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}} , \mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}} \right) \]</span>
+is a random interval that captures <span class="math inline">\(\mathbf{x}_{new}&#39;\boldsymbol{\beta}\)</span> with probability <span class="math inline">\(\alpha\)</span>.</p>
+</div>
+<div id="confidence-intervals-for-linear-combinations-of-boldsymbolbeta" class="section level3 hasAnchor" number="9.4.3">
+<h3><span class="header-section-number">9.4.3</span> Confidence intervals for linear combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Note that if we consider the parameter</p>
+<p><span class="math display">\[ \mathbf{a}&#39; \hat{\boldsymbol{\beta}}\]</span>
+then we note that <span class="math inline">\(\beta_i\)</span> and <span class="math inline">\(\mathbf{x}_{new} \boldsymbol{\beta}\)</span> are particular cases, where the
+value of <span class="math inline">\(\mathbf{a}\)</span> is a s follows:</p>
+<p><span class="math display">\[ \mathbf{a}= (0,\ldots,0,1,0,\ldots,0) \quad \text{for} \quad \mathbf{a}\boldsymbol{\beta}= \beta_i\]</span>
+<span class="math display">\[ \mathbf{a}= \mathbf{x}_{new} \quad \text{for} \quad \mathbf{a}\boldsymbol{\beta}= \mathbf{x}_{new}&#39; \boldsymbol{\beta}\]</span>
+then, performing similar operations as before, we can create random intervals to
+estimate <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}\)</span> as follows:</p>
+<p><span class="math display">\[ \left( \mathbf{a}&#39;\hat{\boldsymbol{\beta}} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}}} , \mathbf{a}&#39;\hat{\boldsymbol{\beta}} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}}} \right) \]</span>
+that captures <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}\)</span> with probability <span class="math inline">\(\alpha\)</span>. Where
+<span class="math inline">\(\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}} = \hat{\sigma}^2 \mathbf{a}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{a}\)</span>.</p>
 
 </div>
 </div>
