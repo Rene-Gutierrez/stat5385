@@ -417,6 +417,301 @@ $$ \left( \ba'\hat{\bgb} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma
 that captures $\ba' \bgb$ with probability $\alpha$. Where 
 $\hat{\sigma}^2_{\ba'\bgb} = \hat{\sigma}^2 \ba' (\bX' \bX)^{-1} \ba$.
 
+## Hypothesis Testing
+
+We will approach hypothesis testing using an implausibility framework. 
+This involves formulating a null hypothesis, $H_0$, and assuming it to be true.
+Next, we calculate a test statistic that follows a specific distribution under 
+the null hypothesis. By comparing the observed value of the statistic to this 
+distribution, we assess how plausible it is to observe such a value if $H_0$ is true.
+
+
+### Testing for the Overall Regression
+
+For this hypothesis, we will use the notation of:
+
+$$ \bX^* = [\bones \bX] \quad \text{and} \quad \bgb^* = [\beta_0, \bgb]' \in \dR^{p}$$
+that is, the $*$ indicates all the independent variables. With $\bX$ of full rank.
+
+Our first test is to see if the Linear Regression framework is useful at all.
+That is, we want to test $\cH_0: \bgb = \bzero$. Before designing our test 
+statistic we will show the following auxiliary results:
+
+1. $SS_{reg} = \by'(\bH - \bH_0)\by$.
+2. $\bH \bH_0 = \bH_0 \bH = \bH_0$.
+3. $(\bH - \bH_0)$ is idempotent.
+4. $\by'(\bH - \bH_0)\by$ and $\by'(\bI - \bH)\by$ are independent.
+5. Under the null hypothesis $\cH_0: \bgb = \bzero$, $\frac{\by'(\bH - \bH_0)\by}{\sigma^2}$
+is distributed like a $\chi^2_{p-1}$.
+
+For auxiliary result 1, we have that:
+
+\begin{align*}
+SS_{tot} 
+  &= SS_{reg} + SS_{res} \\
+  &\implies \by'(\bI - \bH_0)\by = SS_{reg} + \by'(\bI - \bH)\by && \text{since $SS_{tot} = \by'(\bI - \bH)\by$ and $SS_{res} = \by'(\bI - \bH)\by$.} \\
+  &\implies SS_{reg} = \by'(\bI - \bH_0)\by - \by'(\bI - \bH)\by &&                                                                                   \\
+  &\implies SS_{reg} = \by'(\bI - \bH_0 - \bI + \bH)\by          &&                                                                                   \\
+  &\implies SS_{reg} = \by'(\bH - \bH_0)\by                      &&                                                                                   \\
+\end{align*}
+
+For auxiliary result 2, we have that:
+
+Both $\bH$ and $\bH0$ are symmetric, then $\bH \bH_0 = \bH_0 \bH$, and:
+
+\begin{align*}
+  \bH \bH_0 = \bH \bones (\bones' \bones)^{-1} \bones' &&                                     \\
+  \bH \bH_0 = \bones (\bones' \bones)^{-1} \bones'     && \text{since $\bH \bones = \bones$.} \\
+  \bH \bH_0 = \bH_0                                    &&                                     \\
+\end{align*}
+
+For auxiliary result 3, we have that:
+
+\begin{align*}
+  (\bH - \bH_0)(\bH - \bH_0) 
+    &= \bH \bH - \bH \bH_0 - \bH_0 \bH + \bH_0 \bH_0 &&                                                \\
+    &= \bH - \bH \bH_0 - \bH_0 \bH + \bH_0           && \text{since $\bH_0$ and $\bH$ are idempotent.} \\
+    &= \bH - \bH_0 - \bH_0 + \bH_0                   && \text{since $\bH \bH_0 = \bH_0 \bH = \bH_0$.}  \\
+    &= \bH - \bH_0                                   &&                                                \\
+\end{align*}
+
+so, $(\bH - \bH_0)$ is idempotent.
+
+For auxiliary result 4, first we have that:
+
+\begin{align*}
+  \dC[(\bH - \bH_0) \by, (\bI - \bH) \by]
+    &= (\bH - \bH_0) \dC[\by,\by] (\bI - \bH)        \\
+    &= (\bH - \bH_0) \dV[\by] (\bI - \bH)            \\
+    &= \sigma^2 (\bH - \bH_0) (\bI - \bH)            \\
+    &= \sigma^2 (\bH - \bH_0  - \bH \bH + \bH_0 \bH) \\
+    &= \sigma^2 (\bH - \bH_0  - \bH + \bH_0 \bH)     && \text{since $\bH$ is idempotent.} \\
+    &= \sigma^2 (\bH - \bH_0  - \bH + \bH_0)         && \text{since $\bH_0 \bH = \bH_0$.} \\
+    &= \sigma^2 \bzero                               &&                                   \\
+    &= \bzero                                        &&                                   \\
+\end{align*}
+
+This tells us that $(\bH - \bH_0)\by$ and $(\bI - \bH)\by$ are uncorrelated. Now,
+since $(\bH - \bH_0)\by$ and $(\bI - \bH)\by$ are normally distributed, then 
+zero correlation implies independence. Then, any function of this 2 quantities 
+are independent. Note that:
+
+\begin{align*}
+  \by'(\bH - \bH_0)\by 
+    &= \by'(\bH - \bH_0)(\bH - \bH_0)(\bH - \bH_0)\by && \text{since $(\bH - \bH_0)$ is idempotent.}
+\end{align*}
+
+Then, $\by'(\bH - \bH_0)\by$ is a quadratic function of $(\bH - \bH_0)\by$. Similarly,
+$\by'(\bH - \bH)\by$ is a quadratic function of $(\bH - \bH)\by$. Therefore, 
+$\by'(\bH - \bH_0)\by$ and $\by'(\bH - \bH)\by$ are independent.
+
+For result 5, we have that:
+
+\begin{align*}
+  (\bH - \bH_0)\by 
+    &= (\bH - \bH_0)(\bX^* \bgb^* + \be) && \text{since $\by = \bX \bgb + \be$.} \\
+    &= (\bH - \bH_0)([\bones \bX] [\beta_0, \bgb]' + \be)                && \text{since $\bX^* = [\bones \bX] \quad \text{and} \quad \bgb^* = [\beta_0, \bgb]'$.} \\
+    &= (\bH - \bH_0)(\bones\beta_0 + \bX\bgb + \be) &&  \\
+    &= (\bH - \bH_0)(\bones\beta_0) + (\bH - \bH_0)(\bX\bgb + \be) &&  \\
+    &= (\bH \bones - \bH_0 \bones)\beta_0 + (\bH - \bH_0)(\bX\bgb + \be) &&  \\
+    &= (\bones - \bones)\beta_0 + (\bH - \bH_0)(\bX\bgb + \be) &&  \\
+    &= (\bH - \bH_0)(\bX\bgb + \be) &&  \\
+    &= (\bH - \bH_0)\be                                                  && \text{iff $\cH_0: \bgb = \bzero$ for any full rank $\bX$.}
+\end{align*}
+
+That is, for any full rank $\bX$, we have that:
+
+$$ (\bH - \bH_0)\by  = (\bH - \bH_0)\be \iff \cH_0: \bgb = \bzero$$
+
+Then:
+
+\begin{align*}
+  \be \sim N(0, \sigma^2 \bI)
+    &\implies \be'(\bH - \bH_0)\be \sim \sigma^2 \chi^2_{p-1}                                   && \text{since $(\bH - \bH_0)$ is idempotent of rank $p-1$}. \\
+    &\implies \frac{\be'(\bH - \bH_0)\be}{\sigma^2} \sim \chi^2_{p-1}                           &&                                                           \\
+    &\implies \frac{\be'(\bH - \bH_0)(\bH - \bH_0)(\bH - \bH_0)\be}{\sigma^2} \sim \chi^2_{p-1} && \text{since $(\bH - \bH_0)$ is idempotent}.               \\
+    &\implies \frac{\by'(\bH - \bH_0)(\bH - \bH_0)(\bH - \bH_0)\by}{\sigma^2} \sim \chi^2_{p-1} && \text{iff the null hypothesis holds}.                     \\
+    &\implies \frac{\by'(\bH - \bH_0)\by}{\sigma^2} \sim \chi^2_{p-1}                           && \text{since $(\bH - \bH_0)$ is idempotent}.               \\
+\end{align*}
+
+That is:
+
+$$ \frac{\by'(\bH - \bH_0)\by}{\sigma^2} \sim \chi^2_{p-1} \iff \cH_0: \bgb = \bzero$$
+
+With this results, we propose the following statistic:
+
+$$ F_{\bgb = 0} = \frac{\frac{SS_{reg}}{p-1}}{\frac{SS_{res}}{n-p}} $$
+
+and we will show that, this statistic is distributed like an $F_{p-1,n-p}$ only
+under the null hypothesis.
+
+\begin{align*}
+  F_{\bgb = 0} 
+    &= \frac{\frac{SS_{reg}}{p-1}}{\frac{SS_{res}}{n-p}}                                                           &&                                                                                                   \\
+    &= \frac{\frac{\by'(\bH - \bH_0)\by}{p-1}}{\frac{\by'(\bI - \bH)\by}{n-p}}                                     && \text{since $SS_{reg} = \by'(\bH - \bH_0)\by$ and $SS_{res}=\by'(\bI - \bH)\by$}                  \\
+    &= \frac{\frac{\by'(\bH - \bH_0)\by}{\sigma^2}\frac{1}{p-1}}{\frac{\by'(\bI - \bH)\by}{\sigma^2}\frac{1}{n-p}} &&                                                                                                   \\
+    &\sim \frac{\frac{\chi^2_{p-1}}{p-1}}{\frac{\chi^2_{n-p}}{n-p}}                                                && \text{since $\frac{\by'(\bH - \bH_0)\by}{\sigma^2} \sim \chi^2_{p-1}$ under the null hypothesis.} \\
+    &\sim F_{p-1,n-p}                                                                                              && \text{since $\by'(\bH - \bH_0)\by$ and $\by'(\bH - \bH)\by$ are independent.}
+\end{align*}
+
+So, once we observe the value of this statistic, we can contrast it with respect
+respect to this distribution. Call $F^*_{\bgb = 0}$ the observed value, and consider
+a random variable $F \sim F_{p-1,n-p}$, then we can see what would be the
+probability of observing the value of the statistic (or a more extreme value).
+
+$$ \dP(F \geq F^*_{\bgb = 0}) $$
+depending on how small or big is this probability, we can reject or not reject the
+null hypothesis. This value is a called a p-value.
+
+### Testing if one variable is not relevant
+
+We can test if a particular variable is not relevant for the regression. That is,
+$\cH_0: \beta_i = 0$. We will use the same strategy, that is, we will build a 
+test statistic that has a certain distribution only under the null hypothesis.
+
+For this hypothesis we propose the following test statistic:
+
+$$ t_{\beta_i = 0} = \frac{\hat{\beta}_i}{\sqrt{\hat{\sigma}^2 [(\bX \bX)^{-1}]_{ii}}} $$
+First note that:
+
+\begin{align*}
+\hat{\bgb} \sim N \left(\bgb, \sigma^2(\bX \bX)^{-1}\right)
+  &\implies \hat{\beta}_i \sim H(\beta_i, \sigma^2 [(\bX \bX)^{-1}]_{ii})                                                                              \\
+  &\implies \frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}} \sim N \left(\frac{\beta_i}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}, 1 \right) \\
+  &\implies \frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}} \sim N \left( 0, 1 \right) &&  \iff \cH_0: \beta_i = 0                         \\
+\end{align*}
+
+Then we have:
+
+$$$$
+
+\begin{align*}
+t_{\beta_i = 0} 
+  &= \frac{\hat{\beta}_i}{\sqrt{\hat{\sigma}^2 [(\bX \bX)^{-1}]_{ii}}} \\
+  &= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}}{\frac{\sqrt{\hat{\sigma}^2 [(\bX \bX)^{-1}]_{ii}}}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}} \\
+  &= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}}{\sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}}                                                    \\
+  &= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}}{\sqrt{\frac{\hat{\be}'\hat{\be}}{\sigma^2}\frac{1}{n-p}}}                                  && \text{since $\hat{\sigma}^2 = \frac{\hat{\be}\hat{\be}}{n-p}$} \\
+  &\sim \frac{N \left(\frac{\beta_i}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}, 1 \right)}{\sqrt{\frac{\chi^2_{n-p}}{n-p}}}                                            && \text{since $\frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}} \sim N \left( 0, 1 \right)$ and $\frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \chi^2_{n-p}$} \\
+  &\sim \frac{N \left(0, 1 \right)}{\sqrt{\frac{\chi^2_{n-p}}{n-p}}}                                                                                                && \iff \cH_0: \beta_i = 0  \\
+  &\sim t_{n-p}                                                                                                                                                     && \text{since $\hat{\beta}_i$ and $\hat{\sigma}^2$ are independent}.  \\
+\end{align*}
+
+Then, under the null hypothesis we have that:
+
+$$ t_{\beta_i = 0} \sim  t_{n-p}$$
+So, if we call $t_{\beta_i = 0}^*$ the observed value of $t_{\beta_i = 0}$, and
+if we let $t$ be distributed as $t_{n-p}$, we can compute:
+
+$$ \dP(t \geq t_{\beta_i = 0}^*) $$
+and depending on the value, we can reject or accept the null hypothesis.
+
+### Testing if a Subgroup of the Variables is Relevant
+
+For this test, we can assume without loss of generality, that the variables we 
+want to see if it is relevant are the first $k$. So we can divide the design 
+matrix as:
+
+$$ \bX = [\bX_1 \bX_2] $$
+where the variables to test are in $\bX_1$ and the rest of the variables are in
+$\bX_2$ (including possibly the intercept). And similarly we have $\bgb = [\bgb_1 \bgb_2]'$.
+
+This test is similar to the first test once we express it accordingly. We will 
+consider two linear regressions. One including all variables and one excluding 
+the variables to be tested indexed by $2$. With this we can build the following 
+test statistics:
+
+$$ F_{\bgb_1=\bzero} = \frac{\frac{SS_{res,2} - SS_{res}}{k}}{\frac{SS_{res}}{n-p}} $$
+Then note the following:
+
+\begin{align*}
+  SS_{res,2} - SS_{res}
+    &= \by'(\bI - \bH_2)\by - \by'(\bI - \bH) \by \\
+    &= \by'(\bI - \bH_2 - \bI + \bH) \by          \\
+    &= \by'(\bH - \bH_2) \by                      \\
+\end{align*}
+
+Again, we will see that $(\bH - \bH_2)$ is idempotent and $(\bH - \bH_2)\by = (\bH - \bH_2)\be$
+only under the null hypothesis.
+
+First, let us see that $(\bH - \bH_2)$ is idempotent. First note that:
+
+$$ \bH \bH_2 = \bH_2 \bH = \bH_2$$
+since $\bH_2$ is the projection matrix of the columns of $\bX_2$ a subspace of the
+columns of $\bX$. Then:
+
+\begin{align*}
+  (\bH - \bH_2)(\bH - \bH_2)
+    &= \bH \bH - \bH_2 \bH - \bH \bH_2 + \bH_2 \bH_2 \\
+    &= \bH - \bH_2 \bH - \bH \bH_2 + \bH_2           && \text{since $\bH_2$ and $\bH$ are idempotent}. \\
+    &= \bH - \bH_2 - \bH_2 + \bH_2                   && \text{since $\bH \bH_2 = \bH_2 \bH = \bH_2$}.  \\
+    &= \bH - \bH_2                                   &&                                                \\
+\end{align*}
+
+then $(\bH - \bH_2)$ is idempotent.
+
+Now let us see that $(\bH - \bH_R)\by = (\bH - \bH_R)\be$ under the null hypothesis.
+First, let us note that:
+
+$$ \bH \bX_2 = \bX_2 $$
+since space generated by $\bX_2$ is a subspace of the space generated by $\bX$,
+since $\bX$ contains the columns of $\bX_2$. And we also note that:
+
+$$ \bH_2 \bX_2 = \bX_2 $$
+since $\bH_2$ is the projection matrix of the space generated by the columns of
+$\bX_2$. We note that this results can be proven algebraically.
+
+Then:
+
+\begin{align*}
+  (\bH - \bH_2)\by
+    &= (\bH - \bH_2)(\bX \bgb + \be)                                      \\
+    &= (\bH - \bH_2)([\bX_1 \bX_2] [\bgb_1' \bgb_2']' + \be)              \\
+    &= (\bH - \bH_2)(\bX_1 \bgb_1 \bX_2 \bgb_2 + \be)                     \\
+    &= (\bH - \bH_2)(\bX_2 \bgb_2) + (\bH - \bH_1)(\bX_1 \bgb_1 + \be)    \\
+    &= (\bH \bX_2 - \bH_2\bX_2)\bgb_2 + (\bH - \bH_1)(\bX_1 \bgb_1 + \be) \\
+    &= (\bX_2 - \bX_2)\bgb_2 + (\bH - \bH_1)(\bX_1 \bgb_1 + \be)          && \text{since $\bH \bX_1 = \bX_1$ and $\bH_1 \bX_1 = \bX_1$} \\
+    &= (\bH - \bH_R)(\bX_1 \bgb_1 + \be)                                  &&                                                            \\
+    &= (\bH - \bH_R)\be                                                   && \iff \cH_0: \bgb_1 = \bzero \\
+\end{align*}
+
+So, if $\bX_1$ is full rank, then we have that:
+
+$$ (\bH - \bH_2)\by = (\bH - \bH_R)\be \iff \cH_0: \bgb_1 = \bzero $$
+
+Then we can proceed to see what is the distribution of our test statistic under 
+the null hypothesis.
+
+\begin{align*}
+  F_{\bgb_1=\bzero} 
+    &= \frac{\frac{SS_{res,2} - SS_{res}}{k}}{\frac{SS_{res}}{n-p}}                                                                          &&                                                                                                   \\
+    &= \frac{\frac{\by'(\bH - \bH_2)\by}{k}}{\frac{\by'(\bI - \bH)\by}{n-p}}                                                                 && \text{since $SS_{res,2} - SS_{res} = \by'(\bH - \bH_2)\by$ and $SS_{res}=\by'(\bI - \bH)\by$}     \\
+    &= \frac{\frac{\by'(\bH - \bH_2)\by}{\sigma^2}\frac{1}{k}}{\frac{\by'(\bI - \bH)\by}{\sigma^2}\frac{1}{n-p}}                             &&                                                                                                   \\
+    &= \frac{\frac{\by'(\bH - \bH_2)(\bH - \bH_2)(\bH - \bH_2)\by}{\sigma^2}\frac{1}{k}}{\frac{\by'(\bI - \bH)\by}{\sigma^2}\frac{1}{n-p}}   && \text{snce $(\bH - \bH_2)$ is idempotent}.                                                        \\
+    &= \frac{\frac{\be'(\bH - \bH_2)(\bH - \bH_2)(\bH - \bH_2)\be}{\sigma^2}\frac{1}{k}}{\frac{\by'(\bI - \bH)\by}{\sigma^2}\frac{1}{n-p}}   && \iff  \cH_0: \bgb_1 = \bzero                                                                      \\
+    &= \frac{\frac{\be'(\bH - \bH_2)\be}{\sigma^2}\frac{1}{k}}{\frac{\by'(\bI - \bH)\by}{\sigma^2}\frac{1}{n-p}}                             && \text{since $(\bH - \bH_2)$ is idempotent}.                                                       \\
+    &\sim \frac{\frac{\chi^2_{k}}{k}}{\frac{\chi^2_{n-p}}{n-p}}                                                                              && \text{since $(\bH - \bH_2)$ is idempotent and $\frac{\be}{\sqrt{\sigma^2}} \sim N(0, \bI)$}.      \\
+    &\sim F_{k,n-p}                                                                                                                          && 
+\end{align*}
+
+So, before we observe the data, $F_{\bgb_1=\bzero}$ has a $F_{k,n-p}$ distribution.
+Then, once we observe the data, call $F_{\bgb_1=\bzero}^*$ the observed value of
+the statistic, and let $F$ be distributed as an $F_{k,n-p}$, we can compute:
+
+$$ \dP(F \geq F_{\bgb_1=\bzero}^*) $$
+and reject the null hypothesis if this probability is small and not reject if 
+this probability is small.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

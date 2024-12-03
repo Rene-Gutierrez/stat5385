@@ -172,3 +172,7 @@ interval-estimation
 confidence-intervals-for-coefficients
 confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new
 confidence-intervals-for-linear-combinations-of-boldsymbolbeta
+hypothesis-testing
+testing-for-the-overall-regression
+testing-if-one-variable-is-not-relevant
+testing-if-a-subgroup-of-the-variables-is-relevant

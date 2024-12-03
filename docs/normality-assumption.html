@@ -287,6 +287,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>9.4.2</b> Confidence intervals for the expected mean of a new observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
 <li class="chapter" data-level="9.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>9.4.3</b> Confidence intervals for linear combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
 </ul></li>
+<li class="chapter" data-level="9.5" data-path="normality-assumption.html"><a href="normality-assumption.html#hypothesis-testing"><i class="fa fa-check"></i><b>9.5</b> Hypothesis Testing</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-for-the-overall-regression"><i class="fa fa-check"></i><b>9.5.1</b> Testing for the Overall Regression</a></li>
+<li class="chapter" data-level="9.5.2" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-if-one-variable-is-not-relevant"><i class="fa fa-check"></i><b>9.5.2</b> Testing if one variable is not relevant</a></li>
+<li class="chapter" data-level="9.5.3" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-if-a-subgroup-of-the-variables-is-relevant"><i class="fa fa-check"></i><b>9.5.3</b> Testing if a Subgroup of the Variables is Relevant</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -635,6 +641,232 @@ estimate <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}\)</span>
 <p><span class="math display">\[ \left( \mathbf{a}&#39;\hat{\boldsymbol{\beta}} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}}} , \mathbf{a}&#39;\hat{\boldsymbol{\beta}} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}}} \right) \]</span>
 that captures <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}\)</span> with probability <span class="math inline">\(\alpha\)</span>. Where
 <span class="math inline">\(\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}} = \hat{\sigma}^2 \mathbf{a}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{a}\)</span>.</p>
+</div>
+</div>
+<div id="hypothesis-testing" class="section level2 hasAnchor" number="9.5">
+<h2><span class="header-section-number">9.5</span> Hypothesis Testing<a href="normality-assumption.html#hypothesis-testing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will approach hypothesis testing using an implausibility framework.
+This involves formulating a null hypothesis, <span class="math inline">\(H_0\)</span>, and assuming it to be true.
+Next, we calculate a test statistic that follows a specific distribution under
+the null hypothesis. By comparing the observed value of the statistic to this
+distribution, we assess how plausible it is to observe such a value if <span class="math inline">\(H_0\)</span> is true.</p>
+<div id="testing-for-the-overall-regression" class="section level3 hasAnchor" number="9.5.1">
+<h3><span class="header-section-number">9.5.1</span> Testing for the Overall Regression<a href="normality-assumption.html#testing-for-the-overall-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For this hypothesis, we will use the notation of:</p>
+<p><span class="math display">\[ \mathbf{X}^* = [\mathbf{1}\mathbf{X}] \quad \text{and} \quad \boldsymbol{\beta}^* = [\beta_0, \boldsymbol{\beta}]&#39; \in \mathbb{R}^{p}\]</span>
+that is, the <span class="math inline">\(*\)</span> indicates all the independent variables. With <span class="math inline">\(\mathbf{X}\)</span> of full rank.</p>
+<p>Our first test is to see if the Linear Regression framework is useful at all.
+That is, we want to test <span class="math inline">\(\mathcal{H}_0: \boldsymbol{\beta}= \mathbf{0}\)</span>. Before designing our test
+statistic we will show the following auxiliary results:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(SS_{reg} = \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span>.</li>
+<li><span class="math inline">\(\mathbf{H}\mathbf{H}_0 = \mathbf{H}_0 \mathbf{H}= \mathbf{H}_0\)</span>.</li>
+<li><span class="math inline">\((\mathbf{H}- \mathbf{H}_0)\)</span> is idempotent.</li>
+<li><span class="math inline">\(\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span> and <span class="math inline">\(\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}\)</span> are independent.</li>
+<li>Under the null hypothesis <span class="math inline">\(\mathcal{H}_0: \boldsymbol{\beta}= \mathbf{0}\)</span>, <span class="math inline">\(\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2}\)</span>
+is distributed like a <span class="math inline">\(\chi^2_{p-1}\)</span>.</li>
+</ol>
+<p>For auxiliary result 1, we have that:</p>
+<p><span class="math display">\[\begin{align*}
+SS_{tot}
+  &amp;= SS_{reg} + SS_{res} \\
+  &amp;\implies \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}_0)\mathbf{y}= SS_{reg} + \mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}&amp;&amp; \text{since $SS_{tot} = \mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}$ and $SS_{res} = \mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}$.} \\
+  &amp;\implies SS_{reg} = \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}_0)\mathbf{y}- \mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}&amp;&amp;                                                                                   \\
+  &amp;\implies SS_{reg} = \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}_0 - \mathbf{I}+ \mathbf{H})\mathbf{y}&amp;&amp;                                                                                   \\
+  &amp;\implies SS_{reg} = \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}&amp;&amp;                                                                                   \\
+\end{align*}\]</span></p>
+<p>For auxiliary result 2, we have that:</p>
+<p>Both <span class="math inline">\(\mathbf{H}\)</span> and <span class="math inline">\(\mathbf{H}0\)</span> are symmetric, then <span class="math inline">\(\mathbf{H}\mathbf{H}_0 = \mathbf{H}_0 \mathbf{H}\)</span>, and:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{H}\mathbf{H}_0 = \mathbf{H}\mathbf{1}(\mathbf{1}&#39; \mathbf{1})^{-1} \mathbf{1}&#39; &amp;&amp;                                     \\
+  \mathbf{H}\mathbf{H}_0 = \mathbf{1}(\mathbf{1}&#39; \mathbf{1})^{-1} \mathbf{1}&#39;     &amp;&amp; \text{since $\mathbf{H}\mathbf{1}= \mathbf{1}$.} \\
+  \mathbf{H}\mathbf{H}_0 = \mathbf{H}_0                                    &amp;&amp;                                     \\
+\end{align*}\]</span></p>
+<p>For auxiliary result 3, we have that:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)
+    &amp;= \mathbf{H}\mathbf{H}- \mathbf{H}\mathbf{H}_0 - \mathbf{H}_0 \mathbf{H}+ \mathbf{H}_0 \mathbf{H}_0 &amp;&amp;                                                \\
+    &amp;= \mathbf{H}- \mathbf{H}\mathbf{H}_0 - \mathbf{H}_0 \mathbf{H}+ \mathbf{H}_0           &amp;&amp; \text{since $\mathbf{H}_0$ and $\mathbf{H}$ are idempotent.} \\
+    &amp;= \mathbf{H}- \mathbf{H}_0 - \mathbf{H}_0 + \mathbf{H}_0                   &amp;&amp; \text{since $\mathbf{H}\mathbf{H}_0 = \mathbf{H}_0 \mathbf{H}= \mathbf{H}_0$.}  \\
+    &amp;= \mathbf{H}- \mathbf{H}_0                                   &amp;&amp;                                                \\
+\end{align*}\]</span></p>
+<p>so, <span class="math inline">\((\mathbf{H}- \mathbf{H}_0)\)</span> is idempotent.</p>
+<p>For auxiliary result 4, first we have that:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbb{C}[(\mathbf{H}- \mathbf{H}_0) \mathbf{y}, (\mathbf{I}- \mathbf{H}) \mathbf{y}]
+    &amp;= (\mathbf{H}- \mathbf{H}_0) \mathbb{C}[\mathbf{y},\mathbf{y}] (\mathbf{I}- \mathbf{H})        \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0) \mathbb{V}[\mathbf{y}] (\mathbf{I}- \mathbf{H})            \\
+    &amp;= \sigma^2 (\mathbf{H}- \mathbf{H}_0) (\mathbf{I}- \mathbf{H})            \\
+    &amp;= \sigma^2 (\mathbf{H}- \mathbf{H}_0  - \mathbf{H}\mathbf{H}+ \mathbf{H}_0 \mathbf{H}) \\
+    &amp;= \sigma^2 (\mathbf{H}- \mathbf{H}_0  - \mathbf{H}+ \mathbf{H}_0 \mathbf{H})     &amp;&amp; \text{since $\mathbf{H}$ is idempotent.} \\
+    &amp;= \sigma^2 (\mathbf{H}- \mathbf{H}_0  - \mathbf{H}+ \mathbf{H}_0)         &amp;&amp; \text{since $\mathbf{H}_0 \mathbf{H}= \mathbf{H}_0$.} \\
+    &amp;= \sigma^2 \mathbf{0}&amp;&amp;                                   \\
+    &amp;= \mathbf{0}&amp;&amp;                                   \\
+\end{align*}\]</span></p>
+<p>This tells us that <span class="math inline">\((\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span> and <span class="math inline">\((\mathbf{I}- \mathbf{H})\mathbf{y}\)</span> are uncorrelated. Now,
+since <span class="math inline">\((\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span> and <span class="math inline">\((\mathbf{I}- \mathbf{H})\mathbf{y}\)</span> are normally distributed, then
+zero correlation implies independence. Then, any function of this 2 quantities
+are independent. Note that:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}
+    &amp;= \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)\mathbf{y}&amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_0)$ is idempotent.}
+\end{align*}\]</span></p>
+<p>Then, <span class="math inline">\(\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span> is a quadratic function of <span class="math inline">\((\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span>. Similarly,
+<span class="math inline">\(\mathbf{y}&#39;(\mathbf{H}- \mathbf{H})\mathbf{y}\)</span> is a quadratic function of <span class="math inline">\((\mathbf{H}- \mathbf{H})\mathbf{y}\)</span>. Therefore,
+<span class="math inline">\(\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span> and <span class="math inline">\(\mathbf{y}&#39;(\mathbf{H}- \mathbf{H})\mathbf{y}\)</span> are independent.</p>
+<p>For result 5, we have that:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{H}- \mathbf{H}_0)\mathbf{y}
+    &amp;= (\mathbf{H}- \mathbf{H}_0)(\mathbf{X}^* \boldsymbol{\beta}^* + \mathbf{e}) &amp;&amp; \text{since $\mathbf{y}= \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}$.} \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0)([\mathbf{1}\mathbf{X}] [\beta_0, \boldsymbol{\beta}]&#39; + \mathbf{e})                &amp;&amp; \text{since $\mathbf{X}^* = [\mathbf{1}\mathbf{X}] \quad \text{and} \quad \boldsymbol{\beta}^* = [\beta_0, \boldsymbol{\beta}]&#39;$.} \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0)(\mathbf{1}\beta_0 + \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}) &amp;&amp;  \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0)(\mathbf{1}\beta_0) + (\mathbf{H}- \mathbf{H}_0)(\mathbf{X}\boldsymbol{\beta}+ \mathbf{e}) &amp;&amp;  \\
+    &amp;= (\mathbf{H}\mathbf{1}- \mathbf{H}_0 \mathbf{1})\beta_0 + (\mathbf{H}- \mathbf{H}_0)(\mathbf{X}\boldsymbol{\beta}+ \mathbf{e}) &amp;&amp;  \\
+    &amp;= (\mathbf{1}- \mathbf{1})\beta_0 + (\mathbf{H}- \mathbf{H}_0)(\mathbf{X}\boldsymbol{\beta}+ \mathbf{e}) &amp;&amp;  \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0)(\mathbf{X}\boldsymbol{\beta}+ \mathbf{e}) &amp;&amp;  \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0)\mathbf{e}&amp;&amp; \text{iff $\mathcal{H}_0: \boldsymbol{\beta}= \mathbf{0}$ for any full rank $\mathbf{X}$.}
+\end{align*}\]</span></p>
+<p>That is, for any full rank <span class="math inline">\(\mathbf{X}\)</span>, we have that:</p>
+<p><span class="math display">\[ (\mathbf{H}- \mathbf{H}_0)\mathbf{y}= (\mathbf{H}- \mathbf{H}_0)\mathbf{e}\iff \mathcal{H}_0: \boldsymbol{\beta}= \mathbf{0}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{e}\sim N(0, \sigma^2 \mathbf{I})
+    &amp;\implies \mathbf{e}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{e}\sim \sigma^2 \chi^2_{p-1}                                   &amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_0)$ is idempotent of rank $p-1$}. \\
+    &amp;\implies \frac{\mathbf{e}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{e}}{\sigma^2} \sim \chi^2_{p-1}                           &amp;&amp;                                                           \\
+    &amp;\implies \frac{\mathbf{e}&#39;(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)\mathbf{e}}{\sigma^2} \sim \chi^2_{p-1} &amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_0)$ is idempotent}.               \\
+    &amp;\implies \frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2} \sim \chi^2_{p-1} &amp;&amp; \text{iff the null hypothesis holds}.                     \\
+    &amp;\implies \frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2} \sim \chi^2_{p-1}                           &amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_0)$ is idempotent}.               \\
+\end{align*}\]</span></p>
+<p>That is:</p>
+<p><span class="math display">\[ \frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2} \sim \chi^2_{p-1} \iff \mathcal{H}_0: \boldsymbol{\beta}= \mathbf{0}\]</span></p>
+<p>With this results, we propose the following statistic:</p>
+<p><span class="math display">\[ F_{\boldsymbol{\beta}= 0} = \frac{\frac{SS_{reg}}{p-1}}{\frac{SS_{res}}{n-p}} \]</span></p>
+<p>and we will show that, this statistic is distributed like an <span class="math inline">\(F_{p-1,n-p}\)</span> only
+under the null hypothesis.</p>
+<p><span class="math display">\[\begin{align*}
+  F_{\boldsymbol{\beta}= 0}
+    &amp;= \frac{\frac{SS_{reg}}{p-1}}{\frac{SS_{res}}{n-p}}                                                           &amp;&amp;                                                                                                   \\
+    &amp;= \frac{\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{p-1}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{n-p}}                                     &amp;&amp; \text{since $SS_{reg} = \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}$ and $SS_{res}=\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}$}                  \\
+    &amp;= \frac{\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2}\frac{1}{p-1}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{\sigma^2}\frac{1}{n-p}} &amp;&amp;                                                                                                   \\
+    &amp;\sim \frac{\frac{\chi^2_{p-1}}{p-1}}{\frac{\chi^2_{n-p}}{n-p}}                                                &amp;&amp; \text{since $\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2} \sim \chi^2_{p-1}$ under the null hypothesis.} \\
+    &amp;\sim F_{p-1,n-p}                                                                                              &amp;&amp; \text{since $\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}$ and $\mathbf{y}&#39;(\mathbf{H}- \mathbf{H})\mathbf{y}$ are independent.}
+\end{align*}\]</span></p>
+<p>So, once we observe the value of this statistic, we can contrast it with respect
+respect to this distribution. Call <span class="math inline">\(F^*_{\boldsymbol{\beta}= 0}\)</span> the observed value, and consider
+a random variable <span class="math inline">\(F \sim F_{p-1,n-p}\)</span>, then we can see what would be the
+probability of observing the value of the statistic (or a more extreme value).</p>
+<p><span class="math display">\[ \mathbb{P}(F \geq F^*_{\boldsymbol{\beta}= 0}) \]</span>
+depending on how small or big is this probability, we can reject or not reject the
+null hypothesis. This value is a called a p-value.</p>
+</div>
+<div id="testing-if-one-variable-is-not-relevant" class="section level3 hasAnchor" number="9.5.2">
+<h3><span class="header-section-number">9.5.2</span> Testing if one variable is not relevant<a href="normality-assumption.html#testing-if-one-variable-is-not-relevant" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can test if a particular variable is not relevant for the regression. That is,
+<span class="math inline">\(\mathcal{H}_0: \beta_i = 0\)</span>. We will use the same strategy, that is, we will build a
+test statistic that has a certain distribution only under the null hypothesis.</p>
+<p>For this hypothesis we propose the following test statistic:</p>
+<p><span class="math display">\[ t_{\beta_i = 0} = \frac{\hat{\beta}_i}{\sqrt{\hat{\sigma}^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}} \]</span>
+First note that:</p>
+<p><span class="math display">\[\begin{align*}
+\hat{\boldsymbol{\beta}} \sim N \left(\boldsymbol{\beta}, \sigma^2(\mathbf{X}\mathbf{X})^{-1}\right)
+  &amp;\implies \hat{\beta}_i \sim H(\beta_i, \sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii})                                                                              \\
+  &amp;\implies \frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}} \sim N \left(\frac{\beta_i}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}, 1 \right) \\
+  &amp;\implies \frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}} \sim N \left( 0, 1 \right) &amp;&amp;  \iff \mathcal{H}_0: \beta_i = 0                         \\
+\end{align*}\]</span></p>
+<p>Then we have:</p>
+<p>$$$$</p>
+<p><span class="math display">\[\begin{align*}
+t_{\beta_i = 0}
+  &amp;= \frac{\hat{\beta}_i}{\sqrt{\hat{\sigma}^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}} \\
+  &amp;= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}}{\frac{\sqrt{\hat{\sigma}^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}} \\
+  &amp;= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}}{\sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}}                                                    \\
+  &amp;= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}}{\sqrt{\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}\frac{1}{n-p}}}                                  &amp;&amp; \text{since $\hat{\sigma}^2 = \frac{\hat{\mathbf{e}}\hat{\mathbf{e}}}{n-p}$} \\
+  &amp;\sim \frac{N \left(\frac{\beta_i}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}, 1 \right)}{\sqrt{\frac{\chi^2_{n-p}}{n-p}}}                                            &amp;&amp; \text{since $\frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}} \sim N \left( 0, 1 \right)$ and $\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p}$} \\
+  &amp;\sim \frac{N \left(0, 1 \right)}{\sqrt{\frac{\chi^2_{n-p}}{n-p}}}                                                                                                &amp;&amp; \iff \mathcal{H}_0: \beta_i = 0  \\
+  &amp;\sim t_{n-p}                                                                                                                                                     &amp;&amp; \text{since $\hat{\beta}_i$ and $\hat{\sigma}^2$ are independent}.  \\
+\end{align*}\]</span></p>
+<p>Then, under the null hypothesis we have that:</p>
+<p><span class="math display">\[ t_{\beta_i = 0} \sim  t_{n-p}\]</span>
+So, if we call <span class="math inline">\(t_{\beta_i = 0}^*\)</span> the observed value of <span class="math inline">\(t_{\beta_i = 0}\)</span>, and
+if we let <span class="math inline">\(t\)</span> be distributed as <span class="math inline">\(t_{n-p}\)</span>, we can compute:</p>
+<p><span class="math display">\[ \mathbb{P}(t \geq t_{\beta_i = 0}^*) \]</span>
+and depending on the value, we can reject or accept the null hypothesis.</p>
+</div>
+<div id="testing-if-a-subgroup-of-the-variables-is-relevant" class="section level3 hasAnchor" number="9.5.3">
+<h3><span class="header-section-number">9.5.3</span> Testing if a Subgroup of the Variables is Relevant<a href="normality-assumption.html#testing-if-a-subgroup-of-the-variables-is-relevant" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For this test, we can assume without loss of generality, that the variables we
+want to see if it is relevant are the first <span class="math inline">\(k\)</span>. So we can divide the design
+matrix as:</p>
+<p><span class="math display">\[ \mathbf{X}= [\mathbf{X}_1 \mathbf{X}_2] \]</span>
+where the variables to test are in <span class="math inline">\(\mathbf{X}_1\)</span> and the rest of the variables are in
+<span class="math inline">\(\mathbf{X}_2\)</span> (including possibly the intercept). And similarly we have <span class="math inline">\(\boldsymbol{\beta}= [\boldsymbol{\beta}_1 \boldsymbol{\beta}_2]&#39;\)</span>.</p>
+<p>This test is similar to the first test once we express it accordingly. We will
+consider two linear regressions. One including all variables and one excluding
+the variables to be tested indexed by <span class="math inline">\(2\)</span>. With this we can build the following
+test statistics:</p>
+<p><span class="math display">\[ F_{\boldsymbol{\beta}_1=\mathbf{0}} = \frac{\frac{SS_{res,2} - SS_{res}}{k}}{\frac{SS_{res}}{n-p}} \]</span>
+Then note the following:</p>
+<p><span class="math display">\[\begin{align*}
+  SS_{res,2} - SS_{res}
+    &amp;= \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}_2)\mathbf{y}- \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}) \mathbf{y}\\
+    &amp;= \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}_2 - \mathbf{I}+ \mathbf{H}) \mathbf{y}\\
+    &amp;= \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_2) \mathbf{y}\\
+\end{align*}\]</span></p>
+<p>Again, we will see that <span class="math inline">\((\mathbf{H}- \mathbf{H}_2)\)</span> is idempotent and <span class="math inline">\((\mathbf{H}- \mathbf{H}_2)\mathbf{y}= (\mathbf{H}- \mathbf{H}_2)\mathbf{e}\)</span>
+only under the null hypothesis.</p>
+<p>First, let us see that <span class="math inline">\((\mathbf{H}- \mathbf{H}_2)\)</span> is idempotent. First note that:</p>
+<p><span class="math display">\[ \mathbf{H}\mathbf{H}_2 = \mathbf{H}_2 \mathbf{H}= \mathbf{H}_2\]</span>
+since <span class="math inline">\(\mathbf{H}_2\)</span> is the projection matrix of the columns of <span class="math inline">\(\mathbf{X}_2\)</span> a subspace of the
+columns of <span class="math inline">\(\mathbf{X}\)</span>. Then:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{H}- \mathbf{H}_2)(\mathbf{H}- \mathbf{H}_2)
+    &amp;= \mathbf{H}\mathbf{H}- \mathbf{H}_2 \mathbf{H}- \mathbf{H}\mathbf{H}_2 + \mathbf{H}_2 \mathbf{H}_2 \\
+    &amp;= \mathbf{H}- \mathbf{H}_2 \mathbf{H}- \mathbf{H}\mathbf{H}_2 + \mathbf{H}_2           &amp;&amp; \text{since $\mathbf{H}_2$ and $\mathbf{H}$ are idempotent}. \\
+    &amp;= \mathbf{H}- \mathbf{H}_2 - \mathbf{H}_2 + \mathbf{H}_2                   &amp;&amp; \text{since $\mathbf{H}\mathbf{H}_2 = \mathbf{H}_2 \mathbf{H}= \mathbf{H}_2$}.  \\
+    &amp;= \mathbf{H}- \mathbf{H}_2                                   &amp;&amp;                                                \\
+\end{align*}\]</span></p>
+<p>then <span class="math inline">\((\mathbf{H}- \mathbf{H}_2)\)</span> is idempotent.</p>
+<p>Now let us see that <span class="math inline">\((\mathbf{H}- \mathbf{H}_R)\mathbf{y}= (\mathbf{H}- \mathbf{H}_R)\mathbf{e}\)</span> under the null hypothesis.
+First, let us note that:</p>
+<p><span class="math display">\[ \mathbf{H}\mathbf{X}_2 = \mathbf{X}_2 \]</span>
+since space generated by <span class="math inline">\(\mathbf{X}_2\)</span> is a subspace of the space generated by <span class="math inline">\(\mathbf{X}\)</span>,
+since <span class="math inline">\(\mathbf{X}\)</span> contains the columns of <span class="math inline">\(\mathbf{X}_2\)</span>. And we also note that:</p>
+<p><span class="math display">\[ \mathbf{H}_2 \mathbf{X}_2 = \mathbf{X}_2 \]</span>
+since <span class="math inline">\(\mathbf{H}_2\)</span> is the projection matrix of the space generated by the columns of
+<span class="math inline">\(\mathbf{X}_2\)</span>. We note that this results can be proven algebraically.</p>
+<p>Then:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{H}- \mathbf{H}_2)\mathbf{y}
+    &amp;= (\mathbf{H}- \mathbf{H}_2)(\mathbf{X}\boldsymbol{\beta}+ \mathbf{e})                                      \\
+    &amp;= (\mathbf{H}- \mathbf{H}_2)([\mathbf{X}_1 \mathbf{X}_2] [\boldsymbol{\beta}_1&#39; \boldsymbol{\beta}_2&#39;]&#39; + \mathbf{e})              \\
+    &amp;= (\mathbf{H}- \mathbf{H}_2)(\mathbf{X}_1 \boldsymbol{\beta}_1 \mathbf{X}_2 \boldsymbol{\beta}_2 + \mathbf{e})                     \\
+    &amp;= (\mathbf{H}- \mathbf{H}_2)(\mathbf{X}_2 \boldsymbol{\beta}_2) + (\mathbf{H}- \mathbf{H}_1)(\mathbf{X}_1 \boldsymbol{\beta}_1 + \mathbf{e})    \\
+    &amp;= (\mathbf{H}\mathbf{X}_2 - \mathbf{H}_2\mathbf{X}_2)\boldsymbol{\beta}_2 + (\mathbf{H}- \mathbf{H}_1)(\mathbf{X}_1 \boldsymbol{\beta}_1 + \mathbf{e}) \\
+    &amp;= (\mathbf{X}_2 - \mathbf{X}_2)\boldsymbol{\beta}_2 + (\mathbf{H}- \mathbf{H}_1)(\mathbf{X}_1 \boldsymbol{\beta}_1 + \mathbf{e})          &amp;&amp; \text{since $\mathbf{H}\mathbf{X}_1 = \mathbf{X}_1$ and $\mathbf{H}_1 \mathbf{X}_1 = \mathbf{X}_1$} \\
+    &amp;= (\mathbf{H}- \mathbf{H}_R)(\mathbf{X}_1 \boldsymbol{\beta}_1 + \mathbf{e})                                  &amp;&amp;                                                            \\
+    &amp;= (\mathbf{H}- \mathbf{H}_R)\mathbf{e}&amp;&amp; \iff \mathcal{H}_0: \boldsymbol{\beta}_1 = \mathbf{0}\\
+\end{align*}\]</span></p>
+<p>So, if <span class="math inline">\(\mathbf{X}_1\)</span> is full rank, then we have that:</p>
+<p><span class="math display">\[ (\mathbf{H}- \mathbf{H}_2)\mathbf{y}= (\mathbf{H}- \mathbf{H}_R)\mathbf{e}\iff \mathcal{H}_0: \boldsymbol{\beta}_1 = \mathbf{0}\]</span></p>
+<p>Then we can proceed to see what is the distribution of our test statistic under
+the null hypothesis.</p>
+<p><span class="math display">\[\begin{align*}
+  F_{\boldsymbol{\beta}_1=\mathbf{0}}
+    &amp;= \frac{\frac{SS_{res,2} - SS_{res}}{k}}{\frac{SS_{res}}{n-p}}                                                                          &amp;&amp;                                                                                                   \\
+    &amp;= \frac{\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_2)\mathbf{y}}{k}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{n-p}}                                                                 &amp;&amp; \text{since $SS_{res,2} - SS_{res} = \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_2)\mathbf{y}$ and $SS_{res}=\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}$}     \\
+    &amp;= \frac{\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_2)\mathbf{y}}{\sigma^2}\frac{1}{k}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{\sigma^2}\frac{1}{n-p}}                             &amp;&amp;                                                                                                   \\
+    &amp;= \frac{\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_2)(\mathbf{H}- \mathbf{H}_2)(\mathbf{H}- \mathbf{H}_2)\mathbf{y}}{\sigma^2}\frac{1}{k}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{\sigma^2}\frac{1}{n-p}}   &amp;&amp; \text{snce $(\mathbf{H}- \mathbf{H}_2)$ is idempotent}.                                                        \\
+    &amp;= \frac{\frac{\mathbf{e}&#39;(\mathbf{H}- \mathbf{H}_2)(\mathbf{H}- \mathbf{H}_2)(\mathbf{H}- \mathbf{H}_2)\mathbf{e}}{\sigma^2}\frac{1}{k}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{\sigma^2}\frac{1}{n-p}}   &amp;&amp; \iff  \mathcal{H}_0: \boldsymbol{\beta}_1 = \mathbf{0}\\
+    &amp;= \frac{\frac{\mathbf{e}&#39;(\mathbf{H}- \mathbf{H}_2)\mathbf{e}}{\sigma^2}\frac{1}{k}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{\sigma^2}\frac{1}{n-p}}                             &amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_2)$ is idempotent}.                                                       \\
+    &amp;\sim \frac{\frac{\chi^2_{k}}{k}}{\frac{\chi^2_{n-p}}{n-p}}                                                                              &amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_2)$ is idempotent and $\frac{\mathbf{e}}{\sqrt{\sigma^2}} \sim N(0, \mathbf{I})$}.      \\
+    &amp;\sim F_{k,n-p}                                                                                                                          &amp;&amp;
+\end{align*}\]</span></p>
+<p>So, before we observe the data, <span class="math inline">\(F_{\boldsymbol{\beta}_1=\mathbf{0}}\)</span> has a <span class="math inline">\(F_{k,n-p}\)</span> distribution.
+Then, once we observe the data, call <span class="math inline">\(F_{\boldsymbol{\beta}_1=\mathbf{0}}^*\)</span> the observed value of
+the statistic, and let <span class="math inline">\(F\)</span> be distributed as an <span class="math inline">\(F_{k,n-p}\)</span>, we can compute:</p>
+<p><span class="math display">\[ \mathbb{P}(F \geq F_{\boldsymbol{\beta}_1=\mathbf{0}}^*) \]</span>
+and reject the null hypothesis if this probability is small and not reject if
+this probability is small.</p>
 
 </div>
 </div>
