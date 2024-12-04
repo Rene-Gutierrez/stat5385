@@ -576,305 +576,6 @@ For any invertible matrix $\bX \in \dR^{p \times p}$ and matrices $\bA\in\dR^{p\
 
 $$\det(\bX + \bA \bB) = det(\bX)\det(\bI_q + \bB\bX^{-1}\bA) $$
 
-
-
-## Probability
-
-Key probability concepts to understand include:
-
-* [Expected Value](#expected-value)
-* [Variance](#variance)
-* [Cross-Covariance Matrix](#cross-covariance-matrix)
-* [Multivariate Normal Distribution](#multivariate-normal-distribution)
-  
-### Expected Value
-
-The **expected value** (or **mean**) of a random vector is a fundamental concept in multivariate statistics. Just as the expected value of a random variable provides a measure of the "center" or "average" of the distribution, the expected value of a random vector captures the central location of a multidimensional distribution.
-
-#### Definition
-
-Let $\mathbf{X}$ be a random vector in $\mathbb{R}^n$, represented as:
-$$
-\mathbf{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_n \end{bmatrix},
-$$
-where $X_1, X_2, \dots, X_n$ are its components. The **expected value** of $\mathbf{X}$, denoted by $\mathbb{E}[\mathbf{X}]$, is defined as the vector of the expected values of each component:
-$$
-\mathbb{E}[\mathbf{X}] = \begin{bmatrix} \mathbb{E}[X_1] \\ \mathbb{E}[X_2] \\ \vdots \\ \mathbb{E}[X_n] \end{bmatrix}.
-$$
-
-This vector $\mathbb{E}[\mathbf{X}]$ is also called the **mean vector** of $\mathbf{X}$.
-
-#### Key Properties of the Expected Value of a Random Vector
-
-1. **Linearity**: For any scalar $a$ and random vectors $\mathbf{X}$ and $\mathbf{Y}$,
-   $$
-   \mathbb{E}[a\mathbf{X} + \mathbf{Y}] = a\mathbb{E}[\mathbf{X}] + \mathbb{E}[\mathbf{Y}].
-   $$
-   
-2. **Expectation of a Constant Vector**: If $\mathbf{c}$ is a constant vector in $\mathbb{R}^n$, then the expectation is simply the vector itself:
-   $$
-   \mathbb{E}[\mathbf{c}] = \mathbf{c}.
-   $$
-
-3. **Expectation of a Linear Transformation**: If $\mathbf{A}$ is an $m \times n$ constant matrix, then for a random vector $\mathbf{X}$ in $\mathbb{R}^n$,
-   $$
-   \mathbb{E}[\mathbf{A} \mathbf{X}] = \mathbf{A} \mathbb{E}[\mathbf{X}].
-   $$
-
-
-### Variance
-
-#### Definition
-
-Let $\mathbf{X}$ be a random vector in $\mathbb{R}^n$, represented as:
-$$
-\mathbf{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_n \end{bmatrix},
-$$
-where each $X_i$ is a random variable. The **variance-covariance matrix** of $\mathbf{X}$, denoted by $\dV(\mathbf{X})$ or $\boldsymbol{\Sigma}$, is defined as:
-$$
-\dV(\mathbf{X}) = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])(\mathbf{X} - \mathbb{E}[\mathbf{X}])'].
-$$
-The $(i, j)$ entry of $\dV(\mathbf{X})$ is given by $\dC(X_i, X_j)$, representing the covariance between components $X_i$ and $X_j$.
-
-If $\mathbf{X}$ has $n$ components, $\dV(\mathbf{X})$ will be an $n \times n$ symmetric matrix where:
-- Diagonal entries represent the variances of each component, i.e., $\dV(X_i) = \dC(X_i, X_i)$.
-- Off-diagonal entries represent the covariances between different components, i.e., $\dC(X_i, X_j)$ for $i \neq j$.
-
-#### Key Properties of the Variance-Covariance Matrix
-
-1. **Symmetry**: The variance-covariance matrix is symmetric, meaning:
-   $$
-   \dV(\mathbf{X}) = \dV(\mathbf{X})^T.
-   $$
-
-2. **Non-negativity**: The variance-covariance matrix is **positive semi-definite**, which implies:
-   $$
-   \mathbf{z}^T \dV(\mathbf{X}) \mathbf{z} \geq 0 \quad \text{for any vector } \mathbf{z} \in \mathbb{R}^n.
-   $$
-   This property indicates that variances (the diagonal entries) are always non-negative.
-
-3. **Variance of a Linear Transformation**: If $\mathbf{A}$ is an $m \times n$ matrix, then the variance of the transformed random vector $\mathbf{A} \mathbf{X}$ is given by:
-   $$
-   \dV(\mathbf{A} \mathbf{X}) = \mathbf{A} \, \dV(\mathbf{X}) \, \mathbf{A}^T.
-   $$
-
-4. **Variance of Independent Random Variables**: If the components of $\mathbf{X}$ are mutually independent, the off-diagonal entries of $\dV(\mathbf{X})$ (the covariances) are zero, resulting in a diagonal covariance matrix.
-
-5. **Variance of the Sum of Two Arbitrary Random Vectors**: If $\mathbf{X}$ and $\mathbf{Y}$ are two arbitrary random vectors in $\mathbb{R}^n$, the variance of their sum is given by:
-   $$
-   \dV(\mathbf{X} + \mathbf{Y}) = \dV(\mathbf{X}) + \dV(\mathbf{Y}) + 2 \, \dC(\mathbf{X}, \mathbf{Y}),
-   $$
-   where $\dC(\mathbf{X}, \mathbf{Y})$ is the **cross-covariance matrix** between $\mathbf{X}$ and $\mathbf{Y}$:
-   $$
-   \dC(\mathbf{X}, \mathbf{Y}) = \mathbb{E}\left[(\mathbf{X} - \mathbb{E}[\mathbf{X}])(\mathbf{Y} - \mathbb{E}[\mathbf{Y}])'\right].
-   $$
-
-6. **Variance of the Sum of Two Independent Random Vectors**: If $\mathbf{X}$ and $\mathbf{Y}$ are two independent random vectors in $\mathbb{R}^n$, then the variance of their sum is given by the sum of their individual variances:
-   $$
-   \dV(\mathbf{X} + \mathbf{Y}) = \dV(\mathbf{X}) + \dV(\mathbf{Y}).
-   $$
-   Since $\mathbf{X}$ and $\mathbf{Y}$ are independent, their covariance $\dC(\mathbf{X}, \mathbf{Y})$ is zero, simplifying the variance of the sum.
-   
-7. **Trace of the Variance**: A related measure of the variance of a random vector $\mathbf{X}$, is given by
-   $$
-   \text{tr}(\dV[\mathbf{X}]) = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])'(\mathbf{X} - \mathbb{E}[\mathbf{X}])]
-   $$
-   
-   
-### Cross-Covariance Matrix
-
-The **cross-covariance matrix** measures the covariance between two random vectors, providing insights into the linear relationships between different components of these vectors. Given two random vectors \( \mathbf{X} \in \mathbb{R}^n \) and \( \mathbf{Y} \in \mathbb{R}^m \), the cross-covariance matrix between \( \mathbf{X} \) and \( \mathbf{Y} \) captures how each component of \( \mathbf{X} \) varies with each component of \( \mathbf{Y} \).
-
-#### Definition
-
-Let \( \mathbf{X} \) and \( \mathbf{Y} \) be two random vectors with mean vectors \( \mathbb{E}[\mathbf{X}] = \boldsymbol{\mu}_{\mathbf{X}} \) and \( \mathbb{E}[\mathbf{Y}] = \boldsymbol{\mu}_{\mathbf{Y}} \). The cross-covariance matrix of \( \mathbf{X} \) and \( \mathbf{Y} \) is defined as:
-
-$$
-\dC(\mathbf{X}, \mathbf{Y}) = \mathbb{E}[(\mathbf{X} - \boldsymbol{\mu}_{\mathbf{X}})(\mathbf{Y} - \boldsymbol{\mu}_{\mathbf{Y}})^T].
-$$
-
-This matrix is of dimension \( n \times m \), where each element \( (\dC(\mathbf{X}, \mathbf{Y}))_{ij} \) represents the covariance between the \( i \)-th component of \( \mathbf{X} \) and the \( j \)-th component of \( \mathbf{Y} \):
-
-$$
-(\dC(\mathbf{X}, \mathbf{Y}))_{ij} = \dC(X_i, Y_j) = \mathbb{E}[(X_i - \mu_{X_i})(Y_j - \mu_{Y_j})].
-$$
-
-#### Key Properties
-
-1. **Symmetry in Covariance**:
-   - If \( \mathbf{X} = \mathbf{Y} \), then \( \dC(\mathbf{X}, \mathbf{Y}) \) reduces to the covariance matrix of \( \mathbf{X} \), which is symmetric. For distinct vectors \( \mathbf{X} \) and \( \mathbf{Y} \), the cross-covariance matrix \( \dC(\mathbf{X}, \mathbf{Y}) \) is generally not symmetric.
-
-2. **Relationship with Joint Covariance Matrix**:
-   - If \( \mathbf{Z} = \begin{bmatrix} \mathbf{X} \\ \mathbf{Y} \end{bmatrix} \) is a combined random vector, then the covariance matrix of \( \mathbf{Z} \) is:
-     $$
-     \dC(\mathbf{Z}) = \begin{bmatrix} \dC(\mathbf{X}) & \dC(\mathbf{X}, \mathbf{Y}) \\ \dC(\mathbf{Y}, \mathbf{X}) & \dC(\mathbf{Y}) \end{bmatrix}.
-     $$
-
-3. **Linearity**:
-   - If \( a \) and \( b \) are constants and \( \mathbf{X}_1 \) and \( \mathbf{X}_2 \) are random vectors of the same dimension as \( \mathbf{X} \), then:
-     $$
-     \dC(a\mathbf{X}_1 + b\mathbf{X}_2, \mathbf{Y}) = a \dC(\mathbf{X}_1, \mathbf{Y}) + b \dC(\mathbf{X}_2, \mathbf{Y}).
-     $$
-
-Furthermore, if \( \mathbf{A} \) and \( \mathbf{B} \) are matrices of compatible dimensions, and \( \mathbf{X} \) and \( \mathbf{Y} \) are random vectors then the cross-covariance of \( \mathbf{A}\mathbf{X} \) and \( \mathbf{B}\mathbf{Y} \) is given by:
-
-$$
-\dC(\mathbf{A}\mathbf{X}, \mathbf{B}\mathbf{Y}) = \mathbf{A} \dC(\mathbf{X}, \mathbf{Y}) \mathbf{B}^T.
-$$
-
-4. **Zero Cross-Covariance and Independence**:
-   - If \( \dC(\mathbf{X}, \mathbf{Y}) = \mathbf{0} \), it implies that \( \mathbf{X} \) and \( \mathbf{Y} \) are uncorrelated, but it does not necessarily imply independence unless \( \mathbf{X} \) and \( \mathbf{Y} \) are jointly normally distributed.
-   
-### Multivariate Normal Distribution
-
-The **multivariate normal distribution** generalizes the concept of the normal distribution to multiple dimensions, describing the behavior of random vectors whose elements are jointly normally distributed. It is widely used in statistics and machine learning due to its well-behaved properties and its applicability to modeling correlations between variables.
-
-#### Definition
-
-A random vector \( \mathbf{X} = (X_1, X_2, \dots, X_n)^T \) is said to follow a multivariate normal distribution if it has a probability density function of the form:
-
-$$
-f(\mathbf{X}) = \frac{1}{(2\pi)^{n/2} |\boldsymbol{\Sigma}|^{1/2}} \exp\left( -\frac{1}{2} (\mathbf{X} - \boldsymbol{\mu})^T \boldsymbol{\Sigma}^{-1} (\mathbf{X} - \boldsymbol{\mu}) \right),
-$$
-
-where:
-
-- \( \mathbf{X} \in \mathbb{R}^n \) is the random vector,
-- \( \boldsymbol{\mu} \in \mathbb{R}^n \) is the mean vector,
-- \( \boldsymbol{\Sigma} \in \mathbb{R}^{n \times n} \) is the covariance matrix, assumed to be symmetric and positive definite.
-
-This distribution is denoted as \( \mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma}) \).
-
-#### Key Properties
-
-1. **Marginal Distributions**:
-   - Any subset of the components of \( \mathbf{X} \) is also normally distributed.
-   - If \( \mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma}) \), then any partition of \( \mathbf{X} \) results in a marginal distribution that is also multivariate normal.
-
-2. **Affine Transformation**:
-   - For a matrix \( \mathbf{A} \) and vector \( \mathbf{b} \) of appropriate dimensions, the affine transformation \( \mathbf{Y} = \mathbf{A}\mathbf{X} + \mathbf{b} \) also follows a multivariate normal distribution, \( \mathbf{Y} \sim \mathcal{N}(\mathbf{A} \boldsymbol{\mu} + \mathbf{b}, \mathbf{A} \boldsymbol{\Sigma} \mathbf{A}^T) \).
-
-3. **Conditional Distributions**:
-   - For a partitioned vector \( \mathbf{X} = (\mathbf{X}_1, \mathbf{X}_2)^T \), with corresponding partitions of the mean vector and covariance matrix:
-     $$
-     \boldsymbol{\mu} = \begin{pmatrix} \boldsymbol{\mu}_1 \\ \boldsymbol{\mu}_2 \end{pmatrix}, \quad
-     \boldsymbol{\Sigma} = \begin{pmatrix} \boldsymbol{\Sigma}_{11} & \boldsymbol{\Sigma}_{12} \\ \boldsymbol{\Sigma}_{21} & \boldsymbol{\Sigma}_{22} \end{pmatrix},
-     $$
-   - the conditional distribution \( \mathbf{X}_1 | \mathbf{X}_2 = \mathbf{x}_2 \) is also multivariate normal:
-     $$
-     \mathbf{X}_1 | \mathbf{X}_2 = \mathbf{x}_2 \sim \mathcal{N}(\boldsymbol{\mu}_1 + \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} (\mathbf{x}_2 - \boldsymbol{\mu}_2), \boldsymbol{\Sigma}_{11} - \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} \boldsymbol{\Sigma}_{21}).
-     $$
-
-4. **Independence and Uncorrelatedness**:
-   - For a multivariate normal distribution, zero covariance implies independence. If two components \( X_i \) and \( X_j \) (or two subvectors) have a covariance of zero, they are independent.
-
-5. **Moment Generating Function**:
-   - The moment generating function of \( \mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma}) \) is:
-     $$
-     M_{\mathbf{X}}(\mathbf{t}) = \exp\left( \mathbf{t}^T \boldsymbol{\mu} + \frac{1}{2} \mathbf{t}^T \boldsymbol{\Sigma} \mathbf{t} \right).
-     $$
-
-6. **Maximum Entropy**:
-   - Among all distributions with a given mean vector and covariance matrix, the multivariate normal distribution has the maximum entropy, making it the most “uninformative” or spread out.
-
-
-## Statistics
-
-Essential statistical concepts include:
-
-  * [Bias of an Estimator](#bias-of-an-estimator)
-  * [Unbiased Estimator](#unbiased-estimator)
-  * [Mean Square Error of an Estimator](#mean-square-error-of-an-estimator)
-  * Consistent
-  * Minimum Variance
-
-* **Interval Estimation**
-* **Hypothesis Testing**
-
-### Bias of an Estimator
-
-The **bias** of an estimator $\hat{\mathbf{\theta}}$ for a vector parameter $\mathbf{\theta}$ is defined as the difference between the expected value of the estimator and the true value of the parameter. Formally, if $\mathbf{\theta} \in \mathbb{R}^n$ is a vector parameter, then the **bias** of the estimator $\hat{\mathbf{\theta}}$ is:
-
-$$
-\text{Bias}(\hat{\mathbf{\theta}}) = \mathbb{E}[\hat{\mathbf{\theta}}] - \mathbf{\theta}.
-$$
-
-#### Key Points
-
-1. **Interpretation**: Bias measures how far, on average, the estimator $\hat{\mathbf{\theta}}$ is from the true parameter $\mathbf{\theta}$. If the bias is zero, the estimator is said to be **unbiased**.
-
-2. **Component-wise Bias**: For each component of the estimator $\hat{\mathbf{\theta}} = (\hat{\theta}_1, \dots, \hat{\theta}_n)^T$, the bias can be expressed as:
-   $$
-   \text{Bias}(\hat{\theta}_i) = \mathbb{E}[\hat{\theta}_i] - \theta_i, \quad \text{for each } i = 1, \dots, n.
-   $$
-   This component-wise breakdown is helpful for understanding how each part of the vector estimator deviates from the true values.
-
-3. **Total Bias**: The total bias can be viewed as a vector, summarizing the systematic error in each dimension of the estimator.
-
-#### Example
-
-In practice, if $\hat{\mathbf{\theta}}$ is the sample mean vector of a random vector $\mathbf{X}$, and $\mathbf{\theta} = \mathbb{E}[\mathbf{X}]$, then $\text{Bias}(\hat{\mathbf{\theta}})$ will be zero, making the sample mean an unbiased estimator of the population mean.
-
-
-### Unbiased Estimator
-
-An **unbiased estimator** of a vector parameter is an estimator that, on average, accurately estimates the true value of the parameter. Formally, let $\mathbf{\theta} \in \mathbb{R}^n$ be a vector parameter of interest, and let $\hat{\mathbf{\theta}}$ be an estimator of $\mathbf{\theta}$. Then, $\hat{\mathbf{\theta}}$ is an **unbiased estimator** of $\mathbf{\theta}$ if the following condition holds:
-
-$$
-\mathbb{E}[\hat{\mathbf{\theta}}] = \mathbf{\theta} \quad \forall \bgt \in \dR^n.
-$$
-
-#### Key Points
-
-1. **Component-wise Unbiasedness**: Each component of $\hat{\mathbf{\theta}}$, say $\hat{\theta}_i$, must be an unbiased estimator of the corresponding component $\theta_i$ of $\mathbf{\theta}$:
-   $$
-   \mathbb{E}[\hat{\theta}_i] = \theta_i, \quad \text{for all } i = 1, \dots, n.
-   $$
-
-2. **No Systematic Bias**: Unbiasedness implies that, on average, the estimator neither overestimates nor underestimates the true value of $\mathbf{\theta}$ across repeated sampling. 
-
-3. **Applications**: Unbiased estimators are crucial in statistics, as they provide estimations that are theoretically centered around the true parameter values, though they may vary due to sampling variation. 
-
-An example is the sample mean $\mathbf{\bar{X}}$ as an estimator for the population mean $\mathbf{\mu}$ of a random vector $\mathbf{X}$, where $\mathbb{E}[\mathbf{\bar{X}}] = \mathbf{\mu}$.
-
- 
-### Mean Square Error of an Estimator
-
-The **Mean Square Error (MSE)** of an estimator $\hat{\mathbf{\theta}}$ for a vector parameter $\mathbf{\theta}$ measures the average squared deviation of the estimator from the true parameter. Formally, for a parameter vector $\mathbf{\theta} \in \mathbb{R}^n$ and an estimator $\hat{\mathbf{\theta}}$, the MSE is defined as:
-
-$$
-\dM(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ \|\hat{\mathbf{\theta}} - \mathbf{\theta}\|^2 \right],
-$$
-
-where $\|\cdot\|$ denotes the Euclidean (or 2-norm) of a vector. Expanding this expression, we can write:
-
-$$
-\dM(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ (\hat{\mathbf{\theta}} - \mathbf{\theta})^T (\hat{\mathbf{\theta}} - \mathbf{\theta}) \right].
-$$
-
-#### Key Components
-
-The MSE can be decomposed into two main parts: **variance** and **squared bias**.
-
-$$
-\dM(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})) + \|\text{Bias}(\hat{\mathbf{\theta}})\|^2,
-$$
-
-where:
-- **Variance**: $\text{Var}(\hat{\mathbf{\theta}}) = \mathbb{E}[(\hat{\mathbf{\theta}} - \mathbb{E}[\hat{\mathbf{\theta}}])(\hat{\mathbf{\theta}} - \mathbb{E}[\hat{\mathbf{\theta}}])^T]$, representing the variability in the estimator.
-- **Bias**: $\text{Bias}(\hat{\mathbf{\theta}}) = \mathbb{E}[\hat{\mathbf{\theta}}] - \mathbf{\theta}$, representing the systematic deviation from the true parameter.
-
-#### Key Properties
-
-1. **Unbiased Estimator**: If $\hat{\mathbf{\theta}}$ is unbiased, then $\text{Bias}(\hat{\mathbf{\theta}}) = 0$, and the MSE is simply the trace of the covariance matrix of $\hat{\mathbf{\theta}}$:
-   $$
-   \dM(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})).
-   $$
-
-2. **Bias-Variance Trade-off**: The MSE quantifies the balance between bias and variance. Lowering bias often increases variance and vice versa, a key concept in statistical estimation.
-
-3. **Overall Error Metric**: The MSE provides a comprehensive measure of the estimator's accuracy, taking both variance and bias into account, making it an essential criterion in evaluating estimators.
-
 ## Calculus
 
 Key calculus topics include:
@@ -1149,3 +850,421 @@ a_{n1} & a_{n2} & \cdots & a_{nn}
 \end{bmatrix}
 = 2 \bA
 $$
+
+
+
+## Probability
+
+Key probability concepts to understand include:
+
+* [Expected Value](#expected-value)
+* [Variance](#variance)
+* [Cross-Covariance Matrix](#cross-covariance-matrix)
+* [Multivariate Normal Distribution](#multivariate-normal-distribution)
+  
+### Expected Value
+
+The **expected value** (or **mean**) of a random vector is a fundamental concept in multivariate statistics. Just as the expected value of a random variable provides a measure of the "center" or "average" of the distribution, the expected value of a random vector captures the central location of a multidimensional distribution.
+
+#### Definition
+
+Let $\mathbf{X}$ be a random vector in $\mathbb{R}^n$, represented as:
+$$
+\mathbf{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_n \end{bmatrix},
+$$
+where $X_1, X_2, \dots, X_n$ are its components. The **expected value** of $\mathbf{X}$, denoted by $\mathbb{E}[\mathbf{X}]$, is defined as the vector of the expected values of each component:
+$$
+\mathbb{E}[\mathbf{X}] = \begin{bmatrix} \mathbb{E}[X_1] \\ \mathbb{E}[X_2] \\ \vdots \\ \mathbb{E}[X_n] \end{bmatrix}.
+$$
+
+This vector $\mathbb{E}[\mathbf{X}]$ is also called the **mean vector** of $\mathbf{X}$.
+
+#### Key Properties of the Expected Value of a Random Vector
+
+1. **Linearity**: For any scalar $a$ and random vectors $\mathbf{X}$ and $\mathbf{Y}$,
+   $$
+   \mathbb{E}[a\mathbf{X} + \mathbf{Y}] = a\mathbb{E}[\mathbf{X}] + \mathbb{E}[\mathbf{Y}].
+   $$
+   
+2. **Expectation of a Constant Vector**: If $\mathbf{c}$ is a constant vector in $\mathbb{R}^n$, then the expectation is simply the vector itself:
+   $$
+   \mathbb{E}[\mathbf{c}] = \mathbf{c}.
+   $$
+
+3. **Expectation of a Linear Transformation**: If $\mathbf{A}$ is an $m \times n$ constant matrix, then for a random vector $\mathbf{X}$ in $\mathbb{R}^n$,
+   $$
+   \mathbb{E}[\mathbf{A} \mathbf{X}] = \mathbf{A} \mathbb{E}[\mathbf{X}].
+   $$
+
+
+### Variance
+
+#### Definition
+
+Let $\mathbf{X}$ be a random vector in $\mathbb{R}^n$, represented as:
+$$
+\mathbf{X} = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_n \end{bmatrix},
+$$
+where each $X_i$ is a random variable. The **variance-covariance matrix** of $\mathbf{X}$, denoted by $\dV(\mathbf{X})$ or $\boldsymbol{\Sigma}$, is defined as:
+$$
+\dV(\mathbf{X}) = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])(\mathbf{X} - \mathbb{E}[\mathbf{X}])'].
+$$
+The $(i, j)$ entry of $\dV(\mathbf{X})$ is given by $\dC(X_i, X_j)$, representing the covariance between components $X_i$ and $X_j$.
+
+If $\mathbf{X}$ has $n$ components, $\dV(\mathbf{X})$ will be an $n \times n$ symmetric matrix where:
+- Diagonal entries represent the variances of each component, i.e., $\dV(X_i) = \dC(X_i, X_i)$.
+- Off-diagonal entries represent the covariances between different components, i.e., $\dC(X_i, X_j)$ for $i \neq j$.
+
+#### Key Properties of the Variance-Covariance Matrix
+
+1. **Symmetry**: The variance-covariance matrix is symmetric, meaning:
+   $$
+   \dV(\mathbf{X}) = \dV(\mathbf{X})^T.
+   $$
+
+2. **Non-negativity**: The variance-covariance matrix is **positive semi-definite**, which implies:
+   $$
+   \mathbf{z}^T \dV(\mathbf{X}) \mathbf{z} \geq 0 \quad \text{for any vector } \mathbf{z} \in \mathbb{R}^n.
+   $$
+   This property indicates that variances (the diagonal entries) are always non-negative.
+
+3. **Variance of a Linear Transformation**: If $\mathbf{A}$ is an $m \times n$ matrix, then the variance of the transformed random vector $\mathbf{A} \mathbf{X}$ is given by:
+   $$
+   \dV(\mathbf{A} \mathbf{X}) = \mathbf{A} \, \dV(\mathbf{X}) \, \mathbf{A}^T.
+   $$
+
+4. **Variance of Independent Random Variables**: If the components of $\mathbf{X}$ are mutually independent, the off-diagonal entries of $\dV(\mathbf{X})$ (the covariances) are zero, resulting in a diagonal covariance matrix.
+
+5. **Variance of the Sum of Two Arbitrary Random Vectors**: If $\mathbf{X}$ and $\mathbf{Y}$ are two arbitrary random vectors in $\mathbb{R}^n$, the variance of their sum is given by:
+   $$
+   \dV(\mathbf{X} + \mathbf{Y}) = \dV(\mathbf{X}) + \dV(\mathbf{Y}) + 2 \, \dC(\mathbf{X}, \mathbf{Y}),
+   $$
+   where $\dC(\mathbf{X}, \mathbf{Y})$ is the **cross-covariance matrix** between $\mathbf{X}$ and $\mathbf{Y}$:
+   $$
+   \dC(\mathbf{X}, \mathbf{Y}) = \mathbb{E}\left[(\mathbf{X} - \mathbb{E}[\mathbf{X}])(\mathbf{Y} - \mathbb{E}[\mathbf{Y}])'\right].
+   $$
+
+6. **Variance of the Sum of Two Independent Random Vectors**: If $\mathbf{X}$ and $\mathbf{Y}$ are two independent random vectors in $\mathbb{R}^n$, then the variance of their sum is given by the sum of their individual variances:
+   $$
+   \dV(\mathbf{X} + \mathbf{Y}) = \dV(\mathbf{X}) + \dV(\mathbf{Y}).
+   $$
+   Since $\mathbf{X}$ and $\mathbf{Y}$ are independent, their covariance $\dC(\mathbf{X}, \mathbf{Y})$ is zero, simplifying the variance of the sum.
+   
+7. **Trace of the Variance**: A related measure of the variance of a random vector $\mathbf{X}$, is given by
+   $$
+   \text{tr}(\dV[\mathbf{X}]) = \mathbb{E}[(\mathbf{X} - \mathbb{E}[\mathbf{X}])'(\mathbf{X} - \mathbb{E}[\mathbf{X}])]
+   $$
+   
+   
+### Cross-Covariance Matrix
+
+The **cross-covariance matrix** measures the covariance between two random vectors, providing insights into the linear relationships between different components of these vectors. Given two random vectors \( \mathbf{X} \in \mathbb{R}^n \) and \( \mathbf{Y} \in \mathbb{R}^m \), the cross-covariance matrix between \( \mathbf{X} \) and \( \mathbf{Y} \) captures how each component of \( \mathbf{X} \) varies with each component of \( \mathbf{Y} \).
+
+#### Definition
+
+Let \( \mathbf{X} \) and \( \mathbf{Y} \) be two random vectors with mean vectors \( \mathbb{E}[\mathbf{X}] = \boldsymbol{\mu}_{\mathbf{X}} \) and \( \mathbb{E}[\mathbf{Y}] = \boldsymbol{\mu}_{\mathbf{Y}} \). The cross-covariance matrix of \( \mathbf{X} \) and \( \mathbf{Y} \) is defined as:
+
+$$
+\dC(\mathbf{X}, \mathbf{Y}) = \mathbb{E}[(\mathbf{X} - \boldsymbol{\mu}_{\mathbf{X}})(\mathbf{Y} - \boldsymbol{\mu}_{\mathbf{Y}})^T].
+$$
+
+This matrix is of dimension \( n \times m \), where each element \( (\dC(\mathbf{X}, \mathbf{Y}))_{ij} \) represents the covariance between the \( i \)-th component of \( \mathbf{X} \) and the \( j \)-th component of \( \mathbf{Y} \):
+
+$$
+(\dC(\mathbf{X}, \mathbf{Y}))_{ij} = \dC(X_i, Y_j) = \mathbb{E}[(X_i - \mu_{X_i})(Y_j - \mu_{Y_j})].
+$$
+
+#### Key Properties
+
+1. **Symmetry in Covariance**:
+   - If \( \mathbf{X} = \mathbf{Y} \), then \( \dC(\mathbf{X}, \mathbf{Y}) \) reduces to the covariance matrix of \( \mathbf{X} \), which is symmetric. For distinct vectors \( \mathbf{X} \) and \( \mathbf{Y} \), the cross-covariance matrix \( \dC(\mathbf{X}, \mathbf{Y}) \) is generally not symmetric.
+
+2. **Relationship with Joint Covariance Matrix**:
+   - If \( \mathbf{Z} = \begin{bmatrix} \mathbf{X} \\ \mathbf{Y} \end{bmatrix} \) is a combined random vector, then the covariance matrix of \( \mathbf{Z} \) is:
+     $$
+     \dC(\mathbf{Z}) = \begin{bmatrix} \dC(\mathbf{X}) & \dC(\mathbf{X}, \mathbf{Y}) \\ \dC(\mathbf{Y}, \mathbf{X}) & \dC(\mathbf{Y}) \end{bmatrix}.
+     $$
+
+3. **Linearity**:
+   - If \( a \) and \( b \) are constants and \( \mathbf{X}_1 \) and \( \mathbf{X}_2 \) are random vectors of the same dimension as \( \mathbf{X} \), then:
+     $$
+     \dC(a\mathbf{X}_1 + b\mathbf{X}_2, \mathbf{Y}) = a \dC(\mathbf{X}_1, \mathbf{Y}) + b \dC(\mathbf{X}_2, \mathbf{Y}).
+     $$
+
+Furthermore, if \( \mathbf{A} \) and \( \mathbf{B} \) are matrices of compatible dimensions, and \( \mathbf{X} \) and \( \mathbf{Y} \) are random vectors then the cross-covariance of \( \mathbf{A}\mathbf{X} \) and \( \mathbf{B}\mathbf{Y} \) is given by:
+
+$$
+\dC(\mathbf{A}\mathbf{X}, \mathbf{B}\mathbf{Y}) = \mathbf{A} \dC(\mathbf{X}, \mathbf{Y}) \mathbf{B}^T.
+$$
+
+4. **Zero Cross-Covariance and Independence**:
+   - If \( \dC(\mathbf{X}, \mathbf{Y}) = \mathbf{0} \), it implies that \( \mathbf{X} \) and \( \mathbf{Y} \) are uncorrelated, but it does not necessarily imply independence unless \( \mathbf{X} \) and \( \mathbf{Y} \) are jointly normally distributed.
+   
+### Multivariate Normal Distribution
+
+The **multivariate normal distribution** generalizes the concept of the normal distribution to multiple dimensions, describing the behavior of random vectors whose elements are jointly normally distributed. It is widely used in statistics and machine learning due to its well-behaved properties and its applicability to modeling correlations between variables.
+
+#### Definition
+
+A random vector \( \mathbf{X} = (X_1, X_2, \dots, X_n)^T \) is said to follow a multivariate normal distribution if it has a probability density function of the form:
+
+$$
+f(\mathbf{X}) = \frac{1}{(2\pi)^{n/2} |\boldsymbol{\Sigma}|^{1/2}} \exp\left( -\frac{1}{2} (\mathbf{X} - \boldsymbol{\mu})^T \boldsymbol{\Sigma}^{-1} (\mathbf{X} - \boldsymbol{\mu}) \right),
+$$
+
+where:
+
+- \( \mathbf{X} \in \mathbb{R}^n \) is the random vector,
+- \( \boldsymbol{\mu} \in \mathbb{R}^n \) is the mean vector,
+- \( \boldsymbol{\Sigma} \in \mathbb{R}^{n \times n} \) is the covariance matrix, assumed to be symmetric and positive definite.
+
+This distribution is denoted as \( \mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma}) \).
+
+#### Key Properties
+
+1. **Marginal Distributions**:
+   - Any subset of the components of \( \mathbf{X} \) is also normally distributed.
+   - If \( \mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma}) \), then any partition of \( \mathbf{X} \) results in a marginal distribution that is also multivariate normal.
+
+2. **Affine Transformation**:
+   - For a matrix \( \mathbf{A} \) and vector \( \mathbf{b} \) of appropriate dimensions, the affine transformation \( \mathbf{Y} = \mathbf{A}\mathbf{X} + \mathbf{b} \) also follows a multivariate normal distribution, \( \mathbf{Y} \sim \mathcal{N}(\mathbf{A} \boldsymbol{\mu} + \mathbf{b}, \mathbf{A} \boldsymbol{\Sigma} \mathbf{A}^T) \).
+
+3. **Conditional Distributions**:
+   - For a partitioned vector \( \mathbf{X} = (\mathbf{X}_1, \mathbf{X}_2)^T \), with corresponding partitions of the mean vector and covariance matrix:
+     $$
+     \boldsymbol{\mu} = \begin{pmatrix} \boldsymbol{\mu}_1 \\ \boldsymbol{\mu}_2 \end{pmatrix}, \quad
+     \boldsymbol{\Sigma} = \begin{pmatrix} \boldsymbol{\Sigma}_{11} & \boldsymbol{\Sigma}_{12} \\ \boldsymbol{\Sigma}_{21} & \boldsymbol{\Sigma}_{22} \end{pmatrix},
+     $$
+   - the conditional distribution \( \mathbf{X}_1 | \mathbf{X}_2 = \mathbf{x}_2 \) is also multivariate normal:
+     $$
+     \mathbf{X}_1 | \mathbf{X}_2 = \mathbf{x}_2 \sim \mathcal{N}(\boldsymbol{\mu}_1 + \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} (\mathbf{x}_2 - \boldsymbol{\mu}_2), \boldsymbol{\Sigma}_{11} - \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} \boldsymbol{\Sigma}_{21}).
+     $$
+
+4. **Independence and Uncorrelatedness**:
+   - For a multivariate normal distribution, zero covariance implies independence. If two components \( X_i \) and \( X_j \) (or two subvectors) have a covariance of zero, they are independent.
+
+5. **Moment Generating Function**:
+   - The moment generating function of \( \mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu}, \boldsymbol{\Sigma}) \) is:
+     $$
+     M_{\mathbf{X}}(\mathbf{t}) = \exp\left( \mathbf{t}^T \boldsymbol{\mu} + \frac{1}{2} \mathbf{t}^T \boldsymbol{\Sigma} \mathbf{t} \right).
+     $$
+
+6. **Maximum Entropy**:
+   - Among all distributions with a given mean vector and covariance matrix, the multivariate normal distribution has the maximum entropy, making it the most “uninformative” or spread out.
+   
+### $\chi^2$ Distribution
+   
+The chi-squared distribution is a probability distribution that arises naturally in statistics, particularly in hypothesis testing and estimation problems. It is defined as the distribution of a sum of the squares of independent standard normal random variables.
+
+Formally, let $Z_1, Z_2, \dots, Z_k$ be $k$ independent random variables, each following a standard normal distribution (mean $0$ and variance $1$). Then, the sum of their squares:
+
+$$
+Q = Z_1^2 + Z_2^2 + \cdots + Z_k^2
+$$
+
+follows a chi-squared distribution with $k$ degrees of freedom. We denote this as:
+
+$$
+Q \sim \chi^2_k
+$$
+
+#### Key Properties of the Chi-Squared Distribution
+1. **Degrees of Freedom ($k$):** The parameter $k$ determines the shape of the distribution. Larger $k$ values result in a distribution that becomes more symmetric and approaches a normal distribution (as $k \to \infty$).
+   
+2. **Mean and Variance:** 
+   - Mean: $\mathbb{E}[Q] = k$
+   - Variance: $\mathbb{V}[Q] = 2k$
+
+3. **Additivity:** If $Q_1 \sim \chi^2_{k_1}$ and $Q_2 \sim \chi^2_{k_2}$ are independent, then $Q_1 + Q_2 \sim \chi^2_{k_1 + k_2}$.
+
+4. **Special Case:** For $k = 1$, the chi-squared distribution is simply the square of a standard normal variable, $Q = Z^2$.
+
+The chi-squared distribution is widely used in statistical tests, such as the chi-squared test for independence or goodness-of-fit, and in the construction of confidence intervals for variances.
+
+### $t$ Distribution
+
+The **t-distribution**, also known as Student's t-distribution, is a probability distribution that arises frequently in hypothesis testing, particularly when the sample size is small, and the population standard deviation is unknown. It is defined as the distribution of a standard normal random variable divided by the square root of an independent chi-squared random variable, scaled by its degrees of freedom.
+
+#### Definition
+Let:
+- $Z$ be a standard normal random variable ($Z \sim N(0, 1)$),
+- $Q$ be a chi-squared random variable with $k$ degrees of freedom ($Q \sim \chi^2_k$), independent of $Z$.
+
+Then, the random variable:
+
+$$
+T = \frac{Z}{\sqrt{\frac{Q}{k}}}
+$$
+
+follows a t-distribution with $k$ degrees of freedom. We write:
+
+$$
+T \sim t_k
+$$
+
+#### Key Properties of the t-Distribution
+1. **Degrees of Freedom ($k$):** The parameter $k$ determines the shape of the t-distribution. As $k$ increases, the t-distribution approaches the standard normal distribution.
+
+2. **Symmetry:** The t-distribution is symmetric about zero, similar to the normal distribution.
+
+3. **Tails:** The t-distribution has heavier tails than the normal distribution, meaning it gives more probability to extreme values. This reflects increased uncertainty when estimating the population mean with small sample sizes.
+
+4. **Moments:**
+   - Mean: $\mathbb{E}[T] = 0$ for $k > 1$
+   - Variance: $\mathbb{V}[T] = \frac{k}{k-2}$ for $k > 2$
+   - Higher moments exist only for $k > m$, where $m$ is the order of the moment.
+
+#### Applications
+The t-distribution is widely used in:
+1. **t-tests** for hypothesis testing, such as testing means of small samples.
+2. Constructing **confidence intervals** for a population mean when the population standard deviation is unknown.
+3. **Regression analysis**, where it appears in tests for regression coefficients. 
+
+The t-distribution plays a fundamental role in statistics, bridging the gap between small-sample and large-sample inference.
+
+### $F$ Distribution
+
+The **F-distribution**, also known as Fisher-Snedecor distribution, arises frequently in statistics, especially in hypothesis testing and variance analysis (ANOVA). It is defined as the distribution of the ratio of two independent chi-squared random variables, each divided by their respective degrees of freedom.
+
+#### Definition
+Let:
+- $Q_1 \sim \chi^2_{k_1}$, a chi-squared random variable with $k_1$ degrees of freedom,
+- $Q_2 \sim \chi^2_{k_2}$, a chi-squared random variable with $k_2$ degrees of freedom,
+- $Q_1$ and $Q_2$ are independent.
+
+Then, the random variable:
+
+$$
+F = \frac{\frac{Q_1}{k_1}}{\frac{Q_2}{k_2}}
+$$
+
+follows an F-distribution with $k_1$ and $k_2$ degrees of freedom. We write:
+
+$$
+F \sim F(k_1, k_2)
+$$
+
+#### Key Properties of the F-Distribution
+1. **Degrees of Freedom:** The parameters $k_1$ and $k_2$ determine the shape of the F-distribution.
+   - $k_1$ (numerator degrees of freedom) is associated with the variability of the first chi-squared variable.
+   - $k_2$ (denominator degrees of freedom) is associated with the variability of the second chi-squared variable.
+
+2. **Support:** $F$ is defined for $F \geq 0$.
+
+3. **Asymmetry:** The F-distribution is not symmetric; it is skewed to the right, especially for small degrees of freedom. As $k_1$ and $k_2$ increase, it approaches a normal distribution.
+
+4. **Mean:**
+   - $\mathbb{E}[F] = \frac{k_2}{k_2 - 2}$ for $k_2 > 2$.
+   
+5. **Variance:**
+   - $\mathbb{V}[F] = \frac{2k_2^2 (k_1 + k_2 - 2)}{k_1 (k_2 - 2)^2 (k_2 - 4)}$ for $k_2 > 4$.
+
+6. **Special Cases:** 
+   - When $k_1 = 1$, the F-distribution is equivalent to the square of a t-distribution with $k_2$ degrees of freedom: $F(1, k_2) = t_{k_2}^2$.
+
+#### Applications
+
+1. **ANOVA (Analysis of Variance):** The F-statistic is used to test whether multiple groups have the same variance or means.
+2. **Model Comparison:** In regression, the F-distribution is used to compare nested models, assessing whether additional predictors improve the fit of the model.
+3. **Hypothesis Testing:** The F-distribution appears in tests of equality of variances (Levene’s test or Bartlett’s test).
+
+The F-distribution is essential in statistics for comparing variances and testing model adequacy, making it a cornerstone of many inferential procedures.
+
+
+## Statistics
+
+Essential statistical concepts include:
+
+  * [Bias of an Estimator](#bias-of-an-estimator)
+  * [Unbiased Estimator](#unbiased-estimator)
+  * [Mean Square Error of an Estimator](#mean-square-error-of-an-estimator)
+  * Consistent
+  * Minimum Variance
+
+* **Interval Estimation**
+* **Hypothesis Testing**
+
+### Bias of an Estimator
+
+The **bias** of an estimator $\hat{\mathbf{\theta}}$ for a vector parameter $\mathbf{\theta}$ is defined as the difference between the expected value of the estimator and the true value of the parameter. Formally, if $\mathbf{\theta} \in \mathbb{R}^n$ is a vector parameter, then the **bias** of the estimator $\hat{\mathbf{\theta}}$ is:
+
+$$
+\text{Bias}(\hat{\mathbf{\theta}}) = \mathbb{E}[\hat{\mathbf{\theta}}] - \mathbf{\theta}.
+$$
+
+#### Key Points
+
+1. **Interpretation**: Bias measures how far, on average, the estimator $\hat{\mathbf{\theta}}$ is from the true parameter $\mathbf{\theta}$. If the bias is zero, the estimator is said to be **unbiased**.
+
+2. **Component-wise Bias**: For each component of the estimator $\hat{\mathbf{\theta}} = (\hat{\theta}_1, \dots, \hat{\theta}_n)^T$, the bias can be expressed as:
+   $$
+   \text{Bias}(\hat{\theta}_i) = \mathbb{E}[\hat{\theta}_i] - \theta_i, \quad \text{for each } i = 1, \dots, n.
+   $$
+   This component-wise breakdown is helpful for understanding how each part of the vector estimator deviates from the true values.
+
+3. **Total Bias**: The total bias can be viewed as a vector, summarizing the systematic error in each dimension of the estimator.
+
+#### Example
+
+In practice, if $\hat{\mathbf{\theta}}$ is the sample mean vector of a random vector $\mathbf{X}$, and $\mathbf{\theta} = \mathbb{E}[\mathbf{X}]$, then $\text{Bias}(\hat{\mathbf{\theta}})$ will be zero, making the sample mean an unbiased estimator of the population mean.
+
+
+### Unbiased Estimator
+
+An **unbiased estimator** of a vector parameter is an estimator that, on average, accurately estimates the true value of the parameter. Formally, let $\mathbf{\theta} \in \mathbb{R}^n$ be a vector parameter of interest, and let $\hat{\mathbf{\theta}}$ be an estimator of $\mathbf{\theta}$. Then, $\hat{\mathbf{\theta}}$ is an **unbiased estimator** of $\mathbf{\theta}$ if the following condition holds:
+
+$$
+\mathbb{E}[\hat{\mathbf{\theta}}] = \mathbf{\theta} \quad \forall \bgt \in \dR^n.
+$$
+
+#### Key Points
+
+1. **Component-wise Unbiasedness**: Each component of $\hat{\mathbf{\theta}}$, say $\hat{\theta}_i$, must be an unbiased estimator of the corresponding component $\theta_i$ of $\mathbf{\theta}$:
+   $$
+   \mathbb{E}[\hat{\theta}_i] = \theta_i, \quad \text{for all } i = 1, \dots, n.
+   $$
+
+2. **No Systematic Bias**: Unbiasedness implies that, on average, the estimator neither overestimates nor underestimates the true value of $\mathbf{\theta}$ across repeated sampling. 
+
+3. **Applications**: Unbiased estimators are crucial in statistics, as they provide estimations that are theoretically centered around the true parameter values, though they may vary due to sampling variation. 
+
+An example is the sample mean $\mathbf{\bar{X}}$ as an estimator for the population mean $\mathbf{\mu}$ of a random vector $\mathbf{X}$, where $\mathbb{E}[\mathbf{\bar{X}}] = \mathbf{\mu}$.
+
+ 
+### Mean Square Error of an Estimator
+
+The **Mean Square Error (MSE)** of an estimator $\hat{\mathbf{\theta}}$ for a vector parameter $\mathbf{\theta}$ measures the average squared deviation of the estimator from the true parameter. Formally, for a parameter vector $\mathbf{\theta} \in \mathbb{R}^n$ and an estimator $\hat{\mathbf{\theta}}$, the MSE is defined as:
+
+$$
+\dM(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ \|\hat{\mathbf{\theta}} - \mathbf{\theta}\|^2 \right],
+$$
+
+where $\|\cdot\|$ denotes the Euclidean (or 2-norm) of a vector. Expanding this expression, we can write:
+
+$$
+\dM(\hat{\mathbf{\theta}}) = \mathbb{E} \left[ (\hat{\mathbf{\theta}} - \mathbf{\theta})^T (\hat{\mathbf{\theta}} - \mathbf{\theta}) \right].
+$$
+
+#### Key Components
+
+The MSE can be decomposed into two main parts: **variance** and **squared bias**.
+
+$$
+\dM(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})) + \|\text{Bias}(\hat{\mathbf{\theta}})\|^2,
+$$
+
+where:
+- **Variance**: $\text{Var}(\hat{\mathbf{\theta}}) = \mathbb{E}[(\hat{\mathbf{\theta}} - \mathbb{E}[\hat{\mathbf{\theta}}])(\hat{\mathbf{\theta}} - \mathbb{E}[\hat{\mathbf{\theta}}])^T]$, representing the variability in the estimator.
+- **Bias**: $\text{Bias}(\hat{\mathbf{\theta}}) = \mathbb{E}[\hat{\mathbf{\theta}}] - \mathbf{\theta}$, representing the systematic deviation from the true parameter.
+
+#### Key Properties
+
+1. **Unbiased Estimator**: If $\hat{\mathbf{\theta}}$ is unbiased, then $\text{Bias}(\hat{\mathbf{\theta}}) = 0$, and the MSE is simply the trace of the covariance matrix of $\hat{\mathbf{\theta}}$:
+   $$
+   \dM(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})).
+   $$
+
+2. **Bias-Variance Trade-off**: The MSE quantifies the balance between bias and variance. Lowering bias often increases variance and vice versa, a key concept in statistical estimation.
+
+3. **Overall Error Metric**: The MSE provides a comprehensive measure of the estimator's accuracy, taking both variance and bias into account, making it an essential criterion in evaluating estimators.
+
