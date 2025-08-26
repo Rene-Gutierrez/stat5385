@@ -1,4 +1,7 @@
-stat-53856385-fall-2024
+stat-53856385-fall-2025
+calendar
+important-dates
+class-schedule
 prerequisites
 general-math
 linear-algebra

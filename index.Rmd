@@ -1,4 +1,4 @@
-# Stat 5385/6385 Fall 2024
+# Stat 5385/6385 Fall 2025
 
 This is the website for STAT5385. It will contain the relevant information for
 the course and lecture notes and code seen in class.
