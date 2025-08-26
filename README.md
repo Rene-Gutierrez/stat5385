@@ -2,7 +2,7 @@
 
 Welcome to the page of STAT 5385/6385. 
 
-Here is the [Syllabus](https://github.com/Rene-Gutierrez/stat5385/blob/main/Syllabus%205385-6285-3.pdf)
+Here is the [Syllabus](https://github.com/Rene-Gutierrez/stat5385/blob/main/Syllabus%20Stat%205385-6385.pdf)
 
 Here are the [Lecture Notes](https://rene-gutierrez.github.io/stat5385/)
 
