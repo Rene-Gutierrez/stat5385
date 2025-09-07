@@ -1,6 +1,6 @@
-# Introduction
+# Introduction{#introduction}
 
-Check chapters 2.1-2.2 of the textbook.
+## Objectives of Linear Regression
 
 Linear regression is a statistical method used to analyze the relationship between at least two variables: one dependent variable and at least one independent variable. This technique is closely tied to the correlation coefficient, which measures the strength and direction of a linear relationship between variables. In this document, we will explore how these concepts are connected.
 
@@ -9,6 +9,8 @@ Linear regression is typically applied for three main purposes:
 - **Description:** To describe the relationship between the variables under analysis.
 - **Control:** To predict how changes in the independent variables will affect the dependent variable.
 - **Prediction:** To forecast the value of the dependent variable based on new observations of the independent variables.
+
+---
 
 ## Examples
 
@@ -68,7 +70,7 @@ The most important results from the regression analysis can be summarized as fol
 summary(outReg)
 ```
 
-For now, let’s focus on the **estimate** for the intercept and the Ad.Spending coefficient. The **intercept** indicates the expected revenue when ad spending is zero. Based on your analysis, you observe that even without an ad campaign, mattress sales generate $r outReg$coefficients[1]. The **coefficient** for Ad.Spending shows that each dollar spent on ads increases revenue by $r outReg$coefficients[2].
+For now, let’s focus on the **estimate** for the intercept and the Ad.Spending coefficient. The **intercept** indicates the expected revenue when ad spending is zero. Based on your analysis, you observe that even without an ad campaign, mattress sales generate `r outReg$coefficients[1]`. The **coefficient** for Ad.Spending shows that each dollar spent on ads increases revenue by `r outReg$coefficients[2]`.
 
 To visualize the regression line:
 
@@ -135,9 +137,11 @@ abline(h = 0,
        v = 0)
 ```
 
-Within the range of observed ad spending values (r round(min(dat$Ad.Spending)) to r round(max(dat$Ad.Spending))), we can be reasonably confident in the relationship between ad spending and revenue. However, what happens when we consider values outside this range?
+Within the range of observed ad spending values `r round(min(dat$Ad.Spending))` to `r round(max(dat$Ad.Spending))`, we can be reasonably confident in the relationship between ad spending and revenue. However, what happens when we consider values outside this range?
 
 While we can predict and control revenue to some extent by adjusting ad spending within the observed range, this confidence may not extend to values beyond it. For instance, it’s plausible that after reaching a certain level of ad spending, the market could become saturated, resulting in diminishing or even no additional revenue despite increased ad spending. Therefore, we should be cautious when extrapolating beyond the observed data, as the relationship may not hold under different conditions.
+
+---
 
 ### Wine and Life Expectancy {#winw-example}
 
@@ -162,10 +166,6 @@ colnames(datWin) <- c("Years", "Glasses")
 # Saves to csv
 write.csv(datWin[, c(1, 2)], file = "Wine Data.csv", row.names = FALSE)
 ```
-
-Here’s an improved version of your text:
-
----
 
 You should be able to generate the exact same data if you copy and paste the code and run it on your computer. Although the data is randomly simulated, I’ve set a **seed** to ensure that the simulation can be replicated consistently.
 
@@ -200,6 +200,8 @@ abline(a   = outReg$coefficients[1],
 ```
 
 Given the regression line, can we confidently conclude that increasing wine consumption leads to a longer life expectancy?
+
+---
 
 ### Burger Demand
 

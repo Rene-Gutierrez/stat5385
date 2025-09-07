@@ -5,6 +5,8 @@ the course and lecture notes and code seen in class.
 
 Find the syllabus here: [Syllabus](https://github.com/Rene-Gutierrez/stat5385/blob/main/Syllabus%20Stat%205385-6385.pdf)
 
+---
+
 ## Calendar
 
 ### Important Dates
@@ -12,4 +14,6 @@ Find the syllabus here: [Syllabus](https://github.com/Rene-Gutierrez/stat5385/bl
 ### Class Schedule
 
 * Class 1: Class Introduction
-* Class 2: Regression Introduction [Introduction][introduction]
+* Class 2: [Regression Introduction](#introduction)
+* Class 3: [Intro to Simple Linear Regression](#intro-to-slr)
+* Class 4: [Properties of the Simple Linear Regression Problem](#properties-of-the-estimates)

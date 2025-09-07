@@ -1,8 +1,38 @@
 # Simple Linear Regression
 
+## Intro to SLR{#intro-to-slr}
+
 Simple linear regression (**SLR**) is a linear regression model with a single explanatory variable. It focuses on the linear relationship between one independent variable and one dependent variable, making it the most basic form of linear regression analysis.
 
-## Model
+---
+
+### A path not Taken
+
+The basic idea behind linear regression is to find the "best line" that describes the data. This idea admits several interpretations. One interpretation is to measure the distance between a candidate line and the data points. For a line $\mathcal{l}$ given by
+
+$$
+ax + by + c = 0
+$$
+
+the distance from a point $(x_i,y_i)$ to that line is
+
+$$
+d_i = d(\mathcal{l},(x_i,y_i)) = \frac{|ax_i + by_i + c|}{\sqrt{a^2+b^2}}.
+$$
+
+We could then pose the optimization problem
+
+$$
+\min_{a,b,c} \sum_{i=1}^n d_i.
+$$
+
+However, those familiar with regression will recognize that this is not the standard linear regression formulation. That does not make the distance-minimization problem unreasonable, only that its solution will generally differ from the usual linear regression solution.
+
+Linear regression, as commonly defined, is a particular optimization choice made because of its convenient properties. In the next section we introduce a model that refines the notion of a "best line."
+
+---
+
+### SLR Model
 
 The model for simple linear regression is as follows:
 
@@ -17,7 +47,9 @@ where:
 * $\beta_1$ is the slope of the linear model, or regression line.
 * $n$ is the number of observations for both variables.
 
-Note that we are not making any assumptions about the error terms.
+Notice that in this framework, the error is not measuring the distance from the point
+to the regression line, but the vertical distance from the point to the regression line.
+Also, note that we are not making any assumptions about the error terms.
 
 In the case of the [wine example](#wine-example), we generated the data based on the following linear model:
 
@@ -50,15 +82,63 @@ In this case, the intercept $\beta_0$ is meaningful, as it represents the expect
 
 In practice, we rarely know the true regression line. Instead, it must be estimated from the data. The goal is to find the "best" line that fits the data, where "best" means the line that minimizes the sum of squared errors (SSE) between the observed values and the values predicted by the model.
 
+---
+
+### Possible Optimization Problems
+
+Other than minimizing the sum of squared errors (SSE), we can consider the following alternative optimization problems. Here \(e_i(\beta_0,\beta_1)=y_i-(\beta_0+\beta_1 x_i)\) denotes the residual.
+
+#### Minimizing the Sum of Absolute Errors
+
+$$
+\min_{\beta_0, \beta_1} \sum_{i=1}^n |e_i(\beta_0, \beta_1)|
+$$
+
+This L1 criterion is common in the machine-learning community and is more robust to outliers than the SSE. Laplace was among the first to investigate this approach when developing early methods for fitting lines to data.
+
+#### Minimizing the Maximum Error
+
+$$
+\min_{\beta_0, \beta_1} \max_{i=1}^n |e_i(\beta_0, \beta_1)|
+$$
+
+The minimax approach focuses on reducing the largest error and is appropriate when large errors can be catastrophic. Laplace also explored this formulation in his early work.
+
+#### Minimizing the Sum of Squared Errors
+
+$$
+\min_{\beta_0, \beta_1} \sum_{i=1}^n e_i(\beta_0, \beta_1)^2
+$$
+
+This is the standard formulation in simple linear regression (the least squares criterion), introduced by Legendre and Gauss (apparently independently). It remains widely used because of its convenient properties (closed-form solution, computational ease, and optimality under Gaussian error assumptions), which we will analyze later.
+
+---
+
 ## Least Squares Estimation
 
-As explained before, we want to minimize the SSE, we can create a function of 
-$\beta_0$ and $\beta_1$ with this sum as follows:
+
+As explained before, we want to minimize the SSE. Define
 
 $$Q(\beta_0, \beta_1) = \sum_{i=1}^n (e_i(\beta_0, \beta_1))^2 
 = \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2  $$
 
-and we can find the minimum of this function easily since it is a differentiable function. We can find the both components of the gradient and equal them to zero to find the critical points. We start with $\beta_0$:
+Because Q is differentiable (in fact a convex quadratic), we find its minimum by setting the gradient to zero.
+
+The solution to this minimization problem is given by:
+
+$$ \hat{\beta}_1 = \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2} $$
+$$ \hat{\beta_0} = \bar{y} - \hat{\beta}_1 \bar{x}$$
+where we use $\hat{}$, to denote the specific critical point. And we have 
+adopted the standard notation: 
+$$\bar{x} = \frac{1}{n}\sum_{i}^n x_i$$ 
+and 
+$$\bar{y} = \frac{1}{n}\sum_{i}^n y_i$$. 
+It remains to see if this is indeed a minimum. One can check the second order conditions or argue 
+the quadratic form of the problem only admits a minimum.
+
+<details><summary><span style="color:green">Derivation</span></summary>
+
+We start with $\beta_0$:
 
 \begin{align*}
 \frac{\partial Q}{\partial \beta_0} 
@@ -67,8 +147,6 @@ and we can find the minimum of this function easily since it is a differentiable
   &= \sum_{i = 1}^n (2 \beta_0 - 2 y_i + 2 \beta_1 x_i) \\
   &= -2 \left( n \beta_0 - n \bar{y} + n\beta_1 \bar{x} \right)
 \end{align*}
-
-where we have adopted the notation: $\bar{x} = \frac{1}{n}\sum_{i}^n x_i$ and $\bar{y} = \frac{1}{n}\sum_{i}^n y_i$.
 
 \begin{align}
 \frac{\partial Q}{\partial \beta_0} = 0 
@@ -112,15 +190,17 @@ so, the only critical point for $Q(\beta_0,\beta_1)$ is when:
 $$ \hat{\beta}_1 = \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2} $$
 $$ \hat{\beta_0} = \bar{y} - \hat{\beta}_1 \bar{x}$$
 
-where we use $\hat{}$, to denote the specific critical point. It remains to see
-if this is indeed a minimum. One can check the second order conditions.
+</details>
 
-Now, if we introduce the notation for sample variance and covariance:
+Now, if we introduce the further notation for the sample variance and covariance:
 
 $$ S^2_{xx} = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2 $$
 $$ S_{xy}   = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) $$
 
-and note the following:
+and note that:
+
+$$\sum_{i=1}^n (x_i - \bar{x})^2 = \sum_{i=1}^n x_i^2 - n\bar{x}^2 $$
+<details><summary><span style="color:green">Derivation</span></summary>
 
 \begin{align*}
 \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2
@@ -131,7 +211,12 @@ and note the following:
   &= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - n\bar{x}^2
 \end{align*}
 
+</details>
+
 and
+
+$$ \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) = \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} $$
+<details><summary><span style="color:green">Derivation</span></summary>
 
 \begin{align*}
 \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})
@@ -141,12 +226,14 @@ and
   &= \frac{1}{n-1} \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} \\
 \end{align*}
 
-then we can express $\hat{\beta}_1$ as:
+</details>
+
+Then we can express $\hat{\beta}_1$ as:
 
 $$\hat{\beta}_1 = \frac{(n-1)S_{xy}}{(n-1)S_{xx}^2}=\frac{S_{xy}}{S_{xx}^2} $$
 
 Now notice that in order to find the Least Squares estimates you don't require
-the complete data set, but only require the following quantities:
+the complete data set, but only require the following quantities (Suffient Statistics):
 
 * $\bar{y}$.
 * $\bar{x}$.
@@ -155,16 +242,17 @@ the complete data set, but only require the following quantities:
 
 ### Other estimated quantites
 
-If we use the Least squares estimates in the regression equation, we can derive
-other estimated quantities:
+If we substitute the least-squares estimates into the regression model we obtain the fitted (predicted) values and residuals.
 
-The estimated value for observation $i$:
+The fitted value for observation $i$ is
+$$
+\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i,
+$$
 
-$$ \hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i $$
-
-and the estimated error:
-
-$$ \hat{e}_i = y_i - \hat{y}_i = y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i $$
+and the residual (estimated error) is
+$$
+\hat{e}_i = y_i - \hat{y}_i = y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i.
+$$
 
 And we can also compare our estimated regression line (blue) with the real 
 regression line (red) in the following as follows:
@@ -185,10 +273,51 @@ abline(a   = outReg$coefficients[1],
        lwd = 2)
 ```
 
+---
+
+### Properties of the SLR problem
+
+The least-squares solution in simple linear regression (SLR) enjoys several important and useful properties that are not generally shared by minimax or least-absolute-value fits (even for the same linear model). Below is a concise, polished list of these properties with brief explanations.
+
+- **Closed-form solution.**  
+  The normal equations yield explicit formulas (e.g. \(\hat\beta_1 = S_{xy}/S_{xx}\), \(\hat\beta_0=\bar y-\hat\beta_1\bar x\)). Closed-form expressions provide direct insight into how the estimates depend on the data.
+
+- **Computationally cheap (O(n)).**  
+  Only a few sums (or averages and second moments) are needed, so the estimates can be computed in linear time and with constant memory beyond the data summaries.
+
+- **Depends only on a few summary statistics (sufficient-type summaries).**  
+  The estimates require only \(\bar x,\bar y,S_{xx}^2,S_{xx}^2\)
+  
+---
+
 ## Properties of the Estimates
 
+Before analyzing more properties of the least squares problem, let us define the 
+following variables:
+
+* $\mathbf{y} = (y_1,\ldots,y_n)'$.
+* $\mathbf{x} = (x_1,\ldots,x_n)'$.
+* $\mathbf{e} = (e_1,\ldots,e_n)'$.
+* $\hat{\mathbf{y}} = (\hat{y}_1,\ldots,\hat{y}_n)'$.
+* $\hat{\mathbf{e}} = (\hat{e}_1,\ldots,\hat{e}_n)'$.
+* $\mathbb{1} = (1,\ldots,1)'$.
+
+As a bonus, we can write the Linear regression model as follows:
+
+$$ \mathbf{y} = \beta_0 \mathbb{1} + \beta_1 \mathbf{x} + \mathbf{e} $$
+
+---
+
+### $\hat{\beta}_0$ and $\hat{\beta}_1$ are linear combinations of 
+$\mathbf{y}$
+
 The estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ are linear combinations of 
-$\mathbf{y} = (y_1,\ldots,y_n)'$. To see this, notice the following:
+$\mathbf{y} = (y_1,\ldots,y_n)'$.
+
+First note the following:
+
+$$ \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) =  \sum_{i=1}^n (x_i - \bar{x}) y_i $$
+<details><summary><span style="color:green">Derivation</span></summary>
 
 \begin{align*}
 \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) \\
@@ -199,15 +328,25 @@ $\mathbf{y} = (y_1,\ldots,y_n)'$. To see this, notice the following:
   &= \sum_{i=1}^n (x_i - \bar{x}) y_i \\
 \end{align*}
 
+</details>
+
 Then
 
-$$ \hat{\beta}_1 =  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{\sum_{i=1}^n (x_i - \bar{x}) y_i}{\sum_{i=1}^n (x_i - \bar{x})^2} = \sum_{i=1}^n\frac{(x_i - \bar{x}) }{\sum_{i=1}^n (x_i - \bar{x})^2}y_i $$
+$$ \hat{\beta}_1 =  \frac{\sum_{i = 1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{\sum_{i=1}^n (x_i - \bar{x}) y_i}{\sum_{i=1}^n (x_i - \bar{x})^2} = \sum_{i=1}^n\frac{(x_i - \bar{x}) }{\sum_{i=1}^n (x_i - \bar{x})^2}y_i $$
 
 and similarly:
 
 $$ \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x} = \sum_{i=1}^n \frac{y_i}{n} - \sum_{i=1}^n\frac{(x_i - \bar{x}) }{\sum_{j = 1}^n x_j^2 - n \bar{x}^2}y_i \bar{x} = \sum_{i=1}^n \left( \frac{1}{n} - \frac{(x_i - \bar{x}) }{\sum_{j = 1}^n x_j^2 - n \bar{x}^2} \bar{x} \right)y_i $$
 
-Also, notice that the sum of the errors is $0$.
+---
+
+### The sum of the residuals is $0$
+
+That is:
+
+$$ \sum_{i=1}^n \hat{e}_i = 0 $$
+
+<details><summary><span style="color:green">Derivation</span></summary>
 
 \begin{align*}
 \sum_{i=1}^n \hat{e}_i 
@@ -219,10 +358,17 @@ Also, notice that the sum of the errors is $0$.
   &= 0
 \end{align*}
 
-If we let $\hat{\mathbf{e}} = (\hat{e}_i,\ldots,\hat{e}_n)'$ and $\mathbf{x}=(x_1,\ldots,x_n)'$,
-two vectors of size $n$, then we have that $\hat{\mathbf{e}}$ and $\mathbf{x}$ are orthogonal.
-That is:
+</details>
 
+---
+
+### $\hat{\mathbf{e}}$ and $\mathbf{x}$ are orthogonal
+
+We need to show that:
+
+$$ \langle \hbe, \bx \rangle = 0 $$
+
+<details><summary><span style="color:green">Derivation</span></summary>
 
 \begin{align*}
 \langle \hbe, \bx \rangle 
@@ -239,7 +385,17 @@ That is:
   &=0
 \end{align*}
 
-The same applies to $\hby = (\hy_1,\ldots,\hby_n)'$ and $\hbe$, as we can see:
+</details>
+
+---
+
+### $\hby$ and $\hbe$ are orthogonal
+
+We need to show that:
+
+$$ \langle \hbe, \hby \rangle = 0 $$
+
+<details><summary><span style="color:green">Derivation</span></summary>
 
 \begin{align*}
 \langle \hbe, \hby \rangle 
@@ -251,7 +407,16 @@ The same applies to $\hby = (\hy_1,\ldots,\hby_n)'$ and $\hbe$, as we can see:
   &= 0
 \end{align*}
 
-Finally, the average of $\hby$ and $\by$ are the same, to see this notice:
+</details>
+
+---
+
+### The average of $\hby$ and $\by$ are the same
+
+That is:
+
+$$ \frac{1}{n} \sum_{i=1}^n \hy_i = \bar{y} $$
+<details><summary><span style="color:green">Derivation</span></summary>
 
 \begin{align*}
 \frac{1}{n} \sum_{i=1}^n \hy_i 
@@ -262,6 +427,12 @@ Finally, the average of $\hby$ and $\by$ are the same, to see this notice:
   &= \bar{y} - \hgb_1 \bx  + \hgb_1 \bx \\
   &= \bar{y} \\
 \end{align*}
+
+</details>
+
+All these properties of the estimates, are the result of solving the least squares
+problem. If another problem is solve, several of these properties, if not all of them, 
+will be lost.
 
 ## Centering and Standarizing the Data
 
