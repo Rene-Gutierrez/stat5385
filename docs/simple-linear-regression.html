@@ -451,11 +451,20 @@ the quadratic form of the problem only admits a minimum.</p>
 <p>We start with <span class="math inline">\(\beta_0\)</span>:</p>
 <p><span class="math display">\[\begin{align*}
 \frac{\partial Q}{\partial \beta_0}
-  &amp;= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
-  &amp;= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i^2 + \beta_0^2 + \beta_1^2 x_i^2 - 2 \beta_0 y_i - 2 \beta_1 x_i y_i + 2 \beta_0 \beta_1 x_i) \\
-  &amp;= \sum_{i = 1}^n (2 \beta_0 - 2 y_i + 2 \beta_1 x_i) \\
-  &amp;= -2 \left( n \beta_0 - n \bar{y} + n\beta_1 \bar{x} \right)
+  &amp;= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2
+    &amp; \text{def. } Q \\
+  &amp;= \frac{\partial}{\partial \beta_0} \sum_{i=1}^n (y_i^2 + \beta_0^2 + \beta_1^2 x_i^2 - 2 \beta_0 y_i - 2 \beta_1 x_i y_i + 2 \beta_0 \beta_1 x_i)
+    &amp; \text{expanding square} \\
+  &amp;= \sum_{i=1}^n \frac{\partial}{\partial \beta_0} (y_i^2 + \beta_0^2 + \beta_1^2 x_i^2 - 2 \beta_0 y_i - 2 \beta_1 x_i y_i + 2 \beta_0 \beta_1 x_i)
+    &amp; \text{linearity of derivative} \\
+  &amp;= \sum_{i = 1}^n (2 \beta_0 - 2 y_i + 2 \beta_1 x_i)
+    &amp; \text{applying the derivative} \\
+  &amp;=  2 \sum_{i = 1}^n \beta_0 - 2 \sum_{i = 1}^n y_i + 2 \beta_1 \sum_{i = 1}^n x_i
+    &amp; \text{linearity sum} \\
+  &amp;=  2 \left( n \beta_0 - n \bar{y} + n \beta_1 \bar{x} \right)
+    &amp; \text{def. } \bar{y}, \text{def. } \bar{x} \\
 \end{align*}\]</span></p>
+<p>Then we have that:</p>
 <p><span class="math display">\[\begin{align}
 \frac{\partial Q}{\partial \beta_0} = 0
   &amp;\iff -2 \left( n \beta_0 - n \bar{y} + n\beta_1 \bar{x} \right) = 0 \notag \\
@@ -464,10 +473,16 @@ the quadratic form of the problem only admits a minimum.</p>
 <p>And we can do a similar thing for <span class="math inline">\(\beta_1\)</span>:</p>
 <p><span class="math display">\[\begin{align*}
 \frac{\partial Q}{\partial \beta_1}
-  &amp;= \frac{\partial}{\partial \beta_1} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 \\
-  &amp;= \sum_{i = 1}^n 2(y_i -\beta_0 - \beta_1 x_i)(-x_i) \\
-  &amp;= -2\sum_{i = 1}^n y_i x_i + 2 \beta_0 \sum_{i = 1}^n x_i + 2 \beta_1 \sum_{i = 1}^n x_i^2 \\
+  &amp;= \frac{\partial}{\partial \beta_1} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2
+    &amp; \text{def. } Q \\
+  &amp;= \sum_{i=1}^n \frac{\partial}{\partial \beta_1} (y_i - \beta_0 - \beta_1 x_i)^2
+    &amp; \text{linwarity of derivative} \\
+  &amp;= \sum_{i = 1}^n 2(y_i -\beta_0 - \beta_1 x_i)(-x_i)
+    &amp; \text{applying the derivative} \\
+  &amp;= -2\sum_{i = 1}^n y_i x_i + 2 \beta_0 \sum_{i = 1}^n x_i + 2 \beta_1 \sum_{i = 1}^n x_i^2
+    &amp; \text{linearity sum} \\
   &amp;= -2\sum_{i = 1}^n y_i x_i + 2 n \beta_0 \bar{x} + 2 \beta_1 \sum_{i = 1}^n x_i^2
+    &amp; \text{def. } \bar{x} \\
 \end{align*}\]</span></p>
 <p>then:</p>
 <p><span class="math display">\[\begin{align}
@@ -499,11 +514,16 @@ the quadratic form of the problem only admits a minimum.</p>
 </summary>
 <p><span class="math display">\[\begin{align*}
 \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i^2 - 2\bar{x}x_i + \bar{x}^2) \\
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - 2\bar{x}\sum_{i=1}^n x_i + \sum_{i=1}^n \bar{x}^2 \\
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - 2\bar{x}(n\bar{x}) + n \bar{x}^2 \\
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - 2n\bar{x}^2 + n \bar{x}^2 \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i^2 - 2\bar{x}x_i + \bar{x}^2)
+    &amp; \text{exp. square} \\
+  &amp;= \frac{1}{n-1} \left[ \sum_{i=1}^n x_i^2 - 2\bar{x}\sum_{i=1}^n x_i + \sum_{i=1}^n \bar{x}^2 \right]
+    &amp; \text{linearity sum} \\
+  &amp;= \frac{1}{n-1} \left[ \sum_{i=1}^n x_i^2 - 2\bar{x}(n\bar{x}) + n \bar{x}^2 \right]
+    &amp; \text{def. } \bar{x} \\
+  &amp;= \frac{1}{n-1} \left[ \sum_{i=1}^n x_i^2 - 2n\bar{x}^2 + n \bar{x}^2 \right]
+    &amp; \\
   &amp;= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - n\bar{x}^2
+    &amp; \\
 \end{align*}\]</span></p>
 </details>
 <p>and</p>
@@ -514,20 +534,24 @@ the quadratic form of the problem only admits a minimum.</p>
 </summary>
 <p><span class="math display">\[\begin{align*}
 \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_iy_i - \bar{x}y_i - \bar{y}x_i + \bar{x}\bar{y}) \\
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_iy_i - \bar{x} \sum_{i=1}^ny_i - \bar{y} \sum_{i=1}^n x_i + \sum_{i=1}^n \bar{x}\bar{y} \\
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} - n\bar{y} \bar{x} + n \bar{x}\bar{y} \\
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_iy_i - \bar{x}y_i - \bar{y}x_i + \bar{x}\bar{y})  
+    &amp; \text{exp. prod.} \\
+  &amp;= \frac{1}{n-1} \left[ \sum_{i=1}^n x_iy_i - \bar{x} \sum_{i=1}^ny_i - \bar{y} \sum_{i=1}^n x_i + \sum_{i=1}^n \bar{x}\bar{y} \right]
+    &amp; \text{lin. sum} \\
+  &amp;= \frac{1}{n-1} \left[ \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} - n\bar{y} \bar{x} + n \bar{x}\bar{y} \right]
+    &amp; \text{def. } \bar{y}, \bar{x} \\
+  &amp;= \frac{1}{n-1} \left[ \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} \right]
+    &amp;  \\
 \end{align*}\]</span></p>
 </details>
 <p>Then we can express <span class="math inline">\(\hat{\beta}_1\)</span> as:</p>
-<p><span class="math display">\[\hat{\beta}_1 = \frac{(n-1)S_{xy}}{(n-1)S_{xx}^2}=\frac{S_{xy}}{S_{xx}^2} \]</span></p>
+<p><span class="math display">\[\hat{\beta}_1 = \frac{(n-1)S_{xy}}{(n-1)S_{xx}^2}=\frac{S_{xy}}{S_{xx}} \]</span></p>
 <p>Now notice that in order to find the Least Squares estimates you don’t require
 the complete data set, but only require the following quantities (Suffient Statistics):</p>
 <ul>
 <li><span class="math inline">\(\bar{y}\)</span>.</li>
 <li><span class="math inline">\(\bar{x}\)</span>.</li>
-<li><span class="math inline">\(S_{xx}^2\)</span>.</li>
+<li><span class="math inline">\(S_{xx}\)</span>.</li>
 <li><span class="math inline">\(S_{xy}\)</span>.</li>
 </ul>
 <div id="other-estimated-quantites" class="section level3 hasAnchor" number="4.2.1">
@@ -568,7 +592,7 @@ The normal equations yield explicit formulas (e.g. <span class="math inline">\(
 <li><p><strong>Computationally cheap (O(n)).</strong><br />
 Only a few sums (or averages and second moments) are needed, so the estimates can be computed in linear time and with constant memory beyond the data summaries.</p></li>
 <li><p><strong>Depends only on a few summary statistics (sufficient-type summaries).</strong><br />
-The estimates require only <span class="math inline">\(\bar x,\bar y,S_{xx}^2,S_{xx}^2\)</span></p></li>
+The estimates require only <span class="math inline">\(\bar x,\bar y,S_{xx}^2,S_{xx}\)</span></p></li>
 </ul>
 <hr />
 </div>
@@ -600,12 +624,17 @@ following variables:</p>
 <span style="color:green">Derivation</span>
 </summary>
 <p><span class="math display">\[\begin{align*}
-\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) \\
-  &amp;= \sum_{i=1}^n x_i y_i - n \bar{x} \bar{y} \\
-  &amp;= \sum_{i=1}^n x_i y_i - \bar{x} \sum_{i=1}^n y_i \\
-  &amp;= \sum_{i=1}^n x_i y_i - \sum_{i=1}^n \bar{x} y_i \\
-  &amp;= \sum_{i=1}^n (x_i y_i - \bar{x} y_i) \\
-  &amp;= \sum_{i=1}^n (x_i - \bar{x}) y_i \\
+\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})
+  &amp;= \sum_{i=1}^n x_i y_i - n \bar{x} \bar{y}
+    &amp; \text{dist. prod.} \\
+  &amp;= \sum_{i=1}^n x_i y_i - \bar{x} \sum_{i=1}^n y_i  
+    &amp; \text{def. } \bar{y} \\
+  &amp;= \sum_{i=1}^n x_i y_i - \sum_{i=1}^n \bar{x} y_i  
+    &amp; \text{liniarity of sum} \\
+  &amp;= \sum_{i=1}^n (x_i y_i - \bar{x} y_i)   
+    &amp; \text{ass. sum} \\
+  &amp;= \sum_{i=1}^n (x_i - \bar{x}) y_i    
+    &amp; \text{factoring } y_i \\
 \end{align*}\]</span></p>
 </details>
 <p>Then</p>
@@ -624,11 +653,16 @@ following variables:</p>
 </summary>
 <p><span class="math display">\[\begin{align*}
 \sum_{i=1}^n \hat{e}_i
-  &amp;= \sum_{i=1}^n(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i) \\
-  &amp;= \sum_{i=1}^n y_i - \sum_{i=1}^n \hat{\beta}_0 - \hat{\beta}_1 \sum_{i=1}^n x_i \\
-  &amp;= n\bar{y} - n \hat{\beta}_0 - n \hat{\beta}_1 \bar{x} \\
-  &amp;= n\bar{y} - n (\bar{y} - \hat{\beta}_1 \bar{x}) - n \hat{\beta}_1 \bar{x} \\
-  &amp;= n\bar{y} - n \bar{y} + n \hat{\beta}_1 \bar{x} - n \hat{\beta}_1 \bar{x} \\
+  &amp;= \sum_{i=1}^n(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)    
+    &amp; \text{def. } \hat{\mathbf{e}}\\
+  &amp;= \sum_{i=1}^n y_i - \sum_{i=1}^n \hat{\beta}_0 - \hat{\beta}_1 \sum_{i=1}^n x_i    
+    &amp; \text{linearity sum} \\
+  &amp;= n\bar{y} - n \hat{\beta}_0 - n \hat{\beta}_1 \bar{x}     
+    &amp;  \\
+  &amp;= n\bar{y} - n (\bar{y} - \hat{\beta}_1 \bar{x}) - n \hat{\beta}_1 \bar{x}      
+    &amp; \text{def. } \hat{\beta}_0 \\
+  &amp;= n\bar{y} - n \bar{y} + n \hat{\beta}_1 \bar{x} - n \hat{\beta}_1 \bar{x}      
+    &amp; \text{dist.} n \\
   &amp;= 0
 \end{align*}\]</span></p>
 </details>
@@ -644,15 +678,24 @@ following variables:</p>
 </summary>
 <p><span class="math display">\[\begin{align*}
 \langle \hat{\mathbf{e}}, \mathbf{x}\rangle
-  &amp;= \sum_{i=1}^{n} \hat{e}_i x_i \\
-  &amp;= \sum_{i=1}^{n}  (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)x_i \\
-  &amp;= \sum_{i=1}^{n}  (y_i x_i - \hat{\beta}_0x_i - \hat{\beta}_1 x_i x_i) \\
-  &amp;= \sum_{i=1}^{n} y_i x_i - \sum_{i=1}^{n} \hat{\beta}_0x_i - \sum_{i=1}^{n} \hat{\beta}_1 x_i x_i \\
-  &amp;= \sum_{i=1}^{n} y_i x_i - n \hat{\beta}_0 \bar{x} - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
-  &amp;= \sum_{i=1}^{n} y_i x_i - n (\bar{y} - \hat{\beta}_1 \bar{x}) \bar{x} - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
-  &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} + n\hat{\beta}_1 \bar{x}^2 - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2 \\
-  &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} - \hat{\beta}_1 (\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
-  &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} -  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2}(\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  \\
+  &amp;= \sum_{i=1}^{n} \hat{e}_i x_i
+    &amp; \text{def. dot prod.} \\
+  &amp;= \sum_{i=1}^{n}  (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)x_i
+    &amp; \text{def. } \hat{e}_i \\
+  &amp;= \sum_{i=1}^{n}  (y_i x_i - \hat{\beta}_0x_i - \hat{\beta}_1 x_i x_i)
+    &amp; \text{dist. } x_i \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - \hat{\beta}_0 \sum_{i=1}^{n} x_i - \hat{\beta}_1 \sum_{i=1}^{n}  x_i x_i  
+    &amp; \text{linearity sum} \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n \hat{\beta}_0 \bar{x} - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2
+    &amp; \text{def. } \bar{x} \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n (\bar{y} - \hat{\beta}_1 \bar{x}) \bar{x} - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2
+    &amp; \text{def. } \hat{\beta}_0 \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} + n\hat{\beta}_1 \bar{x}^2 - \hat{\beta}_1 \sum_{i=1}^{n} x_i^2
+    &amp; \text{dist. } \bar{x} \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} - \hat{\beta}_1 (\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)   
+    &amp; \text{fact. } \hat{\beta}_1 \\
+  &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} -  \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2}(\sum_{i=1}^{n} x_i^2 - n\bar{x}^2)  
+    &amp; \text{def. } \hat{\beta}_1 \\
   &amp;= \sum_{i=1}^{n} y_i x_i - n \bar{y} \bar{x} -  (\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x})  \\
   &amp;=0
 \end{align*}\]</span></p>
@@ -669,12 +712,20 @@ following variables:</p>
 </summary>
 <p><span class="math display">\[\begin{align*}
 \langle \hat{\mathbf{e}}, \hat{\mathbf{y}}\rangle
-  &amp;= \sum_{i=1}^{n} \hat{e}_i \hat{y}_i \\
-  &amp;= \sum_{i=1}^{n} \hat{e}_i(\hat{\beta}_0 + \hat{\beta}_1 x_i) \\
-  &amp;= \sum_{i=1}^{n} (\hat{e}_i \hat{\beta}_0 + \hat{e}_i \hat{\beta}_1 x_i) \\
-  &amp;= \hat{\beta}_0 \sum_{i=1}^{n} \hat{e}_i + \hat{\beta}_1 \sum_{i=1}^{n} \hat{e}_i x_i \\
-  &amp;= \hat{\beta}_1 \langle \hat{\mathbf{e}}, \mathbf{x}\rangle  \\
+  &amp;= \sum_{i=1}^{n} \hat{e}_i \hat{y}_i
+    &amp; \text{def. dot prod.} \\
+  &amp;= \sum_{i=1}^{n} \hat{e}_i(\hat{\beta}_0 + \hat{\beta}_1 x_i)  
+    &amp; \text{def. } \hat{y}_i \\
+  &amp;= \sum_{i=1}^{n} (\hat{e}_i \hat{\beta}_0 + \hat{e}_i \hat{\beta}_1 x_i)
+    &amp; \text{dist. } \hat{e}_i \\
+  &amp;= \hat{\beta}_0 \sum_{i=1}^{n} \hat{e}_i + \hat{\beta}_1 \sum_{i=1}^{n} \hat{e}_i x_i
+    &amp; \text{lin. sum } \\
+  &amp;= \hat{\beta}_1 \sum_{i=1}^{n} \hat{e}_i x_i
+    &amp;  \sum_{i=1}^{n} \hat{e}_i = 0\\
+  &amp;= \hat{\beta}_1 \langle \hat{\mathbf{e}}, \mathbf{x}\rangle  
+    &amp;  \text{def. dot prod.}\\
   &amp;= 0
+    &amp;  \langle \hat{\mathbf{e}}, \mathbf{x}\rangle = 0 \\
 \end{align*}\]</span></p>
 </details>
 <hr />
@@ -689,12 +740,18 @@ following variables:</p>
 </summary>
 <p><span class="math display">\[\begin{align*}
 \frac{1}{n} \sum_{i=1}^n \hat{y}_i
-  &amp;= \frac{1}{n} \sum_{i=1}^n (\hat{\beta}_0 + \hat{\beta}_1 x_i) \\
-  &amp;= \frac{1}{n} (n \hat{\beta}_0 + \hat{\beta}_1 \sum_{i=1}^n x_i) \\
-  &amp;= \frac{1}{n} (n \hat{\beta}_0 + n \hat{\beta}_1 \mathbf{x}) \\
-  &amp;= \hat{\beta}_0 + \hat{\beta}_1 \mathbf{x}\\
+  &amp;= \frac{1}{n} \sum_{i=1}^n (\hat{\beta}_0 + \hat{\beta}_1 x_i)
+    &amp; \text{def. } \hat{y}_i \\
+  &amp;= \frac{1}{n} (n \hat{\beta}_0 + \hat{\beta}_1 \sum_{i=1}^n x_i)
+    &amp; \text{dist. sum} \\
+  &amp;= \frac{1}{n} (n \hat{\beta}_0 + n \hat{\beta}_1 \mathbf{x})
+    &amp; \text{dist. } n \\
+  &amp;= \hat{\beta}_0 + \hat{\beta}_1 \mathbf{x}
+    &amp; \text{def. } \hat{\beta}_0 \\
   &amp;= \bar{y} - \hat{\beta}_1 \mathbf{x}+ \hat{\beta}_1 \mathbf{x}\\
+    &amp; \\
   &amp;= \bar{y} \\
+    &amp; \\
 \end{align*}\]</span></p>
 </details>
 <p>All these properties of the estimates, are the result of solving the least squares
@@ -707,34 +764,137 @@ will be lost.</p>
 <p>Some transformations of the data can help the regression analysis
 or make it more intuitive. There are 2 main transformations of the data:
 <strong>centering</strong> and <strong>standardization</strong>.</p>
-<p>Consider observations <span class="math inline">\(x_1,\ldots,x_n\)</span>, then the centered version of observation
-<span class="math inline">\(i\)</span> is given by:</p>
-<p><span class="math display">\[x_i&#39; = x_i - \bar{x}\]</span></p>
-<p>The new observations <span class="math inline">\(x_1&#39;,\ldots,x_n&#39;\)</span> are centered and their mean is <span class="math inline">\(0\)</span>.</p>
-<p><span class="math display">\[\bar{x}&#39; = \frac{1}{n} \sum_{i=1}^n x_i&#39; = \frac{1}{n} \sum_{i=1}^n (x_i - \bar{x}) = \frac{1}{n} \left(\sum_{i=1}^n x_i - \sum_{i=1}^n \bar{x} \right) = \frac{1}{n} \left(n\bar{x} - n \bar{x} \right) = 0\]</span>
-Also, let us see that the variance of the standardized variables is the same as
-the variance of the original observations.</p>
-<p><span class="math display">\[ S_{xx}&#39; = \frac{1}{n-1} \sum_{i=1}^n (x_i&#39; - \bar{x}&#39;) = \frac{1}{n-1} \sum_{i=1}^n (x_i&#39;) = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x}) = S_{xx} \]</span>
-So the variance of the observations is not affected by the centering.</p>
-<p>If we center another set of observations <span class="math inline">\(y_1,\ldots,y_n\)</span>, and compute the covariance,
-we have that it also doesn’t change.</p>
-<p><span class="math display">\[S_{xy}&#39; = \frac{1}{n-1} \sum_{i=1}^n (x_i&#39; - \bar{x})(y_i&#39; - \bar{x}) = \frac{1}{n-1} \sum_{i=1}^n (x_i&#39;)(y_i&#39;) = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{x}) = S_{xy}\]</span></p>
-<p>The standardized version of observation <span class="math inline">\(i\)</span> is given by:</p>
-<p><span class="math display">\[x_i&#39;&#39; = \frac{x_i - \bar{x}}{\sqrt{S_{xx}}} = \frac{x_i&#39;}{\sqrt{S_{xx}}}\]</span></p>
-<p>The standardized observations have mean of 0 and variance 1. Let’s see first that
-the sample mean is</p>
-<p><span class="math display">\[ \bar{x}_i&#39;&#39; =  \frac{1}{n} \sum_{i=1}^n x_i&#39;&#39; =  \frac{1}{n} \sum_{i=1}^n \frac{x_i&#39;}{\sqrt{S_{xx}}} = \frac{1}{\sqrt{S_{xx}}}\frac{1}{n} \sum_{i=1}^n x_i&#39; = \frac{1}{\sqrt{S_{xx}}} \bar{x}&#39; = 0\]</span></p>
-<p>Now let us see that the variance of the standardized observations is 1.</p>
+<div class="definition">
+<p><span id="def:def-centered-variable" class="definition"><strong>Definition 4.1  (Centered variable) </strong></span>Given observations <span class="math inline">\(\{x_i\}_{i=1}^n\)</span>, then the centered version of observation
+<span class="math inline">\(i\)</span>, denoted by <span class="math inline">\(x_i^c\)</span> is given by:
+<span class="math display">\[x_i^c = x_i - \bar{x}\]</span></p>
+</div>
+<div class="proposition">
+<p><span id="prp:prp-centered-variable-mean-0" class="proposition"><strong>Proposition 4.1  </strong></span>The centered observations <span class="math inline">\(\{x_i^c\}_{i=1}^n\)</span> have mean <span class="math inline">\(0\)</span>.</p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-1" class="proof"><em>Proof</em>. </span>We need to show that:
+<span class="math display">\[ \bar{x}^c = 0 \]</span></p>
 <p><span class="math display">\[\begin{align*}
-S_{xx}&#39;&#39;
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i&#39;&#39; - \bar{x}&#39;&#39;)^2 \\
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i&#39;&#39;)^2 \\
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n \left(\frac{x_i - \bar{x}}{\sqrt{S_{xx}}}\right)^2 \\
-  &amp;= \frac{1}{n-1} \sum_{i=1}^n \frac{(x_i - \bar{x})^2}{S_{xx}} \\
-  &amp;= \frac{1}{S_{xx}} \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2 \\
-  &amp;= \frac{1}{S_{xx}}S_{xx} \\
-  &amp;= 1
+\bar{x}^c
+  &amp;= \frac{1}{n} \sum_{i=1}^n x_i^c
+    &amp; \text{def. } \bar{x}^c \\
+  &amp;= \frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})
+    &amp; \text{def. } x_i^c \\
+  &amp;= \frac{1}{n} \left(\sum_{i=1}^n x_i - \sum_{i=1}^n \bar{x} \right)
+    &amp; \text{lin. sum} x_i^c \\
+  &amp;= \frac{1}{n} \left(n\bar{x} - n \bar{x} \right)
+    &amp; \text{def. } \bar{x} \\
+  &amp;= 0 \\
+    &amp; \\
 \end{align*}\]</span></p>
+</div>
+</details>
+<div class="proposition">
+<p><span id="prp:prp-centered-variable-variance-equal" class="proposition"><strong>Proposition 4.2  </strong></span>The centered observations <span class="math inline">\(\{x_i^c\}_{i=1}^n\)</span> have the same sample variance as
+the original observations <span class="math inline">\(\{x_i\}_{i=1}^n\)</span>.</p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-2" class="proof"><em>Proof</em>. </span>We need to show that:
+<span class="math display">\[ S_{xx}^c = S_{xx} \]</span></p>
+<p><span class="math display">\[\begin{align*}
+S_{xx}^c
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i^c - \bar{x}^c)^2
+    &amp; \text{def. } S_{xx}^c \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i^c)^2
+    &amp; \bar{x}^c = 0 \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2
+    &amp; \text{def. } x_i^c \\
+  &amp;= S_{xx}
+    &amp; \text{def. } S_{xx} \\
+\end{align*}\]</span></p>
+</div>
+</details>
+<p>So the variance of the observations is not affected by the centering.</p>
+<div class="proposition">
+<p><span id="prp:prp-centered-variable-covariance-equal" class="proposition"><strong>Proposition 4.3  </strong></span>The centered observations <span class="math inline">\(\{x_i^c\}_{i=1}^n\)</span> and <span class="math inline">\(\{y_i^c\}_{i=1}^n\)</span> have the same sample covariance as
+the original observations <span class="math inline">\(\{x_i\}_{i=1}^n\)</span> and <span class="math inline">\(\{y_i\}_{i=1}^n\)</span>.</p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-3" class="proof"><em>Proof</em>. </span>We need to show that:
+<span class="math display">\[ S_{xy}^c = S_{xy} \]</span></p>
+<p><span class="math display">\[\begin{align*}
+S_{xy}^c
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i^c - \bar{x})(y_i^c - \bar{y})
+    &amp; \text{def. } S_{xy}^c \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i^c)(y_i^c)
+    &amp; \bar{x}^c = 0,\bar{y}^c = 0 \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})
+    &amp; \text{def. } x_i^c,y_i^c \\
+  &amp;= S_{xy}
+    &amp; \text{def. } S_{xy} \\
+\end{align*}\]</span></p>
+</div>
+</details>
+<p>So the covariance of the observations is also not affected by the centering.</p>
+<div class="definition">
+<p><span id="def:def-standarized-variable" class="definition"><strong>Definition 4.2  (Standarized variable) </strong></span>Given observations <span class="math inline">\(\{x_i\}_{i=1}^n\)</span>, then the standarized version of observation
+<span class="math inline">\(i\)</span>, denoted by <span class="math inline">\(x_i^s\)</span>, is given by:
+<span class="math display">\[x_i^s = \frac{x_i - \bar{x}}{\sqrt{S_{xx}}} = \frac{x_i^c}{\sqrt{S_{xx}}}\]</span></p>
+</div>
+<div class="proposition">
+<p><span id="prp:prp-standarized-variable-equal-1" class="proposition"><strong>Proposition 4.4  </strong></span>The standardized observations <span class="math inline">\(\{x_i^s\}_{i=1}^n\)</span> have mean of <span class="math inline">\(0\)</span> and variance <span class="math inline">\(1\)</span>.</p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-4" class="proof"><em>Proof</em>. </span>We need to show that:
+<span class="math display">\[ \bar{x}^s = 0 \]</span>
+and
+<span class="math display">\[ S_{xx}^s = 1 \]</span></p>
+<p>First, let us show that <span class="math inline">\(\bar{x}^s = 0\)</span>.
+<span class="math display">\[\begin{align*}
+\bar{x}^s = 0
+  &amp;=  \frac{1}{n} \sum_{i=1}^n x_i^c
+    &amp; \text{def. } \bar{x}^s \\
+  &amp;= \frac{1}{n} \sum_{i=1}^n \frac{x_i^c}{\sqrt{S_{xx}}}
+    &amp; \text{def. } x_i^s \\
+  &amp;= = \frac{1}{\sqrt{S_{xx}}}\frac{1}{n} \sum_{i=1}^n x_i^c
+    &amp; \text{lin. sum} \\
+  &amp;= \frac{1}{\sqrt{S_{xx}}} \bar{x}^c
+    &amp; \text{def. } \bar{x}^c \\
+  &amp;= 0
+    &amp; \bar{x}^c = 0 \\
+\end{align*}\]</span></p>
+<p>Now let us see that the variance of the standardized observations is 1.
+<span class="math display">\[\begin{align*}
+S_{xx}^s
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i^s - \bar{x}^s)^2
+    &amp; \text{def. } S_{xx}^s \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n (x_i^s)^2
+    &amp; \bar{x}^s = 0 \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n \left(\frac{x_i - \bar{x}}{\sqrt{S_{xx}}}\right)^2
+    &amp; \text{def. } x_i^s \\
+  &amp;= \frac{1}{n-1} \sum_{i=1}^n \frac{(x_i - \bar{x})^2}{S_{xx}}
+    &amp; \\
+  &amp;= \frac{1}{S_{xx}} \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2
+    &amp; \text{lin. sum} \\
+  &amp;= \frac{1}{S_{xx}}S_{xx} \\
+    &amp; \text{def. } S_{xx} \\
+  &amp;= 1
+    &amp; \\
+\end{align*}\]</span></p>
+</div>
+</details>
 <p>Now, let us introduce the sample correlation as:</p>
 <p><span class="math display">\[ r_{xy} = \frac{S_{xy}}{\sqrt{S_{xx}{S_{yy}}}} \]</span>
 If we standardize two sets of observations, then the covaraince of the standardized version

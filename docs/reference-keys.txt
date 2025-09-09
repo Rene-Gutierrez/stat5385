@@ -1,3 +1,9 @@
+def:def-centered-variable
+prp:prp-centered-variable-mean-0
+prp:prp-centered-variable-variance-equal
+prp:prp-centered-variable-covariance-equal
+def:def-standarized-variable
+prp:prp-standarized-variable-equal-1
 stat-53856385-fall-2025
 calendar
 important-dates
