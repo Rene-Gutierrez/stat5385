@@ -4,6 +4,8 @@ prp:prp-centered-variable-variance-equal
 prp:prp-centered-variable-covariance-equal
 def:def-standarized-variable
 prp:prp-standarized-variable-equal-1
+def:sample-correlation
+prp:covariance-standarized-equal-correlation
 stat-53856385-fall-2025
 calendar
 important-dates

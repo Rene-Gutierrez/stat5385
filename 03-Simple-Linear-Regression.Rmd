@@ -625,7 +625,7 @@ S_{xx}^s
     & \\
   &= \frac{1}{S_{xx}} \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2 
     & \text{lin. sum} \\
-  &= \frac{1}{S_{xx}}S_{xx} \\
+  &= \frac{1}{S_{xx}}S_{xx}
     & \text{def. } S_{xx} \\
   &= 1
     & \\
@@ -634,30 +634,52 @@ S_{xx}^s
 </details>
 
 
-Now, let us introduce the sample correlation as:
+Now, let us introduce the sample correlation.
 
-$$ r_{xy} = \frac{S_{xy}}{\sqrt{S_{xx}{S_{yy}}}} $$
-If we standardize two sets of observations, then the covaraince of the standardized version
-is the correlation of the standardized version. Let us see it:
+```{definition, sample-correlation, name="Sample Correlation"}
+Given observations $\{x_i\}_{i=1}^n$ and $\{y_i\}_{i=1}^n$, the sample correlation 
+is given by:
+$$ r_{xy} = \frac{S_{xy}}{\sqrt{S_{xx}{S_{yy}}}} $$  
+```
 
+```{proposition, covariance-standarized-equal-correlation}
+The sample covariance of the standardized observations $\{x_i^s\}_{i=1}^n$ and 
+$\{x_i^s\}_{i=1}^n$ is equal to the correlation of the original observations
+$\{x_i\}_{i=1}^n$ and $\{x_i\}_{i=1}^n$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-covariance-standarized-equal-correlation}
 \begin{align*}
-S_{xy}'' 
-  &= \frac{1}{n-1} \sum_{i=1} (x_i'' - \bar{x}'')(y_i'' - \bar{x}'') \\
-  &= \frac{1}{n-1} \sum_{i=1} (x_i'')(y_i'') \\
-  &= \frac{1}{n-1} \sum_{i=1} \left(\frac{x_i - \bar{x}}{\sqrt{S_{xx}}}\right) \left(\frac{y_i - \bar{y}}{\sqrt{S_{yy}}}\right) \\
-  &= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}}\frac{1}{n-1} \sum_{i=1} (x_i - \bar{x}) (y_i - \bar{y}) \\
-  &= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}} S_{xy} \\
-  &= r_{xy}
+S_{xy}^s
+  &= \frac{1}{n-1} \sum_{i=1} (x_i^s - \bar{x}^s)(y_i^s - \bar{x}^s)
+    & \text{def. } S_{xx}^s \\
+  &= \frac{1}{n-1} \sum_{i=1} (x_i^s)(y_i^s) 
+    & \bar{x}^s=0,\bar{y}^s=0 \\
+  &= \frac{1}{n-1} \sum_{i=1} \left(\frac{x_i - \bar{x}}{\sqrt{S_{xx}}}\right) \left(\frac{y_i - \bar{y}}{\sqrt{S_{yy}}}\right) 
+    & \text{def. } x^c_i,y^c_i \\
+  &= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}}\frac{1}{n-1} \sum_{i=1} (x_i - \bar{x}) (y_i - \bar{y}) 
+    & \text{lin. sum} \\
+  &= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}} S_{xy} 
+    & \text{def. } S_{xy} \\
+  &= r_{xy} 
+    & \text{def. } r_{xy} \\
 \end{align*}
+```
+</details>
 
-With this results, we can analyze the effects of following 3 scenarios on the
+
+
+With this results, we can analyze the effects of the following 3 scenarios on the
 estimated coefficients:
 
 * Independent variable centered.
-* Both, Independent and dependent variable centered.
-* Both, Independent and dependent variable standardized.
+* Both, independent and dependent variable centered.
+* Both, independent and dependent variable standardized.
 
 ### Independent variable centered
+
+
 
 Lets compute the value for $\beta_1$ when the data is centered.
 
@@ -681,9 +703,8 @@ y <- dat$Revenue
 xCen <- x - mean(x)
 # Linear regression on the original data
 outRegOri <- lm(y ~ x)
-# Linear regression on the centered independent variable data
+# Linear regression on the centered data
 outRegCen <- lm(y ~ xCen)
-# Plots
 ## Two plots in the same image
 par(mfrow = c(1, 2))
 ## Original data
@@ -691,7 +712,8 @@ par(mfrow = c(1, 2))
 plot(x    = x,
      y    = y,
      xlab = "Ad spending",
-     ylab = "Revenue")
+     ylab = "Revenue",
+     pch  = 16)
 # Plots the regression line
 abline(a   = outRegOri$coefficients[1],
        b   = outRegOri$coefficients[2],
@@ -702,7 +724,8 @@ abline(a   = outRegOri$coefficients[1],
 plot(x    = xCen,
      y    = y,
      xlab = "Ad spending (Centered)",
-     ylab = "Revenue")
+     ylab = "Revenue",
+     pch  = 16)
 # Plots the regression line
 abline(a   = outRegCen$coefficients[1],
        b   = outRegCen$coefficients[2],
@@ -750,7 +773,8 @@ par(mfrow = c(1, 2))
 plot(x    = x,
      y    = y,
      xlab = "Ad spending",
-     ylab = "Revenue")
+     ylab = "Revenue",
+     pch  = 16)
 # Plots the regression line
 abline(a   = outRegOri$coefficients[1],
        b   = outRegOri$coefficients[2],
@@ -761,7 +785,8 @@ abline(a   = outRegOri$coefficients[1],
 plot(x    = xCen,
      y    = yCen,
      xlab = "Ad spending (Centered)",
-     ylab = "Revenue")
+     ylab = "Revenue",
+     pch  = 16)
 # Plots the regression line
 abline(a   = outRegCen$coefficients[1],
        b   = outRegCen$coefficients[2],
@@ -803,7 +828,8 @@ par(mfrow = c(1, 2))
 plot(x    = x,
      y    = y,
      xlab = "Ad spending",
-     ylab = "Revenue")
+     ylab = "Revenue",
+     pch  = 16)
 # Plots the regression line
 abline(a   = outRegOri$coefficients[1],
        b   = outRegOri$coefficients[2],
@@ -814,7 +840,8 @@ abline(a   = outRegOri$coefficients[1],
 plot(x    = xSta,
      y    = ySta,
      xlab = "Ad spending (Centered)",
-     ylab = "Revenue")
+     ylab = "Revenue",
+     pch  = 16)
 # Plots the regression line
 abline(a   = outRegSta$coefficients[1],
        b   = outRegSta$coefficients[2],

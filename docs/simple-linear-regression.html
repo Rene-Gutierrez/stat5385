@@ -868,7 +868,7 @@ and
     &amp; \text{def. } \bar{x}^s \\
   &amp;= \frac{1}{n} \sum_{i=1}^n \frac{x_i^c}{\sqrt{S_{xx}}}
     &amp; \text{def. } x_i^s \\
-  &amp;= = \frac{1}{\sqrt{S_{xx}}}\frac{1}{n} \sum_{i=1}^n x_i^c
+  &amp;= \frac{1}{\sqrt{S_{xx}}}\frac{1}{n} \sum_{i=1}^n x_i^c
     &amp; \text{lin. sum} \\
   &amp;= \frac{1}{\sqrt{S_{xx}}} \bar{x}^c
     &amp; \text{def. } \bar{x}^c \\
@@ -888,32 +888,52 @@ S_{xx}^s
     &amp; \\
   &amp;= \frac{1}{S_{xx}} \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2
     &amp; \text{lin. sum} \\
-  &amp;= \frac{1}{S_{xx}}S_{xx} \\
+  &amp;= \frac{1}{S_{xx}}S_{xx}
     &amp; \text{def. } S_{xx} \\
   &amp;= 1
     &amp; \\
 \end{align*}\]</span></p>
 </div>
 </details>
-<p>Now, let us introduce the sample correlation as:</p>
-<p><span class="math display">\[ r_{xy} = \frac{S_{xy}}{\sqrt{S_{xx}{S_{yy}}}} \]</span>
-If we standardize two sets of observations, then the covaraince of the standardized version
-is the correlation of the standardized version. Let us see it:</p>
-<p><span class="math display">\[\begin{align*}
-S_{xy}&#39;&#39;
-  &amp;= \frac{1}{n-1} \sum_{i=1} (x_i&#39;&#39; - \bar{x}&#39;&#39;)(y_i&#39;&#39; - \bar{x}&#39;&#39;) \\
-  &amp;= \frac{1}{n-1} \sum_{i=1} (x_i&#39;&#39;)(y_i&#39;&#39;) \\
-  &amp;= \frac{1}{n-1} \sum_{i=1} \left(\frac{x_i - \bar{x}}{\sqrt{S_{xx}}}\right) \left(\frac{y_i - \bar{y}}{\sqrt{S_{yy}}}\right) \\
-  &amp;= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}}\frac{1}{n-1} \sum_{i=1} (x_i - \bar{x}) (y_i - \bar{y}) \\
-  &amp;= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}} S_{xy} \\
+<p>Now, let us introduce the sample correlation.</p>
+<div class="definition">
+<p><span id="def:sample-correlation" class="definition"><strong>Definition 4.3  (Sample Correlation) </strong></span>Given observations <span class="math inline">\(\{x_i\}_{i=1}^n\)</span> and <span class="math inline">\(\{y_i\}_{i=1}^n\)</span>, the sample correlation
+is given by:
+<span class="math display">\[ r_{xy} = \frac{S_{xy}}{\sqrt{S_{xx}{S_{yy}}}} \]</span></p>
+</div>
+<div class="proposition">
+<p><span id="prp:covariance-standarized-equal-correlation" class="proposition"><strong>Proposition 4.5  </strong></span>The sample covariance of the standardized observations <span class="math inline">\(\{x_i^s\}_{i=1}^n\)</span> and
+<span class="math inline">\(\{x_i^s\}_{i=1}^n\)</span> is equal to the correlation of the original observations
+<span class="math inline">\(\{x_i\}_{i=1}^n\)</span> and <span class="math inline">\(\{x_i\}_{i=1}^n\)</span></p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-5" class="proof"><em>Proof</em>. </span><span class="math display">\[\begin{align*}
+S_{xy}^s
+  &amp;= \frac{1}{n-1} \sum_{i=1} (x_i^s - \bar{x}^s)(y_i^s - \bar{x}^s)
+    &amp; \text{def. } S_{xx}^s \\
+  &amp;= \frac{1}{n-1} \sum_{i=1} (x_i^s)(y_i^s)
+    &amp; \bar{x}^s=0,\bar{y}^s=0 \\
+  &amp;= \frac{1}{n-1} \sum_{i=1} \left(\frac{x_i - \bar{x}}{\sqrt{S_{xx}}}\right) \left(\frac{y_i - \bar{y}}{\sqrt{S_{yy}}}\right)
+    &amp; \text{def. } x^c_i,y^c_i \\
+  &amp;= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}}\frac{1}{n-1} \sum_{i=1} (x_i - \bar{x}) (y_i - \bar{y})
+    &amp; \text{lin. sum} \\
+  &amp;= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}} S_{xy}
+    &amp; \text{def. } S_{xy} \\
   &amp;= r_{xy}
+    &amp; \text{def. } r_{xy} \\
 \end{align*}\]</span></p>
-<p>With this results, we can analyze the effects of following 3 scenarios on the
+</div>
+</details>
+<p>With this results, we can analyze the effects of the following 3 scenarios on the
 estimated coefficients:</p>
 <ul>
 <li>Independent variable centered.</li>
-<li>Both, Independent and dependent variable centered.</li>
-<li>Both, Independent and dependent variable standardized.</li>
+<li>Both, independent and dependent variable centered.</li>
+<li>Both, independent and dependent variable standardized.</li>
 </ul>
 <div id="independent-variable-centered" class="section level3 hasAnchor" number="4.4.1">
 <h3><span class="header-section-number">4.4.1</span> Independent variable centered<a href="simple-linear-regression.html#independent-variable-centered" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -934,17 +954,17 @@ we can perform linear regression on the original data and the centered data:</p>
 <span id="cb18-7"><a href="simple-linear-regression.html#cb18-7" tabindex="-1"></a>xCen <span class="ot">&lt;-</span> x <span class="sc">-</span> <span class="fu">mean</span>(x)</span>
 <span id="cb18-8"><a href="simple-linear-regression.html#cb18-8" tabindex="-1"></a><span class="co"># Linear regression on the original data</span></span>
 <span id="cb18-9"><a href="simple-linear-regression.html#cb18-9" tabindex="-1"></a>outRegOri <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x)</span>
-<span id="cb18-10"><a href="simple-linear-regression.html#cb18-10" tabindex="-1"></a><span class="co"># Linear regression on the centered independent variable data</span></span>
+<span id="cb18-10"><a href="simple-linear-regression.html#cb18-10" tabindex="-1"></a><span class="co"># Linear regression on the centered data</span></span>
 <span id="cb18-11"><a href="simple-linear-regression.html#cb18-11" tabindex="-1"></a>outRegCen <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> xCen)</span>
-<span id="cb18-12"><a href="simple-linear-regression.html#cb18-12" tabindex="-1"></a><span class="co"># Plots</span></span>
-<span id="cb18-13"><a href="simple-linear-regression.html#cb18-13" tabindex="-1"></a><span class="do">## Two plots in the same image</span></span>
-<span id="cb18-14"><a href="simple-linear-regression.html#cb18-14" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb18-15"><a href="simple-linear-regression.html#cb18-15" tabindex="-1"></a><span class="do">## Original data</span></span>
-<span id="cb18-16"><a href="simple-linear-regression.html#cb18-16" tabindex="-1"></a><span class="co"># Plots the points</span></span>
-<span id="cb18-17"><a href="simple-linear-regression.html#cb18-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> x,</span>
-<span id="cb18-18"><a href="simple-linear-regression.html#cb18-18" tabindex="-1"></a>     <span class="at">y    =</span> y,</span>
-<span id="cb18-19"><a href="simple-linear-regression.html#cb18-19" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad spending&quot;</span>,</span>
-<span id="cb18-20"><a href="simple-linear-regression.html#cb18-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>)</span>
+<span id="cb18-12"><a href="simple-linear-regression.html#cb18-12" tabindex="-1"></a><span class="do">## Two plots in the same image</span></span>
+<span id="cb18-13"><a href="simple-linear-regression.html#cb18-13" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb18-14"><a href="simple-linear-regression.html#cb18-14" tabindex="-1"></a><span class="do">## Original data</span></span>
+<span id="cb18-15"><a href="simple-linear-regression.html#cb18-15" tabindex="-1"></a><span class="co"># Plots the points</span></span>
+<span id="cb18-16"><a href="simple-linear-regression.html#cb18-16" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> x,</span>
+<span id="cb18-17"><a href="simple-linear-regression.html#cb18-17" tabindex="-1"></a>     <span class="at">y    =</span> y,</span>
+<span id="cb18-18"><a href="simple-linear-regression.html#cb18-18" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad spending&quot;</span>,</span>
+<span id="cb18-19"><a href="simple-linear-regression.html#cb18-19" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>,</span>
+<span id="cb18-20"><a href="simple-linear-regression.html#cb18-20" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
 <span id="cb18-21"><a href="simple-linear-regression.html#cb18-21" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
 <span id="cb18-22"><a href="simple-linear-regression.html#cb18-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegOri<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
 <span id="cb18-23"><a href="simple-linear-regression.html#cb18-23" tabindex="-1"></a>       <span class="at">b   =</span> outRegOri<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
@@ -955,14 +975,15 @@ we can perform linear regression on the original data and the centered data:</p>
 <span id="cb18-28"><a href="simple-linear-regression.html#cb18-28" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> xCen,</span>
 <span id="cb18-29"><a href="simple-linear-regression.html#cb18-29" tabindex="-1"></a>     <span class="at">y    =</span> y,</span>
 <span id="cb18-30"><a href="simple-linear-regression.html#cb18-30" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad spending (Centered)&quot;</span>,</span>
-<span id="cb18-31"><a href="simple-linear-regression.html#cb18-31" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>)</span>
-<span id="cb18-32"><a href="simple-linear-regression.html#cb18-32" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
-<span id="cb18-33"><a href="simple-linear-regression.html#cb18-33" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegCen<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb18-34"><a href="simple-linear-regression.html#cb18-34" tabindex="-1"></a>       <span class="at">b   =</span> outRegCen<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb18-35"><a href="simple-linear-regression.html#cb18-35" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb18-36"><a href="simple-linear-regression.html#cb18-36" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb18-37"><a href="simple-linear-regression.html#cb18-37" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="dv">0</span>,</span>
-<span id="cb18-38"><a href="simple-linear-regression.html#cb18-38" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<span id="cb18-31"><a href="simple-linear-regression.html#cb18-31" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>,</span>
+<span id="cb18-32"><a href="simple-linear-regression.html#cb18-32" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb18-33"><a href="simple-linear-regression.html#cb18-33" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
+<span id="cb18-34"><a href="simple-linear-regression.html#cb18-34" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegCen<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb18-35"><a href="simple-linear-regression.html#cb18-35" tabindex="-1"></a>       <span class="at">b   =</span> outRegCen<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb18-36"><a href="simple-linear-regression.html#cb18-36" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb18-37"><a href="simple-linear-regression.html#cb18-37" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb18-38"><a href="simple-linear-regression.html#cb18-38" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="dv">0</span>,</span>
+<span id="cb18-39"><a href="simple-linear-regression.html#cb18-39" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/center-x-1.png" width="672" /></p>
 <p>So we can appreciate that centering the independent variable just shifts the data
 horizontally so the mean will be at zero.</p>
@@ -997,27 +1018,29 @@ The effect of this transformation can be observed, here:</p>
 <span id="cb19-18"><a href="simple-linear-regression.html#cb19-18" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> x,</span>
 <span id="cb19-19"><a href="simple-linear-regression.html#cb19-19" tabindex="-1"></a>     <span class="at">y    =</span> y,</span>
 <span id="cb19-20"><a href="simple-linear-regression.html#cb19-20" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad spending&quot;</span>,</span>
-<span id="cb19-21"><a href="simple-linear-regression.html#cb19-21" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>)</span>
-<span id="cb19-22"><a href="simple-linear-regression.html#cb19-22" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
-<span id="cb19-23"><a href="simple-linear-regression.html#cb19-23" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegOri<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb19-24"><a href="simple-linear-regression.html#cb19-24" tabindex="-1"></a>       <span class="at">b   =</span> outRegOri<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb19-25"><a href="simple-linear-regression.html#cb19-25" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb19-26"><a href="simple-linear-regression.html#cb19-26" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb19-27"><a href="simple-linear-regression.html#cb19-27" tabindex="-1"></a><span class="do">## Centered data</span></span>
-<span id="cb19-28"><a href="simple-linear-regression.html#cb19-28" tabindex="-1"></a><span class="co"># Plots the points</span></span>
-<span id="cb19-29"><a href="simple-linear-regression.html#cb19-29" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> xCen,</span>
-<span id="cb19-30"><a href="simple-linear-regression.html#cb19-30" tabindex="-1"></a>     <span class="at">y    =</span> yCen,</span>
-<span id="cb19-31"><a href="simple-linear-regression.html#cb19-31" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad spending (Centered)&quot;</span>,</span>
-<span id="cb19-32"><a href="simple-linear-regression.html#cb19-32" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>)</span>
-<span id="cb19-33"><a href="simple-linear-regression.html#cb19-33" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
-<span id="cb19-34"><a href="simple-linear-regression.html#cb19-34" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegCen<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb19-35"><a href="simple-linear-regression.html#cb19-35" tabindex="-1"></a>       <span class="at">b   =</span> outRegCen<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb19-36"><a href="simple-linear-regression.html#cb19-36" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb19-37"><a href="simple-linear-regression.html#cb19-37" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb19-38"><a href="simple-linear-regression.html#cb19-38" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="dv">0</span>,</span>
+<span id="cb19-21"><a href="simple-linear-regression.html#cb19-21" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>,</span>
+<span id="cb19-22"><a href="simple-linear-regression.html#cb19-22" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb19-23"><a href="simple-linear-regression.html#cb19-23" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
+<span id="cb19-24"><a href="simple-linear-regression.html#cb19-24" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegOri<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb19-25"><a href="simple-linear-regression.html#cb19-25" tabindex="-1"></a>       <span class="at">b   =</span> outRegOri<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb19-26"><a href="simple-linear-regression.html#cb19-26" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb19-27"><a href="simple-linear-regression.html#cb19-27" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb19-28"><a href="simple-linear-regression.html#cb19-28" tabindex="-1"></a><span class="do">## Centered data</span></span>
+<span id="cb19-29"><a href="simple-linear-regression.html#cb19-29" tabindex="-1"></a><span class="co"># Plots the points</span></span>
+<span id="cb19-30"><a href="simple-linear-regression.html#cb19-30" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> xCen,</span>
+<span id="cb19-31"><a href="simple-linear-regression.html#cb19-31" tabindex="-1"></a>     <span class="at">y    =</span> yCen,</span>
+<span id="cb19-32"><a href="simple-linear-regression.html#cb19-32" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad spending (Centered)&quot;</span>,</span>
+<span id="cb19-33"><a href="simple-linear-regression.html#cb19-33" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>,</span>
+<span id="cb19-34"><a href="simple-linear-regression.html#cb19-34" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb19-35"><a href="simple-linear-regression.html#cb19-35" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
+<span id="cb19-36"><a href="simple-linear-regression.html#cb19-36" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegCen<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb19-37"><a href="simple-linear-regression.html#cb19-37" tabindex="-1"></a>       <span class="at">b   =</span> outRegCen<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb19-38"><a href="simple-linear-regression.html#cb19-38" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
 <span id="cb19-39"><a href="simple-linear-regression.html#cb19-39" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb19-40"><a href="simple-linear-regression.html#cb19-40" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb19-41"><a href="simple-linear-regression.html#cb19-41" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<span id="cb19-40"><a href="simple-linear-regression.html#cb19-40" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="dv">0</span>,</span>
+<span id="cb19-41"><a href="simple-linear-regression.html#cb19-41" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb19-42"><a href="simple-linear-regression.html#cb19-42" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb19-43"><a href="simple-linear-regression.html#cb19-43" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/center-xy-1.png" width="672" /></p>
 </div>
 <div id="independent-and-dependent-variable-standardized" class="section level3 hasAnchor" number="4.4.3">
@@ -1046,27 +1069,29 @@ so, the estimate of the slope is the sample correlation of the original observat
 <span id="cb20-18"><a href="simple-linear-regression.html#cb20-18" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> x,</span>
 <span id="cb20-19"><a href="simple-linear-regression.html#cb20-19" tabindex="-1"></a>     <span class="at">y    =</span> y,</span>
 <span id="cb20-20"><a href="simple-linear-regression.html#cb20-20" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad spending&quot;</span>,</span>
-<span id="cb20-21"><a href="simple-linear-regression.html#cb20-21" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>)</span>
-<span id="cb20-22"><a href="simple-linear-regression.html#cb20-22" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
-<span id="cb20-23"><a href="simple-linear-regression.html#cb20-23" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegOri<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb20-24"><a href="simple-linear-regression.html#cb20-24" tabindex="-1"></a>       <span class="at">b   =</span> outRegOri<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb20-25"><a href="simple-linear-regression.html#cb20-25" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb20-26"><a href="simple-linear-regression.html#cb20-26" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb20-27"><a href="simple-linear-regression.html#cb20-27" tabindex="-1"></a><span class="do">## Standard data</span></span>
-<span id="cb20-28"><a href="simple-linear-regression.html#cb20-28" tabindex="-1"></a><span class="co"># Plots the points</span></span>
-<span id="cb20-29"><a href="simple-linear-regression.html#cb20-29" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> xSta,</span>
-<span id="cb20-30"><a href="simple-linear-regression.html#cb20-30" tabindex="-1"></a>     <span class="at">y    =</span> ySta,</span>
-<span id="cb20-31"><a href="simple-linear-regression.html#cb20-31" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad spending (Centered)&quot;</span>,</span>
-<span id="cb20-32"><a href="simple-linear-regression.html#cb20-32" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>)</span>
-<span id="cb20-33"><a href="simple-linear-regression.html#cb20-33" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
-<span id="cb20-34"><a href="simple-linear-regression.html#cb20-34" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegSta<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb20-35"><a href="simple-linear-regression.html#cb20-35" tabindex="-1"></a>       <span class="at">b   =</span> outRegSta<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb20-36"><a href="simple-linear-regression.html#cb20-36" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb20-37"><a href="simple-linear-regression.html#cb20-37" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb20-38"><a href="simple-linear-regression.html#cb20-38" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="dv">0</span>,</span>
+<span id="cb20-21"><a href="simple-linear-regression.html#cb20-21" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>,</span>
+<span id="cb20-22"><a href="simple-linear-regression.html#cb20-22" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb20-23"><a href="simple-linear-regression.html#cb20-23" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
+<span id="cb20-24"><a href="simple-linear-regression.html#cb20-24" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegOri<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb20-25"><a href="simple-linear-regression.html#cb20-25" tabindex="-1"></a>       <span class="at">b   =</span> outRegOri<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb20-26"><a href="simple-linear-regression.html#cb20-26" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb20-27"><a href="simple-linear-regression.html#cb20-27" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb20-28"><a href="simple-linear-regression.html#cb20-28" tabindex="-1"></a><span class="do">## Standard data</span></span>
+<span id="cb20-29"><a href="simple-linear-regression.html#cb20-29" tabindex="-1"></a><span class="co"># Plots the points</span></span>
+<span id="cb20-30"><a href="simple-linear-regression.html#cb20-30" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> xSta,</span>
+<span id="cb20-31"><a href="simple-linear-regression.html#cb20-31" tabindex="-1"></a>     <span class="at">y    =</span> ySta,</span>
+<span id="cb20-32"><a href="simple-linear-regression.html#cb20-32" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad spending (Centered)&quot;</span>,</span>
+<span id="cb20-33"><a href="simple-linear-regression.html#cb20-33" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue&quot;</span>,</span>
+<span id="cb20-34"><a href="simple-linear-regression.html#cb20-34" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb20-35"><a href="simple-linear-regression.html#cb20-35" tabindex="-1"></a><span class="co"># Plots the regression line</span></span>
+<span id="cb20-36"><a href="simple-linear-regression.html#cb20-36" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> outRegSta<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb20-37"><a href="simple-linear-regression.html#cb20-37" tabindex="-1"></a>       <span class="at">b   =</span> outRegSta<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb20-38"><a href="simple-linear-regression.html#cb20-38" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
 <span id="cb20-39"><a href="simple-linear-regression.html#cb20-39" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb20-40"><a href="simple-linear-regression.html#cb20-40" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb20-41"><a href="simple-linear-regression.html#cb20-41" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<span id="cb20-40"><a href="simple-linear-regression.html#cb20-40" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v   =</span> <span class="dv">0</span>,</span>
+<span id="cb20-41"><a href="simple-linear-regression.html#cb20-41" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb20-42"><a href="simple-linear-regression.html#cb20-42" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb20-43"><a href="simple-linear-regression.html#cb20-43" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/slr-standarize-xy-1.png" width="672" /></p>
 <p>Now, let us see that the correlation is always in the interval <span class="math inline">\((-1,1)\)</span>. To see
 this, notice the following:</p>
