@@ -17,3 +17,5 @@ Find the syllabus here: [Syllabus](https://github.com/Rene-Gutierrez/stat5385/bl
 * Class 2: [Regression Introduction](#introduction)
 * Class 3: [Intro to Simple Linear Regression](#intro-to-slr)
 * Class 4: [Properties of the Simple Linear Regression Problem](#properties-of-the-estimates)
+* Class 5: [Centered and Standarized Data](#centering-and-standarizing-the-data)
+* Class 6: [Coefficient of Determination](#coefficient-of-determination)
