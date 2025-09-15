@@ -492,11 +492,11 @@ All these properties of the estimates, are the result of solving the least squar
 problem. If another problem is solve, several of these properties, if not all of them, 
 will be lost.
 
+---
+
 ## Centering and Standarizing the Data
 
-Some transformations of the data can help the regression analysis 
-or make it more intuitive. There are 2 main transformations of the data: 
-**centering** and **standardization**.
+Some transformations of the data can aid regression analysis or make coefficient interpretations more intuitive. Two standard linear transformations are centering and standardization. Before discussing their implications for linear regression, we define each transformation and analyze its effect on the data itself.
 
 ```{definition, def-centered-variable, name="Centered variable"}
 Given observations $\{x_i\}_{i=1}^n$, then the centered version of observation
@@ -553,8 +553,6 @@ S_{xx}^c
 ```
 </details>
 
-So the variance of the observations is not affected by the centering.
-
 ```{proposition, prp-centered-variable-covariance-equal}
 The centered observations $\{x_i^c\}_{i=1}^n$ and $\{y_i^c\}_{i=1}^n$ have the same sample covariance as
 the original observations $\{x_i\}_{i=1}^n$ and $\{y_i\}_{i=1}^n$.
@@ -579,7 +577,13 @@ S_{xy}^c
 ```
 </details>
 
-So the covariance of the observations is also not affected by the centering.
+Effect on the data:
+
+* Location: The mean of the centered variable is zero. Centering moves the distribution so that its central point is at the origin.
+* Spread and shape: Centering does not change the spread (variance or standard deviation) or the shape (skewness/kurtosis) of the distribution; only the location changes.
+* Units and interpretation: Units remain the same; only the zero point is shifted.
+* Linear relationships: Pairwise linear relationships are unchanged in magnitude.
+* Numerical effects: Centering often reduces the magnitude of numerical values and can improve numerical stability in computations.
 
 ```{definition, def-standarized-variable, name="Standarized variable"}
 Given observations $\{x_i\}_{i=1}^n$, then the standarized version of observation
@@ -633,6 +637,28 @@ S_{xx}^s
 ```
 </details>
 
+Effect on the data:
+
+* Location and scale: The standardized variable has mean zero and a typical magnitude of one.
+* Units: Units are removed; values are expressed in "standard‑deviation units" relative to the original scale.
+* Shape: The shape of the distribution (skewness, kurtosis) is unchanged; only location and scale are affected.
+* Comparability: Variables measured on different original scales become directly comparable after standardization, because they share a common scale.
+* Sensitivity to outliers: The standardization factor is sensitive to extreme values if the sample standard deviation is used; robust alternatives (median and robust spread) can be substituted when outliers are a concern.
+
+### Remarks on Centering and Standarization
+
+* Standardization implies centering. Every standardized variable is centered; the converse need not hold.
+* Both operations are linear transformations: they preserve linear relationships among variables and do not change correlation signs, though numeric slope values will change according to scale.
+* Centering is often sufficient when the goal is to simplify interpretation of an intercept or reduce collinearity with polynomial or interaction terms.
+* Standardization is recommended when predictors have different units or scales, when comparing effect sizes, or when using algorithms or penalties that depend on predictor scale.
+* When applying transformations in modeling workflows, compute centering/standardization parameters (means and spread measures) on the training data and apply the same transformations to validation and test sets to avoid data leakage.
+* Record and report the transformations so coefficients and predictions can be interpreted or converted back to original units when needed.
+
+### Summary Centering and Standarizing
+
+* Centering shifts a variable so its mean is zero; it changes location only and leaves spread and shape intact.  
+* Standardization shifts and rescales so that the variable has mean zero and unit typical magnitude; it removes units and facilitates comparability.  
+- Both are linear, preserve linear association, and are valuable preprocessing steps; the choice between them depends on interpretive goals, numerical stability needs, and sensitivity to outliers.
 
 Now, let us introduce the sample correlation.
 
@@ -668,8 +694,6 @@ S_{xy}^s
 ```
 </details>
 
-
-
 With this results, we can analyze the effects of the following 3 scenarios on the
 estimated coefficients:
 
@@ -677,18 +701,48 @@ estimated coefficients:
 * Both, independent and dependent variable centered.
 * Both, independent and dependent variable standardized.
 
-### Independent variable centered
+---
 
+## Centering and Standarizing in SLR
 
+Centering and standardizing are two common preprocessing steps for continuous variables before fitting a regression model. They are simple linear transformations of the data but have important practical and interpretive consequences.
 
-Lets compute the value for $\beta_1$ when the data is centered.
+---
 
-$$\hgb_1' = \frac{S_{xy}'}{S_{xx}'} = \frac{S_{xy}}{S_{xx}} = \hgb_1 $$
-So centering the data doesn't change the value of the estimated slope.
+### Centered Independent Variable
 
-$$ \hgb_0' = \bar{y} - \hgb_1' \bar{x}' = \bar{y} - \hgb_1' 0 = \bar{y} $$
-So centering the data, makes the estimated intercept to coincide with the mean of
-the independent variable.
+```{proposition, prp-centered-independent-variable}
+The LS estimators $\hgb^c_0, \hgb^c_1$ with centered independent variables $\{x_i^c\}_{i=1}^n$ and original dependent variables $\{y_i\}_{i=1}^n$ can be expressed in terms of the original estimators and data as follows:
+$$\hgb_1^c = \hgb_1$$
+  and
+$$\hgb_0^c = \bar{y}$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-centered-independent-variable}
+First lets compute $\beta_1^c$
+\begin{align*}
+\hgb_1^c
+  &= \frac{S_{xy}^c}{S_{xx}^c}
+    & \text{def. } \hgb_1^c \\
+  &= \frac{S_{xy}}{S_{xx}} 
+    & S_{xy}^c=S_{xy},S_{xx}^c=S_{xx}\\
+  &= \hgb_1
+\end{align*}
+and
+\begin{align*}
+\hgb_0^c
+  &= \bar{y} - \hgb_^c \bar{x}^c
+    & \text{def. } \hgb_0^c \\
+  &= \bar{y} - \hgb_1^c 0 
+    & \bar{x}^c=0 \\
+  &= \bar{y}
+\end{align*}
+```
+</details>
+
+So centering the dependent variable doesn't change the value of the estimated 
+slope and makes the estimated intercept to coincide with the mean of the independent variable.
 
 We can see this in one of our example data sets, looking at the ad spending data
 we can perform linear regression on the original data and the centered data:
@@ -735,22 +789,65 @@ abline(v   = 0,
        lwd = 2)
 ```
 
-So we can appreciate that centering the independent variable just shifts the data
-horizontally so the mean will be at zero.
+Effect on the fitted model:
 
-### Both Variables centered
+* The estimated slope that measures how the response changes with the predictor is unchanged in magnitude.  
+* The intercept becomes the predicted response at the typical predictor value (the predictor average), which makes the intercept directly interpretable as a typical outcome.  
+* Predictions for any observation are unchanged after converting back to the original predictor scale.
 
-Now lets see the effects when both variables are centered. Here, we will denote
-the estimates again with one prime, that is $\hgb'$.
+Statistical and numerical consequences:
 
-Again, the estimate of the slope doesn't change:
+* The sampling variability of the slope estimator is unaffected.   
+* Centering often improves numerical stability in computation because predictor 
+values are closer to zero, reducing the chance of poor conditioning or round-off error.
 
-$$\hgb_1' = \frac{S_{xy}'}{S_{xx}'} = \frac{S_{xy}}{S_{xx}} = \hgb_1 $$
-while the estimate of the intercept becomes zero (the new mean of the centered
-dependent variable)
+Practical considerations:
 
-$$ \hgb_0' = \bar{y}' - \hgb_1' \bar{x}' = \bar{y}' = 0 $$
-The effect of this transformation can be observed, here:
+* Centering is especially useful when the intercept at an observed or typical 
+predictor value is of substantive interest.  
+* It is recommended when polynomial terms or interactions are present, because it reduces collinearity between lower- and higher-order terms.  
+* Always record the predictor mean used for centering so that future predictions
+or reporting can be done on the original scale.
+
+---
+
+### Both Variables Centered
+
+
+```{proposition, prp-centered-both-variable}
+The LS estimators $\hgb^c_0, \hgb^c_1$ with centered independent variables $\{x_i^c\}_{i=1}^n$ and centered dependent variables $\{y_i^c\}_{i=1}^n$ can be expressed in terms of the original estimators and data as follows:
+$$\hgb_1^c = \hgb_1$$
+  and
+$$\hgb_0^c = 0$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-centered-both-variable}
+First lets compute $\beta_1^c$
+\begin{align*}
+\hgb_1^c
+  &= \frac{S_{xy}^c}{S_{xx}^c}
+    & \text{def. } \hgb_1^c \\
+  &= \frac{S_{xy}}{S_{xx}} 
+    & S_{xy}^c=S_{xy},S_{xx}^c=S_{xx}\\
+  &= \hgb_1
+\end{align*}
+and
+\begin{align*}
+\hgb_0^c
+  &= \bar{y}^c - \hgb_1^c \bar{x}^c
+    & \text{def. } \hgb_0^c \\
+  &= 0 - \hgb_1^c 0 
+    & \bar{x}^c=\bar{y}^c=0 \\
+  &= 0
+\end{align*}
+```
+</details>
+
+Again, the slope doesn't change while the estimate of the intercept becomes zero
+(the new mean of the centered dependent variable).
+
+The effect of this transformation can be observed, in the following example:
 
 ```{r center-xy}
 # Read Data
@@ -779,7 +876,8 @@ plot(x    = x,
 abline(a   = outRegOri$coefficients[1],
        b   = outRegOri$coefficients[2],
        col = 'red',
-       lwd = 2)
+       lwd = 2,
+       pch = 16)
 ## Centered data
 # Plots the points
 plot(x    = xCen,
@@ -798,12 +896,59 @@ abline(h   = 0,
        lwd = 2)
 ```
 
-### Independent and dependent variable standardized
+Effect on the fitted model
 
-Again we start we the slope estimate:
+* The fitted line passes through the origin in the centered coordinate system, so there is no separate intercept to estimate in the transformed model.  
+* The estimated slope remains the same numerical quantity as in the original regression fitted to deviations; the relationship described by the slope is identical to the original slope.
 
-$$\hgb_1'' = \frac{S_{xy}''}{S_{xx}''} = \frac{r_{xy}}{1} =r_{xy} $$
-so, the estimate of the slope is the sample correlation of the original observations.
+Inference and numerical consequences  
+
+* There is no intercept estimate to interpret in the centered model, and the slope is naturally interpreted as how deviations in the response correspond to deviations in the predictor.  
+* Because centering reduces magnitudes, numerical conditioning and stability often improve.
+
+Practical considerations:
+
+* Centering both variables is useful when the research question is framed in terms of deviations from typical values (for example, “how much above or below average does the response change when the predictor is above or below average?”).  
+* It simplifies algebraic decompositions of variance and can make interpretation of component sums of squares more direct.  
+* Keep the centering constants so that any transformations of predictions or coefficients back to original units are straightforward.
+
+---
+
+### Both variables Standarized
+
+Finally, we analyze the effect of standardization.
+
+```{proposition, prp-standardized-both-variable}
+The LS estimators $\hgb^s_0, \hgb^s_1$ with standardized independent variables $\{x_i^c\}_{i=1}^n$ and standardized dependent variables $\{y_i^c\}_{i=1}^n$ can be expressed in terms of the original variables as follows:
+$$\hgb_1^s = r_{xy}$$
+  and
+$$\hgb_0^s = 0$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-standardized-both-variable}
+First lets compute $\beta_1^c$
+\begin{align*}
+\hgb_1^s
+  &= \frac{S_{xy}^s}{S_{xx}^s}
+    & \text{def. } \hgb_1^s \\
+  &= \frac{r_{xy}}{1} 
+    & S_{xy}^s=r_{xy},S_{xx}^s=1\\
+  &= r_{xy}
+\end{align*}
+and
+\begin{align*}
+\hgb_0^s
+  &= \bar{y}^s - \hgb_1^s \bar{x}^s
+    & \text{def. } \hgb_0^s \\
+  &= 0 - \hgb_1^s 0 
+    & \bar{x}^s=\bar{y}^s=0 \\
+  &= 0
+\end{align*}
+```
+</details>
+
+So, the estimate of the slope is the sample correlation of the original observations.
 
 Again, we can see this graphically:
 
@@ -853,163 +998,320 @@ abline(h   = 0,
        lwd = 2)
 ```
 
-Now, let us see that the correlation is always in the interval $(-1,1)$. To see
-this, notice the following:
+finally, we show that the sample correlation is between $-1$ and $1$.
 
+```{proposition, prp-correlation-1-and-1}
+The sample correlation $r_{xy}$ lies in $[-1,1]$.
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-correlation-1-and-1}
+First let us show that $\frac{1}{n-1} \sum_{i=1}^n (x_i^s + y_i^s)^2=2(1 + r_{xy})$ 
 \begin{align*}
-\frac{1}{n-1} \sum_{i=1}^n (x_i'' + y_i'')^2 
-  &= \frac{1}{n-1} \sum_{i=1}^n \left((x_i'')^2 + 2x_i'' y_i'' + (y_i'')^2 \right) \\
-  &= \frac{\sum_{i=1}^n (x_i'')^2}{n-1}  + 2\frac{\sum_{i=1}^n x_i''y_i''}{n-1}  + \frac{\sum_{i=1}^n (y_i'')^2}{n-1} \\
-  &= \frac{\sum_{i=1}^n (x_i'' - \bar{x}'')^2}{n-1}  + 2\frac{\sum_{i=1}^n (x_i'' - \bar{x}'')(y_i'' - \bar{y}'')}{n-1}  + \frac{\sum_{i=1}^n (y_i'' - \bar{y}'')^2}{n-1} \\
-  &= S_{xx}'' + 2 S_{xy}'' + S_{yy}'' \\
-  &= 1 + 2r_{xy} + 1 \\
-  &= 2(1 + r_{xy})
+\frac{\sum_{i=1}^n (x_i^s + y_i^s)^2}{n-1} 
+  &= \frac{1}{n-1} \sum_{i=1}^n \left((x_i^s)^2 + 2x_i^s y_i^s + (y_i^s)^2 \right)
+    & \\
+  &= \frac{\sum_{i=1}^n (x_i^s)^2}{n-1}  + 2\frac{\sum_{i=1}^n x_i^sy_i^s}{n-1}  + \frac{\sum_{i=1}^n (y_i^s)^2}{n-1} 
+    & \text{lin. sum} \\
+  &= \frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)^2}{n-1}  + 2\frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)(y_i^s - \bar{y}^s)}{n-1}  
+    & \\
+  &\quad + \frac{\sum_{i=1}^n (y_i^s - \bar{y}^s)^2}{n-1} 
+    &  \bar{x}^s=\bar{y}^s=0 \\
+  &= S_{xx}^2 + 2 S_{xy}^s + S_{yy}^s 
+    &  \text{def. } S_{xx}^2,S_{xy}^s,S_{yy}^s \\
+  &= 1 + 2r_{xy} + 1 
+    &  S_{xy}^s=r_{xy} \\
+  &= 2(1 + r_{xy}) 
+    & \\
 \end{align*}
-
-In a similar way it can be shown that:
-
-$$\frac{1}{n-1} \sum_{i=1}^n (x_i'' + y_i'')^2 = 2(1 - r_{xy})$$
-
-Now since, $$\frac{1}{n-1} \sum_{i=1}^n (x_i'' + y_i'')^2 \geq 0$$
-then we have that
-
+similarly, it can be shown that $\frac{1}{n-1} \sum_{i=1}^n (x_i^s - y_i^s)^2=2(1 - r_{xy})$
 \begin{align*}
-\frac{1}{n-1} \sum_{i=1}^n (x_i'' + y_i'')^2 \geq 0
-  &\implies 2(1 + r_{xy}) \geq 0 \\
-  &\implies 1 + r_{xy} \geq 0 \\
-  &\implies r_{xy} \geq -1 \\
+\frac{\sum_{i=1}^n (x_i^s - y_i^s)^2}{n-1} 
+  &= \frac{1}{n-1} \sum_{i=1}^n \left((x_i^s)^2 - 2x_i^s y_i^s + (y_i^s)^2 \right)
+    & \\
+  &= \frac{\sum_{i=1}^n (x_i^s)^2}{n-1}  - 2\frac{\sum_{i=1}^n x_i^sy_i^s}{n-1}  + \frac{\sum_{i=1}^n (y_i^s)^2}{n-1} 
+    & \text{lin. sum} \\
+  &= \frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)^2}{n-1}  - 2\frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)(y_i^s - \bar{y}^s)}{n-1}  
+    & \\
+  &\quad + \frac{\sum_{i=1}^n (y_i^s - \bar{y}^s)^2}{n-1} 
+    &  \bar{x}^s=\bar{y}^s=0 \\
+  &= S_{xx}^2 - 2 S_{xy}^s + S_{yy}^s 
+    &  \text{def. } S_{xx}^2,S_{xy}^s,S_{yy}^s \\
+  &= 1 - 2r_{xy} + 1 
+    &  S_{xy}^s=r_{xy} \\
+  &= 2(1 - r_{xy}) 
+    & \\
 \end{align*}
+Now since, 
+$$\frac{1}{n-1} \sum_{i=1}^n (x_i^s + y_i^s)^2, \frac{1}{n-1} \sum_{i=1}^n (x_i^s - y_i^s)^2 \geq 0$$
+then
+$$2(1 + r_{xy}) \geq 0 => r_{xy} \geq -1$$
+  and
+$$2(1 - r_{xy}) \geq 0 => r_{xy} \leq  1$$
+Then
+$$ -1 \leq r_{xy} \leq 1 $$
+```
+</details>
 
-Similarly, since
-
-$$\frac{1}{n-1} \sum_{i=1}^n (x_i'' - y_i'')^2 \geq 0$$
-
-implies
-
-$$r_{xy} \leq 1 $$
-then, we have that:
-$$ -1 \leq r_{xy} \leq 1$$
 which implies that the slope of the regression analysis after standarizing both
 variables is going to be in the interval $(-1, 1)$.
 
+Effect on the fitted model:
+
+* The model has no intercept in the standardized coordinates; the estimated slope is unitless and expresses change in the response in standard‑deviation units per one standard‑deviation change in the predictor.  
+* In the simple linear setting, the standardized slope equals the correlation between predictor and response; its squared value equals the proportion of variance explained by the predictor, as we will see in the next section.
+
+Numerical consequences:
+
+* Standardization often improves numerical conditioning and is recommended before applying algorithms or regularization methods that are sensitive to variable scale.  
+
+Practical considerations:
+
+* Standard errors and any inferential statements refer to the transformed units; translating results back to original units requires reversing the standardization.
+* Standardize when you need unitless effect sizes or when preparing inputs for penalized regression or gradient-based optimization.  
+* Be mindful of outliers: standardization using a classical spread measure can be heavily influenced by extreme values; consider robust scaling if outliers are a concern.  
+* Save the centering and scaling constants from the training data to apply the same transformation to new observations and to allow conversion of results back to original units for presentation.
+
+### Summary of Centering and Standarizing in SLR
+
+* Center the predictor when you want a meaningful intercept. 
+* Centering is a minimal, low‑risk transformation useful in many settings.  
+* Center both variables when the focus is on deviations from typical values or when simplifying variance decomposition is helpful.
+* Standardize both variables when you want unitless, comparable coefficients or when scale sensitivity of algorithms or penalties is a concern.  
+* In all cases, transformations do not change the underlying linear relationship or predictive performance (once predictions are transformed back), but they change numerical values and interpretation of coefficients. Always document and retain the transformation constants computed from the training sample to ensure valid application to new data and correct interpretation of results.
+
+---
+
 ## Coefficient of Determination
 
-So far, we have been concerned on findin the "best" line, that is estimating the 
-coefficients that minimize the sum of squared errors. We have find some derivated
-estimated values and some properties of these values. However, we hanven't analized
-how good is our estimation. To see how well we are doing we will look at the 
-coeficient of determination. To do so we will first introduce some quantities:
+So far we have focused on finding the “best” line by estimating the coefficients that minimize the sum of squared errors. We have derived the least‑squares estimates, obtained fitted values and residuals, and discussed some algebraic properties of those estimates. What remains is to evaluate how well the fitted line captures the variability in the response. The principal summary measure for this purpose in linear regression is the coefficient of determination. Before defining it, we introduce a few standard quantities that decompose the total variability of the response.
 
-**Total Sum of Squares** 
 
+
+```{definition, total-sum-of-squares, name="Total Sum of Squares"}
+The Total Sum of Squares is given by:
 $$SS_{tot} = \sum_{i=1}^n (y_i - \bar{y})$$
+```
 
-Is a measure of total variability of the dependent 
-variable. You can think of it in many ways:
+The Total Sum of Squares is the fundamental measure of the total variability present in the observed responses. It quantifies how much the individual response values deviate, collectively, from their overall average. In other words, it is the baseline amount of variation in the dependent variable before any predictor information is used. You can think of it in several ways:
 
-* As a proxy for uncertainty. The bigger the more uncertainty in the dependent
-varaible.
-* It is proportional to the sample varaince.
-* It is what you get if when you solve the following minimization problem:
+* As a proxy for uncertainty. The larger this quantity, the greater the uncertainty in the dependent variable.  
+* It is proportional to the sample variance.  
+* It is what you obtain when solving the following minimization problem:
 
-$$ \min_{a} \sum_{i=1}^n (y_i - \beta_0)^2 $$
-that is, the best you can do to minimize the sum of squares without having access
-to the independent variables $x_1,\ldots,x_n$.
+$$
+\min_{\beta_0} \sum_{i=1}^n (y_i - \beta_0)^2,
+$$
 
-**Residual Sum of Squares**
+that is, the best possible sum of squared errors when no information from the independent variables \(x_1,\ldots,x_n\) is available.
 
+```{definition, residual-sum-of-squares, name="Residual Sum of Squares"}
+The Residual Sum of Squares is given by:
 $$ SS_{res} = \sumin (\he_i)^2 = \sumin (y_i - \hy_i)^2$$
+```
 
-The residual Sum of Squares is the minimum value of our optimization problem. It
-is the the amount of variability that no matter what we do we will have remaing 
-even after finding the "best" line.
+The Residual Sum of Squares (RSS) is the aggregate measure of the discrepancies between observed responses and the responses predicted by a fitted regression model. Concretely, it sums the squared prediction errors (residuals) across all observations and therefore quantifies the total unexplained variation left after fitting the model.
 
-**Explained Sum of Squares**
+Interpretation:
 
+* Unexplained variability: RSS represents the portion of the data’s variability that the model does not capture. A smaller RSS indicates that the model’s predictions are closer to the observed values and that less variability remains unexplained.  
+* Measure of fit error: RSS is a direct summary of model misspecification and random noise as reflected in the residuals; it expresses how far, in aggregate, observed outcomes stray from the fitted line.
+
+Key properties:
+
+* Nonnegative and additive: RSS cannot be negative, and it increases when residuals grow larger in magnitude.  
+* Minimization target: In ordinary least squares, the fitted coefficients are chosen to minimize RSS; thus RSS at the fitted coefficients is the smallest possible sum of squared residuals for the chosen model form.  
+* Basis for variance estimation: RSS underlies the standard estimate of the model’s error variance, after accounting for the loss of degrees of freedom due to parameter estimation.
+
+Role in regression analysis:
+
+* Diagnostic and evaluation metric: RSS is used together with total variability to compute proportions of variance explained and other fit measures. It is central to testing whether predictors provide a meaningful improvement over a simpler model and to constructing confidence intervals and prediction intervals.  
+* Guide to improvement: Large RSS relative to total variability suggests the model is missing important structure or that noise is substantial; small RSS suggests good in‑sample fit (but not necessarily good out‑of‑sample performance).
+
+Practical notes:
+
+* Dependence on scale and sample size: RSS depends on the units of the response and on the number of observations, so it is most useful in relative comparisons (e.g., between models on the same dataset) rather than as an absolute measure across datasets.  
+* Use with diagnostics: Interpreting RSS should be accompanied by residual diagnostics and validation checks to ensure a low RSS reflects genuine explanatory power rather than overfitting or violated assumptions.
+
+```{definition, explained-sum-of-squares, name="Explained Sum of Squares"}
+The Explained Sum of Squares is given by:
 $$ SS_{reg} = \sumin (\hy_i - \bar{y}) = \sumin (\hy_i - \hat{\bar{y}}) $$
+```
 
-The variability of the fitted value. This is the variability we can explain with
-our regression model.
+The Explained Sum of Squares is the portion of the total variability in the dependent variable that is accounted for by the fitted regression model. It quantifies how much of the variation in the observed responses is captured by the model’s fitted values, as compared with using only a single constant (the sample mean).
 
-These 3 quantities are related by:
+Interpretation:
 
+* It measures the improvement in fit achieved by the regression line relative to the baseline of predicting the mean for every observation.  
+* A larger explained sum of squares indicates that the model captures more of the systematic variation in the response and thus provides a better summary of the relationship between predictor and response.
+
+Key properties:
+
+* Nonnegative: it cannot be negative, because the fitted model cannot explain less variation than the baseline in a least‑squares fit.  
+* Bounded above by the total variability: the explained portion cannot exceed the total variability present in the data, we will see this next. 
+* Basis for fit measures: it is the numerator in the fraction that expresses the proportion of variance explained by the model, and it plays a central role in analysis of variance decompositions and in F‑tests comparing nested models.  
+* Sensitive to model choice: adding predictors or model flexibility can increase the explained sum of squares, which is why measures that penalize complexity are sometimes used when comparing models.
+
+```{proposition, prp-sum-of-squares-decomposition, name = "Sum of Squares Decomposition"}
+The $SS_{tot}$, $SS_{res}$ and $SS_{reg}$ are related by the following identity:
 $$ SS_{tot} = SS_{reg} + SS_{res} $$
-That is the total variability si the sum of the variability that is explained by
-the regression model and the variability we can't explain with the regression model.
+```
 
-
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-sum-of-squares-decomposition}
 \begin{align*}
 SS_{tot} 
-  &= \sumin (y_i - \bar{y})^2 = \sumin (y_i - \hy_i + \hy_i - \bar{y})^2 \\
-  &= \sumin \left((y_i - \hy_i)^2 + 2(y_i - \hy_i)(\hy_i - \bar{y}) + (\hy_i - \bar{y})^2\right) \\
-  &= \sumin(y_i - \hy_i)^2 + 2 \sumin (y_i - \hy_i)(\hy_i - \bar{y}) + \sumin (\hy_i - \bar{y})^2 \\
-  &= SS_{res} + 2 \sumin (y_i - \hy_i)(\hy_i - \bar{y}) + SS_{reg} \\
-  &= SS_{res} + 2 \sumin \he_i(\hy_i - \bar{y}) + SS_{reg} \\
-  &= SS_{res} + 2 \sumin (\he_i\hy_i - \he_i\bar{y}) + SS_{reg} \\
-  &= SS_{res} + 2 \sumin \he_i\hy_i - 2 \sumin \he_i\bar{y} + SS_{reg} \\
-  &= SS_{res} + 2(0) - 2  \bar{y} \sumin \he_i + SS_{reg} \\
-  &= SS_{res} - 2 \bar{y} (0) + SS_{reg} \\
-  &= SS_{res} + SS_{reg} \\
+  &= \sumin (y_i - \bar{y})^2 
+    & \text{def. } SS_{tot} \\
+  &= \sumin (y_i - \hy_i + \hy_i - \bar{y})^2 
+    & \text{add } (0=- \hy_i + \hy_i) \\
+  &= \sumin \left((y_i - \hy_i)^2 + 2(y_i - \hy_i)(\hy_i - \bar{y}) + (\hy_i - \bar{y})^2\right)  
+    & \\
+  &= \sumin(y_i - \hy_i)^2 + 2 \sumin (y_i - \hy_i)(\hy_i - \bar{y}) + \sumin (\hy_i - \bar{y})^2 
+    & \text{lin. sum} \\
+  &= SS_{res} + 2 \sumin (y_i - \hy_i)(\hy_i - \bar{y}) + SS_{reg} 
+    & \text{def. } SS_{res}, SS_{reg} \\
+  &= SS_{res} + 2 \sumin \he_i(\hy_i - \bar{y}) + SS_{reg}  
+    & \text{def. } \he_i \\
+  &= SS_{res} + 2 \sumin (\he_i\hy_i - \he_i\bar{y}) + SS_{reg}   
+    & \\
+  &= SS_{res} + 2 \sumin \he_i\hy_i - 2 \sumin \he_i\bar{y} + SS_{reg}  
+    & \text{lin. sum} \\
+  &= SS_{res} + 2 <\hat{\mathbf{e}},\hat{\mathbf{y}}> - 2 \sumin \he_i\bar{y} + SS_{reg}  
+    & \text{def. cross-prod.} \\
+  &= SS_{res} - 2 \sumin \he_i\bar{y} + SS_{reg}  
+    & <\hat{\mathbf{e}},\hat{\mathbf{y}}>=0 \\
+  &= SS_{res} - 2 \bar{y} \sumin \he_i + SS_{reg}  
+    & \text{lin. sum} \\
+  &= SS_{res} + SS_{reg}
+    & \sumin \he_i = 0 \\
 \end{align*}
+```
+</details>
 
-**Coefficient of Determination**
+```{definition, coefficient-of-determmination, name="Coefficient of Determmination"}
+The Coefficient of Determmination is given by:
+  $$ R^2 = \frac{SS_{reg}}{SS_{tot}} $$
+```
 
-$$ R^2 = \frac{SS_{reg}}{SS_{tot}} = 1 - \frac{SS_{res}}{SS_{tot}} $$
-The coefficient of determination then can be explained as the percentage of the
-total varaibility that can be explained with linear regression.
+```{proposition, prp-coefficient-of-determmination, name = "Alternate Definition of the Coefficient of Determmination"}
+The Coefficient of Determmination can be defined alternatively as:
+  $$ R^2 = 1 - \frac{SS_{res}}{SS_{tot}} $$
+```
 
-As a percentage, it has to be a number between 0 and 1. To see this let us show 
-that:
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-coefficient-of-determminatio}
+\begin{align*}
+R^2 
+  &= \frac{SS_{reg}}{SS_{tot}}
+    & \text{def. } R^2 \\
+  &= 1 - \frac{SS_{tot} - SS_{res}}{SS_{tot}} 
+    & SS_{tot} = SS_{res} + SS_{reg} \\
+  &= \frac{SS_{tot}}{SS_{tot}} - \frac{SS_{res}}{SS_{tot}}  
+    & \\
+  &= 1 - \frac{SS_{res}}{SS_{tot}}  
+    & \\
+\end{align*}
+```
+</details>
 
-$$ R^2 = r_{xy}^2 $$
-To see this, first let us express $SS_{reg}$ in a more convinient way:
+```{proposition, prp-coefficient-of-determmination-correlation}
+The Coefficient of Determmination is related to the sample correlation by
+  $$ R^2 = r_{xy}^2 $$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-coefficient-of-determmination-correlation}
+First let us express $SS_{reg}$ in a more convinient way:
 
 \begin{align*}
 SS_{reg} 
-  &= \sumin (\hy_i - \bar{y})^2 \\
-  &= \sumin (\hgb_0 + \hgb_1 x_i - \bar{y})^2 \\
-  &= \sumin (\bar{y} - \hgb_1 \bar{x} + \hgb_1 x_i - \bar{y})^2 \\
-  &= \sumin (\hgb_1 x_i - \hgb_1 \bar{x})^2 \\
-  &= \sumin \hgb_1^2(x_i - \bar{x})^2 \\
-  &= \hgb_1^2 \sumin (x_i - \bar{x})^2 \\
-  &= \hgb_1^2 S_{xx} (n-1) \\
-  &= \left( \frac{S_{xy}}{S_{xx}} \right)^2 S_{xx} (n-1) \\
-  &= \frac{S_{xy}^2}{S_{xx}^2} S_{xx} (n-1) \\
-  &= \frac{S_{xy}^2}{S_{xx}} (n-1) \\
+  &= \sumin (\hy_i - \bar{y})^2 
+    & \text{def. } SS_{reg} \\
+  &= \sumin (\hgb_0 + \hgb_1 x_i - \bar{y})^2  
+    & \text{def. } \hy_i \\
+  &= \sumin (\bar{y} - \hgb_1 \bar{x} + \hgb_1 x_i - \bar{y})^2   
+    & \text{def. } \hgb_0 \\
+  &= \sumin (\hgb_1 x_i - \hgb_1 \bar{x})^2    
+    & \\
+  &= \sumin \hgb_1^2(x_i - \bar{x})^2   
+    & \\
+  &= \hgb_1^2 \sumin (x_i - \bar{x})^2   
+    & \text{lin. sum}\\
+  &= \hgb_1^2 S_{xx} (n-1)    
+    & \text{def. } S_{xx} \\
+  &= \left( \frac{S_{xy}}{S_{xx}} \right)^2 S_{xx} (n-1)   
+    & \text{def. } \hgb_1 \\
+  &= \frac{S_{xy}^2}{S_{xx}^2} S_{xx} (n-1) 
+    & \\
+  &= \frac{S_{xy}^2}{S_{xx}} (n-1) 
+    & \\
 \end{align*}
-
-Then, we can see that:
-
+Now, note that:
+  $$ SS_{tot} = (n-1)S_{yy} $$
+Then
 \begin{align*}
 R^2 
-  &= \frac{SS_{reg}}{SS_{tot}} \\
-  &= \frac{\frac{S_{xy}^2}{S_{xx}} (n-1)}{\sumin(y_i - \bar{y})^2} \\
-  &= \frac{\frac{S_{xy}^2}{S_{xx}} (n-1)}{S_{yy}(n-1)} \\
-  &= \frac{S_{xy}^2}{S_{xx}S_{yy}} \\
-  &= \left( \frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}} \right)^2 \\
-  &= r_{xy}^2
+  &= \frac{SS_reg}{SS_{tot}} 
+    & \text{def. } R^2 \\
+  &= \frac{\frac{S_{xy}^2}{S_{xx}} (n-1)}{S_{yy} (n-1)}  
+    & \text{prev. res.} \\
+  &= \frac{S_{xy}^2}{S_{xx}S_{yy}}   
+    & \\
+  &= \left[\frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}}\right]^2   
+    & \\
+  &= r_{xy}^2   
+    & \text{def. } r_{xy} \\
 \end{align*}
+```
+</details>
 
-The bigger the $R^2$, the better is the fit of our linear model. The $R^2$ can 
-be low for 2 reasons:
+```{corollary, prp-coefficient-of-determmination-0-1}
+The Coefficient of Determmination is between 0 and 1.
+```
 
-* The first one is if our data is not linear, then a linear 
-model will explain little about the relationship (some times a linear model can
-be a good approximation of a non-linear model).
-* The second reason, is when the
-data is noisy. This can reduce the $R^2$ even when we know the relationship 
-between the variables is linear.
+The coefficient of determination is a summary measure that quantifies the fraction of the total variability in the dependent variable that is accounted for by a regression model. It expresses how much of the observed variation can be attributed to the systematic relationship captured by the model, as opposed to unexplained variation.
 
-As an example of noisy data, recall the Ad spending data. I actually generated 
-the data under a linear model, so the relationship between the variables is linear.
-You can verify this be looking at the code where the data is generated in the introduction.
-Next I show the effects of adding additional noise to the data, at 3 levels:
+Interpretation:
+
+* Proportion explained: The coefficient gives the proportion of the response variability that the model explains. A larger value indicates that a greater share of the variability is captured by the fitted relationship.  
+* Measure of fit: It provides a single, unitless index of in‑sample goodness of fit, useful for judging how well the model summarizes the observed data.
+
+Key properties:
+
+* Boundedness: Under the usual regression with an intercept, the coefficient lies between zero and one. Values near one indicate that most variability is explained; values near zero indicate little explanatory power.  
+* Relation to explained and unexplained variation: The coefficient is obtained by comparing the variation explained by the model with the total variation present in the data; it increases as explained variation grows or unexplained variation shrinks.  
+* Equivalence in simple linear regression: In the simple linear case, the coefficient equals the square of the sample correlation between predictor and response, linking it directly to linear association strength.
+
+Practical considerations and limitations:
+
+* Not a test of causation: A high coefficient does not imply a causal relationship; it only describes the extent of linear association in the sample.  
+* Sensitivity to model complexity: Adding predictors will not decrease this measure and can inflate it even for predictors with little true predictive value. Adjusted versions or cross‑validation are often used when comparing models of differing complexity.  
+* Dependence on context and scale: While unitless, the coefficient’s practical meaning depends on the problem domain; what constitutes a “good” value varies by field and by the intrinsic variability of the outcome.  
+* Reliance on model assumptions: Interpretation in terms of explained variance assumes the model form is appropriate; violations of assumptions or influential observations can make the coefficient misleading.
+
+Use in practice:
+
+* Primary summary of fit: It is widely used as a convenient summary of how well a regression model captures observed variation.  
+* Complementary diagnostics: It should be interpreted together with residual analysis, model validation, and, for model selection, complexity‑adjusted criteria or predictive performance measures.
+
+Summary  
+The coefficient of determination quantifies the share of total variability explained by a regression model. It is a useful, unitless index of in‑sample fit, but it must be interpreted with attention to model form, complexity, and the substantive context.
+
+The larger the $R^2$, the better the fit of the linear model. A low $R^2$ can arise for two reasons:
+
+- The data are not well described by a linear relationship. In that case a linear model will explain little of the association (although sometimes a linear model can still serve as a useful approximation to a nonlinear relationship).  
+- The data are noisy. Substantial noise can reduce $R^2$ even when the true relationship between the variables is linear.
+
+As an example of noisy data, recall the Ad spending data. The data was generated under a linear model, so the relationship between the variables is linear. You can verify this by looking at the code where the data is generated in the introduction. In the following example the effects of adding additional noise to the data can be analyzed. Three noise leves are considered:
 
 * Level1: Small Noise.
 * Level2: Medium Noise.
 * Level3: High noise.
 
 ```{r r2-noise}
+# Sets seed for noise randomness
+set.seed(9142025)
 # Read Data
 dat <- read.csv("Ad spending Data.csv")
 # Assign data
@@ -1095,27 +1397,39 @@ print("Level 3 LM summary")
 summary(outRegNoiLe3)
 ```
 
-where we observe that the point cloud is more dispersed and looks less than a line
+here where we observe that the point cloud is more dispersed and looks less than a line
 the more noise is added, but the estimated regression line changes only a little bit.
 We can also see how the $R^2$ becomes smaller as more noise is added.
 
+---
+
 ## Residual Analysis
 
-While the coefficient of determination can tell us how good is the fit of the
-data, it can't tell us why is it good or bad. The easiest way to check for any
-problems is to check the residuals or estimated errors. Right now, we will focus
-on 4 problems:
+While the coefficient of determination (\(R^2\)) provides a measure of how well the data fit a linear model, it cannot explain why the fit is good or poor. To gain insights into potential problems with the model, the most straightforward approach is to examine the residuals or estimated errors. Residual analysis helps identify issues that can compromise the validity of the model's assumptions. 
 
-* The regression function is not linear.
-* The variance of the error terms is not constant.
-* There are outliers.
-* Important variables are ommited.
+Currently, we focus on four common problems that residual analysis can reveal:
+
+* **The regression function is not truly linear.**  
+  If the relationship between the predictor and response is nonlinear, then a linear model will not capture the true pattern, leading to systematic patterns in the residuals.
+
+* **The variance of the error terms is not constant (heteroscedasticity).**  
+  Non-constant variance means that the spread of the residuals varies with the fitted values or predictor, which violates a key assumption of linear regression and can affect inference.
+
+* **There are outliers.**  
+  Outliers are observations that deviate markedly from the overall pattern and can disproportionately influence the estimated regression coefficients or inflate measures of error.
+
+* **Important variables are omitted.**  
+  Omitting relevant variables leads to biased residuals and can cause the model to systematically under- or over-predict responses based on unaccounted factors.
+  
+---
 
 ### Non-linear regression function
 
-Sometimes the relationship between the two variables that we are analyzing is 
-not linear. Looking at the example of the relationship between burger price and
-burgers sold we can look at the fitted regression line and the residuals plot.
+In many real-world situations, the relationship between the variables of interest may not be well described by a simple straight line. While linear regression is a powerful and widely used technique, it relies on the assumption that the true relationship between the predictor and response variables is linear. 
+
+However, when this assumption does not hold, the linear model can lead to poor fits, systematic bias, and misleading inferences. To better understand the nature of the relationship, it is important to examine the fitted regression function and related residuals carefully.
+
+Consider the example of analyzing the relationship between burger price and the number of burgers sold. 
 
 ```{r burgers-residuals, echo=FALSE}
 dat <- read.csv("Burger Data.csv")
@@ -1128,7 +1442,8 @@ plot(x    = dat$Price,
      y    = dat$Burgers,
      xlab = "Price ($)",
      ylab = "Burgers Sold",
-     main = "Original Data")
+     main = "Original Data",
+     pch  = 16)
 abline(a   = outReg$coefficients[1],
        b   = outReg$coefficients[2],
        col = 'red',
@@ -1138,7 +1453,8 @@ plot(x = dat$Price,
      y = outReg$residuals,
      xlab = "Price ($)",
      ylab = "Residuals",
-     main = "Residuals")
+     main = "Residuals",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 ```
@@ -1168,7 +1484,8 @@ plot(x    = dat$Price,
      y    = log(dat$Burgers),
      xlab = "Price ($)",
      ylab = "log(Burgers Sold)",
-     main = "Transformed Data")
+     main = "Transformed Data",
+     pch  = 16)
 abline(a   = outReg$coefficients[1],
        b   = outReg$coefficients[2],
        col = 'red',
@@ -1178,7 +1495,8 @@ plot(x = dat$Price,
      y = outReg$residuals,
      xlab = "Price ($)",
      ylab = "Residuals",
-     main = "Residuals")
+     main = "Residuals",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 ```
@@ -1197,7 +1515,8 @@ plot(x    = log(dat$Price),
      y    = dat$Burgers,
      xlab = "log(Price) (log($))",
      ylab = "Burgers Sold",
-     main = "Transformed Data")
+     main = "Transformed Data",
+     pch  = 16)
 abline(a   = outReg$coefficients[1],
        b   = outReg$coefficients[2],
        col = 'red',
@@ -1207,12 +1526,13 @@ plot(x = dat$Price,
      y = outReg$residuals,
      xlab = "log(Price) (log($))",
      ylab = "Residuals",
-     main = "Residuals")
+     main = "Residuals",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 ```
 
-It is this these transformations improve the fit of the model, however which one
+It this case, these transformations improve the fit of the model, however which one
 is the best one?
 
 One can check the $R^2$ of the different transformations:
@@ -1233,17 +1553,33 @@ summary(outRegTr2)
 ```
 We will see other ways to choose the transformation later.
 
+Why non-linearity matters:
+
+* **Violation of assumptions:** Non-linearity violates the key assumption of linear regression that the expected response changes linearly with the predictor. This can lead to biased estimates and unreliable inference.
+* **Inadequate modeling:** A simple straight line may oversimplify the true relationship, missing important features such as thresholds, plateaus, or other non-linear behaviors.
+* **Need for model refinement:** Detecting non-linearity encourages the use of more flexible modeling approaches, such as polynomial regression, spline regression, or other non-linear models that better capture the underlying pattern.
+
+Addressing non-linearity:
+
+* **Visualization:** Always examine scatterplots of the data accompanied by the fitted regression line and residuals plots to identify non-linear patterns visually.
+
+* **Transformations:** Applying data transformations (e.g., logarithmic, square root) to one or both variables can sometimes linearize the relationship.
+* **Non-linear models:** Use specialized non-linear regression models that explicitly accommodate curves and other complex relationships.
+
+In summary, recognizing when the relationship is non-linear is crucial for building accurate models. By analyzing the fitted line and residuals plots, analysts can identify these cases and take appropriate steps to improve their modeling approach, leading to better understanding and more reliable predictions.
+
+---
+
 ### Heteroscedasticity
 
-Sometimes, errors are expected to increase depending on the explanatory variable.
-For example, it could be expected that errors for bigger values of the explanatory
-variable will be also bigger.
+In linear regression modeling, one of the key assumptions is that the variability (or variance) of the errors remains constant across all levels of the explanatory variable. This assumption is known as homoscedasticity. When this assumption is violated–that is, when the variance of the errors is not constant but instead depends on the level of the predictor–it is referred to as **heteroscedasticity**.
 
-As an example, consider a new data set with the Height of several children. One
-could expect there is a linear relationship between the age of a child and the
-height. However, one also would expect that height difference are bigger for 
-older children than for younger children. We can see this in the following 
-simulated data:
+**Definition and intuition**  
+Heteroscedasticity occurs when the spread or dispersion of the residuals changes systematically with the value of the independent variable. For example, as the value of the predictor increases, the errors or deviations in the response variable may become larger or smaller, leading to a funnel-shaped or other non-uniform pattern in the residuals plot.
+
+**An illustrative example**  
+Consider a new data set with the heights of several children. Suppose we believe there is a linear relationship between a child's age and height: as children grow older, their height increases. However, it is also reasonable to expect that the variability in height differences increases for older children than for younger children: taller children tend to have more variation in height than shorter children.  
+This expectation can be visualized in a simulated data set where the residuals (the deviations from the fitted line) tend to increase with age, forming a funnel shape in the residuals plot. Such a pattern indicates heteroscedasticity, where the error variance depends on the predictor.
 
 ```{r height-data-residuals}
 dat <- read.csv("Height Data.csv")
@@ -1256,7 +1592,8 @@ plot(x    = dat$Age,
      y    = dat$Height,
      xlab = "Age (years)",
      ylab = "Height (in)",
-     main = "Original Data")
+     main = "Original Data",
+     pch  = 16)
 abline(a   = outReg$coefficients[1],
        b   = outReg$coefficients[2],
        col = 'red',
@@ -1266,22 +1603,38 @@ plot(x = dat$Age,
      y = outReg$residuals,
      xlab = "Age (years)",
      ylab = "Residuals (in)",
-     main = "Residuals")
+     main = "Residuals",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 ```
 
-While one can infer this error behavior in the original scatter plot, the residual
-plot makes this pattern much more clearly. In the residual plot, it is pretty clear
-that the errors increase with the age of the children. While this is not a problem 
-in itself when doing least squares estimation, it might be better to consider 
-other alternatives that do not penalize the same way the errors at young age than
-the errors at a later age. We will see this with weighted least squares.
+While one can infer this error behavior from the original scatter plot, the residuals plot makes this pattern much more clearly visible. In the residual plot, it is evident that the errors increase with the age of the children. While this is not inherently problematic when using least squares estimation, it may be advisable to consider alternative methods that do not penalize all errors equally—particularly the larger errors at later ages—such as weighted least squares.
+
+
+While heteroscedasticity does not bias the estimates of the regression coefficients themselves, it affects the accuracy and precision of these estimates and the associated inference metrics. Specifically, standard errors may be underestimated or overestimated, leading to incorrect conclusions about the significance of predictors.
+
+Several strategies can be used to address heteroscedasticity, including: 
+
+* Applying data transformations (e.g., logarithmic, square root) to stabilize the variance.  
+* Using heteroscedasticity-robust standard errors that adjust the inference procedures to account for non-constant variance.  
+* Employing alternative modeling approaches such as weighted least squares, where observations are weighted inversely proportional to their variance, or explicitly modeling the variance function.
+
+---
 
 ### Outliers
 
-Sometimes the data follows a linear regression for most of the observations, but
-there might be some observations that do not follow the linear relationship.
+In the context of linear regression analysis, **outliers** are data points that do not conform to the general pattern established by the majority of the observations. While most data points may align well with the fitted regression line, a few observations might deviate substantially from this pattern, standing out as unusual or extreme relative to the rest.
+
+Outliers can arise for various reasons, including measurement errors, data entry mistakes, or genuinely rare or unusual cases. Regardless of their origin, these outlying points can have a disproportionate influence on the results of the regression analysis, often skewing the estimated coefficients, inflating the residuals, and affecting overall model fit.
+
+It is important to identify and understand outliers because they can mislead the analysis. They may unduly influence the estimated relationship between the predictor and response variables, leading to biased estimates of the slope and intercept. Moreover, outliers can inflate measures of error, such as the residual sum of squares, making the model seem less accurate than it truly is for the majority of the data.
+
+Detecting outliers typically involves examining residuals, especially those that are unusually large or small compared to typical residuals. Residual plots can reveal these points as isolated dots that are far away from the bulk of the data cloud. Statistical rules and diagnostic tools can also be used to flag potential outliers for further investigation.
+
+Once identified, outliers demand careful consideration. Some outliers may be due to data collection or entry errors and should be corrected or removed. Others may represent genuine but rare phenomena, and understanding their context is essential before deciding how to handle them in the analysis.
+
+Dealing with outliers involves balancing the goal of accurately modeling the typical relationship while acknowledging that outliers can carry important information or indicate special cases. Sometimes, it is appropriate to analyze the data both with and without outliers, or to apply robust regression methods designed to reduce the influence of extreme observations.
 
 In the next example, we work with the Wine data set and add outliers, to see the
 effect this might have on the estimation.
@@ -1306,7 +1659,8 @@ plot(x    = x,
      xlim = c(xmin, xmax),
      xlab = "Average Glasses per Week",
      ylab = "Life Expectancy",
-     main = "No Outliers")
+     main = "No Outliers",
+     pch  = 16)
 abline(a   = outRegNoo$coefficients[1],
        b   = outRegNoo$coefficients[2],
        col = 'red',
@@ -1323,7 +1677,8 @@ plot(x    = x,
      xlim = c(xmin, xmax),
      xlab = "Average Glasses per Week",
      ylab = "Life Expectancy",
-     main = "Outlier Left")
+     main = "Outlier Left",
+     pch  = 16)
 points(x   = x[21],
        y   = y[21],
        pch = 16,
@@ -1343,7 +1698,8 @@ plot(x    = x,
      xlim = c(xmin, xmax),
      xlab = "Average Glasses per Week",
      ylab = "Life Expectancy",
-     main = "Right Outliers")
+     main = "Right Outliers",
+     pch  = 16)
 points(x   = x[21],
        y   = y[21],
        pch = 16,
@@ -1363,7 +1719,8 @@ plot(x    = x,
      xlim = c(xmin, xmax),
      xlab = "Average Glasses per Week",
      ylab = "Life Expectancy",
-     main = "Center Outliers")
+     main = "Center Outliers",
+     pch  = 16)
 points(x   = x[21],
        y   = y[21],
        pch = 16,
@@ -1391,7 +1748,8 @@ plot(x    = dat$Glasses,
      xlim = c(xmin, xmax),
      xlab = "Average Glasses per Week",
      ylab = "Residuals",
-     main = "No Outliers")
+     main = "No Outliers",
+     pch = 16)
 abline(h   = 0,
        lwd = 2)
 
@@ -1404,7 +1762,8 @@ plot(x    = x,
      xlim = c(xmin, xmax),
      xlab = "Average Glasses per Week",
      ylab = "Residuals",
-     main = "Left Outlier")
+     main = "Left Outlier",
+     pch = 16)
 abline(h   = 0,
        lwd = 2)
 # Outlier on the right side
@@ -1417,7 +1776,8 @@ plot(x    = x,
      xlim = c(xmin, xmax),
      xlab = "Average Glasses per Week",
      ylab = "Residuals",
-     main = "Left Outlier")
+     main = "Left Outlier",
+     pch = 16)
 abline(h   = 0,
        lwd = 2)
 # Outlier on the right side
@@ -1430,7 +1790,8 @@ plot(x    = x,
      xlim = c(xmin, xmax),
      xlab = "Average Glasses per Week",
      ylab = "Residuals",
-     main = "Left Outlier")
+     main = "Left Outlier",
+     pch = 16)
 abline(h   = 0,
        lwd = 2)
 ```
@@ -1443,13 +1804,17 @@ summary(outRegRig)
 summary(outRegCen)
 ```
 
+Outliers located at the edges of the explanatory variable range often possess higher leverage, which means they have a disproportionate influence on the estimated regression coefficients, including the slope. Leverage points are data points that are far from the center of the predictor distribution and can exert undue influence on the fitted line.
+
+---
+
 ### Variables Ommited
 
-When looking at the residuals, there should be no aparent pattern. Sometimes, 
-the pattern is only noticeable when considering other variables. We can see this
-with the Height data set. The data includes the sex of the children. If you fit
-least squares without taking this into consideration, a pattern is appears in the
-residuals when you look at the residuals for each sex.
+When analyzing the residuals from a regression model, one of the key assumptions is that there should be no systematic pattern or structure in the residual plots. If the residuals appear randomly scattered around zero, it suggests that the model has effectively captured all the systematic variation in the response variable, and no important information has been left out.
+
+However, in practice, the absence of an apparent pattern in the residuals may be misleading if some relevant variables have been omitted from the model. Sometimes, the pattern is only visible when residuals are examined in relation to other variables not included as predictors. This situation indicates that the model may be missing important factors that explain variability in the response, leading to biased or incomplete conclusions.
+
+To illustrate this concept, consider the example of analyzing children's heights. Suppose the initial model predicts height based solely on age. When you examine the residuals, they might seem to lack any obvious pattern (beyond heteroscedasticity), suggesting a reasonable fit. Yet, if the data set also includes the sex of the children as an additional variable, and this variable affects height, then ignoring sex in the model can cause a pattern to emerge in the residuals when they are grouped or compared by sex.
 
 ```{r height-other-var}
 dat <- read.csv("Height Data.csv")
@@ -1467,7 +1832,8 @@ plot(x = dat$Age[dat$Sex == 1],
      ylim = c(ymin, ymax),
      xlab = "Age",
      ylab = "Residuals",
-     main = "Males")
+     main = "Males",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 plot(x = dat$Age[dat$Sex == 0],
@@ -1475,10 +1841,19 @@ plot(x = dat$Age[dat$Sex == 0],
      ylim = c(ymin, ymax),
      xlab = "Age",
      ylab = "Residuals",
-     main = "Females")
+     main = "Females",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 ```
+
+Specifically, when residuals are plotted separately for boys and girls, a clear pattern may appear: residuals for boys tend to be systematically higher or lower than those for girls. This indicates that sex is an important variable that was omitted from the model. Failing to include such relevant variables can lead to biased estimates of the relationship between the predictor (age) and the response (height), and potentially misleading inferences.
+
+This example underscores the importance of considering all relevant variables when building a regression model. Omitting an important variable—such as sex in this case—can result in patterns in the residuals that reveal the model's inadequacy. These patterns suggest the model is misspecified and that including additional, relevant predictors could significantly improve its accuracy and interpretability.
+
+In practice, examining residuals against other variables, not just the predictor, provides crucial diagnostic information. Detecting such patterns alerts analysts to possible omitted variables, prompting further investigation, model refinement, and ultimately, more valid and reliable conclusions.
+
+---
 
 ## Cross-Validation
 
@@ -1489,8 +1864,7 @@ alternatives to doing cross-validation, here are a few of the most relevant ones
 
 1. **Holdout Method (Train/Test Split)**
    - **Description**: The data is split into two (or three) sets: training and test (and sometimes validation). The model is trained on the training set and evaluated on the test set.
-   - **Use Case**: 
-     - Simple to implement, but has high variance. The performance may depend on the specific split.
+   - **Use Case**: Simple to implement, but has high variance. The performance may depend on the specific split.
 
 2. **K-Fold Cross-Validation**
    - **Description**: The data is divided into \( k \) equal-sized folds (subsets). The model is trained on \( k-1 \) folds and tested on the remaining fold. This process is repeated \( k \) times, with each fold used as the test set once.
@@ -1500,23 +1874,19 @@ alternatives to doing cross-validation, here are a few of the most relevant ones
 
 3. **Leave-One-Out Cross-Validation (LOOCV)**
    - **Description**: Each data point is used once as a test set, and the rest of the data is used as the training set. This results in \( n \) iterations, where \( n \) is the number of samples.
-   - **Use Case**:
-     - Good when the dataset is small, but can be computationally expensive for large datasets.
+   - **Use Case**: Good when the dataset is small, but can be computationally expensive for large datasets.
 
 4. **Leave-P-Out Cross-Validation (LPOCV)**
    - **Description**: Similar to LOOCV, but instead of leaving out one data point, \( p \) data points are left out. This creates \( \binom{n}{p} \) different training/testing splits.
-   - **Use Case**:
-     - Rarely used due to its high computational cost for large datasets but might be useful in specific scenarios.
+   - **Use Case**: Rarely used due to its high computational cost for large datasets but might be useful in specific scenarios.
 
 5. **Stratified K-Fold Cross-Validation**
    - **Description**: Similar to K-fold cross-validation but ensures that each fold has the same proportion of each class in classification tasks (i.e., balanced classes in each fold).
-   - **Use Case**: 
-     - Useful for imbalanced datasets in classification problems.
+   - **Use Case**: Useful for imbalanced datasets in classification problems.
      
 6. **Repeated K-Fold Cross-Validation**
    - **Description**: A variation of K-Fold Cross-Validation where the process is repeated multiple times with different random splits.
-   - **Use Case**:
-     - Provides more robust estimates of model performance, particularly when the dataset is small.
+   - **Use Case**: Provides more robust estimates of model performance, particularly when the dataset is small.
      
 Here is an example of \(k\)-fold Cross-Validation using the "Burger Data" set.
 
@@ -1569,11 +1939,19 @@ par(mfrow=c(2, 2))
 for(k in 1:numMod){
   yMod <- Y[, k]
   xMod <- X[, k]
+  # Plots Transformed Data (All)
   plot(x = xMod,
        y = yMod,
        xlab = "Price ($)",
        ylab = "Burgers",
-       main = paste0("Model ", k))
+       main = paste0("Model ", k),
+       pch  = 16)
+  # Plots Regression Line (All)
+  outReg   <- lm(yMod ~ xMod)
+  abline(a   = outReg$coefficients[1],
+         b   = outReg$coefficients[2],
+         col = 'red',
+         lwd = 2)
   metFol <- numeric(length = numFol)
   # Loops through the folds
   for(i in 1:numFol){
@@ -1590,7 +1968,21 @@ for(k in 1:numMod){
   }
   matMet[, k] <- metFol
 }
+
+# Displays the Results of Cross-Validation
+tab <- data.frame(colMeans(matMet))
+tab <- cbind(c("Model 1", "Model 2", "Model 3", "Model 4"), tab)
+tab <- cbind(tab, apply(X = matMet, MARGIN = 2, FUN = sd))
+colnames(tab) <- c("Model", "Mean", "SD")
+knitr::kable(tab, digits = 2)
 ```
+When performing cross-validation, it is essential to calculate error metrics in the original units of the response variable before any transformation. Transformations like scaling or logging change the scale of the data, which can make errors appear smaller or larger in the transformed units and lead to misleading comparisons.
+
+For example, compare the scale of the dependent variable in Models 3 and 4 with those in Models 1 and 2. Since the range of values after transforming in Models 3 and 4 is smaller, the squared errors tend to be smaller simply because of this change, making it unfair to compare these errors to those from Models 1 and 2. Similarly, if income is measured in dollars and then log-transformed, errors in the transformed scale do not directly reflect dollar amounts. To evaluate model performance correctly, predictions should be transformed back to the original units before computing errors or other accuracy metrics.
+
+Always perform validation in the original units to ensure that results are meaningful and comparable in real-world terms. Keep the transformation parameters consistent for new data, and report errors in the original units for clear, interpretable results.
+
+---
 
 ## Weighted Least Squares
 
@@ -1611,55 +2003,83 @@ $$
 \min \sum_{i=1}^{n} w_i (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
 $$
 
-Step 1: Define the weighted residual sum of squares
+```{proposition, prp-weighted-least-squares-estimators, name="Weighted Least Squares Estimators"}
+The solution to the Weithed Least Squares problem:
+$$
+\min_{\beta_0,\beta_1} \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
+$$
+is given by:
+$$\hgb_1^w = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}},$$
 
-The objective function is:
+$$\hgb_0^w = \frac{\sum_{i=1}^{n} w_i y_i - \beta_1^w \sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}.$$
+```
 
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-weighted-least-squares-estimators}
+First define the weighted residual sum of squares, the objective function, as:
 $$Q_w(\beta_0, \beta_1) = \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2$$
-
 We aim to minimize $Q(\beta_0, \beta_1)$ with respect to $\beta_0$ and $\beta_1$.
-
-Step 2: Take the partial derivatives with respect to $ \beta_0 $ and $ \beta_1 $:
-
-$$\frac{\partial Q_w}{\partial \beta_0} = -2 \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)$$
-
-Setting the derivative equal to zero:
-
-$$\sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i) = 0 $$
-$$\sum_{i=1}^{n} w_i y_i = \sum_{i=1}^{n} w_i (\beta_0 + \beta_1 x_i)$$
-$$\beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i = \sum_{i=1}^{n} w_i y_i \tag{3}$$
-
-Now with respect to \( \beta_1 \):
-
-$$\frac{\partial Q_w}{\partial \beta_1} = -2 \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i) x_i$$
-
-Setting the derivative equal to zero:
-
-$$-2 \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i) x_i = 0$$
-$$\sum_{i=1}^{n} w_i y_i x_i = \sum_{i=1}^{n} w_i (\beta_0 + \beta_1 x_i) x_i$$
-
-$$\beta_0 \sum_{i=1}^{n} w_i x_i + \beta_1 \sum_{i=1}^{n} w_i x_i^2 = \sum_{i=1}^{n} w_i y_i x_i \tag{4}$$
-
-Now we solve the system of two linear equations:
-
-1. \( \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i = \sum_{i=1}^{n} w_i y_i \)
-2. \( \beta_0 \sum_{i=1}^{n} w_i x_i + \beta_1 \sum_{i=1}^{n} w_i x_i^2 = \sum_{i=1}^{n} w_i y_i x_i \)
-
-Solve for \( \beta_1 \)
-
-Multiply equation (3) by $\frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i}$ and subtract it from equation (4) to eliminate $\beta_0$:
-
-$$\beta_1 \left( \sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i} \right) = \sum_{i=1}^{n} w_i y_i x_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}$$
-
-Thus, $\beta_1$ is:
-
-$$\beta_1 = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}}$$
-
+We will do so by finding its critical points.
+\begin{align*}
+\frac{\partial Q_w}{\partial \beta_0}  
+  &= \frac{\partial}{\partial \beta_0} \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
+    & \text{def. } Q_w \\
+  &= \sum_{i=1}^{n} \frac{\partial}{\partial \beta_0} w_i (y_i - \beta_0 - \beta_1 x_i)^2
+    & \text{lin. dev.} \\
+  &= \sum_{i=1}^{n} -2  w_i (y_i - \beta_0 - \beta_1 x_i)
+    & \\
+  &= \sum_{i=1}^{n} -2  \left( w_i y_i - w_i \beta_0 - w_i \beta_1 x_i \right)
+    & \\
+  &= -2  \sum_{i=1}^{n} w_i y_i + 2 \beta_0 \sum_{i=1}^{n} w_i + 2 \beta_1 \sum_{i=1}^{n} w_i x_i
+    & \text{lin. sum} \\
+  &= -2  \left( \sum_{i=1}^{n} w_i y_i - \beta_0 \sum_{i=1}^{n} w_i - \beta_1 \sum_{i=1}^{n} w_i x_i \right)
+    & \\
+\end{align*}
+Similarly
+\begin{align*}
+\frac{\partial Q_w}{\partial \beta_1}  
+  &= \frac{\partial}{\partial \beta_1} \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
+    & \text{def. } Q_w \\
+  &= \sum_{i=1}^{n} \frac{\partial}{\partial \beta_1} w_i (y_i - \beta_0 - \beta_1 x_i)^2
+    & \text{lin. dev.} \\
+  &= \sum_{i=1}^{n} -2  w_i (y_i - \beta_0 - \beta_1 x_i) x_i
+    & \\
+  &= \sum_{i=1}^{n} -2  \left( w_i y_i  x_i - \beta_0 w_i  x_i - w_i \beta_1 x_i^2 \right)
+    & \\
+  &= -2  \sum_{i=1}^{n} w_i y_i x_i + 2 \beta_0 \sum_{i=1}^{n} w_i x_i + 2 \beta_1 \sum_{i=1}^{n} w_i x_i^2
+    & \text{lin. sum} \\
+  &= -2  \left( \sum_{i=1}^{n} w_i y_i x_i - \beta_0 \sum_{i=1}^{n} w_i x_i - \beta_1 \sum_{i=1}^{n} w_i x_i^2 \right)
+    & \\
+\end{align*}
+Making them equal to zero, we have:
+  $$ -2  \left( \sum_{i=1}^{n} w_i y_i - \beta_0 \sum_{i=1}^{n} w_i - \beta_1 \sum_{i=1}^{n} w_i x_i \right) = 0 \implies \sum_{i=1}^{n} w_i y_i = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i \tag{1} $$
+  and
+$$ -2  \left( \sum_{i=1}^{n} w_i y_i x_i - \beta_0 \sum_{i=1}^{n} w_i x_i - \beta_1 \sum_{i=1}^{n} w_i x_i^2 \right) = 0 \implies \sum_{i=1}^{n} w_i y_i x_i = \beta_0 \sum_{i=1}^{n} w_i x_i + \beta_1 \sum_{i=1}^{n} w_i x_i^2 \tag{2} $$
+Now we solve the system of two linear equations.
+First, we solve for \( \beta_1 \) by multiplying equation (1) by $\frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i}$ and subtract it from equation (2) to eliminate $\beta_0$:
+\begin{align*}
+\sum_{i=1}^{n} w_i y_i 
+  & = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i
+    & \\
+  &\implies \frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i} \sum_{i=1}^{n} w_i y_i = \frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i} \left( \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i \right)
+    & \\
+  &\implies \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^n w_i} = \beta_0 \sum_{i=1}^{n} w_i x_i + \beta_1 \frac{\left(\sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^n w_i}
+    & \\
+  &\implies \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^n w_i} - \sum_{i=1}^{n} w_i y_i x_i = \beta_1 \frac{\left(\sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^n w_i} - \beta_1 \sum_{i=1}^{n} w_i x_i^2
+    & \text{sub. } (2) \\
+  &\implies \beta_1 \left( \sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i} \right) = \sum_{i=1}^{n} w_i y_i x_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}
+    & \\
+  &\implies \beta_1 = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}}
+    & \tag{3}\\
+\end{align*}
 Then the weighted estimators for $\beta_0$ and $\beta_1$ are:
+$$\hgb_1^w = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}},$$
 
-$$\hgb_{w,1} = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}},$$
+$$\hgb_0^w = \frac{\sum_{i=1}^{n} w_i y_i - \beta_1 \sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}.$$
+```
+</details>
 
-$$\hgb_{w,0} = \frac{\sum_{i=1}^{n} w_i y_i - \beta_1 \sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}.$$
+---
 
 ## Model in Matrix Form
 
