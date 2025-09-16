@@ -1969,6 +1969,10 @@ for(k in 1:numMod){
   matMet[, k] <- metFol
 }
 
+# Box plot of the MSE
+boxplot(matMet, outline = FALSE, xaxt = "n", xlab = "Models", ylab = "MSE")
+axis(side = 1, at = c(1, 2, 3, 4), labels = c("y~x", "y~log(x)", "log(y)~x", "log(y)~log(x)"))
+
 # Displays the Results of Cross-Validation
 tab <- data.frame(colMeans(matMet))
 tab <- cbind(c("Model 1", "Model 2", "Model 3", "Model 4"), tab)
@@ -1986,12 +1990,12 @@ Always perform validation in the original units to ensure that results are meani
 
 ## Weighted Least Squares
 
-Weighted Least Squares (WLS) is an extension of ordinary least squares (OLS) used when the assumption of constant variance (homoscedasticity) is violated. In cases of heteroscedasticity (unequal variances), OLS produces inefficient estimates. 
+Weighted Least Squares is a generalization of Ordinary Least Squares designed to handle situations in which the assumption of constant error variance is violated. When the variability of the errors differs across observations—i.e., when heteroscedasticity is present—OLS estimators remain unbiased but are no longer the most efficient linear estimators. WLS addresses this inefficiency by incorporating information about the relative precision of individual observations into the fitting procedure.
 
-WLS solves this by assigning weights to each observation, giving more importance to data points with lower variance. This leads to more reliable estimates in the presence of heteroscedasticity, making WLS valuable for improving regression models when error variances vary.
-
-- **Lower variance** → **Higher weight**
-- **Higher variance** → **Lower weight**
+Motivation and intuition  
+- Heteroscedasticity means some observations are inherently more variable than others. Treating all observations as equally informative gives undue influence to noisy points and reduces overall estimation precision.  
+- WLS assigns each observation a weight that reflects its reliability: observations with smaller error variance receive larger weight, and those with larger error variance receive smaller weight. In effect, the method downweights noisy observations and upweights precise ones, producing estimates that place greater trust in the most informative data.  
+- In the ideal case, weights are chosen to be inversely related to the true error variances; this makes the weighted estimator the most efficient among linear unbiased estimators under the model.
 
 In a simple linear regression model with one independent variable, OLS minimizes the sum of squared residuals:
 
@@ -2052,14 +2056,27 @@ Similarly
     & \\
 \end{align*}
 Making them equal to zero, we have:
-  $$ -2  \left( \sum_{i=1}^{n} w_i y_i - \beta_0 \sum_{i=1}^{n} w_i - \beta_1 \sum_{i=1}^{n} w_i x_i \right) = 0 \implies \sum_{i=1}^{n} w_i y_i = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i \tag{1} $$
+
+\begin{align*}
+-2  
+  & \left( \sum_{i=1}^{n} w_i y_i - \beta_0 \sum_{i=1}^{n} w_i - \beta_1 \sum_{i=1}^{n} w_i x_i \right) = 0 \\
+  & \implies \sum_{i=1}^{n} w_i y_i = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i \tag{1}
+\end{align*}
+
   and
-$$ -2  \left( \sum_{i=1}^{n} w_i y_i x_i - \beta_0 \sum_{i=1}^{n} w_i x_i - \beta_1 \sum_{i=1}^{n} w_i x_i^2 \right) = 0 \implies \sum_{i=1}^{n} w_i y_i x_i = \beta_0 \sum_{i=1}^{n} w_i x_i + \beta_1 \sum_{i=1}^{n} w_i x_i^2 \tag{2} $$
+  
+\begin{align*}
+-2  
+  & \left( \sum_{i=1}^{n} w_i y_i x_i - \beta_0 \sum_{i=1}^{n} w_i x_i - \beta_1 \sum_{i=1}^{n} w_i x_i^2 \right) = 0 \\
+  & \implies \sum_{i=1}^{n} w_i y_i x_i = \beta_0 \sum_{i=1}^{n} w_i x_i + \beta_1 \sum_{i=1}^{n} w_i x_i^2 \tag{2}
+\end{align*}
+  
 Now we solve the system of two linear equations.
 First, we solve for \( \beta_1 \) by multiplying equation (1) by $\frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i}$ and subtract it from equation (2) to eliminate $\beta_0$:
+  
 \begin{align*}
-\sum_{i=1}^{n} w_i y_i 
-  & = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i
+\sum_{i=1}^{n} 
+  & w_i y_i = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i
     & \\
   &\implies \frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i} \sum_{i=1}^{n} w_i y_i = \frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i} \left( \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i \right)
     & \\
@@ -2070,7 +2087,7 @@ First, we solve for \( \beta_1 \) by multiplying equation (1) by $\frac{\sum_{i=
   &\implies \beta_1 \left( \sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i} \right) = \sum_{i=1}^{n} w_i y_i x_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}
     & \\
   &\implies \beta_1 = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}}
-    & \tag{3}\\
+    & \\
 \end{align*}
 Then the weighted estimators for $\beta_0$ and $\beta_1$ are:
 $$\hgb_1^w = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}},$$
@@ -2078,6 +2095,33 @@ $$\hgb_1^w = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \su
 $$\hgb_0^w = \frac{\sum_{i=1}^{n} w_i y_i - \beta_1 \sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}.$$
 ```
 </details>
+
+How weights are determined?
+
+* When the error variances are known a priori, weights can be set directly in inverse proportion to those variances.  
+* In practice, true variances are usually unknown. Weights are therefore often based on estimates or proxies for the variances—obtained from repeated measurements, external information, or preliminary residual analysis. Iterative procedures can be used to refine weights if needed.  
+* Choosing appropriate weights is crucial: good weights improve efficiency and inference, whereas poorly chosen weights can degrade performance.
+
+Implementation and relationship to OLS:
+
+* WLS reduces to OLS when all weights are equal; thus OLS is a special case of WLS.  
+* Implementation typically entails reweighting observations and solving the weighted normal equations; many statistical software packages provide direct WLS fitting routines.  
+* It is important to record and use the same weights for prediction and validation to maintain consistency.
+
+Diagnostics and when to consider WLS:
+
+* Residual plots that show changing spread with the predictor or fitted values suggest heteroscedasticity and motivate consideration of WLS.  
+* Even when heteroscedasticity is modest, WLS can improve precision; where heteroscedasticity is severe, it can substantially alter conclusions.
+
+Limitations and cautions:
+
+* Weight specification is critical. If weights do not reflect the actual variance structure, WLS may not improve and can even worsen inference.  
+* When reliable information about the variance structure is unavailable, robust (heteroscedasticity‑consistent) standard errors or other methods may be preferable to poorly specified weighting.  
+* WLS addresses nonconstant variance but does not by itself resolve other model problems such as nonlinearity, omitted variables, or influential outliers.
+
+**Summary**
+
+Weighted Least Squares adapts the least‑squares framework to give more influence to precise observations and less to noisy ones, restoring efficiency when error variances vary across observations. The guiding principle is straightforward: lower variance implies higher weight, and higher variance implies lower weight. Effective use of WLS depends on sensible choices or estimates of the weights and appropriate calculation of standard errors for valid inference.
 
 ---
 

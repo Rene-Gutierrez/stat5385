@@ -53,8 +53,9 @@
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -64,7 +65,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -2331,12 +2332,16 @@ alternatives to doing cross-validation, here are a few of the most relevant ones
 <span id="cb56-76"><a href="simple-linear-regression.html#cb56-76" tabindex="-1"></a>  matMet[, k] <span class="ot">&lt;-</span> metFol</span>
 <span id="cb56-77"><a href="simple-linear-regression.html#cb56-77" tabindex="-1"></a>}</span></code></pre></div>
 <p><img src="_main_files/figure-html/cross-validation-1.png" width="672" /></p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="simple-linear-regression.html#cb57-1" tabindex="-1"></a><span class="co"># Displays the Results of Cross-Validation</span></span>
-<span id="cb57-2"><a href="simple-linear-regression.html#cb57-2" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">colMeans</span>(matMet))</span>
-<span id="cb57-3"><a href="simple-linear-regression.html#cb57-3" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="st">&quot;Model 1&quot;</span>, <span class="st">&quot;Model 2&quot;</span>, <span class="st">&quot;Model 3&quot;</span>, <span class="st">&quot;Model 4&quot;</span>), tab)</span>
-<span id="cb57-4"><a href="simple-linear-regression.html#cb57-4" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(tab, <span class="fu">apply</span>(<span class="at">X =</span> matMet, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> sd))</span>
-<span id="cb57-5"><a href="simple-linear-regression.html#cb57-5" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Model&quot;</span>, <span class="st">&quot;Mean&quot;</span>, <span class="st">&quot;SD&quot;</span>)</span>
-<span id="cb57-6"><a href="simple-linear-regression.html#cb57-6" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="simple-linear-regression.html#cb57-1" tabindex="-1"></a><span class="co"># Box plot of the MSE</span></span>
+<span id="cb57-2"><a href="simple-linear-regression.html#cb57-2" tabindex="-1"></a><span class="fu">boxplot</span>(matMet, <span class="at">outline =</span> <span class="cn">FALSE</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Models&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;MSE&quot;</span>)</span>
+<span id="cb57-3"><a href="simple-linear-regression.html#cb57-3" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">1</span>, <span class="at">at =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;y~x&quot;</span>, <span class="st">&quot;y~log(x)&quot;</span>, <span class="st">&quot;log(y)~x&quot;</span>, <span class="st">&quot;log(y)~log(x)&quot;</span>))</span>
+<span id="cb57-4"><a href="simple-linear-regression.html#cb57-4" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="simple-linear-regression.html#cb57-5" tabindex="-1"></a><span class="co"># Displays the Results of Cross-Validation</span></span>
+<span id="cb57-6"><a href="simple-linear-regression.html#cb57-6" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">colMeans</span>(matMet))</span>
+<span id="cb57-7"><a href="simple-linear-regression.html#cb57-7" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="st">&quot;Model 1&quot;</span>, <span class="st">&quot;Model 2&quot;</span>, <span class="st">&quot;Model 3&quot;</span>, <span class="st">&quot;Model 4&quot;</span>), tab)</span>
+<span id="cb57-8"><a href="simple-linear-regression.html#cb57-8" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(tab, <span class="fu">apply</span>(<span class="at">X =</span> matMet, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> sd))</span>
+<span id="cb57-9"><a href="simple-linear-regression.html#cb57-9" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Model&quot;</span>, <span class="st">&quot;Mean&quot;</span>, <span class="st">&quot;SD&quot;</span>)</span>
+<span id="cb57-10"><a href="simple-linear-regression.html#cb57-10" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2368,19 +2373,19 @@ alternatives to doing cross-validation, here are a few of the most relevant ones
 </tr>
 </tbody>
 </table>
-<p>When performing cross-validation, it is essential to calculate error metrics in the original units of the response variable before any transformation. Transformations like scaling or logging change the scale of the data, which can make errors appear smaller or larger in the transformed units and lead to misleading comparisons.</p>
+<p><img src="_main_files/figure-html/cross-validation-2.png" width="672" />
+When performing cross-validation, it is essential to calculate error metrics in the original units of the response variable before any transformation. Transformations like scaling or logging change the scale of the data, which can make errors appear smaller or larger in the transformed units and lead to misleading comparisons.</p>
 <p>For example, compare the scale of the dependent variable in Models 3 and 4 with those in Models 1 and 2. Since the range of values after transforming in Models 3 and 4 is smaller, the squared errors tend to be smaller simply because of this change, making it unfair to compare these errors to those from Models 1 and 2. Similarly, if income is measured in dollars and then log-transformed, errors in the transformed scale do not directly reflect dollar amounts. To evaluate model performance correctly, predictions should be transformed back to the original units before computing errors or other accuracy metrics.</p>
 <p>Always perform validation in the original units to ensure that results are meaningful and comparable in real-world terms. Keep the transformation parameters consistent for new data, and report errors in the original units for clear, interpretable results.</p>
 <hr />
 </div>
 <div id="weighted-least-squares" class="section level2 hasAnchor" number="4.9">
 <h2><span class="header-section-number">4.9</span> Weighted Least Squares<a href="simple-linear-regression.html#weighted-least-squares" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Weighted Least Squares (WLS) is an extension of ordinary least squares (OLS) used when the assumption of constant variance (homoscedasticity) is violated. In cases of heteroscedasticity (unequal variances), OLS produces inefficient estimates.</p>
-<p>WLS solves this by assigning weights to each observation, giving more importance to data points with lower variance. This leads to more reliable estimates in the presence of heteroscedasticity, making WLS valuable for improving regression models when error variances vary.</p>
-<ul>
-<li><strong>Lower variance</strong> → <strong>Higher weight</strong></li>
-<li><strong>Higher variance</strong> → <strong>Lower weight</strong></li>
-</ul>
+<p>Weighted Least Squares is a generalization of Ordinary Least Squares designed to handle situations in which the assumption of constant error variance is violated. When the variability of the errors differs across observations—i.e., when heteroscedasticity is present—OLS estimators remain unbiased but are no longer the most efficient linear estimators. WLS addresses this inefficiency by incorporating information about the relative precision of individual observations into the fitting procedure.</p>
+<p>Motivation and intuition<br />
+- Heteroscedasticity means some observations are inherently more variable than others. Treating all observations as equally informative gives undue influence to noisy points and reduces overall estimation precision.<br />
+- WLS assigns each observation a weight that reflects its reliability: observations with smaller error variance receive larger weight, and those with larger error variance receive smaller weight. In effect, the method downweights noisy observations and upweights precise ones, producing estimates that place greater trust in the most informative data.<br />
+- In the ideal case, weights are chosen to be inversely related to the true error variances; this makes the weighted estimator the most efficient among linear unbiased estimators under the model.</p>
 <p>In a simple linear regression model with one independent variable, OLS minimizes the sum of squared residuals:</p>
 <p><span class="math display">\[ \min \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
 \]</span></p>
@@ -2437,15 +2442,23 @@ Similarly
   &amp;= -2  \left( \sum_{i=1}^{n} w_i y_i x_i - \beta_0 \sum_{i=1}^{n} w_i x_i - \beta_1 \sum_{i=1}^{n} w_i x_i^2 \right)
     &amp; \\
 \end{align*}\]</span>
-Making them equal to zero, we have:
-<span class="math display">\[ -2  \left( \sum_{i=1}^{n} w_i y_i - \beta_0 \sum_{i=1}^{n} w_i - \beta_1 \sum_{i=1}^{n} w_i x_i \right) = 0 \implies \sum_{i=1}^{n} w_i y_i = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i \tag{1} \]</span>
-and
-<span class="math display">\[ -2  \left( \sum_{i=1}^{n} w_i y_i x_i - \beta_0 \sum_{i=1}^{n} w_i x_i - \beta_1 \sum_{i=1}^{n} w_i x_i^2 \right) = 0 \implies \sum_{i=1}^{n} w_i y_i x_i = \beta_0 \sum_{i=1}^{n} w_i x_i + \beta_1 \sum_{i=1}^{n} w_i x_i^2 \tag{2} \]</span>
-Now we solve the system of two linear equations.
-First, we solve for <span class="math inline">\(\beta_1\)</span> by multiplying equation (1) by <span class="math inline">\(\frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i}\)</span> and subtract it from equation (2) to eliminate <span class="math inline">\(\beta_0\)</span>:
-<span class="math display">\[\begin{align*}
-\sum_{i=1}^{n} w_i y_i
-  &amp; = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i
+Making them equal to zero, we have:</p>
+<p><span class="math display">\[\begin{align*}
+-2  
+  &amp; \left( \sum_{i=1}^{n} w_i y_i - \beta_0 \sum_{i=1}^{n} w_i - \beta_1 \sum_{i=1}^{n} w_i x_i \right) = 0 \\
+  &amp; \implies \sum_{i=1}^{n} w_i y_i = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i \tag{1}
+\end{align*}\]</span></p>
+<p>and</p>
+<p><span class="math display">\[\begin{align*}
+-2  
+  &amp; \left( \sum_{i=1}^{n} w_i y_i x_i - \beta_0 \sum_{i=1}^{n} w_i x_i - \beta_1 \sum_{i=1}^{n} w_i x_i^2 \right) = 0 \\
+  &amp; \implies \sum_{i=1}^{n} w_i y_i x_i = \beta_0 \sum_{i=1}^{n} w_i x_i + \beta_1 \sum_{i=1}^{n} w_i x_i^2 \tag{2}
+\end{align*}\]</span></p>
+<p>Now we solve the system of two linear equations.
+First, we solve for <span class="math inline">\(\beta_1\)</span> by multiplying equation (1) by <span class="math inline">\(\frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i}\)</span> and subtract it from equation (2) to eliminate <span class="math inline">\(\beta_0\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+\sum_{i=1}^{n}
+  &amp; w_i y_i = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i
     &amp; \\
   &amp;\implies \frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i} \sum_{i=1}^{n} w_i y_i = \frac{\sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^n w_i} \left( \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i \right)
     &amp; \\
@@ -2456,13 +2469,45 @@ First, we solve for <span class="math inline">\(\beta_1\)</span> by multiplying 
   &amp;\implies \beta_1 \left( \sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i} \right) = \sum_{i=1}^{n} w_i y_i x_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}
     &amp; \\
   &amp;\implies \beta_1 = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}}
-    &amp; \tag{3}\\
+    &amp; \\
 \end{align*}\]</span>
 Then the weighted estimators for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are:
 <span class="math display">\[\hat{\beta}_1^w = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}},\]</span></p>
 <p><span class="math display">\[\hat{\beta}_0^w = \frac{\sum_{i=1}^{n} w_i y_i - \beta_1 \sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}.\]</span></p>
 </div>
 </details>
+<p>How weights are determined?</p>
+<ul>
+<li>When the error variances are known a priori, weights can be set directly in inverse proportion to those variances.<br />
+</li>
+<li>In practice, true variances are usually unknown. Weights are therefore often based on estimates or proxies for the variances—obtained from repeated measurements, external information, or preliminary residual analysis. Iterative procedures can be used to refine weights if needed.<br />
+</li>
+<li>Choosing appropriate weights is crucial: good weights improve efficiency and inference, whereas poorly chosen weights can degrade performance.</li>
+</ul>
+<p>Implementation and relationship to OLS:</p>
+<ul>
+<li>WLS reduces to OLS when all weights are equal; thus OLS is a special case of WLS.<br />
+</li>
+<li>Implementation typically entails reweighting observations and solving the weighted normal equations; many statistical software packages provide direct WLS fitting routines.<br />
+</li>
+<li>It is important to record and use the same weights for prediction and validation to maintain consistency.</li>
+</ul>
+<p>Diagnostics and when to consider WLS:</p>
+<ul>
+<li>Residual plots that show changing spread with the predictor or fitted values suggest heteroscedasticity and motivate consideration of WLS.<br />
+</li>
+<li>Even when heteroscedasticity is modest, WLS can improve precision; where heteroscedasticity is severe, it can substantially alter conclusions.</li>
+</ul>
+<p>Limitations and cautions:</p>
+<ul>
+<li>Weight specification is critical. If weights do not reflect the actual variance structure, WLS may not improve and can even worsen inference.<br />
+</li>
+<li>When reliable information about the variance structure is unavailable, robust (heteroscedasticity‑consistent) standard errors or other methods may be preferable to poorly specified weighting.<br />
+</li>
+<li>WLS addresses nonconstant variance but does not by itself resolve other model problems such as nonlinearity, omitted variables, or influential outliers.</li>
+</ul>
+<p><strong>Summary</strong></p>
+<p>Weighted Least Squares adapts the least‑squares framework to give more influence to precise observations and less to noisy ones, restoring efficiency when error variances vary across observations. The guiding principle is straightforward: lower variance implies higher weight, and higher variance implies lower weight. Effective use of WLS depends on sensible choices or estimates of the weights and appropriate calculation of standard errors for valid inference.</p>
 <hr />
 </div>
 <div id="model-in-matrix-form" class="section level2 hasAnchor" number="4.10">

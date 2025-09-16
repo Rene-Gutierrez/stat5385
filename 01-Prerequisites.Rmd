@@ -45,9 +45,9 @@ Before diving into the course, it’s important to have a solid understanding of
 
 * [General Math](#general-math)
 * [Linear Algebra](#linear-algebra)
+* [Calculus](#calculus)
 * [Probability](#probability)
 * [Statistics](#statistics)
-* [Calculus](#calculus)
 
 You can check some of the requirements on Chapter 1 of the textbook.
 
@@ -583,7 +583,6 @@ Key calculus topics include:
 * [Gradient](#gradient)
 * [Hessian](#hessian)
 * [Matrix Calculus](#matrix-calculus)
-* Optimization
 
 ### Gradient
 
