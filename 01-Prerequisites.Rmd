@@ -244,7 +244,7 @@ where $\bI$ is the identity matrix, and its diagonal elements are 1, with all of
 3. **Inverse of the Inverse:** $(\bA^{-1})^{-1} = \bA$.
 4. **Transpose of the Inverse:** $(\bA^{-1})' = (\bA')^{-1}$.
 
-#### Special Case 2 by 2 Matrix
+#### Special Case 2 by 2 Matrix {#special-case-2-by-2-matrix}
 
 For a $2 \times 2$ matrix:
 

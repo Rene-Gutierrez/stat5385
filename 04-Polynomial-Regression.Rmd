@@ -1,18 +1,22 @@
 # Polynomial Regression
 
-Polynomial regression is an extension of linear regression where the relationship between the independent variable $x$ and the dependent variable $y$ is modeled as an $n$-th degree polynomial. Instead of fitting a straight line, it fits a curve that can capture more complex patterns in the data.
+Polynomial regression is an extension of linear regression that fits a curve to capture more complex patterns in the data. In practice we still use a linear model in the coefficients, but we model the response as a polynomial function of the predictor.
 
-In polynomial regression, the model takes the form:
+In polynomial regression the model takes the form:
 
 $$
-y = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_k x^k + \epsilon
+y = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_k x^k + e
 $$
 
-Where:
+where
 - $y$ is the dependent variable,
 - $x$ is the independent variable,
-- $\beta_0, \beta_1, \dots, \beta_n$ are the coefficients,
-- $\epsilon$ is the error term.
+- $\beta_0, \beta_1, \dots, \beta_k$ are coefficients,
+- $e$ is the error term.
+
+---
+
+## Motivation
 
 Polynomial regression is useful when the data exhibits a nonlinear trend that cannot be well approximated by a straight line. By increasing the degree of the polynomial, the model can fit more complex patterns, though caution is needed to avoid overfitting.
 
@@ -22,9 +26,36 @@ The underlying process is inherently polynomial.
 A polynomial provides a good approximation for the relationship.
 If you know that the phenomenon you're modeling follows a polynomial function, there's no need to worry about overfitting. You can confidently use the polynomial degree that best fits the known relationship.
 
-However, if you're using polynomial regression to approximate a nonlinear relationship between the independent and dependent variables, be cautious. Overfitting can become a significant issue, particularly outside the range of the data used for model fitting, where predictions can be unreliable.
+### Taylor polynomials and polynomial regression
 
-In the second scenario, it's common to limit the polynomial degree to 2nd or 3rd order to prevent overfitting while still capturing key nonlinear patterns.
+A natural motivation for polynomial regression comes from the idea of **Taylor polynomials**. A smooth function $f(x)$ can be approximated locally (near a point $x_0$) by a polynomial whose coefficients are derivatives of $f$ at $x_0$. The Taylor polynomial of degree $k$ around $x_0$ provides a polynomial that approximates $f(x)$ well *in a neighborhood of $x_0$*.
+
+Translating this idea to regression:
+- We often do not know the true function $f$ relating $x$ to $y$, but we can approximate it locally by a polynomial.
+- Fitting a polynomial regression model is therefore analogous to estimating the coefficients of a Taylor polynomial that approximates the unknown regression function in the region of the data.
+- Because Taylor approximations are *local*, the choice of the expansion point matters: the polynomial is most accurate near that point and less accurate far away. Overfitting can become a significant issue, particularly outside the range of the data used for model fitting, where predictions can be unreliable.
+
+---
+
+## Why use the sample mean as the expansion (center) point?
+
+Since Taylor approximations are local, it is natural to choose an expansion point near the bulk of the observed $x$ values. The **sample mean** $\bar{x}$ is a canonical choice for several reasons:
+
+1. **Local accuracy where data concentrate.**  
+   The polynomial approximation is most accurate near the expansion point. Choosing $x_0 = \bar{x}$ places that point at the center of the observed predictor distribution, so the approximation tends to be good across the typical range of the data rather than skewed toward the extremes.
+
+2. **Interpretability of the intercept.**  
+   When we center $x$ at $\bar{x}$, the intercept $\beta_0$ becomes the model's predicted value at the average predictor: it is an estimate of the mean response at the typical $x$. This often yields a more meaningful intercept than the value at $x=0$ (which may be outside the data range).
+
+3. **Numerical stability and reduced multicollinearity.**  
+   Polynomial terms of raw $x$ are often highly correlated (e.g., $x$ and $x^2$), which inflates condition numbers and makes estimation numerically unstable. Centering (subtracting $\bar{x}$) reduces the correlation between powers of the predictor and typically produces a design matrix with much better numerical properties.
+
+4. **Smaller average approximation error.**  
+   If you think of approximation error averaged over the empirical distribution of $x$, centering at the mean tends to minimize the average distance between $x$ and the expansion point; this makes the Taylor approximation, on average, closer to the true function on the observed data.
+
+---
+
+### Examples
 
 We use our `Burger Data` set, to see an example of using polynomial regression
 to approximate a non-linear relationship. We will use a second degree polynomial
@@ -74,6 +105,73 @@ curve(expr = outRegPol$coefficients[1] + outRegPol$coefficients[2] * x + outRegP
 ```
 
 The second-degree polynomial approximation provides a reasonably good fit to the data. The red line represents the true nonlinear relationship, while the blue line shows the polynomial approximation. However, if we restrict the dataset to prices below $10, the fit noticeably worsens. This demonstrates a limitation of the polynomial model: while it might fit well within certain ranges, it can lead to unrealistic predictions outside those bounds. For instance, the model might predict that burger sales will eventually rise again as prices increase, which contradicts typical market expectations.
+
+```{r poly-reg-burger-centered}
+dat <- read.csv("Burger Data.csv")
+
+x   <- dat$Price
+y   <- dat$Burgers
+xc  <- x - mean(x)
+xc2 <- xc^2
+
+# Check Correlation
+print(paste0("Non centered correlation: ", round(cor(x, x^2), 4)))
+print(paste0("Centered correlation: ",     round(cor(xc, xc^2), 4)))
+
+# Polynomial Regression Fit
+outRegPol <- lm(Burgers ~ Price + I(Price^2), data = dat)
+
+# Polynomial Regression Centered Fit
+outRegPolCen <- lm(y ~ xc + xc2)
+
+# Data Limits
+xmin <- min(dat$Price)
+xmax <- max(dat$Price)
+ymin <- min(dat$Burgers)
+ymax <- max(dat$Burgers)
+
+# Scatter plot
+plot(x = dat$Price,
+     y = dat$Burgers,
+     ylim = c(ymin, ymax),
+     xlim = c(xmin, xmax),
+     xlab = "Price ($)",
+     ylab = "Burgers Sold")
+par(new = TRUE)
+# Plots real non-linear relationship
+curve(expr = 100 - 30 * log(x),
+      from = xmin,
+      to   = xmax,
+      ylim = c(ymin, ymax),
+      xlim = c(xmin, xmax),
+      xlab = "",
+      ylab = "",
+      col  = 'red',
+      lwd  = 2)
+par(new = TRUE)
+# Plots approximated polynomial relationship
+curve(expr = outRegPol$coefficients[1] + outRegPol$coefficients[2] * x + outRegPol$coefficients[3] * x^2,
+      from = xmin,
+      to   = xmax,
+      ylim = c(ymin, ymax),
+      xlim = c(xmin, xmax),
+      xlab = "",
+      ylab = "",
+      col  = 'blue',
+      lwd  = 2)
+par(new = TRUE)
+# Plots approximated polynomial centered relationship
+curve(expr = outRegPolCen$coefficients[1] + outRegPolCen$coefficients[2] * (x - mean(x)) + outRegPolCen$coefficients[3] * (x - mean(x))^2,
+      from = xmin,
+      to   = xmax,
+      ylim = c(ymin, ymax),
+      xlim = c(xmin, xmax),
+      xlab = "",
+      ylab = "",
+      col  = 'green',
+      lwd  = 2)
+```
+
 
 ```{r poly-reg-burger-restricted}
 dat <- read.csv("Burger Data.csv")

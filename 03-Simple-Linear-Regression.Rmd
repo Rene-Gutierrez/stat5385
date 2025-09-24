@@ -2127,7 +2127,7 @@ Weighted Least Squares adapts the least‑squares framework to give more influen
 
 ## Model in Matrix Form
 
-We can specify the same model as in [Model](#model), in matrix form as follows:
+We can specify the same model as in [Model](#slr-model), in matrix form as follows:
 
 $$\by = \bX \bgb + \be$$
 where:
@@ -2135,163 +2135,290 @@ where:
 * $\by={y_1,\ldots,y_n}'$
 * $\be={e_1,\ldots,e_n}'$
 * $\bgb={\beta_0,\beta_1}'$
-* $\bX=[\mathbb{1}_n \bx]$
-* $\mathbb{1}_n={1,\ldots,1}'$ (1 $n$-times).
+* $\bX=\begin{bmatrix}𝟙  & \bx \end{bmatrix}$
+* $𝟙={1,\ldots,1}'$ (1 $n$-times).
 
 In this way we can re-write our minimization problem as follows:
 
-$$ \min \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
-= \min \sum_{i=1}^{n} (\by - \bX \bgb)'(\by - \bX \bgb)$$
+$$ \min_{\bgb} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min_{\bgb} \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
+= \min_{\bgb} \sum_{i=1}^{n} (\by - \bX \bgb)'(\by - \bX \bgb)$$
 equivalent to:
-$$\min \by'\by - \by'\bX\bgb - \bgb'\bX'\by + \bgb'\bX'\bX\bgb$$
+$$\min_{\bgb} Q(\bgb) = \left( \by'\by - \by'\bX\bgb - \bgb'\bX'\by + \bgb'\bX'\bX\bgb \right)$$
 
+```{proposition, prp-lse-matrix-solution}
+The solution to the Least Squres minimization problem in matrix form is given by:
+  $$\hat{\bgb} = \left(\bX' \bX \right)^{-1}\bX'\by$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-lse-matrix-solution}
 The procedure to find the estimators is very similar, working with the gradient
 instead of the partial derivatives:
-
 $$\nabla_\beta Q = \mathbf{0} $$
-then:
-$$-\bX'\by -\bX'\by + 2 \bX' \bX \bgb = \bzero$$
-$$2 \bX' \bX \bgb = 2 \bX'\by$$
-$$\bX' \bX \bgb = \bX'\by$$
-$$\bgb = \left(\bX' \bX \right)^{-1}\bX'\by$$
-
+  Now
+$$\nabla_\beta Q = -\bX'\by -\bX'\by + 2 \bX' \bX \bgb $$
+Then, making the gradient equal to zero, we have:
+\begin{align*}
+\nabla_\beta Q
+  &= 0
+    & \\
+  & \implies -\bX'\by -\bX'\by + 2 \bX' \bX \bgb = 0
+    & \\
+  & \implies 2 \bX' \bX \bgb = 2 \bX'\by
+    & \\
+  & \implies \bX' \bX \bgb = \bX'\by
+    & \\
+  & \implies \bgb = \left(\bX' \bX \right)^{-1}\bX'\by
+\end{align*}
 Notice how we find the estimates much easier. It is also easy to show that a
 minimum is attained by computing the **Hessian Matrix** of $Q$
-
+  The Hessian matrix is given by:
 $$H_Q = 2 \bX' \bX$$
-
-and noticing that:
-
-$$\bX' \bX$$
-
+Notice that
+$$ \bX' \bX$$
 is [positive-definite](#positive-definite-matrix) if $\bx$ is not a constant vector.
+  This shows that the solution is indeed a minimum.
+```
+</details>
 
-We can verify that indeed the estimate $\hat{\bgb}$ is the same as before by
-manually doing the computations for this case:
+```{proposition, prp-lse-matrix-solution-equal}
+The solution to the Least Squres minimization problem in matrix form is given by 
+is equivalent to the solution in of the model expressed in scalar form.
+```
 
-We have:
-
-   $$
-   \mathbf{X} = \begin{bmatrix}
-   1 & x_1 \\
-   1 & x_2 \\
-   \vdots & \vdots \\
-   1 & x_n
-   \end{bmatrix}
-   $$
-
-   $$
-   \mathbf{X}' = \begin{bmatrix}
-   1 & 1 & \cdots & 1 \\
-   x_1 & x_2 & \cdots & x_n
-   \end{bmatrix}
-   $$
-
-   Multiplying $\mathbf{X}'$ by $\mathbf{X}$:
-
-   $$
-   \mathbf{X}' \mathbf{X} = \begin{bmatrix}
-   n & \sum_{i=1}^n x_i \\
-   \sum_{i=1}^n x_i & \sum_{i=1}^n x_i^2
-   \end{bmatrix}
-   $$
-Similarly, we have:
-
-   $$
-   \mathbf{y} = \begin{bmatrix}
-   y_1 \\
-   y_2 \\
-   \vdots \\
-   y_n
-   \end{bmatrix}
-   $$
-
-   Multiplying $\mathbf{X}'$ by $\mathbf{y}$:
-
-   $$
-   \mathbf{X}' \mathbf{y} = \begin{bmatrix}
-   \sum_{i=1}^n y_i \\
-   \sum_{i=1}^n x_i y_i
-   \end{bmatrix}
-   $$
-
-To compute the inverse of $\mathbf{X}'\mathbf{X}$ we have that the determinant is:
-
-   $$
-   |\mathbf{X}' \mathbf{X}|=\text{det}(\mathbf{X}^\top \mathbf{X}) = n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2
-   $$
-
-   Then, the inverse is:
-
-   $$
-   (\mathbf{X}' \mathbf{X})^{-1} = \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2}
-   \begin{bmatrix}
-   \sum_{i=1}^n x_i^2 & - \sum_{i=1}^n x_i \\
-   - \sum_{i=1}^n x_i & n
-   \end{bmatrix}
-   $$
-
-Then, we have that:
-
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-lse-lse-matrix-solution-equal}
+We need to show that each of the components of $\hat{\bgb} = (\hat{\beta}_0,\hat{\beta_1})$
+  are the same of the scalar solution. To do so, we need to go through the matrix
+computations.
 \begin{align*}
-   (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y} 
-      &= \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2}
-   \begin{bmatrix}
-   \sum_{i=1}^n x_i^2 & - \sum_{i=1}^n x_i \\
-   - \sum_{i=1}^n x_i & n
-   \end{bmatrix}
-   \begin{bmatrix}
-   \sum_{i=1}^n y_i \\
-   \sum_{i=1}^n x_i y_i
-   \end{bmatrix} \\
-      &= \begin{bmatrix}
-   \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2} \left( \sum_{i=1}^n x_i^2 \sum_{i=1}^n y_i - \sum_{i=1}^n x_i \sum_{i=1}^n x_i y_i \right) \\
-   \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2} \left( - \sum_{i=1}^n x_i \sum_{i=1}^n y_i + n \sum_{i=1}^n x_i y_i \right)
-   \end{bmatrix} \\
-      &= \begin{bmatrix}
-   \frac{1}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2} \left( n \bar{y} \sum_{i=1}^n x_i^2 - n \bar{x} \sum_{i=1}^n x_i y_i \right) \\
-   \frac{1}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2} \left( - n \bar{x}n \bar{y} + n \sum_{i=1}^n x_i y_i \right)
-   \end{bmatrix} \\ 
-
+\mathbf{X} 
+  &= \begin{bmatrix}
+      1 & x_1 \\
+      1 & x_2 \\
+      \vdots & \vdots \\
+      1 & x_n
+    \end{bmatrix} \\
+  &= \begin{bmatrix}
+      𝟙  & \bx
+     \end{bmatrix} \in \dR^{n \times 2}
 \end{align*}
 
-Now simplifying, the first row, we have that:
+Then we have that:
 
 \begin{align*}
-\frac{n \bar{y} \sum_{i=1}^n x_i^2 - n \bar{x} \sum_{i=1}^n x_i y_i}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2}
-  &= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
-  &= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{y} n\bar{x}^2 + \bar{y} n\bar{x}^2   - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
-  &= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{y} n\bar{x}^2 + \bar{y} n\bar{x}^2   - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
-  &= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \left(\sum_{i=1}^n x_i^2 - n\bar{x}^2 \right) + \bar{x} \left(n\bar{y}\bar{x}   - \sum_{i=1}^n x_i y_i \right) \right) \\
-  &= \bar{y} + \bar{x} \frac{n\bar{y}\bar{x} - \sum_{i=1}^n x_i y_i}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \\
-  &= \bar{y} + \bar{x} \frac{-(n-1)S_{xy}}{(n-1)S_{xx}} \\
-  &= \bar{y} - \beta_1 \bar{x}
+\bX' 
+  &= \begin{bmatrix}
+      𝟙' \\ 
+      \bx'
+     \end{bmatrix} \in \dR^{2 \times n}
 \end{align*}
 
-And simplifying the second row, we have:
+Multiplying $\mathbf{X}'$ by $\mathbf{X}$, we have:
+        
+\begin{align*}
+\bX' \bX
+  &= \begin{bmatrix}
+      𝟙' \\ 
+      \bx'
+     \end{bmatrix} 
+     \begin{bmatrix}
+      𝟙 & \bx
+     \end{bmatrix} \\
+  &= \begin{bmatrix}
+      𝟙'𝟙 & 𝟙'\bx \\ 
+      \bx'𝟙& \bx'\bx
+     \end{bmatrix} \\
+  &= \begin{bmatrix}
+        n                & \sum_{i=1}^n x_i   \\
+        \sum_{i=1}^n x_i & \sum_{i=1}^n x_i^2
+     \end{bmatrix} \\
+  &= \begin{bmatrix}
+        n        & n\bar{x}   \\
+        n\bar{x} & \sum_{i=1}^n x_i^2
+     \end{bmatrix}
+\end{align*}
 
-$$\frac{1}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2} \left( - n \bar{x}n \bar{y} + n \sum_{i=1}^n x_i y_i \right) = \frac{1}{\sum_{i=1}^n x_i^2 - n \bar{x}^2} \left( - n\bar{x}\bar{y} + \sum_{i=1}^n x_i y_i \right) = \frac{S_{xy}}{S_{xx}} = \beta_1$$
+Similarly, we have that:
 
-So both expressions are equivalent.
+\begin{align*}
+\bX' \by
+  &= \begin{bmatrix}
+      𝟙' \\ 
+      \bx'
+     \end{bmatrix}
+     \by \\
+  &= \begin{bmatrix}
+      𝟙'\by \\
+      \bx'\by
+     \end{bmatrix} \\
+  &= \begin{bmatrix}
+      \sum_{i=1}^n y_i \\
+      \sum_{i=1}^n x_i y_i
+     \end{bmatrix} \\
+  &= \begin{bmatrix}
+      n \bar{y} \\
+      \sum_{i=1}^n x_i y_i
+     \end{bmatrix} \\
+\end{align*}
+
+To compute the inverse of $\mathbf{X}'\mathbf{X}$ we use the [Formula for the Inverse of a 2 by 2 Matrix](#special-case-2-by-2-matrix):
+
+$$
+   (\mathbf{X}' \mathbf{X})^{-1} = \frac{1}{n \sum_{i=1}^n x_i^2 - n^2 \left( \bar{x} \right)^2}
+   \begin{bmatrix}
+   \sum_{i=1}^n x_i^2 & - n \bar{x} \\
+   - n \bar{x}        & n
+   \end{bmatrix}
+$$
+
+Combining all of this operations we have that:
+
+\begin{align*}
+\hat{\bgb}
+  &= (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
+    & \\
+  &= \frac{1}{n \sum_{i=1}^n x_i^2 - n^2 \left( \bar{x} \right)^2}
+    \begin{bmatrix}
+      \sum_{i=1}^n x_i^2 & - n \bar{x} \\
+      - n \bar{x}        & n
+    \end{bmatrix}
+    \begin{bmatrix}
+      n \bar{y} \\
+      \sum_{i=1}^n x_i y_i
+    \end{bmatrix} 
+    & \\
+  &= \frac{1}{n \left( \sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2 \right)}
+    \begin{bmatrix}
+      n \bar{y} \sum_{i=1}^n x_i^2 - n \bar{x} \sum_{i=1}^n x_i y_i \\
+      -n^2 \bar{y} \bar{x} + n \sum_{i=1}^n x_i y_i  
+    \end{bmatrix} 
+    & \\
+  &= \frac{1}{n(n-1)S_{xx}}
+    \begin{bmatrix}
+      n \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
+      n \left( \sum_{i=1}^n x_i y_i - n \bar{y} \bar{x} \right)   
+    \end{bmatrix} 
+    & S{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1} \\
+  &= \frac{1}{n(n-1)S_{xx}}
+    \begin{bmatrix}
+      n \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
+      n (n-1) S{xy}   
+    \end{bmatrix} 
+    & S{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
+\end{align*}
+
+Now, notice that:
+\begin{align*}
+  \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i
+    &= \bar{y} \sum_{i=1}^n x_i^2 -n \bar{y}\bar{x}^2 + n \bar{y}\bar{x}^2 - \bar{x} \sum_{i=1}^n x_i y_i
+      & \text{adding 0} \\
+    &= \bar{y} \left(\sum_{i=1}^n x_i^2 -n \bar{x}^2 \right) + \bar{x}\left(n \bar{y}\bar{x} - \sum_{i=1}^n x_i y_i \right)
+      & \\
+    &= \bar{y} (n-1)S_{xx} - \bar{x}(n-1)S_{yx}
+      & S{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1}, S{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
+    &= (n-1)\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right)
+      & S{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1}, S{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
+\end{align*}
+Then we have that:
+\begin{align*}
+\hat{\bgb}
+  &= \frac{1}{n(n-1)S_{xx}}
+    \begin{bmatrix}
+      n (n-1)\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right) \\
+      n (n-1) S{xy}   
+    \end{bmatrix}
+    & \\
+  &= \begin{bmatrix}
+      \frac{n (n-1)\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right)}{n(n-1)S_{xx}} \\
+      \frac{n (n-1) S{xy}}{n(n-1)S_{xx}}   
+    \end{bmatrix}
+    & \\
+  &= \begin{bmatrix}
+      \frac{\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right)}{S_{xx}} \\
+      \frac{S{xy}}{S_{xx}}   
+    \end{bmatrix}
+    & \\
+  &= \begin{bmatrix}
+      \frac{\bar{y} S_{xx}}{S_{xx}} - \frac{S_{yx} \bar{x}}{S_{xx}} \\
+      \hat{\beta}_1   
+    \end{bmatrix}
+    & \hat{\beta}_1 = \frac{S{xy}}{S_{xx}}\\
+  &= \begin{bmatrix}
+      \bar{y} - \bar{x}\frac{S_{yx}}{S_{xx}} \\
+      \hat{\beta}_1   
+    \end{bmatrix}
+    & \\
+  &= \begin{bmatrix}
+      \bar{y} - \bar{x}\hat{\beta}_1 \\
+      \hat{\beta}_1   
+    \end{bmatrix}
+    & \hat{\beta}_1 = \frac{S{xy}}{S_{xx}}\\
+\end{align*}
+```
+</details>
+
+---
 
 ### Weighted Least Squares in Matrix Form
 
 In a similar way we can solve the weighted least squares problem in matrix form
-as follows:
+by noticing that we can write the Weighted Least Squares function as follows:
 
 $$Q_w = \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2 = (\by - \bX \bgb)'\bW (\by - \bX \bgb) = \by'\bW\by -\by'\bW\bX\bgb - \bgb'\bX'\bW\by + \bgb'\bX'\bW\bX \bgb $$
 
-where, $\bW$ is a diagonal matrix with diagonal entries $w_1,\ldots,w_n$.
+where, $\bW$ is a diagonal matrix with diagonal entries $w_1,\ldots,w_n$. That is
 
-then the gradient is:
+$$\bW = \left[\begin{matrix}
+          w_1    & 0      & \ldots & 0      \\
+          0      & w_2    & \ldots & 0      \\
+          0      &   0    & \ldots & 0      \\
+          \vdots & \vdots & \ddots & \vdots \\
+          0      &      0 & \ldots & w_n    
+        \end{matrix} \right]$$
 
-$$ \nabla_\beta Q_w = -2 \bX'\bW\by + 2\bX'\bW\bX \bgb $$
 
-then, making it equal to zero, we have that:
+```{proposition, prp-weighted-least-squares-estimators-matrix, name="Weighted Least Squares Estimators in Matrix Form"}
+The solution to the Weithed Least Squares problem in matrix form:
+$$
+\min_{\bgb} (\by - \bX \bgb)'\bW (\by - \bX \bgb)
+$$
+is given by:
+$$\hat{\bgb}^w = \left(\bX'\bW\bX\right)^{-1}\bX'\bW\by $$
+```
 
-$$ 2\bX'\bW\bX \bgb = 2 \bX'\bW\by$$
-$$\bX'\bW\bX \bgb = \bX'\bW\by $$
-$$\bgb = \left(\bX'\bW\bX\right)^{-1}\bX'\bW\by $$
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-weighted-least-squares-estimators-matrix}
+Note we can write the objective function as:
+  $$Q_w = \by'\bW\by -\by'\bW\bX\bgb - \bgb'\bX'\bW\by + \bgb'\bX'\bW\bX \bgb $$
+then computing the gradient we have that:
+\begin{align*}
+  \nabla_\bgb Q_w
+    &=\frac{d Q_w}{d \bgb} 
+      & \\
+    &= \frac{d}{d \bgb} \left[\by'\bW\by -\by'\bW\bX\bgb - \bgb'\bX'\bW\by + \bgb'\bX'\bW\bX \bgb \right]
+      & \\ 
+    &=  \frac{d}{d \bgb} \by'\bW\by - \frac{d}{d \bgb} \by'\bW\bX\bgb - \frac{d}{d \bgb} \bgb'\bX'\bW\by + \frac{d}{d \bgb} \bgb'\bX'\bW\bX \bgb
+      & \text{lin. derivative} \\
+    &=  0 - \bX'\bW \by - \bX'\bW\by + 2 \bX'\bW\bX \bgb
+      &  \\
+    &=  2 \bX'\bW\bX \bgb - 2 \bX'\bW \by 
+      &  \\
+\end{align*}
+
+Then making the gradient equalt to $0$, we have:
+
+\begin{align*}
+  \nabla_\bgb Q_w
+    &= 0 
+      & \\
+    &\implies 2 \bX'\bW\bX \bgb - 2 \bX'\bW \by
+      & \\
+    &\implies \bX'\bW\bX \bgb = \bX'\bW \by
+      & \\
+    &\implies \bgb = \left(\bX'\bW\bX\right)^{-1} \bX'\bW \by
+      & \\
+\end{align*}
 
 And the Hessian Matrix is given by:
 
@@ -2299,3 +2426,7 @@ $$H_{Q_w} = 2 \bX'\bW\bX$$
 
 which is positive-definite under the same conditions that before and if the entries
 of $\bW$ are positive.
+```
+</details>
+
+Again, using matrix notation, the computations become much more easier.

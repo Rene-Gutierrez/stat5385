@@ -241,7 +241,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.10.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weighted-least-squares-in-matrix-form"><i class="fa fa-check"></i><b>4.10.1</b> Weighted Least Squares in Matrix Form</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="polynomial-regression.html"><a href="polynomial-regression.html"><i class="fa fa-check"></i><b>5</b> Polynomial Regression</a></li>
+<li class="chapter" data-level="5" data-path="polynomial-regression.html"><a href="polynomial-regression.html"><i class="fa fa-check"></i><b>5</b> Polynomial Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#motivation"><i class="fa fa-check"></i><b>5.1</b> Motivation</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#taylor-polynomials-and-polynomial-regression"><i class="fa fa-check"></i><b>5.1.1</b> Taylor polynomials and polynomial regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="polynomial-regression.html"><a href="polynomial-regression.html#why-use-the-sample-mean-as-the-expansion-center-point"><i class="fa fa-check"></i><b>5.2</b> Why use the sample mean as the expansion (center) point?</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#examples-2"><i class="fa fa-check"></i><b>5.2.1</b> Examples</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
@@ -2512,139 +2522,287 @@ Then the weighted estimators for <span class="math inline">\(\beta_0\)</span> an
 </div>
 <div id="model-in-matrix-form" class="section level2 hasAnchor" number="4.10">
 <h2><span class="header-section-number">4.10</span> Model in Matrix Form<a href="simple-linear-regression.html#model-in-matrix-form" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We can specify the same model as in <a href="#model">Model</a>, in matrix form as follows:</p>
+<p>We can specify the same model as in <a href="simple-linear-regression.html#slr-model">Model</a>, in matrix form as follows:</p>
 <p><span class="math display">\[\mathbf{y}= \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}\]</span>
 where:</p>
 <ul>
 <li><span class="math inline">\(\mathbf{y}={y_1,\ldots,y_n}&#39;\)</span></li>
 <li><span class="math inline">\(\mathbf{e}={e_1,\ldots,e_n}&#39;\)</span></li>
 <li><span class="math inline">\(\boldsymbol{\beta}={\beta_0,\beta_1}&#39;\)</span></li>
-<li><span class="math inline">\(\mathbf{X}=[\mathbb{1}_n \mathbf{x}]\)</span></li>
-<li><span class="math inline">\(\mathbb{1}_n={1,\ldots,1}&#39;\)</span> (1 <span class="math inline">\(n\)</span>-times).</li>
+<li><span class="math inline">\(\mathbf{X}=\begin{bmatrix}𝟙  &amp; \mathbf{x}\end{bmatrix}\)</span></li>
+<li><span class="math inline">\(𝟙={1,\ldots,1}&#39;\)</span> (1 <span class="math inline">\(n\)</span>-times).</li>
 </ul>
 <p>In this way we can re-write our minimization problem as follows:</p>
-<p><span class="math display">\[ \min \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
-= \min \sum_{i=1}^{n} (\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})\]</span>
+<p><span class="math display">\[ \min_{\boldsymbol{\beta}} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min_{\boldsymbol{\beta}} \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
+= \min_{\boldsymbol{\beta}} \sum_{i=1}^{n} (\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})\]</span>
 equivalent to:
-<span class="math display">\[\min \mathbf{y}&#39;\mathbf{y}- \mathbf{y}&#39;\mathbf{X}\boldsymbol{\beta}- \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{y}+ \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{X}\boldsymbol{\beta}\]</span></p>
-<p>The procedure to find the estimators is very similar, working with the gradient
-instead of the partial derivatives:</p>
-<p><span class="math display">\[\nabla_\beta Q = \mathbf{0} \]</span>
-then:
-<span class="math display">\[-\mathbf{X}&#39;\mathbf{y}-\mathbf{X}&#39;\mathbf{y}+ 2 \mathbf{X}&#39; \mathbf{X}\boldsymbol{\beta}= \mathbf{0}\]</span>
-<span class="math display">\[2 \mathbf{X}&#39; \mathbf{X}\boldsymbol{\beta}= 2 \mathbf{X}&#39;\mathbf{y}\]</span>
-<span class="math display">\[\mathbf{X}&#39; \mathbf{X}\boldsymbol{\beta}= \mathbf{X}&#39;\mathbf{y}\]</span>
-<span class="math display">\[\boldsymbol{\beta}= \left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\mathbf{X}&#39;\mathbf{y}\]</span></p>
-<p>Notice how we find the estimates much easier. It is also easy to show that a
-minimum is attained by computing the <strong>Hessian Matrix</strong> of <span class="math inline">\(Q\)</span></p>
-<p><span class="math display">\[H_Q = 2 \mathbf{X}&#39; \mathbf{X}\]</span></p>
-<p>and noticing that:</p>
-<p><span class="math display">\[\mathbf{X}&#39; \mathbf{X}\]</span></p>
-<p>is <a href="prerequisites.html#positive-definite-matrix">positive-definite</a> if <span class="math inline">\(\mathbf{x}\)</span> is not a constant vector.</p>
-<p>We can verify that indeed the estimate <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is the same as before by
-manually doing the computations for this case:</p>
-<p>We have:</p>
-<p><span class="math display">\[
-   \mathbf{X} = \begin{bmatrix}
-   1 &amp; x_1 \\
-   1 &amp; x_2 \\
-   \vdots &amp; \vdots \\
-   1 &amp; x_n
-   \end{bmatrix}
-   \]</span></p>
-<p><span class="math display">\[
-   \mathbf{X}&#39; = \begin{bmatrix}
-   1 &amp; 1 &amp; \cdots &amp; 1 \\
-   x_1 &amp; x_2 &amp; \cdots &amp; x_n
-   \end{bmatrix}
-   \]</span></p>
-<p>Multiplying <span class="math inline">\(\mathbf{X}&#39;\)</span> by <span class="math inline">\(\mathbf{X}\)</span>:</p>
-<p><span class="math display">\[
-   \mathbf{X}&#39; \mathbf{X} = \begin{bmatrix}
-   n &amp; \sum_{i=1}^n x_i \\
-   \sum_{i=1}^n x_i &amp; \sum_{i=1}^n x_i^2
-   \end{bmatrix}
-   \]</span>
-Similarly, we have:</p>
-<p><span class="math display">\[
-   \mathbf{y} = \begin{bmatrix}
-   y_1 \\
-   y_2 \\
-   \vdots \\
-   y_n
-   \end{bmatrix}
-   \]</span></p>
-<p>Multiplying <span class="math inline">\(\mathbf{X}&#39;\)</span> by <span class="math inline">\(\mathbf{y}\)</span>:</p>
-<p><span class="math display">\[
-   \mathbf{X}&#39; \mathbf{y} = \begin{bmatrix}
-   \sum_{i=1}^n y_i \\
-   \sum_{i=1}^n x_i y_i
-   \end{bmatrix}
-   \]</span></p>
-<p>To compute the inverse of <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> we have that the determinant is:</p>
-<p><span class="math display">\[
-   |\mathbf{X}&#39; \mathbf{X}|=\text{det}(\mathbf{X}^\top \mathbf{X}) = n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2
-   \]</span></p>
-<p>Then, the inverse is:</p>
-<p><span class="math display">\[
-   (\mathbf{X}&#39; \mathbf{X})^{-1} = \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2}
-   \begin{bmatrix}
-   \sum_{i=1}^n x_i^2 &amp; - \sum_{i=1}^n x_i \\
-   - \sum_{i=1}^n x_i &amp; n
-   \end{bmatrix}
-   \]</span></p>
-<p>Then, we have that:</p>
-<p><span class="math display">\[\begin{align*}
-   (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
-      &amp;= \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2}
-   \begin{bmatrix}
-   \sum_{i=1}^n x_i^2 &amp; - \sum_{i=1}^n x_i \\
-   - \sum_{i=1}^n x_i &amp; n
-   \end{bmatrix}
-   \begin{bmatrix}
-   \sum_{i=1}^n y_i \\
-   \sum_{i=1}^n x_i y_i
-   \end{bmatrix} \\
-      &amp;= \begin{bmatrix}
-   \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2} \left( \sum_{i=1}^n x_i^2 \sum_{i=1}^n y_i - \sum_{i=1}^n x_i \sum_{i=1}^n x_i y_i \right) \\
-   \frac{1}{n \sum_{i=1}^n x_i^2 - \left( \sum_{i=1}^n x_i \right)^2} \left( - \sum_{i=1}^n x_i \sum_{i=1}^n y_i + n \sum_{i=1}^n x_i y_i \right)
-   \end{bmatrix} \\
-      &amp;= \begin{bmatrix}
-   \frac{1}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2} \left( n \bar{y} \sum_{i=1}^n x_i^2 - n \bar{x} \sum_{i=1}^n x_i y_i \right) \\
-   \frac{1}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2} \left( - n \bar{x}n \bar{y} + n \sum_{i=1}^n x_i y_i \right)
-   \end{bmatrix} \\
-
+<span class="math display">\[\min_{\boldsymbol{\beta}} Q(\boldsymbol{\beta}) = \left( \mathbf{y}&#39;\mathbf{y}- \mathbf{y}&#39;\mathbf{X}\boldsymbol{\beta}- \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{y}+ \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{X}\boldsymbol{\beta}\right)\]</span></p>
+<div class="proposition">
+<p><span id="prp:prp-lse-matrix-solution" class="proposition"><strong>Proposition 4.14  </strong></span>The solution to the Least Squres minimization problem in matrix form is given by:
+<span class="math display">\[\hat{\boldsymbol{\beta}} = \left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\mathbf{X}&#39;\mathbf{y}\]</span></p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-14" class="proof"><em>Proof</em>. </span>The procedure to find the estimators is very similar, working with the gradient
+instead of the partial derivatives:
+<span class="math display">\[\nabla_\beta Q = \mathbf{0} \]</span>
+Now
+<span class="math display">\[\nabla_\beta Q = -\mathbf{X}&#39;\mathbf{y}-\mathbf{X}&#39;\mathbf{y}+ 2 \mathbf{X}&#39; \mathbf{X}\boldsymbol{\beta}\]</span>
+Then, making the gradient equal to zero, we have:
+<span class="math display">\[\begin{align*}
+\nabla_\beta Q
+  &amp;= 0
+    &amp; \\
+  &amp; \implies -\mathbf{X}&#39;\mathbf{y}-\mathbf{X}&#39;\mathbf{y}+ 2 \mathbf{X}&#39; \mathbf{X}\boldsymbol{\beta}= 0
+    &amp; \\
+  &amp; \implies 2 \mathbf{X}&#39; \mathbf{X}\boldsymbol{\beta}= 2 \mathbf{X}&#39;\mathbf{y}
+    &amp; \\
+  &amp; \implies \mathbf{X}&#39; \mathbf{X}\boldsymbol{\beta}= \mathbf{X}&#39;\mathbf{y}
+    &amp; \\
+  &amp; \implies \boldsymbol{\beta}= \left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\mathbf{X}&#39;\mathbf{y}
+\end{align*}\]</span>
+Notice how we find the estimates much easier. It is also easy to show that a
+minimum is attained by computing the <strong>Hessian Matrix</strong> of <span class="math inline">\(Q\)</span>
+The Hessian matrix is given by:
+<span class="math display">\[H_Q = 2 \mathbf{X}&#39; \mathbf{X}\]</span>
+Notice that
+<span class="math display">\[ \mathbf{X}&#39; \mathbf{X}\]</span>
+is <a href="prerequisites.html#positive-definite-matrix">positive-definite</a> if <span class="math inline">\(\mathbf{x}\)</span> is not a constant vector.
+This shows that the solution is indeed a minimum.</p>
+</div>
+</details>
+<div class="proposition">
+<p><span id="prp:prp-lse-matrix-solution-equal" class="proposition"><strong>Proposition 4.15  </strong></span>The solution to the Least Squres minimization problem in matrix form is given by
+is equivalent to the solution in of the model expressed in scalar form.</p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-15" class="proof"><em>Proof</em>. </span>We need to show that each of the components of <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\hat{\beta}_0,\hat{\beta_1})\)</span>
+are the same of the scalar solution. To do so, we need to go through the matrix
+computations.
+<span class="math display">\[\begin{align*}
+\mathbf{X}
+  &amp;= \begin{bmatrix}
+      1 &amp; x_1 \\
+      1 &amp; x_2 \\
+      \vdots &amp; \vdots \\
+      1 &amp; x_n
+    \end{bmatrix} \\
+  &amp;= \begin{bmatrix}
+      𝟙  &amp; \mathbf{x}
+     \end{bmatrix} \in \mathbb{R}^{n \times 2}
 \end{align*}\]</span></p>
-<p>Now simplifying, the first row, we have that:</p>
+<p>Then we have that:</p>
 <p><span class="math display">\[\begin{align*}
-\frac{n \bar{y} \sum_{i=1}^n x_i^2 - n \bar{x} \sum_{i=1}^n x_i y_i}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2}
-  &amp;= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
-  &amp;= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{y} n\bar{x}^2 + \bar{y} n\bar{x}^2   - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
-  &amp;= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{y} n\bar{x}^2 + \bar{y} n\bar{x}^2   - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
-  &amp;= \frac{1}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \left( \bar{y} \left(\sum_{i=1}^n x_i^2 - n\bar{x}^2 \right) + \bar{x} \left(n\bar{y}\bar{x}   - \sum_{i=1}^n x_i y_i \right) \right) \\
-  &amp;= \bar{y} + \bar{x} \frac{n\bar{y}\bar{x} - \sum_{i=1}^n x_i y_i}{\sum_{i=1}^n x_i^2 - n\bar{x}^2} \\
-  &amp;= \bar{y} + \bar{x} \frac{-(n-1)S_{xy}}{(n-1)S_{xx}} \\
-  &amp;= \bar{y} - \beta_1 \bar{x}
+\mathbf{X}&#39;
+  &amp;= \begin{bmatrix}
+      𝟙&#39; \\
+      \mathbf{x}&#39;
+     \end{bmatrix} \in \mathbb{R}^{2 \times n}
 \end{align*}\]</span></p>
-<p>And simplifying the second row, we have:</p>
-<p><span class="math display">\[\frac{1}{n \sum_{i=1}^n x_i^2 - (n \bar{x})^2} \left( - n \bar{x}n \bar{y} + n \sum_{i=1}^n x_i y_i \right) = \frac{1}{\sum_{i=1}^n x_i^2 - n \bar{x}^2} \left( - n\bar{x}\bar{y} + \sum_{i=1}^n x_i y_i \right) = \frac{S_{xy}}{S_{xx}} = \beta_1\]</span></p>
-<p>So both expressions are equivalent.</p>
+<p>Multiplying <span class="math inline">\(\mathbf{X}&#39;\)</span> by <span class="math inline">\(\mathbf{X}\)</span>, we have:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{X}&#39; \mathbf{X}
+  &amp;= \begin{bmatrix}
+      𝟙&#39; \\
+      \mathbf{x}&#39;
+     \end{bmatrix}
+     \begin{bmatrix}
+      𝟙 &amp; \mathbf{x}
+     \end{bmatrix} \\
+  &amp;= \begin{bmatrix}
+      𝟙&#39;𝟙 &amp; 𝟙&#39;\mathbf{x}\\
+      \mathbf{x}&#39;𝟙&amp; \mathbf{x}&#39;\mathbf{x}
+     \end{bmatrix} \\
+  &amp;= \begin{bmatrix}
+        n                &amp; \sum_{i=1}^n x_i   \\
+        \sum_{i=1}^n x_i &amp; \sum_{i=1}^n x_i^2
+     \end{bmatrix} \\
+  &amp;= \begin{bmatrix}
+        n        &amp; n\bar{x}   \\
+        n\bar{x} &amp; \sum_{i=1}^n x_i^2
+     \end{bmatrix}
+\end{align*}\]</span></p>
+<p>Similarly, we have that:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{X}&#39; \mathbf{y}
+  &amp;= \begin{bmatrix}
+      𝟙&#39; \\
+      \mathbf{x}&#39;
+     \end{bmatrix}
+     \mathbf{y}\\
+  &amp;= \begin{bmatrix}
+      𝟙&#39;\mathbf{y}\\
+      \mathbf{x}&#39;\mathbf{y}
+     \end{bmatrix} \\
+  &amp;= \begin{bmatrix}
+      \sum_{i=1}^n y_i \\
+      \sum_{i=1}^n x_i y_i
+     \end{bmatrix} \\
+  &amp;= \begin{bmatrix}
+      n \bar{y} \\
+      \sum_{i=1}^n x_i y_i
+     \end{bmatrix} \\
+\end{align*}\]</span></p>
+<p>To compute the inverse of <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> we use the <a href="prerequisites.html#special-case-2-by-2-matrix">Formula for the Inverse of a 2 by 2 Matrix</a>:</p>
+<p><span class="math display">\[
+   (\mathbf{X}&#39; \mathbf{X})^{-1} = \frac{1}{n \sum_{i=1}^n x_i^2 - n^2 \left( \bar{x} \right)^2}
+   \begin{bmatrix}
+   \sum_{i=1}^n x_i^2 &amp; - n \bar{x} \\
+   - n \bar{x}        &amp; n
+   \end{bmatrix}
+\]</span></p>
+<p>Combining all of this operations we have that:</p>
+<p><span class="math display">\[\begin{align*}
+\hat{\boldsymbol{\beta}}
+  &amp;= (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
+    &amp; \\
+  &amp;= \frac{1}{n \sum_{i=1}^n x_i^2 - n^2 \left( \bar{x} \right)^2}
+    \begin{bmatrix}
+      \sum_{i=1}^n x_i^2 &amp; - n \bar{x} \\
+      - n \bar{x}        &amp; n
+    \end{bmatrix}
+    \begin{bmatrix}
+      n \bar{y} \\
+      \sum_{i=1}^n x_i y_i
+    \end{bmatrix}
+    &amp; \\
+  &amp;= \frac{1}{n \left( \sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2 \right)}
+    \begin{bmatrix}
+      n \bar{y} \sum_{i=1}^n x_i^2 - n \bar{x} \sum_{i=1}^n x_i y_i \\
+      -n^2 \bar{y} \bar{x} + n \sum_{i=1}^n x_i y_i  
+    \end{bmatrix}
+    &amp; \\
+  &amp;= \frac{1}{n(n-1)S_{xx}}
+    \begin{bmatrix}
+      n \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
+      n \left( \sum_{i=1}^n x_i y_i - n \bar{y} \bar{x} \right)   
+    \end{bmatrix}
+    &amp; S{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1} \\
+  &amp;= \frac{1}{n(n-1)S_{xx}}
+    \begin{bmatrix}
+      n \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
+      n (n-1) S{xy}   
+    \end{bmatrix}
+    &amp; S{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
+\end{align*}\]</span></p>
+<p>Now, notice that:
+<span class="math display">\[\begin{align*}
+  \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i
+    &amp;= \bar{y} \sum_{i=1}^n x_i^2 -n \bar{y}\bar{x}^2 + n \bar{y}\bar{x}^2 - \bar{x} \sum_{i=1}^n x_i y_i
+      &amp; \text{adding 0} \\
+    &amp;= \bar{y} \left(\sum_{i=1}^n x_i^2 -n \bar{x}^2 \right) + \bar{x}\left(n \bar{y}\bar{x} - \sum_{i=1}^n x_i y_i \right)
+      &amp; \\
+    &amp;= \bar{y} (n-1)S_{xx} - \bar{x}(n-1)S_{yx}
+      &amp; S{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1}, S{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
+    &amp;= (n-1)\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right)
+      &amp; S{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1}, S{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
+\end{align*}\]</span>
+Then we have that:
+<span class="math display">\[\begin{align*}
+\hat{\boldsymbol{\beta}}
+  &amp;= \frac{1}{n(n-1)S_{xx}}
+    \begin{bmatrix}
+      n (n-1)\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right) \\
+      n (n-1) S{xy}   
+    \end{bmatrix}
+    &amp; \\
+  &amp;= \begin{bmatrix}
+      \frac{n (n-1)\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right)}{n(n-1)S_{xx}} \\
+      \frac{n (n-1) S{xy}}{n(n-1)S_{xx}}   
+    \end{bmatrix}
+    &amp; \\
+  &amp;= \begin{bmatrix}
+      \frac{\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right)}{S_{xx}} \\
+      \frac{S{xy}}{S_{xx}}   
+    \end{bmatrix}
+    &amp; \\
+  &amp;= \begin{bmatrix}
+      \frac{\bar{y} S_{xx}}{S_{xx}} - \frac{S_{yx} \bar{x}}{S_{xx}} \\
+      \hat{\beta}_1   
+    \end{bmatrix}
+    &amp; \hat{\beta}_1 = \frac{S{xy}}{S_{xx}}\\
+  &amp;= \begin{bmatrix}
+      \bar{y} - \bar{x}\frac{S_{yx}}{S_{xx}} \\
+      \hat{\beta}_1   
+    \end{bmatrix}
+    &amp; \\
+  &amp;= \begin{bmatrix}
+      \bar{y} - \bar{x}\hat{\beta}_1 \\
+      \hat{\beta}_1   
+    \end{bmatrix}
+    &amp; \hat{\beta}_1 = \frac{S{xy}}{S_{xx}}\\
+\end{align*}\]</span></p>
+</div>
+</details>
+<hr />
 <div id="weighted-least-squares-in-matrix-form" class="section level3 hasAnchor" number="4.10.1">
 <h3><span class="header-section-number">4.10.1</span> Weighted Least Squares in Matrix Form<a href="simple-linear-regression.html#weighted-least-squares-in-matrix-form" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>In a similar way we can solve the weighted least squares problem in matrix form
-as follows:</p>
+by noticing that we can write the Weighted Least Squares function as follows:</p>
 <p><span class="math display">\[Q_w = \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2 = (\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;\mathbf{W}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) = \mathbf{y}&#39;\mathbf{W}\mathbf{y}-\mathbf{y}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}- \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{W}\mathbf{y}+ \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}\]</span></p>
-<p>where, <span class="math inline">\(\mathbf{W}\)</span> is a diagonal matrix with diagonal entries <span class="math inline">\(w_1,\ldots,w_n\)</span>.</p>
-<p>then the gradient is:</p>
-<p><span class="math display">\[ \nabla_\beta Q_w = -2 \mathbf{X}&#39;\mathbf{W}\mathbf{y}+ 2\mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}\]</span></p>
-<p>then, making it equal to zero, we have that:</p>
-<p><span class="math display">\[ 2\mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}= 2 \mathbf{X}&#39;\mathbf{W}\mathbf{y}\]</span>
-<span class="math display">\[\mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}= \mathbf{X}&#39;\mathbf{W}\mathbf{y}\]</span>
-<span class="math display">\[\boldsymbol{\beta}= \left(\mathbf{X}&#39;\mathbf{W}\mathbf{X}\right)^{-1}\mathbf{X}&#39;\mathbf{W}\mathbf{y}\]</span></p>
+<p>where, <span class="math inline">\(\mathbf{W}\)</span> is a diagonal matrix with diagonal entries <span class="math inline">\(w_1,\ldots,w_n\)</span>. That is</p>
+<p><span class="math display">\[\mathbf{W}= \left[\begin{matrix}
+          w_1    &amp; 0      &amp; \ldots &amp; 0      \\
+          0      &amp; w_2    &amp; \ldots &amp; 0      \\
+          0      &amp;   0    &amp; \ldots &amp; 0      \\
+          \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+          0      &amp;      0 &amp; \ldots &amp; w_n    
+        \end{matrix} \right]\]</span></p>
+<div class="proposition">
+<p><span id="prp:prp-weighted-least-squares-estimators-matrix" class="proposition"><strong>Proposition 4.16  (Weighted Least Squares Estimators in Matrix Form) </strong></span>The solution to the Weithed Least Squares problem in matrix form:
+<span class="math display">\[
+\min_{\boldsymbol{\beta}} (\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;\mathbf{W}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})
+\]</span>
+is given by:
+<span class="math display">\[\hat{\boldsymbol{\beta}}^w = \left(\mathbf{X}&#39;\mathbf{W}\mathbf{X}\right)^{-1}\mathbf{X}&#39;\mathbf{W}\mathbf{y}\]</span></p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-16" class="proof"><em>Proof</em>. </span>Note we can write the objective function as:
+<span class="math display">\[Q_w = \mathbf{y}&#39;\mathbf{W}\mathbf{y}-\mathbf{y}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}- \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{W}\mathbf{y}+ \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}\]</span>
+then computing the gradient we have that:
+<span class="math display">\[\begin{align*}
+  \nabla_\boldsymbol{\beta}Q_w
+    &amp;=\frac{d Q_w}{d \boldsymbol{\beta}}
+      &amp; \\
+    &amp;= \frac{d}{d \boldsymbol{\beta}} \left[\mathbf{y}&#39;\mathbf{W}\mathbf{y}-\mathbf{y}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}- \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{W}\mathbf{y}+ \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}\right]
+      &amp; \\
+    &amp;=  \frac{d}{d \boldsymbol{\beta}} \mathbf{y}&#39;\mathbf{W}\mathbf{y}- \frac{d}{d \boldsymbol{\beta}} \mathbf{y}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}- \frac{d}{d \boldsymbol{\beta}} \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{W}\mathbf{y}+ \frac{d}{d \boldsymbol{\beta}} \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}
+      &amp; \text{lin. derivative} \\
+    &amp;=  0 - \mathbf{X}&#39;\mathbf{W}\mathbf{y}- \mathbf{X}&#39;\mathbf{W}\mathbf{y}+ 2 \mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}
+      &amp;  \\
+    &amp;=  2 \mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}- 2 \mathbf{X}&#39;\mathbf{W}\mathbf{y}
+      &amp;  \\
+\end{align*}\]</span></p>
+<p>Then making the gradient equalt to <span class="math inline">\(0\)</span>, we have:</p>
+<p><span class="math display">\[\begin{align*}
+  \nabla_\boldsymbol{\beta}Q_w
+    &amp;= 0
+      &amp; \\
+    &amp;\implies 2 \mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}- 2 \mathbf{X}&#39;\mathbf{W}\mathbf{y}
+      &amp; \\
+    &amp;\implies \mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}= \mathbf{X}&#39;\mathbf{W}\mathbf{y}
+      &amp; \\
+    &amp;\implies \boldsymbol{\beta}= \left(\mathbf{X}&#39;\mathbf{W}\mathbf{X}\right)^{-1} \mathbf{X}&#39;\mathbf{W}\mathbf{y}
+      &amp; \\
+\end{align*}\]</span></p>
 <p>And the Hessian Matrix is given by:</p>
 <p><span class="math display">\[H_{Q_w} = 2 \mathbf{X}&#39;\mathbf{W}\mathbf{X}\]</span></p>
 <p>which is positive-definite under the same conditions that before and if the entries
 of <span class="math inline">\(\mathbf{W}\)</span> are positive.</p>
+</div>
+</details>
+<p>Again, using matrix notation, the computations become much more easier.</p>
 
 </div>
 </div>

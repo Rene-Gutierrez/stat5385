@@ -19,6 +19,9 @@ prp:prp-coefficient-of-determmination
 prp:prp-coefficient-of-determmination-correlation
 cor:prp-coefficient-of-determmination-0-1
 prp:prp-weighted-least-squares-estimators
+prp:prp-lse-matrix-solution
+prp:prp-lse-matrix-solution-equal
+prp:prp-weighted-least-squares-estimators-matrix
 stat-53856385-fall-2025
 calendar
 important-dates
@@ -167,6 +170,10 @@ weighted-least-squares
 model-in-matrix-form
 weighted-least-squares-in-matrix-form
 polynomial-regression
+motivation
+taylor-polynomials-and-polynomial-regression
+why-use-the-sample-mean-as-the-expansion-center-point
+examples-2
 multiple-linear-regression
 introduction-1
 example-9

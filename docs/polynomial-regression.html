@@ -241,7 +241,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.10.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weighted-least-squares-in-matrix-form"><i class="fa fa-check"></i><b>4.10.1</b> Weighted Least Squares in Matrix Form</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="polynomial-regression.html"><a href="polynomial-regression.html"><i class="fa fa-check"></i><b>5</b> Polynomial Regression</a></li>
+<li class="chapter" data-level="5" data-path="polynomial-regression.html"><a href="polynomial-regression.html"><i class="fa fa-check"></i><b>5</b> Polynomial Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#motivation"><i class="fa fa-check"></i><b>5.1</b> Motivation</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#taylor-polynomials-and-polynomial-regression"><i class="fa fa-check"></i><b>5.1.1</b> Taylor polynomials and polynomial regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="polynomial-regression.html"><a href="polynomial-regression.html#why-use-the-sample-mean-as-the-expansion-center-point"><i class="fa fa-check"></i><b>5.2</b> Why use the sample mean as the expansion (center) point?</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#examples-2"><i class="fa fa-check"></i><b>5.2.1</b> Examples</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
@@ -344,23 +354,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="polynomial-regression" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">5</span> Polynomial Regression<a href="polynomial-regression.html#polynomial-regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Polynomial regression is an extension of linear regression where the relationship between the independent variable <span class="math inline">\(x\)</span> and the dependent variable <span class="math inline">\(y\)</span> is modeled as an <span class="math inline">\(n\)</span>-th degree polynomial. Instead of fitting a straight line, it fits a curve that can capture more complex patterns in the data.</p>
-<p>In polynomial regression, the model takes the form:</p>
+<p>Polynomial regression is an extension of linear regression that fits a curve to capture more complex patterns in the data. In practice we still use a linear model in the coefficients, but we model the response as a polynomial function of the predictor.</p>
+<p>In polynomial regression the model takes the form:</p>
 <p><span class="math display">\[
-y = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_k x^k + \epsilon
+y = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_k x^k + e
 \]</span></p>
-<p>Where:
+<p>where
 - <span class="math inline">\(y\)</span> is the dependent variable,
 - <span class="math inline">\(x\)</span> is the independent variable,
-- <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_n\)</span> are the coefficients,
-- <span class="math inline">\(\epsilon\)</span> is the error term.</p>
+- <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_k\)</span> are coefficients,
+- <span class="math inline">\(e\)</span> is the error term.</p>
+<hr />
+<div id="motivation" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Motivation<a href="polynomial-regression.html#motivation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Polynomial regression is useful when the data exhibits a nonlinear trend that cannot be well approximated by a straight line. By increasing the degree of the polynomial, the model can fit more complex patterns, though caution is needed to avoid overfitting.</p>
 <p>There are two main scenarios for using polynomial regression:</p>
 <p>The underlying process is inherently polynomial.
 A polynomial provides a good approximation for the relationship.
 If you know that the phenomenon you’re modeling follows a polynomial function, there’s no need to worry about overfitting. You can confidently use the polynomial degree that best fits the known relationship.</p>
-<p>However, if you’re using polynomial regression to approximate a nonlinear relationship between the independent and dependent variables, be cautious. Overfitting can become a significant issue, particularly outside the range of the data used for model fitting, where predictions can be unreliable.</p>
-<p>In the second scenario, it’s common to limit the polynomial degree to 2nd or 3rd order to prevent overfitting while still capturing key nonlinear patterns.</p>
+<div id="taylor-polynomials-and-polynomial-regression" class="section level3 hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Taylor polynomials and polynomial regression<a href="polynomial-regression.html#taylor-polynomials-and-polynomial-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A natural motivation for polynomial regression comes from the idea of <strong>Taylor polynomials</strong>. A smooth function <span class="math inline">\(f(x)\)</span> can be approximated locally (near a point <span class="math inline">\(x_0\)</span>) by a polynomial whose coefficients are derivatives of <span class="math inline">\(f\)</span> at <span class="math inline">\(x_0\)</span>. The Taylor polynomial of degree <span class="math inline">\(k\)</span> around <span class="math inline">\(x_0\)</span> provides a polynomial that approximates <span class="math inline">\(f(x)\)</span> well <em>in a neighborhood of <span class="math inline">\(x_0\)</span></em>.</p>
+<p>Translating this idea to regression:
+- We often do not know the true function <span class="math inline">\(f\)</span> relating <span class="math inline">\(x\)</span> to <span class="math inline">\(y\)</span>, but we can approximate it locally by a polynomial.
+- Fitting a polynomial regression model is therefore analogous to estimating the coefficients of a Taylor polynomial that approximates the unknown regression function in the region of the data.
+- Because Taylor approximations are <em>local</em>, the choice of the expansion point matters: the polynomial is most accurate near that point and less accurate far away. Overfitting can become a significant issue, particularly outside the range of the data used for model fitting, where predictions can be unreliable.</p>
+<hr />
+</div>
+</div>
+<div id="why-use-the-sample-mean-as-the-expansion-center-point" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Why use the sample mean as the expansion (center) point?<a href="polynomial-regression.html#why-use-the-sample-mean-as-the-expansion-center-point" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Since Taylor approximations are local, it is natural to choose an expansion point near the bulk of the observed <span class="math inline">\(x\)</span> values. The <strong>sample mean</strong> <span class="math inline">\(\bar{x}\)</span> is a canonical choice for several reasons:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Local accuracy where data concentrate.</strong><br />
+The polynomial approximation is most accurate near the expansion point. Choosing <span class="math inline">\(x_0 = \bar{x}\)</span> places that point at the center of the observed predictor distribution, so the approximation tends to be good across the typical range of the data rather than skewed toward the extremes.</p></li>
+<li><p><strong>Interpretability of the intercept.</strong><br />
+When we center <span class="math inline">\(x\)</span> at <span class="math inline">\(\bar{x}\)</span>, the intercept <span class="math inline">\(\beta_0\)</span> becomes the model’s predicted value at the average predictor: it is an estimate of the mean response at the typical <span class="math inline">\(x\)</span>. This often yields a more meaningful intercept than the value at <span class="math inline">\(x=0\)</span> (which may be outside the data range).</p></li>
+<li><p><strong>Numerical stability and reduced multicollinearity.</strong><br />
+Polynomial terms of raw <span class="math inline">\(x\)</span> are often highly correlated (e.g., <span class="math inline">\(x\)</span> and <span class="math inline">\(x^2\)</span>), which inflates condition numbers and makes estimation numerically unstable. Centering (subtracting <span class="math inline">\(\bar{x}\)</span>) reduces the correlation between powers of the predictor and typically produces a design matrix with much better numerical properties.</p></li>
+<li><p><strong>Smaller average approximation error.</strong><br />
+If you think of approximation error averaged over the empirical distribution of <span class="math inline">\(x\)</span>, centering at the mean tends to minimize the average distance between <span class="math inline">\(x\)</span> and the expansion point; this makes the Taylor approximation, on average, closer to the true function on the observed data.</p></li>
+</ol>
+<hr />
+<div id="examples-2" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Examples<a href="polynomial-regression.html#examples-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We use our <code>Burger Data</code> set, to see an example of using polynomial regression
 to approximate a non-linear relationship. We will use a second degree polynomial
 to fit the data.</p>
@@ -408,53 +445,118 @@ to fit the data.</p>
 <p>The second-degree polynomial approximation provides a reasonably good fit to the data. The red line represents the true nonlinear relationship, while the blue line shows the polynomial approximation. However, if we restrict the dataset to prices below $10, the fit noticeably worsens. This demonstrates a limitation of the polynomial model: while it might fit well within certain ranges, it can lead to unrealistic predictions outside those bounds. For instance, the model might predict that burger sales will eventually rise again as prices increase, which contradicts typical market expectations.</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="polynomial-regression.html#cb59-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Burger Data.csv&quot;</span>)</span>
 <span id="cb59-2"><a href="polynomial-regression.html#cb59-2" tabindex="-1"></a></span>
-<span id="cb59-3"><a href="polynomial-regression.html#cb59-3" tabindex="-1"></a><span class="co"># Select only Prices bellow 10 dollars</span></span>
-<span id="cb59-4"><a href="polynomial-regression.html#cb59-4" tabindex="-1"></a>sel <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price <span class="sc">&lt;</span> <span class="dv">10</span></span>
-<span id="cb59-5"><a href="polynomial-regression.html#cb59-5" tabindex="-1"></a></span>
-<span id="cb59-6"><a href="polynomial-regression.html#cb59-6" tabindex="-1"></a>datRes <span class="ot">&lt;-</span> dat[sel, ]</span>
+<span id="cb59-3"><a href="polynomial-regression.html#cb59-3" tabindex="-1"></a>x   <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price</span>
+<span id="cb59-4"><a href="polynomial-regression.html#cb59-4" tabindex="-1"></a>y   <span class="ot">&lt;-</span> dat<span class="sc">$</span>Burgers</span>
+<span id="cb59-5"><a href="polynomial-regression.html#cb59-5" tabindex="-1"></a>xc  <span class="ot">&lt;-</span> x <span class="sc">-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb59-6"><a href="polynomial-regression.html#cb59-6" tabindex="-1"></a>xc2 <span class="ot">&lt;-</span> xc<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb59-7"><a href="polynomial-regression.html#cb59-7" tabindex="-1"></a></span>
-<span id="cb59-8"><a href="polynomial-regression.html#cb59-8" tabindex="-1"></a><span class="co"># Polynomial Regression Fit</span></span>
-<span id="cb59-9"><a href="polynomial-regression.html#cb59-9" tabindex="-1"></a>outRegPolRes <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> datRes)</span>
-<span id="cb59-10"><a href="polynomial-regression.html#cb59-10" tabindex="-1"></a></span>
-<span id="cb59-11"><a href="polynomial-regression.html#cb59-11" tabindex="-1"></a><span class="co"># Data Limits</span></span>
-<span id="cb59-12"><a href="polynomial-regression.html#cb59-12" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Price)</span>
-<span id="cb59-13"><a href="polynomial-regression.html#cb59-13" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Price)</span>
-<span id="cb59-14"><a href="polynomial-regression.html#cb59-14" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Burgers)</span>
-<span id="cb59-15"><a href="polynomial-regression.html#cb59-15" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Burgers)</span>
-<span id="cb59-16"><a href="polynomial-regression.html#cb59-16" tabindex="-1"></a></span>
-<span id="cb59-17"><a href="polynomial-regression.html#cb59-17" tabindex="-1"></a><span class="co"># Scatter plot</span></span>
-<span id="cb59-18"><a href="polynomial-regression.html#cb59-18" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Price,</span>
-<span id="cb59-19"><a href="polynomial-regression.html#cb59-19" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Burgers,</span>
-<span id="cb59-20"><a href="polynomial-regression.html#cb59-20" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
-<span id="cb59-21"><a href="polynomial-regression.html#cb59-21" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
-<span id="cb59-22"><a href="polynomial-regression.html#cb59-22" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
-<span id="cb59-23"><a href="polynomial-regression.html#cb59-23" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Burgers Sold&quot;</span>,</span>
-<span id="cb59-24"><a href="polynomial-regression.html#cb59-24" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Polynomial fit with Restricted data (Price &lt; 10)&quot;</span>)</span>
-<span id="cb59-25"><a href="polynomial-regression.html#cb59-25" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb59-26"><a href="polynomial-regression.html#cb59-26" tabindex="-1"></a><span class="co"># Plots real non-linear relationship</span></span>
-<span id="cb59-27"><a href="polynomial-regression.html#cb59-27" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> <span class="dv">100</span> <span class="sc">-</span> <span class="dv">30</span> <span class="sc">*</span> <span class="fu">log</span>(x),</span>
-<span id="cb59-28"><a href="polynomial-regression.html#cb59-28" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
-<span id="cb59-29"><a href="polynomial-regression.html#cb59-29" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
-<span id="cb59-30"><a href="polynomial-regression.html#cb59-30" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
-<span id="cb59-31"><a href="polynomial-regression.html#cb59-31" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
-<span id="cb59-32"><a href="polynomial-regression.html#cb59-32" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb59-33"><a href="polynomial-regression.html#cb59-33" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb59-34"><a href="polynomial-regression.html#cb59-34" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb59-35"><a href="polynomial-regression.html#cb59-35" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
-<span id="cb59-36"><a href="polynomial-regression.html#cb59-36" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb59-37"><a href="polynomial-regression.html#cb59-37" tabindex="-1"></a><span class="co"># Plots approximated polynomial relationship</span></span>
-<span id="cb59-38"><a href="polynomial-regression.html#cb59-38" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> x<span class="sc">^</span><span class="dv">2</span>,</span>
-<span id="cb59-39"><a href="polynomial-regression.html#cb59-39" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
-<span id="cb59-40"><a href="polynomial-regression.html#cb59-40" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
-<span id="cb59-41"><a href="polynomial-regression.html#cb59-41" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
-<span id="cb59-42"><a href="polynomial-regression.html#cb59-42" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
-<span id="cb59-43"><a href="polynomial-regression.html#cb59-43" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb59-44"><a href="polynomial-regression.html#cb59-44" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb59-45"><a href="polynomial-regression.html#cb59-45" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;blue&#39;</span>,</span>
-<span id="cb59-46"><a href="polynomial-regression.html#cb59-46" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span></code></pre></div>
+<span id="cb59-8"><a href="polynomial-regression.html#cb59-8" tabindex="-1"></a><span class="co"># Check Correlation</span></span>
+<span id="cb59-9"><a href="polynomial-regression.html#cb59-9" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Non centered correlation: &quot;</span>, <span class="fu">round</span>(<span class="fu">cor</span>(x, x<span class="sc">^</span><span class="dv">2</span>), <span class="dv">4</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;Non centered correlation: 0.971&quot;</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="polynomial-regression.html#cb61-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Centered correlation: &quot;</span>,     <span class="fu">round</span>(<span class="fu">cor</span>(xc, xc<span class="sc">^</span><span class="dv">2</span>), <span class="dv">4</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;Centered correlation: 0.2083&quot;</code></pre>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="polynomial-regression.html#cb63-1" tabindex="-1"></a><span class="co"># Polynomial Regression Fit</span></span>
+<span id="cb63-2"><a href="polynomial-regression.html#cb63-2" tabindex="-1"></a>outRegPol <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> dat)</span>
+<span id="cb63-3"><a href="polynomial-regression.html#cb63-3" tabindex="-1"></a></span>
+<span id="cb63-4"><a href="polynomial-regression.html#cb63-4" tabindex="-1"></a><span class="co"># Polynomial Regression Centered Fit</span></span>
+<span id="cb63-5"><a href="polynomial-regression.html#cb63-5" tabindex="-1"></a>outRegPolCen <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> xc <span class="sc">+</span> xc2)</span>
+<span id="cb63-6"><a href="polynomial-regression.html#cb63-6" tabindex="-1"></a></span>
+<span id="cb63-7"><a href="polynomial-regression.html#cb63-7" tabindex="-1"></a><span class="co"># Data Limits</span></span>
+<span id="cb63-8"><a href="polynomial-regression.html#cb63-8" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb63-9"><a href="polynomial-regression.html#cb63-9" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb63-10"><a href="polynomial-regression.html#cb63-10" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb63-11"><a href="polynomial-regression.html#cb63-11" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb63-12"><a href="polynomial-regression.html#cb63-12" tabindex="-1"></a></span>
+<span id="cb63-13"><a href="polynomial-regression.html#cb63-13" tabindex="-1"></a><span class="co"># Scatter plot</span></span>
+<span id="cb63-14"><a href="polynomial-regression.html#cb63-14" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Price,</span>
+<span id="cb63-15"><a href="polynomial-regression.html#cb63-15" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Burgers,</span>
+<span id="cb63-16"><a href="polynomial-regression.html#cb63-16" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb63-17"><a href="polynomial-regression.html#cb63-17" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb63-18"><a href="polynomial-regression.html#cb63-18" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
+<span id="cb63-19"><a href="polynomial-regression.html#cb63-19" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Burgers Sold&quot;</span>)</span>
+<span id="cb63-20"><a href="polynomial-regression.html#cb63-20" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb63-21"><a href="polynomial-regression.html#cb63-21" tabindex="-1"></a><span class="co"># Plots real non-linear relationship</span></span>
+<span id="cb63-22"><a href="polynomial-regression.html#cb63-22" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> <span class="dv">100</span> <span class="sc">-</span> <span class="dv">30</span> <span class="sc">*</span> <span class="fu">log</span>(x),</span>
+<span id="cb63-23"><a href="polynomial-regression.html#cb63-23" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb63-24"><a href="polynomial-regression.html#cb63-24" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb63-25"><a href="polynomial-regression.html#cb63-25" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb63-26"><a href="polynomial-regression.html#cb63-26" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb63-27"><a href="polynomial-regression.html#cb63-27" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb63-28"><a href="polynomial-regression.html#cb63-28" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb63-29"><a href="polynomial-regression.html#cb63-29" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb63-30"><a href="polynomial-regression.html#cb63-30" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
+<span id="cb63-31"><a href="polynomial-regression.html#cb63-31" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb63-32"><a href="polynomial-regression.html#cb63-32" tabindex="-1"></a><span class="co"># Plots approximated polynomial relationship</span></span>
+<span id="cb63-33"><a href="polynomial-regression.html#cb63-33" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> x<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb63-34"><a href="polynomial-regression.html#cb63-34" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb63-35"><a href="polynomial-regression.html#cb63-35" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb63-36"><a href="polynomial-regression.html#cb63-36" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb63-37"><a href="polynomial-regression.html#cb63-37" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb63-38"><a href="polynomial-regression.html#cb63-38" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb63-39"><a href="polynomial-regression.html#cb63-39" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb63-40"><a href="polynomial-regression.html#cb63-40" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;blue&#39;</span>,</span>
+<span id="cb63-41"><a href="polynomial-regression.html#cb63-41" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
+<span id="cb63-42"><a href="polynomial-regression.html#cb63-42" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb63-43"><a href="polynomial-regression.html#cb63-43" tabindex="-1"></a><span class="co"># Plots approximated polynomial centered relationship</span></span>
+<span id="cb63-44"><a href="polynomial-regression.html#cb63-44" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> outRegPolCen<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outRegPolCen<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> (x <span class="sc">-</span> <span class="fu">mean</span>(x)) <span class="sc">+</span> outRegPolCen<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> (x <span class="sc">-</span> <span class="fu">mean</span>(x))<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb63-45"><a href="polynomial-regression.html#cb63-45" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb63-46"><a href="polynomial-regression.html#cb63-46" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb63-47"><a href="polynomial-regression.html#cb63-47" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb63-48"><a href="polynomial-regression.html#cb63-48" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb63-49"><a href="polynomial-regression.html#cb63-49" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb63-50"><a href="polynomial-regression.html#cb63-50" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb63-51"><a href="polynomial-regression.html#cb63-51" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;green&#39;</span>,</span>
+<span id="cb63-52"><a href="polynomial-regression.html#cb63-52" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/poly-reg-burger-centered-1.png" width="672" /></p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="polynomial-regression.html#cb64-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Burger Data.csv&quot;</span>)</span>
+<span id="cb64-2"><a href="polynomial-regression.html#cb64-2" tabindex="-1"></a></span>
+<span id="cb64-3"><a href="polynomial-regression.html#cb64-3" tabindex="-1"></a><span class="co"># Select only Prices bellow 10 dollars</span></span>
+<span id="cb64-4"><a href="polynomial-regression.html#cb64-4" tabindex="-1"></a>sel <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price <span class="sc">&lt;</span> <span class="dv">10</span></span>
+<span id="cb64-5"><a href="polynomial-regression.html#cb64-5" tabindex="-1"></a></span>
+<span id="cb64-6"><a href="polynomial-regression.html#cb64-6" tabindex="-1"></a>datRes <span class="ot">&lt;-</span> dat[sel, ]</span>
+<span id="cb64-7"><a href="polynomial-regression.html#cb64-7" tabindex="-1"></a></span>
+<span id="cb64-8"><a href="polynomial-regression.html#cb64-8" tabindex="-1"></a><span class="co"># Polynomial Regression Fit</span></span>
+<span id="cb64-9"><a href="polynomial-regression.html#cb64-9" tabindex="-1"></a>outRegPolRes <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> datRes)</span>
+<span id="cb64-10"><a href="polynomial-regression.html#cb64-10" tabindex="-1"></a></span>
+<span id="cb64-11"><a href="polynomial-regression.html#cb64-11" tabindex="-1"></a><span class="co"># Data Limits</span></span>
+<span id="cb64-12"><a href="polynomial-regression.html#cb64-12" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb64-13"><a href="polynomial-regression.html#cb64-13" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb64-14"><a href="polynomial-regression.html#cb64-14" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb64-15"><a href="polynomial-regression.html#cb64-15" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb64-16"><a href="polynomial-regression.html#cb64-16" tabindex="-1"></a></span>
+<span id="cb64-17"><a href="polynomial-regression.html#cb64-17" tabindex="-1"></a><span class="co"># Scatter plot</span></span>
+<span id="cb64-18"><a href="polynomial-regression.html#cb64-18" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Price,</span>
+<span id="cb64-19"><a href="polynomial-regression.html#cb64-19" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Burgers,</span>
+<span id="cb64-20"><a href="polynomial-regression.html#cb64-20" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb64-21"><a href="polynomial-regression.html#cb64-21" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb64-22"><a href="polynomial-regression.html#cb64-22" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
+<span id="cb64-23"><a href="polynomial-regression.html#cb64-23" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Burgers Sold&quot;</span>,</span>
+<span id="cb64-24"><a href="polynomial-regression.html#cb64-24" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Polynomial fit with Restricted data (Price &lt; 10)&quot;</span>)</span>
+<span id="cb64-25"><a href="polynomial-regression.html#cb64-25" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb64-26"><a href="polynomial-regression.html#cb64-26" tabindex="-1"></a><span class="co"># Plots real non-linear relationship</span></span>
+<span id="cb64-27"><a href="polynomial-regression.html#cb64-27" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> <span class="dv">100</span> <span class="sc">-</span> <span class="dv">30</span> <span class="sc">*</span> <span class="fu">log</span>(x),</span>
+<span id="cb64-28"><a href="polynomial-regression.html#cb64-28" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb64-29"><a href="polynomial-regression.html#cb64-29" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb64-30"><a href="polynomial-regression.html#cb64-30" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb64-31"><a href="polynomial-regression.html#cb64-31" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb64-32"><a href="polynomial-regression.html#cb64-32" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb64-33"><a href="polynomial-regression.html#cb64-33" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb64-34"><a href="polynomial-regression.html#cb64-34" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb64-35"><a href="polynomial-regression.html#cb64-35" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
+<span id="cb64-36"><a href="polynomial-regression.html#cb64-36" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb64-37"><a href="polynomial-regression.html#cb64-37" tabindex="-1"></a><span class="co"># Plots approximated polynomial relationship</span></span>
+<span id="cb64-38"><a href="polynomial-regression.html#cb64-38" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> x<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb64-39"><a href="polynomial-regression.html#cb64-39" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb64-40"><a href="polynomial-regression.html#cb64-40" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb64-41"><a href="polynomial-regression.html#cb64-41" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb64-42"><a href="polynomial-regression.html#cb64-42" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb64-43"><a href="polynomial-regression.html#cb64-43" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb64-44"><a href="polynomial-regression.html#cb64-44" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb64-45"><a href="polynomial-regression.html#cb64-45" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;blue&#39;</span>,</span>
+<span id="cb64-46"><a href="polynomial-regression.html#cb64-46" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/poly-reg-burger-restricted-1.png" width="672" />
 We can also check the <span class="math inline">\(R^2\)</span> of the restricted fit.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="polynomial-regression.html#cb60-1" tabindex="-1"></a><span class="fu">summary</span>(outRegPolRes)</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="polynomial-regression.html#cb65-1" tabindex="-1"></a><span class="fu">summary</span>(outRegPolRes)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Burgers ~ Price + I(Price^2), data = datRes)
@@ -478,6 +580,8 @@ We can also check the <span class="math inline">\(R^2\)</span> of the restricted
 see that outside the restricted range the fit is pretty bad.</p>
 <p>Although polynomial regression is technically a form of multivariate linear regression—since it involves multiple polynomial terms of a single independent variable—it can still be analyzed using the tools discussed in the next chapter. Despite having multiple polynomial terms, the model has only one original independent variable that has been transformed. Consequently, the relationship between the transformed variable and the dependent variable can be effectively visualized using a scatter plot.</p>
 
+</div>
+</div>
 </div>
             </section>
 
