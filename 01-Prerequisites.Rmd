@@ -243,6 +243,7 @@ where $\bI$ is the identity matrix, and its diagonal elements are 1, with all of
 2. **Inverse of a Product:** The inverse of the product of two matrices $\bA$ and $\bB$ is given by $(\bA\bB)^{-1} = \bB^{-1} \bA^{-1}$.
 3. **Inverse of the Inverse:** $(\bA^{-1})^{-1} = \bA$.
 4. **Transpose of the Inverse:** $(\bA^{-1})' = (\bA')^{-1}$.
+5. **Symmetric Inverse:** If $\bA$ is symmetric and non-singular, then $\bA^{-1}$ is also symmetric.
 
 #### Special Case 2 by 2 Matrix {#special-case-2-by-2-matrix}
 
