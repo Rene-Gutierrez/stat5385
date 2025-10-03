@@ -16,13 +16,25 @@ Find the syllabus here: [Syllabus](https://github.com/Rene-Gutierrez/stat5385/bl
 
 ### Class Schedule
 
-* Class 1: Class Introduction
-* Class 2: [Regression Introduction](#introduction)
-* Class 3: [Intro to Simple Linear Regression](#intro-to-slr)
-* Class 4: [Properties of the Simple Linear Regression Problem](#properties-of-the-estimates)
-* Class 5: [Centered and Standarized Data](#centering-and-standarizing-the-data)
-* Class 6: [Coefficient of Determination](#coefficient-of-determination), [Residual Analysis](#residual-analysis)
-* Class 7: [Cross-validation](#cross-validation), [Weighted Least Squares](#weighted-least-squares)
+* Class 1:  Class Introduction
+* Class 2:  [Regression Introduction](#introduction)
+* Class 3:  [Intro to Simple Linear Regression](#intro-to-slr)
+* Class 4:  [Properties of the Simple Linear Regression Problem](#properties-of-the-estimates)
+* Class 5:  [Centered and Standarized Data](#centering-and-standarizing-the-data)
+* Class 6:  Topics:
+  - [Coefficient of Determination](#coefficient-of-determination)
+  - [Residual Analysis](#residual-analysis)
+* Class 7:  Topics:
+  - [Cross-validation](#cross-validation)
+  - [Weighted Least Squares](#weighted-least-squares)
   - [Project 1 - Overview](https://www.kaggle.com/competitions/stat-5385-6385-project-1-2025/overview)
-* Class 8: [Model in Matrix Form](#model-in-matrix-form)
-
+* Class 8:  [Model in Matrix Form](#model-in-matrix-form)
+* Class 9:  [Polynomial Regression](#polynomial-regression),
+* Class 10: Topics:
+  - [Properties of the Estimates](#properties-of-the-estimates-1)
+  - [Multiple $R^2$](#multiple-r2)
+  - [Geometric Interpretation of Multiple Linear Regression](#geometric-interpretation-of-multiple-linear-regression)
+* Class 11: [Centered and Standarized Variables](#centered-and-standarized-variables)
+* Class 12: [Variable Cross Effects](#variable-cross-effects)
+* Class 13: Midterm Part 1
+* Class 14: Midterm Part 2
