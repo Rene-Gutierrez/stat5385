@@ -2543,7 +2543,7 @@ However, this is not necessarily so.</p>
 <h3><span class="header-section-number">6.11.2</span> Ridge Regression<a href="multiple-linear-regression.html#ridge-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Another important modification to the least squares criterion involves adding a <strong>penalty on the size of the coefficients</strong>. This approach, known as <strong>Ridge Regression</strong>, encourages more <strong>parsimonious</strong> (i.e., smaller and smoother) coefficient estimates. The optimization problem is:</p>
 <p><span class="math display">\[
-\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}*i&#39;\boldsymbol{\beta})^2 + \lambda \sum*{j=1}^n \beta_j^2
+\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}_i&#39;\boldsymbol{\beta})^2 + \lambda \sum_{j=1}^n \beta_j^2
 = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda \boldsymbol{\beta}&#39;\boldsymbol{\beta}
 \]</span></p>
 <p>This problem admits a closed-form solution given by:</p>
@@ -2561,10 +2561,10 @@ However, this is not necessarily so.</p>
 <h3><span class="header-section-number">6.11.3</span> Lasso Regression<a href="multiple-linear-regression.html#lasso-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The <strong>Lasso (Least Absolute Shrinkage and Selection Operator)</strong> combines regularization and variable selection in a single framework. It modifies the least squares criterion by penalizing the <strong>sum of the absolute values</strong> of the coefficients:</p>
 <p><span class="math display">\[
-\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}*i&#39;\boldsymbol{\beta})^2 + \lambda \sum*{j=1}^n |\beta_j|
-= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda |\boldsymbol{\beta}|_1
+\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}_i&#39;\boldsymbol{\beta})^2 + \lambda \sum_{j=1}^n |\beta_j|
+= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda ||\boldsymbol{\beta}||_1
 \]</span></p>
-<p>where <span class="math inline">\(|\cdot|_1\)</span> denotes the <span class="math inline">\(\ell^1\)</span>-norm.</p>
+<p>where <span class="math inline">\(||\cdot||_1\)</span> denotes the <span class="math inline">\(\ell^1\)</span>-norm.</p>
 <p>Unlike Ridge Regression, this problem <strong>does not have an analytical solution</strong> and must be solved numerically, typically through iterative algorithms such as <strong>coordinate descent</strong>.</p>
 <p>The Lasso estimator, denoted <span class="math inline">\(\hat{\boldsymbol{\beta}}_L\)</span>, has the remarkable property that it can <strong>set some coefficients exactly to zero</strong>, thereby performing <strong>automatic feature selection</strong>. However, its statistical properties differ significantly from both LSE and Ridge estimators.</p>
 
