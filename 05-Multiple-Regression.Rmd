@@ -1700,7 +1700,7 @@ So we can characterize the leverages as:
 
 $$h_{ij} = X_i (\bX'\bX)^{-1}X_j'$$
 
-### Outliers identification
+### Influential Observations
 
 Identifying outliers in multiple regression is hard. One way to measure the influence
 of an observation is to see how different are the predicted values if an observation
@@ -2137,14 +2137,78 @@ rownames(tab) <- c("Big Leverage", "Medium Leverage", "No Leverage")
 knitr::kable(tab)
 ```
 
+Here’s your subsection rewritten in a **textbook style** while keeping all equations and notation unchanged. The tone and structure have been refined for clarity, precision, and smooth exposition — suitable for inclusion in a formal regression analysis chapter.
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+---
+
+## Other Approaches to Regression
+
+So far, we have focused on the **Least Squares Estimation (LSE)** framework for linear regression. While LSE provides an elegant analytical solution with well-understood statistical properties, it is by no means the only way to formulate a regression problem.
+
+Alternative formulations arise by changing the **objective function**—the criterion used to determine the “best” coefficients. Each of these approaches yields estimators with distinct properties, often differing substantially from those of the least squares estimator.
+
+In this section, we explore some of these alternatives. Throughout, we will denote by:
+
+* $\hat{\boldsymbol{\beta}}$ — the least squares estimator (LSE) of the coefficients,
+* $\hat{\mathbf{y}}$ — the LSE predictions for the observed data, and
+* $R^2$ — the coefficient of determination, a common measure of model fit.
+
+Each alternative approach will yield its own versions of these quantities, possessing different interpretations and statistical behaviors.
+
+---
+
+### Least Absolute Error Regression
+
+Instead of minimizing the sum of squared residuals, we can minimize the **sum of absolute residuals**. This leads to the **Least Absolute Error (LAE)** or **Least Absolute Deviations (LAD)** regression problem:
+
+$$
+\min_{\boldsymbol{\beta}} \sum_{i=1}^n |y_i - \mathbf{x}_i' \boldsymbol{\beta}|
+$$
+
+Unlike the least squares estimator, the LAE estimator does not have a closed-form analytical solution. Instead, it must be computed using **numerical optimization methods**.
+
+We denote this estimator by $\hat{\boldsymbol{\beta}}_A$.
+
+An appealing property of LAE regression is its **robustness to outliers**. Because it penalizes large deviations linearly rather than quadratically, it tends to be less sensitive to extreme observations than the LSE.
+
+---
+
+### Ridge Regression
+
+Another important modification to the least squares criterion involves adding a **penalty on the size of the coefficients**. This approach, known as **Ridge Regression**, encourages more **parsimonious** (i.e., smaller and smoother) coefficient estimates. The optimization problem is:
+
+$$
+\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}*i'\boldsymbol{\beta})^2 + \lambda \sum*{j=1}^n \beta_j^2
+= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda \boldsymbol{\beta}'\boldsymbol{\beta}
+$$
+
+This problem admits a closed-form solution given by:
+
+$$
+\hat{\boldsymbol{\beta}}_R = \left(\mathbf{X}'\mathbf{X} + \lambda \mathbf{I} \right)^{-1}\mathbf{X}'\mathbf{y}
+$$
+
+A notable feature of ridge regression is that it **always produces a unique solution**, even when the design matrix $\mathbf{X}$ is not of full rank, i.e.
+
+$$
+\text{rank}(\mathbf{X}) < p
+$$
+
+Ridge regression thus addresses issues of **multicollinearity** and **ill-conditioning** in $\mathbf{X}$, albeit at the cost of introducing some bias (defined in the next chapters) in the estimates.
+
+---
+
+### Lasso Regression
+
+The **Lasso (Least Absolute Shrinkage and Selection Operator)** combines regularization and variable selection in a single framework. It modifies the least squares criterion by penalizing the **sum of the absolute values** of the coefficients:
+
+$$
+\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}*i'\boldsymbol{\beta})^2 + \lambda \sum*{j=1}^n |\beta_j|
+= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda |\boldsymbol{\beta}|_1
+$$
+
+where $|\cdot|_1$ denotes the $\ell^1$-norm.
+
+Unlike Ridge Regression, this problem **does not have an analytical solution** and must be solved numerically, typically through iterative algorithms such as **coordinate descent**.
+
+The Lasso estimator, denoted $\hat{\boldsymbol{\beta}}_L$, has the remarkable property that it can **set some coefficients exactly to zero**, thereby performing **automatic feature selection**. However, its statistical properties differ significantly from both LSE and Ridge estimators.

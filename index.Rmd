@@ -5,6 +5,8 @@ the course and lecture notes and code seen in class.
 
 Find the syllabus here: [Syllabus](https://github.com/Rene-Gutierrez/stat5385/blob/main/Syllabus%20Stat%205385-6385.pdf)
 
+Find the github page for the course (with the data sets) here: [Github](https://github.com/Rene-Gutierrez/stat5385)
+
 ---
 
 ## Calendar
@@ -13,6 +15,7 @@ Find the syllabus here: [Syllabus](https://github.com/Rene-Gutierrez/stat5385/bl
 * Midterm Part 1: October 7
 * Midterm Part 2: October 9
 * Project 1 Due Date: September 29
+* Project 2 Due Date: October 4
 
 ### Class Schedule
 
@@ -38,3 +41,11 @@ Find the syllabus here: [Syllabus](https://github.com/Rene-Gutierrez/stat5385/bl
 * Class 12: [Variable Cross Effects](#variable-cross-effects)
 * Class 13: Midterm Part 1
 * Class 14: Midterm Part 2
+* Class 15: Topics:
+  - Midterm "Review"
+  - [Leverage](#leverage)
+* Class 16: [Influential Observations](#influential-observations)
+* Class 17: Topics:
+  - [Stability of the Solution](#stability-of-the-solution)
+  - [Other Approches to Regression](#other-approches-to-regression)
+  - [Bootstrapping](#bootstrapping)

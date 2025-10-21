@@ -279,9 +279,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.9" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#outliers-and-leverage"><i class="fa fa-check"></i><b>6.9</b> Outliers and Leverage</a>
 <ul>
 <li class="chapter" data-level="6.9.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#leverage"><i class="fa fa-check"></i><b>6.9.1</b> Leverage</a></li>
-<li class="chapter" data-level="6.9.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#outliers-identification"><i class="fa fa-check"></i><b>6.9.2</b> Outliers identification</a></li>
+<li class="chapter" data-level="6.9.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#influential-observations"><i class="fa fa-check"></i><b>6.9.2</b> Influential Observations</a></li>
 </ul></li>
 <li class="chapter" data-level="6.10" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#stability-of-the-solution"><i class="fa fa-check"></i><b>6.10</b> Stability of the Solution</a></li>
+<li class="chapter" data-level="6.11" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#other-approaches-to-regression"><i class="fa fa-check"></i><b>6.11</b> Other Approaches to Regression</a>
+<ul>
+<li class="chapter" data-level="6.11.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#least-absolute-error-regression"><i class="fa fa-check"></i><b>6.11.1</b> Least Absolute Error Regression</a></li>
+<li class="chapter" data-level="6.11.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#ridge-regression"><i class="fa fa-check"></i><b>6.11.2</b> Ridge Regression</a></li>
+<li class="chapter" data-level="6.11.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#lasso-regression"><i class="fa fa-check"></i><b>6.11.3</b> Lasso Regression</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="bootstrapping.html"><a href="bootstrapping.html"><i class="fa fa-check"></i><b>7</b> Bootstrapping</a>
 <ul>
@@ -1941,8 +1947,8 @@ So we can characterize the leverages as:</p>
 <p><span class="math display">\[h_{ij} = X_i (\mathbf{X}&#39;\mathbf{X})^{-1}X_j&#39;\]</span></p>
 </div>
 </div>
-<div id="outliers-identification" class="section level3 hasAnchor" number="6.9.2">
-<h3><span class="header-section-number">6.9.2</span> Outliers identification<a href="multiple-linear-regression.html#outliers-identification" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="influential-observations" class="section level3 hasAnchor" number="6.9.2">
+<h3><span class="header-section-number">6.9.2</span> Influential Observations<a href="multiple-linear-regression.html#influential-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Identifying outliers in multiple regression is hard. One way to measure the influence
 of an observation is to see how different are the predicted values if an observation
 is removed. We will call:</p>
@@ -2324,7 +2330,7 @@ variable to the rest of the variables, that is:</p>
 <p>In a similar way, assume that we are working with centered values, we can analyze
 what would happen if we remove an observation <span class="math inline">\(X_{i}\)</span>. Here we analyze <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span>.
 Again, using <a href="prerequisites.html#properties-of-the-determinant">properties of the determinant</a>, and results of the
-<a href="multiple-linear-regression.html#outliers-identification">Outliers Identification</a> we have that:</p>
+<a href="#outliers-identification">Outliers Identification</a> we have that:</p>
 <p><span class="math display">\[\det(\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)}) = \det(\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)}) \\
   =\det(\mathbf{X}&#39;\mathbf{X}&#39; - X_iX_i&#39;) \\
   =\det(\mathbf{X}&#39;\mathbf{X}&#39;)\det(1 - X_i(\mathbf{X}&#39;\mathbf{X})^{-1}X_i&#39;) \\
@@ -2507,7 +2513,62 @@ However, this is not necessarily so.</p>
 </tr>
 </tbody>
 </table>
+<p>Here’s your subsection rewritten in a <strong>textbook style</strong> while keeping all equations and notation unchanged. The tone and structure have been refined for clarity, precision, and smooth exposition — suitable for inclusion in a formal regression analysis chapter.</p>
+<hr />
+</div>
+<div id="other-approaches-to-regression" class="section level2 hasAnchor" number="6.11">
+<h2><span class="header-section-number">6.11</span> Other Approaches to Regression<a href="multiple-linear-regression.html#other-approaches-to-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So far, we have focused on the <strong>Least Squares Estimation (LSE)</strong> framework for linear regression. While LSE provides an elegant analytical solution with well-understood statistical properties, it is by no means the only way to formulate a regression problem.</p>
+<p>Alternative formulations arise by changing the <strong>objective function</strong>—the criterion used to determine the “best” coefficients. Each of these approaches yields estimators with distinct properties, often differing substantially from those of the least squares estimator.</p>
+<p>In this section, we explore some of these alternatives. Throughout, we will denote by:</p>
+<ul>
+<li><span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> — the least squares estimator (LSE) of the coefficients,</li>
+<li><span class="math inline">\(\hat{\mathbf{y}}\)</span> — the LSE predictions for the observed data, and</li>
+<li><span class="math inline">\(R^2\)</span> — the coefficient of determination, a common measure of model fit.</li>
+</ul>
+<p>Each alternative approach will yield its own versions of these quantities, possessing different interpretations and statistical behaviors.</p>
+<hr />
+<div id="least-absolute-error-regression" class="section level3 hasAnchor" number="6.11.1">
+<h3><span class="header-section-number">6.11.1</span> Least Absolute Error Regression<a href="multiple-linear-regression.html#least-absolute-error-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Instead of minimizing the sum of squared residuals, we can minimize the <strong>sum of absolute residuals</strong>. This leads to the <strong>Least Absolute Error (LAE)</strong> or <strong>Least Absolute Deviations (LAD)</strong> regression problem:</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}} \sum_{i=1}^n |y_i - \mathbf{x}_i&#39; \boldsymbol{\beta}|
+\]</span></p>
+<p>Unlike the least squares estimator, the LAE estimator does not have a closed-form analytical solution. Instead, it must be computed using <strong>numerical optimization methods</strong>.</p>
+<p>We denote this estimator by <span class="math inline">\(\hat{\boldsymbol{\beta}}_A\)</span>.</p>
+<p>An appealing property of LAE regression is its <strong>robustness to outliers</strong>. Because it penalizes large deviations linearly rather than quadratically, it tends to be less sensitive to extreme observations than the LSE.</p>
+<hr />
+</div>
+<div id="ridge-regression" class="section level3 hasAnchor" number="6.11.2">
+<h3><span class="header-section-number">6.11.2</span> Ridge Regression<a href="multiple-linear-regression.html#ridge-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Another important modification to the least squares criterion involves adding a <strong>penalty on the size of the coefficients</strong>. This approach, known as <strong>Ridge Regression</strong>, encourages more <strong>parsimonious</strong> (i.e., smaller and smoother) coefficient estimates. The optimization problem is:</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}*i&#39;\boldsymbol{\beta})^2 + \lambda \sum*{j=1}^n \beta_j^2
+= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda \boldsymbol{\beta}&#39;\boldsymbol{\beta}
+\]</span></p>
+<p>This problem admits a closed-form solution given by:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}_R = \left(\mathbf{X}&#39;\mathbf{X} + \lambda \mathbf{I} \right)^{-1}\mathbf{X}&#39;\mathbf{y}
+\]</span></p>
+<p>A notable feature of ridge regression is that it <strong>always produces a unique solution</strong>, even when the design matrix <span class="math inline">\(\mathbf{X}\)</span> is not of full rank, i.e.</p>
+<p><span class="math display">\[
+\text{rank}(\mathbf{X}) &lt; p
+\]</span></p>
+<p>Ridge regression thus addresses issues of <strong>multicollinearity</strong> and <strong>ill-conditioning</strong> in <span class="math inline">\(\mathbf{X}\)</span>, albeit at the cost of introducing some bias (defined in the next chapters) in the estimates.</p>
+<hr />
+</div>
+<div id="lasso-regression" class="section level3 hasAnchor" number="6.11.3">
+<h3><span class="header-section-number">6.11.3</span> Lasso Regression<a href="multiple-linear-regression.html#lasso-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>Lasso (Least Absolute Shrinkage and Selection Operator)</strong> combines regularization and variable selection in a single framework. It modifies the least squares criterion by penalizing the <strong>sum of the absolute values</strong> of the coefficients:</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}*i&#39;\boldsymbol{\beta})^2 + \lambda \sum*{j=1}^n |\beta_j|
+= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda |\boldsymbol{\beta}|_1
+\]</span></p>
+<p>where <span class="math inline">\(|\cdot|_1\)</span> denotes the <span class="math inline">\(\ell^1\)</span>-norm.</p>
+<p>Unlike Ridge Regression, this problem <strong>does not have an analytical solution</strong> and must be solved numerically, typically through iterative algorithms such as <strong>coordinate descent</strong>.</p>
+<p>The Lasso estimator, denoted <span class="math inline">\(\hat{\boldsymbol{\beta}}_L\)</span>, has the remarkable property that it can <strong>set some coefficients exactly to zero</strong>, thereby performing <strong>automatic feature selection</strong>. However, its statistical properties differ significantly from both LSE and Ridge estimators.</p>
 
+</div>
 </div>
 </div>
             </section>

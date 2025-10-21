@@ -195,8 +195,12 @@ single-variable-cross-effects-example
 outliers-and-leverage
 leverage
 properties-of-leverages
-outliers-identification
+influential-observations
 stability-of-the-solution
+other-approaches-to-regression
+least-absolute-error-regression
+ridge-regression
+lasso-regression
 bootstrapping
 introduction-2
 bootstrapping-example
