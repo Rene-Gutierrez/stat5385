@@ -2178,7 +2178,7 @@ An appealing property of LAE regression is its **robustness to outliers**. Becau
 Another important modification to the least squares criterion involves adding a **penalty on the size of the coefficients**. This approach, known as **Ridge Regression**, encourages more **parsimonious** (i.e., smaller and smoother) coefficient estimates. The optimization problem is:
 
 $$
-\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}*i'\boldsymbol{\beta})^2 + \lambda \sum*{j=1}^n \beta_j^2
+\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}_i'\boldsymbol{\beta})^2 + \lambda \sum_{j=1}^n \beta_j^2
 = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda \boldsymbol{\beta}'\boldsymbol{\beta}
 $$
 
@@ -2203,11 +2203,11 @@ Ridge regression thus addresses issues of **multicollinearity** and **ill-condit
 The **Lasso (Least Absolute Shrinkage and Selection Operator)** combines regularization and variable selection in a single framework. It modifies the least squares criterion by penalizing the **sum of the absolute values** of the coefficients:
 
 $$
-\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}*i'\boldsymbol{\beta})^2 + \lambda \sum*{j=1}^n |\beta_j|
-= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda |\boldsymbol{\beta}|_1
+\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}_i'\boldsymbol{\beta})^2 + \lambda \sum_{j=1}^n |\beta_j|
+= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda ||\boldsymbol{\beta}||_1
 $$
 
-where $|\cdot|_1$ denotes the $\ell^1$-norm.
+where $||\cdot||_1$ denotes the $\ell^1$-norm.
 
 Unlike Ridge Regression, this problem **does not have an analytical solution** and must be solved numerically, typically through iterative algorithms such as **coordinate descent**.
 
