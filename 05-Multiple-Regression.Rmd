@@ -2,28 +2,37 @@
 
 ## Introduction
 
-Multiple regression is a statistical technique used to model the relationship between a dependent variable and two or more independent variables. It extends simple linear regression by allowing for a more complex analysis of how various factors impact an outcome. The general form of the multiple regression equation is:
+Multiple linear regression is a fundamental statistical technique used to model the relationship between a single dependent variable and two or more independent variables. It generalizes simple linear regression by allowing several predictors to jointly explain variation in the outcome.  
+
+The general model is written as
 
 $$
-y_i = \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \ldots + \beta_p x_{p,i} + e_i \quad i=\{1,\ldots,n\}
+y_i = \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \ldots + \beta_p x_{p,i} + e_i, \quad i = 1, \ldots, n
 $$
 
-Where:
-- $y$ is the dependent variable.
-- $\beta_0$ is the intercept.
-- $\beta_1, \beta_2, \ldots, \beta_p$ are the coefficients of the independent variables $X_1, X_2, \ldots, X_p$.
-- $e represents the error term.
+where:  
+- $y_i$ is the dependent variable for observation $i$,  
+- $\beta_0$ is the intercept,  
+- $\beta_1, \beta_2, \ldots, \beta_p$ are the coefficients of the predictors $x_{1,i}, x_{2,i}, \ldots, x_{p,i}$, and  
+- $e_i$ is the random error term.  
 
-This technique is widely used across various fields, including economics, social sciences, and healthcare, to control for multiple factors and enhance prediction accuracy. However, it requires careful attention to assumptions. Beyond linearity, now we have to consider issues like independence, multicollinearity, and variable selection which can affect the results.
+This framework is widely applied in economics, the social sciences, and many other fields to control for multiple factors simultaneously and to improve predictive accuracy. However, it also brings additional challenges beyond those in simple regression, such as multicollinearity, the choice of relevant predictors, and the validity of standard assumptions.
 
-We already have seen an example of Multiple linear regression when we worked with
-Polynomial regression. However, multiple linear regression is more general.
+We have already seen a form of multiple regression in the context of polynomial regression. Here, however, we consider the general case with different explanatory variables.  
 
-## Example
+---
 
-Consider, for example, the task of explaining a country's GDP using other economic variables such as inflation, unemployment, reference interest rate, government spending (as a percentage of GDP), and exports (as a percentage of GDP).
+## Example: Modeling GDP
 
-In this case, visualization is not as straightforward, and visually inspecting these relationships is much less practical. Nevertheless, with this number of variables, we can visually explore the relationships between them as follows:
+As an applied example, consider the problem of explaining a country’s Gross Domestic Product (GDP) using several economic indicators. In this case, we include:  
+
+- Inflation rate,  
+- Unemployment rate,  
+- Reference interest rate,  
+- Government spending (as a percentage of GDP), and  
+- Exports (as a percentage of GDP).  
+
+With multiple predictors, visualization becomes more challenging than in simple regression. Still, we can explore the pairwise relationships among variables using scatterplots:
 
 ```{r paris-plot-gdp}
 # Reads Data
@@ -33,18 +42,20 @@ dat <- read.csv(file = "Gdp Data.csv")
 pairs(dat)
 ```
 
-Here we can see, that some independent variables are more related to `GDP` and
-some independent variables are more related between themselves. This is valuable information that will help us
-to develop the right linear model with this variables.
+The scatterplot matrix shows that some predictors are strongly related to GDP, while others are correlated with each other. This initial exploration provides useful insight before fitting regression models.
 
-We can also observe the correlation between these variables as follows:
+We can also examine the correlation structure numerically:
 
 ```{r gdp-cor}
 # Computes the correlation between variables
 cor(dat)
 ```
-We can also fit simple linear regression with each one of the independent
-variables.
+
+---
+
+### Simple Regressions
+
+Before fitting the full multiple regression, it is instructive to look at the simple linear regressions of GDP on each predictor individually.
 
 **Inflation Rate**
 
@@ -59,7 +70,8 @@ par(mfrow = c(1, 2))
 plot(x    = varVal,
      y    = dat$gd,
      xlab = varNam,
-     ylab = "GDP")
+     ylab = "GDP",
+     pch  = 16)
 abline(a   = out$coefficients[1],
        b   = out$coefficients[2],
        col = 'red',
@@ -67,24 +79,27 @@ abline(a   = out$coefficients[1],
 plot(x    = varVal,
      y    = out$residuals,
      xlab = varNam,
-     ylab = "Residuals")
+     ylab = "Residuals",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 ```
+
 **Unemployment Rate**
 
 ```{r gdp-unp-fit}
-# Fits with Inflation
+# Fits with Unemployment
 outRegUne <- lm(gdp ~ une, data = dat)
 varVal    <- dat$une
 out       <- outRegUne
-varNam    <- "Unemplyment Rate"
+varNam    <- "Unemployment Rate"
 # Plots Regression Line and Scatterplot and residuals plot
 par(mfrow = c(1, 2))
 plot(x    = varVal,
      y    = dat$gd,
      xlab = varNam,
-     ylab = "GDP")
+     ylab = "GDP",
+     pch  = 16)
 abline(a   = out$coefficients[1],
        b   = out$coefficients[2],
        col = 'red',
@@ -92,14 +107,16 @@ abline(a   = out$coefficients[1],
 plot(x    = varVal,
      y    = out$residuals,
      xlab = varNam,
-     ylab = "Residuals")
+     ylab = "Residuals",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 ```
+
 **Interest Rate**
 
 ```{r gdp-int-fit}
-# Fits with Inflation
+# Fits with Interest Rate
 outRegInt <- lm(gdp ~ int, data = dat)
 varVal    <- dat$int
 out       <- outRegInt
@@ -109,7 +126,8 @@ par(mfrow = c(1, 2))
 plot(x    = varVal,
      y    = dat$gd,
      xlab = varNam,
-     ylab = "GDP")
+     ylab = "GDP",
+     pch  = 16)
 abline(a   = out$coefficients[1],
        b   = out$coefficients[2],
        col = 'red',
@@ -117,25 +135,27 @@ abline(a   = out$coefficients[1],
 plot(x    = varVal,
      y    = out$residuals,
      xlab = varNam,
-     ylab = "Residuals")
+     ylab = "Residuals",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 ```
 
-**Goverment Spending**
+**Government Spending**
 
 ```{r gdp-gov-fit}
-# Fits with Inflation
+# Fits with Government Spending
 outRegGov <- lm(gdp ~ gov, data = dat)
 varVal    <- dat$gov
 out       <- outRegGov
-varNam    <- "Goverment Spending"
+varNam    <- "Government Spending"
 # Plots Regression Line and Scatterplot and residuals plot
 par(mfrow = c(1, 2))
 plot(x    = varVal,
      y    = dat$gd,
      xlab = varNam,
-     ylab = "GDP")
+     ylab = "GDP",
+     pch  = 16)
 abline(a   = out$coefficients[1],
        b   = out$coefficients[2],
        col = 'red',
@@ -143,15 +163,16 @@ abline(a   = out$coefficients[1],
 plot(x    = varVal,
      y    = out$residuals,
      xlab = varNam,
-     ylab = "Residuals")
+     ylab = "Residuals",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 ```
 
-*Exports*
+**Exports**
 
 ```{r gdp-exp-fit}
-# Fits with Inflation
+# Fits with Exports
 outRegExp <- lm(gdp ~ exp, data = dat)
 varVal    <- dat$exp
 out       <- outRegExp
@@ -161,7 +182,8 @@ par(mfrow = c(1, 2))
 plot(x    = varVal,
      y    = dat$gd,
      xlab = varNam,
-     ylab = "GDP")
+     ylab = "GDP",
+     pch  = 16)
 abline(a   = out$coefficients[1],
        b   = out$coefficients[2],
        col = 'red',
@@ -169,16 +191,19 @@ abline(a   = out$coefficients[1],
 plot(x    = varVal,
      y    = out$residuals,
      xlab = varNam,
-     ylab = "Residuals")
+     ylab = "Residuals",
+     pch  = 16)
 abline(h   = 0,
        lwd = 2)
 ```
 
-All of them seem like good candidates for a linear relationship with the GDP,
-however when we use them all together, a more careful analysis should be made.
+---
 
-We can see the summary reports for the individual regressions and the regression
-with all independent variables as follows:
+### Multiple Regression
+
+Each variable individually shows some relationship with GDP, but the key advantage of multiple regression is that it considers all predictors simultaneously. This allows us to estimate the *unique contribution* of each factor while controlling for the others.
+
+We fit the full model including all predictors:
 
 ```{r gdp-all-ind-com}
 outRegAll <- lm(gdp ~ inf + une + int + gov + exp, data = dat)
@@ -198,9 +223,22 @@ print("Only Exports")
 summary(outRegExp)
 ```
 
-As we can see, the values for the coefficients can change when doing simple linear
-regression and multiple linear regression. If the changes are very dramatic (like change
-in the sign of the coefficient) further inspection is necessary for that variable.
+Comparing the simple regressions with the multiple regression highlights an important point: coefficient estimates can change when predictors are analyzed jointly. In some cases, a variable may even change sign once other variables are included, which suggests potential multicollinearity or overlapping explanatory power. Such cases warrant further investigation.
+
+---
+
+### Summary
+
+This example illustrates the key steps in multiple regression analysis:
+
+1. Explore relationships through scatterplots and correlations.
+2. Fit simple regressions to understand individual effects.
+3. Fit the full multiple regression to assess joint contributions.
+4. Compare results to detect changes in coefficient estimates.
+
+Multiple regression provides a richer, more realistic picture of how multiple factors influence an outcome, but it also requires careful interpretation and diagnostic checks.
+
+---
 
 ## Least Squares Estimation
 

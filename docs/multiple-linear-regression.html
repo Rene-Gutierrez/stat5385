@@ -255,7 +255,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
 <ul>
 <li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
-<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#example-9"><i class="fa fa-check"></i><b>6.2</b> Example</a></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#example-modeling-gdp"><i class="fa fa-check"></i><b>6.2</b> Example: Modeling GDP</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#simple-regressions"><i class="fa fa-check"></i><b>6.2.1</b> Simple Regressions</a></li>
+<li class="chapter" data-level="6.2.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#multiple-regression"><i class="fa fa-check"></i><b>6.2.2</b> Multiple Regression</a></li>
+<li class="chapter" data-level="6.2.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#summary"><i class="fa fa-check"></i><b>6.2.3</b> Summary</a></li>
+</ul></li>
 <li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#least-squares-estimation-1"><i class="fa fa-check"></i><b>6.3</b> Least Squares Estimation</a></li>
 <li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#properties-of-the-estimates-1"><i class="fa fa-check"></i><b>6.4</b> Properties of the Estimates</a></li>
 <li class="chapter" data-level="6.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#multiple-r2"><i class="fa fa-check"></i><b>6.5</b> Multiple <span class="math inline">\(R^2\)</span></a></li>
@@ -356,33 +361,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">6</span> Multiple Linear Regression<a href="multiple-linear-regression.html#multiple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="introduction-1" class="section level2 hasAnchor" number="6.1">
 <h2><span class="header-section-number">6.1</span> Introduction<a href="multiple-linear-regression.html#introduction-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Multiple regression is a statistical technique used to model the relationship between a dependent variable and two or more independent variables. It extends simple linear regression by allowing for a more complex analysis of how various factors impact an outcome. The general form of the multiple regression equation is:</p>
+<p>Multiple linear regression is a fundamental statistical technique used to model the relationship between a single dependent variable and two or more independent variables. It generalizes simple linear regression by allowing several predictors to jointly explain variation in the outcome.</p>
+<p>The general model is written as</p>
 <p><span class="math display">\[
-y_i = \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \ldots + \beta_p x_{p,i} + e_i \quad i=\{1,\ldots,n\}
+y_i = \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \ldots + \beta_p x_{p,i} + e_i, \quad i = 1, \ldots, n
 \]</span></p>
-<p>Where:
-- <span class="math inline">\(y\)</span> is the dependent variable.
-- <span class="math inline">\(\beta_0\)</span> is the intercept.
-- <span class="math inline">\(\beta_1, \beta_2, \ldots, \beta_p\)</span> are the coefficients of the independent variables <span class="math inline">\(X_1, X_2, \ldots, X_p\)</span>.
-- $e represents the error term.</p>
-<p>This technique is widely used across various fields, including economics, social sciences, and healthcare, to control for multiple factors and enhance prediction accuracy. However, it requires careful attention to assumptions. Beyond linearity, now we have to consider issues like independence, multicollinearity, and variable selection which can affect the results.</p>
-<p>We already have seen an example of Multiple linear regression when we worked with
-Polynomial regression. However, multiple linear regression is more general.</p>
+<p>where:<br />
+- <span class="math inline">\(y_i\)</span> is the dependent variable for observation <span class="math inline">\(i\)</span>,<br />
+- <span class="math inline">\(\beta_0\)</span> is the intercept,<br />
+- <span class="math inline">\(\beta_1, \beta_2, \ldots, \beta_p\)</span> are the coefficients of the predictors <span class="math inline">\(x_{1,i}, x_{2,i}, \ldots, x_{p,i}\)</span>, and<br />
+- <span class="math inline">\(e_i\)</span> is the random error term.</p>
+<p>This framework is widely applied in economics, the social sciences, and many other fields to control for multiple factors simultaneously and to improve predictive accuracy. However, it also brings additional challenges beyond those in simple regression, such as multicollinearity, the choice of relevant predictors, and the validity of standard assumptions.</p>
+<p>We have already seen a form of multiple regression in the context of polynomial regression. Here, however, we consider the general case with different explanatory variables.</p>
+<hr />
 </div>
-<div id="example-9" class="section level2 hasAnchor" number="6.2">
-<h2><span class="header-section-number">6.2</span> Example<a href="multiple-linear-regression.html#example-9" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Consider, for example, the task of explaining a country’s GDP using other economic variables such as inflation, unemployment, reference interest rate, government spending (as a percentage of GDP), and exports (as a percentage of GDP).</p>
-<p>In this case, visualization is not as straightforward, and visually inspecting these relationships is much less practical. Nevertheless, with this number of variables, we can visually explore the relationships between them as follows:</p>
+<div id="example-modeling-gdp" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Example: Modeling GDP<a href="multiple-linear-regression.html#example-modeling-gdp" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As an applied example, consider the problem of explaining a country’s Gross Domestic Product (GDP) using several economic indicators. In this case, we include:</p>
+<ul>
+<li>Inflation rate,<br />
+</li>
+<li>Unemployment rate,<br />
+</li>
+<li>Reference interest rate,<br />
+</li>
+<li>Government spending (as a percentage of GDP), and<br />
+</li>
+<li>Exports (as a percentage of GDP).</li>
+</ul>
+<p>With multiple predictors, visualization becomes more challenging than in simple regression. Still, we can explore the pairwise relationships among variables using scatterplots:</p>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="multiple-linear-regression.html#cb67-1" tabindex="-1"></a><span class="co"># Reads Data</span></span>
 <span id="cb67-2"><a href="multiple-linear-regression.html#cb67-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Gdp Data.csv&quot;</span>)</span>
 <span id="cb67-3"><a href="multiple-linear-regression.html#cb67-3" tabindex="-1"></a></span>
 <span id="cb67-4"><a href="multiple-linear-regression.html#cb67-4" tabindex="-1"></a><span class="co"># Plot the scatterplots for each pair of variables</span></span>
 <span id="cb67-5"><a href="multiple-linear-regression.html#cb67-5" tabindex="-1"></a><span class="fu">pairs</span>(dat)</span></code></pre></div>
 <p><img src="_main_files/figure-html/paris-plot-gdp-1.png" width="672" /></p>
-<p>Here we can see, that some independent variables are more related to <code>GDP</code> and
-some independent variables are more related between themselves. This is valuable information that will help us
-to develop the right linear model with this variables.</p>
-<p>We can also observe the correlation between these variables as follows:</p>
+<p>The scatterplot matrix shows that some predictors are strongly related to GDP, while others are correlated with each other. This initial exploration provides useful insight before fitting regression models.</p>
+<p>We can also examine the correlation structure numerically:</p>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="multiple-linear-regression.html#cb68-1" tabindex="-1"></a><span class="co"># Computes the correlation between variables</span></span>
 <span id="cb68-2"><a href="multiple-linear-regression.html#cb68-2" tabindex="-1"></a><span class="fu">cor</span>(dat)</span></code></pre></div>
 <pre><code>##            gdp          inf         une        int         gov         exp
@@ -392,8 +407,10 @@ to develop the right linear model with this variables.</p>
 ## int  0.6964256  0.829206121 -0.36424525  1.0000000  0.21389456 0.015699798
 ## gov  0.2217228  0.311036436 -0.16674407  0.2138946  1.00000000 0.018475446
 ## exp  0.1736027  0.005685918  0.01055386  0.0156998  0.01847545 1.000000000</code></pre>
-<p>We can also fit simple linear regression with each one of the independent
-variables.</p>
+<hr />
+<div id="simple-regressions" class="section level3 hasAnchor" number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> Simple Regressions<a href="multiple-linear-regression.html#simple-regressions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Before fitting the full multiple regression, it is instructive to look at the simple linear regressions of GDP on each predictor individually.</p>
 <p><strong>Inflation Rate</strong></p>
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="multiple-linear-regression.html#cb70-1" tabindex="-1"></a><span class="co"># Fits with Inflation</span></span>
 <span id="cb70-2"><a href="multiple-linear-regression.html#cb70-2" tabindex="-1"></a>outRegInf <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> inf, <span class="at">data =</span> dat)</span>
@@ -405,43 +422,47 @@ variables.</p>
 <span id="cb70-8"><a href="multiple-linear-regression.html#cb70-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
 <span id="cb70-9"><a href="multiple-linear-regression.html#cb70-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
 <span id="cb70-10"><a href="multiple-linear-regression.html#cb70-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb70-11"><a href="multiple-linear-regression.html#cb70-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>)</span>
-<span id="cb70-12"><a href="multiple-linear-regression.html#cb70-12" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb70-13"><a href="multiple-linear-regression.html#cb70-13" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb70-14"><a href="multiple-linear-regression.html#cb70-14" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb70-15"><a href="multiple-linear-regression.html#cb70-15" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb70-16"><a href="multiple-linear-regression.html#cb70-16" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb70-17"><a href="multiple-linear-regression.html#cb70-17" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
-<span id="cb70-18"><a href="multiple-linear-regression.html#cb70-18" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb70-19"><a href="multiple-linear-regression.html#cb70-19" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>)</span>
-<span id="cb70-20"><a href="multiple-linear-regression.html#cb70-20" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb70-21"><a href="multiple-linear-regression.html#cb70-21" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-inf-fit-1.png" width="672" />
-<strong>Unemployment Rate</strong></p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="multiple-linear-regression.html#cb71-1" tabindex="-1"></a><span class="co"># Fits with Inflation</span></span>
+<span id="cb70-11"><a href="multiple-linear-regression.html#cb70-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
+<span id="cb70-12"><a href="multiple-linear-regression.html#cb70-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb70-13"><a href="multiple-linear-regression.html#cb70-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb70-14"><a href="multiple-linear-regression.html#cb70-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb70-15"><a href="multiple-linear-regression.html#cb70-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb70-16"><a href="multiple-linear-regression.html#cb70-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb70-17"><a href="multiple-linear-regression.html#cb70-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb70-18"><a href="multiple-linear-regression.html#cb70-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
+<span id="cb70-19"><a href="multiple-linear-regression.html#cb70-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb70-20"><a href="multiple-linear-regression.html#cb70-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb70-21"><a href="multiple-linear-regression.html#cb70-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb70-22"><a href="multiple-linear-regression.html#cb70-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb70-23"><a href="multiple-linear-regression.html#cb70-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/gdp-inf-fit-1.png" width="672" /></p>
+<p><strong>Unemployment Rate</strong></p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="multiple-linear-regression.html#cb71-1" tabindex="-1"></a><span class="co"># Fits with Unemployment</span></span>
 <span id="cb71-2"><a href="multiple-linear-regression.html#cb71-2" tabindex="-1"></a>outRegUne <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> une, <span class="at">data =</span> dat)</span>
 <span id="cb71-3"><a href="multiple-linear-regression.html#cb71-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>une</span>
 <span id="cb71-4"><a href="multiple-linear-regression.html#cb71-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegUne</span>
-<span id="cb71-5"><a href="multiple-linear-regression.html#cb71-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Unemplyment Rate&quot;</span></span>
+<span id="cb71-5"><a href="multiple-linear-regression.html#cb71-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Unemployment Rate&quot;</span></span>
 <span id="cb71-6"><a href="multiple-linear-regression.html#cb71-6" tabindex="-1"></a><span class="co"># Plots Regression Line and Scatterplot and residuals plot</span></span>
 <span id="cb71-7"><a href="multiple-linear-regression.html#cb71-7" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb71-8"><a href="multiple-linear-regression.html#cb71-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
 <span id="cb71-9"><a href="multiple-linear-regression.html#cb71-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
 <span id="cb71-10"><a href="multiple-linear-regression.html#cb71-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb71-11"><a href="multiple-linear-regression.html#cb71-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>)</span>
-<span id="cb71-12"><a href="multiple-linear-regression.html#cb71-12" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb71-13"><a href="multiple-linear-regression.html#cb71-13" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb71-14"><a href="multiple-linear-regression.html#cb71-14" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb71-15"><a href="multiple-linear-regression.html#cb71-15" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb71-16"><a href="multiple-linear-regression.html#cb71-16" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb71-17"><a href="multiple-linear-regression.html#cb71-17" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
-<span id="cb71-18"><a href="multiple-linear-regression.html#cb71-18" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb71-19"><a href="multiple-linear-regression.html#cb71-19" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>)</span>
-<span id="cb71-20"><a href="multiple-linear-regression.html#cb71-20" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb71-21"><a href="multiple-linear-regression.html#cb71-21" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-unp-fit-1.png" width="672" />
-<strong>Interest Rate</strong></p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="multiple-linear-regression.html#cb72-1" tabindex="-1"></a><span class="co"># Fits with Inflation</span></span>
+<span id="cb71-11"><a href="multiple-linear-regression.html#cb71-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
+<span id="cb71-12"><a href="multiple-linear-regression.html#cb71-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb71-13"><a href="multiple-linear-regression.html#cb71-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb71-14"><a href="multiple-linear-regression.html#cb71-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb71-15"><a href="multiple-linear-regression.html#cb71-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb71-16"><a href="multiple-linear-regression.html#cb71-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb71-17"><a href="multiple-linear-regression.html#cb71-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb71-18"><a href="multiple-linear-regression.html#cb71-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
+<span id="cb71-19"><a href="multiple-linear-regression.html#cb71-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb71-20"><a href="multiple-linear-regression.html#cb71-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb71-21"><a href="multiple-linear-regression.html#cb71-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb71-22"><a href="multiple-linear-regression.html#cb71-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb71-23"><a href="multiple-linear-regression.html#cb71-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/gdp-unp-fit-1.png" width="672" /></p>
+<p><strong>Interest Rate</strong></p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="multiple-linear-regression.html#cb72-1" tabindex="-1"></a><span class="co"># Fits with Interest Rate</span></span>
 <span id="cb72-2"><a href="multiple-linear-regression.html#cb72-2" tabindex="-1"></a>outRegInt <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> int, <span class="at">data =</span> dat)</span>
 <span id="cb72-3"><a href="multiple-linear-regression.html#cb72-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>int</span>
 <span id="cb72-4"><a href="multiple-linear-regression.html#cb72-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegInt</span>
@@ -451,43 +472,47 @@ variables.</p>
 <span id="cb72-8"><a href="multiple-linear-regression.html#cb72-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
 <span id="cb72-9"><a href="multiple-linear-regression.html#cb72-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
 <span id="cb72-10"><a href="multiple-linear-regression.html#cb72-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb72-11"><a href="multiple-linear-regression.html#cb72-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>)</span>
-<span id="cb72-12"><a href="multiple-linear-regression.html#cb72-12" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb72-13"><a href="multiple-linear-regression.html#cb72-13" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb72-14"><a href="multiple-linear-regression.html#cb72-14" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb72-15"><a href="multiple-linear-regression.html#cb72-15" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb72-16"><a href="multiple-linear-regression.html#cb72-16" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb72-17"><a href="multiple-linear-regression.html#cb72-17" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
-<span id="cb72-18"><a href="multiple-linear-regression.html#cb72-18" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb72-19"><a href="multiple-linear-regression.html#cb72-19" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>)</span>
-<span id="cb72-20"><a href="multiple-linear-regression.html#cb72-20" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb72-21"><a href="multiple-linear-regression.html#cb72-21" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<span id="cb72-11"><a href="multiple-linear-regression.html#cb72-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
+<span id="cb72-12"><a href="multiple-linear-regression.html#cb72-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb72-13"><a href="multiple-linear-regression.html#cb72-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb72-14"><a href="multiple-linear-regression.html#cb72-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb72-15"><a href="multiple-linear-regression.html#cb72-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb72-16"><a href="multiple-linear-regression.html#cb72-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb72-17"><a href="multiple-linear-regression.html#cb72-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb72-18"><a href="multiple-linear-regression.html#cb72-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
+<span id="cb72-19"><a href="multiple-linear-regression.html#cb72-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb72-20"><a href="multiple-linear-regression.html#cb72-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb72-21"><a href="multiple-linear-regression.html#cb72-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb72-22"><a href="multiple-linear-regression.html#cb72-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb72-23"><a href="multiple-linear-regression.html#cb72-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/gdp-int-fit-1.png" width="672" /></p>
-<p><strong>Goverment Spending</strong></p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="multiple-linear-regression.html#cb73-1" tabindex="-1"></a><span class="co"># Fits with Inflation</span></span>
+<p><strong>Government Spending</strong></p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="multiple-linear-regression.html#cb73-1" tabindex="-1"></a><span class="co"># Fits with Government Spending</span></span>
 <span id="cb73-2"><a href="multiple-linear-regression.html#cb73-2" tabindex="-1"></a>outRegGov <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> gov, <span class="at">data =</span> dat)</span>
 <span id="cb73-3"><a href="multiple-linear-regression.html#cb73-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>gov</span>
 <span id="cb73-4"><a href="multiple-linear-regression.html#cb73-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegGov</span>
-<span id="cb73-5"><a href="multiple-linear-regression.html#cb73-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Goverment Spending&quot;</span></span>
+<span id="cb73-5"><a href="multiple-linear-regression.html#cb73-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Government Spending&quot;</span></span>
 <span id="cb73-6"><a href="multiple-linear-regression.html#cb73-6" tabindex="-1"></a><span class="co"># Plots Regression Line and Scatterplot and residuals plot</span></span>
 <span id="cb73-7"><a href="multiple-linear-regression.html#cb73-7" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb73-8"><a href="multiple-linear-regression.html#cb73-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
 <span id="cb73-9"><a href="multiple-linear-regression.html#cb73-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
 <span id="cb73-10"><a href="multiple-linear-regression.html#cb73-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb73-11"><a href="multiple-linear-regression.html#cb73-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>)</span>
-<span id="cb73-12"><a href="multiple-linear-regression.html#cb73-12" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb73-13"><a href="multiple-linear-regression.html#cb73-13" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb73-14"><a href="multiple-linear-regression.html#cb73-14" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb73-15"><a href="multiple-linear-regression.html#cb73-15" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb73-16"><a href="multiple-linear-regression.html#cb73-16" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb73-17"><a href="multiple-linear-regression.html#cb73-17" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
-<span id="cb73-18"><a href="multiple-linear-regression.html#cb73-18" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb73-19"><a href="multiple-linear-regression.html#cb73-19" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>)</span>
-<span id="cb73-20"><a href="multiple-linear-regression.html#cb73-20" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb73-21"><a href="multiple-linear-regression.html#cb73-21" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<span id="cb73-11"><a href="multiple-linear-regression.html#cb73-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
+<span id="cb73-12"><a href="multiple-linear-regression.html#cb73-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb73-13"><a href="multiple-linear-regression.html#cb73-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb73-14"><a href="multiple-linear-regression.html#cb73-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb73-15"><a href="multiple-linear-regression.html#cb73-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb73-16"><a href="multiple-linear-regression.html#cb73-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb73-17"><a href="multiple-linear-regression.html#cb73-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb73-18"><a href="multiple-linear-regression.html#cb73-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
+<span id="cb73-19"><a href="multiple-linear-regression.html#cb73-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb73-20"><a href="multiple-linear-regression.html#cb73-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb73-21"><a href="multiple-linear-regression.html#cb73-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb73-22"><a href="multiple-linear-regression.html#cb73-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb73-23"><a href="multiple-linear-regression.html#cb73-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/gdp-gov-fit-1.png" width="672" /></p>
-<p><em>Exports</em></p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="multiple-linear-regression.html#cb74-1" tabindex="-1"></a><span class="co"># Fits with Inflation</span></span>
+<p><strong>Exports</strong></p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="multiple-linear-regression.html#cb74-1" tabindex="-1"></a><span class="co"># Fits with Exports</span></span>
 <span id="cb74-2"><a href="multiple-linear-regression.html#cb74-2" tabindex="-1"></a>outRegExp <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> exp, <span class="at">data =</span> dat)</span>
 <span id="cb74-3"><a href="multiple-linear-regression.html#cb74-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>exp</span>
 <span id="cb74-4"><a href="multiple-linear-regression.html#cb74-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegExp</span>
@@ -497,22 +522,26 @@ variables.</p>
 <span id="cb74-8"><a href="multiple-linear-regression.html#cb74-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
 <span id="cb74-9"><a href="multiple-linear-regression.html#cb74-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
 <span id="cb74-10"><a href="multiple-linear-regression.html#cb74-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb74-11"><a href="multiple-linear-regression.html#cb74-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>)</span>
-<span id="cb74-12"><a href="multiple-linear-regression.html#cb74-12" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb74-13"><a href="multiple-linear-regression.html#cb74-13" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb74-14"><a href="multiple-linear-regression.html#cb74-14" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb74-15"><a href="multiple-linear-regression.html#cb74-15" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb74-16"><a href="multiple-linear-regression.html#cb74-16" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb74-17"><a href="multiple-linear-regression.html#cb74-17" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
-<span id="cb74-18"><a href="multiple-linear-regression.html#cb74-18" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb74-19"><a href="multiple-linear-regression.html#cb74-19" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>)</span>
-<span id="cb74-20"><a href="multiple-linear-regression.html#cb74-20" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb74-21"><a href="multiple-linear-regression.html#cb74-21" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<span id="cb74-11"><a href="multiple-linear-regression.html#cb74-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
+<span id="cb74-12"><a href="multiple-linear-regression.html#cb74-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb74-13"><a href="multiple-linear-regression.html#cb74-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb74-14"><a href="multiple-linear-regression.html#cb74-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb74-15"><a href="multiple-linear-regression.html#cb74-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb74-16"><a href="multiple-linear-regression.html#cb74-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb74-17"><a href="multiple-linear-regression.html#cb74-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb74-18"><a href="multiple-linear-regression.html#cb74-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
+<span id="cb74-19"><a href="multiple-linear-regression.html#cb74-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb74-20"><a href="multiple-linear-regression.html#cb74-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb74-21"><a href="multiple-linear-regression.html#cb74-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb74-22"><a href="multiple-linear-regression.html#cb74-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb74-23"><a href="multiple-linear-regression.html#cb74-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/gdp-exp-fit-1.png" width="672" /></p>
-<p>All of them seem like good candidates for a linear relationship with the GDP,
-however when we use them all together, a more careful analysis should be made.</p>
-<p>We can see the summary reports for the individual regressions and the regression
-with all independent variables as follows:</p>
+<hr />
+</div>
+<div id="multiple-regression" class="section level3 hasAnchor" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> Multiple Regression<a href="multiple-linear-regression.html#multiple-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Each variable individually shows some relationship with GDP, but the key advantage of multiple regression is that it considers all predictors simultaneously. This allows us to estimate the <em>unique contribution</em> of each factor while controlling for the others.</p>
+<p>We fit the full model including all predictors:</p>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="multiple-linear-regression.html#cb75-1" tabindex="-1"></a>outRegAll <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> inf <span class="sc">+</span> une <span class="sc">+</span> int <span class="sc">+</span> gov <span class="sc">+</span> exp, <span class="at">data =</span> dat)</span>
 <span id="cb75-2"><a href="multiple-linear-regression.html#cb75-2" tabindex="-1"></a></span>
 <span id="cb75-3"><a href="multiple-linear-regression.html#cb75-3" tabindex="-1"></a><span class="co"># Summary All</span></span>
@@ -646,9 +675,21 @@ with all independent variables as follows:</p>
 ## Residual standard error: 1.122 on 194 degrees of freedom
 ## Multiple R-squared:  0.03014,    Adjusted R-squared:  0.02514 
 ## F-statistic: 6.028 on 1 and 194 DF,  p-value: 0.01496</code></pre>
-<p>As we can see, the values for the coefficients can change when doing simple linear
-regression and multiple linear regression. If the changes are very dramatic (like change
-in the sign of the coefficient) further inspection is necessary for that variable.</p>
+<p>Comparing the simple regressions with the multiple regression highlights an important point: coefficient estimates can change when predictors are analyzed jointly. In some cases, a variable may even change sign once other variables are included, which suggests potential multicollinearity or overlapping explanatory power. Such cases warrant further investigation.</p>
+<hr />
+</div>
+<div id="summary" class="section level3 hasAnchor" number="6.2.3">
+<h3><span class="header-section-number">6.2.3</span> Summary<a href="multiple-linear-regression.html#summary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This example illustrates the key steps in multiple regression analysis:</p>
+<ol style="list-style-type: decimal">
+<li>Explore relationships through scatterplots and correlations.</li>
+<li>Fit simple regressions to understand individual effects.</li>
+<li>Fit the full multiple regression to assess joint contributions.</li>
+<li>Compare results to detect changes in coefficient estimates.</li>
+</ol>
+<p>Multiple regression provides a richer, more realistic picture of how multiple factors influence an outcome, but it also requires careful interpretation and diagnostic checks.</p>
+<hr />
+</div>
 </div>
 <div id="least-squares-estimation-1" class="section level2 hasAnchor" number="6.3">
 <h2><span class="header-section-number">6.3</span> Least Squares Estimation<a href="multiple-linear-regression.html#least-squares-estimation-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>

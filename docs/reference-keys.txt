@@ -176,7 +176,10 @@ why-use-the-sample-mean-as-the-expansion-center-point
 examples-2
 multiple-linear-regression
 introduction-1
-example-9
+example-modeling-gdp
+simple-regressions
+multiple-regression
+summary
 least-squares-estimation-1
 properties-of-the-estimates-1
 multiple-r2
