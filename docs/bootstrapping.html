@@ -142,6 +142,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#important-dates"><i class="fa fa-check"></i><b>1.1.1</b> Important Dates</a></li>
 <li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#class-schedule"><i class="fa fa-check"></i><b>1.1.2</b> Class Schedule</a></li>
 </ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#course-overview"><i class="fa fa-check"></i><b>1.2</b> Course Overview</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#chapter-2-mathematical-prerequisites"><i class="fa fa-check"></i><b>1.2.1</b> Chapter 2 — Mathematical Prerequisites</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#chapter-3-the-linear-regression-problem"><i class="fa fa-check"></i><b>1.2.2</b> Chapter 3 — The Linear Regression Problem</a></li>
+<li class="chapter" data-level="1.2.3" data-path="index.html"><a href="index.html#chapters-4-to-6-linear-regression-as-an-optimization-problem"><i class="fa fa-check"></i><b>1.2.3</b> Chapters 4 to 6 — Linear Regression as an Optimization Problem</a></li>
+<li class="chapter" data-level="1.2.4" data-path="index.html"><a href="index.html#chapter-7-introducing-uncertainty"><i class="fa fa-check"></i><b>1.2.4</b> Chapter 7 — Introducing Uncertainty</a></li>
+<li class="chapter" data-level="1.2.5" data-path="index.html"><a href="index.html#chapters-8-and-9-probabilistic-modeling-and-statistical-inference"><i class="fa fa-check"></i><b>1.2.5</b> Chapters 8 and 9 — Probabilistic Modeling and Statistical Inference</a></li>
+<li class="chapter" data-level="1.2.6" data-path="index.html"><a href="index.html#summary"><i class="fa fa-check"></i><b>1.2.6</b> Summary</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>2</b> Prerequisites</a>
 <ul>
@@ -259,7 +268,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="6.2.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#simple-regressions"><i class="fa fa-check"></i><b>6.2.1</b> Simple Regressions</a></li>
 <li class="chapter" data-level="6.2.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#multiple-regression"><i class="fa fa-check"></i><b>6.2.2</b> Multiple Regression</a></li>
-<li class="chapter" data-level="6.2.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#summary"><i class="fa fa-check"></i><b>6.2.3</b> Summary</a></li>
+<li class="chapter" data-level="6.2.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#summary-1"><i class="fa fa-check"></i><b>6.2.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#least-squares-estimation-1"><i class="fa fa-check"></i><b>6.3</b> Least Squares Estimation</a></li>
 <li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#properties-of-the-estimates-1"><i class="fa fa-check"></i><b>6.4</b> Properties of the Estimates</a></li>
@@ -492,7 +501,8 @@ When we studied influential observations and outliers, we saw how removing certa
 </details>
 <p>The plot shows that the <strong>intercept</strong> has substantial uncertainty, while coefficients for inflation, unemployment, and interest rates show moderate variability.
 Government expenditure and exports have very little variability.</p>
-<p>Even though the intercept varies widely, it remains positive in all bootstrap samples. Inflation and unemployment coefficients occasionally change sign, suggesting weaker evidence for their direction of effect. The interest rate coefficient is usually positive but sometimes negative, while the government expenditure coefficient hovers near zero. Exports remain small but consistently positive.</p>
+<p>Even though the intercept varies widely, it remains positive in all bootstrap samples. Inflation and unemployment coefficients almost never change sign, suggesting strong evidence for their direction of effect. The interest rate coefficient is usually positive but sometimes negative, suggesting little evidence for the direction of the effect. The government expenditure coefficient hovers near zero. Exports remain small but consistently positive.</p>
+<p>Notice this relationships and the number of <code>*</code> in the summary of the regular linear regression. Whenever a coefficient has all (or almost all) of its observations on one side of the red line, the summary assigns more <code>*</code>, while when a coefficient that has several observations on either side of the line, has no <code>*</code> indicating little significance.</p>
 <hr />
 <p>We can also explore how the estimated coefficients relate to each other.</p>
 <div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="bootstrapping.html#cb150-1" tabindex="-1"></a><span class="co"># Data Frame</span></span>

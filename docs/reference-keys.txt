@@ -26,6 +26,13 @@ stat-53856385-fall-2025
 calendar
 important-dates
 class-schedule
+course-overview
+chapter-2-mathematical-prerequisites
+chapter-3-the-linear-regression-problem
+chapters-4-to-6-linear-regression-as-an-optimization-problem
+chapter-7-introducing-uncertainty
+chapters-8-and-9-probabilistic-modeling-and-statistical-inference
+summary
 prerequisites
 general-math
 linear-algebra
@@ -179,7 +186,7 @@ introduction-1
 example-modeling-gdp
 simple-regressions
 multiple-regression
-summary
+summary-1
 least-squares-estimation-1
 properties-of-the-estimates-1
 multiple-r2
