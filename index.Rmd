@@ -49,3 +49,97 @@ Find the github page for the course (with the data sets) here: [Github](https://
   - [Stability of the Solution](#stability-of-the-solution)
   - [Other Approches to Regression](#other-approches-to-regression)
   - [Bootstrapping](#bootstrapping)
+
+## Course Overview
+
+This course is designed for graduate students in Statistics and related fields, presenting **Linear Regression** as both a mathematical and a statistical modeling framework. The material develops the topic systematically, moving from rigorous mathematical foundations to a probabilistic understanding of regression. No results are assumed without being first derived or stated in the text, making the course **entirely self-contained**.
+
+Throughout all chapters, **examples and code are used extensively**—primarily in **R**—to illustrate theoretical results, verify algebraic derivations, and visualize statistical concepts.
+This integration of **mathematical theory and computational practice** ensures that students not only understand each result formally but also see how it operates in applied settings.
+
+The course is organized into several chapters, each serving a specific pedagogical purpose and building upon the previous one.
+
+---
+
+### Chapter 2 — Mathematical Prerequisites
+
+Chapter 2 provides a **comprehensive review of the mathematical tools** required for the course, including essential topics from **Linear Algebra, Calculus, Probability, and Statistics**.
+
+The goal is not to provide a general background, but to present precisely those results that are **used explicitly** in later chapters. Every theorem, identity, or property invoked afterward is included here, ensuring that the course can be followed without external references.
+
+Code examples in this chapter are used mainly to **illustrate matrix operations and probabilistic concepts** numerically, bridging abstract results with computational intuition.
+
+---
+
+### Chapter 3 — The Linear Regression Problem
+
+Chapter 3 introduces the **core modeling framework** of the course: Linear Regression.
+The emphasis is on **understanding the purpose and intuition** behind regression analysis—modeling the relationship between dependent and independent variables and interpreting regression coefficients.
+
+Concepts are introduced through **simple applied examples**, often accompanied by R code that demonstrates how theoretical constructs translate into real data analysis.
+By the end of the chapter, students understand both the **conceptual motivation** and the **computational implementation** of regression.
+
+---
+
+### Chapters 4 to 6 — Linear Regression as an Optimization Problem
+
+Chapters 4 through 6 approach linear regression from a **Machine Learning perspective**, treating it as a **pure optimization problem** before introducing any probabilistic assumptions.
+
+This approach has two main objectives:
+
+1. To **derive the mechanics of least squares estimation** using linear algebra and geometry.
+2. To **develop familiarity with the algebraic structures** that will later reappear in the probabilistic framework.
+
+Each chapter is heavily supported by **worked examples and code demonstrations**, which replicate derivations computationally and visualize concepts such as projections, residuals, and model fit.
+This combination of symbolic and computational work helps students develop both mathematical insight and applied proficiency.
+
+* **Chapter 4** introduces **Simple Linear Regression** (one independent variable), deriving the least squares estimator analytically and interpreting it geometrically as an orthogonal projection.
+* **Chapter 5** serves as a **bridge** between simple and multiple regression by exploring models where transformations of a single variable can be treated as multiple predictors.
+* **Chapter 6** generalizes to **Multiple Linear Regression**, fully expressed in matrix form. This chapter develops central results such as the normal equations, projection matrices, and the decomposition of sums of squares, with accompanying R code to verify and illustrate each result.
+
+Together, these chapters form the **mathematical backbone** of regression analysis and provide a hands-on understanding of how theory translates into computation.
+
+---
+
+### Chapter 7 — Introducing Uncertainty
+
+Chapter 7 marks the **transition from deterministic optimization to stochastic modeling**.
+Here, uncertainty is formally introduced—both in the estimated coefficients and in derived quantities such as fitted values and residuals.
+
+This chapter can be viewed from two complementary perspectives:
+
+* As a **machine learning perspective**, focusing on variability due to sample dependence;
+* Or as a **statistical perspective**, where such variability is interpreted as randomness governed by a probabilistic model.
+
+Coding examples in this chapter illustrate **empirical estimation of variability** (e.g., via resampling or bootstrapping), providing a concrete understanding of uncertainty before formal statistical assumptions are introduced.
+
+---
+
+### Chapters 8 and 9 — Probabilistic Modeling and Statistical Inference
+
+The final section of the course introduces **probabilistic models** for regression, enabling formal **statistical inference**.
+
+* **Chapter 8** studies the properties of the least squares estimator under **minimal assumptions**—specifically, assuming only the **mean and variance** of the errors.
+  Here, key results such as the **unbiasedness** of the estimator and the **Gauss–Markov theorem** are derived and supported by simulations verifying theoretical properties empirically.
+
+* **Chapter 9** introduces the **normality assumption**, which allows the full machinery of **statistical inference**.
+  Students derive and visualize **sampling distributions**, **confidence intervals**, **hypothesis tests**, and **prediction intervals**. Each concept is accompanied by **code examples** that connect algebraic derivations with their computational implementation.
+
+These chapters transition the course from purely mathematical reasoning to **fully probabilistic thinking**, equipping students to use regression as a formal inferential tool.
+
+---
+
+### Summary
+
+The course follows a **progressive and integrated structure**:
+
+1. **Mathematical foundations** — Chapter 2
+2. **Conceptual introduction to regression** — Chapter 3
+3. **Optimization and linear algebraic formulation** — Chapters 4–6
+4. **Introduction of uncertainty** — Chapter 7
+5. **Statistical inference and probabilistic modeling** — Chapters 8–9
+
+Throughout the course, **R code and applied examples** are used to reinforce every theoretical result.
+This dual emphasis on **mathematical rigor** and **computational practice** ensures that students gain a deep understanding of both how linear regression works in theory and how it is implemented and interpreted in real data analysis.
+
+By the end, students will be able to derive regression results from first principles, verify them computationally, and apply them confidently in research and applied contexts.

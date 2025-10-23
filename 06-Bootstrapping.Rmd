@@ -2,37 +2,37 @@
 
 ## Introduction
 
-**Bootstrapping** is a statistical technique that estimates the variability of a
-statistic by resampling data with replacement. It creates multiple simulated 
-datasets ("bootstrap samples") from the original data, allowing the construction
-of empirical distributions for estimates like means, medians, or regression 
-coefficients. This method does not rely on assumptions about the data's
-distribution, making it highly flexible and robust, especially with small 
-sample sizes.
+**Bootstrapping** is a resampling-based statistical method used to estimate the variability of a statistic by repeatedly sampling from the observed data **with replacement**.
+Each resample, called a *bootstrap sample*, mimics the process of drawing new data from the population. By computing the statistic of interest (for example, the mean, median, or regression coefficients) for many bootstrap samples, we obtain an **empirical distribution** that approximates the sampling distribution of that statistic.
 
-Key Points:
+Unlike classical inference methods that rely on strong distributional assumptions (such as normality), bootstrapping is **non-parametric** and **data-driven**, making it highly flexible and particularly useful when sample sizes are small or assumptions are difficult to justify.
 
-1. **Resampling with Replacement**: Each bootstrap sample allows the same data point to appear multiple times.
-2. **No Distribution Assumptions**: Unlike traditional methods, bootstrapping is non-parametric.
-3. **Estimates Uncertainty**: Useful for computing confidence intervals and standard errors without strict assumptions.
+In a way, bootstrapping can be viewed as the *“poor man’s probability”*—it lets us approximate uncertainty purely from data, without relying on analytical formulas.
 
-Bootstrapping is a simple and powerful tool for inference, often applied when 
-data is scarce or distributional assumptions are unclear.
+### Key Points
+
+1. **Resampling with Replacement:** Each bootstrap sample is created by randomly drawing observations from the original dataset, allowing repetitions.
+2. **No Distributional Assumptions:** Bootstrapping makes no assumptions about the underlying population distribution.
+3. **Estimation of Uncertainty:** It provides estimates of standard errors, confidence intervals, and other measures of variability directly from the data.
+
+In short, bootstrapping provides a simple and powerful way to quantify uncertainty when theoretical solutions are unavailable or unreliable.
+
+---
 
 ## Bootstrapping Example
 
-So far we have been able to compute several estimates of interest:
+Up to this point, we have computed several regression-related quantities of interest:
 
-$$ \hat{\bgb} $$
-$$ \hat{\by} $$
-$$ \hat{\be} $$
+$$ \hat{\boldsymbol{\beta}}, \quad \hat{\mathbf{y}}, \quad \hat{\mathbf{e}} $$
 
-But they are point estimates. When we talked about influential observations and
-outliers, we saw what were some of the effects on the estimates when we removed 
-observations. But this changes were very limited.
+These are all *point estimates* obtained from the least squares fit.
+When we studied influential observations and outliers, we saw how removing certain data points affected these estimates — but those changes provided only limited information about uncertainty.
 
-With bootstrapping we can add uncertainty to our estimates or any quantity of 
-interest. Let's see this with our GDP data.
+Bootstrapping allows us to go much further. By repeatedly resampling the data and refitting the model, we can build empirical distributions for our estimates and thus quantify their variability.
+
+Let’s illustrate this using GDP data.
+
+---
 
 ```{r bootstrapping-coefficients}
 # Data Load
@@ -41,6 +41,9 @@ dat <- read.csv(file = "Gdp data.csv")
 # Assigns Values
 X <- as.matrix(dat[, 2:6])
 y <- as.numeric(dat$gdp)
+
+# Regression without Bootstrapping
+norReg <- lm(y ~ X)
 
 # Number of Observations
 n <- nrow(X)
@@ -66,7 +69,7 @@ for(i in 1:m){
   booCoe[i, ] <- solve(t(Xb) %*% Xb, t(Xb) %*% yb)
 }
 
-# Plots the distribution for each coefficient
+# Plots the distribution for each coefficient with the point estimate without suing bootstrapping
 boxplot(booCoe,
         col = rgb(0, 0, 1, 0.5),
         xaxt = "n")
@@ -74,21 +77,45 @@ axis(side = 1, at = 1:6, labels = c("Intercept", "Inf", "Une", "Int", "Gov", "Ex
 abline(h   = 0,
        col = rgb(1, 0, 0),
        lwd = 2)
+points(norReg$coefficients, pch = 17, col = rgb(0,1,0))
+
+# Compare to the Summary of the regression without Bootstrapping
+summary(norReg)
 ```
 
+<details><summary><span style="color:green">Explanation of the Code</span></summary>
 
-Here we can see that the intercept has a lot of uncertainty. While the coefficients
-corresponding to the inflation rate, unemployment rate and the interest rate have
-less variability and the government expenditure and exports have very little variability.
 
-We see that even though the intercept is very variable is always positive. While 
-the coefficients for inflation and unemployment have less variability but a couple
-of times change signs. The interest rate coefficient, while positive most of the 
-time is negative sometimes. The government expenditure coefficients lands almost
-exactly at 0, with very little variability, while the coefficient for exports
-is small but always positive.
+This code performs **bootstrap resampling** of a linear regression model using GDP data.
 
-We can observe how the coefficient estimates are related:
+1. The dataset is read and split into the predictor matrix `X` and the response vector `y`.
+2. A standard linear model (`norReg`) is fit to the original data for reference.
+3. A design matrix is constructed by adding an intercept term.
+4. We specify `m = 1000`, meaning 1000 bootstrap replications.
+5. For each replication:
+
+   * A bootstrap sample is drawn from the indices `1:n` with replacement.
+   * The model is refit using this resampled data.
+   * The estimated coefficients are stored in the matrix `booCoe`.
+6. Finally, a **boxplot** displays the bootstrap distributions of the coefficients, with:
+
+   * The **red line** indicating zero,
+   * The **green triangles** marking the original least squares estimates.
+
+This visualization highlights the **variability** of each coefficient estimate.
+
+</details>
+
+The plot shows that the **intercept** has substantial uncertainty, while coefficients for inflation, unemployment, and interest rates show moderate variability.
+Government expenditure and exports have very little variability.
+
+Even though the intercept varies widely, it remains positive in all bootstrap samples. Inflation and unemployment coefficients almost never change sign, suggesting strong evidence for their direction of effect. The interest rate coefficient is usually positive but sometimes negative, suggesting little evidence for the direction of the effect. The government expenditure coefficient hovers near zero. Exports remain small but consistently positive.
+
+Notice this relationships and the number of `*` in the summary of the regular linear regression. Whenever a coefficient has all (or almost all) of its observations on one side of the red line, the summary assigns more `*`, while when a coefficient that has several observations on either side of the line, has no `*` indicating little significance. 
+
+---
+
+We can also explore how the estimated coefficients relate to each other.
 
 ```{r bootstraping-coefficients-correlation}
 # Data Frame
@@ -97,17 +124,22 @@ colnames(booCoeDf) <- c("Intercept", "Inf", "Une", "Int", "Gov", "Exp")
 pairs(booCoeDf)
 ```
 
-Here we can observe that the coefficients for inflation, unemployment and interest
-rate are very correlated. While government expenditure and exports are almost
-independent of the other variables.
+<details><summary><span style="color:green">Explanation of the Code</span></summary>
 
-This type of analysis is not limited to the coefficients, it can also be applied
-to the predictions (in and out of sample).
+This code creates a **pairwise scatterplot matrix** (`pairs`) of the bootstrap coefficient estimates. Each panel shows the relationship between two coefficients across all bootstrap samples.
 
-For example, we can compare the estimates and the observed values
-for GDP. We can compute 95\% bootstrap confidence intervals for the estimates
-and analyze for which observations the linear model is a good fit, and for which it
-isn't.
+</details>
+
+
+The plot reveals that coefficients for **inflation**, **unemployment**, and **interest rate** are strongly correlated, indicating possible multicollinearity among these predictors.
+In contrast, **government expenditure** and **exports** appear largely independent of the others.
+
+---
+
+### Bootstrapping Predictions
+
+Bootstrapping can be applied not only to model coefficients but also to **predicted values**.
+We can use bootstrap samples to construct **confidence intervals** for the mean predictions and **prediction intervals** for individual outcomes.
 
 ```{r bootstrap-in-sample-mean-predictions}
 # Mean Estimates
@@ -143,22 +175,35 @@ for(i in 1:numPlo){
   points(x   = xSet[i, ],
          y   = y[xSet[i, ]],
          pch = 16,
-         col = rgb(1, 0, 0, 0.75))
+         col = rgb(0, 0, 1, 0.75))
 }
 
 # Coverage of the Bootstrap Confidence Intervals
 print(paste0("Bootstrap Confidence Intervals Coverage = ", round(mean((y > booConQua[1, ]) & (y < booConQua[2, ])) * 100, 2) ))
 ```
-As we can see, the mean estimate confidence intervals of the observations do not
-cover 95\% of the observed values. This is because we are only estimating the mean
-value (the place where the line is) and not where the observations could be, that
-is it is not accounting for possible errors.
 
-We can include this uncertainty component by adding the bootstrapping errors.
+<details><summary><span style="color:green">Explanation of the Code</span></summary>
 
-Since, we have made no assumptions about the errors, we can assume now that the
-errors will behave the same way for all observations, so we can create bootstrap
-errors and add them to our bootstrap mean estimates to create prediction intervals.
+Here, the matrix multiplication `booCoe %*% t(X)` computes the fitted values for all bootstrap replications.
+For each observation, the 2.5% and 97.5% quantiles across these replications form a **95% confidence interval** for the mean prediction.
+
+The resulting plot displays:
+
+* **Thick vertical lines** for confidence intervals,
+* **Blue dots** for observed GDP values.
+
+Finally, the coverage rate — the proportion of true observations lying within their confidence intervals — is printed.
+
+</details>
+
+The intervals for mean predictions do not cover 95% of the observed values.
+This is expected, because these intervals quantify uncertainty in the *mean response*, not in individual observations. They do not account for the variability due to random errors.
+
+---
+
+### Adding Prediction Intervals
+
+To include the effect of random errors, we can also bootstrap the residuals and use them to construct **prediction intervals**.
 
 ```{r bootstrapping-prediction_intervales}
 ### Error Bootstrapping Samples
@@ -208,25 +253,35 @@ for(i in 1:numPlo){
   points(x   = xSet[i, ] - (i - 1),
          y   = y[xSet[i, ]],
          pch = 16,
-         col = rgb(1, 0, 0, 0.75))
+         col = rgb(0, 1, 0, 0.75))
   points(x   = xSet[i, ][!nonCov[xSet[i, ]]] - (i - 1),
          y   = y[xSet[i, ][!nonCov[xSet[i, ]]]],
-         pch = 1,
-         col = rgb(0, 0, 1, 0.75))
+         pch = 16,
+         col = rgb(1, 0, 0, 0.75))
 }
 
 # Coverage of the Bootstrap Confidence Intervals
 print(paste0("Bootstrap Predictive Intervals Coverage = ", round(mean((y > booPreQua[1, ]) & (y < booPreQua[2, ])) * 100, 2) ))
 ```
 
-In the figure the thin intervals represent the 95\% predictive intervals and the
-thick intervals the 95\% mean confidence intervals.
+<details><summary><span style="color:green">Explanation of the Code</span></summary>
 
-Notice here that the coverage of the Predictive Intervals is much closer to 95\%.
+1. Residuals (`eh`) are obtained by subtracting observed GDP from the bootstrap mean estimates.
+2. These residuals are resampled and added to the fitted values to simulate new predictions (`yp`).
+3. For each observation, the 2.5% and 97.5% quantiles form the **95% prediction intervals**.
+4. The plot now shows:
 
-Also, notice that if you run this code in your computer the results will be slightly
-different, since this results depend on the random sampling used to create the
-bootstrap samples.
+   * **Thick lines** for mean confidence intervals,
+   * **Thin lines** for prediction intervals,
+   * **Green points** for covered observations,
+   * **Red points** for uncovered observations.
+
+Finally, the empirical coverage rate of the prediction intervals is printed.
+
+</details>
 
 
+The **prediction intervals** now achieve a coverage much closer to 95%, as expected.
+This reflects the inclusion of both **estimation uncertainty** and **random variability**.
 
+Because bootstrap resampling involves randomness, running the code again will produce slightly different numerical results—an inherent feature of resampling methods.
