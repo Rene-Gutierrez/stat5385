@@ -69,6 +69,7 @@ Key properties of the summation operator include:
 
 You should be familiar with the following linear algebra concepts:
 
+* [Zero Matrix](#zero-matrix)
 * [Linear Independence](#linear-independence)
 * [Column Space of a Matrix](#column-space-of-a-matrix)
 * [Rank of a Matrix](#rank-of-a-matrix)
@@ -79,6 +80,13 @@ You should be familiar with the following linear algebra concepts:
 * [Eigendecomposition](#eigendecomposition)
 * [Idempotent Matrix](#idempotent-matrix)
 * [Determinant of a Matrix](#determinant-of-a-matrix)
+* [Trace of a Matrix](#trace-of-a-matrix)
+
+### Zero Matrix
+
+A matrix \(\bA \in \dR^{n \times m}\) is the zero matrix if and only if when multiplied by any vector the result is the zero vector. That is
+
+$$ \bA = 0 \in \dR^{n \times m} \iff \bA \bx = 0 \in \dR^m \quad \forall \bx \in \dR^m$$
 
 ### Linear Independence
 
@@ -576,6 +584,125 @@ Here, $\mathbf{A} - \mathbf{B} \mathbf{D}^{-1} \mathbf{C}$ is called the **Schur
 For any invertible matrix $\bX \in \dR^{p \times p}$ and matrices $\bA\in\dR^{p\times q}$ and $\bB \in\dR^{q\times p}$ we have, that:
 
 $$\det(\bX + \bA \bB) = det(\bX)\det(\bI_q + \bB\bX^{-1}\bA) $$
+
+Here’s a **textbook-style introduction** to the **trace of a matrix**, suitable for inclusion in your Applied Linear Regression notes. The exposition is clear, concise, and uses notation consistent with the rest of your course.
+
+---
+
+### Trace of a Matrix
+
+The **trace** of a square matrix is one of the most fundamental scalar quantities in linear algebra. It captures, in a compact way, the sum of a matrix’s diagonal elements and often arises in proofs involving inner products, variance decompositions, and matrix derivatives.
+
+#### Definition
+
+Let $\mathbf{A}$ be a square matrix of order $n$, that is, $\mathbf{A} \in \mathbb{R}^{n \times n}$.
+The **trace** of $\mathbf{A}$, denoted by $\operatorname{tr}(\mathbf{A})$, is defined as
+
+$$
+\operatorname{tr}(\mathbf{A}) = \sum_{i=1}^{n} a_{ii}.
+$$
+
+In words, the trace of a matrix is simply the **sum of its diagonal elements**.
+
+---
+
+#### Intuitive Meaning
+
+Although the trace looks simple, it plays an important role in many mathematical and statistical contexts:
+
+* In **geometry**, the trace can represent the sum of eigenvalues, which in turn relates to how a linear transformation stretches or compresses space.
+* In **statistics**, traces frequently appear in expressions for **variances**, **covariances**, and **expected sums of squares**, since they compactly summarize matrix operations involving quadratic forms.
+* In **machine learning** and **matrix calculus**, the trace simplifies differentiation of scalar-valued functions of matrices.
+
+---
+
+#### Properties of the Trace
+
+The trace operator has several useful algebraic properties that make it invaluable in proofs and derivations.
+
+Let $\mathbf{A}$, $\mathbf{B}$, and $\mathbf{C}$ be matrices of compatible dimensions, and let $c$ be a scalar. Then:
+
+1. **Linearity**
+
+   $$
+   \operatorname{tr}(c\mathbf{A}) = c , \operatorname{tr}(\mathbf{A}), \qquad
+   \operatorname{tr}(\mathbf{A} + \mathbf{B}) = \operatorname{tr}(\mathbf{A}) + \operatorname{tr}(\mathbf{B})
+   $$
+
+   The trace is a linear operator.
+
+---
+
+2. **Invariance under Transpose**
+
+   $$
+   \operatorname{tr}(\mathbf{A}) = \operatorname{tr}(\mathbf{A}')
+   $$
+
+   Since the diagonal elements of $\mathbf{A}$ and $\mathbf{A}'$ are the same, the trace is unchanged by transposition.
+
+---
+
+3. **Cyclic Property**
+
+   For any matrices $\mathbf{A}$ and $\mathbf{B}$ such that the products are defined,
+
+   $$
+   \operatorname{tr}(\mathbf{A}\mathbf{B}) = \operatorname{tr}(\mathbf{B}\mathbf{A})
+   $$
+
+   More generally, for a product of several matrices,
+
+   $$
+   \operatorname{tr}(\mathbf{A}\mathbf{B}\mathbf{C}) = \operatorname{tr}(\mathbf{B}\mathbf{C}\mathbf{A}) = \operatorname{tr}(\mathbf{C}\mathbf{A}\mathbf{B})
+   $$
+
+   This **cyclic permutation** property is extremely useful for simplifying expressions in proofs.
+
+---
+
+4. **Trace of a Scalar**
+
+   If $\mathbf{A}$ and $\mathbf{B}$ are conformable, then the scalar $\mathbf{a}'\mathbf{b}$ can be expressed as a trace:
+
+   $$
+   \mathbf{a}'\mathbf{b} = \operatorname{tr}(\mathbf{a}'\mathbf{b}) = \operatorname{tr}(\mathbf{b}\mathbf{a}')
+   $$
+
+   This shows that even scalar products can be written in trace form—a trick that often simplifies derivations involving differentiation or expectations.
+
+---
+
+5. **Trace and Eigenvalues**
+
+   If $\lambda_1, \lambda_2, \dots, \lambda_n$ are the eigenvalues of $\mathbf{A}$ (counting multiplicity), then
+
+   $$
+   \operatorname{tr}(\mathbf{A}) = \sum_{i=1}^n \lambda_i.
+   $$
+
+   This property links the trace directly to the **spectrum** of the matrix.
+
+---
+
+6. **Trace of an Idempotent Matrix**
+
+   If $\mathbf{A}$ is idempotent (that is, $\mathbf{A}^2 = \mathbf{A}$), then its trace equals its rank:
+
+   $$
+   \operatorname{tr}(\mathbf{A}) = \operatorname{rank}(\mathbf{A}).
+   $$
+
+   This result will later be important in regression analysis, where projection (hat) matrices are idempotent, and their trace gives the model’s **degrees of freedom**.
+
+---
+
+#### Summary
+
+The trace function is simple to define but extremely powerful in application.
+Its **linearity**, **cyclic invariance**, and **connection to eigenvalues and rank** make it a central tool in both theoretical and applied linear regression, particularly when expressing variances, covariances, and expectations in matrix form.
+
+---
 
 ## Calculus
 
