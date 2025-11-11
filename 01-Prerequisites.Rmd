@@ -1475,3 +1475,46 @@ Confidence intervals are central in statistical inference because they provide b
    [T(\bY) - c_2 S(\bY),T(\bY) - c_1 S(\bY)]
    $$
 
+---
+
+### Hypothesis Testing
+
+In statistical inference, **hypothesis testing** provides a formal framework to evaluate claims or assumptions about unknown population parameters based on sample data. While *interval estimation* aims to quantify uncertainty by constructing a range of plausible values for a parameter, hypothesis testing seeks to make a decision — whether the available evidence supports or contradicts a particular assumption about that parameter.
+
+Suppose that a parameter of interest is denoted by $\theta$. We begin by specifying two competing statements:
+
+* The **null hypothesis**, $H_0$, represents the claim or status quo that we assume to be true unless the data provide strong evidence against it.
+* The **alternative hypothesis**, $H_1$, represents the claim we consider if the evidence suggests that $H_0$ may not hold.
+
+For example, in a regression setting, one may test whether a particular coefficient is equal to zero:
+$$
+H_0: \beta_i = 0 \quad \text{versus} \quad H_1: \beta_i \neq 0
+$$
+to determine whether predictor $x_i$ contributes significantly to explaining the dependent variable.
+
+The general idea of hypothesis testing can be expressed through the construction of a **test statistic**, a function of the data and the parameter of interest:
+$$
+T = T(\mathbf{y}, \theta)
+$$
+This statistic is designed so that, under the null hypothesis $H_0$, its sampling distribution is known. The test statistic must be a *bijective* function of $\theta$ with respect to the hypothesis being tested; that is, changes in $\theta$ should translate uniquely into changes in $T$, ensuring that inferences about $\theta$ can be drawn from the observed value of $T$.
+
+Once the distribution of $T$ under $H_0$ is established, we define a **rejection region** — the set of values of $T$ for which the null hypothesis will be rejected. This region is determined by the **significance level** $\alpha$, which represents the probability of incorrectly rejecting $H_0$ when it is actually true (a *Type I error*). Mathematically,
+$$
+\mathbb{P}(T \in R \mid H_0 \text{ true}) = \alpha
+$$
+
+If the observed test statistic $t_{\text{obs}}$ falls within this region, we reject $H_0$ in favor of $H_1$. Otherwise, we fail to reject $H_0$. The cutoff points that determine the rejection region are called **critical values**, and they are derived from the distribution of $T$ under $H_0$.
+
+An equivalent approach is to compute the **p-value**, which represents the probability, under $H_0$, of obtaining a test statistic as extreme or more extreme than the observed one. The decision rule is then:
+$$
+\text{Reject } H_0 \quad \text{if} \quad p\text{-value} < \alpha
+$$
+
+In summary, hypothesis testing involves four essential steps:
+
+1. **State the hypotheses**: formulate $H_0$ and $H_1$.
+2. **Choose an appropriate test statistic** $T(\mathbf{y}, \theta)$ and determine its distribution under $H_0$.
+3. **Determine the rejection region** based on the desired significance level $\alpha$.
+4. **Make a decision** by comparing the observed statistic to the rejection region or by evaluating the p-value.
+
+
