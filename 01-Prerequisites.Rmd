@@ -17,6 +17,7 @@
 \newcommand{\bV}{\mathbf{V}}
 \newcommand{\bW}{\mathbf{W}}
 \newcommand{\bX}{\mathbf{X}}
+\newcommand{\bY}{\mathbf{Y}}
 \newcommand{\dC}{\mathbb{C}}
 \newcommand{\dE}{\mathbb{E}}
 \newcommand{\dM}{\mathbb{M}}
@@ -1391,7 +1392,86 @@ where:
    \dM(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})).
    $$
 
-2. **Bias-Variance Trade-off**: The MSE quantifies the balance between bias and variance. Lowering bias often increases variance and vice versa, a key concept in statistical estimation.
+2. **Bias-Variance Trade-off**: The MSE quantifies the balance between bias and variance. Lowering bias often increases variance and viceversa, a key concept in statistical estimation.
 
 3. **Overall Error Metric**: The MSE provides a comprehensive measure of the estimator's accuracy, taking both variance and bias into account, making it an essential criterion in evaluating estimators.
+
+---
+
+### Interval Estimation
+
+**Point estimation** is useful when the goal is to provide a single best estimate of an unknown population parameter based on sample data. While point estimates are useful summaries, they do not convey any information about the **precision** or **uncertainty** associated with the estimation process.
+
+**Interval estimation** addresses this limitation by constructing an interval that, with a specified probability, contains the true value of the parameter of interest. Instead of reporting a single estimate $ \hat{\theta} $, we report an interval $ [L, U] $ that reflects the range of plausible values for the parameter $ \theta $.
+
+Formally, a **$ (1 - \alpha)100% $ confidence interval** for a parameter $ \theta $ is an interval computed from the data $ \bY $, denoted by
+$$
+[L(\bY), U(\bY)],
+$$
+such that
+$$
+P(L(\bY) \leq \theta \leq U(\bY)) = 1 - \alpha.
+$$
+
+Here, $ 1 - \alpha $ is called the **confidence level**, typically chosen as 0.90, 0.95, or 0.99. The value $ \alpha $ represents the **significance level**, or the probability that the constructed interval fails to contain the true parameter value.
+
+Intuitively, if we were to draw a large number of random samples and construct a confidence interval for each, approximately $ (1 - \alpha)100% $ of those intervals would contain the true value of $ \theta $. Importantly, the confidence level pertains to the *procedure* of interval construction, not to the probability that any single computed interval contains $ \theta $, since once the data are observed, the interval is fixed and $ \theta $ is not random.
+
+Confidence intervals are central in statistical inference because they provide both an estimate and a measure of its reliability. Moreover, their construction is closely tied to hypothesis testing, as the same pivotal quantities used to form confidence intervals are also used to test hypotheses about population parameters.
+
+---
+
+#### Steps to Construct a Confidence Interval
+
+1. **Define a pivotal quantity.**
+   Begin by constructing a random variable $ W(\bY, \theta) $ that satisfies two essential properties:
+
+   * It depends on the data $ \bY $ and the parameter of interest $ \theta $, but on *no other unknown parameters*.
+   * It is a *bijective* function of $ \theta $, meaning that for every possible value of $ W $, there exists a unique corresponding value of $ \theta $.
+
+   For example, suppose $ \bar{Y} \sim N(\theta, \sigma^2 / n) $ and $ \sigma^2 $ is known. Then a valid pivotal quantity is
+   $$
+   W(\bY, \theta) = \frac{\bar{Y} - \theta}{\sigma / \sqrt{n}}
+   $$
+   which depends only on the data and $ \theta $.
+
+2. **Determine the sampling distribution of the pivotal quantity.**
+   Identify the probability distribution of $ W(\bY, \theta) $. This distribution should *not* depend on any unknown parameters.
+
+   In the previous example, we know that
+   $$
+   W(\bY, \theta) = \frac{\bar{Y} - \theta}{\sigma / \sqrt{n}} \sim N(0,1)
+   $$
+
+   Hence, the distribution of $ W $ is fully specified and parameter-free.
+
+3. **Find the relevant percentiles of the distribution.**
+   For a desired confidence level $ 1 - \alpha $, determine the constants $ c_1 $ and $ c_2 $ such that
+   $$
+   P(c_1 \leq W(\bY, \theta) \leq c_2) = 1 - \alpha
+   $$
+   These constants correspond to the $ \alpha/2 $ and $ 1 - \alpha/2 $ quantiles of the distribution of $ W $.
+
+   For instance, when $ W \sim N(0,1) $,
+   $$
+   P(-z_{\alpha/2} \leq W \leq z_{\alpha/2}) = 1 - \alpha
+   $$
+
+4. **Invert the probability statement to isolate $ \theta $.**
+   Express the probability statement in terms of $ \theta $ by algebraically manipulating the inequalities.
+   Starting from
+   $$
+   P(c_1 \leq W(\bY, \theta) \leq c_2) = 1 - \alpha
+   $$
+   substitute $ W(\bY, \theta) $ and solve for $ \theta $:
+   \begin{align*}
+   c_1 &\leq W(\bY, \theta) = \frac{T(\bY) - \theta}{S(\bY)} \leq c_2 \
+   -c_2 S(\bY) + T(\bY) &\leq \theta \leq -c_1 S(\bY) + T(\bY)
+   \end{align*}
+   where $ T(\bY) $ and $ S(\bY) $ are functions of the data.
+
+   Thus, the $ 100(1-\alpha)% $ confidence interval for $ \theta $ is
+   $$
+   [T(\bY) - c_2 S(\bY),T(\bY) - c_1 S(\bY)]
+   $$
 

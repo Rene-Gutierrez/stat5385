@@ -2,39 +2,47 @@
 
 ## Introduction
 
-To the mean and covariance assumptions, we can add the normality assumption. This
-is a very strong and powerful assumption, that will enable us to obtain the 
-distribution of  our data and several of our estimates.
+Up to this point, we have treated the linear regression model primarily as an **optimization problem**, where the goal was to find parameter estimates that minimize the sum of squared errors. By making only mild assumptions about the error term—such as a zero mean and constant variance—we were able to establish key results like the **Gauss–Markov theorem**, which guarantees that the Ordinary Least Squares (OLS) estimator is the **Best Linear Unbiased Estimator (BLUE)** under those conditions.
 
-We will assume:
+We now take a further step by introducing a **distributional assumption** on the error term. Specifically, we assume that the errors follow a **Normal distribution**. This assumption is much stronger than those introduced before, but it provides powerful analytical advantages. In particular, it allows us to:
 
-$$\be \sim N(\bzero, \sigma^2 \bI)$$
+* Derive the **sampling distributions** of the estimators,
+* Conduct **statistical inference** (e.g., confidence intervals and hypothesis tests),
+* Formulate and maximize the **likelihood function**, leading to **Maximum Likelihood Estimates (MLE)** of the parameters.
 
-Also, note that the Normal distribution is completely characterized by its 
-mean and variance, so if the distribution of our estimates is normal, we will
-already have the information to completely characterize their distribution since
-we have computed the mean and variance of the estimates in the previous chapter.
+Formally, we assume:
 
-Another thing, that assuming normality allows is to obtain the likelihood of our
-data, and in this way obtain Maximum Likelihood Estimates (MLE) of the parameters
-we have introduced $\bgb$ and $\sigma^2$.
+$$
+\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})
+$$
+
+The Normal distribution is completely characterized by its mean and variance. Therefore, once we know the expected value and variance of an estimator, assuming normality allows us to fully determine its distribution. Since in previous chapters we have already computed the mean and variance of the OLS estimators, the normality assumption now enables us to describe their entire probabilistic behavior.
+
+Furthermore, the assumption of normality allows us to derive the **likelihood function** of the observed data, which serves as the foundation for **Maximum Likelihood Estimation**. This framework not only provides an alternative route to parameter estimation but also forms the basis for many modern extensions of regression analysis, including Bayesian regression and generalized linear models.
+
+---
 
 ## Maximum Likelihood Estimation
 
-In order to perform the maximum likelihood estimates of $\bgb$ and $\sigma^2$, we
-need the distribution of $\by$. This is very easy to obtain, since:
+To obtain the maximum likelihood estimates of $\boldsymbol{\beta}$ and $\sigma^2$, we first need the distribution of $\mathbf{y}$. From the regression model
 
-$$\by = \bX \bgb + \be$$
-is a linear combination of $\be$ (in fact is just a translation of $\be$), and
-therefore it is normally distributed. Since we have already computed its mean 
-and variance in the previous chapter, using those computations, we can conclude
-that:
+$$
+\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{e},
+$$
 
-$$\by \sim N(\bX \bgb, \sigma^2 \bI)$$
-This means that the likelihood of $\bgb$ and $\sigma^2$ is given by:
+and the assumption $\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})$, we see that $\mathbf{y}$ is simply a **linear transformation** of a multivariate normal random vector. Therefore, $\mathbf{y}$ is also normally distributed, with mean and variance given by:
 
-$$ \cL(\bgb, \sigma^2 | \by ) = N(\by | \bX \by, \sigma^2 \bI) $$
-Then this means that:
+$$
+\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}).
+$$
+
+Consequently, the likelihood function of $\boldsymbol{\beta}$ and $\sigma^2$, given $\mathbf{y}$, is:
+
+$$
+\mathcal{L}(\boldsymbol{\beta}, \sigma^2 \mid \mathbf{y}) = N(\mathbf{y} \mid \mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}),
+$$
+
+which, when written explicitly, becomes:
 
 \begin{align*}
   \cL(\bgb, \sigma^2 | \by )
@@ -45,14 +53,25 @@ Then this means that:
     &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\by - \bX \bgb)'(\by - \bX \bgb) \right\}                                   \\
 \end{align*}
 
-Now recalling from:
+---
 
-$$(\by - \dE[\by])'(\by - \dE[\by]) = \hat{\be}'\hat{\be} + (\hat{\by} - \dE[\hat{\by}])'(\hat{\by} - \dE[\hat{\by}])$$
-that is:
+### Decomposition of the Quadratic Form
 
-$$(\by - \bX \bgb)'(\by - \bX \bgb) = \hat{\be}'\hat{\be} + (\bX \hat{\bgb} - \bX \bgb)'(\bX \hat{\bgb} - \bX \bgb) = \hat{\be}'\hat{\be} + (\hat{\bgb} - \bgb)'\bX \bX( \hat{\bgb} - \bgb)$$
+Recall that in the previous chapter we showed the following decomposition:
 
-then, the likelihood can be written as:
+$$
+(\mathbf{y} - \mathbb{E}[\mathbf{y}])'(\mathbf{y} - \mathbb{E}[\mathbf{y}])
+= \hat{\mathbf{e}}'\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])'(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}]),
+$$
+
+which implies that
+
+$$
+(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})
+= \hat{\mathbf{e}}'\hat{\mathbf{e}} + (\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})' \mathbf{X}'\mathbf{X} (\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}).
+$$
+
+Substituting this into the likelihood function gives:
 
 \begin{align*}
   \cL(\bgb, \sigma^2 | \by )
@@ -60,99 +79,94 @@ then, the likelihood can be written as:
     &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{\hat{\be}'\hat{\be}}{2 \sigma^2} -\frac{(\hat{\bgb} - \bgb)'\bX \bX( \hat{\bgb} - \bgb)}{2 \sigma^2} \right\} \\
 \end{align*}
 
-This is a useful way to write the likelihood, since it is easy to optimize with
-respect to $\bgb$. Since, independently of the value of $\sigma^2$, the value of
-$\bgb$ that maximizes the likelihood is the OLS estimator $\hat{\bgb}$, since it
-makes zero the following term:
+This expression is convenient for optimization. Notice that, for any fixed $\sigma^2$, the likelihood is maximized with respect to $\boldsymbol{\beta}$ when $\boldsymbol{\beta} = \hat{\boldsymbol{\beta}}$, since that value nullifies the second exponential term. Therefore, the MLE for $\boldsymbol{\beta}$ coincides with the OLS estimator.
 
-$$ -\frac{(\hat{\bgb} - \bgb)'\bX \bX( \hat{\bgb} - \bgb)}{2 \sigma^2} $$
-In this way, we only need to maximize the likelihood with respect to $\sigma^2$,
-as the following marginal likelihood:
+---
 
-$$ \cL(\sigma^2 | \by, \bgb = \hat{\bgb} ) =  (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{\hat{\be}'\hat{\be}}{2 \sigma^2} \right\}$$
-Instead of maximizing the marginal likelihood directly, we will maximize the 
-marginal log-likelihood:
+### Estimation of $\sigma^2$
 
-$$ \ell(\sigma^2 | \by, \bgb = \hat{\bgb}) = -\frac{n}{2} \log(2 \pi) -\frac{n}{2} \log(\sigma^2) -\frac{\hat{\be}'\hat{\be}}{2 \sigma^2}$$
-We can do this maximization, by taking the derivative:
+Once we have $\boldsymbol{\beta} = \hat{\boldsymbol{\beta}}$, the likelihood simplifies to a function of $\sigma^2$ only:
 
-\begin{align*}
-  \frac{d \ell}{d \sigma^2} 
-    &=        -\frac{n}{2 \sigma^2} + \frac{\hat{\be}'\hat{\be}}{2 (\sigma^2)^2} 
-\end{align*}
+$$ \cL(\sigma^2 | \by, \bgb = \hat{\bgb}) = (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ \frac{\hat{\mathbf{e}}'\hat{\mathbf{e}}}{2\sigma^2} \right\}  $$
 
-Then
+Taking logs gives the **log-likelihood function**:
 
-\begin{align*}
-  \frac{d \ell}{d \sigma^2} =0
-    &\implies -\frac{n}{2 \sigma^2} + \frac{\hat{\be}'\hat{\be}}{2 (\sigma^2)^2} = 0 \\
-    &\implies -n + \frac{\hat{\be}'\hat{\be}}{\sigma^2} = 0                          \\
-    &\implies \frac{\hat{\be}'\hat{\be}}{\sigma^2} = n                               \\
-    &\implies \sigma^2 = \frac{\hat{\be}'\hat{\be}}{n}                               \\
-\end{align*}
+$$
+\ell(\sigma^2 \mid \mathbf{y}, \boldsymbol{\beta} = \hat{\boldsymbol{\beta}})
+= -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{\hat{\mathbf{e}}'\hat{\mathbf{e}}}{2\sigma^2}.
+$$
 
-So we have, that the Maximum Likelihood Estimate of $\sigma^2$ is given by:
+Differentiating with respect to $\sigma^2$ and setting the derivative equal to zero yields:
 
-$$\tilde{\sigma}^2 = \frac{\hat{\be}'\hat{\be}}{n}$$
+$$
+\tilde{\sigma}^2 = \frac{\hat{\mathbf{e}}'\hat{\mathbf{e}}}{n}.
+$$
 
-And, taking the second derivative to confirm it is a maximum we have that:
+A second derivative check confirms that this value indeed maximizes the log-likelihood. Thus, $\tilde{\sigma}^2$ is the **maximum likelihood estimator** of $\sigma^2$.
 
-\begin{align*}
-  \frac{d^2 \ell}{d (\sigma^2)^2} \bigg|_{\sigma^2 = \tilde{\sigma}^2}
-    &= \frac{n}{2 (\tilde{\sigma}^2)^2} - \frac{\hat{\be}'\hat{\be}}{(\tilde{\sigma}^2)^3} \\
-    &= \frac{n}{2 (\tilde{\sigma}^2)^2} - \frac{n}{(\tilde{\sigma}^2)^2}                   \\
-    &= - \frac{n}{(2 \tilde{\sigma}^2)^2}                                                  \\
-    &\leq 0                                                  
-\end{align*}
+---
 
-So $\tilde{\sigma}^2$ is indeed maximizing the marginal likelihood.
+### Remarks on Bias and Practical Use
 
-Note that, unlike with the $\bgb$ parameter, our OLS estimate $\hat{\sigma}^2$
-of $\sigma^2$ is different to the MLE estimator $\tilde{\sigma}^2$. In particular
-$\tilde{\sigma}^2$ is biased.
+It is important to note that $\tilde{\sigma}^2$ is **biased** as an estimator of $\sigma^2$. In contrast, the usual OLS variance estimator
 
-This doesn't mean that one estimate is better than the other, they just have 
-different properties.
+$$
+\hat{\sigma}^2 = \frac{\hat{\mathbf{e}}'\hat{\mathbf{e}}}{n - p}
+$$
 
-We will work more with $\hat{\sigma}^2$ than $\tilde{\sigma}^2$, since it is more
-useful to build certain statistics.
+is unbiased under the Gauss–Markov assumptions. Both estimators are useful: $\tilde{\sigma}^2$ arises naturally in likelihood-based methods and is convenient for theoretical developments, while $\hat{\sigma}^2$ is preferred for unbiased estimation and inferential procedures.
 
-## Distribution of Estimates
+In the following sections, we will build on these results to derive the exact **sampling distributions** of the OLS estimators and the basis for hypothesis testing within the classical linear model framework.
 
-In the same way that in the last chapters we computed the mean and the variance 
-of our estimates, we can obtain the distribution of the estimates:
+---
 
-### Distribution of $\hat{\bgb}$, $\hat{\by}$ and $\hat{\be}$
+## Distribution of the Estimates
 
-Most of our estimates are linear combinations of $\by$, so they are normally 
-distributed and we can use the mean and variances computed in the last chapter
-to fully characterize their distributions. This is the case for:
+In the previous chapters, we derived the mean and variance of the least squares estimators under the assumption of normally distributed errors. We now go further and obtain their **sampling distributions**, which fully characterize the stochastic behavior of these estimators.
+This is possible because, under normality, any linear combination of normally distributed random variables is itself normal. Since most of our estimators are linear functions of the observed data, their distributions are readily available.
 
-$$ \hat{\bgb}, \quad \hat{\by}, \quad \hat{\be} $$
-Their distributions are:
+### Distribution of $\hat{\bgb}$, $\hat{\by}$, and $\hat{\be}$
 
-$$ \hat{\bgb} \sim N(\bgb, \sigma^2 (\bX'\bX)^{-1}) $$
-$$ \hat{\by} \sim N(\bX \bgb, \sigma^2 \bH) $$
-$$ \hat{\be} \sim N(\bzero, \sigma^2 (\bI-\bH)) $$
+The least squares estimators $\hat{\bgb}$, $\hat{\by}$, and $\hat{\be}$ are all linear transformations of the response vector $\by$. Therefore, they are normally distributed, and the corresponding mean and variance expressions derived earlier allow us to determine their full distributions. Specifically, we have:
 
-This is not the case for the estimate $\hat{\sigma}^2$, since it is not a linear
-transformation of $\by$.
+$$
+\hat{\bgb}, \quad \hat{\by}, \quad \hat{\be}
+$$
+
+and their respective distributions are given by:
+
+$$
+\hat{\bgb} \sim N(\bgb, \sigma^2 (\bX'\bX)^{-1})
+$$
+
+$$
+\hat{\by} \sim N(\bX \bgb, \sigma^2 \bH)
+$$
+
+$$
+\hat{\be} \sim N(\bzero, \sigma^2 (\bI - \bH))
+$$
+
+These results reveal that both fitted values and residuals are multivariate normal, each with a distinct covariance structure determined by the projection matrices $\bH$ and $\bI - \bH$. The matrix $\bH$ projects $\by$ onto the column space of $\bX$, while $(\bI - \bH)$ projects it onto its orthogonal complement.
+
+Note that the estimator of the error variance, $\hat{\sigma}^2$, is **not** a linear function of $\by$, so its distribution must be derived differently.
+
+---
 
 ### Distribution of $\hat{\sigma}^2$
 
-Obtaining the distribution of $\hat{\sigma}^2$ is not as straight forward. We
-will use 3 steps:
+The estimator $\hat{\sigma}^2$ measures the variability of the residuals around the fitted model. Its distribution is central to many inferential procedures, such as constructing confidence intervals and hypothesis tests for the regression coefficients.
+However, because $\hat{\sigma}^2$ involves the quadratic form $\hat{\be}'\hat{\be}$, its derivation is more involved. We will obtain its distribution in three steps:
 
-1. Express $\frac{\hat{\be}'\hat{\be}}{\sigma^2}$ as quadratic form of standard
-normal with an idempotent matrix.
-2. Show that the quadratic form of standard normal with an idempotent matrix is
-distributed as a chi squared.
-3. Relate the distribution of $\frac{\hat{\be}'\hat{\be}}{\sigma^2}$ to the 
-distribution of $\hat{\sigma}^2$.
+1. Express $\frac{\hat{\be}'\hat{\be}}{\sigma^2}$ as a **quadratic form** of a standard normal vector with an idempotent matrix.
+2. Show that such a quadratic form follows a **chi-squared distribution** with degrees of freedom equal to the rank of the idempotent matrix.
+3. Relate this result to the distribution of $\hat{\sigma}^2$ itself.
 
-#### Distribution of $\hat{\sigma}^2$ Step 1
+---
 
-First, note that:
+#### Step 1: Expressing $\frac{\hat{\be}'\hat{\be}}{\sigma^2}$ as a Quadratic Form
+
+We begin by rewriting the residual vector in terms of the error vector $\be$:
 
 \begin{align*}
   (\bI - \bH) \by
@@ -172,7 +186,7 @@ Then:
     &= \be' (\bI - \bH) \be              && \text{since $(\bI - \bH)$ is idempotent}         \\
 \end{align*}
 
-Then,
+Thus,
 
 \begin{align*}
   \frac{\hat{\be}'\hat{\be}}{\sigma^2}
@@ -181,33 +195,38 @@ Then,
     &= \frac{\be}{\sqrt{\sigma^2}}' (\bI - \bH) \frac{\be}{\sqrt{\sigma^2}}                                 \\
 \end{align*}
 
-Finally, note that $\frac{\be}{\sqrt{\sigma^2}}$ is a linear function of $\be$ 
-that is normal, therefore it is normal also, with mean:
+Finally, because $\frac{\be}{\sqrt{\sigma^2}}$ is a scaled version of the normal vector $\be$, it remains normally distributed with zero mean and identity covariance:
 
-$$ \dE\left[\frac{\be}{\sqrt{\sigma^2}}\right] =  \frac{1}{\sqrt{\sigma^2}} \dE[\be] = \frac{1}{\sqrt{\sigma^2}} \bzero = \bzero$$
-$$ \dV\left[\frac{\be}{\sqrt{\sigma^2}}\right] =  \left(\frac{1}{\sqrt{\sigma^2}}\right)^2 \dV[\be] = \frac{1}{\sigma^2} \sigma^2 \bI = \bI$$
-So
+$$
+\dE\left[\frac{\be}{\sqrt{\sigma^2}}\right] = \bzero, \qquad
+\dV\left[\frac{\be}{\sqrt{\sigma^2}}\right] = \bI
+$$
 
-$$ \frac{\be}{\sqrt{\sigma^2}} \sim N(\bzero, \bI) $$
-is a multivariate standard normal. This concludes step 1.
+Hence,
 
-#### Distribution of $\hat{\sigma}^2$ Step 2
+$$
+\frac{\be}{\sqrt{\sigma^2}} \sim N(\bzero, \bI)
+$$
 
-Let $\bz \in \dR^{n}$ a multivariate standard normal and $\bM \in \dR^{n \times n}$
-and idempotent matrix of rank $m$. Then, we will show that:
+This vector is known as a **standard multivariate normal**, completing Step 1.
 
-$$ \bz' \bM \bz \sim \chi^2_{m} $$
+---
 
-To show this result, we will use the spectral decomposition of $\bM$, that is:
+#### Step 2: The Chi-Squared Distribution of a Quadratic Form
 
-$$ \bM = \bV \bgS \bV' $$
+Let $\bz \in \mathbb{R}^n$ be a standard multivariate normal vector and $\bM \in \mathbb{R}^{n \times n}$ an idempotent matrix of rank $m$. We now show that:
 
-with $\bV$ orthonormal and $\bgS$ diagonal. Since $\bV = [\bv_1,\ldots,\bv_n]$ is
-orthonormal, then we have that:
+$$
+\bz' \bM \bz \sim \chi^2_m
+$$
 
-$$ \bv_i'\bv_j = 0 \quad \forall i \neq j \quad \text{and} \quad ||\bv_i||^2_2 = 1 \quad \forall i$$
-and, since $\bM$ is idempotent, then $\bgS$ is diagonal with exactly $m$ entries
-equal to $1$ and the rest equal to $0$. Without loss of generality, we
+To prove this, we use the spectral decomposition of $\bM$:
+
+$$
+\bM = \bV \bgS \bV'
+$$
+
+where $\bV$ is an orthonormal matrix and $\bgS$ is diagonal. Since $\bM$ is idempotent, the diagonal of $\bgS$ consists of $m$ ones and $n-m$ zeros. Without loss of generality, we
 can assume that the first $m$ entries of the diagonal are equal to $1$ and the 
 next entries equal to $0$.
 
@@ -235,79 +254,91 @@ Then
     &\sim \chi^2_m                    && \text{by definition of the $\chi^2$ distribution}        \\
 \end{align*} 
 
-#### Distribution of $\hat{\sigma}^2$ Step 3
+This fundamental result connects linear algebra and probability theory and is essential to statistical inference in linear regression.
 
-Using step 1 and 2, we can conclude that:
+---
 
-$$ \frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \chi^2_{n-p} $$
-since the rank of the idempotent matrix $(\bI - \bH)$ is $n-p$. Since:
+#### Step 3: Distribution of $\hat{\sigma}^2$
 
-$$ \hat{\sigma}^2 = \frac{\hat{\be}'\hat{\be}}{n-p} = \frac{\sigma^2}{n-p}\frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \frac{\sigma^2}{n-p}\chi^2_{n-p} $$
+Combining the results from Steps 1 and 2, we conclude that:
+
+$$
+\frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \chi^2_{n-p}
+$$
+
+since the idempotent matrix $(\bI - \bH)$ has rank $n-p$. Therefore:
+
+$$
+\hat{\sigma}^2 = \frac{\hat{\be}'\hat{\be}}{n-p}
+= \frac{\sigma^2}{n-p}\frac{\hat{\be}'\hat{\be}}{\sigma^2}
+\sim \frac{\sigma^2}{n-p}\chi^2_{n-p}
+$$
+
+This result shows that the estimator of $\sigma^2$ is scaled chi-squared distributed, a fact that will be crucial when constructing confidence intervals and hypothesis tests.
+
+---
 
 ### Independence of $\hat{\be}$ and $\hat{\by}$
 
-We have seen that $\hat{\be}$ and $\hat{\by}$ are uncorrelated, that is
+Previously, we showed that $\hat{\be}$ and $\hat{\by}$ are uncorrelated:
 
-$$ \dC[\hat{\be}, \hat{\by}] = \bzero $$
-however, this doesn't necessarily mean they are independent. Independence is a 
-much more stronger property. For example, if two random variables are independent
-then any function of this random variables will be independent. However, if two 
-random variables are uncorrelated then not necessarily any function of this 
-random variables will be uncorrelated.
+$$
+\dC[\hat{\be}, \hat{\by}] = \bzero
+$$
 
-Now, after our assumption of normality, then $\hat{\be}$ and $\hat{\by}$ are 
-independent, because uncorrelated random variables implies independence for
-normally distributed random variables, as is the case of $\hat{\be}$ and $\hat{\by}$.
+However, uncorrelatedness does not necessarily imply independence. In general, two random variables can have zero covariance and still exhibit nonlinear dependence.
 
-Then, any variable that is a function of $\hat{\be}$ will be independent of any
-random variable that is a function of $\hat{\by}$, even if these new random
-variables are not normal themselves.
+Under the **normality assumption**, this distinction disappears: if two normally distributed vectors are uncorrelated, they are also independent. Since both $\hat{\be}$ and $\hat{\by}$ are linear combinations of the normal vector $\by$, they are jointly normal. Therefore, the absence of correlation between them implies that they are independent:
+
+* $\hat{\be}$ depends only on $(\bI - \bH)\by$, the projection onto the residual space.
+* $\hat{\by}$ depends only on $\bH\by$, the projection onto the column space of $\bX$.
+
+These two subspaces are orthogonal, and under normality, orthogonality implies statistical independence. Consequently, any statistic that is a function of $\hat{\be}$ (such as $\hat{\sigma}^2$) is independent of any statistic that is a function of $\hat{\by}$ (such as $\hat{\bgb}$).
+
+This independence property plays a pivotal role in classical regression inference, as it underlies the derivation of $t$ and $F$ distributions for hypothesis testing.
+
+---
 
 ## Interval Estimation
 
-So far, we have obtained point estimates of different quantities of interest, 
-$\bgb$, $\be$ and $\hat{\sigma}^2$, however the fact
-we have the distribution of estimates of this quantities will allow us to obtain
-interval estimators.
+So far, we have derived **point estimates** for several parameters of interest—namely the regression coefficients $\bgb$, the errors $\be$, and the residual variance $\hat{\sigma}^2$.
+While point estimates provide single “best guesses” of the true parameters, they do not convey how much uncertainty is associated with these estimates.
 
-### Confidence Intervals for Coefficients
+However, since we have already obtained the **sampling distributions** of these estimators, we can now use this probabilistic information to construct **interval estimators**, which express a range of plausible values for the unknown parameters, given the observed data.
 
-We know that the OLS estimate for the coefficients, has the following distribution:
+---
 
-$$ \hat{\bgb} \sim N(\bzero, \sigma^2 (\bX'\bX)^{-1}) $$
+### Confidence Intervals for the Coefficients
 
-then, this means that each of the entries of $\hat{\bgb} = (\hat{\beta}_0, \hat{\beta}_1,\ldots,\hat{\beta}_{p-1})$
-is normally distributed, as follows:
+Recall that under the classical linear model assumptions, the ordinary least squares estimator satisfies
 
-$$ \hat{\beta}_i \sim N(\beta_i, \sigma^2 [(\bX'\bX)^{-1}]_{ii}) $$
-we will call
+$$ \hat{\bgb} \sim N(\bgb, \sigma^2 (\bX'\bX)^{-1}) $$
+
+This result implies that each individual coefficient estimator $\hat{\beta}_i$ follows a univariate normal distribution:
+
+$$ \hat{\beta}_i \sim N(\beta_i, \sigma^2 [(\bX'\bX)^{-1}])_{ii}) $$
+
+The quantity
 
 $$ \sigma^2_{\beta_i} =  \sigma^2 [(\bX'\bX)^{-1}]_{ii} $$
-then, we can re-write the distribution as follows:
+
+represents the **variance** of $\hat{\beta}_i$, which depends both on the noise variance $\sigma^2$ and on the geometry of the design matrix $\bX$.
+
+Thus, we can rewrite the distribution as
 
 $$ \hat{\beta}_i \sim N \left(\beta_i, \sigma^2_{\beta_i} \right) $$
-unfortunately this distribution depends on $\sigma^2$ which is unknown, so we 
-can't use it to build a confidence interval. So we transform the statistic first
-by removing the mean $\beta_i$ and by diving by the standard deviation: 
+
+Since $\sigma^2$ is unknown, this distribution cannot be used directly for inference.
+To overcome this, we first standardize the estimator by subtracting its mean and dividing by its true standard deviation:
 
 $$ t^0_{\beta_i}=\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} $$
-Then, this new quantity is normally distributed, since it a linear transformation
-of a random variable that is normally distributed, and has mean as variance as
-follows:
 
-$$ \dE[t^0_{\beta_i}] = \dE\left[\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}}\right]= \frac{\hat{\dE[\beta}_i] - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} = \frac{\beta_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} = 0  $$
-$$ \dV[t^0_{\beta_i}] = \dV\left[\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}}\right]= \left(\frac{1}{\sqrt{\sigma^2_{\beta_i}}}\right)^2 \dV[\hat{\beta}_i - \beta_i] = \frac{1}{\sigma^2_{\beta_i}} \dV[\hat{\beta}_i] = \frac{1}{\sigma^2_{\beta_i}} \sigma^2_{\beta_i} = 1  $$
-then:
+This standardized statistic follows the **standard normal distribution**, as confirmed by the derivations of its mean and variance. However, it still involves the unknown $\sigma^2$.
 
-$$ t^0_{\beta_i} \sim N(0, 1) $$
-that is $t^0_{\beta_i}$ is distributed like a standard normal. Now the distribution
-doesn't depend on any unknown parameter (on top of $\beta_i$, that is the parameter
-of interest), but the quantity itself depends on $\sigma^2$ through $\sigma^2_{\beta_i}$,
-so we can't use it to build a confidence interval.
-
-We consider a new quantity
+Therefore, we replace $\sigma^2$ with its unbiased estimator $\hat{\sigma}^2$ to form
 
 $$ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} $$
+
 where $\hat{\sigma}^2_{\beta_i} = \hat{\sigma}^2 [(\bX'\bX)^{-1}]_{ii}$, so $t_{\beta_i}$
 doesn't depend on $\sigma^2$. Let's compute the distribution of this quantity,
 first lets re-write the statistic as follows:
@@ -328,9 +359,11 @@ and from
 we have that any function of both variables is independent, in particular
 
 $$ t^0_{\beta_i} \quad \text{and} \quad \frac{\hat{\be}'\hat{\be}}{\sigma^2} $$
-are independent. Therefore
+are independent. Therefore the ratio $t_{\beta_i}$ follows a **Student’s $t$ distribution** with $n - p$ degrees of freedom:
 
 $$ t_{\beta_i} \sim t_{n-p} $$
+
+This fundamental result enables us to construct confidence intervals for each regression coefficient.
 Now, let $t \sim t_m$ a random variable with a $t$ distribution with $m$ degrees
 of freedom. Then call:
 
@@ -353,30 +386,29 @@ Then, we have that:
 So
 
 $$ \left(\hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}}, \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) $$
-is a random interval, that is an interval that is a function of a random variables,
-in this case the random variables $\hat{\beta}_i$ and $\hat{\sigma}^2_{\beta_i}$.
-This random interval will capture the true parameter $\beta_i$ with probability
-$\alpha$. However, when data is observed and the interval is fixed (at the observed
-values), the interval either captures the true parameter or not (something we
-don't know in general).
 
-### Confidence intervals for the expected mean of a new observation $\bx_{new}$
+This **random interval** depends on the sample through $\hat{\beta}_i$ and $\hat{\sigma}^2_{\beta_i}$ and contains the true parameter $\beta_i$ with probability $\alpha$.
+Once data are observed, the interval becomes fixed, and while it either includes or excludes $\beta_i$, the confidence level reflects the long-run frequency with which such intervals contain the true value under repeated sampling.
 
-Note that the expected mean of a new observation $\bx_{new}$ is given by:
+---
+
+### Confidence Intervals for the Expected Mean of a New Observation $\bx_{new}$
+
+In many applications, the researcher is not only interested in the regression coefficients themselves but also in the **expected value of the response** for a new vector of predictors $\bx_{new}$.
+
+The expected response is given by
 
 $$ \dE[y_{new}] = \bx_{new}' \bgb $$
-then we can consider, an estimate of this parameter, as:
+
+and its natural estimator is
 
 $$ \bx_{new}' \hat{\bgb} $$
-this estimate is a linear combination of $\hat{\bgb}$, therefore it has a normal
-distribution with mean and variance as follows:
 
-$$\dE[\bx_{new} \hat{\bgb}] = \bx_{new} \dE[\hat{\bgb}] = \bx_{new}' \bgb$$
-$$\dV[\bx_{new}' \hat{\bgb}] = \bx_{new}' \dV[\hat{\bgb}] \bx_{new} = \bx_{new}' \sigma^2 (\bX' \bX)^{-1} \bx_{new} =  \sigma^2 \bx_{new}' (\bX' \bX)^{-1} \bx_{new} $$
-that is:
+Since $\hat{\bgb}$ is normally distributed, this linear combination is also normal with
+
 $$ \bx_{new}' \hat{\bgb} \sim N \left(\bx_{new}' \bgb, \sigma^2 \bx_{new}' (\bX' \bX)^{-1} \bx_{new} \right)  $$
 
-so, similarly, we can consider
+Replacing $\sigma^2$ with $\hat{\sigma}^2$ and applying the same reasoning as before, we obtain the statistic
 
 $$ t_{\bx_{new}'\bgb} = \frac{\bx_{new}'\hat{\bgb} - \bx_{new}'\bgb}{\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}}}=\frac{\frac{\bx_{new}'\hat{\bgb} - \bx_{new}'\bgb}{\sqrt{\sigma^2_{\bx_{new}'\bgb}}}}{\sqrt{\frac{\frac{\hat{\be}'\hat{\be}}{\sigma^2}}{n-p}}} \sim \chi^2_{n-p} $$
 where $\hat{\sigma}^2_{\bx_{new}'\bgb} = \hat{\sigma}^2 \bx_{new}' (\bX' \bX)^{-1} \bx_{new}$.
@@ -400,22 +432,36 @@ so, the random interval is given by:
 $$ \left( \bx_{new}'\hat{\bgb} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}} , \bx_{new}'\hat{\bgb} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}} \right) $$
 is a random interval that captures $\bx_{new}'\bgb$ with probability $\alpha$.
 
-### Confidence intervals for linear combinations of $\bgb$
 
-Note that if we consider the parameter
+This interval quantifies uncertainty about the **mean response** at $\bx_{new}$, not about an individual observation, which would require adding the variance of the random error term.
 
-$$ \ba' \hat{\bgb}$$
-then we note that $\beta_i$ and $\bx_{new} \bgb$ are particular cases, where the
-value of $\ba$ is a s follows:
+---
 
-$$ \ba = (0,\ldots,0,1,0,\ldots,0) \quad \text{for} \quad \ba \bgb = \beta_i$$
-$$ \ba = \bx_{new} \quad \text{for} \quad \ba \bgb = \bx_{new}' \bgb$$
-then, performing similar operations as before, we can create random intervals to
-estimate $\ba' \bgb$ as follows:
+### Confidence Intervals for Linear Combinations of $\bgb$
+
+A particularly elegant aspect of the linear model is that it allows inference on **any linear combination** of the coefficients.
+Consider a vector $\ba \in \mathbb{R}^p$ and the parameter of interest $\ba' \bgb$.
+
+This formulation encompasses several important special cases:
+
+* $\ba = (0, \ldots, 0, 1, 0, \ldots, 0)$ yields $\ba' \bgb = \beta_i$, the $i$-th coefficient;
+* $\ba = \bx_{new}$ yields $\ba' \bgb = \bx_{new}' \bgb$, the expected mean at a new data point.
+
+Since $\ba' \hat{\bgb}$ is a linear combination of normally distributed estimators, it follows that
+
+$$ \ba' \hat{\bgb} \sim N(\ba' \bgb, \sigma^2 \ba' (\bX'\bX)^{-1} \ba) $$
+
+and replacing $\sigma^2$ by its estimator leads to a $t_{n-p}$ distribution for the corresponding standardized statistic.
+Therefore, the general form of a $(1 - \alpha)$ confidence interval for any linear combination is
 
 $$ \left( \ba'\hat{\bgb} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\ba'\bgb}} , \ba'\hat{\bgb} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\ba'\bgb}} \right) $$
-that captures $\ba' \bgb$ with probability $\alpha$. Where 
-$\hat{\sigma}^2_{\ba'\bgb} = \hat{\sigma}^2 \ba' (\bX' \bX)^{-1} \ba$.
+
+where $\hat{\sigma}^2_{\ba'\bgb} = \hat{\sigma}^2 \ba' (\bX' \bX)^{-1} \ba$.
+
+This result unifies the previous confidence intervals into a single, compact framework and highlights the power and flexibility of the linear model for statistical inference.
+
+---
+
 
 ## Hypothesis Testing
 

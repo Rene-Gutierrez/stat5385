@@ -192,6 +192,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.5.1" data-path="prerequisites.html"><a href="prerequisites.html#bias-of-an-estimator"><i class="fa fa-check"></i><b>2.5.1</b> Bias of an Estimator</a></li>
 <li class="chapter" data-level="2.5.2" data-path="prerequisites.html"><a href="prerequisites.html#unbiased-estimator"><i class="fa fa-check"></i><b>2.5.2</b> Unbiased Estimator</a></li>
 <li class="chapter" data-level="2.5.3" data-path="prerequisites.html"><a href="prerequisites.html#mean-square-error-of-an-estimator"><i class="fa fa-check"></i><b>2.5.3</b> Mean Square Error of an Estimator</a></li>
+<li class="chapter" data-level="2.5.4" data-path="prerequisites.html"><a href="prerequisites.html#interval-estimation"><i class="fa fa-check"></i><b>2.5.4</b> Interval Estimation</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
@@ -265,7 +266,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#the-general-model"><i class="fa fa-check"></i><b>6.1.1</b> The General Model</a></li>
+<li class="chapter" data-level="6.1.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interpretation-and-objectives"><i class="fa fa-check"></i><b>6.1.2</b> Interpretation and Objectives</a></li>
+<li class="chapter" data-level="6.1.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#applications-and-context"><i class="fa fa-check"></i><b>6.1.3</b> Applications and Context</a></li>
+<li class="chapter" data-level="6.1.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#connection-to-polynomial-regression"><i class="fa fa-check"></i><b>6.1.4</b> Connection to Polynomial Regression</a></li>
+</ul></li>
 <li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#example-modeling-gdp"><i class="fa fa-check"></i><b>6.2</b> Example: Modeling GDP</a>
 <ul>
 <li class="chapter" data-level="6.2.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#simple-regressions"><i class="fa fa-check"></i><b>6.2.1</b> Simple Regressions</a></li>
@@ -344,18 +351,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="normality-assumption.html"><a href="normality-assumption.html"><i class="fa fa-check"></i><b>9</b> Normality Assumption</a>
 <ul>
 <li class="chapter" data-level="9.1" data-path="normality-assumption.html"><a href="normality-assumption.html#introduction-3"><i class="fa fa-check"></i><b>9.1</b> Introduction</a></li>
-<li class="chapter" data-level="9.2" data-path="normality-assumption.html"><a href="normality-assumption.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>9.2</b> Maximum Likelihood Estimation</a></li>
-<li class="chapter" data-level="9.3" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-estimates"><i class="fa fa-check"></i><b>9.3</b> Distribution of Estimates</a>
+<li class="chapter" data-level="9.2" data-path="normality-assumption.html"><a href="normality-assumption.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>9.2</b> Maximum Likelihood Estimation</a>
 <ul>
-<li class="chapter" data-level="9.3.1" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe"><i class="fa fa-check"></i><b>9.3.1</b> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+<li class="chapter" data-level="9.2.1" data-path="normality-assumption.html"><a href="normality-assumption.html#decomposition-of-the-quadratic-form"><i class="fa fa-check"></i><b>9.2.1</b> Decomposition of the Quadratic Form</a></li>
+<li class="chapter" data-level="9.2.2" data-path="normality-assumption.html"><a href="normality-assumption.html#estimation-of-sigma2"><i class="fa fa-check"></i><b>9.2.2</b> Estimation of <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="9.2.3" data-path="normality-assumption.html"><a href="normality-assumption.html#remarks-on-bias-and-practical-use"><i class="fa fa-check"></i><b>9.2.3</b> Remarks on Bias and Practical Use</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-the-estimates"><i class="fa fa-check"></i><b>9.3</b> Distribution of the Estimates</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe"><i class="fa fa-check"></i><b>9.3.1</b> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span>, and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
 <li class="chapter" data-level="9.3.2" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatsigma2"><i class="fa fa-check"></i><b>9.3.2</b> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a></li>
 <li class="chapter" data-level="9.3.3" data-path="normality-assumption.html"><a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy"><i class="fa fa-check"></i><b>9.3.3</b> Independence of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="normality-assumption.html"><a href="normality-assumption.html#interval-estimation"><i class="fa fa-check"></i><b>9.4</b> Interval Estimation</a>
+<li class="chapter" data-level="9.4" data-path="normality-assumption.html"><a href="normality-assumption.html#interval-estimation-1"><i class="fa fa-check"></i><b>9.4</b> Interval Estimation</a>
 <ul>
-<li class="chapter" data-level="9.4.1" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-coefficients"><i class="fa fa-check"></i><b>9.4.1</b> Confidence Intervals for Coefficients</a></li>
-<li class="chapter" data-level="9.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>9.4.2</b> Confidence intervals for the expected mean of a new observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
-<li class="chapter" data-level="9.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>9.4.3</b> Confidence intervals for linear combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
+<li class="chapter" data-level="9.4.1" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-coefficients"><i class="fa fa-check"></i><b>9.4.1</b> Confidence Intervals for the Coefficients</a></li>
+<li class="chapter" data-level="9.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>9.4.2</b> Confidence Intervals for the Expected Mean of a New Observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
+<li class="chapter" data-level="9.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>9.4.3</b> Confidence Intervals for Linear Combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
 </ul></li>
 <li class="chapter" data-level="9.5" data-path="normality-assumption.html"><a href="normality-assumption.html#hypothesis-testing"><i class="fa fa-check"></i><b>9.5</b> Hypothesis Testing</a>
 <ul>

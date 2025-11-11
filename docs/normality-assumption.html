@@ -192,6 +192,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.5.1" data-path="prerequisites.html"><a href="prerequisites.html#bias-of-an-estimator"><i class="fa fa-check"></i><b>2.5.1</b> Bias of an Estimator</a></li>
 <li class="chapter" data-level="2.5.2" data-path="prerequisites.html"><a href="prerequisites.html#unbiased-estimator"><i class="fa fa-check"></i><b>2.5.2</b> Unbiased Estimator</a></li>
 <li class="chapter" data-level="2.5.3" data-path="prerequisites.html"><a href="prerequisites.html#mean-square-error-of-an-estimator"><i class="fa fa-check"></i><b>2.5.3</b> Mean Square Error of an Estimator</a></li>
+<li class="chapter" data-level="2.5.4" data-path="prerequisites.html"><a href="prerequisites.html#interval-estimation"><i class="fa fa-check"></i><b>2.5.4</b> Interval Estimation</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
@@ -265,7 +266,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#the-general-model"><i class="fa fa-check"></i><b>6.1.1</b> The General Model</a></li>
+<li class="chapter" data-level="6.1.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interpretation-and-objectives"><i class="fa fa-check"></i><b>6.1.2</b> Interpretation and Objectives</a></li>
+<li class="chapter" data-level="6.1.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#applications-and-context"><i class="fa fa-check"></i><b>6.1.3</b> Applications and Context</a></li>
+<li class="chapter" data-level="6.1.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#connection-to-polynomial-regression"><i class="fa fa-check"></i><b>6.1.4</b> Connection to Polynomial Regression</a></li>
+</ul></li>
 <li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#example-modeling-gdp"><i class="fa fa-check"></i><b>6.2</b> Example: Modeling GDP</a>
 <ul>
 <li class="chapter" data-level="6.2.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#simple-regressions"><i class="fa fa-check"></i><b>6.2.1</b> Simple Regressions</a></li>
@@ -344,18 +351,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="normality-assumption.html"><a href="normality-assumption.html"><i class="fa fa-check"></i><b>9</b> Normality Assumption</a>
 <ul>
 <li class="chapter" data-level="9.1" data-path="normality-assumption.html"><a href="normality-assumption.html#introduction-3"><i class="fa fa-check"></i><b>9.1</b> Introduction</a></li>
-<li class="chapter" data-level="9.2" data-path="normality-assumption.html"><a href="normality-assumption.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>9.2</b> Maximum Likelihood Estimation</a></li>
-<li class="chapter" data-level="9.3" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-estimates"><i class="fa fa-check"></i><b>9.3</b> Distribution of Estimates</a>
+<li class="chapter" data-level="9.2" data-path="normality-assumption.html"><a href="normality-assumption.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>9.2</b> Maximum Likelihood Estimation</a>
 <ul>
-<li class="chapter" data-level="9.3.1" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe"><i class="fa fa-check"></i><b>9.3.1</b> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+<li class="chapter" data-level="9.2.1" data-path="normality-assumption.html"><a href="normality-assumption.html#decomposition-of-the-quadratic-form"><i class="fa fa-check"></i><b>9.2.1</b> Decomposition of the Quadratic Form</a></li>
+<li class="chapter" data-level="9.2.2" data-path="normality-assumption.html"><a href="normality-assumption.html#estimation-of-sigma2"><i class="fa fa-check"></i><b>9.2.2</b> Estimation of <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="9.2.3" data-path="normality-assumption.html"><a href="normality-assumption.html#remarks-on-bias-and-practical-use"><i class="fa fa-check"></i><b>9.2.3</b> Remarks on Bias and Practical Use</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-the-estimates"><i class="fa fa-check"></i><b>9.3</b> Distribution of the Estimates</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe"><i class="fa fa-check"></i><b>9.3.1</b> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span>, and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
 <li class="chapter" data-level="9.3.2" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatsigma2"><i class="fa fa-check"></i><b>9.3.2</b> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a></li>
 <li class="chapter" data-level="9.3.3" data-path="normality-assumption.html"><a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy"><i class="fa fa-check"></i><b>9.3.3</b> Independence of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="normality-assumption.html"><a href="normality-assumption.html#interval-estimation"><i class="fa fa-check"></i><b>9.4</b> Interval Estimation</a>
+<li class="chapter" data-level="9.4" data-path="normality-assumption.html"><a href="normality-assumption.html#interval-estimation-1"><i class="fa fa-check"></i><b>9.4</b> Interval Estimation</a>
 <ul>
-<li class="chapter" data-level="9.4.1" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-coefficients"><i class="fa fa-check"></i><b>9.4.1</b> Confidence Intervals for Coefficients</a></li>
-<li class="chapter" data-level="9.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>9.4.2</b> Confidence intervals for the expected mean of a new observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
-<li class="chapter" data-level="9.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>9.4.3</b> Confidence intervals for linear combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
+<li class="chapter" data-level="9.4.1" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-coefficients"><i class="fa fa-check"></i><b>9.4.1</b> Confidence Intervals for the Coefficients</a></li>
+<li class="chapter" data-level="9.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>9.4.2</b> Confidence Intervals for the Expected Mean of a New Observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
+<li class="chapter" data-level="9.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>9.4.3</b> Confidence Intervals for Linear Combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
 </ul></li>
 <li class="chapter" data-level="9.5" data-path="normality-assumption.html"><a href="normality-assumption.html#hypothesis-testing"><i class="fa fa-check"></i><b>9.5</b> Hypothesis Testing</a>
 <ul>
@@ -385,32 +397,36 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">9</span> Normality Assumption<a href="normality-assumption.html#normality-assumption" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="introduction-3" class="section level2 hasAnchor" number="9.1">
 <h2><span class="header-section-number">9.1</span> Introduction<a href="normality-assumption.html#introduction-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>To the mean and covariance assumptions, we can add the normality assumption. This
-is a very strong and powerful assumption, that will enable us to obtain the
-distribution of our data and several of our estimates.</p>
-<p>We will assume:</p>
-<p><span class="math display">\[\mathbf{e}\sim N(\mathbf{0}, \sigma^2 \mathbf{I})\]</span></p>
-<p>Also, note that the Normal distribution is completely characterized by its
-mean and variance, so if the distribution of our estimates is normal, we will
-already have the information to completely characterize their distribution since
-we have computed the mean and variance of the estimates in the previous chapter.</p>
-<p>Another thing, that assuming normality allows is to obtain the likelihood of our
-data, and in this way obtain Maximum Likelihood Estimates (MLE) of the parameters
-we have introduced <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>Up to this point, we have treated the linear regression model primarily as an <strong>optimization problem</strong>, where the goal was to find parameter estimates that minimize the sum of squared errors. By making only mild assumptions about the error term—such as a zero mean and constant variance—we were able to establish key results like the <strong>Gauss–Markov theorem</strong>, which guarantees that the Ordinary Least Squares (OLS) estimator is the <strong>Best Linear Unbiased Estimator (BLUE)</strong> under those conditions.</p>
+<p>We now take a further step by introducing a <strong>distributional assumption</strong> on the error term. Specifically, we assume that the errors follow a <strong>Normal distribution</strong>. This assumption is much stronger than those introduced before, but it provides powerful analytical advantages. In particular, it allows us to:</p>
+<ul>
+<li>Derive the <strong>sampling distributions</strong> of the estimators,</li>
+<li>Conduct <strong>statistical inference</strong> (e.g., confidence intervals and hypothesis tests),</li>
+<li>Formulate and maximize the <strong>likelihood function</strong>, leading to <strong>Maximum Likelihood Estimates (MLE)</strong> of the parameters.</li>
+</ul>
+<p>Formally, we assume:</p>
+<p><span class="math display">\[
+\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})
+\]</span></p>
+<p>The Normal distribution is completely characterized by its mean and variance. Therefore, once we know the expected value and variance of an estimator, assuming normality allows us to fully determine its distribution. Since in previous chapters we have already computed the mean and variance of the OLS estimators, the normality assumption now enables us to describe their entire probabilistic behavior.</p>
+<p>Furthermore, the assumption of normality allows us to derive the <strong>likelihood function</strong> of the observed data, which serves as the foundation for <strong>Maximum Likelihood Estimation</strong>. This framework not only provides an alternative route to parameter estimation but also forms the basis for many modern extensions of regression analysis, including Bayesian regression and generalized linear models.</p>
+<hr />
 </div>
 <div id="maximum-likelihood-estimation" class="section level2 hasAnchor" number="9.2">
 <h2><span class="header-section-number">9.2</span> Maximum Likelihood Estimation<a href="normality-assumption.html#maximum-likelihood-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In order to perform the maximum likelihood estimates of <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma^2\)</span>, we
-need the distribution of <span class="math inline">\(\mathbf{y}\)</span>. This is very easy to obtain, since:</p>
-<p><span class="math display">\[\mathbf{y}= \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}\]</span>
-is a linear combination of <span class="math inline">\(\mathbf{e}\)</span> (in fact is just a translation of <span class="math inline">\(\mathbf{e}\)</span>), and
-therefore it is normally distributed. Since we have already computed its mean
-and variance in the previous chapter, using those computations, we can conclude
-that:</p>
-<p><span class="math display">\[\mathbf{y}\sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I})\]</span>
-This means that the likelihood of <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma^2\)</span> is given by:</p>
-<p><span class="math display">\[ \mathcal{L}(\boldsymbol{\beta}, \sigma^2 | \mathbf{y}) = N(\mathbf{y}| \mathbf{X}\mathbf{y}, \sigma^2 \mathbf{I}) \]</span>
-Then this means that:</p>
+<p>To obtain the maximum likelihood estimates of <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma^2\)</span>, we first need the distribution of <span class="math inline">\(\mathbf{y}\)</span>. From the regression model</p>
+<p><span class="math display">\[
+\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{e},
+\]</span></p>
+<p>and the assumption <span class="math inline">\(\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})\)</span>, we see that <span class="math inline">\(\mathbf{y}\)</span> is simply a <strong>linear transformation</strong> of a multivariate normal random vector. Therefore, <span class="math inline">\(\mathbf{y}\)</span> is also normally distributed, with mean and variance given by:</p>
+<p><span class="math display">\[
+\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}).
+\]</span></p>
+<p>Consequently, the likelihood function of <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma^2\)</span>, given <span class="math inline">\(\mathbf{y}\)</span>, is:</p>
+<p><span class="math display">\[
+\mathcal{L}(\boldsymbol{\beta}, \sigma^2 \mid \mathbf{y}) = N(\mathbf{y} \mid \mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}),
+\]</span></p>
+<p>which, when written explicitly, becomes:</p>
 <p><span class="math display">\[\begin{align*}
   \mathcal{L}(\boldsymbol{\beta}, \sigma^2 | \mathbf{y})
     &amp;= (2 \pi)^{-\frac{n}{2}} |\sigma^2 \mathbf{I}|^{-\frac{1}{2}} \exp\left\{ -\frac{1}{2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\sigma^2 \mathbf{I})^{-1}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}    \\
@@ -419,91 +435,92 @@ Then this means that:</p>
     &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                   \\
     &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                   \\
 \end{align*}\]</span></p>
-<p>Now recalling from:</p>
-<p><span class="math display">\[(\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;(\mathbf{y}- \mathbb{E}[\mathbf{y}]) = \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])\]</span>
-that is:</p>
-<p><span class="math display">\[(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) = \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta}) = \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})&#39;\mathbf{X}\mathbf{X}( \hat{\boldsymbol{\beta}} - \boldsymbol{\beta})\]</span></p>
-<p>then, the likelihood can be written as:</p>
+<hr />
+<div id="decomposition-of-the-quadratic-form" class="section level3 hasAnchor" number="9.2.1">
+<h3><span class="header-section-number">9.2.1</span> Decomposition of the Quadratic Form<a href="normality-assumption.html#decomposition-of-the-quadratic-form" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Recall that in the previous chapter we showed the following decomposition:</p>
+<p><span class="math display">\[
+(\mathbf{y} - \mathbb{E}[\mathbf{y}])&#39;(\mathbf{y} - \mathbb{E}[\mathbf{y}])
+= \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}]),
+\]</span></p>
+<p>which implies that</p>
+<p><span class="math display">\[
+(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})
+= \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})&#39; \mathbf{X}&#39;\mathbf{X} (\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}).
+\]</span></p>
+<p>Substituting this into the likelihood function gives:</p>
 <p><span class="math display">\[\begin{align*}
   \mathcal{L}(\boldsymbol{\beta}, \sigma^2 | \mathbf{y})
     &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                                      \\
     &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 \sigma^2} -\frac{(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})&#39;\mathbf{X}\mathbf{X}( \hat{\boldsymbol{\beta}} - \boldsymbol{\beta})}{2 \sigma^2} \right\} \\
 \end{align*}\]</span></p>
-<p>This is a useful way to write the likelihood, since it is easy to optimize with
-respect to <span class="math inline">\(\boldsymbol{\beta}\)</span>. Since, independently of the value of <span class="math inline">\(\sigma^2\)</span>, the value of
-<span class="math inline">\(\boldsymbol{\beta}\)</span> that maximizes the likelihood is the OLS estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, since it
-makes zero the following term:</p>
-<p><span class="math display">\[ -\frac{(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})&#39;\mathbf{X}\mathbf{X}( \hat{\boldsymbol{\beta}} - \boldsymbol{\beta})}{2 \sigma^2} \]</span>
-In this way, we only need to maximize the likelihood with respect to <span class="math inline">\(\sigma^2\)</span>,
-as the following marginal likelihood:</p>
-<p><span class="math display">\[ \mathcal{L}(\sigma^2 | \mathbf{y}, \boldsymbol{\beta}= \hat{\boldsymbol{\beta}} ) =  (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 \sigma^2} \right\}\]</span>
-Instead of maximizing the marginal likelihood directly, we will maximize the
-marginal log-likelihood:</p>
-<p><span class="math display">\[ \ell(\sigma^2 | \mathbf{y}, \boldsymbol{\beta}= \hat{\boldsymbol{\beta}}) = -\frac{n}{2} \log(2 \pi) -\frac{n}{2} \log(\sigma^2) -\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 \sigma^2}\]</span>
-We can do this maximization, by taking the derivative:</p>
-<p><span class="math display">\[\begin{align*}
-  \frac{d \ell}{d \sigma^2}
-    &amp;=        -\frac{n}{2 \sigma^2} + \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 (\sigma^2)^2}
-\end{align*}\]</span></p>
-<p>Then</p>
-<p><span class="math display">\[\begin{align*}
-  \frac{d \ell}{d \sigma^2} =0
-    &amp;\implies -\frac{n}{2 \sigma^2} + \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 (\sigma^2)^2} = 0 \\
-    &amp;\implies -n + \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} = 0                          \\
-    &amp;\implies \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} = n                               \\
-    &amp;\implies \sigma^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n}                               \\
-\end{align*}\]</span></p>
-<p>So we have, that the Maximum Likelihood Estimate of <span class="math inline">\(\sigma^2\)</span> is given by:</p>
-<p><span class="math display">\[\tilde{\sigma}^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n}\]</span></p>
-<p>And, taking the second derivative to confirm it is a maximum we have that:</p>
-<p><span class="math display">\[\begin{align*}
-  \frac{d^2 \ell}{d (\sigma^2)^2} \bigg|_{\sigma^2 = \tilde{\sigma}^2}
-    &amp;= \frac{n}{2 (\tilde{\sigma}^2)^2} - \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{(\tilde{\sigma}^2)^3} \\
-    &amp;= \frac{n}{2 (\tilde{\sigma}^2)^2} - \frac{n}{(\tilde{\sigma}^2)^2}                   \\
-    &amp;= - \frac{n}{(2 \tilde{\sigma}^2)^2}                                                  \\
-    &amp;\leq 0                                                  
-\end{align*}\]</span></p>
-<p>So <span class="math inline">\(\tilde{\sigma}^2\)</span> is indeed maximizing the marginal likelihood.</p>
-<p>Note that, unlike with the <span class="math inline">\(\boldsymbol{\beta}\)</span> parameter, our OLS estimate <span class="math inline">\(\hat{\sigma}^2\)</span>
-of <span class="math inline">\(\sigma^2\)</span> is different to the MLE estimator <span class="math inline">\(\tilde{\sigma}^2\)</span>. In particular
-<span class="math inline">\(\tilde{\sigma}^2\)</span> is biased.</p>
-<p>This doesn’t mean that one estimate is better than the other, they just have
-different properties.</p>
-<p>We will work more with <span class="math inline">\(\hat{\sigma}^2\)</span> than <span class="math inline">\(\tilde{\sigma}^2\)</span>, since it is more
-useful to build certain statistics.</p>
+<p>This expression is convenient for optimization. Notice that, for any fixed <span class="math inline">\(\sigma^2\)</span>, the likelihood is maximized with respect to <span class="math inline">\(\boldsymbol{\beta}\)</span> when <span class="math inline">\(\boldsymbol{\beta} = \hat{\boldsymbol{\beta}}\)</span>, since that value nullifies the second exponential term. Therefore, the MLE for <span class="math inline">\(\boldsymbol{\beta}\)</span> coincides with the OLS estimator.</p>
+<hr />
 </div>
-<div id="distribution-of-estimates" class="section level2 hasAnchor" number="9.3">
-<h2><span class="header-section-number">9.3</span> Distribution of Estimates<a href="normality-assumption.html#distribution-of-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In the same way that in the last chapters we computed the mean and the variance
-of our estimates, we can obtain the distribution of the estimates:</p>
+<div id="estimation-of-sigma2" class="section level3 hasAnchor" number="9.2.2">
+<h3><span class="header-section-number">9.2.2</span> Estimation of <span class="math inline">\(\sigma^2\)</span><a href="normality-assumption.html#estimation-of-sigma2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Once we have <span class="math inline">\(\boldsymbol{\beta} = \hat{\boldsymbol{\beta}}\)</span>, the likelihood simplifies to a function of <span class="math inline">\(\sigma^2\)</span> only:</p>
+<p><span class="math display">\[ \mathcal{L}(\sigma^2 | \mathbf{y}, \boldsymbol{\beta}= \hat{\boldsymbol{\beta}}) = (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2\sigma^2} \right\}  \]</span></p>
+<p>Taking logs gives the <strong>log-likelihood function</strong>:</p>
+<p><span class="math display">\[
+\ell(\sigma^2 \mid \mathbf{y}, \boldsymbol{\beta} = \hat{\boldsymbol{\beta}})
+= -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2\sigma^2}.
+\]</span></p>
+<p>Differentiating with respect to <span class="math inline">\(\sigma^2\)</span> and setting the derivative equal to zero yields:</p>
+<p><span class="math display">\[
+\tilde{\sigma}^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n}.
+\]</span></p>
+<p>A second derivative check confirms that this value indeed maximizes the log-likelihood. Thus, <span class="math inline">\(\tilde{\sigma}^2\)</span> is the <strong>maximum likelihood estimator</strong> of <span class="math inline">\(\sigma^2\)</span>.</p>
+<hr />
+</div>
+<div id="remarks-on-bias-and-practical-use" class="section level3 hasAnchor" number="9.2.3">
+<h3><span class="header-section-number">9.2.3</span> Remarks on Bias and Practical Use<a href="normality-assumption.html#remarks-on-bias-and-practical-use" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>It is important to note that <span class="math inline">\(\tilde{\sigma}^2\)</span> is <strong>biased</strong> as an estimator of <span class="math inline">\(\sigma^2\)</span>. In contrast, the usual OLS variance estimator</p>
+<p><span class="math display">\[
+\hat{\sigma}^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n - p}
+\]</span></p>
+<p>is unbiased under the Gauss–Markov assumptions. Both estimators are useful: <span class="math inline">\(\tilde{\sigma}^2\)</span> arises naturally in likelihood-based methods and is convenient for theoretical developments, while <span class="math inline">\(\hat{\sigma}^2\)</span> is preferred for unbiased estimation and inferential procedures.</p>
+<p>In the following sections, we will build on these results to derive the exact <strong>sampling distributions</strong> of the OLS estimators and the basis for hypothesis testing within the classical linear model framework.</p>
+<hr />
+</div>
+</div>
+<div id="distribution-of-the-estimates" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Distribution of the Estimates<a href="normality-assumption.html#distribution-of-the-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the previous chapters, we derived the mean and variance of the least squares estimators under the assumption of normally distributed errors. We now go further and obtain their <strong>sampling distributions</strong>, which fully characterize the stochastic behavior of these estimators.
+This is possible because, under normality, any linear combination of normally distributed random variables is itself normal. Since most of our estimators are linear functions of the observed data, their distributions are readily available.</p>
 <div id="distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe" class="section level3 hasAnchor" number="9.3.1">
-<h3><span class="header-section-number">9.3.1</span> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Most of our estimates are linear combinations of <span class="math inline">\(\mathbf{y}\)</span>, so they are normally
-distributed and we can use the mean and variances computed in the last chapter
-to fully characterize their distributions. This is the case for:</p>
-<p><span class="math display">\[ \hat{\boldsymbol{\beta}}, \quad \hat{\mathbf{y}}, \quad \hat{\mathbf{e}} \]</span>
-Their distributions are:</p>
-<p><span class="math display">\[ \hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2 (\mathbf{X}&#39;\mathbf{X})^{-1}) \]</span>
-<span class="math display">\[ \hat{\mathbf{y}} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{H}) \]</span>
-<span class="math display">\[ \hat{\mathbf{e}} \sim N(\mathbf{0}, \sigma^2 (\mathbf{I}-\mathbf{H})) \]</span></p>
-<p>This is not the case for the estimate <span class="math inline">\(\hat{\sigma}^2\)</span>, since it is not a linear
-transformation of <span class="math inline">\(\mathbf{y}\)</span>.</p>
+<h3><span class="header-section-number">9.3.1</span> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span>, and <span class="math inline">\(\hat{\mathbf{e}}\)</span><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The least squares estimators <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span>, and <span class="math inline">\(\hat{\mathbf{e}}\)</span> are all linear transformations of the response vector <span class="math inline">\(\mathbf{y}\)</span>. Therefore, they are normally distributed, and the corresponding mean and variance expressions derived earlier allow us to determine their full distributions. Specifically, we have:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}, \quad \hat{\mathbf{y}}, \quad \hat{\mathbf{e}}
+\]</span></p>
+<p>and their respective distributions are given by:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2 (\mathbf{X}&#39;\mathbf{X})^{-1})
+\]</span></p>
+<p><span class="math display">\[
+\hat{\mathbf{y}} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{H})
+\]</span></p>
+<p><span class="math display">\[
+\hat{\mathbf{e}} \sim N(\mathbf{0}, \sigma^2 (\mathbf{I}- \mathbf{H}))
+\]</span></p>
+<p>These results reveal that both fitted values and residuals are multivariate normal, each with a distinct covariance structure determined by the projection matrices <span class="math inline">\(\mathbf{H}\)</span> and <span class="math inline">\(\mathbf{I}- \mathbf{H}\)</span>. The matrix <span class="math inline">\(\mathbf{H}\)</span> projects <span class="math inline">\(\mathbf{y}\)</span> onto the column space of <span class="math inline">\(\mathbf{X}\)</span>, while <span class="math inline">\((\mathbf{I}- \mathbf{H})\)</span> projects it onto its orthogonal complement.</p>
+<p>Note that the estimator of the error variance, <span class="math inline">\(\hat{\sigma}^2\)</span>, is <strong>not</strong> a linear function of <span class="math inline">\(\mathbf{y}\)</span>, so its distribution must be derived differently.</p>
+<hr />
 </div>
 <div id="distribution-of-hatsigma2" class="section level3 hasAnchor" number="9.3.2">
 <h3><span class="header-section-number">9.3.2</span> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span><a href="normality-assumption.html#distribution-of-hatsigma2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Obtaining the distribution of <span class="math inline">\(\hat{\sigma}^2\)</span> is not as straight forward. We
-will use 3 steps:</p>
+<p>The estimator <span class="math inline">\(\hat{\sigma}^2\)</span> measures the variability of the residuals around the fitted model. Its distribution is central to many inferential procedures, such as constructing confidence intervals and hypothesis tests for the regression coefficients.
+However, because <span class="math inline">\(\hat{\sigma}^2\)</span> involves the quadratic form <span class="math inline">\(\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}\)</span>, its derivation is more involved. We will obtain its distribution in three steps:</p>
 <ol style="list-style-type: decimal">
-<li>Express <span class="math inline">\(\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}\)</span> as quadratic form of standard
-normal with an idempotent matrix.</li>
-<li>Show that the quadratic form of standard normal with an idempotent matrix is
-distributed as a chi squared.</li>
-<li>Relate the distribution of <span class="math inline">\(\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}\)</span> to the
-distribution of <span class="math inline">\(\hat{\sigma}^2\)</span>.</li>
+<li>Express <span class="math inline">\(\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}\)</span> as a <strong>quadratic form</strong> of a standard normal vector with an idempotent matrix.</li>
+<li>Show that such a quadratic form follows a <strong>chi-squared distribution</strong> with degrees of freedom equal to the rank of the idempotent matrix.</li>
+<li>Relate this result to the distribution of <span class="math inline">\(\hat{\sigma}^2\)</span> itself.</li>
 </ol>
-<div id="distribution-of-hatsigma2-step-1" class="section level4 hasAnchor" number="9.3.2.1">
-<h4><span class="header-section-number">9.3.2.1</span> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span> Step 1<a href="normality-assumption.html#distribution-of-hatsigma2-step-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>First, note that:</p>
+<hr />
+<div id="step-1-expressing-frachatmathbfehatmathbfesigma2-as-a-quadratic-form" class="section level4 hasAnchor" number="9.3.2.1">
+<h4><span class="header-section-number">9.3.2.1</span> Step 1: Expressing <span class="math inline">\(\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}\)</span> as a Quadratic Form<a href="normality-assumption.html#step-1-expressing-frachatmathbfehatmathbfesigma2-as-a-quadratic-form" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We begin by rewriting the residual vector in terms of the error vector <span class="math inline">\(\mathbf{e}\)</span>:</p>
 <p><span class="math display">\[\begin{align*}
   (\mathbf{I}- \mathbf{H}) \mathbf{y}
     &amp;= (\mathbf{I}- \mathbf{H}) (\mathbf{X}\boldsymbol{\beta}+ \mathbf{e})                    &amp;&amp; \text{since $\mathbf{y}= \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}$}  \\
@@ -519,33 +536,36 @@ distribution of <span class="math inline">\(\hat{\sigma}^2\)</span>.</li>
     &amp;= \mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) (\mathbf{I}- \mathbf{H}) \mathbf{e}&amp;&amp; \text{since $(\mathbf{I}- \mathbf{H}) \mathbf{y}= (\mathbf{I}- \mathbf{H}) \mathbf{e}$} \\
     &amp;= \mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{e}&amp;&amp; \text{since $(\mathbf{I}- \mathbf{H})$ is idempotent}         \\
 \end{align*}\]</span></p>
-<p>Then,</p>
+<p>Thus,</p>
 <p><span class="math display">\[\begin{align*}
   \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}
     &amp;= \frac{\mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}}{\sigma^2}  &amp;&amp; \text{since $\hat{\mathbf{e}}&#39;\hat{\mathbf{e}} = \mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}$}  \\
     &amp;= \frac{\mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{e}}{\sigma^2}  &amp;&amp; \text{since $\mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{e}= \mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}$} \\
     &amp;= \frac{\mathbf{e}}{\sqrt{\sigma^2}}&#39; (\mathbf{I}- \mathbf{H}) \frac{\mathbf{e}}{\sqrt{\sigma^2}}                                 \\
 \end{align*}\]</span></p>
-<p>Finally, note that <span class="math inline">\(\frac{\mathbf{e}}{\sqrt{\sigma^2}}\)</span> is a linear function of <span class="math inline">\(\mathbf{e}\)</span>
-that is normal, therefore it is normal also, with mean:</p>
-<p><span class="math display">\[ \mathbb{E}\left[\frac{\mathbf{e}}{\sqrt{\sigma^2}}\right] =  \frac{1}{\sqrt{\sigma^2}} \mathbb{E}[\mathbf{e}] = \frac{1}{\sqrt{\sigma^2}} \mathbf{0}= \mathbf{0}\]</span>
-<span class="math display">\[ \mathbb{V}\left[\frac{\mathbf{e}}{\sqrt{\sigma^2}}\right] =  \left(\frac{1}{\sqrt{\sigma^2}}\right)^2 \mathbb{V}[\mathbf{e}] = \frac{1}{\sigma^2} \sigma^2 \mathbf{I}= \mathbf{I}\]</span>
-So</p>
-<p><span class="math display">\[ \frac{\mathbf{e}}{\sqrt{\sigma^2}} \sim N(\mathbf{0}, \mathbf{I}) \]</span>
-is a multivariate standard normal. This concludes step 1.</p>
+<p>Finally, because <span class="math inline">\(\frac{\mathbf{e}}{\sqrt{\sigma^2}}\)</span> is a scaled version of the normal vector <span class="math inline">\(\mathbf{e}\)</span>, it remains normally distributed with zero mean and identity covariance:</p>
+<p><span class="math display">\[
+\mathbb{E}\left[\frac{\mathbf{e}}{\sqrt{\sigma^2}}\right] = \mathbf{0}, \qquad
+\mathbb{V}\left[\frac{\mathbf{e}}{\sqrt{\sigma^2}}\right] = \mathbf{I}
+\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\frac{\mathbf{e}}{\sqrt{\sigma^2}} \sim N(\mathbf{0}, \mathbf{I})
+\]</span></p>
+<p>This vector is known as a <strong>standard multivariate normal</strong>, completing Step 1.</p>
+<hr />
 </div>
-<div id="distribution-of-hatsigma2-step-2" class="section level4 hasAnchor" number="9.3.2.2">
-<h4><span class="header-section-number">9.3.2.2</span> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span> Step 2<a href="normality-assumption.html#distribution-of-hatsigma2-step-2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Let <span class="math inline">\(\mathbf{z}\in \mathbb{R}^{n}\)</span> a multivariate standard normal and <span class="math inline">\(\mathbf{M}\in \mathbb{R}^{n \times n}\)</span>
-and idempotent matrix of rank <span class="math inline">\(m\)</span>. Then, we will show that:</p>
-<p><span class="math display">\[ \mathbf{z}&#39; \mathbf{M}\mathbf{z}\sim \chi^2_{m} \]</span></p>
-<p>To show this result, we will use the spectral decomposition of <span class="math inline">\(\mathbf{M}\)</span>, that is:</p>
-<p><span class="math display">\[ \mathbf{M}= \mathbf{V}\boldsymbol{\Sigma}\mathbf{V}&#39; \]</span></p>
-<p>with <span class="math inline">\(\mathbf{V}\)</span> orthonormal and <span class="math inline">\(\boldsymbol{\Sigma}\)</span> diagonal. Since <span class="math inline">\(\mathbf{V}= [\mathbf{v}_1,\ldots,\mathbf{v}_n]\)</span> is
-orthonormal, then we have that:</p>
-<p><span class="math display">\[ \mathbf{v}_i&#39;\mathbf{v}_j = 0 \quad \forall i \neq j \quad \text{and} \quad ||\mathbf{v}_i||^2_2 = 1 \quad \forall i\]</span>
-and, since <span class="math inline">\(\mathbf{M}\)</span> is idempotent, then <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is diagonal with exactly <span class="math inline">\(m\)</span> entries
-equal to <span class="math inline">\(1\)</span> and the rest equal to <span class="math inline">\(0\)</span>. Without loss of generality, we
+<div id="step-2-the-chi-squared-distribution-of-a-quadratic-form" class="section level4 hasAnchor" number="9.3.2.2">
+<h4><span class="header-section-number">9.3.2.2</span> Step 2: The Chi-Squared Distribution of a Quadratic Form<a href="normality-assumption.html#step-2-the-chi-squared-distribution-of-a-quadratic-form" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(\mathbf{z}\in \mathbb{R}^n\)</span> be a standard multivariate normal vector and <span class="math inline">\(\mathbf{M}\in \mathbb{R}^{n \times n}\)</span> an idempotent matrix of rank <span class="math inline">\(m\)</span>. We now show that:</p>
+<p><span class="math display">\[
+\mathbf{z}&#39; \mathbf{M}\mathbf{z}\sim \chi^2_m
+\]</span></p>
+<p>To prove this, we use the spectral decomposition of <span class="math inline">\(\mathbf{M}\)</span>:</p>
+<p><span class="math display">\[
+\mathbf{M}= \mathbf{V}\boldsymbol{\Sigma}\mathbf{V}&#39;
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{V}\)</span> is an orthonormal matrix and <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is diagonal. Since <span class="math inline">\(\mathbf{M}\)</span> is idempotent, the diagonal of <span class="math inline">\(\boldsymbol{\Sigma}\)</span> consists of <span class="math inline">\(m\)</span> ones and <span class="math inline">\(n-m\)</span> zeros. Without loss of generality, we
 can assume that the first <span class="math inline">\(m\)</span> entries of the diagonal are equal to <span class="math inline">\(1\)</span> and the
 next entries equal to <span class="math inline">\(0\)</span>.</p>
 <p>Then, first note that <span class="math inline">\(\mathbf{V}&#39; \mathbf{z}\)</span> is a linear combination of a normal distribution.
@@ -566,67 +586,66 @@ distributed.</p>
     &amp;= \sum_{i=1}^{m} w_i^2           &amp;&amp; \text{since only the first $m$ entries are equal to $1$} \\
     &amp;\sim \chi^2_m                    &amp;&amp; \text{by definition of the $\chi^2$ distribution}        \\
 \end{align*}\]</span></p>
+<p>This fundamental result connects linear algebra and probability theory and is essential to statistical inference in linear regression.</p>
+<hr />
 </div>
-<div id="distribution-of-hatsigma2-step-3" class="section level4 hasAnchor" number="9.3.2.3">
-<h4><span class="header-section-number">9.3.2.3</span> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span> Step 3<a href="normality-assumption.html#distribution-of-hatsigma2-step-3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Using step 1 and 2, we can conclude that:</p>
-<p><span class="math display">\[ \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p} \]</span>
-since the rank of the idempotent matrix <span class="math inline">\((\mathbf{I}- \mathbf{H})\)</span> is <span class="math inline">\(n-p\)</span>. Since:</p>
-<p><span class="math display">\[ \hat{\sigma}^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n-p} = \frac{\sigma^2}{n-p}\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \frac{\sigma^2}{n-p}\chi^2_{n-p} \]</span></p>
+<div id="step-3-distribution-of-hatsigma2" class="section level4 hasAnchor" number="9.3.2.3">
+<h4><span class="header-section-number">9.3.2.3</span> Step 3: Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span><a href="normality-assumption.html#step-3-distribution-of-hatsigma2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Combining the results from Steps 1 and 2, we conclude that:</p>
+<p><span class="math display">\[
+\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p}
+\]</span></p>
+<p>since the idempotent matrix <span class="math inline">\((\mathbf{I}- \mathbf{H})\)</span> has rank <span class="math inline">\(n-p\)</span>. Therefore:</p>
+<p><span class="math display">\[
+\hat{\sigma}^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n-p}
+= \frac{\sigma^2}{n-p}\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}
+\sim \frac{\sigma^2}{n-p}\chi^2_{n-p}
+\]</span></p>
+<p>This result shows that the estimator of <span class="math inline">\(\sigma^2\)</span> is scaled chi-squared distributed, a fact that will be crucial when constructing confidence intervals and hypothesis tests.</p>
+<hr />
 </div>
 </div>
 <div id="independence-of-hatmathbfe-and-hatmathbfy" class="section level3 hasAnchor" number="9.3.3">
 <h3><span class="header-section-number">9.3.3</span> Independence of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span><a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>We have seen that <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> are uncorrelated, that is</p>
-<p><span class="math display">\[ \mathbb{C}[\hat{\mathbf{e}}, \hat{\mathbf{y}}] = \mathbf{0}\]</span>
-however, this doesn’t necessarily mean they are independent. Independence is a
-much more stronger property. For example, if two random variables are independent
-then any function of this random variables will be independent. However, if two
-random variables are uncorrelated then not necessarily any function of this
-random variables will be uncorrelated.</p>
-<p>Now, after our assumption of normality, then <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> are
-independent, because uncorrelated random variables implies independence for
-normally distributed random variables, as is the case of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span>.</p>
-<p>Then, any variable that is a function of <span class="math inline">\(\hat{\mathbf{e}}\)</span> will be independent of any
-random variable that is a function of <span class="math inline">\(\hat{\mathbf{y}}\)</span>, even if these new random
-variables are not normal themselves.</p>
+<p>Previously, we showed that <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> are uncorrelated:</p>
+<p><span class="math display">\[
+\mathbb{C}[\hat{\mathbf{e}}, \hat{\mathbf{y}}] = \mathbf{0}
+\]</span></p>
+<p>However, uncorrelatedness does not necessarily imply independence. In general, two random variables can have zero covariance and still exhibit nonlinear dependence.</p>
+<p>Under the <strong>normality assumption</strong>, this distinction disappears: if two normally distributed vectors are uncorrelated, they are also independent. Since both <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> are linear combinations of the normal vector <span class="math inline">\(\mathbf{y}\)</span>, they are jointly normal. Therefore, the absence of correlation between them implies that they are independent:</p>
+<ul>
+<li><span class="math inline">\(\hat{\mathbf{e}}\)</span> depends only on <span class="math inline">\((\mathbf{I}- \mathbf{H})\mathbf{y}\)</span>, the projection onto the residual space.</li>
+<li><span class="math inline">\(\hat{\mathbf{y}}\)</span> depends only on <span class="math inline">\(\mathbf{H}\mathbf{y}\)</span>, the projection onto the column space of <span class="math inline">\(\mathbf{X}\)</span>.</li>
+</ul>
+<p>These two subspaces are orthogonal, and under normality, orthogonality implies statistical independence. Consequently, any statistic that is a function of <span class="math inline">\(\hat{\mathbf{e}}\)</span> (such as <span class="math inline">\(\hat{\sigma}^2\)</span>) is independent of any statistic that is a function of <span class="math inline">\(\hat{\mathbf{y}}\)</span> (such as <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>).</p>
+<p>This independence property plays a pivotal role in classical regression inference, as it underlies the derivation of <span class="math inline">\(t\)</span> and <span class="math inline">\(F\)</span> distributions for hypothesis testing.</p>
+<hr />
 </div>
 </div>
-<div id="interval-estimation" class="section level2 hasAnchor" number="9.4">
-<h2><span class="header-section-number">9.4</span> Interval Estimation<a href="normality-assumption.html#interval-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>So far, we have obtained point estimates of different quantities of interest,
-<span class="math inline">\(\boldsymbol{\beta}\)</span>, <span class="math inline">\(\mathbf{e}\)</span> and <span class="math inline">\(\hat{\sigma}^2\)</span>, however the fact
-we have the distribution of estimates of this quantities will allow us to obtain
-interval estimators.</p>
-<div id="confidence-intervals-for-coefficients" class="section level3 hasAnchor" number="9.4.1">
-<h3><span class="header-section-number">9.4.1</span> Confidence Intervals for Coefficients<a href="normality-assumption.html#confidence-intervals-for-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>We know that the OLS estimate for the coefficients, has the following distribution:</p>
-<p><span class="math display">\[ \hat{\boldsymbol{\beta}} \sim N(\mathbf{0}, \sigma^2 (\mathbf{X}&#39;\mathbf{X})^{-1}) \]</span></p>
-<p>then, this means that each of the entries of <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\hat{\beta}_0, \hat{\beta}_1,\ldots,\hat{\beta}_{p-1})\)</span>
-is normally distributed, as follows:</p>
-<p><span class="math display">\[ \hat{\beta}_i \sim N(\beta_i, \sigma^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii}) \]</span>
-we will call</p>
-<p><span class="math display">\[ \sigma^2_{\beta_i} =  \sigma^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii} \]</span>
-then, we can re-write the distribution as follows:</p>
-<p><span class="math display">\[ \hat{\beta}_i \sim N \left(\beta_i, \sigma^2_{\beta_i} \right) \]</span>
-unfortunately this distribution depends on <span class="math inline">\(\sigma^2\)</span> which is unknown, so we
-can’t use it to build a confidence interval. So we transform the statistic first
-by removing the mean <span class="math inline">\(\beta_i\)</span> and by diving by the standard deviation:</p>
-<p><span class="math display">\[ t^0_{\beta_i}=\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} \]</span>
-Then, this new quantity is normally distributed, since it a linear transformation
-of a random variable that is normally distributed, and has mean as variance as
-follows:</p>
-<p><span class="math display">\[ \mathbb{E}[t^0_{\beta_i}] = \mathbb{E}\left[\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}}\right]= \frac{\hat{\mathbb{E}[\beta}_i] - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} = \frac{\beta_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} = 0  \]</span>
-<span class="math display">\[ \mathbb{V}[t^0_{\beta_i}] = \mathbb{V}\left[\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}}\right]= \left(\frac{1}{\sqrt{\sigma^2_{\beta_i}}}\right)^2 \mathbb{V}[\hat{\beta}_i - \beta_i] = \frac{1}{\sigma^2_{\beta_i}} \mathbb{V}[\hat{\beta}_i] = \frac{1}{\sigma^2_{\beta_i}} \sigma^2_{\beta_i} = 1  \]</span>
-then:</p>
-<p><span class="math display">\[ t^0_{\beta_i} \sim N(0, 1) \]</span>
-that is <span class="math inline">\(t^0_{\beta_i}\)</span> is distributed like a standard normal. Now the distribution
-doesn’t depend on any unknown parameter (on top of <span class="math inline">\(\beta_i\)</span>, that is the parameter
-of interest), but the quantity itself depends on <span class="math inline">\(\sigma^2\)</span> through <span class="math inline">\(\sigma^2_{\beta_i}\)</span>,
-so we can’t use it to build a confidence interval.</p>
-<p>We consider a new quantity</p>
-<p><span class="math display">\[ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} \]</span>
-where <span class="math inline">\(\hat{\sigma}^2_{\beta_i} = \hat{\sigma}^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii}\)</span>, so <span class="math inline">\(t_{\beta_i}\)</span>
+<div id="interval-estimation-1" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Interval Estimation<a href="normality-assumption.html#interval-estimation-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So far, we have derived <strong>point estimates</strong> for several parameters of interest—namely the regression coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span>, the errors <span class="math inline">\(\mathbf{e}\)</span>, and the residual variance <span class="math inline">\(\hat{\sigma}^2\)</span>.
+While point estimates provide single “best guesses” of the true parameters, they do not convey how much uncertainty is associated with these estimates.</p>
+<p>However, since we have already obtained the <strong>sampling distributions</strong> of these estimators, we can now use this probabilistic information to construct <strong>interval estimators</strong>, which express a range of plausible values for the unknown parameters, given the observed data.</p>
+<hr />
+<div id="confidence-intervals-for-the-coefficients" class="section level3 hasAnchor" number="9.4.1">
+<h3><span class="header-section-number">9.4.1</span> Confidence Intervals for the Coefficients<a href="normality-assumption.html#confidence-intervals-for-the-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Recall that under the classical linear model assumptions, the ordinary least squares estimator satisfies</p>
+<p><span class="math display">\[ \hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2 (\mathbf{X}&#39;\mathbf{X})^{-1}) \]</span></p>
+<p>This result implies that each individual coefficient estimator <span class="math inline">\(\hat{\beta}_i\)</span> follows a univariate normal distribution:</p>
+<p><span class="math display">\[ \hat{\beta}_i \sim N(\beta_i, \sigma^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}])_{ii}) \]</span></p>
+<p>The quantity</p>
+<p><span class="math display">\[ \sigma^2_{\beta_i} =  \sigma^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii} \]</span></p>
+<p>represents the <strong>variance</strong> of <span class="math inline">\(\hat{\beta}_i\)</span>, which depends both on the noise variance <span class="math inline">\(\sigma^2\)</span> and on the geometry of the design matrix <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<p>Thus, we can rewrite the distribution as</p>
+<p><span class="math display">\[ \hat{\beta}_i \sim N \left(\beta_i, \sigma^2_{\beta_i} \right) \]</span></p>
+<p>Since <span class="math inline">\(\sigma^2\)</span> is unknown, this distribution cannot be used directly for inference.
+To overcome this, we first standardize the estimator by subtracting its mean and dividing by its true standard deviation:</p>
+<p><span class="math display">\[ t^0_{\beta_i}=\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} \]</span></p>
+<p>This standardized statistic follows the <strong>standard normal distribution</strong>, as confirmed by the derivations of its mean and variance. However, it still involves the unknown <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>Therefore, we replace <span class="math inline">\(\sigma^2\)</span> with its unbiased estimator <span class="math inline">\(\hat{\sigma}^2\)</span> to form</p>
+<p><span class="math display">\[ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} \]</span></p>
+<p>where <span class="math inline">\(\hat{\sigma}^2_{\beta_i} = \hat{\sigma}^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii}\)</span>, so <span class="math inline">\(t_{\beta_i}\)</span>
 doesn’t depend on <span class="math inline">\(\sigma^2\)</span>. Let’s compute the distribution of this quantity,
 first lets re-write the statistic as follows:</p>
 <p><span class="math display">\[ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}}
@@ -635,15 +654,16 @@ first lets re-write the statistic as follows:</p>
   = \frac{\frac{\left(\hat{\beta}_i - \beta_i\right)}{\sqrt{\sigma^2_{\beta_i}}}}{            \sqrt{\frac{(n-p)\frac{\hat{\sigma}^2}{\sigma^2}}{n-p}}}
   = \frac{t^0_{\beta_i}}{ \sqrt{\frac{\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}}{n-p}}}\]</span></p>
 <p>Now, we know <span class="math inline">\(t^0_{\beta_i}\)</span> is standard normal distributed, and from
-<a href="normality-assumption.html#distribution-of-hatsigma2-step-3">the distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a> we
+<a href="#distribution-of-hatsigma2-step-3">the distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a> we
 have that:</p>
 <p><span class="math display">\[ \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p} \]</span>
 and from
 <a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy">the independence of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a>
 we have that any function of both variables is independent, in particular</p>
 <p><span class="math display">\[ t^0_{\beta_i} \quad \text{and} \quad \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \]</span>
-are independent. Therefore</p>
-<p><span class="math display">\[ t_{\beta_i} \sim t_{n-p} \]</span>
+are independent. Therefore the ratio <span class="math inline">\(t_{\beta_i}\)</span> follows a <strong>Student’s <span class="math inline">\(t\)</span> distribution</strong> with <span class="math inline">\(n - p\)</span> degrees of freedom:</p>
+<p><span class="math display">\[ t_{\beta_i} \sim t_{n-p} \]</span></p>
+<p>This fundamental result enables us to construct confidence intervals for each regression coefficient.
 Now, let <span class="math inline">\(t \sim t_m\)</span> a random variable with a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(m\)</span> degrees
 of freedom. Then call:</p>
 <p><span class="math display">\[ t_m\left(a\right) \quad \text{such that} \quad \mathbb{P}\left(t\leq t_m\left(a\right) \right) = a\]</span>
@@ -660,27 +680,21 @@ for any <span class="math inline">\(a\in[0,1]\)</span></p>
   &amp;\implies \mathbb{P}\left( \hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \beta_i \leq \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
 \end{align*}\]</span></p>
 <p>So</p>
-<p><span class="math display">\[ \left(\hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}}, \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) \]</span>
-is a random interval, that is an interval that is a function of a random variables,
-in this case the random variables <span class="math inline">\(\hat{\beta}_i\)</span> and <span class="math inline">\(\hat{\sigma}^2_{\beta_i}\)</span>.
-This random interval will capture the true parameter <span class="math inline">\(\beta_i\)</span> with probability
-<span class="math inline">\(\alpha\)</span>. However, when data is observed and the interval is fixed (at the observed
-values), the interval either captures the true parameter or not (something we
-don’t know in general).</p>
+<p><span class="math display">\[ \left(\hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}}, \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) \]</span></p>
+<p>This <strong>random interval</strong> depends on the sample through <span class="math inline">\(\hat{\beta}_i\)</span> and <span class="math inline">\(\hat{\sigma}^2_{\beta_i}\)</span> and contains the true parameter <span class="math inline">\(\beta_i\)</span> with probability <span class="math inline">\(\alpha\)</span>.
+Once data are observed, the interval becomes fixed, and while it either includes or excludes <span class="math inline">\(\beta_i\)</span>, the confidence level reflects the long-run frequency with which such intervals contain the true value under repeated sampling.</p>
+<hr />
 </div>
 <div id="confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new" class="section level3 hasAnchor" number="9.4.2">
-<h3><span class="header-section-number">9.4.2</span> Confidence intervals for the expected mean of a new observation <span class="math inline">\(\mathbf{x}_{new}\)</span><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Note that the expected mean of a new observation <span class="math inline">\(\mathbf{x}_{new}\)</span> is given by:</p>
-<p><span class="math display">\[ \mathbb{E}[y_{new}] = \mathbf{x}_{new}&#39; \boldsymbol{\beta}\]</span>
-then we can consider, an estimate of this parameter, as:</p>
-<p><span class="math display">\[ \mathbf{x}_{new}&#39; \hat{\boldsymbol{\beta}} \]</span>
-this estimate is a linear combination of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, therefore it has a normal
-distribution with mean and variance as follows:</p>
-<p><span class="math display">\[\mathbb{E}[\mathbf{x}_{new} \hat{\boldsymbol{\beta}}] = \mathbf{x}_{new} \mathbb{E}[\hat{\boldsymbol{\beta}}] = \mathbf{x}_{new}&#39; \boldsymbol{\beta}\]</span>
-<span class="math display">\[\mathbb{V}[\mathbf{x}_{new}&#39; \hat{\boldsymbol{\beta}}] = \mathbf{x}_{new}&#39; \mathbb{V}[\hat{\boldsymbol{\beta}}] \mathbf{x}_{new} = \mathbf{x}_{new}&#39; \sigma^2 (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new} =  \sigma^2 \mathbf{x}_{new}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new} \]</span>
-that is:
-<span class="math display">\[ \mathbf{x}_{new}&#39; \hat{\boldsymbol{\beta}} \sim N \left(\mathbf{x}_{new}&#39; \boldsymbol{\beta}, \sigma^2 \mathbf{x}_{new}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new} \right)  \]</span></p>
-<p>so, similarly, we can consider</p>
+<h3><span class="header-section-number">9.4.2</span> Confidence Intervals for the Expected Mean of a New Observation <span class="math inline">\(\mathbf{x}_{new}\)</span><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In many applications, the researcher is not only interested in the regression coefficients themselves but also in the <strong>expected value of the response</strong> for a new vector of predictors <span class="math inline">\(\mathbf{x}_{new}\)</span>.</p>
+<p>The expected response is given by</p>
+<p><span class="math display">\[ \mathbb{E}[y_{new}] = \mathbf{x}_{new}&#39; \boldsymbol{\beta}\]</span></p>
+<p>and its natural estimator is</p>
+<p><span class="math display">\[ \mathbf{x}_{new}&#39; \hat{\boldsymbol{\beta}} \]</span></p>
+<p>Since <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is normally distributed, this linear combination is also normal with</p>
+<p><span class="math display">\[ \mathbf{x}_{new}&#39; \hat{\boldsymbol{\beta}} \sim N \left(\mathbf{x}_{new}&#39; \boldsymbol{\beta}, \sigma^2 \mathbf{x}_{new}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new} \right)  \]</span></p>
+<p>Replacing <span class="math inline">\(\sigma^2\)</span> with <span class="math inline">\(\hat{\sigma}^2\)</span> and applying the same reasoning as before, we obtain the statistic</p>
 <p><span class="math display">\[ t_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}} = \frac{\mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - \mathbf{x}_{new}&#39;\boldsymbol{\beta}}{\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}}}=\frac{\frac{\mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - \mathbf{x}_{new}&#39;\boldsymbol{\beta}}{\sqrt{\sigma^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}}}}{\sqrt{\frac{\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}}{n-p}}} \sim \chi^2_{n-p} \]</span>
 where <span class="math inline">\(\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}} = \hat{\sigma}^2 \mathbf{x}_{new}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new}\)</span>.
 This quantity is distributed as a <span class="math inline">\(t\)</span> with <span class="math inline">\(n-p\)</span> degrees of freedom since:</p>
@@ -697,20 +711,26 @@ and the other a function of <span class="math inline">\(\hat{\mathbf{e}}\)</span
 <p>so, the random interval is given by:</p>
 <p><span class="math display">\[ \left( \mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}} , \mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}} \right) \]</span>
 is a random interval that captures <span class="math inline">\(\mathbf{x}_{new}&#39;\boldsymbol{\beta}\)</span> with probability <span class="math inline">\(\alpha\)</span>.</p>
+<p>This interval quantifies uncertainty about the <strong>mean response</strong> at <span class="math inline">\(\mathbf{x}_{new}\)</span>, not about an individual observation, which would require adding the variance of the random error term.</p>
+<hr />
 </div>
 <div id="confidence-intervals-for-linear-combinations-of-boldsymbolbeta" class="section level3 hasAnchor" number="9.4.3">
-<h3><span class="header-section-number">9.4.3</span> Confidence intervals for linear combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Note that if we consider the parameter</p>
-<p><span class="math display">\[ \mathbf{a}&#39; \hat{\boldsymbol{\beta}}\]</span>
-then we note that <span class="math inline">\(\beta_i\)</span> and <span class="math inline">\(\mathbf{x}_{new} \boldsymbol{\beta}\)</span> are particular cases, where the
-value of <span class="math inline">\(\mathbf{a}\)</span> is a s follows:</p>
-<p><span class="math display">\[ \mathbf{a}= (0,\ldots,0,1,0,\ldots,0) \quad \text{for} \quad \mathbf{a}\boldsymbol{\beta}= \beta_i\]</span>
-<span class="math display">\[ \mathbf{a}= \mathbf{x}_{new} \quad \text{for} \quad \mathbf{a}\boldsymbol{\beta}= \mathbf{x}_{new}&#39; \boldsymbol{\beta}\]</span>
-then, performing similar operations as before, we can create random intervals to
-estimate <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}\)</span> as follows:</p>
-<p><span class="math display">\[ \left( \mathbf{a}&#39;\hat{\boldsymbol{\beta}} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}}} , \mathbf{a}&#39;\hat{\boldsymbol{\beta}} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}}} \right) \]</span>
-that captures <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}\)</span> with probability <span class="math inline">\(\alpha\)</span>. Where
-<span class="math inline">\(\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}} = \hat{\sigma}^2 \mathbf{a}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{a}\)</span>.</p>
+<h3><span class="header-section-number">9.4.3</span> Confidence Intervals for Linear Combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A particularly elegant aspect of the linear model is that it allows inference on <strong>any linear combination</strong> of the coefficients.
+Consider a vector <span class="math inline">\(\mathbf{a}\in \mathbb{R}^p\)</span> and the parameter of interest <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}\)</span>.</p>
+<p>This formulation encompasses several important special cases:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{a}= (0, \ldots, 0, 1, 0, \ldots, 0)\)</span> yields <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}= \beta_i\)</span>, the <span class="math inline">\(i\)</span>-th coefficient;</li>
+<li><span class="math inline">\(\mathbf{a}= \mathbf{x}_{new}\)</span> yields <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}= \mathbf{x}_{new}&#39; \boldsymbol{\beta}\)</span>, the expected mean at a new data point.</li>
+</ul>
+<p>Since <span class="math inline">\(\mathbf{a}&#39; \hat{\boldsymbol{\beta}}\)</span> is a linear combination of normally distributed estimators, it follows that</p>
+<p><span class="math display">\[ \mathbf{a}&#39; \hat{\boldsymbol{\beta}} \sim N(\mathbf{a}&#39; \boldsymbol{\beta}, \sigma^2 \mathbf{a}&#39; (\mathbf{X}&#39;\mathbf{X})^{-1} \mathbf{a}) \]</span></p>
+<p>and replacing <span class="math inline">\(\sigma^2\)</span> by its estimator leads to a <span class="math inline">\(t_{n-p}\)</span> distribution for the corresponding standardized statistic.
+Therefore, the general form of a <span class="math inline">\((1 - \alpha)\)</span> confidence interval for any linear combination is</p>
+<p><span class="math display">\[ \left( \mathbf{a}&#39;\hat{\boldsymbol{\beta}} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}}} , \mathbf{a}&#39;\hat{\boldsymbol{\beta}} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}}} \right) \]</span></p>
+<p>where <span class="math inline">\(\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}} = \hat{\sigma}^2 \mathbf{a}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{a}\)</span>.</p>
+<p>This result unifies the previous confidence intervals into a single, compact framework and highlights the power and flexibility of the linear model for statistical inference.</p>
+<hr />
 </div>
 </div>
 <div id="hypothesis-testing" class="section level2 hasAnchor" number="9.5">

@@ -192,6 +192,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.5.1" data-path="prerequisites.html"><a href="prerequisites.html#bias-of-an-estimator"><i class="fa fa-check"></i><b>2.5.1</b> Bias of an Estimator</a></li>
 <li class="chapter" data-level="2.5.2" data-path="prerequisites.html"><a href="prerequisites.html#unbiased-estimator"><i class="fa fa-check"></i><b>2.5.2</b> Unbiased Estimator</a></li>
 <li class="chapter" data-level="2.5.3" data-path="prerequisites.html"><a href="prerequisites.html#mean-square-error-of-an-estimator"><i class="fa fa-check"></i><b>2.5.3</b> Mean Square Error of an Estimator</a></li>
+<li class="chapter" data-level="2.5.4" data-path="prerequisites.html"><a href="prerequisites.html#interval-estimation"><i class="fa fa-check"></i><b>2.5.4</b> Interval Estimation</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
@@ -265,7 +266,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#the-general-model"><i class="fa fa-check"></i><b>6.1.1</b> The General Model</a></li>
+<li class="chapter" data-level="6.1.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interpretation-and-objectives"><i class="fa fa-check"></i><b>6.1.2</b> Interpretation and Objectives</a></li>
+<li class="chapter" data-level="6.1.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#applications-and-context"><i class="fa fa-check"></i><b>6.1.3</b> Applications and Context</a></li>
+<li class="chapter" data-level="6.1.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#connection-to-polynomial-regression"><i class="fa fa-check"></i><b>6.1.4</b> Connection to Polynomial Regression</a></li>
+</ul></li>
 <li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#example-modeling-gdp"><i class="fa fa-check"></i><b>6.2</b> Example: Modeling GDP</a>
 <ul>
 <li class="chapter" data-level="6.2.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#simple-regressions"><i class="fa fa-check"></i><b>6.2.1</b> Simple Regressions</a></li>
@@ -344,18 +351,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="normality-assumption.html"><a href="normality-assumption.html"><i class="fa fa-check"></i><b>9</b> Normality Assumption</a>
 <ul>
 <li class="chapter" data-level="9.1" data-path="normality-assumption.html"><a href="normality-assumption.html#introduction-3"><i class="fa fa-check"></i><b>9.1</b> Introduction</a></li>
-<li class="chapter" data-level="9.2" data-path="normality-assumption.html"><a href="normality-assumption.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>9.2</b> Maximum Likelihood Estimation</a></li>
-<li class="chapter" data-level="9.3" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-estimates"><i class="fa fa-check"></i><b>9.3</b> Distribution of Estimates</a>
+<li class="chapter" data-level="9.2" data-path="normality-assumption.html"><a href="normality-assumption.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>9.2</b> Maximum Likelihood Estimation</a>
 <ul>
-<li class="chapter" data-level="9.3.1" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe"><i class="fa fa-check"></i><b>9.3.1</b> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+<li class="chapter" data-level="9.2.1" data-path="normality-assumption.html"><a href="normality-assumption.html#decomposition-of-the-quadratic-form"><i class="fa fa-check"></i><b>9.2.1</b> Decomposition of the Quadratic Form</a></li>
+<li class="chapter" data-level="9.2.2" data-path="normality-assumption.html"><a href="normality-assumption.html#estimation-of-sigma2"><i class="fa fa-check"></i><b>9.2.2</b> Estimation of <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="9.2.3" data-path="normality-assumption.html"><a href="normality-assumption.html#remarks-on-bias-and-practical-use"><i class="fa fa-check"></i><b>9.2.3</b> Remarks on Bias and Practical Use</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-the-estimates"><i class="fa fa-check"></i><b>9.3</b> Distribution of the Estimates</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe"><i class="fa fa-check"></i><b>9.3.1</b> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span>, and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
 <li class="chapter" data-level="9.3.2" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatsigma2"><i class="fa fa-check"></i><b>9.3.2</b> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a></li>
 <li class="chapter" data-level="9.3.3" data-path="normality-assumption.html"><a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy"><i class="fa fa-check"></i><b>9.3.3</b> Independence of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="normality-assumption.html"><a href="normality-assumption.html#interval-estimation"><i class="fa fa-check"></i><b>9.4</b> Interval Estimation</a>
+<li class="chapter" data-level="9.4" data-path="normality-assumption.html"><a href="normality-assumption.html#interval-estimation-1"><i class="fa fa-check"></i><b>9.4</b> Interval Estimation</a>
 <ul>
-<li class="chapter" data-level="9.4.1" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-coefficients"><i class="fa fa-check"></i><b>9.4.1</b> Confidence Intervals for Coefficients</a></li>
-<li class="chapter" data-level="9.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>9.4.2</b> Confidence intervals for the expected mean of a new observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
-<li class="chapter" data-level="9.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>9.4.3</b> Confidence intervals for linear combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
+<li class="chapter" data-level="9.4.1" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-coefficients"><i class="fa fa-check"></i><b>9.4.1</b> Confidence Intervals for the Coefficients</a></li>
+<li class="chapter" data-level="9.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>9.4.2</b> Confidence Intervals for the Expected Mean of a New Observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
+<li class="chapter" data-level="9.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>9.4.3</b> Confidence Intervals for Linear Combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
 </ul></li>
 <li class="chapter" data-level="9.5" data-path="normality-assumption.html"><a href="normality-assumption.html#hypothesis-testing"><i class="fa fa-check"></i><b>9.5</b> Hypothesis Testing</a>
 <ul>
@@ -1710,8 +1722,74 @@ This component-wise breakdown is helpful for understanding how each part of the 
 <span class="math display">\[
 \mathbb{M}(\hat{\mathbf{\theta}}) = \text{tr}(\text{Var}(\hat{\mathbf{\theta}})).
 \]</span></p></li>
-<li><p><strong>Bias-Variance Trade-off</strong>: The MSE quantifies the balance between bias and variance. Lowering bias often increases variance and vice versa, a key concept in statistical estimation.</p></li>
+<li><p><strong>Bias-Variance Trade-off</strong>: The MSE quantifies the balance between bias and variance. Lowering bias often increases variance and viceversa, a key concept in statistical estimation.</p></li>
 <li><p><strong>Overall Error Metric</strong>: The MSE provides a comprehensive measure of the estimator’s accuracy, taking both variance and bias into account, making it an essential criterion in evaluating estimators.</p></li>
+</ol>
+<hr />
+</div>
+</div>
+<div id="interval-estimation" class="section level3 hasAnchor" number="2.5.4">
+<h3><span class="header-section-number">2.5.4</span> Interval Estimation<a href="prerequisites.html#interval-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Point estimation</strong> is useful when the goal is to provide a single best estimate of an unknown population parameter based on sample data. While point estimates are useful summaries, they do not convey any information about the <strong>precision</strong> or <strong>uncertainty</strong> associated with the estimation process.</p>
+<p><strong>Interval estimation</strong> addresses this limitation by constructing an interval that, with a specified probability, contains the true value of the parameter of interest. Instead of reporting a single estimate $ $, we report an interval $ [L, U] $ that reflects the range of plausible values for the parameter $ $.</p>
+<p>Formally, a <strong>$ (1 - )100% $ confidence interval</strong> for a parameter $ $ is an interval computed from the data $ <span class="math inline">\(, denoted by\)</span>$
+[L(), U()],
+<span class="math display">\[
+such that
+\]</span>
+P(L() U()) = 1 - .
+$$</p>
+<p>Here, $ 1 - $ is called the <strong>confidence level</strong>, typically chosen as 0.90, 0.95, or 0.99. The value $ $ represents the <strong>significance level</strong>, or the probability that the constructed interval fails to contain the true parameter value.</p>
+<p>Intuitively, if we were to draw a large number of random samples and construct a confidence interval for each, approximately $ (1 - )100% $ of those intervals would contain the true value of $ $. Importantly, the confidence level pertains to the <em>procedure</em> of interval construction, not to the probability that any single computed interval contains $ $, since once the data are observed, the interval is fixed and $ $ is not random.</p>
+<p>Confidence intervals are central in statistical inference because they provide both an estimate and a measure of its reliability. Moreover, their construction is closely tied to hypothesis testing, as the same pivotal quantities used to form confidence intervals are also used to test hypotheses about population parameters.</p>
+<hr />
+<div id="steps-to-construct-a-confidence-interval" class="section level4 hasAnchor" number="2.5.4.1">
+<h4><span class="header-section-number">2.5.4.1</span> Steps to Construct a Confidence Interval<a href="prerequisites.html#steps-to-construct-a-confidence-interval" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ol style="list-style-type: decimal">
+<li><p><strong>Define a pivotal quantity.</strong>
+Begin by constructing a random variable $ W(, ) $ that satisfies two essential properties:</p>
+<ul>
+<li>It depends on the data $ $ and the parameter of interest $ $, but on <em>no other unknown parameters</em>.</li>
+<li>It is a <em>bijective</em> function of $ $, meaning that for every possible value of $ W $, there exists a unique corresponding value of $ $.</li>
+</ul>
+<p>For example, suppose $ {Y} N(, ^2 / n) $ and $ ^2 $ is known. Then a valid pivotal quantity is
+<span class="math display">\[
+W(\mathbf{Y}, \theta) = \frac{\bar{Y} - \theta}{\sigma / \sqrt{n}}
+\]</span>
+which depends only on the data and $ $.</p></li>
+<li><p><strong>Determine the sampling distribution of the pivotal quantity.</strong>
+Identify the probability distribution of $ W(, ) $. This distribution should <em>not</em> depend on any unknown parameters.</p>
+<p>In the previous example, we know that
+<span class="math display">\[
+W(\mathbf{Y}, \theta) = \frac{\bar{Y} - \theta}{\sigma / \sqrt{n}} \sim N(0,1)
+\]</span></p>
+<p>Hence, the distribution of $ W $ is fully specified and parameter-free.</p></li>
+<li><p><strong>Find the relevant percentiles of the distribution.</strong>
+For a desired confidence level $ 1 - $, determine the constants $ c_1 $ and $ c_2 $ such that
+<span class="math display">\[
+P(c_1 \leq W(\mathbf{Y}, \theta) \leq c_2) = 1 - \alpha
+\]</span>
+These constants correspond to the $ /2 $ and $ 1 - /2 $ quantiles of the distribution of $ W $.</p>
+<p>For instance, when $ W N(0,1) <span class="math inline">\(,\)</span>$
+P(-z_{/2} W z_{/2}) = 1 -
+$$</p></li>
+<li><p><strong>Invert the probability statement to isolate $ $.</strong>
+Express the probability statement in terms of $ $ by algebraically manipulating the inequalities.
+Starting from
+<span class="math display">\[
+P(c_1 \leq W(\mathbf{Y}, \theta) \leq c_2) = 1 - \alpha
+\]</span>
+substitute $ W(, ) $ and solve for $ $:
+<span class="math display">\[\begin{align*}
+c_1 &amp;\leq W(\mathbf{Y}, \theta) = \frac{T(\mathbf{Y}) - \theta}{S(\mathbf{Y})} \leq c_2 \
+-c_2 S(\mathbf{Y}) + T(\mathbf{Y}) &amp;\leq \theta \leq -c_1 S(\mathbf{Y}) + T(\mathbf{Y})
+\end{align*}\]</span>+ T() &amp;-c_1 S() + T()
+\end{align*}
+where $ T() $ and $ S() $ are functions of the data.</p>
+<p>Thus, the $ 100(1-)% $ confidence interval for $ $ is
+<span class="math display">\[
+[T(\mathbf{Y}) - c_2 S(\mathbf{Y}),T(\mathbf{Y}) - c_1 S(\mathbf{Y})]
+\]</span></p></li>
 </ol>
 
 </div>
