@@ -193,6 +193,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.5.2" data-path="prerequisites.html"><a href="prerequisites.html#unbiased-estimator"><i class="fa fa-check"></i><b>2.5.2</b> Unbiased Estimator</a></li>
 <li class="chapter" data-level="2.5.3" data-path="prerequisites.html"><a href="prerequisites.html#mean-square-error-of-an-estimator"><i class="fa fa-check"></i><b>2.5.3</b> Mean Square Error of an Estimator</a></li>
 <li class="chapter" data-level="2.5.4" data-path="prerequisites.html"><a href="prerequisites.html#interval-estimation"><i class="fa fa-check"></i><b>2.5.4</b> Interval Estimation</a></li>
+<li class="chapter" data-level="2.5.5" data-path="prerequisites.html"><a href="prerequisites.html#hypothesis-testing"><i class="fa fa-check"></i><b>2.5.5</b> Hypothesis Testing</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
@@ -369,7 +370,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>9.4.2</b> Confidence Intervals for the Expected Mean of a New Observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
 <li class="chapter" data-level="9.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>9.4.3</b> Confidence Intervals for Linear Combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
 </ul></li>
-<li class="chapter" data-level="9.5" data-path="normality-assumption.html"><a href="normality-assumption.html#hypothesis-testing"><i class="fa fa-check"></i><b>9.5</b> Hypothesis Testing</a>
+<li class="chapter" data-level="9.5" data-path="normality-assumption.html"><a href="normality-assumption.html#hypothesis-testing-1"><i class="fa fa-check"></i><b>9.5</b> Hypothesis Testing</a>
 <ul>
 <li class="chapter" data-level="9.5.1" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-for-the-overall-regression"><i class="fa fa-check"></i><b>9.5.1</b> Testing for the Overall Regression</a></li>
 <li class="chapter" data-level="9.5.2" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-if-one-variable-is-not-relevant"><i class="fa fa-check"></i><b>9.5.2</b> Testing if one variable is not relevant</a></li>
@@ -1791,8 +1792,44 @@ where $ T() $ and $ S() $ are functions of the data.</p>
 [T(\mathbf{Y}) - c_2 S(\mathbf{Y}),T(\mathbf{Y}) - c_1 S(\mathbf{Y})]
 \]</span></p></li>
 </ol>
-
+<hr />
 </div>
+</div>
+<div id="hypothesis-testing" class="section level3 hasAnchor" number="2.5.5">
+<h3><span class="header-section-number">2.5.5</span> Hypothesis Testing<a href="prerequisites.html#hypothesis-testing" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In statistical inference, <strong>hypothesis testing</strong> provides a formal framework to evaluate claims or assumptions about unknown population parameters based on sample data. While <em>interval estimation</em> aims to quantify uncertainty by constructing a range of plausible values for a parameter, hypothesis testing seeks to make a decision — whether the available evidence supports or contradicts a particular assumption about that parameter.</p>
+<p>Suppose that a parameter of interest is denoted by <span class="math inline">\(\theta\)</span>. We begin by specifying two competing statements:</p>
+<ul>
+<li>The <strong>null hypothesis</strong>, <span class="math inline">\(H_0\)</span>, represents the claim or status quo that we assume to be true unless the data provide strong evidence against it.</li>
+<li>The <strong>alternative hypothesis</strong>, <span class="math inline">\(H_1\)</span>, represents the claim we consider if the evidence suggests that <span class="math inline">\(H_0\)</span> may not hold.</li>
+</ul>
+<p>For example, in a regression setting, one may test whether a particular coefficient is equal to zero:
+<span class="math display">\[
+H_0: \beta_i = 0 \quad \text{versus} \quad H_1: \beta_i \neq 0
+\]</span>
+to determine whether predictor <span class="math inline">\(x_i\)</span> contributes significantly to explaining the dependent variable.</p>
+<p>The general idea of hypothesis testing can be expressed through the construction of a <strong>test statistic</strong>, a function of the data and the parameter of interest:
+<span class="math display">\[
+T = T(\mathbf{y}, \theta)
+\]</span>
+This statistic is designed so that, under the null hypothesis <span class="math inline">\(H_0\)</span>, its sampling distribution is known. The test statistic must be a <em>bijective</em> function of <span class="math inline">\(\theta\)</span> with respect to the hypothesis being tested; that is, changes in <span class="math inline">\(\theta\)</span> should translate uniquely into changes in <span class="math inline">\(T\)</span>, ensuring that inferences about <span class="math inline">\(\theta\)</span> can be drawn from the observed value of <span class="math inline">\(T\)</span>.</p>
+<p>Once the distribution of <span class="math inline">\(T\)</span> under <span class="math inline">\(H_0\)</span> is established, we define a <strong>rejection region</strong> — the set of values of <span class="math inline">\(T\)</span> for which the null hypothesis will be rejected. This region is determined by the <strong>significance level</strong> <span class="math inline">\(\alpha\)</span>, which represents the probability of incorrectly rejecting <span class="math inline">\(H_0\)</span> when it is actually true (a <em>Type I error</em>). Mathematically,
+<span class="math display">\[
+\mathbb{P}(T \in R \mid H_0 \text{ true}) = \alpha
+\]</span></p>
+<p>If the observed test statistic <span class="math inline">\(t_{\text{obs}}\)</span> falls within this region, we reject <span class="math inline">\(H_0\)</span> in favor of <span class="math inline">\(H_1\)</span>. Otherwise, we fail to reject <span class="math inline">\(H_0\)</span>. The cutoff points that determine the rejection region are called <strong>critical values</strong>, and they are derived from the distribution of <span class="math inline">\(T\)</span> under <span class="math inline">\(H_0\)</span>.</p>
+<p>An equivalent approach is to compute the <strong>p-value</strong>, which represents the probability, under <span class="math inline">\(H_0\)</span>, of obtaining a test statistic as extreme or more extreme than the observed one. The decision rule is then:
+<span class="math display">\[
+\text{Reject } H_0 \quad \text{if} \quad p\text{-value} &lt; \alpha
+\]</span></p>
+<p>In summary, hypothesis testing involves four essential steps:</p>
+<ol style="list-style-type: decimal">
+<li><strong>State the hypotheses</strong>: formulate <span class="math inline">\(H_0\)</span> and <span class="math inline">\(H_1\)</span>.</li>
+<li><strong>Choose an appropriate test statistic</strong> <span class="math inline">\(T(\mathbf{y}, \theta)\)</span> and determine its distribution under <span class="math inline">\(H_0\)</span>.</li>
+<li><strong>Determine the rejection region</strong> based on the desired significance level <span class="math inline">\(\alpha\)</span>.</li>
+<li><strong>Make a decision</strong> by comparing the observed statistic to the rejection region or by evaluating the p-value.</li>
+</ol>
+
 </div>
 </div>
 </div>

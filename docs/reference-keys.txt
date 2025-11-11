@@ -143,6 +143,7 @@ key-components
 key-properties-5
 interval-estimation
 steps-to-construct-a-confidence-interval
+hypothesis-testing
 introduction
 objectives-of-linear-regression
 examples-1
@@ -262,7 +263,7 @@ interval-estimation-1
 confidence-intervals-for-the-coefficients
 confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new
 confidence-intervals-for-linear-combinations-of-boldsymbolbeta
-hypothesis-testing
+hypothesis-testing-1
 testing-for-the-overall-regression
 testing-if-one-variable-is-not-relevant
 testing-if-a-subgroup-of-the-variables-is-relevant
