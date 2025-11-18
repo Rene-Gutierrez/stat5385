@@ -194,6 +194,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.5.3" data-path="prerequisites.html"><a href="prerequisites.html#mean-square-error-of-an-estimator"><i class="fa fa-check"></i><b>2.5.3</b> Mean Square Error of an Estimator</a></li>
 <li class="chapter" data-level="2.5.4" data-path="prerequisites.html"><a href="prerequisites.html#interval-estimation"><i class="fa fa-check"></i><b>2.5.4</b> Interval Estimation</a></li>
 <li class="chapter" data-level="2.5.5" data-path="prerequisites.html"><a href="prerequisites.html#hypothesis-testing"><i class="fa fa-check"></i><b>2.5.5</b> Hypothesis Testing</a></li>
+<li class="chapter" data-level="2.5.6" data-path="prerequisites.html"><a href="prerequisites.html#power-analysis"><i class="fa fa-check"></i><b>2.5.6</b> Power Analysis</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
@@ -375,6 +376,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.5.1" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-for-the-overall-regression"><i class="fa fa-check"></i><b>9.5.1</b> Testing for the Overall Regression</a></li>
 <li class="chapter" data-level="9.5.2" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-if-one-variable-is-not-relevant"><i class="fa fa-check"></i><b>9.5.2</b> Testing if one variable is not relevant</a></li>
 <li class="chapter" data-level="9.5.3" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-if-a-subgroup-of-the-variables-is-relevant"><i class="fa fa-check"></i><b>9.5.3</b> Testing if a Subgroup of the Variables is Relevant</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="normality-assumption.html"><a href="normality-assumption.html#power-analysis-1"><i class="fa fa-check"></i><b>9.6</b> Power Analysis</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="normality-assumption.html"><a href="normality-assumption.html#power-for-testing-a-single-coefficient"><i class="fa fa-check"></i><b>9.6.1</b> Power for Testing a Single Coefficient</a></li>
+<li class="chapter" data-level="9.6.2" data-path="normality-assumption.html"><a href="normality-assumption.html#power-for-testing-multiple-coefficients-partial-f-tests"><i class="fa fa-check"></i><b>9.6.2</b> Power for Testing Multiple Coefficients (Partial F-Tests)</a></li>
+<li class="chapter" data-level="9.6.3" data-path="normality-assumption.html"><a href="normality-assumption.html#the-role-of-the-design-matrix"><i class="fa fa-check"></i><b>9.6.3</b> The Role of the Design Matrix</a></li>
+<li class="chapter" data-level="9.6.4" data-path="normality-assumption.html"><a href="normality-assumption.html#practical-applications"><i class="fa fa-check"></i><b>9.6.4</b> Practical Applications</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -1829,6 +1837,59 @@ This statistic is designed so that, under the null hypothesis <span class="math 
 <li><strong>Determine the rejection region</strong> based on the desired significance level <span class="math inline">\(\alpha\)</span>.</li>
 <li><strong>Make a decision</strong> by comparing the observed statistic to the rejection region or by evaluating the p-value.</li>
 </ol>
+<hr />
+</div>
+<div id="power-analysis" class="section level3 hasAnchor" number="2.5.6">
+<h3><span class="header-section-number">2.5.6</span> Power Analysis<a href="prerequisites.html#power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In hypothesis testing, it is not enough to specify how likely we are to reject a true null hypothesis. Equally important is understanding how likely a statistical test is to detect an effect when such an effect truly exists. <strong>Power analysis</strong> provides a quantitative framework for evaluating the sensitivity of a test to departures from the null hypothesis.</p>
+<p>Consider again a parameter of interest <span class="math inline">\(\theta\)</span>, and suppose we are testing the hypotheses
+<span class="math display">\[
+H_0:\ \theta = \theta_0
+\qquad\text{versus}\qquad
+H_1:\ \theta \neq \theta_0 .
+\]</span>
+When the null hypothesis is false, the true value of the parameter is some <span class="math inline">\(\theta_1 \neq \theta_0\)</span>. A good statistical test should then reject <span class="math inline">\(H_0\)</span> with high probability. The <strong>power</strong> of a test at <span class="math inline">\(\theta_1\)</span> is defined as
+<span class="math display">\[
+\pi(\theta_1) = \mathbb{P}(\text{Reject } H_0 \mid \theta = \theta_1) .
+\]</span>
+Thus, while the <strong>significance level</strong> <span class="math inline">\(\alpha\)</span> controls the probability of a <em>Type I error</em> (rejecting <span class="math inline">\(H_0\)</span> when it is true),
+<span class="math display">\[
+\alpha = \mathbb{P}(\text{Reject } H_0 \mid \theta = \theta_0),
+\]</span>
+the power function describes the probability of avoiding a <em>Type II error</em> (failing to reject <span class="math inline">\(H_0\)</span> when it is false). Denoting a Type II error by <span class="math inline">\(\beta(\theta_1)\)</span>,
+<span class="math display">\[
+\beta(\theta_1) = \mathbb{P}(\text{Fail to reject } H_0 \mid \theta = \theta_1)
+\]</span>
+we see that power is simply
+<span class="math display">\[
+\pi(\theta_1) = 1 - \beta(\theta_1).
+\]</span></p>
+<p>A well-designed test aims to keep <span class="math inline">\(\alpha\)</span> small while ensuring that <span class="math inline">\(\pi(\theta_1)\)</span> is large for values of <span class="math inline">\(\theta_1\)</span> that represent practically meaningful deviations from <span class="math inline">\(\theta_0\)</span>. Power analysis therefore plays a critical role in:</p>
+<ul>
+<li><strong>Designing experiments</strong>
+(determining how large the sample size must be to detect effects of interest),</li>
+<li><strong>Evaluating the sensitivity of a test</strong>, and</li>
+<li><strong>Interpreting non-significant results</strong>, as low power may indicate insufficient sample information rather than evidence supporting <span class="math inline">\(H_0\)</span>.</li>
+</ul>
+<p>To illustrate the structure of power calculations, suppose the test statistic is
+<span class="math display">\[
+T = T(\mathbf{y}),
+\]</span>
+with distribution <span class="math inline">\(F_0\)</span> under <span class="math inline">\(H_0\)</span> and distribution <span class="math inline">\(F_{\theta_1}\)</span> under an alternative <span class="math inline">\(\theta_1\)</span>. If <span class="math inline">\(R\)</span> denotes the rejection region chosen so that
+<span class="math display">\[
+\mathbb{P}(T \in R \mid \theta = \theta_0) = \alpha,
+\]</span>
+then the power at <span class="math inline">\(\theta_1\)</span> is
+<span class="math display">\[
+\pi(\theta_1) = \mathbb{P}(T \in R \mid \theta = \theta_1)
+= \int_{R} f_{\theta_1}(t), dt .
+\]</span></p>
+<p>In many classical settings, especially linear models, the test statistic has a known distribution under both <span class="math inline">\(H_0\)</span> and <span class="math inline">\(H_1\)</span>. For example, if
+<span class="math display">\[
+T = \frac{\hat{\theta} - \theta_0}{\hat{\sigma}(\theta)}
+\]</span>
+follows a <span class="math inline">\(t\)</span>-distribution under <span class="math inline">\(H_0\)</span> and a noncentral <span class="math inline">\(t\)</span>-distribution under <span class="math inline">\(H_1\)</span>, the power depends on the <strong>noncentrality parameter</strong>, which reflects the magnitude of the deviation <span class="math inline">\(\theta_1 - \theta_0\)</span> relative to sampling variability. In this form, power can be computed explicitly or approximated numerically.</p>
+<p>Ultimately, power analysis provides a bridge between the theoretical properties of a test and the practical realities of data collection. It ensures that the study design is capable of detecting meaningful effects, giving researchers both statistical and substantive confidence in the conclusions drawn from their analyses.</p>
 
 </div>
 </div>

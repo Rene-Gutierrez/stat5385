@@ -1517,4 +1517,64 @@ In summary, hypothesis testing involves four essential steps:
 3. **Determine the rejection region** based on the desired significance level $\alpha$.
 4. **Make a decision** by comparing the observed statistic to the rejection region or by evaluating the p-value.
 
+---
+
+
+### Power Analysis
+
+In hypothesis testing, it is not enough to specify how likely we are to reject a true null hypothesis. Equally important is understanding how likely a statistical test is to detect an effect when such an effect truly exists. **Power analysis** provides a quantitative framework for evaluating the sensitivity of a test to departures from the null hypothesis.
+
+Consider again a parameter of interest $\theta$, and suppose we are testing the hypotheses
+$$
+H_0:\ \theta = \theta_0
+\qquad\text{versus}\qquad
+H_1:\ \theta \neq \theta_0 .
+$$
+When the null hypothesis is false, the true value of the parameter is some $\theta_1 \neq \theta_0$. A good statistical test should then reject $H_0$ with high probability. The **power** of a test at $\theta_1$ is defined as
+$$
+\pi(\theta_1) = \mathbb{P}(\text{Reject } H_0 \mid \theta = \theta_1) .
+$$
+Thus, while the **significance level** $\alpha$ controls the probability of a *Type I error* (rejecting $H_0$ when it is true),
+$$
+\alpha = \mathbb{P}(\text{Reject } H_0 \mid \theta = \theta_0),
+$$
+the power function describes the probability of avoiding a *Type II error* (failing to reject $H_0$ when it is false). Denoting a Type II error by $\beta(\theta_1)$,
+$$
+\beta(\theta_1) = \mathbb{P}(\text{Fail to reject } H_0 \mid \theta = \theta_1)
+$$
+we see that power is simply
+$$
+\pi(\theta_1) = 1 - \beta(\theta_1).
+$$
+
+A well-designed test aims to keep $\alpha$ small while ensuring that $\pi(\theta_1)$ is large for values of $\theta_1$ that represent practically meaningful deviations from $\theta_0$. Power analysis therefore plays a critical role in:
+
+* **Designing experiments**
+  (determining how large the sample size must be to detect effects of interest),
+* **Evaluating the sensitivity of a test**, and
+* **Interpreting non-significant results**, as low power may indicate insufficient sample information rather than evidence supporting $H_0$.
+
+To illustrate the structure of power calculations, suppose the test statistic is
+$$
+T = T(\mathbf{y}),
+$$
+with distribution $F_0$ under $H_0$ and distribution $F_{\theta_1}$ under an alternative $\theta_1$. If $R$ denotes the rejection region chosen so that
+$$
+\mathbb{P}(T \in R \mid \theta = \theta_0) = \alpha,
+$$
+then the power at $\theta_1$ is
+$$
+\pi(\theta_1) = \mathbb{P}(T \in R \mid \theta = \theta_1)
+= \int_{R} f_{\theta_1}(t), dt .
+$$
+
+In many classical settings, especially linear models, the test statistic has a known distribution under both $H_0$ and $H_1$. For example, if
+$$
+T = \frac{\hat{\theta} - \theta_0}{\hat{\sigma}(\theta)}
+$$
+follows a $t$-distribution under $H_0$ and a noncentral $t$-distribution under $H_1$, the power depends on the **noncentrality parameter**, which reflects the magnitude of the deviation $\theta_1 - \theta_0$ relative to sampling variability. In this form, power can be computed explicitly or approximated numerically.
+
+Ultimately, power analysis provides a bridge between the theoretical properties of a test and the practical realities of data collection. It ensures that the study design is capable of detecting meaningful effects, giving researchers both statistical and substantive confidence in the conclusions drawn from their analyses.
+
+
 

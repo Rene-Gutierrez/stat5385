@@ -648,7 +648,7 @@ $$ t_{\beta_i = 0} \sim  t_{n-p}$$
 So, if we call $t_{\beta_i = 0}^*$ the observed value of $t_{\beta_i = 0}$, and
 if we let $t$ be distributed as $t_{n-p}$, we can compute:
 
-$$ \dP(t \geq t_{\beta_i = 0}^*) $$
+$$ \dP(t \geq |t_{\beta_i = 0}^*|) $$
 and depending on the value, we can reject or accept the null hypothesis.
 
 ### Testing if a Subgroup of the Variables is Relevant
@@ -695,7 +695,7 @@ columns of $\bX$. Then:
 
 then $(\bH - \bH_2)$ is idempotent.
 
-Now let us see that $(\bH - \bH_R)\by = (\bH - \bH_R)\be$ under the null hypothesis.
+Now let us see that $(\bH - \bH_2)\by = (\bH - \bH_2)\be$ under the null hypothesis.
 First, let us note that:
 
 $$ \bH \bX_2 = \bX_2 $$
@@ -713,16 +713,16 @@ Then:
     &= (\bH - \bH_2)(\bX \bgb + \be)                                      \\
     &= (\bH - \bH_2)([\bX_1 \bX_2] [\bgb_1' \bgb_2']' + \be)              \\
     &= (\bH - \bH_2)(\bX_1 \bgb_1 \bX_2 \bgb_2 + \be)                     \\
-    &= (\bH - \bH_2)(\bX_2 \bgb_2) + (\bH - \bH_1)(\bX_1 \bgb_1 + \be)    \\
-    &= (\bH \bX_2 - \bH_2\bX_2)\bgb_2 + (\bH - \bH_1)(\bX_1 \bgb_1 + \be) \\
-    &= (\bX_2 - \bX_2)\bgb_2 + (\bH - \bH_1)(\bX_1 \bgb_1 + \be)          && \text{since $\bH \bX_1 = \bX_1$ and $\bH_1 \bX_1 = \bX_1$} \\
-    &= (\bH - \bH_R)(\bX_1 \bgb_1 + \be)                                  &&                                                            \\
-    &= (\bH - \bH_R)\be                                                   && \iff \cH_0: \bgb_1 = \bzero \\
+    &= (\bH - \bH_2)(\bX_2 \bgb_2) + (\bH - \bH_2)(\bX_1 \bgb_1 + \be)    \\
+    &= (\bH \bX_2 - \bH_2\bX_2)\bgb_2 + (\bH - \bH_2)(\bX_1 \bgb_1 + \be) \\
+    &= (\bX_2 - \bX_2)\bgb_2 + (\bH - \bH_2)(\bX_1 \bgb_1 + \be)          && \text{since $\bH \bX_1 = \bX_1$ and $\bH_1 \bX_1 = \bX_1$} \\
+    &= (\bH - \bH_2)(\bX_1 \bgb_1 + \be)                                  &&                                                            \\
+    &= (\bH - \bH_2)\be                                                   && \iff \cH_0: \bgb_1 = \bzero \\
 \end{align*}
 
 So, if $\bX_1$ is full rank, then we have that:
 
-$$ (\bH - \bH_2)\by = (\bH - \bH_R)\be \iff \cH_0: \bgb_1 = \bzero $$
+$$ (\bH - \bH_2)\by = (\bH - \bH_2)\be \iff \cH_0: \bgb_1 = \bzero $$
 
 Then we can proceed to see what is the distribution of our test statistic under 
 the null hypothesis.
@@ -746,6 +746,101 @@ the statistic, and let $F$ be distributed as an $F_{k,n-p}$, we can compute:
 $$ \dP(F \geq F_{\bgb_1=\bzero}^*) $$
 and reject the null hypothesis if this probability is small and not reject if 
 this probability is small.
+
+Below is a **textbook-style introduction to power analysis in the context of multiple linear regression**, consistent with the level and tone of graduate coursework in applied linear models. No equations have been altered if you later integrate this into your existing notes.
+
+---
+
+## Power Analysis
+
+Power analysis in multiple linear regression extends the general principles of hypothesis testing to the setting where several predictors jointly explain variability in a response variable. Because many inferential questions in regression involve testing whether one or more regression coefficients differ from zero, power analysis provides a framework for assessing how sensitive these tests are to detecting true effects of practical importance. It also informs decisions about sample size, model specification, and the expected precision of future studies.
+
+Recall the multiple linear regression model
+$$
+\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{e},
+$$
+with $\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})$. In this framework, power analysis concerns the probability of rejecting a null hypothesis about one or more components of $\boldsymbol{\beta}$ under specific alternatives.
+
+### Power for Testing a Single Coefficient
+
+A common hypothesis test asks whether a particular predictor has any linear association with the response, controlling for the other predictors:
+$$
+H_0: \beta_j = 0
+\qquad\text{vs.}\qquad
+H_1: \beta_j \neq 0.
+$$
+
+The usual test statistic takes the form
+$$
+t_{\beta_j} = \frac{\hat{\beta}_j - \beta_j}{\sqrt{\hat{\sigma}^2_{\beta_j}}},
+$$
+which, under the null hypothesis, follows a $t$ distribution with $n - p$ degrees of freedom. Under an alternative $\beta_j = \theta_1 \neq 0$, the statistic follows a **noncentral $t$ distribution**, whose noncentrality parameter depends on:
+
+* the magnitude of the effect $\beta_j$,
+* the sampling variability of $\hat{\beta}_j$ (involving $(\mathbf{X}'\mathbf{X})^{-1}$),
+* the error variance $\sigma^2$, and
+* the sample size.
+
+In particular the noncentrality parameter is given by:
+
+$$ \mu_{\beta_j} = \frac{\beta_j}{\sqrt{\sigma^2 [(\bX'\bX)]_{jj}}} $$
+
+If $R$ is the rejection region for the two-sided test, then the power at $\beta_j = \theta_1$ is
+$$
+\pi(\theta_1) = \mathbb{P}(t_{\beta_j} \in R \mid \beta_j = \theta_1),
+$$
+which increases with larger sample sizes, larger effect sizes, smaller noise variance, and designs that reduce the variance of $\hat{\beta}_j$. The structure of the design matrix therefore plays a crucial role: multicollinearity inflates $\hat{\sigma}^2_{\beta_j}$ and can dramatically reduce power.
+
+### Power for Testing Multiple Coefficients (Partial F-Tests)
+
+Many inferential questions in regression concern the joint contribution of several predictors. For example,
+$$
+H_0: \beta_{j_1} = \beta_{j_2} = \cdots = \beta_{j_k} = 0
+\quad\text{versus}\quad
+H_1:\ \text{at least one }\beta_{j_r} \neq 0,
+$$
+is evaluated using a partial F-test. The test statistic is of the form
+$$
+F = \frac{\left(\text{SSR}_{\text{full}} - \text{SSR}_{\text{reduced}}\right)/k}{\hat{\sigma}^2},
+$$
+which follows an $F_{k,; n-p}$ distribution under $H_0$. Under an alternative model in which the set of coefficients differs from zero, the statistic follows a **noncentral $F$ distribution**, with noncentrality parameter
+$$
+\lambda = \frac{(\mathbf{C}\boldsymbol{\beta})' \left[\mathbf{C}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{C}'\right]^{-1} (\mathbf{C}\boldsymbol{\beta})}{\sigma^2},
+$$
+where $\mathbf{C}$ selects the coefficients under test.
+
+The power for the partial F-test is then
+$$
+\pi(\lambda) = \mathbb{P}(F > F_{k,; n-p}(1 - \alpha) \mid \lambda),
+$$
+where $F_{k,; n-p}(1-\alpha)$ is the $(1-\alpha)$ quantile of the central $F$ distribution. In this setting, the noncentrality parameter encodes the joint effect size of the tested predictors. The power increases with:
+
+* larger joint effect sizes,
+* lower error variance,
+* larger sample sizes, and
+* predictor configurations that reduce multicollinearity.
+
+### The Role of the Design Matrix
+
+Unlike simpler settings such as one-sample or two-sample tests, power in multiple regression depends critically on the geometry of the predictors. The matrix $(\mathbf{X}'\mathbf{X})^{-1}$ directly determines how much information the data provide about each coefficient and about linear combinations of coefficients. As a consequence:
+
+* highly correlated predictors inflate variances and reduce power,
+* balanced and orthogonal designs maximize power, and
+* adding irrelevant predictors can decrease power for testing the important ones.
+
+Thus, power analysis in regression provides insight not only into sample size requirements but also into the effect of model specification and predictor structure.
+
+### Practical Applications
+
+Power analysis in multiple linear regression is essential in the following contexts:
+
+* **Experimental design:** Determining the sample size needed to detect expected effects.
+* **Study planning with observational data:** Evaluating whether available data can reasonably support planned inferences.
+* **Model assessment:** Understanding how collinearity or the inclusion of unnecessary predictors affects inferential strength.
+* **Interpretation of non-significant results:** Distinguishing between evidence supporting the null hypothesis and insufficient statistical sensitivity.
+
+In summary, power analysis for multiple linear regression extends classical power concepts to a multivariate linear setting, where the design matrix, error variance, and effect size structure collectively determine the sensitivity of hypothesis tests. This framework is fundamental for constructing well-designed studies and for obtaining reliable inferential conclusions about the regression coefficients.
+
 
 
 
