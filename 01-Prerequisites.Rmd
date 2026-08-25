@@ -25,6 +25,7 @@
 \newcommand{\dV}{\mathbb{V}}
 \newcommand{\cH}{\mathcal{H}}
 \newcommand{\cL}{\mathcal{L}}
+\newcommand{\cR}{\mathcal{R}}
 \newcommand{\dR}{\mathbb{R}}
 \newcommand{\bgb}{\boldsymbol{\beta}}
 \newcommand{\bga}{\boldsymbol{\alpha}}
@@ -1179,35 +1180,6 @@ This distribution is denoted as \( \mathbf{X} \sim \mathcal{N}(\boldsymbol{\mu},
 
 6. **Maximum Entropy**:
    - Among all distributions with a given mean vector and covariance matrix, the multivariate normal distribution has the maximum entropy, making it the most “uninformative” or spread out.
-   
-### $\chi^2$ Distribution
-   
-The chi-squared distribution is a probability distribution that arises naturally in statistics, particularly in hypothesis testing and estimation problems. It is defined as the distribution of a sum of the squares of independent standard normal random variables.
-
-Formally, let $Z_1, Z_2, \dots, Z_k$ be $k$ independent random variables, each following a standard normal distribution (mean $0$ and variance $1$). Then, the sum of their squares:
-
-$$
-Q = Z_1^2 + Z_2^2 + \cdots + Z_k^2
-$$
-
-follows a chi-squared distribution with $k$ degrees of freedom. We denote this as:
-
-$$
-Q \sim \chi^2_k
-$$
-
-#### Key Properties of the Chi-Squared Distribution
-1. **Degrees of Freedom ($k$):** The parameter $k$ determines the shape of the distribution. Larger $k$ values result in a distribution that becomes more symmetric and approaches a normal distribution (as $k \to \infty$).
-   
-2. **Mean and Variance:** 
-   - Mean: $\mathbb{E}[Q] = k$
-   - Variance: $\mathbb{V}[Q] = 2k$
-
-3. **Additivity:** If $Q_1 \sim \chi^2_{k_1}$ and $Q_2 \sim \chi^2_{k_2}$ are independent, then $Q_1 + Q_2 \sim \chi^2_{k_1 + k_2}$.
-
-4. **Special Case:** For $k = 1$, the chi-squared distribution is simply the square of a standard normal variable, $Q = Z^2$.
-
-The chi-squared distribution is widely used in statistical tests, such as the chi-squared test for independence or goodness-of-fit, and in the construction of confidence intervals for variances.
 
 ### $t$ Distribution
 
@@ -1249,6 +1221,35 @@ The t-distribution is widely used in:
 3. **Regression analysis**, where it appears in tests for regression coefficients. 
 
 The t-distribution plays a fundamental role in statistics, bridging the gap between small-sample and large-sample inference.
+
+### $\chi^2$ Distribution
+   
+The chi-squared distribution is a probability distribution that arises naturally in statistics, particularly in hypothesis testing and estimation problems. It is defined as the distribution of a sum of the squares of independent standard normal random variables.
+
+Formally, let $Z_1, Z_2, \dots, Z_k$ be $k$ independent random variables, each following a standard normal distribution (mean $0$ and variance $1$). Then, the sum of their squares:
+
+$$
+Q = Z_1^2 + Z_2^2 + \cdots + Z_k^2
+$$
+
+follows a chi-squared distribution with $k$ degrees of freedom. We denote this as:
+
+$$
+Q \sim \chi^2_k
+$$
+
+#### Key Properties of the Chi-Squared Distribution
+1. **Degrees of Freedom ($k$):** The parameter $k$ determines the shape of the distribution. Larger $k$ values result in a distribution that becomes more symmetric and approaches a normal distribution (as $k \to \infty$).
+   
+2. **Mean and Variance:** 
+   - Mean: $\mathbb{E}[Q] = k$
+   - Variance: $\mathbb{V}[Q] = 2k$
+
+3. **Additivity:** If $Q_1 \sim \chi^2_{k_1}$ and $Q_2 \sim \chi^2_{k_2}$ are independent, then $Q_1 + Q_2 \sim \chi^2_{k_1 + k_2}$.
+
+4. **Special Case:** For $k = 1$, the chi-squared distribution is simply the square of a standard normal variable, $Q = Z^2$.
+
+The chi-squared distribution is widely used in statistical tests, such as the chi-squared test for independence or goodness-of-fit, and in the construction of confidence intervals for variances.
 
 ### $F$ Distribution
 

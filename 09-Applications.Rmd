@@ -1,0 +1,457 @@
+# Applications
+
+## ANOVA
+
+This section introduces Analysis of Variance (ANOVA) from the viewpoint of the linear regression model. We begin with the simplest case — a single covariate that indicates group membership (one-way ANOVA) — and show how this is equivalent to testing differences in means. We then generalize to the case with additional covariates (ANCOVA), explain how control variables improve estimation, and finish with a discussion of the role of randomization for the covariate of interest.
+
+---
+
+### One-way ANOVA: a single covariate (differences in means)
+
+#### Conceptual statement
+
+Suppose we have an outcome $y$ and a categorical factor with $G$ groups. Let $g(i)\in\{1,\dots,G\}$ denote the group of observation $i$. A one-way ANOVA model can be written as the regression
+
+$$
+y_i = \mu + \tau_{g(i)} + e_i,\qquad e_i\sim N(0,\sigma^2),
+$$
+
+with the usual constraint $\sum_{g=1}^G \tau_g = 0$ (identifiability). Equivalently, we can encode the groups with dummy variables and write
+
+$$
+y_i = \beta_0 + \beta_1 x_{1,i} + \cdots + \beta_{G-1} x_{G-1,i} + e_i,
+$$
+
+where the $x_{j,i}$ are indicator (0/1) variables for groups 2..G (group 1 is baseline). Thus **one-way ANOVA is an ordinary linear regression** in which the covariates are the group indicators.
+
+#### ANOVA as difference-in-means
+
+For the two-group case ($G=2$) this reduces to testing a difference of means. Let group 1 have mean $\mu_1$ and group 2 mean $\mu_2$. The regression
+
+$$
+y_i = \beta_0 + \beta_1 x_i + e_i,
+$$
+
+with $x_i=1$ if observation $i$ is in group 2 and $0$ otherwise, yields $\beta_0=\mu_1$ and $\beta_1=\mu_2-\mu_1$. The hypothesis
+
+$$
+H_0:\ \mu_1=\mu_2 \quad\Longleftrightarrow\quad H_0:\ \beta_1=0
+$$
+
+is then tested by the usual $t$-test (or equivalently by an $F$-test with 1 numerator df). The one-way ANOVA $F$ statistic for general $G$ compares between-group variability to within-group variability; algebraically it is the same as the regression $F$ that compares the model with group indicators to the intercept-only model.
+
+---
+
+#### R example — one-way ANOVA / difference in means
+
+```{r anova-oneway, echo=TRUE}
+# Example: the built-in 'sleep' dataset (two groups).
+data(sleep)   # R's sleep dataset: extra sleep for two groups
+head(sleep)
+
+# Fit one-way ANOVA using aov (equivalent to lm with factor)
+fit_aov <- aov(extra ~ group, data = sleep)
+summary(fit_aov)
+
+# Fit the equivalent linear model with a dummy
+fit_lm <- lm(extra ~ factor(group), data = sleep)
+summary(fit_lm)
+```
+
+<details><summary><span style="color:green">Explanation of the code</span></summary>
+
+* We use the built-in `sleep` dataset, which contains the sleep **extra** hours in two groups.
+* `aov(extra ~ group, data = sleep)` fits the one-way ANOVA model.
+* `lm(extra ~ factor(group), ...)` fits the equivalent regression with group indicators; `summary` reports coefficients and tests.
+* The `F` test in `aov` and the $t$ test for the group coefficient in `lm` are numerically equivalent for the two-group problem.
+
+</details>
+
+---
+
+## ANCOVA
+
+#### Concept and notation
+
+When additional continuous covariates are present, we may want to test group differences *after controlling* for these covariates. This is the Analysis of Covariance (ANCOVA) framework. Suppose $\mathbf{z}_i$ is a vector of control variables for observation $i$. The ANCOVA model is:
+
+$$
+y_i = \beta_0 + \beta_{\text{grp}}' \mathbf{x}_{i} + \boldsymbol{\gamma}'\mathbf{z}_i + e_i,
+$$
+
+where $\mathbf{x}_i$ are group indicator variables and $\boldsymbol{\gamma}$ are coefficients for the controls. The hypothesis that the $k$ group effects are zero (no group differences after adjustment) is
+
+$$
+H_0:\ \beta_{\text{grp}} = \mathbf{0}.
+$$
+
+### How controls act as "partialling out"
+
+Adding $\mathbf{z}$ does two things:
+
+1. **Reduces omitted-variable bias (if $\mathbf{z}$ is confounded with group)**: by adjusting for covariates associated with both group and outcome, we make the conditional interpretation of $\beta_{\text{grp}}$ closer to a causal or conditional effect.
+2. **Improves precision**: if $\mathbf{z}$ explains variance in $y$, then residual variance $\sigma^2$ is smaller, which reduces the variance of coefficient estimators and increases power to detect group effects.
+
+In matrix terms, let $\mathbf{X}=[\mathbf{X}*{\text{grp}},\mathbf{Z}]$ be the full design matrix (group indicators and controls). The variance of the estimated group coefficients depends on the block $(\mathbf{X}'\mathbf{X})^{-1}$. If $\mathbf{Z}$ explains variation in $y$ but is not collinear with $\mathbf{X}*{\text{grp}}$, the diagonal entries of $(\mathbf{X}'\mathbf{X})^{-1}$ relevant to group coefficients shrink, improving standard errors.
+
+### Partial F-test in ANCOVA
+
+To test group effects controlling for $\mathbf{z}$, compare:
+
+* Reduced model (controls only): $y \sim \mathbf{Z}$, SSR$_{\text{red}}$.
+* Full model (controls + groups): $y \sim \mathbf{Z} + \mathbf{X}*{\text{grp}}$, SSR$*{\text{full}}$.
+
+The partial F statistic is
+
+$$
+F = \frac{(\text{SSR}*{\text{red}}-\text{SSR}*{\text{full}})/k}{\text{SSR}*{\text{full}}/(n-p*{\text{full}})},
+$$
+
+with $k$ = number of group d.f. in numerator. Under $H_0$ this follows $F_{k, n-p_{\text{full}}}$.
+
+---
+
+### R example — ANCOVA with `mtcars`
+
+We analyze whether the number of cylinders (`cyl`) affects `mpg` after controlling for weight (`wt`) and horsepower (`hp`).
+
+```{r ancova-mtcars, echo=TRUE}
+data(mtcars)
+
+# Fit reduced model: controls only
+fit_red <- lm(mpg ~ wt + hp, data = mtcars)
+
+# Fit full model: controls + group indicator (cyl as factor)
+fit_full <- lm(mpg ~ factor(cyl) + wt + hp, data = mtcars)
+
+# Partial F-test
+anova(fit_red, fit_full)
+
+# Summaries
+summary(fit_full)
+```
+
+<details><summary><span style="color:green">Explanation of the code</span></summary>
+
+* `fit_red` estimates mpg using only controls `wt` and `hp`.
+* `fit_full` adds `factor(cyl)` (group indicators for cylinder counts).
+* `anova(fit_red, fit_full)` performs the partial F-test comparing the reduced and full models; the reported F tests whether `factor(cyl)` explains additional variance after controlling for `wt` and `hp`.
+* `summary(fit_full)` gives coefficient estimates for each group after adjustment and their standard errors.
+
+</details>
+
+---
+
+### Why controlling improves the analysis?
+
+1. **Reduction in residual variance.** If the controls explain genuine variation in $y$, then $\hat\sigma^2$ from the full model is smaller than from a model without controls. Since standard errors for coefficients are proportional to $\hat\sigma$, this increases power.
+
+2. **Removal of confounding.** If group membership is correlated with control covariates that also affect $y$, failing to control will bias the estimated group differences. Conditioning on $\mathbf{Z}$ recovers the conditional association of groups with $y$.
+
+3. **Interpretation: conditional effects.** Coefficients of the group indicators in the ANCOVA are interpreted as **mean differences conditional on the controls**.
+
+4. **Caveat — multicollinearity.** If some controls are highly collinear with group indicators (e.g., almost all observations in one group have similar control values), then $(\mathbf{X}'\mathbf{X})^{-1}$ inflates and standard errors can increase. Design and variable selection matter.
+
+---
+
+## Effect of randomization in the covariate of interest
+
+Randomization of the treatment (or group assignment) is central to causal inference and also simplifies the ANOVA/ANCOVA analysis.
+
+### Key consequences of randomization
+
+* **Balance (in expectation).** With random assignment, treatment groups are, in expectation, balanced on both observed and unobserved covariates: $\mathbb{E}[\mathbf{Z}\mid \text{treatment}] = \mathbb{E}[\mathbf{Z}]$. As a result, simple between-group comparisons are unbiased for the average treatment effect without needing adjustment for covariates.
+* **Orthogonality.** Under complete randomization, the group indicators are (approximately) orthogonal to pre-treatment covariates; formally, $\operatorname{Cov}(\mathbf{X}_{\text{grp}},\mathbf{Z})\approx \mathbf{0}$ in large samples. This orthogonality yields simpler variance expressions and better behaved estimates.
+* **Precision gain from adjusting.** Even with randomization, adjusting for prognostic covariates in ANCOVA can **increase precision** (reduce standard errors) because controls explain residual variance. Because orthogonality prevents bias in coefficient estimates, adjustment is safe and typically recommended.
+* **Finite-sample exactness.** In randomized experiments with certain designs (e.g., completely randomized with normal errors), tests based on regression or ANOVA can be made exact (valid in finite samples), not only asymptotically.
+
+### Randomized vs observational assignments
+
+* **Randomized assignment:** identification of the causal effect is straightforward; regression adjustments mainly improve precision.
+* **Observational assignment:** group differences may reflect confounding; adjustments are necessary to reduce bias, but residual confounding can remain.
+
+---
+
+### Simulation example: randomized vs non-randomized (brief)
+
+```{r randomization-sim, echo=TRUE}
+set.seed(123)
+
+n <- 200
+# Covariate strongly predictive of y
+z <- rnorm(n, 0, 1)
+
+# Scenario A: randomized treatment
+t_rand <- rbinom(n, 1, 0.5)  # random 0/1 assignment
+y_rand <- 1.5 * t_rand + 2 * z + rnorm(n, 0, 1)
+
+# Scenario B: observational treatment correlated with z
+p_obs <- plogis(0.5 * z)     # higher z -> more likely treated
+t_obs <- rbinom(n, 1, p_obs)
+y_obs <- 1.5 * t_obs + 2 * z + rnorm(n, 0, 1)
+
+# Estimate treatment effect without and with control
+summary(lm(y_rand ~ t_rand))
+summary(lm(y_rand ~ t_rand + z))
+
+summary(lm(y_obs ~ t_obs))
+summary(lm(y_obs ~ t_obs + z))
+```
+
+<details><summary><span style="color:green">Explanation of the code</span></summary>
+
+* We simulate a prognostic covariate `z` that affects the outcome.
+* In the randomized scenario (`t_rand`) treatment is independent of `z`. The unadjusted regression `y ~ t_rand` gives an (approximately) unbiased estimate of the treatment effect; adding `z` reduces the standard error.
+* In the observational scenario, treatment depends on `z` (`t_obs`), creating confounding. The unadjusted regression `y ~ t_obs` is biased; adding `z` recovers a more accurate estimate (and reduces bias), though perfect adjustment requires all confounders to be observed.
+
+</details>
+
+---
+
+### Practical guidance and summary
+
+* **ANOVA = Regression.** One-way ANOVA is a linear regression with group indicator covariates. Testing for equal means is testing coefficients of those indicators.
+* **ANCOVA = ANOVA + controls.** Adding covariates adjusts for confounding and improves precision when covariates explain outcome variability.
+* **Partial F-tests** compare nested models (with and without group indicators) controlling for other covariates; algebraically these are the same sums-of-squares comparisons used in classical ANOVA.
+* **Randomization** guarantees unbiasedness of group comparisons and typically simplifies inference; even when randomized, adjustment for prognostic covariates is advisable to gain efficiency.
+* **Check assumptions.** Classical ANOVA/ANCOVA relies on linearity, homoscedasticity (or robust alternatives), and (for exact small-sample $p$-values) normality of errors; diagnostics remain important.
+
+### ANOVA sums-of-squares as projection (matrix) decomposition
+
+Below is a concise derivation that shows how the classical ANOVA decomposition of sums of squares maps directly to the regression decomposition using projection (hat) matrices. The derivation assumes the model includes an intercept (so that the column space of the intercept is the space of constant vectors).
+
+#### Notation
+
+- $\mathbf{y}$: $n\times 1$ response vector.  
+- $\mathbf{X}$: $n\times p$ design matrix **including** a column of ones for the intercept.  
+- $\mathbf{H} = \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'$: hat (projection) matrix onto $\operatorname{col}(\mathbf{X})$.  
+- $\mathbf{H}_0 = \dfrac{1}{n}\mathbf{1}\mathbf{1}'$: hat matrix for the intercept-only model (projection onto constant vectors).  
+- $\mathbf{I}$: $n\times n$ identity matrix.
+
+All projection matrices above are symmetric and idempotent.
+
+---
+
+#### Total Sum of Squares (SST)
+
+Classically, the total sum of squares (using the mean as baseline) is
+\[
+\text{SST}=\sum_{i=1}^n (y_i-\bar{y})^2.
+\]
+In matrix form this is
+\[
+\text{SST} = \mathbf{y}'(\mathbf{I}-\mathbf{H}_0)\mathbf{y},
+\]
+because $\mathbf{H}_0\mathbf{y}=\bar{y}\,\mathbf{1}$ is the projection of $\mathbf{y}$ onto the constant vector.
+
+---
+
+#### Error (Residual) Sum of Squares (SSE)
+
+The residual sum of squares from the full model is
+\[
+\text{SSE}=\sum_{i=1}^n (y_i-\hat{y}_i)^2
+= \mathbf{y}'(\mathbf{I}-\mathbf{H})\mathbf{y},
+\]
+since $\mathbf{H}\mathbf{y}=\hat{\mathbf{y}}$ is the projection of $\mathbf{y}$ onto $\operatorname{col}(\mathbf{X})$.
+
+---
+
+#### Regression (Between) Sum of Squares (SSR)
+
+The regression (or explained) sum of squares is defined by the identity
+\[
+\text{SSR} = \text{SST} - \text{SSE}.
+\]
+Using the matrix forms above,
+\begin{align*}
+\text{SSR}
+&= \mathbf{y}'(\mathbf{I}-\mathbf{H}_0)\mathbf{y} - \mathbf{y}'(\mathbf{I}-\mathbf{H})\mathbf{y} \\
+&= \mathbf{y}'\big(\mathbf{H}-\mathbf{H}_0\big)\mathbf{y}.
+\end{align*}
+
+Thus the portion of variability explained by the full model (over and above the intercept-only model) is the quadratic form with the idempotent matrix $\mathbf{H}-\mathbf{H}_0$, which projects onto the subspace of $\operatorname{col}(\mathbf{X})$ orthogonal to the constant vector.
+
+---
+
+#### Orthogonality and additivity
+
+Because $\mathbf{H}$ and $\mathbf{H}_0$ are projection matrices with $\operatorname{col}(\mathbf{H}_0)\subseteq\operatorname{col}(\mathbf{H})$, the difference
+\[
+\mathbf{M} \;=\; \mathbf{H}-\mathbf{H}_0
+\]
+is itself symmetric and idempotent, and projects onto the $p-1$ dimensional subspace of predictors after removing the intercept. One checks that
+\[
+(\mathbf{H}-\mathbf{H}_0)(\mathbf{I}-\mathbf{H}) = \mathbf{0},
+\]
+so the subspace onto which $\mathbf{M}$ projects is orthogonal to the residual space of the full model. From this orthogonality it follows immediately that
+\[
+\text{SST} = \text{SSR} + \text{SSE},
+\]
+i.e. the sums-of-squares add (because the corresponding quadratic forms are on orthogonal subspaces).
+
+---
+
+#### Degrees of freedom and trace
+
+The degrees of freedom associated to each sum of squares are equal to the trace (rank) of the corresponding idempotent matrix:
+
+- $\text{df}_{\text{Total}} = \operatorname{tr}(\mathbf{I}-\mathbf{H}_0) = n-1$.  
+- $\text{df}_{\text{Regression}} = \operatorname{tr}(\mathbf{H}-\mathbf{H}_0) = \operatorname{tr}(\mathbf{H})-\operatorname{tr}(\mathbf{H}_0) = p - 1$.  
+- $\text{df}_{\text{Error}} = \operatorname{tr}(\mathbf{I}-\mathbf{H}) = n - p$.
+
+These trace identities give the familiar ANOVA degrees-of-freedom breakdown.
+
+---
+
+#### Remarks
+
+- The matrix viewpoint makes transparent that one-way ANOVA, multiple regression, and ANCOVA are the same algebraic object: sums of squares are quadratic forms induced by projections onto nested linear subspaces.  
+- The decomposition and orthogonality arguments above are the backbone of ANOVA inference and of the construction of $F$-tests: a difference of quadratic forms projecting onto an added subspace yields a (scaled) $\chi^2$ in the numerator, independent of the residual $\chi^2$ in the denominator, producing the $F$-statistic.
+
+## Variance decomposition
+
+### Notation (common to both derivations)
+
+* There are $k$ groups.
+* Group $j$ has $n_j$ observations, $j=1,\dots,k$, and total sample size $n=\sum_{j=1}^k n_j$.
+* Let $y_{j i}$ be the $i$th observation in group $j$ ($i=1,\dots,n_j$).
+* Group means: $\bar y_{j\cdot}=\dfrac{1}{n_j}\sum_{i=1}^{n_j} y_{j i}$.
+* Overall (grand) mean: $\bar y_{\cdot\cdot}=\dfrac{1}{n}\sum_{j=1}^k\sum_{i=1}^{n_j} y_{j i}$.
+
+We define the standard sums of squares:
+
+* **Total sum of squares (SST)**
+  $$
+  \mathrm{SST}=\sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i}-\bar y_{\cdot\cdot})^2.
+  $$
+
+* **Within-groups (error) sum of squares (SSE)**
+  $$
+  \mathrm{SSE}=\sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i}-\bar y_{j\cdot})^2.
+  $$
+
+* **Between-groups (regression/explained) sum of squares (SSB)**
+  $$
+  \mathrm{SSB}=\sum_{j=1}^k n_j(\bar y_{j\cdot}-\bar y_{\cdot\cdot})^2.
+  $$
+
+The ANOVA identity to prove is
+$$
+\mathrm{SST}=\mathrm{SSB}+\mathrm{SSE}.
+$$
+
+---
+
+### 1 — Scalar (elementwise) derivation
+
+Start from the decomposition of each deviation from the grand mean as the sum of a within-group deviation and the group mean deviation:
+
+$$
+y_{j i} - \bar y_{\cdot\cdot} = (y_{j i} - \bar y_{j\cdot}) + (\bar y_{j\cdot} - \bar y_{\cdot\cdot}).
+$$
+Square both sides and sum over all observations:
+\begin{align*}
+\mathrm{SST}
+  &= \sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i}-\bar y_{\cdot\cdot})^2 \\
+  &= \sum_{j=1}^k\sum_{i=1}^{n_j} \big[ (y_{j i} - \bar y_{j\cdot}) + (\bar y_{j\cdot} - \bar y_{\cdot\cdot}) \big]^2 \\
+  &= \sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i} - \bar y_{j\cdot})^2 + 2\sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i} - \bar y_{j\cdot})(\bar y_{j\cdot}-\bar y_{\cdot\cdot}) + \sum_{j=1}^k\sum_{i=1}^{n_j} (\bar y_{j\cdot}-\bar y_{\cdot\cdot})^2
+\end{align*}
+
+Now simplify the middle term. For a fixed group $j$,
+$$
+\sum_{i=1}^{n_j} (y_{j i} - \bar y_{j\cdot}) = 0
+$$
+
+by the definition of the group mean. Therefore the cross term vanishes:
+
+$$
+\sum_{i=1}^{n_j} (y_{j i} - \bar y_{j\cdot})(\bar y_{j\cdot}-\bar y_{\cdot\cdot})
+= (\bar y_{j\cdot}-\bar y_{\cdot\cdot})\sum_{i=1}^{n_j}(y_{j i}-\bar y_{j\cdot}) = 0.
+$$
+Hence the expansion reduces to
+
+$$
+\mathrm{SST} = \underbrace{\sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i} - \bar y_{j\cdot})^2}_{\mathrm{SSE}} + \underbrace{\sum_{j=1}^k n_j(\bar y_{j\cdot}-\bar y_{\cdot\cdot})^2}_{\mathrm{SSB}}.
+$$
+
+That is,
+$$
+  \boxed{\mathrm{SST} = \mathrm{SSB} + \mathrm{SSE}.}
+$$
+
+This is the usual elementary proof used in introductory courses.
+
+---
+
+### 2 — Matrix / projection derivation
+
+The matrix derivation exposes the geometric reason: ANOVA is a decomposition of the data vector $\mathbf{y}$ into orthogonal projections.
+
+Form the $n\times 1$ stacked data vector $\mathbf{y}$ (stack all observations in any order). Let
+
+* $\mathbf{1}$ be the $n\times 1$ vector of ones,
+* $\mathbf{H}_0=\dfrac{1}{n}\mathbf{1}\mathbf{1}'$ be the projection onto the constant (intercept) subspace,
+* $\mathbf{X}$ be the $n\times k$ design matrix of group indicators in *cell-means* or *contrast* form (a column for each group mean or $k-1$ columns plus an intercept — the projection subspace is the same),
+* $\mathbf{H}=\mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'$ be the hat matrix projecting onto the group subspace (all vectors constant within groups).
+
+Then SST, SSE and SSB can be written as quadratic forms:
+
+* Total:
+  $$
+  \mathrm{SST} = \mathbf{y}'(\mathbf{I}-\mathbf{H}_0)\mathbf{y}.
+  $$
+  (This measures deviation from the grand mean.)
+
+* Error (within groups):
+  $$
+  \mathrm{SSE} = \mathbf{y}'(\mathbf{I}-\mathbf{H})\mathbf{y}.
+  $$
+
+* Between groups:
+  $$
+  \mathrm{SSB} = \mathbf{y}'(\mathbf{H}-\mathbf{H}_0)\mathbf{y}.
+  $$
+
+These identities are immediate from the definitions of the projection matrices (e.g. $\mathbf{H}\mathbf{y}=\widehat{\mathbf{y}}$ is the vector of fitted values, constant within each group).
+
+Now note that (algebraically)
+$$
+\mathbf{I}-\mathbf{H}_0 = (\mathbf{H}-\mathbf{H}_0) + (\mathbf{I}-\mathbf{H}).
+$$
+Indeed rearrange:
+$$
+(\mathbf{H}-\mathbf{H}_0) + (\mathbf{I}-\mathbf{H}) = \mathbf{I} - \mathbf{H}_0.
+$$
+Thus the three quadratic forms add:
+$$
+\mathbf{y}'(\mathbf{I}-\mathbf{H}_0)\mathbf{y}
+= \mathbf{y}'(\mathbf{H}-\mathbf{H}_0)\mathbf{y} + \mathbf{y}'(\mathbf{I}-\mathbf{H})\mathbf{y},
+$$
+which is
+
+$$
+\mathrm{SST} = \mathrm{SSB} + \mathrm{SSE}.
+$$
+
+Geometrically, $\mathbf{H}-\mathbf{H}_0$ and $\mathbf{I}-\mathbf{H}$ are orthogonal projectors: they project onto orthogonal subspaces (the explained subspace orthogonal to the intercept, and the residual subspace), so their quadratic forms are additive. The ranks (traces) of these idempotent matrices give the usual degrees of freedom:
+
+\begin{aligned}
+  \mathrm{df}(\mathrm{SST}) &= n-1,\
+  \mathrm{df}(\mathrm{SSB}) &= k-1,\
+  \mathrm{df}(\mathrm{SSE}) &= n-k,
+\end{aligned}
+
+and the additivity of degrees of freedom follows from the trace additivity of the matrices.
+
+---
+
+### Concluding remarks
+
+* The elementary expansion shows the identity by direct algebra and uses only the fact that group deviations sum to zero.
+* The matrix proof reveals the deeper geometric reason: ANOVA decomposes $\mathbf{y}$ into orthogonal projection components (grand-mean, group effects, residual), and orthogonality implies additivity of sums of squares.
+
+Either viewpoint is useful: the scalar proof is easy and constructive; the matrix viewpoint generalizes directly to ANCOVA, factorial ANOVA, and the projection-based distributional results (chi-square / $F$ tests).
+
+
+

@@ -308,6 +308,20 @@ However, since we have already obtained the **sampling distributions** of these 
 
 ---
 
+### Quantile notation
+
+```{definition, quantiles, name="Notation: Specific Distribution Quantiles"}
+The $\alpha$ quantiles for the standard normal, $t$, $\chi^2$ and $F$ distribution are denoted by:
+  $$ z_{\alpha}        \quad \ni \dP(Z \geq z_{\alpha})        = \alpha \land Z\sim N(0,1) $$
+  $$ t_{k,\alpha}      \quad \ni \dP(T \geq t_{k,\alpha})      = \alpha \land T\sim  t_{k}$$
+  $$ chi^2_{k,\alpha}  \quad \ni \dP(W \geq chi^2_{k,\alpha})  = \alpha \land W\sim \chi^2_{k} $$
+  $$ f_{k_1,k_2\alpha} \quad \ni \dP(F \geq f_{k_1,k_2\alpha}) = \alpha \land F\sim F_{k_1,k_2} $$
+```
+
+we will use this quantiles for for confidence interval building and hypothesis testing. It is important to not that this are known values depending only on the parameters of the distribution to which they relate to and the tail probability $\alpha$. In the next sections, the tail probability will be related to the confidence and significance levels. 
+
+---
+
 ### Confidence Intervals for the Coefficients
 
 Recall that under the classical linear model assumptions, the ordinary least squares estimator satisfies
@@ -774,7 +788,11 @@ The usual test statistic takes the form
 $$
 t_{\beta_j} = \frac{\hat{\beta}_j - \beta_j}{\sqrt{\hat{\sigma}^2_{\beta_j}}},
 $$
-which, under the null hypothesis, follows a $t$ distribution with $n - p$ degrees of freedom. Under an alternative $\beta_j = \theta_1 \neq 0$, the statistic follows a **noncentral $t$ distribution**, whose noncentrality parameter depends on:
+which, under the null hypothesis, follows a $t$ distribution with $n - p$ degrees of freedom.
+
+Given a significance level $\alpha$, we have chosen a rejection region given by:
+
+Under an alternative $\beta_j = \theta_1 \neq 0$, the statistic follows a **noncentral $t$ distribution**, whose noncentrality parameter depends on:
 
 * the magnitude of the effect $\beta_j$,
 * the sampling variability of $\hat{\beta}_j$ (involving $(\mathbf{X}'\mathbf{X})^{-1}$),
