@@ -45,8 +45,7 @@ Find the github page for the course (with the data sets) here: [Github](https://
   - [Stability of the Solution](#stability-of-the-solution)
   - [Other Approches to Regression](#other-approches-to-regression)
   - [Bootstrapping](#bootstrapping)
-
-I would make the **three-part structure the organizing principle of the overview**, rather than describing the course mainly chapter by chapter. The central progression is then much clearer: **first learn regression as a prediction/optimization method, then introduce probability to turn it into a statistical model, and finally derive classical applications from that framework.**
+  
 
 ## Course Overview
 
