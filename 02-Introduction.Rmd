@@ -236,3 +236,442 @@ abline(a   = outReg$coefficients[1],
 ```
 
 Do you think this is a good fit for the data? The regression line appears to be inadequate for both low and high price points. Additionally, since the number of burgers sold must be positive, the regression line should not intersect the x-axis.
+
+## Exercises
+
+The following exercises explore how different characteristics of a dataset affect the usefulness of a linear regression model. The main objective is not simply to fit a regression line, since a line can always be fitted, but to determine whether that line provides a meaningful representation of the relationship between the variables.
+
+For each exercise involving simulated or collected data, begin by plotting the data before fitting a regression model.
+
+***
+
+### Exercise 1: Changing the Intercept
+
+Simulate $100$ observations from the relationship
+
+$$
+y = \beta_0 + 5x + e,
+$$
+
+where $x$ is generated using
+
+```{r}
+x <- runif(n = 100, min = 0, max = 100)
+```
+
+and $e$ is generated using `rnorm()` with mean $0$ and standard deviation $50$.
+
+Consider the following three values for the intercept:
+
+$$
+\beta_0 = 0, \qquad \beta_0 = 500, \qquad \beta_0 = 1000.
+$$
+
+For each value:
+
+1. Simulate the response variable $y$ using the same values of $x$ and $e$.
+2. Plot $y$ against $x$.
+3. Fit a linear regression using `lm()`.
+4. Add the fitted regression line to the plot.
+5. Compare the three plots.
+6. Explain what changes when the intercept changes and what remains approximately the same.
+7. Give a practical interpretation of the intercept in each simulation.
+
+---
+
+### Exercise 2: Changing the Slope
+
+Generate one set of $100$ values of $x$ between $0$ and $100$ and one set of random errors. Using the same $x$ and errors, simulate
+
+$$
+y = 500 + \beta_1x + e
+$$
+
+for
+
+$$
+\beta_1 = -5, \qquad \beta_1 = 0, \qquad \beta_1 = 2, \qquad \beta_1 = 10.
+$$
+
+For each dataset:
+
+1. Make a scatterplot.
+2. Fit a linear regression.
+3. Add the fitted line.
+4. Record the estimated slope and intercept.
+5. Describe the direction of the relationship.
+6. Explain how the magnitude of the slope changes the relationship between $x$ and $y$.
+7. Explain what a slope close to zero means.
+
+---
+
+### Exercise 3: Different Intercepts and Slopes
+
+Consider the following four relationships:
+
+$$
+y = 100 + 2x + e,
+$$
+
+$$
+y = 100 + 8x + e,
+$$
+
+$$
+y = 700 + 2x + e,
+$$
+
+and
+
+$$
+y = 700 - 4x + e.
+$$
+
+Use the same $100$ values of $x$ and the same random errors for all four datasets.
+
+1. Simulate all four datasets.
+2. Create a scatterplot for each.
+3. Before fitting the regression models, identify which datasets have:
+
+   * the same intercept,
+   * the same slope,
+   * positive relationships,
+   * negative relationships.
+4. Fit a regression to each dataset.
+5. Compare the estimated coefficients with the values used to generate the data.
+6. Explain how the plot allows you to distinguish changes in slope from changes in intercept.
+
+---
+
+### Exercise 4: Increasing the Amount of Noise
+
+Generate $100$ observations from
+
+$$
+y = 1000 + 5x + e,
+$$
+
+where $x$ is between $0$ and $100$.
+
+Generate four datasets by changing only the standard deviation of $e$:
+
+$$
+10,\qquad 50,\qquad 200,\qquad 500.
+$$
+
+For each dataset:
+
+1. Plot the data.
+2. Fit and display the regression line.
+3. Compare the estimated slopes.
+4. Describe how the appearance of the relationship changes as the variability increases.
+5. At what point does the linear relationship become difficult to recognize visually?
+6. Does increased variability necessarily change the underlying slope used to generate the data?
+
+---
+
+### Exercise 5: No Relationship
+
+Generate $100$ observations of $x$ using `runif()` and independently generate $100$ observations of $y$ using `rnorm()`.
+
+For example, $x$ might represent advertising expenditure while $y$ represents sales from a process that is completely unrelated to advertising.
+
+1. Plot the data.
+2. Fit a linear regression.
+3. Add the fitted line.
+4. Interpret the estimated slope.
+5. Repeat the simulation several times.
+6. Is the estimated slope exactly zero every time?
+7. Does the existence of a nonzero fitted slope necessarily imply that there is a meaningful relationship between the variables?
+
+---
+
+### Exercise 6: A Quadratic Relationship
+
+Generate $100$ values of $x$ between $-10$ and $10$ and simulate
+
+$$
+y = 100 + 4x^2 + e,
+$$
+
+where $e$ has relatively small variability.
+
+1. Plot $y$ against $x$.
+2. Fit the linear model
+
+$$
+y = \beta_0 + \beta_1x + e.
+$$
+
+3. Add the fitted line to the scatterplot.
+4. Does the line adequately describe the data?
+5. Describe the pattern that the regression line fails to capture.
+6. Explain why looking only at the estimated slope could be misleading.
+7. Increase the variability of $e$ and repeat the exercise. At what point does the nonlinear pattern become difficult to identify?
+
+---
+
+### Exercise 7: Diminishing Returns
+
+Suppose the effect of advertising becomes smaller as advertising expenditure increases.
+
+Generate $100$ values of $x$ between $0$ and $200$ and simulate data from a relationship such as
+
+$$
+y = 1000 + 500\log(x+1) + e.
+$$
+
+1. Plot the data.
+2. Fit a linear regression of $y$ on $x$.
+3. Add the regression line.
+4. Identify the ranges of $x$ where the line appears to fit reasonably well.
+5. Identify the ranges where it fits poorly.
+6. Explain why a single slope is inadequate for describing the entire relationship.
+7. Relate this example to the possibility of saturation in the Ad Spending example.
+
+---
+
+### Exercise 8: A Relationship That Changes
+
+Suppose advertising is effective up to a certain expenditure but becomes less effective afterward.
+
+Generate $x$ between $0$ and $200$ and construct $y$ so that:
+
+* when $x \leq 100$, revenue increases rapidly as $x$ increases;
+* when $x > 100$, revenue continues increasing, but much more slowly.
+
+Add random variation to the response.
+
+1. Write R code to simulate such a dataset.
+2. Plot the data.
+3. Fit one regression line to all observations.
+4. Does the fitted line adequately represent either part of the relationship?
+5. Describe how the slope appears to change around $x=100$.
+6. Explain why a model that assumes one constant slope can be inappropriate in this situation.
+
+---
+
+### Exercise 9: Saturation
+
+Simulate a situation in which increasing $x$ initially causes $y$ to increase, but eventually additional increases in $x$ produce almost no change in $y$.
+
+For example, imagine:
+
+* $x$ = amount spent on advertising,
+* $y$ = number of potential customers reached.
+
+1. Construct a nonlinear function with this behavior.
+2. Generate at least $100$ observations and add random variation.
+3. Plot the resulting data.
+4. Fit a linear regression.
+5. Determine whether the regression line tends to overpredict or underpredict the response at different values of $x$.
+6. Explain why extrapolating the fitted line to very large values of $x$ would be unreasonable.
+
+---
+
+### Exercise 10: The Effect of an Outlier
+
+Generate $100$ observations from
+
+$$
+y = 500 + 3x + e
+$$
+
+with relatively small random variation.
+
+1. Plot the data and fit a regression line.
+2. Record the estimated intercept and slope.
+3. Modify one observation so that its response value is much larger than the rest of the data.
+4. Refit the regression.
+5. Compare the new regression line with the original one.
+6. Move the unusual observation to a very large value of $x$ and repeat the analysis.
+7. Which unusual observation produces the larger change in the fitted line?
+8. Explain why a small number of observations can sometimes substantially change the apparent relationship.
+
+---
+
+### Exercise 11: Restricted Range
+
+Generate $200$ observations from
+
+$$
+y = 100 + 4x + e,
+$$
+
+where $x$ ranges from $0$ to $100$.
+
+First analyze all $200$ observations. Then create a second dataset containing only observations for which
+
+$$
+40 \leq x \leq 60.
+$$
+
+For both datasets:
+
+1. Plot the observations.
+2. Fit a regression line.
+3. Compare the estimated slopes.
+4. Compare how clearly the relationship can be seen in the two scatterplots.
+5. Explain why observing only a small range of the independent variable can make a relationship more difficult to identify.
+
+---
+
+### Exercise 12: Extrapolation
+
+Generate observations from a relationship that is approximately linear for
+
+$$
+0 \leq x \leq 100,
+$$
+
+but changes after $x=100$.
+
+For example, the response could increase linearly until $x=100$ and then remain approximately constant.
+
+However, suppose that only observations with $x \leq 100$ are available when fitting the model.
+
+1. Fit a linear regression using only the observed range.
+2. Plot the fitted line for values of $x$ between $0$ and $200$.
+3. Generate the true response values for the entire range from $0$ to $200$.
+4. Add these values to the plot.
+5. Compare predictions inside and outside the original range of the data.
+6. Explain why a model can fit the observed data very well but still produce poor predictions through extrapolation.
+
+---
+
+### Exercise 13: Positive Responses and Impossible Predictions
+
+Suppose $x$ represents the price of a burger and $y$ represents the number of burgers sold.
+
+Simulate a decreasing relationship in which burger demand is always positive but decreases nonlinearly as price increases.
+
+1. Plot the simulated data.
+2. Fit a linear regression.
+3. Extend the fitted regression line beyond the range of observed prices.
+4. Determine the price at which the fitted line predicts zero burgers sold.
+5. What does the model predict for even larger prices?
+6. Explain why these predictions are not reasonable.
+7. Does this mean the regression line is necessarily useless within the observed range? Explain.
+
+---
+
+### Exercise 14: Two Different Groups
+
+Suppose you collect data from two stores. Within each store, sales increase approximately linearly with advertising expenditure, but one store consistently sells more mattresses than the other.
+
+Simulate approximately $50$ observations from each store such that:
+
+* both stores have approximately the same slope,
+* the stores have noticeably different intercepts.
+
+Combine all observations into one dataset.
+
+1. Plot both stores using different plotting symbols.
+2. Examine the relationship within each store.
+3. Ignore the store labels and fit one regression line to all observations.
+4. Does a single line adequately describe both groups?
+5. Explain what information is lost when the store identity is ignored.
+6. Modify the simulation so that the two stores also have different slopes. Describe how the combined plot changes.
+
+---
+
+### Exercise 15: Collecting Your Own Data
+
+Choose two quantitative variables that you can measure or obtain for at least $20$ observational units.
+
+Possible examples include:
+
+* height and arm span,
+* distance traveled and travel time,
+* temperature and electricity consumption,
+* size and price of similar products,
+* number of reviews and price of products listed online.
+
+For your selected variables:
+
+1. Clearly define the dependent and independent variables.
+2. Explain how the observations were collected.
+3. Create a scatterplot.
+4. Before fitting a regression line, describe the relationship you observe.
+5. Decide whether a straight line appears to be a reasonable description.
+6. Fit a linear regression.
+7. Add the fitted line to the plot.
+8. Interpret the slope and intercept in the context of your data.
+9. State whether the primary purpose of the analysis is description, control, or prediction.
+10. Identify at least one reason why predictions outside the range of your observed $x$ values could be unreliable.
+
+---
+
+### Exercise 16: Control Versus Description
+
+Create or collect two datasets:
+
+1. A dataset in which the independent variable could realistically be manipulated.
+2. A dataset in which the independent variable is only observed and cannot reasonably be manipulated by the researcher.
+
+For each dataset:
+
+1. Identify $x$ and $y$.
+2. Plot the variables.
+3. Fit a linear regression.
+4. Interpret the estimated slope.
+5. Determine whether the relationship is primarily useful for description, control, or prediction.
+6. For the observational dataset, explain why an estimated relationship does not automatically imply that changing $x$ would cause $y$ to change.
+
+Relate your reasoning to the difference between the Ad Spending and Wine and Life Expectancy examples.
+
+---
+
+### Exercise 17: Same Linear Model, Different Data
+
+Generate three datasets using the same relationship
+
+$$
+y = 500 + 5x + e,
+$$
+
+but change the way the $x$ values are generated.
+
+Use:
+
+1. values spread approximately uniformly across an interval;
+2. values concentrated near the center of the interval;
+3. values concentrated into two separated groups.
+
+Use the same approximate range for $x$ in all three datasets.
+
+For each dataset:
+
+1. Create a scatterplot.
+2. Fit a regression line.
+3. Compare the appearance of the three plots.
+4. Compare the estimated slopes and intercepts.
+5. Explain how the distribution of observed $x$ values affects what portions of the relationship are well represented by the data.
+6. Which dataset would make you most comfortable predicting throughout the entire range of $x$? Explain using the observed data rather than only the fitted line.
+
+---
+
+### Exercise 18: Build a Dataset Where a Line Is Misleading
+
+Construct your own simulated dataset for which `lm()` produces a regression line but the line is clearly an inadequate description of the relationship.
+
+Your dataset must have at least $100$ observations and should demonstrate at least two of the following characteristics:
+
+* curvature,
+* saturation,
+* an abrupt change in the relationship,
+* an unusual observation,
+* different groups,
+* increasing or decreasing variability,
+* a restricted range of observed values,
+* a response that cannot reasonably take some values predicted by the line.
+
+For your dataset:
+
+1. Explain how you generated the data.
+2. Plot the observations.
+3. Fit and display a regression line.
+4. Identify the characteristics that make the line inadequate.
+5. Describe which portions of the data, if any, are reasonably represented by the fitted line.
+6. Explain what could go wrong if the fitted model were used for prediction or control.
+7. Summarize, in a few sentences, why fitting a line and determining that a linear model is appropriate are two different tasks.
