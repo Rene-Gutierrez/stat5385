@@ -1,25 +1,27 @@
-# Introduction{#introduction}
+# Introduction {#introduction}
 
 ## Objectives of Linear Regression
 
-Linear regression is a statistical method used to analyze the relationship between at least two variables: one dependent variable and at least one independent variable. This technique is closely tied to the correlation coefficient, which measures the strength and direction of a linear relationship between variables. In this document, we will explore how these concepts are connected.
+Linear regression is a statistical method used to analyze the relationship between at least two variables: one dependent variable (called response in linear regression) and at least one independent variable (called explanatory variables in linear regression).
 
 Linear regression is typically applied for three main purposes:
 
 - **Description:** To describe the relationship between the variables under analysis.
-- **Control:** To predict how changes in the independent variables will affect the dependent variable.
-- **Prediction:** To forecast the value of the dependent variable based on new observations of the independent variables.
+- **Prediction:** To forecast the value of the response based on new observations of the explanatory variables.
+- **Control:** To determine or choose values of the explanatory variable to influence response, when the setting permits a causal interpretation.
 
----
+***
 
 ## Examples
+
+The following examples illustrate three different goals of linear regression: control, description, and prediction. They also demonstrate that fitting a line is always computationally possible, but that the resulting line is not necessarily an appropriate description of the data.
 
 ### Ad Spending
 
 Imagine you are a newly hired data scientist at a mattress company. Your manager asks you to analyze the relationship between Google ad spending and mattress sales revenue.
 
 To illustrate this scenario, I have simulated a dataset:
-```
+```{r ad-spending-simulation}
 # Ad Spending Example
 
 # Set Seed
@@ -44,7 +46,7 @@ write.csv(x    = datAd[, c(1, 2)],
 
 You can load the dataset as follows:
 
-```
+```{r read-ad-spending-example}
 dat <- read.csv(file = "Ad spending Data.csv")
 ```
 
@@ -60,21 +62,21 @@ plot(x = dat$Ad.Spending,
 
 Next, you can perform a linear regression analysis:
 
-```{r}
+```{r linear-regression-ad-spending-example}
 outReg <- lm(Revenue ~ Ad.Spending, data = dat)
 ```
 
 The most important results from the regression analysis can be summarized as follows:
 
-```{r}
+```{r linear-regression-summary-ad-spending-example}
 summary(outReg)
 ```
 
-For now, let’s focus on the **estimate** for the intercept and the Ad.Spending coefficient. The **intercept** indicates the expected revenue when ad spending is zero. Based on your analysis, you observe that even without an ad campaign, mattress sales generate `r outReg$coefficients[1]`. The **coefficient** for Ad.Spending shows that each dollar spent on ads increases revenue by `r outReg$coefficients[2]`.
+For now, let’s focus on the **estimate** for the intercept and the Ad.Spending coefficient. The **intercept** gives the predicted revenue when ad spending is zero. Based on your analysis, you observe that even without an ad campaign, mattress sales generate `r outReg$coefficients[1]`. The **coefficient** for Ad.Spending shows that each dollar spent on ads increases revenue by `r outReg$coefficients[2]`.
 
 To visualize the regression line:
 
-```{r}
+```{r linear-regression-vizualization-ad-spending-example}
 plot(x = dat$Ad.Spending,
      y = dat$Revenue,
      xlab = "Ad Spending ($)",
@@ -85,11 +87,11 @@ abline(a   = outReg$coefficients[1],
        lwd = 2)
 ```
 
-The red regression line represents the "best fit" for these variables. In this context, "best fit" means the line that minimizes the sum of the squared distances from each point to the line. For comparison, here are examples of other lines that do not fit as well:
+The red regression line represents the "best fit" for these variables. In this context, "best fit" means the line that minimizes the sum of the squared vertical differences from each point to the line. For comparison, here are examples of other lines that do not fit as well:
 
 Different **slope** (coefficient for the Ad.Spending variable):
 
-```{r}
+```{r linear-regression-slope-change-ad-spending-example}
 plot(x = dat$Ad.Spending,
      y = dat$Revenue,
      xlab = "Ad Spending ($)",
@@ -106,7 +108,7 @@ abline(a   = outReg$coefficients[1],
 
 Different **intercept**:
 
-```{r}
+```{r linear-regression-intercept-change-ad-spending-example}
 plot(x = dat$Ad.Spending,
      y = dat$Revenue,
      xlab = "Ad Spending ($)",
@@ -122,7 +124,7 @@ abline(a   = 1100,
 ```
 
 We can expand the range for ad spending and revenue on the plot, as follows:
-```{r}
+```{r linear-regression-range-change-ad-spending-example}
 plot(x = dat$Ad.Spending,
      y = dat$Revenue,
      xlab = "Ad Spending ($)",
@@ -137,17 +139,17 @@ abline(h = 0,
        v = 0)
 ```
 
-Within the range of observed ad spending values `r round(min(dat$Ad.Spending))` to `r round(max(dat$Ad.Spending))`, we can be reasonably confident in the relationship between ad spending and revenue. However, what happens when we consider values outside this range?
+Within the range of observed ad spending values `r round(min(dat$Ad.Spending))` to `r round(max(dat$Ad.Spending))`, the data provide direct information about the relationship between ad spending and revenue. However, what happens when we consider values outside this range?
 
 While we can predict and control revenue to some extent by adjusting ad spending within the observed range, this confidence may not extend to values beyond it. For instance, it’s plausible that after reaching a certain level of ad spending, the market could become saturated, resulting in diminishing or even no additional revenue despite increased ad spending. Therefore, we should be cautious when extrapolating beyond the observed data, as the relationship may not hold under different conditions.
 
----
+***
 
-### Wine and Life Expectancy {#winw-example}
+### Wine and Life Expectancy {#wine-example}
 
-In the previous example, we were able to manipulate the independent variable to influence the outcome. However, there are situations where our primary goal is simply to describe the relationship between two variables, without aiming to control them. In the following example, I generate a dataset that illustrates the relationship between wine consumption and life expectancy in years for an imaginary country. Here’s how the data is simulated:
+In the previous example, we were able to manipulate the explanatory variable to influence the outcome. However, there are situations where our primary goal is simply to describe the relationship between two variables, without aiming to control them. In the following example, I generate a dataset that illustrates the relationship between wine consumption and life expectancy in years for an imaginary country. Here’s how the data is simulated:
 
-```{r}
+```{r linear-regression-simulation-wine-example}
 # Wine and Life Expectancy
 
 # Set Seed
@@ -169,7 +171,7 @@ write.csv(datWin[, c(1, 2)], file = "Wine Data.csv", row.names = FALSE)
 
 You should be able to generate the exact same data if you copy and paste the code and run it on your computer. Although the data is randomly simulated, I’ve set a **seed** to ensure that the simulation can be replicated consistently.
 
-We can read and plot the data in the as follows:
+We can read and plot the data in as follows:
 
 ```{r wine-plot}
 # Reads the Data
@@ -201,7 +203,9 @@ abline(a   = outReg$coefficients[1],
 
 Given the regression line, can we confidently conclude that increasing wine consumption leads to a longer life expectancy?
 
----
+The simulation is designed to generate a positive association between the variables. The fact that we used $x$ to generate $y$ computationally should not be interpreted as evidence that an analogous observed association in real data would be causal.
+
+***
 
 ### Burger Demand
 
@@ -235,7 +239,118 @@ abline(a   = outReg$coefficients[1],
        lwd = 2)
 ```
 
-Do you think this is a good fit for the data? The regression line appears to be inadequate for both low and high price points. Additionally, since the number of burgers sold must be positive, the regression line should not intersect the x-axis.
+Do you think this is a good fit for the data? The regression line appears to be inadequate for both low and high price points. Since the number of burgers sold cannot be negative, the linear model becomes unreasonable over ranges of prices for which it predicts zero or negative demand.
+
+## Intro to SLR {#intro-to-slr}
+
+Simple linear regression (**SLR**) is a linear regression model with a single explanatory variable. It focuses on the linear relationship between one explanatory variable and one response, making it the most basic form of linear regression analysis.
+
+***
+
+### A Path Not Taken
+
+The basic idea behind linear regression is to find the "best line" that describes the data. This idea admits several interpretations. One interpretation is to measure the distance between a candidate line and the data points. For a line $\mathcal{l}$ given by
+
+$$
+ax + by + c = 0
+$$
+
+the distance from a point $(x_i,y_i)$ to that line is
+
+$$
+d_i = d(\mathcal{l},(x_i,y_i)) = \frac{|ax_i + by_i + c|}{\sqrt{a^2+b^2}}.
+$$
+
+We could then pose the optimization problem
+
+$$
+\min_{a,b,c: a^2 + b^2 > 0} \sum_{i=1}^n d_i.
+$$
+
+However, those familiar with regression will recognize that this is not the standard linear regression formulation. That does not make the distance-minimization problem unreasonable, only that its solution will generally differ from the usual linear regression solution.
+
+The standard least-squares formulation of linear regression makes a particular optimization choice because of its convenient properties.. In the next section we introduce a model that refines the notion of a "best line."
+
+***
+
+### SLR Model
+
+The model for simple linear regression is as follows:
+
+$$y_i = \beta_0 + \beta_1 x_i + e_i, \quad i\in\{1,\ldots,n\}$$
+
+where:
+
+* $y_i$ represents the $i$-th observation of the response.
+* $x_i$ represents the $i$-th observation of the explanatory variable.
+* $e_i$ represents the $i$-th observation of the error term.
+* $\beta_0$ is the intercept of the linear model, or regression line.
+* $\beta_1$ is the slope of the linear model, or regression line.
+* $n$ is the number of observations for both variables.
+
+Notice that in this framework, the error measures the signed vertical difference between the observed point and the regression line, rather than the perpendicular distance from the point to the line.
+Also, note that we are not making any assumptions about the error terms.
+
+In the case of the [wine example](#wine-example), we generated the data based on the following linear model:
+
+$$y_i = 75 + 1.5 x_i + e_i $$
+
+
+```{r slr-parts}
+dat <- read.csv(file = "Wine Data.csv")
+plot(x    = dat$Glasses,
+     y    = dat$Years,
+     xlab = "Avg. Glasses of Wine per Week",
+     ylab = "Life Expectancy (Years)")
+abline(a   = 75,
+       b   = 1.5,
+       col = 'red',
+       lwd = 2)
+abline(v   = 0,
+       lwd = 2)
+text(x = 0.25, y = 76, expression(beta[0] ~ "=75"))
+text(x = 3.25, y = 79, expression(beta[1] ~ "=1.5"))
+segments(x0 = c(2, 3),
+         x1 = c(3, 3),
+         y0 = c(78, 78),
+         y1 = c(78, 79.5),
+         lwd = 2,
+         col = 'blue')
+```
+
+In this case, the intercept $\beta_0$ is meaningful, as it represents the value predicted by the linear component of the model for a person who drinks no wine.. However, depending on the data, the intercept may or may not have a meaningful interpretation. The slope $\beta_1$ indicates that for each additional glass of wine consumed per week, our model predicts an increase of 1.5 years in life expectancy.
+
+In practice, we rarely know the true regression line. Instead, it must be estimated from the data. The goal is to find the "best" line that fits the data, where "best" means the line that minimizes the sum of squared errors (SSE) between the observed values and the values predicted by the model.
+
+***
+
+### Possible Optimization Problems
+
+Other than minimizing the sum of squared errors (SSE), we can consider the following alternative optimization problems. Here $(e_i(\beta_0,\beta_1)=y_i-(\beta_0+\beta_1 x_i)$ denotes the vertical error associated with a candidate line.
+
+#### Minimizing the Sum of Absolute Errors
+
+$$
+\min_{\beta_0, \beta_1} \sum_{i=1}^n |e_i(\beta_0, \beta_1)|
+$$
+
+This L1 criterion is common in the machine-learning community and is more robust to outliers than the SSE. Laplace was among the first to investigate this approach when developing early methods for fitting lines to data.
+
+#### Minimizing the Maximum Error
+
+$$
+\min_{\beta_0, \beta_1} \max_{i=1}^n |e_i(\beta_0, \beta_1)|
+$$
+
+The minimax approach focuses on reducing the largest error and is appropriate when large errors can be catastrophic. Laplace also explored this formulation in his early work.
+
+#### Minimizing the Sum of Squared Errors
+
+$$
+\min_{\beta_0, \beta_1} \sum_{i=1}^n e_i(\beta_0, \beta_1)^2
+$$
+
+This is the standard formulation in simple linear regression (the least squares criterion), introduced by Legendre and Gauss (apparently independently).It remains widely used because of its convenient mathematical and computational properties, which we will analyze in the following sections.
 
 ## Exercises
 
@@ -255,7 +370,7 @@ $$
 
 where $x$ is generated using
 
-```{r}
+```{r data-generation-instruction-exercise}
 x <- runif(n = 100, min = 0, max = 100)
 ```
 
@@ -277,7 +392,7 @@ For each value:
 6. Explain what changes when the intercept changes and what remains approximately the same.
 7. Give a practical interpretation of the intercept in each simulation.
 
----
+***
 
 ### Exercise 2: Changing the Slope
 
@@ -303,7 +418,7 @@ For each dataset:
 6. Explain how the magnitude of the slope changes the relationship between $x$ and $y$.
 7. Explain what a slope close to zero means.
 
----
+***
 
 ### Exercise 3: Different Intercepts and Slopes
 
@@ -341,7 +456,7 @@ Use the same $100$ values of $x$ and the same random errors for all four dataset
 5. Compare the estimated coefficients with the values used to generate the data.
 6. Explain how the plot allows you to distinguish changes in slope from changes in intercept.
 
----
+***
 
 ### Exercise 4: Increasing the Amount of Noise
 
@@ -368,11 +483,11 @@ For each dataset:
 5. At what point does the linear relationship become difficult to recognize visually?
 6. Does increased variability necessarily change the underlying slope used to generate the data?
 
----
+***
 
 ### Exercise 5: No Relationship
 
-Generate $100$ observations of $x$ using `runif()` and independently generate $100$ observations of $y$ using `rnorm()`.
+Generate $100$ observations of $x$ using `runif()` and separately generate $100$ observations of $y$ using `rnorm()`, so that the construction does not impose a relationship between them.
 
 For example, $x$ might represent advertising expenditure while $y$ represents sales from a process that is completely unrelated to advertising.
 
@@ -384,7 +499,7 @@ For example, $x$ might represent advertising expenditure while $y$ represents sa
 6. Is the estimated slope exactly zero every time?
 7. Does the existence of a nonzero fitted slope necessarily imply that there is a meaningful relationship between the variables?
 
----
+***
 
 ### Exercise 6: A Quadratic Relationship
 
@@ -409,7 +524,7 @@ $$
 6. Explain why looking only at the estimated slope could be misleading.
 7. Increase the variability of $e$ and repeat the exercise. At what point does the nonlinear pattern become difficult to identify?
 
----
+***
 
 ### Exercise 7: Diminishing Returns
 
@@ -429,7 +544,7 @@ $$
 6. Explain why a single slope is inadequate for describing the entire relationship.
 7. Relate this example to the possibility of saturation in the Ad Spending example.
 
----
+***
 
 ### Exercise 8: A Relationship That Changes
 
@@ -449,7 +564,7 @@ Add random variation to the response.
 5. Describe how the slope appears to change around $x=100$.
 6. Explain why a model that assumes one constant slope can be inappropriate in this situation.
 
----
+***
 
 ### Exercise 9: Saturation
 
@@ -467,7 +582,7 @@ For example, imagine:
 5. Determine whether the regression line tends to overpredict or underpredict the response at different values of $x$.
 6. Explain why extrapolating the fitted line to very large values of $x$ would be unreasonable.
 
----
+***
 
 ### Exercise 10: The Effect of an Outlier
 
@@ -488,7 +603,7 @@ with relatively small random variation.
 7. Which unusual observation produces the larger change in the fitted line?
 8. Explain why a small number of observations can sometimes substantially change the apparent relationship.
 
----
+***
 
 ### Exercise 11: Restricted Range
 
@@ -512,9 +627,9 @@ For both datasets:
 2. Fit a regression line.
 3. Compare the estimated slopes.
 4. Compare how clearly the relationship can be seen in the two scatterplots.
-5. Explain why observing only a small range of the independent variable can make a relationship more difficult to identify.
+5. Explain why observing only a small range of the explanatory variable can make a relationship more difficult to identify.
 
----
+***
 
 ### Exercise 12: Extrapolation
 
@@ -537,7 +652,7 @@ However, suppose that only observations with $x \leq 100$ are available when fit
 5. Compare predictions inside and outside the original range of the data.
 6. Explain why a model can fit the observed data very well but still produce poor predictions through extrapolation.
 
----
+***
 
 ### Exercise 13: Positive Responses and Impossible Predictions
 
@@ -553,7 +668,7 @@ Simulate a decreasing relationship in which burger demand is always positive but
 6. Explain why these predictions are not reasonable.
 7. Does this mean the regression line is necessarily useless within the observed range? Explain.
 
----
+***
 
 ### Exercise 14: Two Different Groups
 
@@ -573,7 +688,7 @@ Combine all observations into one dataset.
 5. Explain what information is lost when the store identity is ignored.
 6. Modify the simulation so that the two stores also have different slopes. Describe how the combined plot changes.
 
----
+***
 
 ### Exercise 15: Collecting Your Own Data
 
@@ -589,7 +704,7 @@ Possible examples include:
 
 For your selected variables:
 
-1. Clearly define the dependent and independent variables.
+1. Clearly define the response and explanatory variables.
 2. Explain how the observations were collected.
 3. Create a scatterplot.
 4. Before fitting a regression line, describe the relationship you observe.
@@ -600,14 +715,14 @@ For your selected variables:
 9. State whether the primary purpose of the analysis is description, control, or prediction.
 10. Identify at least one reason why predictions outside the range of your observed $x$ values could be unreliable.
 
----
+***
 
 ### Exercise 16: Control Versus Description
 
 Create or collect two datasets:
 
-1. A dataset in which the independent variable could realistically be manipulated.
-2. A dataset in which the independent variable is only observed and cannot reasonably be manipulated by the researcher.
+1. A dataset in which the explanatory variable could realistically be manipulated.
+2. A dataset in which the explanatory variable is only observed and cannot reasonably be manipulated by the researcher.
 
 For each dataset:
 
@@ -620,7 +735,7 @@ For each dataset:
 
 Relate your reasoning to the difference between the Ad Spending and Wine and Life Expectancy examples.
 
----
+***
 
 ### Exercise 17: Same Linear Model, Different Data
 
@@ -649,7 +764,7 @@ For each dataset:
 5. Explain how the distribution of observed $x$ values affects what portions of the relationship are well represented by the data.
 6. Which dataset would make you most comfortable predicting throughout the entire range of $x$? Explain using the observed data rather than only the fitted line.
 
----
+***
 
 ### Exercise 18: Build a Dataset Where a Line Is Misleading
 
