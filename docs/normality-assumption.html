@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Normality Assumption | _main.knit</title>
+  <meta name="description" content="" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Normality Assumption | _main.knit" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Normality Assumption | _main.knit" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="mean-and-varaince-assumptions.html"/>
+<link rel="next" href="applications-4.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Stat 5385/6385 Fall 2025</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#calendar"><i class="fa fa-check"></i><b>1.1</b> Calendar</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#important-dates"><i class="fa fa-check"></i><b>1.1.1</b> Important Dates</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#class-schedule"><i class="fa fa-check"></i><b>1.1.2</b> Class Schedule</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#course-overview"><i class="fa fa-check"></i><b>1.2</b> Course Overview</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#part-i-linear-regression-for-prediction"><i class="fa fa-check"></i><b>1.3</b> Part I — Linear Regression for Prediction</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#mathematical-prerequisites"><i class="fa fa-check"></i><b>1.3.1</b> Mathematical Prerequisites</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#introduction-to-linear-regression"><i class="fa fa-check"></i><b>1.3.2</b> Introduction to Linear Regression</a></li>
+<li class="chapter" data-level="1.3.3" data-path="index.html"><a href="index.html#simple-linear-regression"><i class="fa fa-check"></i><b>1.3.3</b> Simple Linear Regression</a></li>
+<li class="chapter" data-level="1.3.4" data-path="index.html"><a href="index.html#polynomial-regression"><i class="fa fa-check"></i><b>1.3.4</b> Polynomial Regression</a></li>
+<li class="chapter" data-level="1.3.5" data-path="index.html"><a href="index.html#multiple-linear-regression"><i class="fa fa-check"></i><b>1.3.5</b> Multiple Linear Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#part-ii-linear-regression-as-a-statistical-model"><i class="fa fa-check"></i><b>1.4</b> Part II — Linear Regression as a Statistical Model</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#bootstrapping-and-the-introduction-of-uncertainty"><i class="fa fa-check"></i><b>1.4.1</b> Bootstrapping and the Introduction of Uncertainty</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#mean-and-variance-assumptions"><i class="fa fa-check"></i><b>1.4.2</b> Mean and Variance Assumptions</a></li>
+<li class="chapter" data-level="1.4.3" data-path="index.html"><a href="index.html#the-normality-assumption-and-statistical-inference"><i class="fa fa-check"></i><b>1.4.3</b> The Normality Assumption and Statistical Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#part-iii-applications-of-the-linear-regression-framework"><i class="fa fa-check"></i><b>1.5</b> Part III — Applications of the Linear Regression Framework</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#analysis-of-variance-and-analysis-of-covariance"><i class="fa fa-check"></i><b>1.5.1</b> Analysis of Variance and Analysis of Covariance</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#experimental-design"><i class="fa fa-check"></i><b>1.5.2</b> Experimental Design</a></li>
+<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#instrumental-variables"><i class="fa fa-check"></i><b>1.5.3</b> Instrumental Variables</a></li>
+<li class="chapter" data-level="1.5.4" data-path="index.html"><a href="index.html#a-unified-view-of-applications"><i class="fa fa-check"></i><b>1.5.4</b> A Unified View of Applications</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>2</b> Prerequisites</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="prerequisites.html"><a href="prerequisites.html#general-math"><i class="fa fa-check"></i><b>2.1</b> General Math</a></li>
+<li class="chapter" data-level="2.2" data-path="prerequisites.html"><a href="prerequisites.html#linear-algebra"><i class="fa fa-check"></i><b>2.2</b> Linear Algebra</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="prerequisites.html"><a href="prerequisites.html#zero-matrix"><i class="fa fa-check"></i><b>2.2.1</b> Zero Matrix</a></li>
+<li class="chapter" data-level="2.2.2" data-path="prerequisites.html"><a href="prerequisites.html#linear-independence"><i class="fa fa-check"></i><b>2.2.2</b> Linear Independence</a></li>
+<li class="chapter" data-level="2.2.3" data-path="prerequisites.html"><a href="prerequisites.html#column-space-of-a-matrix"><i class="fa fa-check"></i><b>2.2.3</b> Column Space of a Matrix</a></li>
+<li class="chapter" data-level="2.2.4" data-path="prerequisites.html"><a href="prerequisites.html#rank-of-a-matrix"><i class="fa fa-check"></i><b>2.2.4</b> Rank of a Matrix</a></li>
+<li class="chapter" data-level="2.2.5" data-path="prerequisites.html"><a href="prerequisites.html#full-rank-matrix"><i class="fa fa-check"></i><b>2.2.5</b> Full Rank Matrix</a></li>
+<li class="chapter" data-level="2.2.6" data-path="prerequisites.html"><a href="prerequisites.html#inverse-matrix"><i class="fa fa-check"></i><b>2.2.6</b> Inverse Matrix</a></li>
+<li class="chapter" data-level="2.2.7" data-path="prerequisites.html"><a href="prerequisites.html#positive-definite-matrix"><i class="fa fa-check"></i><b>2.2.7</b> Positive Definite Matrix</a></li>
+<li class="chapter" data-level="2.2.8" data-path="prerequisites.html"><a href="prerequisites.html#singular-value-decomposition"><i class="fa fa-check"></i><b>2.2.8</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="2.2.9" data-path="prerequisites.html"><a href="prerequisites.html#eigendecomposition"><i class="fa fa-check"></i><b>2.2.9</b> Eigendecomposition</a></li>
+<li class="chapter" data-level="2.2.10" data-path="prerequisites.html"><a href="prerequisites.html#idempotent-matrix"><i class="fa fa-check"></i><b>2.2.10</b> Idempotent Matrix</a></li>
+<li class="chapter" data-level="2.2.11" data-path="prerequisites.html"><a href="prerequisites.html#determinant-of-a-matrix"><i class="fa fa-check"></i><b>2.2.11</b> Determinant of a Matrix</a></li>
+<li class="chapter" data-level="2.2.12" data-path="prerequisites.html"><a href="prerequisites.html#trace-of-a-matrix"><i class="fa fa-check"></i><b>2.2.12</b> Trace of a Matrix</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#calculus"><i class="fa fa-check"></i><b>2.3</b> Calculus</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="prerequisites.html"><a href="prerequisites.html#gradient"><i class="fa fa-check"></i><b>2.3.1</b> Gradient</a></li>
+<li class="chapter" data-level="2.3.2" data-path="prerequisites.html"><a href="prerequisites.html#hessian-matrix"><i class="fa fa-check"></i><b>2.3.2</b> Hessian Matrix</a></li>
+<li class="chapter" data-level="2.3.3" data-path="prerequisites.html"><a href="prerequisites.html#applications-1"><i class="fa fa-check"></i><b>2.3.3</b> Applications:</a></li>
+<li class="chapter" data-level="2.3.4" data-path="prerequisites.html"><a href="prerequisites.html#matrix-calculus"><i class="fa fa-check"></i><b>2.3.4</b> Matrix Calculus</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.4</b> Probability</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="prerequisites.html"><a href="prerequisites.html#expected-value"><i class="fa fa-check"></i><b>2.4.1</b> Expected Value</a></li>
+<li class="chapter" data-level="2.4.2" data-path="prerequisites.html"><a href="prerequisites.html#variance"><i class="fa fa-check"></i><b>2.4.2</b> Variance</a></li>
+<li class="chapter" data-level="2.4.3" data-path="prerequisites.html"><a href="prerequisites.html#cross-covariance-matrix"><i class="fa fa-check"></i><b>2.4.3</b> Cross-Covariance Matrix</a></li>
+<li class="chapter" data-level="2.4.4" data-path="prerequisites.html"><a href="prerequisites.html#multivariate-normal-distribution"><i class="fa fa-check"></i><b>2.4.4</b> Multivariate Normal Distribution</a></li>
+<li class="chapter" data-level="2.4.5" data-path="prerequisites.html"><a href="prerequisites.html#t-distribution"><i class="fa fa-check"></i><b>2.4.5</b> <span class="math inline">\(t\)</span> Distribution</a></li>
+<li class="chapter" data-level="2.4.6" data-path="prerequisites.html"><a href="prerequisites.html#chi2-distribution"><i class="fa fa-check"></i><b>2.4.6</b> <span class="math inline">\(\chi^2\)</span> Distribution</a></li>
+<li class="chapter" data-level="2.4.7" data-path="prerequisites.html"><a href="prerequisites.html#f-distribution"><i class="fa fa-check"></i><b>2.4.7</b> <span class="math inline">\(F\)</span> Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.5</b> Statistics</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="prerequisites.html"><a href="prerequisites.html#bias-of-an-estimator"><i class="fa fa-check"></i><b>2.5.1</b> Bias of an Estimator</a></li>
+<li class="chapter" data-level="2.5.2" data-path="prerequisites.html"><a href="prerequisites.html#unbiased-estimator"><i class="fa fa-check"></i><b>2.5.2</b> Unbiased Estimator</a></li>
+<li class="chapter" data-level="2.5.3" data-path="prerequisites.html"><a href="prerequisites.html#mean-square-error-of-an-estimator"><i class="fa fa-check"></i><b>2.5.3</b> Mean Square Error of an Estimator</a></li>
+<li class="chapter" data-level="2.5.4" data-path="prerequisites.html"><a href="prerequisites.html#interval-estimation"><i class="fa fa-check"></i><b>2.5.4</b> Interval Estimation</a></li>
+<li class="chapter" data-level="2.5.5" data-path="prerequisites.html"><a href="prerequisites.html#hypothesis-testing"><i class="fa fa-check"></i><b>2.5.5</b> Hypothesis Testing</a></li>
+<li class="chapter" data-level="2.5.6" data-path="prerequisites.html"><a href="prerequisites.html#power-analysis"><i class="fa fa-check"></i><b>2.5.6</b> Power Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="introduction.html"><a href="introduction.html#objectives-of-linear-regression"><i class="fa fa-check"></i><b>3.1</b> Objectives of Linear Regression</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction.html"><a href="introduction.html#examples-1"><i class="fa fa-check"></i><b>3.2</b> Examples</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="introduction.html"><a href="introduction.html#ad-spending"><i class="fa fa-check"></i><b>3.2.1</b> Ad Spending</a></li>
+<li class="chapter" data-level="3.2.2" data-path="introduction.html"><a href="introduction.html#wine-example"><i class="fa fa-check"></i><b>3.2.2</b> Wine and Life Expectancy</a></li>
+<li class="chapter" data-level="3.2.3" data-path="introduction.html"><a href="introduction.html#burger-demand"><i class="fa fa-check"></i><b>3.2.3</b> Burger Demand</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="introduction.html"><a href="introduction.html#intro-to-slr"><i class="fa fa-check"></i><b>3.3</b> Intro to SLR</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="introduction.html"><a href="introduction.html#a-path-not-taken"><i class="fa fa-check"></i><b>3.3.1</b> A Path Not Taken</a></li>
+<li class="chapter" data-level="3.3.2" data-path="introduction.html"><a href="introduction.html#slr-model"><i class="fa fa-check"></i><b>3.3.2</b> SLR Model</a></li>
+<li class="chapter" data-level="3.3.3" data-path="introduction.html"><a href="introduction.html#possible-optimization-problems"><i class="fa fa-check"></i><b>3.3.3</b> Possible Optimization Problems</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="introduction.html"><a href="introduction.html#exercises"><i class="fa fa-check"></i><b>3.4</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="introduction.html"><a href="introduction.html#exercise-1-changing-the-intercept"><i class="fa fa-check"></i><b>3.4.1</b> Exercise 1: Changing the Intercept</a></li>
+<li class="chapter" data-level="3.4.2" data-path="introduction.html"><a href="introduction.html#exercise-2-changing-the-slope"><i class="fa fa-check"></i><b>3.4.2</b> Exercise 2: Changing the Slope</a></li>
+<li class="chapter" data-level="3.4.3" data-path="introduction.html"><a href="introduction.html#exercise-3-different-intercepts-and-slopes"><i class="fa fa-check"></i><b>3.4.3</b> Exercise 3: Different Intercepts and Slopes</a></li>
+<li class="chapter" data-level="3.4.4" data-path="introduction.html"><a href="introduction.html#exercise-4-increasing-the-amount-of-noise"><i class="fa fa-check"></i><b>3.4.4</b> Exercise 4: Increasing the Amount of Noise</a></li>
+<li class="chapter" data-level="3.4.5" data-path="introduction.html"><a href="introduction.html#exercise-5-no-relationship"><i class="fa fa-check"></i><b>3.4.5</b> Exercise 5: No Relationship</a></li>
+<li class="chapter" data-level="3.4.6" data-path="introduction.html"><a href="introduction.html#exercise-6-a-quadratic-relationship"><i class="fa fa-check"></i><b>3.4.6</b> Exercise 6: A Quadratic Relationship</a></li>
+<li class="chapter" data-level="3.4.7" data-path="introduction.html"><a href="introduction.html#exercise-7-diminishing-returns"><i class="fa fa-check"></i><b>3.4.7</b> Exercise 7: Diminishing Returns</a></li>
+<li class="chapter" data-level="3.4.8" data-path="introduction.html"><a href="introduction.html#exercise-8-a-relationship-that-changes"><i class="fa fa-check"></i><b>3.4.8</b> Exercise 8: A Relationship That Changes</a></li>
+<li class="chapter" data-level="3.4.9" data-path="introduction.html"><a href="introduction.html#exercise-9-saturation"><i class="fa fa-check"></i><b>3.4.9</b> Exercise 9: Saturation</a></li>
+<li class="chapter" data-level="3.4.10" data-path="introduction.html"><a href="introduction.html#exercise-10-the-effect-of-an-outlier"><i class="fa fa-check"></i><b>3.4.10</b> Exercise 10: The Effect of an Outlier</a></li>
+<li class="chapter" data-level="3.4.11" data-path="introduction.html"><a href="introduction.html#exercise-11-restricted-range"><i class="fa fa-check"></i><b>3.4.11</b> Exercise 11: Restricted Range</a></li>
+<li class="chapter" data-level="3.4.12" data-path="introduction.html"><a href="introduction.html#exercise-12-extrapolation"><i class="fa fa-check"></i><b>3.4.12</b> Exercise 12: Extrapolation</a></li>
+<li class="chapter" data-level="3.4.13" data-path="introduction.html"><a href="introduction.html#exercise-13-positive-responses-and-impossible-predictions"><i class="fa fa-check"></i><b>3.4.13</b> Exercise 13: Positive Responses and Impossible Predictions</a></li>
+<li class="chapter" data-level="3.4.14" data-path="introduction.html"><a href="introduction.html#exercise-14-two-different-groups"><i class="fa fa-check"></i><b>3.4.14</b> Exercise 14: Two Different Groups</a></li>
+<li class="chapter" data-level="3.4.15" data-path="introduction.html"><a href="introduction.html#exercise-15-collecting-your-own-data"><i class="fa fa-check"></i><b>3.4.15</b> Exercise 15: Collecting Your Own Data</a></li>
+<li class="chapter" data-level="3.4.16" data-path="introduction.html"><a href="introduction.html#exercise-16-control-versus-description"><i class="fa fa-check"></i><b>3.4.16</b> Exercise 16: Control Versus Description</a></li>
+<li class="chapter" data-level="3.4.17" data-path="introduction.html"><a href="introduction.html#exercise-17-same-linear-model-different-data"><i class="fa fa-check"></i><b>3.4.17</b> Exercise 17: Same Linear Model, Different Data</a></li>
+<li class="chapter" data-level="3.4.18" data-path="introduction.html"><a href="introduction.html#exercise-18-build-a-dataset-where-a-line-is-misleading"><i class="fa fa-check"></i><b>3.4.18</b> Exercise 18: Build a Dataset Where a Line Is Misleading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html"><i class="fa fa-check"></i><b>4</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#least-squares-estimation"><i class="fa fa-check"></i><b>4.1</b> Least Squares Estimation</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#other-estimated-quantites"><i class="fa fa-check"></i><b>4.1.1</b> Other estimated quantites</a></li>
+<li class="chapter" data-level="4.1.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#properties-of-the-slr-problem"><i class="fa fa-check"></i><b>4.1.2</b> Properties of the SLR problem</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#properties-of-the-estimates"><i class="fa fa-check"></i><b>4.2</b> Properties of the Estimates</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#hatbeta_0-and-hatbeta_1-are-linear-combinations-of"><i class="fa fa-check"></i><b>4.2.1</b> <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> are linear combinations of</a></li>
+<li class="chapter" data-level="4.2.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#the-sum-of-the-residuals-is-0"><i class="fa fa-check"></i><b>4.2.2</b> The sum of the residuals is <span class="math inline">\(0\)</span></a></li>
+<li class="chapter" data-level="4.2.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#hatmathbfe-and-mathbfx-are-orthogonal"><i class="fa fa-check"></i><b>4.2.3</b> <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> are orthogonal</a></li>
+<li class="chapter" data-level="4.2.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#hatmathbfy-and-hatmathbfe-are-orthogonal"><i class="fa fa-check"></i><b>4.2.4</b> <span class="math inline">\(\hat{\mathbf{y}}\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span> are orthogonal</a></li>
+<li class="chapter" data-level="4.2.5" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#the-average-of-hatmathbfy-and-mathbfy-are-the-same"><i class="fa fa-check"></i><b>4.2.5</b> The average of <span class="math inline">\(\hat{\mathbf{y}}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> are the same</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#centering-and-standarizing-the-data"><i class="fa fa-check"></i><b>4.3</b> Centering and Standarizing the Data</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#remarks-on-centering-and-standarization"><i class="fa fa-check"></i><b>4.3.1</b> Remarks on Centering and Standarization</a></li>
+<li class="chapter" data-level="4.3.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#summary-centering-and-standarizing"><i class="fa fa-check"></i><b>4.3.2</b> Summary Centering and Standarizing</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#centering-and-standarizing-in-slr"><i class="fa fa-check"></i><b>4.4</b> Centering and Standarizing in SLR</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#centered-independent-variable"><i class="fa fa-check"></i><b>4.4.1</b> Centered Independent Variable</a></li>
+<li class="chapter" data-level="4.4.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#both-variables-centered"><i class="fa fa-check"></i><b>4.4.2</b> Both Variables Centered</a></li>
+<li class="chapter" data-level="4.4.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#both-variables-standarized"><i class="fa fa-check"></i><b>4.4.3</b> Both variables Standarized</a></li>
+<li class="chapter" data-level="4.4.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#summary-of-centering-and-standarizing-in-slr"><i class="fa fa-check"></i><b>4.4.4</b> Summary of Centering and Standarizing in SLR</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#coefficient-of-determination"><i class="fa fa-check"></i><b>4.5</b> Coefficient of Determination</a></li>
+<li class="chapter" data-level="4.6" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#residual-analysis"><i class="fa fa-check"></i><b>4.6</b> Residual Analysis</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#non-linear-regression-function"><i class="fa fa-check"></i><b>4.6.1</b> Non-linear regression function</a></li>
+<li class="chapter" data-level="4.6.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#heteroscedasticity"><i class="fa fa-check"></i><b>4.6.2</b> Heteroscedasticity</a></li>
+<li class="chapter" data-level="4.6.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#outliers"><i class="fa fa-check"></i><b>4.6.3</b> Outliers</a></li>
+<li class="chapter" data-level="4.6.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#variables-ommited"><i class="fa fa-check"></i><b>4.6.4</b> Variables Ommited</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#cross-validation"><i class="fa fa-check"></i><b>4.7</b> Cross-Validation</a></li>
+<li class="chapter" data-level="4.8" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#weighted-least-squares"><i class="fa fa-check"></i><b>4.8</b> Weighted Least Squares</a></li>
+<li class="chapter" data-level="4.9" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#model-in-matrix-form"><i class="fa fa-check"></i><b>4.9</b> Model in Matrix Form</a>
+<ul>
+<li class="chapter" data-level="4.9.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#weighted-least-squares-in-matrix-form"><i class="fa fa-check"></i><b>4.9.1</b> Weighted Least Squares in Matrix Form</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html"><i class="fa fa-check"></i><b>5</b> Polynomial Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#motivation"><i class="fa fa-check"></i><b>5.1</b> Motivation</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#taylor-polynomials-and-polynomial-regression"><i class="fa fa-check"></i><b>5.1.1</b> Taylor polynomials and polynomial regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#why-use-the-sample-mean-as-the-expansion-center-point"><i class="fa fa-check"></i><b>5.2</b> Why use the sample mean as the expansion (center) point?</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#examples-2"><i class="fa fa-check"></i><b>5.2.1</b> Examples</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#the-general-model"><i class="fa fa-check"></i><b>6.1.1</b> The General Model</a></li>
+<li class="chapter" data-level="6.1.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#interpretation-and-objectives"><i class="fa fa-check"></i><b>6.1.2</b> Interpretation and Objectives</a></li>
+<li class="chapter" data-level="6.1.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#applications-and-context"><i class="fa fa-check"></i><b>6.1.3</b> Applications and Context</a></li>
+<li class="chapter" data-level="6.1.4" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#connection-to-polynomial-regression"><i class="fa fa-check"></i><b>6.1.4</b> Connection to Polynomial Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#example-modeling-gdp"><i class="fa fa-check"></i><b>6.2</b> Example: Modeling GDP</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#simple-regressions"><i class="fa fa-check"></i><b>6.2.1</b> Simple Regressions</a></li>
+<li class="chapter" data-level="6.2.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#multiple-regression"><i class="fa fa-check"></i><b>6.2.2</b> Multiple Regression</a></li>
+<li class="chapter" data-level="6.2.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#summary-2"><i class="fa fa-check"></i><b>6.2.3</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#least-squares-estimation-1"><i class="fa fa-check"></i><b>6.3</b> Least Squares Estimation</a></li>
+<li class="chapter" data-level="6.4" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#properties-of-the-estimates-1"><i class="fa fa-check"></i><b>6.4</b> Properties of the Estimates</a></li>
+<li class="chapter" data-level="6.5" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#multiple-r2"><i class="fa fa-check"></i><b>6.5</b> Multiple <span class="math inline">\(R^2\)</span></a></li>
+<li class="chapter" data-level="6.6" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#geometric-interpretation-of-multiple-linear-regression"><i class="fa fa-check"></i><b>6.6</b> Geometric Interpretation of Multiple Linear Regression</a></li>
+<li class="chapter" data-level="6.7" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#centered-and-standarized-variables"><i class="fa fa-check"></i><b>6.7</b> Centered and Standarized Variables</a>
+<ul>
+<li class="chapter" data-level="6.7.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#centered-variables"><i class="fa fa-check"></i><b>6.7.1</b> Centered Variables</a></li>
+<li class="chapter" data-level="6.7.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#sample-covariance"><i class="fa fa-check"></i><b>6.7.2</b> Sample Covariance</a></li>
+<li class="chapter" data-level="6.7.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#satandard-variables"><i class="fa fa-check"></i><b>6.7.3</b> Satandard Variables</a></li>
+<li class="chapter" data-level="6.7.4" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#sample-correlation-matrix"><i class="fa fa-check"></i><b>6.7.4</b> Sample Correlation Matrix</a></li>
+</ul></li>
+<li class="chapter" data-level="6.8" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#variable-cross-effects"><i class="fa fa-check"></i><b>6.8</b> Variable Cross-Effects</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#single-variable-cross-effects"><i class="fa fa-check"></i><b>6.8.1</b> Single Variable Cross-Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#outliers-and-leverage"><i class="fa fa-check"></i><b>6.9</b> Outliers and Leverage</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#leverage"><i class="fa fa-check"></i><b>6.9.1</b> Leverage</a></li>
+<li class="chapter" data-level="6.9.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#influential-observations"><i class="fa fa-check"></i><b>6.9.2</b> Influential Observations</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#stability-of-the-solution"><i class="fa fa-check"></i><b>6.10</b> Stability of the Solution</a></li>
+<li class="chapter" data-level="6.11" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#other-approaches-to-regression"><i class="fa fa-check"></i><b>6.11</b> Other Approaches to Regression</a>
+<ul>
+<li class="chapter" data-level="6.11.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#least-absolute-error-regression"><i class="fa fa-check"></i><b>6.11.1</b> Least Absolute Error Regression</a></li>
+<li class="chapter" data-level="6.11.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#ridge-regression"><i class="fa fa-check"></i><b>6.11.2</b> Ridge Regression</a></li>
+<li class="chapter" data-level="6.11.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#lasso-regression"><i class="fa fa-check"></i><b>6.11.3</b> Lasso Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="bootstrapping.html"><a href="bootstrapping.html"><i class="fa fa-check"></i><b>7</b> Bootstrapping</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="bootstrapping.html"><a href="bootstrapping.html#introduction-2"><i class="fa fa-check"></i><b>7.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="bootstrapping.html"><a href="bootstrapping.html#key-points-6"><i class="fa fa-check"></i><b>7.1.1</b> Key Points</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="bootstrapping.html"><a href="bootstrapping.html#bootstrapping-example"><i class="fa fa-check"></i><b>7.2</b> Bootstrapping Example</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="bootstrapping.html"><a href="bootstrapping.html#bootstrapping-predictions"><i class="fa fa-check"></i><b>7.2.1</b> Bootstrapping Predictions</a></li>
+<li class="chapter" data-level="7.2.2" data-path="bootstrapping.html"><a href="bootstrapping.html#adding-prediction-intervals"><i class="fa fa-check"></i><b>7.2.2</b> Adding Prediction Intervals</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html"><i class="fa fa-check"></i><b>8</b> Mean and Varaince Assumptions</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mean-assumptions"><i class="fa fa-check"></i><b>8.1</b> Mean Assumptions</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#expectation-of-mathbfy"><i class="fa fa-check"></i><b>8.1.1</b> Expectation of <span class="math inline">\(\mathbf{y}\)</span>:</a></li>
+<li class="chapter" data-level="8.1.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#expectation-of-hatboldsymbolbeta"><i class="fa fa-check"></i><b>8.1.2</b> Expectation of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span></a></li>
+<li class="chapter" data-level="8.1.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#expectation-of-hatmathbfy"><i class="fa fa-check"></i><b>8.1.3</b> Expectation of <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
+<li class="chapter" data-level="8.1.4" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#expectation-of-hatmathbfe"><i class="fa fa-check"></i><b>8.1.4</b> Expectation of <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-assumptions"><i class="fa fa-check"></i><b>8.2</b> Variance Assumptions</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-mathbfy"><i class="fa fa-check"></i><b>8.2.1</b> Variance of <span class="math inline">\(\mathbf{y}\)</span></a></li>
+<li class="chapter" data-level="8.2.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-hatboldsymbolbeta"><i class="fa fa-check"></i><b>8.2.2</b> Variance of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span></a></li>
+<li class="chapter" data-level="8.2.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-hatmathbfy"><i class="fa fa-check"></i><b>8.2.3</b> Variance of <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
+<li class="chapter" data-level="8.2.4" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-hatmathbfe"><i class="fa fa-check"></i><b>8.2.4</b> Variance of <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#cross-covariances"><i class="fa fa-check"></i><b>8.3</b> Cross-Covariances</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#cross-covaraince-of-haty-and-hate"><i class="fa fa-check"></i><b>8.3.1</b> Cross-covaraince of <span class="math inline">\(\hat{y}\)</span> and <span class="math inline">\(\hat{e}\)</span></a></li>
+<li class="chapter" data-level="8.3.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#cross-covaraince-of-haty-and-hatboldsymbolbeta"><i class="fa fa-check"></i><b>8.3.2</b> Cross-covaraince of <span class="math inline">\(\hat{y}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#gauss-markov-theorem"><i class="fa fa-check"></i><b>8.4</b> Gauss-Markov Theorem</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#assumptions"><i class="fa fa-check"></i><b>8.4.1</b> Assumptions</a></li>
+<li class="chapter" data-level="8.4.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#statement"><i class="fa fa-check"></i><b>8.4.2</b> Statement</a></li>
+<li class="chapter" data-level="8.4.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#proof"><i class="fa fa-check"></i><b>8.4.3</b> Proof</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#estimate-of-sigma2"><i class="fa fa-check"></i><b>8.5</b> Estimate of <span class="math inline">\(\sigma^2\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="normality-assumption.html"><a href="normality-assumption.html"><i class="fa fa-check"></i><b>9</b> Normality Assumption</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="normality-assumption.html"><a href="normality-assumption.html#introduction-3"><i class="fa fa-check"></i><b>9.1</b> Introduction</a></li>
+<li class="chapter" data-level="9.2" data-path="normality-assumption.html"><a href="normality-assumption.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>9.2</b> Maximum Likelihood Estimation</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="normality-assumption.html"><a href="normality-assumption.html#decomposition-of-the-quadratic-form"><i class="fa fa-check"></i><b>9.2.1</b> Decomposition of the Quadratic Form</a></li>
+<li class="chapter" data-level="9.2.2" data-path="normality-assumption.html"><a href="normality-assumption.html#estimation-of-sigma2"><i class="fa fa-check"></i><b>9.2.2</b> Estimation of <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="9.2.3" data-path="normality-assumption.html"><a href="normality-assumption.html#remarks-on-bias-and-practical-use"><i class="fa fa-check"></i><b>9.2.3</b> Remarks on Bias and Practical Use</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-the-estimates"><i class="fa fa-check"></i><b>9.3</b> Distribution of the Estimates</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe"><i class="fa fa-check"></i><b>9.3.1</b> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span>, and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+<li class="chapter" data-level="9.3.2" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatsigma2"><i class="fa fa-check"></i><b>9.3.2</b> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a></li>
+<li class="chapter" data-level="9.3.3" data-path="normality-assumption.html"><a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy"><i class="fa fa-check"></i><b>9.3.3</b> Independence of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="normality-assumption.html"><a href="normality-assumption.html#interval-estimation-1"><i class="fa fa-check"></i><b>9.4</b> Interval Estimation</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="normality-assumption.html"><a href="normality-assumption.html#quantile-notation"><i class="fa fa-check"></i><b>9.4.1</b> Quantile notation</a></li>
+<li class="chapter" data-level="9.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-coefficients"><i class="fa fa-check"></i><b>9.4.2</b> Confidence Intervals for the Coefficients</a></li>
+<li class="chapter" data-level="9.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>9.4.3</b> Confidence Intervals for the Expected Mean of a New Observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
+<li class="chapter" data-level="9.4.4" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>9.4.4</b> Confidence Intervals for Linear Combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="normality-assumption.html"><a href="normality-assumption.html#hypothesis-testing-1"><i class="fa fa-check"></i><b>9.5</b> Hypothesis Testing</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-for-the-overall-regression"><i class="fa fa-check"></i><b>9.5.1</b> Testing for the Overall Regression</a></li>
+<li class="chapter" data-level="9.5.2" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-if-one-variable-is-not-relevant"><i class="fa fa-check"></i><b>9.5.2</b> Testing if one variable is not relevant</a></li>
+<li class="chapter" data-level="9.5.3" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-if-a-subgroup-of-the-variables-is-relevant"><i class="fa fa-check"></i><b>9.5.3</b> Testing if a Subgroup of the Variables is Relevant</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="normality-assumption.html"><a href="normality-assumption.html#power-analysis-1"><i class="fa fa-check"></i><b>9.6</b> Power Analysis</a>
+<ul>
+<li class="chapter" data-level="9.6.1" data-path="normality-assumption.html"><a href="normality-assumption.html#power-for-testing-a-single-coefficient"><i class="fa fa-check"></i><b>9.6.1</b> Power for Testing a Single Coefficient</a></li>
+<li class="chapter" data-level="9.6.2" data-path="normality-assumption.html"><a href="normality-assumption.html#power-for-testing-multiple-coefficients-partial-f-tests"><i class="fa fa-check"></i><b>9.6.2</b> Power for Testing Multiple Coefficients (Partial F-Tests)</a></li>
+<li class="chapter" data-level="9.6.3" data-path="normality-assumption.html"><a href="normality-assumption.html#the-role-of-the-design-matrix"><i class="fa fa-check"></i><b>9.6.3</b> The Role of the Design Matrix</a></li>
+<li class="chapter" data-level="9.6.4" data-path="normality-assumption.html"><a href="normality-assumption.html#practical-applications"><i class="fa fa-check"></i><b>9.6.4</b> Practical Applications</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="applications-4.html"><a href="applications-4.html"><i class="fa fa-check"></i><b>10</b> Applications</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="applications-4.html"><a href="applications-4.html#anova"><i class="fa fa-check"></i><b>10.1</b> ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="applications-4.html"><a href="applications-4.html#one-way-anova-a-single-covariate-differences-in-means"><i class="fa fa-check"></i><b>10.1.1</b> One-way ANOVA: a single covariate (differences in means)</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="applications-4.html"><a href="applications-4.html#ancova"><i class="fa fa-check"></i><b>10.2</b> ANCOVA</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="applications-4.html"><a href="applications-4.html#how-controls-act-as-partialling-out"><i class="fa fa-check"></i><b>10.2.1</b> How controls act as “partialling out”</a></li>
+<li class="chapter" data-level="10.2.2" data-path="applications-4.html"><a href="applications-4.html#partial-f-test-in-ancova"><i class="fa fa-check"></i><b>10.2.2</b> Partial F-test in ANCOVA</a></li>
+<li class="chapter" data-level="10.2.3" data-path="applications-4.html"><a href="applications-4.html#r-example-ancova-with-mtcars"><i class="fa fa-check"></i><b>10.2.3</b> R example — ANCOVA with <code>mtcars</code></a></li>
+<li class="chapter" data-level="10.2.4" data-path="applications-4.html"><a href="applications-4.html#why-controlling-improves-the-analysis"><i class="fa fa-check"></i><b>10.2.4</b> Why controlling improves the analysis?</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="applications-4.html"><a href="applications-4.html#effect-of-randomization-in-the-covariate-of-interest"><i class="fa fa-check"></i><b>10.3</b> Effect of randomization in the covariate of interest</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="applications-4.html"><a href="applications-4.html#key-consequences-of-randomization"><i class="fa fa-check"></i><b>10.3.1</b> Key consequences of randomization</a></li>
+<li class="chapter" data-level="10.3.2" data-path="applications-4.html"><a href="applications-4.html#randomized-vs-observational-assignments"><i class="fa fa-check"></i><b>10.3.2</b> Randomized vs observational assignments</a></li>
+<li class="chapter" data-level="10.3.3" data-path="applications-4.html"><a href="applications-4.html#simulation-example-randomized-vs-non-randomized-brief"><i class="fa fa-check"></i><b>10.3.3</b> Simulation example: randomized vs non-randomized (brief)</a></li>
+<li class="chapter" data-level="10.3.4" data-path="applications-4.html"><a href="applications-4.html#practical-guidance-and-summary"><i class="fa fa-check"></i><b>10.3.4</b> Practical guidance and summary</a></li>
+<li class="chapter" data-level="10.3.5" data-path="applications-4.html"><a href="applications-4.html#anova-sums-of-squares-as-projection-matrix-decomposition"><i class="fa fa-check"></i><b>10.3.5</b> ANOVA sums-of-squares as projection (matrix) decomposition</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="applications-4.html"><a href="applications-4.html#variance-decomposition"><i class="fa fa-check"></i><b>10.4</b> Variance decomposition</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="applications-4.html"><a href="applications-4.html#notation-common-to-both-derivations"><i class="fa fa-check"></i><b>10.4.1</b> Notation (common to both derivations)</a></li>
+<li class="chapter" data-level="10.4.2" data-path="applications-4.html"><a href="applications-4.html#scalar-elementwise-derivation"><i class="fa fa-check"></i><b>10.4.2</b> 1 — Scalar (elementwise) derivation</a></li>
+<li class="chapter" data-level="10.4.3" data-path="applications-4.html"><a href="applications-4.html#matrix-projection-derivation"><i class="fa fa-check"></i><b>10.4.3</b> 2 — Matrix / projection derivation</a></li>
+<li class="chapter" data-level="10.4.4" data-path="applications-4.html"><a href="applications-4.html#concluding-remarks"><i class="fa fa-check"></i><b>10.4.4</b> Concluding remarks</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="normality-assumption" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">9</span> Normality Assumption<a href="normality-assumption.html#normality-assumption" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-3" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Introduction<a href="normality-assumption.html#introduction-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Up to this point, we have treated the linear regression model primarily as an <strong>optimization problem</strong>, where the goal was to find parameter estimates that minimize the sum of squared errors. By making only mild assumptions about the error term—such as a zero mean and constant variance—we were able to establish key results like the <strong>Gauss–Markov theorem</strong>, which guarantees that the Ordinary Least Squares (OLS) estimator is the <strong>Best Linear Unbiased Estimator (BLUE)</strong> under those conditions.</p>
+<p>We now take a further step by introducing a <strong>distributional assumption</strong> on the error term. Specifically, we assume that the errors follow a <strong>Normal distribution</strong>. This assumption is much stronger than those introduced before, but it provides powerful analytical advantages. In particular, it allows us to:</p>
+<ul>
+<li>Derive the <strong>sampling distributions</strong> of the estimators,</li>
+<li>Conduct <strong>statistical inference</strong> (e.g., confidence intervals and hypothesis tests),</li>
+<li>Formulate and maximize the <strong>likelihood function</strong>, leading to <strong>Maximum Likelihood Estimates (MLE)</strong> of the parameters.</li>
+</ul>
+<p>Formally, we assume:</p>
+<p><span class="math display">\[
+\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})
+\]</span></p>
+<p>The Normal distribution is completely characterized by its mean and variance. Therefore, once we know the expected value and variance of an estimator, assuming normality allows us to fully determine its distribution. Since in previous chapters we have already computed the mean and variance of the OLS estimators, the normality assumption now enables us to describe their entire probabilistic behavior.</p>
+<p>Furthermore, the assumption of normality allows us to derive the <strong>likelihood function</strong> of the observed data, which serves as the foundation for <strong>Maximum Likelihood Estimation</strong>. This framework not only provides an alternative route to parameter estimation but also forms the basis for many modern extensions of regression analysis, including Bayesian regression and generalized linear models.</p>
+<hr />
+</div>
+<div id="maximum-likelihood-estimation" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Maximum Likelihood Estimation<a href="normality-assumption.html#maximum-likelihood-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To obtain the maximum likelihood estimates of <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma^2\)</span>, we first need the distribution of <span class="math inline">\(\mathbf{y}\)</span>. From the regression model</p>
+<p><span class="math display">\[
+\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{e},
+\]</span></p>
+<p>and the assumption <span class="math inline">\(\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})\)</span>, we see that <span class="math inline">\(\mathbf{y}\)</span> is simply a <strong>linear transformation</strong> of a multivariate normal random vector. Therefore, <span class="math inline">\(\mathbf{y}\)</span> is also normally distributed, with mean and variance given by:</p>
+<p><span class="math display">\[
+\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}).
+\]</span></p>
+<p>Consequently, the likelihood function of <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\sigma^2\)</span>, given <span class="math inline">\(\mathbf{y}\)</span>, is:</p>
+<p><span class="math display">\[
+\mathcal{L}(\boldsymbol{\beta}, \sigma^2 \mid \mathbf{y}) = N(\mathbf{y} \mid \mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}),
+\]</span></p>
+<p>which, when written explicitly, becomes:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathcal{L}(\boldsymbol{\beta}, \sigma^2 | \mathbf{y})
+    &amp;= (2 \pi)^{-\frac{n}{2}} |\sigma^2 \mathbf{I}|^{-\frac{1}{2}} \exp\left\{ -\frac{1}{2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\sigma^2 \mathbf{I})^{-1}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}    \\
+    &amp;= (2 \pi)^{-\frac{n}{2}} (\sigma^2)^{-\frac{n}{2}} |\mathbf{I}| \exp\left\{ -\frac{1}{2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;\frac{\mathbf{I}}{\sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\} \\
+    &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                   \\
+    &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                   \\
+    &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                   \\
+\end{align*}\]</span></p>
+<hr />
+<div id="decomposition-of-the-quadratic-form" class="section level3 hasAnchor" number="9.2.1">
+<h3><span class="header-section-number">9.2.1</span> Decomposition of the Quadratic Form<a href="normality-assumption.html#decomposition-of-the-quadratic-form" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Recall that in the previous chapter we showed the following decomposition:</p>
+<p><span class="math display">\[
+(\mathbf{y} - \mathbb{E}[\mathbf{y}])&#39;(\mathbf{y} - \mathbb{E}[\mathbf{y}])
+= \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}]),
+\]</span></p>
+<p>which implies that</p>
+<p><span class="math display">\[
+(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})
+= \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})&#39; \mathbf{X}&#39;\mathbf{X} (\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}).
+\]</span></p>
+<p>Substituting this into the likelihood function gives:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathcal{L}(\boldsymbol{\beta}, \sigma^2 | \mathbf{y})
+    &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) \right\}                                                      \\
+    &amp;= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2 \sigma^2} -\frac{(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})&#39;\mathbf{X}\mathbf{X}( \hat{\boldsymbol{\beta}} - \boldsymbol{\beta})}{2 \sigma^2} \right\} \\
+\end{align*}\]</span></p>
+<p>This expression is convenient for optimization. Notice that, for any fixed <span class="math inline">\(\sigma^2\)</span>, the likelihood is maximized with respect to <span class="math inline">\(\boldsymbol{\beta}\)</span> when <span class="math inline">\(\boldsymbol{\beta} = \hat{\boldsymbol{\beta}}\)</span>, since that value nullifies the second exponential term. Therefore, the MLE for <span class="math inline">\(\boldsymbol{\beta}\)</span> coincides with the OLS estimator.</p>
+<hr />
+</div>
+<div id="estimation-of-sigma2" class="section level3 hasAnchor" number="9.2.2">
+<h3><span class="header-section-number">9.2.2</span> Estimation of <span class="math inline">\(\sigma^2\)</span><a href="normality-assumption.html#estimation-of-sigma2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Once we have <span class="math inline">\(\boldsymbol{\beta} = \hat{\boldsymbol{\beta}}\)</span>, the likelihood simplifies to a function of <span class="math inline">\(\sigma^2\)</span> only:</p>
+<p><span class="math display">\[ \mathcal{L}(\sigma^2 | \mathbf{y}, \boldsymbol{\beta}= \hat{\boldsymbol{\beta}}) = (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2\sigma^2} \right\}  \]</span></p>
+<p>Taking logs gives the <strong>log-likelihood function</strong>:</p>
+<p><span class="math display">\[
+\ell(\sigma^2 \mid \mathbf{y}, \boldsymbol{\beta} = \hat{\boldsymbol{\beta}})
+= -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{2\sigma^2}.
+\]</span></p>
+<p>Differentiating with respect to <span class="math inline">\(\sigma^2\)</span> and setting the derivative equal to zero yields:</p>
+<p><span class="math display">\[
+\tilde{\sigma}^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n}.
+\]</span></p>
+<p>A second derivative check confirms that this value indeed maximizes the log-likelihood. Thus, <span class="math inline">\(\tilde{\sigma}^2\)</span> is the <strong>maximum likelihood estimator</strong> of <span class="math inline">\(\sigma^2\)</span>.</p>
+<hr />
+</div>
+<div id="remarks-on-bias-and-practical-use" class="section level3 hasAnchor" number="9.2.3">
+<h3><span class="header-section-number">9.2.3</span> Remarks on Bias and Practical Use<a href="normality-assumption.html#remarks-on-bias-and-practical-use" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>It is important to note that <span class="math inline">\(\tilde{\sigma}^2\)</span> is <strong>biased</strong> as an estimator of <span class="math inline">\(\sigma^2\)</span>. In contrast, the usual OLS variance estimator</p>
+<p><span class="math display">\[
+\hat{\sigma}^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n - p}
+\]</span></p>
+<p>is unbiased under the Gauss–Markov assumptions. Both estimators are useful: <span class="math inline">\(\tilde{\sigma}^2\)</span> arises naturally in likelihood-based methods and is convenient for theoretical developments, while <span class="math inline">\(\hat{\sigma}^2\)</span> is preferred for unbiased estimation and inferential procedures.</p>
+<p>In the following sections, we will build on these results to derive the exact <strong>sampling distributions</strong> of the OLS estimators and the basis for hypothesis testing within the classical linear model framework.</p>
+<hr />
+</div>
+</div>
+<div id="distribution-of-the-estimates" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Distribution of the Estimates<a href="normality-assumption.html#distribution-of-the-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the previous chapters, we derived the mean and variance of the least squares estimators under the assumption of normally distributed errors. We now go further and obtain their <strong>sampling distributions</strong>, which fully characterize the stochastic behavior of these estimators.
+This is possible because, under normality, any linear combination of normally distributed random variables is itself normal. Since most of our estimators are linear functions of the observed data, their distributions are readily available.</p>
+<div id="distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe" class="section level3 hasAnchor" number="9.3.1">
+<h3><span class="header-section-number">9.3.1</span> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span>, and <span class="math inline">\(\hat{\mathbf{e}}\)</span><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The least squares estimators <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span>, and <span class="math inline">\(\hat{\mathbf{e}}\)</span> are all linear transformations of the response vector <span class="math inline">\(\mathbf{y}\)</span>. Therefore, they are normally distributed, and the corresponding mean and variance expressions derived earlier allow us to determine their full distributions. Specifically, we have:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}, \quad \hat{\mathbf{y}}, \quad \hat{\mathbf{e}}
+\]</span></p>
+<p>and their respective distributions are given by:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2 (\mathbf{X}&#39;\mathbf{X})^{-1})
+\]</span></p>
+<p><span class="math display">\[
+\hat{\mathbf{y}} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{H})
+\]</span></p>
+<p><span class="math display">\[
+\hat{\mathbf{e}} \sim N(\mathbf{0}, \sigma^2 (\mathbf{I}- \mathbf{H}))
+\]</span></p>
+<p>These results reveal that both fitted values and residuals are multivariate normal, each with a distinct covariance structure determined by the projection matrices <span class="math inline">\(\mathbf{H}\)</span> and <span class="math inline">\(\mathbf{I}- \mathbf{H}\)</span>. The matrix <span class="math inline">\(\mathbf{H}\)</span> projects <span class="math inline">\(\mathbf{y}\)</span> onto the column space of <span class="math inline">\(\mathbf{X}\)</span>, while <span class="math inline">\((\mathbf{I}- \mathbf{H})\)</span> projects it onto its orthogonal complement.</p>
+<p>Note that the estimator of the error variance, <span class="math inline">\(\hat{\sigma}^2\)</span>, is <strong>not</strong> a linear function of <span class="math inline">\(\mathbf{y}\)</span>, so its distribution must be derived differently.</p>
+<hr />
+</div>
+<div id="distribution-of-hatsigma2" class="section level3 hasAnchor" number="9.3.2">
+<h3><span class="header-section-number">9.3.2</span> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span><a href="normality-assumption.html#distribution-of-hatsigma2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The estimator <span class="math inline">\(\hat{\sigma}^2\)</span> measures the variability of the residuals around the fitted model. Its distribution is central to many inferential procedures, such as constructing confidence intervals and hypothesis tests for the regression coefficients.
+However, because <span class="math inline">\(\hat{\sigma}^2\)</span> involves the quadratic form <span class="math inline">\(\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}\)</span>, its derivation is more involved. We will obtain its distribution in three steps:</p>
+<ol style="list-style-type: decimal">
+<li>Express <span class="math inline">\(\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}\)</span> as a <strong>quadratic form</strong> of a standard normal vector with an idempotent matrix.</li>
+<li>Show that such a quadratic form follows a <strong>chi-squared distribution</strong> with degrees of freedom equal to the rank of the idempotent matrix.</li>
+<li>Relate this result to the distribution of <span class="math inline">\(\hat{\sigma}^2\)</span> itself.</li>
+</ol>
+<hr />
+<div id="step-1-expressing-frachatmathbfehatmathbfesigma2-as-a-quadratic-form" class="section level4 hasAnchor" number="9.3.2.1">
+<h4><span class="header-section-number">9.3.2.1</span> Step 1: Expressing <span class="math inline">\(\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}\)</span> as a Quadratic Form<a href="normality-assumption.html#step-1-expressing-frachatmathbfehatmathbfesigma2-as-a-quadratic-form" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We begin by rewriting the residual vector in terms of the error vector <span class="math inline">\(\mathbf{e}\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{I}- \mathbf{H}) \mathbf{y}
+    &amp;= (\mathbf{I}- \mathbf{H}) (\mathbf{X}\boldsymbol{\beta}+ \mathbf{e})                    &amp;&amp; \text{since $\mathbf{y}= \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}$}  \\
+    &amp;= \mathbf{I}\mathbf{X}\boldsymbol{\beta}- \mathbf{H}\mathbf{X}\boldsymbol{\beta}+ \mathbf{I}\mathbf{e}- \mathbf{H}\mathbf{e}\\
+    &amp;= \mathbf{X}\boldsymbol{\beta}- \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}- \mathbf{H}\mathbf{e}&amp;&amp; \text{since $\mathbf{H}\mathbf{X}= \mathbf{X}$}         \\
+    &amp;= \mathbf{e}- \mathbf{H}\mathbf{e}\\
+    &amp;= (\mathbf{I}- \mathbf{H}) \mathbf{e}\\
+\end{align*}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}
+    &amp;= \mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) (\mathbf{I}- \mathbf{H}) \mathbf{y}&amp;&amp; \text{since $(\mathbf{I}- \mathbf{H})$ is idempotent}         \\
+    &amp;= \mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) (\mathbf{I}- \mathbf{H}) \mathbf{e}&amp;&amp; \text{since $(\mathbf{I}- \mathbf{H}) \mathbf{y}= (\mathbf{I}- \mathbf{H}) \mathbf{e}$} \\
+    &amp;= \mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{e}&amp;&amp; \text{since $(\mathbf{I}- \mathbf{H})$ is idempotent}         \\
+\end{align*}\]</span></p>
+<p>Thus,</p>
+<p><span class="math display">\[\begin{align*}
+  \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}
+    &amp;= \frac{\mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}}{\sigma^2}  &amp;&amp; \text{since $\hat{\mathbf{e}}&#39;\hat{\mathbf{e}} = \mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}$}  \\
+    &amp;= \frac{\mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{e}}{\sigma^2}  &amp;&amp; \text{since $\mathbf{e}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{e}= \mathbf{y}&#39; (\mathbf{I}- \mathbf{H}) \mathbf{y}$} \\
+    &amp;= \frac{\mathbf{e}}{\sqrt{\sigma^2}}&#39; (\mathbf{I}- \mathbf{H}) \frac{\mathbf{e}}{\sqrt{\sigma^2}}                                 \\
+\end{align*}\]</span></p>
+<p>Finally, because <span class="math inline">\(\frac{\mathbf{e}}{\sqrt{\sigma^2}}\)</span> is a scaled version of the normal vector <span class="math inline">\(\mathbf{e}\)</span>, it remains normally distributed with zero mean and identity covariance:</p>
+<p><span class="math display">\[
+\mathbb{E}\left[\frac{\mathbf{e}}{\sqrt{\sigma^2}}\right] = \mathbf{0}, \qquad
+\mathbb{V}\left[\frac{\mathbf{e}}{\sqrt{\sigma^2}}\right] = \mathbf{I}
+\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\frac{\mathbf{e}}{\sqrt{\sigma^2}} \sim N(\mathbf{0}, \mathbf{I})
+\]</span></p>
+<p>This vector is known as a <strong>standard multivariate normal</strong>, completing Step 1.</p>
+<hr />
+</div>
+<div id="step-2-the-chi-squared-distribution-of-a-quadratic-form" class="section level4 hasAnchor" number="9.3.2.2">
+<h4><span class="header-section-number">9.3.2.2</span> Step 2: The Chi-Squared Distribution of a Quadratic Form<a href="normality-assumption.html#step-2-the-chi-squared-distribution-of-a-quadratic-form" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(\mathbf{z}\in \mathbb{R}^n\)</span> be a standard multivariate normal vector and <span class="math inline">\(\mathbf{M}\in \mathbb{R}^{n \times n}\)</span> an idempotent matrix of rank <span class="math inline">\(m\)</span>. We now show that:</p>
+<p><span class="math display">\[
+\mathbf{z}&#39; \mathbf{M}\mathbf{z}\sim \chi^2_m
+\]</span></p>
+<p>To prove this, we use the spectral decomposition of <span class="math inline">\(\mathbf{M}\)</span>:</p>
+<p><span class="math display">\[
+\mathbf{M}= \mathbf{V}\boldsymbol{\Sigma}\mathbf{V}&#39;
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{V}\)</span> is an orthonormal matrix and <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is diagonal. Since <span class="math inline">\(\mathbf{M}\)</span> is idempotent, the diagonal of <span class="math inline">\(\boldsymbol{\Sigma}\)</span> consists of <span class="math inline">\(m\)</span> ones and <span class="math inline">\(n-m\)</span> zeros. Without loss of generality, we
+can assume that the first <span class="math inline">\(m\)</span> entries of the diagonal are equal to <span class="math inline">\(1\)</span> and the
+next entries equal to <span class="math inline">\(0\)</span>.</p>
+<p>Then, first note that <span class="math inline">\(\mathbf{V}&#39; \mathbf{z}\)</span> is a linear combination of a normal distribution.
+We will show, that <span class="math inline">\(\mathbf{V}&#39; \mathbf{z}\in \mathbb{R}^{n}\)</span> is also standard normal.</p>
+<p>Note that:</p>
+<p><span class="math display">\[ \mathbb{E}[\mathbf{V}&#39; \mathbf{z}] =  \mathbf{V}&#39; \mathbb{E}[\mathbf{z}] = \mathbf{V}&#39; \mathbf{0}= \mathbf{0}\]</span>
+<span class="math display">\[ \mathbb{V}[\mathbf{V}&#39; \mathbf{z}] =  \mathbf{V}&#39; \mathbb{V}[\mathbf{z}] \mathbf{V}= \mathbf{V}&#39; \mathbf{I}\mathbf{V}= \mathbf{V}&#39; \mathbf{V}= \mathbf{I}\]</span></p>
+<p>Then <span class="math inline">\(\mathbf{V}&#39; \mathbf{z}\)</span> is also standard normal. Let’s name <span class="math inline">\(\mathbf{w}= \mathbf{V}&#39; \mathbf{z}\)</span>, then each of
+the components <span class="math inline">\(w_1,\ldots,w_n\)</span> of <span class="math inline">\(\mathbf{w}\)</span> are independent univariate standard normally
+distributed.</p>
+<p>Then</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{z}&#39; \mathbf{M}\mathbf{z}
+    &amp;= \mathbf{z}&#39; (\mathbf{V}\boldsymbol{\Sigma}\mathbf{V}&#39;) \mathbf{z}&amp;&amp; \text{using the spectral decomposition of $\mathbf{M}$}         \\
+    &amp;= (\mathbf{V}&#39; \mathbf{z})&#39; \boldsymbol{\Sigma}(\mathbf{V}&#39; \mathbf{z})                                                                \\
+    &amp;= \mathbf{w}&#39; \boldsymbol{\Sigma}\mathbf{w}&amp;&amp; \text{since $\mathbf{w}= \mathbf{V}&#39; \mathbf{z}$}                            \\
+    &amp;= \sum_{i=1}^n [\boldsymbol{\Sigma}]_{ii} w_i^2                                                             \\
+    &amp;= \sum_{i=1}^{m} w_i^2           &amp;&amp; \text{since only the first $m$ entries are equal to $1$} \\
+    &amp;\sim \chi^2_m                    &amp;&amp; \text{by definition of the $\chi^2$ distribution}        \\
+\end{align*}\]</span></p>
+<p>This fundamental result connects linear algebra and probability theory and is essential to statistical inference in linear regression.</p>
+<hr />
+</div>
+<div id="step-3-distribution-of-hatsigma2" class="section level4 hasAnchor" number="9.3.2.3">
+<h4><span class="header-section-number">9.3.2.3</span> Step 3: Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span><a href="normality-assumption.html#step-3-distribution-of-hatsigma2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Combining the results from Steps 1 and 2, we conclude that:</p>
+<p><span class="math display">\[
+\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p}
+\]</span></p>
+<p>since the idempotent matrix <span class="math inline">\((\mathbf{I}- \mathbf{H})\)</span> has rank <span class="math inline">\(n-p\)</span>. Therefore:</p>
+<p><span class="math display">\[
+\hat{\sigma}^2 = \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n-p}
+= \frac{\sigma^2}{n-p}\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}
+\sim \frac{\sigma^2}{n-p}\chi^2_{n-p}
+\]</span></p>
+<p>This result shows that the estimator of <span class="math inline">\(\sigma^2\)</span> is scaled chi-squared distributed, a fact that will be crucial when constructing confidence intervals and hypothesis tests.</p>
+<hr />
+</div>
+</div>
+<div id="independence-of-hatmathbfe-and-hatmathbfy" class="section level3 hasAnchor" number="9.3.3">
+<h3><span class="header-section-number">9.3.3</span> Independence of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span><a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Previously, we showed that <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> are uncorrelated:</p>
+<p><span class="math display">\[
+\mathbb{C}[\hat{\mathbf{e}}, \hat{\mathbf{y}}] = \mathbf{0}
+\]</span></p>
+<p>However, uncorrelatedness does not necessarily imply independence. In general, two random variables can have zero covariance and still exhibit nonlinear dependence.</p>
+<p>Under the <strong>normality assumption</strong>, this distinction disappears: if two normally distributed vectors are uncorrelated, they are also independent. Since both <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> are linear combinations of the normal vector <span class="math inline">\(\mathbf{y}\)</span>, they are jointly normal. Therefore, the absence of correlation between them implies that they are independent:</p>
+<ul>
+<li><span class="math inline">\(\hat{\mathbf{e}}\)</span> depends only on <span class="math inline">\((\mathbf{I}- \mathbf{H})\mathbf{y}\)</span>, the projection onto the residual space.</li>
+<li><span class="math inline">\(\hat{\mathbf{y}}\)</span> depends only on <span class="math inline">\(\mathbf{H}\mathbf{y}\)</span>, the projection onto the column space of <span class="math inline">\(\mathbf{X}\)</span>.</li>
+</ul>
+<p>These two subspaces are orthogonal, and under normality, orthogonality implies statistical independence. Consequently, any statistic that is a function of <span class="math inline">\(\hat{\mathbf{e}}\)</span> (such as <span class="math inline">\(\hat{\sigma}^2\)</span>) is independent of any statistic that is a function of <span class="math inline">\(\hat{\mathbf{y}}\)</span> (such as <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>).</p>
+<p>This independence property plays a pivotal role in classical regression inference, as it underlies the derivation of <span class="math inline">\(t\)</span> and <span class="math inline">\(F\)</span> distributions for hypothesis testing.</p>
+<hr />
+</div>
+</div>
+<div id="interval-estimation-1" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Interval Estimation<a href="normality-assumption.html#interval-estimation-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>So far, we have derived <strong>point estimates</strong> for several parameters of interest—namely the regression coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span>, the errors <span class="math inline">\(\mathbf{e}\)</span>, and the residual variance <span class="math inline">\(\hat{\sigma}^2\)</span>.
+While point estimates provide single “best guesses” of the true parameters, they do not convey how much uncertainty is associated with these estimates.</p>
+<p>However, since we have already obtained the <strong>sampling distributions</strong> of these estimators, we can now use this probabilistic information to construct <strong>interval estimators</strong>, which express a range of plausible values for the unknown parameters, given the observed data.</p>
+<hr />
+<div id="quantile-notation" class="section level3 hasAnchor" number="9.4.1">
+<h3><span class="header-section-number">9.4.1</span> Quantile notation<a href="normality-assumption.html#quantile-notation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="definition">
+<p><span id="def:quantiles" class="definition"><strong>Definition 9.1  (Notation: Specific Distribution Quantiles) </strong></span>The <span class="math inline">\(\alpha\)</span> quantiles for the standard normal, <span class="math inline">\(t\)</span>, <span class="math inline">\(\chi^2\)</span> and <span class="math inline">\(F\)</span> distribution are denoted by:
+<span class="math display">\[ z_{\alpha}        \quad \ni \mathbb{P}(Z \geq z_{\alpha})        = \alpha \land Z\sim N(0,1) \]</span>
+<span class="math display">\[ t_{k,\alpha}      \quad \ni \mathbb{P}(T \geq t_{k,\alpha})      = \alpha \land T\sim  t_{k}\]</span>
+<span class="math display">\[ chi^2_{k,\alpha}  \quad \ni \mathbb{P}(W \geq chi^2_{k,\alpha})  = \alpha \land W\sim \chi^2_{k} \]</span>
+<span class="math display">\[ f_{k_1,k_2\alpha} \quad \ni \mathbb{P}(F \geq f_{k_1,k_2\alpha}) = \alpha \land F\sim F_{k_1,k_2} \]</span></p>
+</div>
+<p>we will use this quantiles for for confidence interval building and hypothesis testing. It is important to not that this are known values depending only on the parameters of the distribution to which they relate to and the tail probability <span class="math inline">\(\alpha\)</span>. In the next sections, the tail probability will be related to the confidence and significance levels.</p>
+<hr />
+</div>
+<div id="confidence-intervals-for-the-coefficients" class="section level3 hasAnchor" number="9.4.2">
+<h3><span class="header-section-number">9.4.2</span> Confidence Intervals for the Coefficients<a href="normality-assumption.html#confidence-intervals-for-the-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Recall that under the classical linear model assumptions, the ordinary least squares estimator satisfies</p>
+<p><span class="math display">\[ \hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, \sigma^2 (\mathbf{X}&#39;\mathbf{X})^{-1}) \]</span></p>
+<p>This result implies that each individual coefficient estimator <span class="math inline">\(\hat{\beta}_i\)</span> follows a univariate normal distribution:</p>
+<p><span class="math display">\[ \hat{\beta}_i \sim N(\beta_i, \sigma^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}])_{ii}) \]</span></p>
+<p>The quantity</p>
+<p><span class="math display">\[ \sigma^2_{\beta_i} =  \sigma^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii} \]</span></p>
+<p>represents the <strong>variance</strong> of <span class="math inline">\(\hat{\beta}_i\)</span>, which depends both on the noise variance <span class="math inline">\(\sigma^2\)</span> and on the geometry of the design matrix <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<p>Thus, we can rewrite the distribution as</p>
+<p><span class="math display">\[ \hat{\beta}_i \sim N \left(\beta_i, \sigma^2_{\beta_i} \right) \]</span></p>
+<p>Since <span class="math inline">\(\sigma^2\)</span> is unknown, this distribution cannot be used directly for inference.
+To overcome this, we first standardize the estimator by subtracting its mean and dividing by its true standard deviation:</p>
+<p><span class="math display">\[ t^0_{\beta_i}=\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} \]</span></p>
+<p>This standardized statistic follows the <strong>standard normal distribution</strong>, as confirmed by the derivations of its mean and variance. However, it still involves the unknown <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>Therefore, we replace <span class="math inline">\(\sigma^2\)</span> with its unbiased estimator <span class="math inline">\(\hat{\sigma}^2\)</span> to form</p>
+<p><span class="math display">\[ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} \]</span></p>
+<p>where <span class="math inline">\(\hat{\sigma}^2_{\beta_i} = \hat{\sigma}^2 [(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii}\)</span>, so <span class="math inline">\(t_{\beta_i}\)</span>
+doesn’t depend on <span class="math inline">\(\sigma^2\)</span>. Let’s compute the distribution of this quantity,
+first lets re-write the statistic as follows:</p>
+<p><span class="math display">\[ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}}
+  = \frac{\sqrt{\frac{1}{\sigma^2}}}{\sqrt{\frac{1}{\sigma^2}}}\frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2[(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii}}}   
+  = \frac{\frac{\left(\hat{\beta}_i - \beta_i\right)}{\sqrt{\sigma^2[(\mathbf{X}&#39;\mathbf{X})^{-1}]_{ii}}}}{ \sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}}   
+  = \frac{\frac{\left(\hat{\beta}_i - \beta_i\right)}{\sqrt{\sigma^2_{\beta_i}}}}{            \sqrt{\frac{(n-p)\frac{\hat{\sigma}^2}{\sigma^2}}{n-p}}}
+  = \frac{t^0_{\beta_i}}{ \sqrt{\frac{\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}}{n-p}}}\]</span></p>
+<p>Now, we know <span class="math inline">\(t^0_{\beta_i}\)</span> is standard normal distributed, and from
+<a href="#distribution-of-hatsigma2-step-3">the distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a> we
+have that:</p>
+<p><span class="math display">\[ \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p} \]</span>
+and from
+<a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy">the independence of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a>
+we have that any function of both variables is independent, in particular</p>
+<p><span class="math display">\[ t^0_{\beta_i} \quad \text{and} \quad \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \]</span>
+are independent. Therefore the ratio <span class="math inline">\(t_{\beta_i}\)</span> follows a <strong>Student’s <span class="math inline">\(t\)</span> distribution</strong> with <span class="math inline">\(n - p\)</span> degrees of freedom:</p>
+<p><span class="math display">\[ t_{\beta_i} \sim t_{n-p} \]</span></p>
+<p>This fundamental result enables us to construct confidence intervals for each regression coefficient.
+Now, let <span class="math inline">\(t \sim t_m\)</span> a random variable with a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(m\)</span> degrees
+of freedom. Then call:</p>
+<p><span class="math display">\[ t_m\left(a\right) \quad \text{such that} \quad \mathbb{P}\left(t\leq t_m\left(a\right) \right) = a\]</span>
+for any <span class="math inline">\(a\in[0,1]\)</span></p>
+<p>Then, we have that:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbb{P}
+  &amp;\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq t_{\beta_i} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha  
+    &amp;&amp; \text{since the $t$ distribution is symmetric} \\
+  &amp;\implies \mathbb{P}\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha
+    &amp;&amp; \text{since the $t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}}$} \\
+  &amp;\implies \mathbb{P}\left( -t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \hat{\beta}_i - \beta_i \leq t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
+  &amp;\implies \mathbb{P}\left( -t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \beta_i - \hat{\beta}_i \leq t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
+  &amp;\implies \mathbb{P}\left( \hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \beta_i \leq \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
+\end{align*}\]</span></p>
+<p>So</p>
+<p><span class="math display">\[ \left(\hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}}, \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) \]</span></p>
+<p>This <strong>random interval</strong> depends on the sample through <span class="math inline">\(\hat{\beta}_i\)</span> and <span class="math inline">\(\hat{\sigma}^2_{\beta_i}\)</span> and contains the true parameter <span class="math inline">\(\beta_i\)</span> with probability <span class="math inline">\(\alpha\)</span>.
+Once data are observed, the interval becomes fixed, and while it either includes or excludes <span class="math inline">\(\beta_i\)</span>, the confidence level reflects the long-run frequency with which such intervals contain the true value under repeated sampling.</p>
+<hr />
+</div>
+<div id="confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new" class="section level3 hasAnchor" number="9.4.3">
+<h3><span class="header-section-number">9.4.3</span> Confidence Intervals for the Expected Mean of a New Observation <span class="math inline">\(\mathbf{x}_{new}\)</span><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In many applications, the researcher is not only interested in the regression coefficients themselves but also in the <strong>expected value of the response</strong> for a new vector of predictors <span class="math inline">\(\mathbf{x}_{new}\)</span>.</p>
+<p>The expected response is given by</p>
+<p><span class="math display">\[ \mathbb{E}[y_{new}] = \mathbf{x}_{new}&#39; \boldsymbol{\beta}\]</span></p>
+<p>and its natural estimator is</p>
+<p><span class="math display">\[ \mathbf{x}_{new}&#39; \hat{\boldsymbol{\beta}} \]</span></p>
+<p>Since <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is normally distributed, this linear combination is also normal with</p>
+<p><span class="math display">\[ \mathbf{x}_{new}&#39; \hat{\boldsymbol{\beta}} \sim N \left(\mathbf{x}_{new}&#39; \boldsymbol{\beta}, \sigma^2 \mathbf{x}_{new}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new} \right)  \]</span></p>
+<p>Replacing <span class="math inline">\(\sigma^2\)</span> with <span class="math inline">\(\hat{\sigma}^2\)</span> and applying the same reasoning as before, we obtain the statistic</p>
+<p><span class="math display">\[ t_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}} = \frac{\mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - \mathbf{x}_{new}&#39;\boldsymbol{\beta}}{\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}}}=\frac{\frac{\mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - \mathbf{x}_{new}&#39;\boldsymbol{\beta}}{\sqrt{\sigma^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}}}}{\sqrt{\frac{\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}}{n-p}}} \sim \chi^2_{n-p} \]</span>
+where <span class="math inline">\(\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}} = \hat{\sigma}^2 \mathbf{x}_{new}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{x}_{new}\)</span>.
+This quantity is distributed as a <span class="math inline">\(t\)</span> with <span class="math inline">\(n-p\)</span> degrees of freedom since:</p>
+<p><span class="math display">\[\frac{\mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - \mathbf{x}_{new}&#39;\boldsymbol{\beta}}{\sqrt{\sigma^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}}} \sim N(0, 1)\]</span>
+<span class="math display">\[ \frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p}\]</span>
+and this random variables are independent since one is a function of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>
+and the other a function of <span class="math inline">\(\hat{\mathbf{e}}\)</span>.</p>
+<p>Then we can conclude that:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbb{P}
+  &amp;\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq t_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha  \\
+  &amp;\implies \mathbb{P}\left( \mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}} \leq \mathbf{x}_{new}&#39;\boldsymbol{\beta}\leq \mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}} \right) = \alpha \\
+\end{align*}\]</span></p>
+<p>so, the random interval is given by:</p>
+<p><span class="math display">\[ \left( \mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}} , \mathbf{x}_{new}&#39;\hat{\boldsymbol{\beta}} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{x}_{new}&#39;\boldsymbol{\beta}}} \right) \]</span>
+is a random interval that captures <span class="math inline">\(\mathbf{x}_{new}&#39;\boldsymbol{\beta}\)</span> with probability <span class="math inline">\(\alpha\)</span>.</p>
+<p>This interval quantifies uncertainty about the <strong>mean response</strong> at <span class="math inline">\(\mathbf{x}_{new}\)</span>, not about an individual observation, which would require adding the variance of the random error term.</p>
+<hr />
+</div>
+<div id="confidence-intervals-for-linear-combinations-of-boldsymbolbeta" class="section level3 hasAnchor" number="9.4.4">
+<h3><span class="header-section-number">9.4.4</span> Confidence Intervals for Linear Combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A particularly elegant aspect of the linear model is that it allows inference on <strong>any linear combination</strong> of the coefficients.
+Consider a vector <span class="math inline">\(\mathbf{a}\in \mathbb{R}^p\)</span> and the parameter of interest <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}\)</span>.</p>
+<p>This formulation encompasses several important special cases:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{a}= (0, \ldots, 0, 1, 0, \ldots, 0)\)</span> yields <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}= \beta_i\)</span>, the <span class="math inline">\(i\)</span>-th coefficient;</li>
+<li><span class="math inline">\(\mathbf{a}= \mathbf{x}_{new}\)</span> yields <span class="math inline">\(\mathbf{a}&#39; \boldsymbol{\beta}= \mathbf{x}_{new}&#39; \boldsymbol{\beta}\)</span>, the expected mean at a new data point.</li>
+</ul>
+<p>Since <span class="math inline">\(\mathbf{a}&#39; \hat{\boldsymbol{\beta}}\)</span> is a linear combination of normally distributed estimators, it follows that</p>
+<p><span class="math display">\[ \mathbf{a}&#39; \hat{\boldsymbol{\beta}} \sim N(\mathbf{a}&#39; \boldsymbol{\beta}, \sigma^2 \mathbf{a}&#39; (\mathbf{X}&#39;\mathbf{X})^{-1} \mathbf{a}) \]</span></p>
+<p>and replacing <span class="math inline">\(\sigma^2\)</span> by its estimator leads to a <span class="math inline">\(t_{n-p}\)</span> distribution for the corresponding standardized statistic.
+Therefore, the general form of a <span class="math inline">\((1 - \alpha)\)</span> confidence interval for any linear combination is</p>
+<p><span class="math display">\[ \left( \mathbf{a}&#39;\hat{\boldsymbol{\beta}} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}}} , \mathbf{a}&#39;\hat{\boldsymbol{\beta}} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}}} \right) \]</span></p>
+<p>where <span class="math inline">\(\hat{\sigma}^2_{\mathbf{a}&#39;\boldsymbol{\beta}} = \hat{\sigma}^2 \mathbf{a}&#39; (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{a}\)</span>.</p>
+<p>This result unifies the previous confidence intervals into a single, compact framework and highlights the power and flexibility of the linear model for statistical inference.</p>
+<hr />
+</div>
+</div>
+<div id="hypothesis-testing-1" class="section level2 hasAnchor" number="9.5">
+<h2><span class="header-section-number">9.5</span> Hypothesis Testing<a href="normality-assumption.html#hypothesis-testing-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will approach hypothesis testing using an implausibility framework.
+This involves formulating a null hypothesis, <span class="math inline">\(H_0\)</span>, and assuming it to be true.
+Next, we calculate a test statistic that follows a specific distribution under
+the null hypothesis. By comparing the observed value of the statistic to this
+distribution, we assess how plausible it is to observe such a value if <span class="math inline">\(H_0\)</span> is true.</p>
+<div id="testing-for-the-overall-regression" class="section level3 hasAnchor" number="9.5.1">
+<h3><span class="header-section-number">9.5.1</span> Testing for the Overall Regression<a href="normality-assumption.html#testing-for-the-overall-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For this hypothesis, we will use the notation of:</p>
+<p><span class="math display">\[ \mathbf{X}^* = [\mathbf{1}\mathbf{X}] \quad \text{and} \quad \boldsymbol{\beta}^* = [\beta_0, \boldsymbol{\beta}]&#39; \in \mathbb{R}^{p}\]</span>
+that is, the <span class="math inline">\(*\)</span> indicates all the independent variables. With <span class="math inline">\(\mathbf{X}\)</span> of full rank.</p>
+<p>Our first test is to see if the Linear Regression framework is useful at all.
+That is, we want to test <span class="math inline">\(\mathcal{H}_0: \boldsymbol{\beta}= \mathbf{0}\)</span>. Before designing our test
+statistic we will show the following auxiliary results:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(SS_{reg} = \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span>.</li>
+<li><span class="math inline">\(\mathbf{H}\mathbf{H}_0 = \mathbf{H}_0 \mathbf{H}= \mathbf{H}_0\)</span>.</li>
+<li><span class="math inline">\((\mathbf{H}- \mathbf{H}_0)\)</span> is idempotent.</li>
+<li><span class="math inline">\(\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span> and <span class="math inline">\(\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}\)</span> are independent.</li>
+<li>Under the null hypothesis <span class="math inline">\(\mathcal{H}_0: \boldsymbol{\beta}= \mathbf{0}\)</span>, <span class="math inline">\(\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2}\)</span>
+is distributed like a <span class="math inline">\(\chi^2_{p-1}\)</span>.</li>
+</ol>
+<p>For auxiliary result 1, we have that:</p>
+<p><span class="math display">\[\begin{align*}
+SS_{tot}
+  &amp;= SS_{reg} + SS_{res} \\
+  &amp;\implies \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}_0)\mathbf{y}= SS_{reg} + \mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}&amp;&amp; \text{since $SS_{tot} = \mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}$ and $SS_{res} = \mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}$.} \\
+  &amp;\implies SS_{reg} = \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}_0)\mathbf{y}- \mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}&amp;&amp;                                                                                   \\
+  &amp;\implies SS_{reg} = \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}_0 - \mathbf{I}+ \mathbf{H})\mathbf{y}&amp;&amp;                                                                                   \\
+  &amp;\implies SS_{reg} = \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}&amp;&amp;                                                                                   \\
+\end{align*}\]</span></p>
+<p>For auxiliary result 2, we have that:</p>
+<p>Both <span class="math inline">\(\mathbf{H}\)</span> and <span class="math inline">\(\mathbf{H}0\)</span> are symmetric, then <span class="math inline">\(\mathbf{H}\mathbf{H}_0 = \mathbf{H}_0 \mathbf{H}\)</span>, and:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{H}\mathbf{H}_0 = \mathbf{H}\mathbf{1}(\mathbf{1}&#39; \mathbf{1})^{-1} \mathbf{1}&#39; &amp;&amp;                                     \\
+  \mathbf{H}\mathbf{H}_0 = \mathbf{1}(\mathbf{1}&#39; \mathbf{1})^{-1} \mathbf{1}&#39;     &amp;&amp; \text{since $\mathbf{H}\mathbf{1}= \mathbf{1}$.} \\
+  \mathbf{H}\mathbf{H}_0 = \mathbf{H}_0                                    &amp;&amp;                                     \\
+\end{align*}\]</span></p>
+<p>For auxiliary result 3, we have that:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)
+    &amp;= \mathbf{H}\mathbf{H}- \mathbf{H}\mathbf{H}_0 - \mathbf{H}_0 \mathbf{H}+ \mathbf{H}_0 \mathbf{H}_0 &amp;&amp;                                                \\
+    &amp;= \mathbf{H}- \mathbf{H}\mathbf{H}_0 - \mathbf{H}_0 \mathbf{H}+ \mathbf{H}_0           &amp;&amp; \text{since $\mathbf{H}_0$ and $\mathbf{H}$ are idempotent.} \\
+    &amp;= \mathbf{H}- \mathbf{H}_0 - \mathbf{H}_0 + \mathbf{H}_0                   &amp;&amp; \text{since $\mathbf{H}\mathbf{H}_0 = \mathbf{H}_0 \mathbf{H}= \mathbf{H}_0$.}  \\
+    &amp;= \mathbf{H}- \mathbf{H}_0                                   &amp;&amp;                                                \\
+\end{align*}\]</span></p>
+<p>so, <span class="math inline">\((\mathbf{H}- \mathbf{H}_0)\)</span> is idempotent.</p>
+<p>For auxiliary result 4, first we have that:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbb{C}[(\mathbf{H}- \mathbf{H}_0) \mathbf{y}, (\mathbf{I}- \mathbf{H}) \mathbf{y}]
+    &amp;= (\mathbf{H}- \mathbf{H}_0) \mathbb{C}[\mathbf{y},\mathbf{y}] (\mathbf{I}- \mathbf{H})        \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0) \mathbb{V}[\mathbf{y}] (\mathbf{I}- \mathbf{H})            \\
+    &amp;= \sigma^2 (\mathbf{H}- \mathbf{H}_0) (\mathbf{I}- \mathbf{H})            \\
+    &amp;= \sigma^2 (\mathbf{H}- \mathbf{H}_0  - \mathbf{H}\mathbf{H}+ \mathbf{H}_0 \mathbf{H}) \\
+    &amp;= \sigma^2 (\mathbf{H}- \mathbf{H}_0  - \mathbf{H}+ \mathbf{H}_0 \mathbf{H})     &amp;&amp; \text{since $\mathbf{H}$ is idempotent.} \\
+    &amp;= \sigma^2 (\mathbf{H}- \mathbf{H}_0  - \mathbf{H}+ \mathbf{H}_0)         &amp;&amp; \text{since $\mathbf{H}_0 \mathbf{H}= \mathbf{H}_0$.} \\
+    &amp;= \sigma^2 \mathbf{0}&amp;&amp;                                   \\
+    &amp;= \mathbf{0}&amp;&amp;                                   \\
+\end{align*}\]</span></p>
+<p>This tells us that <span class="math inline">\((\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span> and <span class="math inline">\((\mathbf{I}- \mathbf{H})\mathbf{y}\)</span> are uncorrelated. Now,
+since <span class="math inline">\((\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span> and <span class="math inline">\((\mathbf{I}- \mathbf{H})\mathbf{y}\)</span> are normally distributed, then
+zero correlation implies independence. Then, any function of this 2 quantities
+are independent. Note that:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}
+    &amp;= \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)\mathbf{y}&amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_0)$ is idempotent.}
+\end{align*}\]</span></p>
+<p>Then, <span class="math inline">\(\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span> is a quadratic function of <span class="math inline">\((\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span>. Similarly,
+<span class="math inline">\(\mathbf{y}&#39;(\mathbf{H}- \mathbf{H})\mathbf{y}\)</span> is a quadratic function of <span class="math inline">\((\mathbf{H}- \mathbf{H})\mathbf{y}\)</span>. Therefore,
+<span class="math inline">\(\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}\)</span> and <span class="math inline">\(\mathbf{y}&#39;(\mathbf{H}- \mathbf{H})\mathbf{y}\)</span> are independent.</p>
+<p>For result 5, we have that:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{H}- \mathbf{H}_0)\mathbf{y}
+    &amp;= (\mathbf{H}- \mathbf{H}_0)(\mathbf{X}^* \boldsymbol{\beta}^* + \mathbf{e}) &amp;&amp; \text{since $\mathbf{y}= \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}$.} \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0)([\mathbf{1}\mathbf{X}] [\beta_0, \boldsymbol{\beta}]&#39; + \mathbf{e})                &amp;&amp; \text{since $\mathbf{X}^* = [\mathbf{1}\mathbf{X}] \quad \text{and} \quad \boldsymbol{\beta}^* = [\beta_0, \boldsymbol{\beta}]&#39;$.} \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0)(\mathbf{1}\beta_0 + \mathbf{X}\boldsymbol{\beta}+ \mathbf{e}) &amp;&amp;  \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0)(\mathbf{1}\beta_0) + (\mathbf{H}- \mathbf{H}_0)(\mathbf{X}\boldsymbol{\beta}+ \mathbf{e}) &amp;&amp;  \\
+    &amp;= (\mathbf{H}\mathbf{1}- \mathbf{H}_0 \mathbf{1})\beta_0 + (\mathbf{H}- \mathbf{H}_0)(\mathbf{X}\boldsymbol{\beta}+ \mathbf{e}) &amp;&amp;  \\
+    &amp;= (\mathbf{1}- \mathbf{1})\beta_0 + (\mathbf{H}- \mathbf{H}_0)(\mathbf{X}\boldsymbol{\beta}+ \mathbf{e}) &amp;&amp;  \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0)(\mathbf{X}\boldsymbol{\beta}+ \mathbf{e}) &amp;&amp;  \\
+    &amp;= (\mathbf{H}- \mathbf{H}_0)\mathbf{e}&amp;&amp; \text{iff $\mathcal{H}_0: \boldsymbol{\beta}= \mathbf{0}$ for any full rank $\mathbf{X}$.}
+\end{align*}\]</span></p>
+<p>That is, for any full rank <span class="math inline">\(\mathbf{X}\)</span>, we have that:</p>
+<p><span class="math display">\[ (\mathbf{H}- \mathbf{H}_0)\mathbf{y}= (\mathbf{H}- \mathbf{H}_0)\mathbf{e}\iff \mathcal{H}_0: \boldsymbol{\beta}= \mathbf{0}\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbf{e}\sim N(0, \sigma^2 \mathbf{I})
+    &amp;\implies \mathbf{e}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{e}\sim \sigma^2 \chi^2_{p-1}                                   &amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_0)$ is idempotent of rank $p-1$}. \\
+    &amp;\implies \frac{\mathbf{e}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{e}}{\sigma^2} \sim \chi^2_{p-1}                           &amp;&amp;                                                           \\
+    &amp;\implies \frac{\mathbf{e}&#39;(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)\mathbf{e}}{\sigma^2} \sim \chi^2_{p-1} &amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_0)$ is idempotent}.               \\
+    &amp;\implies \frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2} \sim \chi^2_{p-1} &amp;&amp; \text{iff the null hypothesis holds}.                     \\
+    &amp;\implies \frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2} \sim \chi^2_{p-1}                           &amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_0)$ is idempotent}.               \\
+\end{align*}\]</span></p>
+<p>That is:</p>
+<p><span class="math display">\[ \frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2} \sim \chi^2_{p-1} \iff \mathcal{H}_0: \boldsymbol{\beta}= \mathbf{0}\]</span></p>
+<p>With this results, we propose the following statistic:</p>
+<p><span class="math display">\[ F_{\boldsymbol{\beta}= 0} = \frac{\frac{SS_{reg}}{p-1}}{\frac{SS_{res}}{n-p}} \]</span></p>
+<p>and we will show that, this statistic is distributed like an <span class="math inline">\(F_{p-1,n-p}\)</span> only
+under the null hypothesis.</p>
+<p><span class="math display">\[\begin{align*}
+  F_{\boldsymbol{\beta}= 0}
+    &amp;= \frac{\frac{SS_{reg}}{p-1}}{\frac{SS_{res}}{n-p}}                                                           &amp;&amp;                                                                                                   \\
+    &amp;= \frac{\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{p-1}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{n-p}}                                     &amp;&amp; \text{since $SS_{reg} = \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}$ and $SS_{res}=\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}$}                  \\
+    &amp;= \frac{\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2}\frac{1}{p-1}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{\sigma^2}\frac{1}{n-p}} &amp;&amp;                                                                                                   \\
+    &amp;\sim \frac{\frac{\chi^2_{p-1}}{p-1}}{\frac{\chi^2_{n-p}}{n-p}}                                                &amp;&amp; \text{since $\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}}{\sigma^2} \sim \chi^2_{p-1}$ under the null hypothesis.} \\
+    &amp;\sim F_{p-1,n-p}                                                                                              &amp;&amp; \text{since $\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_0)\mathbf{y}$ and $\mathbf{y}&#39;(\mathbf{H}- \mathbf{H})\mathbf{y}$ are independent.}
+\end{align*}\]</span></p>
+<p>So, once we observe the value of this statistic, we can contrast it with respect
+respect to this distribution. Call <span class="math inline">\(F^*_{\boldsymbol{\beta}= 0}\)</span> the observed value, and consider
+a random variable <span class="math inline">\(F \sim F_{p-1,n-p}\)</span>, then we can see what would be the
+probability of observing the value of the statistic (or a more extreme value).</p>
+<p><span class="math display">\[ \mathbb{P}(F \geq F^*_{\boldsymbol{\beta}= 0}) \]</span>
+depending on how small or big is this probability, we can reject or not reject the
+null hypothesis. This value is a called a p-value.</p>
+</div>
+<div id="testing-if-one-variable-is-not-relevant" class="section level3 hasAnchor" number="9.5.2">
+<h3><span class="header-section-number">9.5.2</span> Testing if one variable is not relevant<a href="normality-assumption.html#testing-if-one-variable-is-not-relevant" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can test if a particular variable is not relevant for the regression. That is,
+<span class="math inline">\(\mathcal{H}_0: \beta_i = 0\)</span>. We will use the same strategy, that is, we will build a
+test statistic that has a certain distribution only under the null hypothesis.</p>
+<p>For this hypothesis we propose the following test statistic:</p>
+<p><span class="math display">\[ t_{\beta_i = 0} = \frac{\hat{\beta}_i}{\sqrt{\hat{\sigma}^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}} \]</span>
+First note that:</p>
+<p><span class="math display">\[\begin{align*}
+\hat{\boldsymbol{\beta}} \sim N \left(\boldsymbol{\beta}, \sigma^2(\mathbf{X}\mathbf{X})^{-1}\right)
+  &amp;\implies \hat{\beta}_i \sim H(\beta_i, \sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii})                                                                              \\
+  &amp;\implies \frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}} \sim N \left(\frac{\beta_i}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}, 1 \right) \\
+  &amp;\implies \frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}} \sim N \left( 0, 1 \right) &amp;&amp;  \iff \mathcal{H}_0: \beta_i = 0                         \\
+\end{align*}\]</span></p>
+<p>Then we have:</p>
+<p>$$$$</p>
+<p><span class="math display">\[\begin{align*}
+t_{\beta_i = 0}
+  &amp;= \frac{\hat{\beta}_i}{\sqrt{\hat{\sigma}^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}} \\
+  &amp;= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}}{\frac{\sqrt{\hat{\sigma}^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}} \\
+  &amp;= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}}{\sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}}                                                    \\
+  &amp;= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}}{\sqrt{\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2}\frac{1}{n-p}}}                                  &amp;&amp; \text{since $\hat{\sigma}^2 = \frac{\hat{\mathbf{e}}\hat{\mathbf{e}}}{n-p}$} \\
+  &amp;\sim \frac{N \left(\frac{\beta_i}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}}, 1 \right)}{\sqrt{\frac{\chi^2_{n-p}}{n-p}}}                                            &amp;&amp; \text{since $\frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\mathbf{X}\mathbf{X})^{-1}]_{ii}}} \sim N \left( 0, 1 \right)$ and $\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{\sigma^2} \sim \chi^2_{n-p}$} \\
+  &amp;\sim \frac{N \left(0, 1 \right)}{\sqrt{\frac{\chi^2_{n-p}}{n-p}}}                                                                                                &amp;&amp; \iff \mathcal{H}_0: \beta_i = 0  \\
+  &amp;\sim t_{n-p}                                                                                                                                                     &amp;&amp; \text{since $\hat{\beta}_i$ and $\hat{\sigma}^2$ are independent}.  \\
+\end{align*}\]</span></p>
+<p>Then, under the null hypothesis we have that:</p>
+<p><span class="math display">\[ t_{\beta_i = 0} \sim  t_{n-p}\]</span>
+So, if we call <span class="math inline">\(t_{\beta_i = 0}^*\)</span> the observed value of <span class="math inline">\(t_{\beta_i = 0}\)</span>, and
+if we let <span class="math inline">\(t\)</span> be distributed as <span class="math inline">\(t_{n-p}\)</span>, we can compute:</p>
+<p><span class="math display">\[ \mathbb{P}(t \geq |t_{\beta_i = 0}^*|) \]</span>
+and depending on the value, we can reject or accept the null hypothesis.</p>
+</div>
+<div id="testing-if-a-subgroup-of-the-variables-is-relevant" class="section level3 hasAnchor" number="9.5.3">
+<h3><span class="header-section-number">9.5.3</span> Testing if a Subgroup of the Variables is Relevant<a href="normality-assumption.html#testing-if-a-subgroup-of-the-variables-is-relevant" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For this test, we can assume without loss of generality, that the variables we
+want to see if it is relevant are the first <span class="math inline">\(k\)</span>. So we can divide the design
+matrix as:</p>
+<p><span class="math display">\[ \mathbf{X}= [\mathbf{X}_1 \mathbf{X}_2] \]</span>
+where the variables to test are in <span class="math inline">\(\mathbf{X}_1\)</span> and the rest of the variables are in
+<span class="math inline">\(\mathbf{X}_2\)</span> (including possibly the intercept). And similarly we have <span class="math inline">\(\boldsymbol{\beta}= [\boldsymbol{\beta}_1 \boldsymbol{\beta}_2]&#39;\)</span>.</p>
+<p>This test is similar to the first test once we express it accordingly. We will
+consider two linear regressions. One including all variables and one excluding
+the variables to be tested indexed by <span class="math inline">\(2\)</span>. With this we can build the following
+test statistics:</p>
+<p><span class="math display">\[ F_{\boldsymbol{\beta}_1=\mathbf{0}} = \frac{\frac{SS_{res,2} - SS_{res}}{k}}{\frac{SS_{res}}{n-p}} \]</span>
+Then note the following:</p>
+<p><span class="math display">\[\begin{align*}
+  SS_{res,2} - SS_{res}
+    &amp;= \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}_2)\mathbf{y}- \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}) \mathbf{y}\\
+    &amp;= \mathbf{y}&#39;(\mathbf{I}- \mathbf{H}_2 - \mathbf{I}+ \mathbf{H}) \mathbf{y}\\
+    &amp;= \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_2) \mathbf{y}\\
+\end{align*}\]</span></p>
+<p>Again, we will see that <span class="math inline">\((\mathbf{H}- \mathbf{H}_2)\)</span> is idempotent and <span class="math inline">\((\mathbf{H}- \mathbf{H}_2)\mathbf{y}= (\mathbf{H}- \mathbf{H}_2)\mathbf{e}\)</span>
+only under the null hypothesis.</p>
+<p>First, let us see that <span class="math inline">\((\mathbf{H}- \mathbf{H}_2)\)</span> is idempotent. First note that:</p>
+<p><span class="math display">\[ \mathbf{H}\mathbf{H}_2 = \mathbf{H}_2 \mathbf{H}= \mathbf{H}_2\]</span>
+since <span class="math inline">\(\mathbf{H}_2\)</span> is the projection matrix of the columns of <span class="math inline">\(\mathbf{X}_2\)</span> a subspace of the
+columns of <span class="math inline">\(\mathbf{X}\)</span>. Then:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{H}- \mathbf{H}_2)(\mathbf{H}- \mathbf{H}_2)
+    &amp;= \mathbf{H}\mathbf{H}- \mathbf{H}_2 \mathbf{H}- \mathbf{H}\mathbf{H}_2 + \mathbf{H}_2 \mathbf{H}_2 \\
+    &amp;= \mathbf{H}- \mathbf{H}_2 \mathbf{H}- \mathbf{H}\mathbf{H}_2 + \mathbf{H}_2           &amp;&amp; \text{since $\mathbf{H}_2$ and $\mathbf{H}$ are idempotent}. \\
+    &amp;= \mathbf{H}- \mathbf{H}_2 - \mathbf{H}_2 + \mathbf{H}_2                   &amp;&amp; \text{since $\mathbf{H}\mathbf{H}_2 = \mathbf{H}_2 \mathbf{H}= \mathbf{H}_2$}.  \\
+    &amp;= \mathbf{H}- \mathbf{H}_2                                   &amp;&amp;                                                \\
+\end{align*}\]</span></p>
+<p>then <span class="math inline">\((\mathbf{H}- \mathbf{H}_2)\)</span> is idempotent.</p>
+<p>Now let us see that <span class="math inline">\((\mathbf{H}- \mathbf{H}_2)\mathbf{y}= (\mathbf{H}- \mathbf{H}_2)\mathbf{e}\)</span> under the null hypothesis.
+First, let us note that:</p>
+<p><span class="math display">\[ \mathbf{H}\mathbf{X}_2 = \mathbf{X}_2 \]</span>
+since space generated by <span class="math inline">\(\mathbf{X}_2\)</span> is a subspace of the space generated by <span class="math inline">\(\mathbf{X}\)</span>,
+since <span class="math inline">\(\mathbf{X}\)</span> contains the columns of <span class="math inline">\(\mathbf{X}_2\)</span>. And we also note that:</p>
+<p><span class="math display">\[ \mathbf{H}_2 \mathbf{X}_2 = \mathbf{X}_2 \]</span>
+since <span class="math inline">\(\mathbf{H}_2\)</span> is the projection matrix of the space generated by the columns of
+<span class="math inline">\(\mathbf{X}_2\)</span>. We note that this results can be proven algebraically.</p>
+<p>Then:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{H}- \mathbf{H}_2)\mathbf{y}
+    &amp;= (\mathbf{H}- \mathbf{H}_2)(\mathbf{X}\boldsymbol{\beta}+ \mathbf{e})                                      \\
+    &amp;= (\mathbf{H}- \mathbf{H}_2)([\mathbf{X}_1 \mathbf{X}_2] [\boldsymbol{\beta}_1&#39; \boldsymbol{\beta}_2&#39;]&#39; + \mathbf{e})              \\
+    &amp;= (\mathbf{H}- \mathbf{H}_2)(\mathbf{X}_1 \boldsymbol{\beta}_1 \mathbf{X}_2 \boldsymbol{\beta}_2 + \mathbf{e})                     \\
+    &amp;= (\mathbf{H}- \mathbf{H}_2)(\mathbf{X}_2 \boldsymbol{\beta}_2) + (\mathbf{H}- \mathbf{H}_2)(\mathbf{X}_1 \boldsymbol{\beta}_1 + \mathbf{e})    \\
+    &amp;= (\mathbf{H}\mathbf{X}_2 - \mathbf{H}_2\mathbf{X}_2)\boldsymbol{\beta}_2 + (\mathbf{H}- \mathbf{H}_2)(\mathbf{X}_1 \boldsymbol{\beta}_1 + \mathbf{e}) \\
+    &amp;= (\mathbf{X}_2 - \mathbf{X}_2)\boldsymbol{\beta}_2 + (\mathbf{H}- \mathbf{H}_2)(\mathbf{X}_1 \boldsymbol{\beta}_1 + \mathbf{e})          &amp;&amp; \text{since $\mathbf{H}\mathbf{X}_1 = \mathbf{X}_1$ and $\mathbf{H}_1 \mathbf{X}_1 = \mathbf{X}_1$} \\
+    &amp;= (\mathbf{H}- \mathbf{H}_2)(\mathbf{X}_1 \boldsymbol{\beta}_1 + \mathbf{e})                                  &amp;&amp;                                                            \\
+    &amp;= (\mathbf{H}- \mathbf{H}_2)\mathbf{e}&amp;&amp; \iff \mathcal{H}_0: \boldsymbol{\beta}_1 = \mathbf{0}\\
+\end{align*}\]</span></p>
+<p>So, if <span class="math inline">\(\mathbf{X}_1\)</span> is full rank, then we have that:</p>
+<p><span class="math display">\[ (\mathbf{H}- \mathbf{H}_2)\mathbf{y}= (\mathbf{H}- \mathbf{H}_2)\mathbf{e}\iff \mathcal{H}_0: \boldsymbol{\beta}_1 = \mathbf{0}\]</span></p>
+<p>Then we can proceed to see what is the distribution of our test statistic under
+the null hypothesis.</p>
+<p><span class="math display">\[\begin{align*}
+  F_{\boldsymbol{\beta}_1=\mathbf{0}}
+    &amp;= \frac{\frac{SS_{res,2} - SS_{res}}{k}}{\frac{SS_{res}}{n-p}}                                                                          &amp;&amp;                                                                                                   \\
+    &amp;= \frac{\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_2)\mathbf{y}}{k}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{n-p}}                                                                 &amp;&amp; \text{since $SS_{res,2} - SS_{res} = \mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_2)\mathbf{y}$ and $SS_{res}=\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}$}     \\
+    &amp;= \frac{\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_2)\mathbf{y}}{\sigma^2}\frac{1}{k}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{\sigma^2}\frac{1}{n-p}}                             &amp;&amp;                                                                                                   \\
+    &amp;= \frac{\frac{\mathbf{y}&#39;(\mathbf{H}- \mathbf{H}_2)(\mathbf{H}- \mathbf{H}_2)(\mathbf{H}- \mathbf{H}_2)\mathbf{y}}{\sigma^2}\frac{1}{k}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{\sigma^2}\frac{1}{n-p}}   &amp;&amp; \text{snce $(\mathbf{H}- \mathbf{H}_2)$ is idempotent}.                                                        \\
+    &amp;= \frac{\frac{\mathbf{e}&#39;(\mathbf{H}- \mathbf{H}_2)(\mathbf{H}- \mathbf{H}_2)(\mathbf{H}- \mathbf{H}_2)\mathbf{e}}{\sigma^2}\frac{1}{k}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{\sigma^2}\frac{1}{n-p}}   &amp;&amp; \iff  \mathcal{H}_0: \boldsymbol{\beta}_1 = \mathbf{0}\\
+    &amp;= \frac{\frac{\mathbf{e}&#39;(\mathbf{H}- \mathbf{H}_2)\mathbf{e}}{\sigma^2}\frac{1}{k}}{\frac{\mathbf{y}&#39;(\mathbf{I}- \mathbf{H})\mathbf{y}}{\sigma^2}\frac{1}{n-p}}                             &amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_2)$ is idempotent}.                                                       \\
+    &amp;\sim \frac{\frac{\chi^2_{k}}{k}}{\frac{\chi^2_{n-p}}{n-p}}                                                                              &amp;&amp; \text{since $(\mathbf{H}- \mathbf{H}_2)$ is idempotent and $\frac{\mathbf{e}}{\sqrt{\sigma^2}} \sim N(0, \mathbf{I})$}.      \\
+    &amp;\sim F_{k,n-p}                                                                                                                          &amp;&amp;
+\end{align*}\]</span></p>
+<p>So, before we observe the data, <span class="math inline">\(F_{\boldsymbol{\beta}_1=\mathbf{0}}\)</span> has a <span class="math inline">\(F_{k,n-p}\)</span> distribution.
+Then, once we observe the data, call <span class="math inline">\(F_{\boldsymbol{\beta}_1=\mathbf{0}}^*\)</span> the observed value of
+the statistic, and let <span class="math inline">\(F\)</span> be distributed as an <span class="math inline">\(F_{k,n-p}\)</span>, we can compute:</p>
+<p><span class="math display">\[ \mathbb{P}(F \geq F_{\boldsymbol{\beta}_1=\mathbf{0}}^*) \]</span>
+and reject the null hypothesis if this probability is small and not reject if
+this probability is small.</p>
+<p>Below is a <strong>textbook-style introduction to power analysis in the context of multiple linear regression</strong>, consistent with the level and tone of graduate coursework in applied linear models. No equations have been altered if you later integrate this into your existing notes.</p>
+<hr />
+</div>
+</div>
+<div id="power-analysis-1" class="section level2 hasAnchor" number="9.6">
+<h2><span class="header-section-number">9.6</span> Power Analysis<a href="normality-assumption.html#power-analysis-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Power analysis in multiple linear regression extends the general principles of hypothesis testing to the setting where several predictors jointly explain variability in a response variable. Because many inferential questions in regression involve testing whether one or more regression coefficients differ from zero, power analysis provides a framework for assessing how sensitive these tests are to detecting true effects of practical importance. It also informs decisions about sample size, model specification, and the expected precision of future studies.</p>
+<p>Recall the multiple linear regression model
+<span class="math display">\[
+\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{e},
+\]</span>
+with <span class="math inline">\(\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})\)</span>. In this framework, power analysis concerns the probability of rejecting a null hypothesis about one or more components of <span class="math inline">\(\boldsymbol{\beta}\)</span> under specific alternatives.</p>
+<div id="power-for-testing-a-single-coefficient" class="section level3 hasAnchor" number="9.6.1">
+<h3><span class="header-section-number">9.6.1</span> Power for Testing a Single Coefficient<a href="normality-assumption.html#power-for-testing-a-single-coefficient" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A common hypothesis test asks whether a particular predictor has any linear association with the response, controlling for the other predictors:
+<span class="math display">\[
+H_0: \beta_j = 0
+\qquad\text{vs.}\qquad
+H_1: \beta_j \neq 0.
+\]</span></p>
+<p>The usual test statistic takes the form
+<span class="math display">\[
+t_{\beta_j} = \frac{\hat{\beta}_j - \beta_j}{\sqrt{\hat{\sigma}^2_{\beta_j}}},
+\]</span>
+which, under the null hypothesis, follows a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n - p\)</span> degrees of freedom.</p>
+<p>Given a significance level <span class="math inline">\(\alpha\)</span>, we have chosen a rejection region given by:</p>
+<p>Under an alternative <span class="math inline">\(\beta_j = \theta_1 \neq 0\)</span>, the statistic follows a <strong>noncentral <span class="math inline">\(t\)</span> distribution</strong>, whose noncentrality parameter depends on:</p>
+<ul>
+<li>the magnitude of the effect <span class="math inline">\(\beta_j\)</span>,</li>
+<li>the sampling variability of <span class="math inline">\(\hat{\beta}_j\)</span> (involving <span class="math inline">\((\mathbf{X}&#39;\mathbf{X})^{-1}\)</span>),</li>
+<li>the error variance <span class="math inline">\(\sigma^2\)</span>, and</li>
+<li>the sample size.</li>
+</ul>
+<p>In particular the noncentrality parameter is given by:</p>
+<p><span class="math display">\[ \mu_{\beta_j} = \frac{\beta_j}{\sqrt{\sigma^2 [(\mathbf{X}&#39;\mathbf{X})]_{jj}}} \]</span></p>
+<p>If <span class="math inline">\(R\)</span> is the rejection region for the two-sided test, then the power at <span class="math inline">\(\beta_j = \theta_1\)</span> is
+<span class="math display">\[
+\pi(\theta_1) = \mathbb{P}(t_{\beta_j} \in R \mid \beta_j = \theta_1),
+\]</span>
+which increases with larger sample sizes, larger effect sizes, smaller noise variance, and designs that reduce the variance of <span class="math inline">\(\hat{\beta}_j\)</span>. The structure of the design matrix therefore plays a crucial role: multicollinearity inflates <span class="math inline">\(\hat{\sigma}^2_{\beta_j}\)</span> and can dramatically reduce power.</p>
+</div>
+<div id="power-for-testing-multiple-coefficients-partial-f-tests" class="section level3 hasAnchor" number="9.6.2">
+<h3><span class="header-section-number">9.6.2</span> Power for Testing Multiple Coefficients (Partial F-Tests)<a href="normality-assumption.html#power-for-testing-multiple-coefficients-partial-f-tests" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Many inferential questions in regression concern the joint contribution of several predictors. For example,
+<span class="math display">\[
+H_0: \beta_{j_1} = \beta_{j_2} = \cdots = \beta_{j_k} = 0
+\quad\text{versus}\quad
+H_1:\ \text{at least one }\beta_{j_r} \neq 0,
+\]</span>
+is evaluated using a partial F-test. The test statistic is of the form
+<span class="math display">\[
+F = \frac{\left(\text{SSR}_{\text{full}} - \text{SSR}_{\text{reduced}}\right)/k}{\hat{\sigma}^2},
+\]</span>
+which follows an <span class="math inline">\(F_{k,; n-p}\)</span> distribution under <span class="math inline">\(H_0\)</span>. Under an alternative model in which the set of coefficients differs from zero, the statistic follows a <strong>noncentral <span class="math inline">\(F\)</span> distribution</strong>, with noncentrality parameter
+<span class="math display">\[
+\lambda = \frac{(\mathbf{C}\boldsymbol{\beta})&#39; \left[\mathbf{C}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{C}&#39;\right]^{-1} (\mathbf{C}\boldsymbol{\beta})}{\sigma^2},
+\]</span>
+where <span class="math inline">\(\mathbf{C}\)</span> selects the coefficients under test.</p>
+<p>The power for the partial F-test is then
+<span class="math display">\[
+\pi(\lambda) = \mathbb{P}(F &gt; F_{k,; n-p}(1 - \alpha) \mid \lambda),
+\]</span>
+where <span class="math inline">\(F_{k,; n-p}(1-\alpha)\)</span> is the <span class="math inline">\((1-\alpha)\)</span> quantile of the central <span class="math inline">\(F\)</span> distribution. In this setting, the noncentrality parameter encodes the joint effect size of the tested predictors. The power increases with:</p>
+<ul>
+<li>larger joint effect sizes,</li>
+<li>lower error variance,</li>
+<li>larger sample sizes, and</li>
+<li>predictor configurations that reduce multicollinearity.</li>
+</ul>
+</div>
+<div id="the-role-of-the-design-matrix" class="section level3 hasAnchor" number="9.6.3">
+<h3><span class="header-section-number">9.6.3</span> The Role of the Design Matrix<a href="normality-assumption.html#the-role-of-the-design-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Unlike simpler settings such as one-sample or two-sample tests, power in multiple regression depends critically on the geometry of the predictors. The matrix <span class="math inline">\((\mathbf{X}&#39;\mathbf{X})^{-1}\)</span> directly determines how much information the data provide about each coefficient and about linear combinations of coefficients. As a consequence:</p>
+<ul>
+<li>highly correlated predictors inflate variances and reduce power,</li>
+<li>balanced and orthogonal designs maximize power, and</li>
+<li>adding irrelevant predictors can decrease power for testing the important ones.</li>
+</ul>
+<p>Thus, power analysis in regression provides insight not only into sample size requirements but also into the effect of model specification and predictor structure.</p>
+</div>
+<div id="practical-applications" class="section level3 hasAnchor" number="9.6.4">
+<h3><span class="header-section-number">9.6.4</span> Practical Applications<a href="normality-assumption.html#practical-applications" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Power analysis in multiple linear regression is essential in the following contexts:</p>
+<ul>
+<li><strong>Experimental design:</strong> Determining the sample size needed to detect expected effects.</li>
+<li><strong>Study planning with observational data:</strong> Evaluating whether available data can reasonably support planned inferences.</li>
+<li><strong>Model assessment:</strong> Understanding how collinearity or the inclusion of unnecessary predictors affects inferential strength.</li>
+<li><strong>Interpretation of non-significant results:</strong> Distinguishing between evidence supporting the null hypothesis and insufficient statistical sensitivity.</li>
+</ul>
+<p>In summary, power analysis for multiple linear regression extends classical power concepts to a multivariate linear setting, where the design matrix, error variance, and effect size structure collectively determine the sensitivity of hypothesis tests. This framework is fundamental for constructing well-designed studies and for obtaining reliable inferential conclusions about the regression coefficients.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="mean-and-varaince-assumptions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="applications-4.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

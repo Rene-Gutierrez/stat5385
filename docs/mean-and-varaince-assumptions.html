@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | _main.knit</title>
+  <title>8 Mean and Varaince Assumptions | _main.knit</title>
   <meta name="description" content="" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | _main.knit" />
+  <meta property="og:title" content="8 Mean and Varaince Assumptions | _main.knit" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | _main.knit" />
+  <meta name="twitter:title" content="8 Mean and Varaince Assumptions | _main.knit" />
   
   
   
@@ -28,8 +28,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-
+<link rel="prev" href="bootstrapping.html"/>
+<link rel="next" href="normality-assumption.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -467,19 +467,334 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="mean-and-varaince-assumptions" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">8</span> Mean and Varaince Assumptions<a href="mean-and-varaince-assumptions.html#mean-and-varaince-assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>So far we have not made any probabilistic assumptions about the different
+elements in our model. So the model errors are unknown but are not random.</p>
+<p>Now we will assume that the random errors are random variables. However, we will
+not specify the complete distribution of the errors and will limit ourselves to
+make assumptions about the mean and variance of the errors.</p>
+<div id="mean-assumptions" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Mean Assumptions<a href="mean-and-varaince-assumptions.html#mean-assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We will begin by making the assumptions about the mean of the errors.
+Specifically, we will assume that:</p>
+<p><span class="math display">\[ \mathbb{E}[e_i] = 0 \in \mathbb{R}\quad \forall i\in\{1,\ldots,n\}\]</span></p>
+<p>This can be expressed in vector form as follows:</p>
+<p><span class="math display">\[ \mathbb{E}[\mathbf{e}] = \mathbf{0}\in \mathbb{R}^n\]</span></p>
+<p>Note that <span class="math inline">\(\mathbf{X}\)</span> is a known constant and <span class="math inline">\(\boldsymbol{\beta}\)</span> is an unknown constant (an unknown
+parameter). This implies that + <span class="math inline">\(\mathbf{y}\)</span> is a random vector. And therefor, any function
+of <span class="math inline">\(\mathbf{y}\)</span> will be a random varaible. In particular, our estimates:</p>
+<p><span class="math display">\[ \hat{\boldsymbol{\beta}} = (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \mathbf{y}\]</span>
+<span class="math display">\[ \hat{\mathbf{y}} = \mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \mathbf{y}= \mathbf{H}\mathbf{y}\]</span>
+<span class="math display">\[ \hat{\mathbf{e}} = \mathbf{y}- \hat{\mathbf{y}} = (\mathbf{I}- \mathbf{H})\mathbf{y}\]</span></p>
+<p>are random vectors. Then we can try to compute the mean of these values. This
+should be possible since all 3 estimates are linear combinations of <span class="math inline">\(\mathbf{y}\)</span> and
+we can compute the mean of <span class="math inline">\(\mathbf{y}\)</span>.</p>
+<div id="expectation-of-mathbfy" class="section level3 hasAnchor" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> Expectation of <span class="math inline">\(\mathbf{y}\)</span>:<a href="mean-and-varaince-assumptions.html#expectation-of-mathbfy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}[\mathbf{y}]
+  &amp;=  \mathbb{E}[\mathbf{X}\boldsymbol{\beta}+ \mathbf{e}] \\
+  &amp;= \mathbf{X}\boldsymbol{\beta}+ \mathbb{E}[\mathbf{e}] \\
+  &amp;= \mathbf{X}\boldsymbol{\beta}
+\end{align*}\]</span></p>
+</div>
+<div id="expectation-of-hatboldsymbolbeta" class="section level3 hasAnchor" number="8.1.2">
+<h3><span class="header-section-number">8.1.2</span> Expectation of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span><a href="mean-and-varaince-assumptions.html#expectation-of-hatboldsymbolbeta" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}[\hat{\boldsymbol{\beta}}]
+  &amp;= \mathbb{E}[(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \mathbf{y}] \\
+  &amp;= (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbb{E}[\mathbf{y}] \\
+  &amp;= (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \mathbf{X}\boldsymbol{\beta}\\
+  &amp;= \boldsymbol{\beta}\\
+\end{align*}\]</span></p>
+<p>So, <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is an unbiased estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
+</div>
+<div id="expectation-of-hatmathbfy" class="section level3 hasAnchor" number="8.1.3">
+<h3><span class="header-section-number">8.1.3</span> Expectation of <span class="math inline">\(\hat{\mathbf{y}}\)</span><a href="mean-and-varaince-assumptions.html#expectation-of-hatmathbfy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}[\hat{\mathbf{y}}]
+  &amp;= \mathbb{E}[\mathbf{X}\hat{\boldsymbol{\beta}}] \\
+  &amp;= \mathbf{X}\mathbb{E}[\hat{\boldsymbol{\beta}}] \\
+  &amp;= \mathbf{X}\boldsymbol{\beta}\\
+  &amp;= \mathbb{E}[\mathbf{y}] \\
+\end{align*}\]</span></p>
+<p>So <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> have the same mean.</p>
+</div>
+<div id="expectation-of-hatmathbfe" class="section level3 hasAnchor" number="8.1.4">
+<h3><span class="header-section-number">8.1.4</span> Expectation of <span class="math inline">\(\hat{\mathbf{e}}\)</span><a href="mean-and-varaince-assumptions.html#expectation-of-hatmathbfe" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}[\hat{\mathbf{e}}]
+  &amp;= \mathbb{E}[\mathbf{y}- \hat{\mathbf{y}}] \\
+  &amp;= \mathbb{E}[\mathbf{y}] - \mathbb{E}[\hat{\mathbf{y}}] \\
+  &amp;= \mathbf{0}
+\end{align*}\]</span></p>
+<p>So <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> have the same mean.</p>
+<p>Without any further assumptions, we can get more additional results. Next, we
+move to assumptions on the variance of the errors.</p>
+</div>
+</div>
+<div id="variance-assumptions" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> Variance Assumptions<a href="mean-and-varaince-assumptions.html#variance-assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>While the assumptions on the mean are assumptions about the first moment of the
+errors, now we will make assumptions about the second moment of the errors. In
+particular, we will assume that all the errors have the same (finite) variance
+and are uncorrelated. That is:</p>
+<p><span class="math display">\[ \mathbb{V}[e_i] = \sigma^2 &lt; \infty \quad \forall i \in \{1,\ldots,n\}, \quad \text{and} \quad \mathbb{C}[e_i, e_j] = 0 \quad \forall i \neq j\]</span></p>
+<p>We can express this assumption in vector form as:</p>
+<p><span class="math display">\[ \mathbb{V}[\mathbf{e}] = \sigma^2 \mathbf{I}\quad \sigma^2 &lt; \infty \]</span></p>
+<p>As we did before, we can try to compute the variance of all the random quantities
+we have.</p>
+<div id="variance-of-mathbfy" class="section level3 hasAnchor" number="8.2.1">
+<h3><span class="header-section-number">8.2.1</span> Variance of <span class="math inline">\(\mathbf{y}\)</span><a href="mean-and-varaince-assumptions.html#variance-of-mathbfy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{V}[\mathbf{y}]
+  &amp;= \mathbb{V}[\mathbf{X}+ \mathbf{e}] \\
+  &amp;= \mathbb{V}[\mathbf{e}]       \\
+  &amp;= \sigma^2 \mathbf{I}
+\end{align*}\]</span></p>
+<p>So, the observations <span class="math inline">\(\mathbf{y}\)</span> and the errors <span class="math inline">\(\mathbf{e}\)</span> have the same variance. This makes
+sense since they only differ by a non-random element <span class="math inline">\(\mathbf{X}\boldsymbol{\beta}\)</span>.</p>
+</div>
+<div id="variance-of-hatboldsymbolbeta" class="section level3 hasAnchor" number="8.2.2">
+<h3><span class="header-section-number">8.2.2</span> Variance of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span><a href="mean-and-varaince-assumptions.html#variance-of-hatboldsymbolbeta" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{V}[\hat{\boldsymbol{\beta}}]
+  &amp;= \mathbb{V}[(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \mathbf{y}]                         \\
+  &amp;= (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \mathbb{V}[\mathbf{y}] \mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}       \\
+  &amp;= (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; (\sigma^2 \mathbf{I}) \mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1} \\
+  &amp;= \sigma^2 (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}        \\
+  &amp;= \sigma^2 (\mathbf{X}&#39;\mathbf{X})^{-1}                             \\
+\end{align*}\]</span></p>
+</div>
+<div id="variance-of-hatmathbfy" class="section level3 hasAnchor" number="8.2.3">
+<h3><span class="header-section-number">8.2.3</span> Variance of <span class="math inline">\(\hat{\mathbf{y}}\)</span><a href="mean-and-varaince-assumptions.html#variance-of-hatmathbfy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{V}[\hat{\mathbf{y}}]
+  &amp;= \mathbb{V}[\mathbf{H}\mathbf{y}]                                              \\
+  &amp;= \mathbf{H}\mathbb{V}[\mathbf{y}] \mathbf{H}&#39;                                         \\
+  &amp;= \mathbf{H}(\sigma^2 \mathbf{I}) \mathbf{H}&amp; \text{since $\mathbf{H}$ is symmetric}  \\
+  &amp;= \sigma^2 \mathbf{H}\mathbf{H}\\
+  &amp;= \sigma^2 \mathbf{H}&amp; \text{since $\mathbf{H}$ is idempotent} \\
+\end{align*}\]</span></p>
+<p>So, while <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span> have the same mean, they do not have the same
+variance. We will see that the variance of <span class="math inline">\(\hat{\mathbf{y}}\)</span> is “smaller” than the
+variance of <span class="math inline">\(\mathbf{y}\)</span>. I say “smaller” since for matrices it is not clear what does
+it mean to be smaller or bigger.</p>
+<p>Not for now, that the diagonal elements of these matrices satisfy the following:</p>
+<p><span class="math display">\[[\mathbb{V}[\mathbf{y}]]_{ii} = \sigma^2 \leq \sigma^2 h_{ii} = [\mathbb{V}[\hat{\mathbf{y}}]]_{ii}\]</span>
+since the leverages <span class="math inline">\(h_{ii}\)</span> satisfy <span class="math inline">\(0 \leq h_{ii} \leq 1\)</span>.</p>
+</div>
+<div id="variance-of-hatmathbfe" class="section level3 hasAnchor" number="8.2.4">
+<h3><span class="header-section-number">8.2.4</span> Variance of <span class="math inline">\(\hat{\mathbf{e}}\)</span><a href="mean-and-varaince-assumptions.html#variance-of-hatmathbfe" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{V}[\hat{\mathbf{e}}]
+  &amp;= \mathbb{V}[(\mathbf{I}- \mathbf{H}) \mathbf{y}]                                                             \\
+  &amp;= (\mathbf{I}- \mathbf{H}) \mathbb{V}[\mathbf{y}] (\mathbf{I}- \mathbf{H})&#39;                                                \\
+  &amp;= (\mathbf{I}- \mathbf{H}) (\sigma^2 \mathbf{I}) (\mathbf{I}- \mathbf{H}) &amp; \text{since $(\mathbf{I}- \mathbf{H})$ is symmetric} \\
+  &amp;= \sigma^2 (\mathbf{I}- \mathbf{H})(\mathbf{I}- \mathbf{H})                                                  \\
+  &amp;= \sigma^2 (\mathbf{I}- \mathbf{H})           &amp; \text{since $(\mathbf{I}- \mathbf{H})$ is idempotent}        \\
+\end{align*}\]</span></p>
+<p>Then we can see that <span class="math inline">\(\mathbf{y}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span> and <span class="math inline">\(\hat{\mathbf{e}}\)</span> have variances that are
+idempotent matrices multiplied by the scalar <span class="math inline">\(\sigma^2\)</span>.</p>
+</div>
+</div>
+<div id="cross-covariances" class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> Cross-Covariances<a href="mean-and-varaince-assumptions.html#cross-covariances" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When we introduce the assumption of the variance, we can check the
+cross-covariances of our estimators. This will help us later in the course.</p>
+<p>We can check several cross-covariances but for now I will only check 2.</p>
+<div id="cross-covaraince-of-haty-and-hate" class="section level3 hasAnchor" number="8.3.1">
+<h3><span class="header-section-number">8.3.1</span> Cross-covaraince of <span class="math inline">\(\hat{y}\)</span> and <span class="math inline">\(\hat{e}\)</span><a href="mean-and-varaince-assumptions.html#cross-covaraince-of-haty-and-hate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{C}[\hat{\mathbf{y}}, \hat{\mathbf{e}}]
+  &amp;=\mathbb{C}[(\mathbf{I}- \mathbf{H}) \mathbf{y}, \mathbf{H}\mathbf{y}]                                                           \\
+  &amp;=(\mathbf{I}- \mathbf{H})\mathbb{C}[\mathbf{y},\mathbf{y}] \mathbf{H}&#39;                                                            \\
+  &amp;=(\mathbf{I}- \mathbf{H})\mathbb{V}[\mathbf{y}] \mathbf{H}&amp; \text{since $\mathbf{H}$ is symmetric and $\mathbb{C}[\mathbf{y},\mathbf{y}] = \mathbb{V}[\mathbf{y}]$} \\
+  &amp;=(\mathbf{I}- \mathbf{H})(\sigma^2 \mathbf{I}) \mathbf{H}&amp; \text{since $\mathbb{V}[\mathbf{y}] = \sigma^2 \mathbf{I}$}                  \\
+  &amp;=\sigma^2 (\mathbf{I}- \mathbf{H}) \mathbf{H}\\
+  &amp;=\sigma^2 (\mathbf{H}- \mathbf{H}\mathbf{H})                                                                \\
+  &amp;=\sigma^2 (\mathbf{H}- \mathbf{H}) &amp; \text{since $\mathbf{H}$ is idempotent}                                 \\
+  &amp;=\mathbf{0}\in \mathbb{R}^{n \times n}                                                             \\
+\end{align*}\]</span></p>
+<p>Then, the residuals <span class="math inline">\(\hat{\mathbf{e}}\)</span> and the estimates of the observations
+<span class="math inline">\(\hat{\mathbf{y}}\)</span> are uncorrelated. We had a similar result before, that however is not
+the same (we couldn’t have even talked before expectation and covariance since we
+didn’t have random variables). That result was:</p>
+<p><span class="math display">\[ \hat{\mathbf{e}}&#39;\hat{\mathbf{y}} = 0 \in \mathbb{R}\]</span></p>
+<p>Notice that, the dimension of the zero’s.</p>
+</div>
+<div id="cross-covaraince-of-haty-and-hatboldsymbolbeta" class="section level3 hasAnchor" number="8.3.2">
+<h3><span class="header-section-number">8.3.2</span> Cross-covaraince of <span class="math inline">\(\hat{y}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span><a href="mean-and-varaince-assumptions.html#cross-covaraince-of-haty-and-hatboldsymbolbeta" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[\begin{align*}
+\mathbb{C}[\hat{\mathbf{e}}, \hat{\boldsymbol{\beta}}]
+  &amp;= \mathbb{C}[(\mathbf{I}- \mathbf{H}) \mathbf{y}, (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{y}]                \\
+  &amp;= (\mathbf{I}- \mathbf{H}) \mathbb{C}[\mathbf{y}, \mathbf{y}] \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1}                 \\
+  &amp;= (\mathbf{I}- \mathbf{H}) \mathbb{V}[\mathbf{y}] \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1}                      \\
+  &amp;= (\mathbf{I}- \mathbf{H}) (\sigma^2 \mathbf{I}) \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1}                \\
+  &amp;= \sigma^2 (\mathbf{I}- \mathbf{H}) \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1}                      \\
+  &amp;= \sigma^2 (\mathbf{I}- \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1} \\
+  &amp;= \sigma^2 (\mathbf{X}- \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;\mathbf{X})(\mathbf{X}&#39; \mathbf{X})^{-1}   \\
+  &amp;= \sigma^2 (\mathbf{X}- \mathbf{X})(\mathbf{X}&#39; \mathbf{X})^{-1}                           \\
+  &amp;= \mathbf{0}\in \mathbb{R}^{n \times p}                                   \\
+\end{align*}\]</span></p>
+<p>So the residuals and the estimate of <span class="math inline">\(\boldsymbol{\beta}\)</span> are uncorrelated. We will use this
+result in the next chapter.</p>
+</div>
+</div>
+<div id="gauss-markov-theorem" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> Gauss-Markov Theorem<a href="mean-and-varaince-assumptions.html#gauss-markov-theorem" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This theorem justifies the use of the Ordinary Least Squares (OLS) estimator,
+since it is the “best” estimator in a way.</p>
+<div id="assumptions" class="section level3 hasAnchor" number="8.4.1">
+<h3><span class="header-section-number">8.4.1</span> Assumptions<a href="mean-and-varaince-assumptions.html#assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The theorem assumes that:</p>
+<ul>
+<li>The errors have the same finite variance.</li>
+<li>The errors are uncorrelated.</li>
+</ul>
+<p>This assumption is equivalent to our assumption of:</p>
+<p><span class="math display">\[ \mathbb{V}[\mathbf{e}] = \sigma^2 \mathbf{I}\quad \sigma^2 &lt; \infty \]</span></p>
+</div>
+<div id="statement" class="section level3 hasAnchor" number="8.4.2">
+<h3><span class="header-section-number">8.4.2</span> Statement<a href="mean-and-varaince-assumptions.html#statement" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In the linear regression model, the OLS estimator <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{y}\)</span>
+has the smallest variance among all unbiased linear estimators.</p>
+<p>That is, if <span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> is a linear estimator, then:</p>
+<p><span class="math display">\[ \mathbb{V}[\tilde{\boldsymbol{\beta}}] - \mathbb{V}[\hat{\boldsymbol{\beta}}] \]</span></p>
+<p>is semi-positive definite.</p>
+<p>Because of this, the OLS estimator is called the Best Linear Unbiased Estimator
+(BLUE), where best means smaller variance.</p>
+</div>
+<div id="proof" class="section level3 hasAnchor" number="8.4.3">
+<h3><span class="header-section-number">8.4.3</span> Proof<a href="mean-and-varaince-assumptions.html#proof" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let <span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> be an unbiased linear estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span>. Then, we can write
+<span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> as follows:</p>
+<p><span class="math display">\[\tilde{\boldsymbol{\beta}} = \mathbf{A}\mathbf{y}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{A}\)</span> is a constant matrix of the appropriate dimensions. Then we can write
+<span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> as follows:</p>
+<p><span class="math display">\[\begin{align*}
+\tilde{\boldsymbol{\beta}}
+  &amp;=(\mathbf{A}- (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; + (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) \mathbf{y}\\
+  &amp;=(\mathbf{A}- (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;)\mathbf{y}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{y}\\
+  &amp;=(\mathbf{D}) + \hat{\boldsymbol{\beta}} &amp; \text{with $\mathbf{D}= \mathbf{A}- (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;$} \\
+\end{align*}\]</span></p>
+<p>Now, since <span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> is unbiased, we have that:</p>
+<p><span class="math display">\[\mathbb{E}[\tilde{\boldsymbol{\beta}}] = \boldsymbol{\beta}\quad \forall \boldsymbol{\beta}\in \mathbb{R}^p \]</span></p>
+<p>And</p>
+<p><span class="math display">\[\begin{align*}
+\mathbb{E}[\tilde{\boldsymbol{\beta}}]
+  &amp;= \mathbb{E}[\mathbf{D}\mathbf{y}+ \hat{\boldsymbol{\beta}}] \quad \forall \boldsymbol{\beta}\in \mathbb{R}^p      \\
+  &amp;= \mathbf{D}\mathbb{E}[\mathbf{y}] + \mathbb{E}[\hat{\boldsymbol{\beta}}] \quad \forall \boldsymbol{\beta}\in \mathbb{R}^p \\
+  &amp;= \mathbf{D}\mathbf{X}\boldsymbol{\beta}+ \boldsymbol{\beta}\quad \forall \boldsymbol{\beta}\in \mathbb{R}^p &amp; \text{since $\mathbb{E}[\mathbf{y}] = \mathbf{X}\boldsymbol{\beta}$ and $\mathbb{E}[\hat{\boldsymbol{\beta}}] = \boldsymbol{\beta}$} \\
+\end{align*}\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbb{E}[\tilde{\boldsymbol{\beta}}] = \boldsymbol{\beta}\quad \forall \boldsymbol{\beta}\in \mathbb{R}^p           \\
+  &amp;\implies \mathbf{D}\mathbf{X}\boldsymbol{\beta}+ \boldsymbol{\beta}= \boldsymbol{\beta}\quad \forall \boldsymbol{\beta}\in \mathbb{R}^p  \\
+  &amp;\implies \mathbf{D}\mathbf{X}\boldsymbol{\beta}= \mathbf{0}\quad \forall \boldsymbol{\beta}\in \mathbb{R}^p       \\
+  &amp;\implies \mathbf{D}\mathbf{X}= \mathbf{0}\\
+\end{align*}\]</span></p>
+<p>Now, we can analyze the variance of <span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbb{V}[\tilde{\boldsymbol{\beta}}]
+    &amp;= \mathbb{V}[\mathbf{D}\mathbf{y}+ \hat{\boldsymbol{\beta}}]                                                                                            \\
+    &amp;= \mathbb{V}[\mathbf{D}\mathbf{y}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{y}] &amp;&amp; \text{since $\hat{\boldsymbol{\beta}} = (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{y}$}                      \\
+    &amp;= \mathbb{V}[(\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) \mathbf{y}]                                                                                \\
+    &amp;= (\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) \mathbb{V}[\mathbf{y}] (\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;)&#39;                                                  \\
+    &amp;= (\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) \mathbb{V}[\mathbf{y}] (\mathbf{D}&#39; + \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1})                                                   \\
+    &amp;= (\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) (\sigma^2 \mathbf{I}) (\mathbf{D}&#39; + \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1}) &amp;&amp; \text{since $\mathbb{V}[\mathbf{y}] = \sigma^2 \mathbf{I}$}   \\
+    &amp;= \sigma^2 (\mathbf{D}+ (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39;) (\mathbf{D}&#39; + \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1})                                                   \\
+    &amp;= \sigma^2 (\mathbf{D}\mathbf{D}&#39; + (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{D}&#39;                                                                       \\
+    &amp;\quad + \mathbf{D}\mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1} + (\mathbf{X}&#39; \mathbf{X})^{-1} \mathbf{X}&#39; \mathbf{X}(\mathbf{X}&#39; \mathbf{X})^{-1})                                            \\
+    &amp;= \sigma^2 (\mathbf{D}\mathbf{D}&#39; + (\mathbf{X}&#39; \mathbf{X})^{-1}) &amp;&amp; \text{since $\mathbf{D}\mathbf{X}= \mathbf{0}$}                                             \\
+    &amp;= \sigma^2 (\mathbf{X}&#39; \mathbf{X})^{-1} + \sigma^2 (\mathbf{D}\mathbf{D}&#39;)                                                                       \\
+    &amp;= \mathbb{V}[\hat{\boldsymbol{\beta}}] + \sigma^2 (\mathbf{D}\mathbf{D}&#39;) &amp;&amp; \text{since $\mathbb{V}[\hat{\boldsymbol{\beta}}] = \sigma^2 (\mathbf{X}&#39; \mathbf{X})^{-1}$}                   \\
+\end{align*}\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{D}\mathbf{D}&#39;\)</span> is semi-positive definite, we have that:</p>
+<p><span class="math display">\[ \mathbb{V}[\tilde{\boldsymbol{\beta}}] - \mathbb{V}[\hat{\boldsymbol{\beta}}] = \sigma^2 (\mathbf{D}\mathbf{D}&#39;) \]</span></p>
+<p>is semi-positive definite. This concludes the end of the proof.</p>
+<p>So, as it turns out, the OLS estimator that came out of minimizing the least
+squares, and made no assumptions about the expectation and variances is a very
+good estimator, since it is:</p>
+<ul>
+<li>Unbiased</li>
+<li>Among the unbiased and linear estimators, it has the smallest variance.</li>
+</ul>
+<p>Another common measure of performance is the Mean Square Error (MSE) of an estimator
+with respect to a parameter. Using the Gauss-Markov Theorem we can conclude that,
+among the unbiased and linear estimators, the OLS estimator has the smallest MSE.</p>
+<p>Since, both estimators are unbiased, we have that:</p>
+<p><span class="math display">\[ \mathbb{M}(\hat{\mathbf{\boldsymbol{\beta}}}) = \text{tr}(\text{Var}(\hat{\mathbf{\boldsymbol{\beta}}})) + \|\text{Bias}(\hat{\mathbf{\boldsymbol{\beta}}})\|^2 = \text{tr}(\text{Var}(\hat{\mathbf{\boldsymbol{\beta}}})) \]</span>
+<span class="math display">\[ \mathbb{M}(\tilde{\mathbf{\boldsymbol{\beta}}}) = \text{tr}(\text{Var}(\tilde{\mathbf{\boldsymbol{\beta}}})) + \|\text{Bias}(\tilde{\mathbf{\boldsymbol{\beta}}})\|^2 = \text{tr}(\text{Var}(\tilde{\mathbf{\boldsymbol{\beta}}})) \]</span></p>
+<p>Then, by the Gauss-Markov theorem:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbb{M}[\tilde{\boldsymbol{\beta}}] - \mathbb{M}[\hat{\boldsymbol{\beta}}]
+    &amp;= \text{tr}(\text{Var}(\tilde{\mathbf{\boldsymbol{\beta}}})) - \text{tr}(\text{Var}(\hat{\mathbf{\boldsymbol{\beta}}}))                                     \\
+    &amp;= \text{tr}(\text{Var}(\tilde{\mathbf{\boldsymbol{\beta}}})) - \text{Var}(\hat{\mathbf{\boldsymbol{\beta}}})) &amp;&amp; \text{since the trace operator is linear.} \\
+    &amp;\geq 0          \\
+\end{align*}\]</span></p>
+<p>Where we use the fact that <span class="math inline">\(\text{Var}(\tilde{\mathbf{\boldsymbol{\beta}}})) - \text{Var}(\hat{\mathbf{\boldsymbol{\beta}}})\)</span>
+is positive semi-definite by the Gauss-Markov theorem and the trace of a positive
+semi-definite matrix is non-negative.</p>
+</div>
+</div>
+<div id="estimate-of-sigma2" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> Estimate of <span class="math inline">\(\sigma^2\)</span><a href="mean-and-varaince-assumptions.html#estimate-of-sigma2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Since we have introduced a new parameter <span class="math inline">\(\sigma^2\)</span>, we might be interested in
+estimate it. We will propose an estimate of <span class="math inline">\(\sigma^2\)</span> of the following shape:</p>
+<p><span class="math display">\[\hat{\sigma}^2 = a \hat{\mathbf{e}}&#39;\hat{\mathbf{e}}\]</span></p>
+<p>where we will choose the scalar <span class="math inline">\(a\)</span> later.</p>
+<p>In particular, we want to take the expectation of this estimate. To do so, we will
+take a roundabout way. First we will show that:</p>
+<p><span class="math display">\[(\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;(\mathbf{y}- \mathbb{E}[\mathbf{y}]) = \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])\]</span></p>
+<p>and we will use this fact to compute the expectation of <span class="math inline">\(\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;&amp; (\mathbf{y}- \mathbb{E}[\mathbf{y}])                                                                                           \\
+    &amp;= (\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\boldsymbol{\beta}) &amp;&amp; \text{since $\mathbb{E}[\mathbf{y}] = \mathbf{X}\boldsymbol{\beta}$}                                                  \\
+    &amp;= (\mathbf{y}- \mathbf{X}\hat{\boldsymbol{\beta}} + \mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y}- \mathbf{X}\hat{\boldsymbol{\beta}} + \mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})                    \\
+    &amp;= (\mathbf{y}- \mathbf{X}\hat{\boldsymbol{\beta}})&#39;(\mathbf{y}- \mathbf{X}\hat{\boldsymbol{\beta}}) + 2(\mathbf{y}- \mathbf{X}\hat{\boldsymbol{\beta}})&#39;(\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})                      \\
+    &amp;\quad + (\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})                                                            \\
+    &amp;= (\mathbf{y}- \hat{\mathbf{y}})&#39;(\mathbf{y}- \hat{\mathbf{y}}) + 2(\mathbf{y}- \hat{\mathbf{y}})&#39;(\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})                                     \\
+    &amp;\quad + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])                                                          \\
+    &amp;= \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + 2\hat{\mathbf{e}}&#39;(\mathbf{X}\hat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta}) + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}]) \\
+    &amp;= \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + 2\hat{\mathbf{e}}&#39;\mathbf{X}(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}) + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])     \\
+    &amp;= \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}]) &amp;&amp; \text{since $\hat{\mathbf{e}}&#39;\mathbf{X}=\mathbf{0}$}   \\
+\end{align*}\]</span></p>
+<p>Since</p>
+<p><span class="math display">\[\mathbb{E}[(\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;(\mathbf{y}- \mathbb{E}[\mathbf{y}])] = \text{tr}(\mathbb{V}[\mathbf{y}]) = \text{tr}(\sigma^2 \mathbf{I}) = \sigma^2 \text{tr}(\mathbf{I}) = \sigma^2 n\]</span>
+<span class="math display">\[\mathbb{E}[(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])] = \text{tr}(\mathbb{V}[\hat{\mathbf{y}}]) = \text{tr}(\sigma^2 \mathbf{H}) = \sigma^2 \text{tr}(\mathbf{H}) = \sigma^2 p\]</span>
+where we use the fact that the trace of an idempotent matrix is equal to the rank of the matrix. Then we get that:</p>
+<p><span class="math display">\[\begin{align*}
+  (\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;&amp; (\mathbf{y}- \mathbb{E}[\mathbf{y}]) = \hat{\mathbf{e}}&#39;\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])                          \\
+    &amp;\implies \mathbb{E}[(\mathbf{y}- \mathbb{E}[\mathbf{y}])&#39;(\mathbf{y}- \mathbb{E}[\mathbf{y}])] = \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}] + \mathbb{E}[(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])&#39;(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])] \\
+    &amp;\implies \text{tr}(\mathbb{V}[\mathbf{y}]) = \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}] + \text{tr}(\mathbb{V}[\hat{\mathbf{y}}])                                                         \\
+    &amp;\implies \sigma^2 n = \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}] + \sigma^2 p                                                                                 \\
+    &amp;\implies \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}] = \sigma^2 n - \sigma^2 p                                                                                 \\
+    &amp;\implies \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}] = \sigma^2 (n - p)                                                                                        \\
+\end{align*}\]</span></p>
+<p>Then, if we set <span class="math inline">\(a=(\frac{1}{n-p})\)</span> we have that our proposed estimator <span class="math inline">\(\hat{\sigma}^2\)</span>
+is unbiased. Since:</p>
+<p><span class="math display">\[\begin{align*}
+  \mathbb{E}[a \hat{\sigma}^2]
+    &amp;= \mathbb{E}[a \hat{\mathbf{e}}&#39;\hat{\mathbf{e}}]   \\
+    &amp;= a \mathbb{E}[\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}]   \\
+    &amp;= a \sigma^2 (n-p)             \\
+    &amp;= \frac{1}{n-p} \sigma^2 (n-p) \\
+    &amp;= \sigma^2                     \\
+\end{align*}\]</span></p>
+<p>We can choose or obtain other values for <span class="math inline">\(a\)</span>, however the estimator will not be
+unbiased.</p>
+
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-
+<a href="bootstrapping.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="normality-assumption.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

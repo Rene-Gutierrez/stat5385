@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | _main.knit</title>
+  <title>10 Applications | _main.knit</title>
   <meta name="description" content="" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | _main.knit" />
+  <meta property="og:title" content="10 Applications | _main.knit" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | _main.knit" />
+  <meta name="twitter:title" content="10 Applications | _main.knit" />
   
   
   
@@ -28,7 +28,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
+<link rel="prev" href="normality-assumption.html"/>
 
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -467,18 +467,573 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="applications-4" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">10</span> Applications<a href="applications-4.html#applications-4" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="anova" class="section level2 hasAnchor" number="10.1">
+<h2><span class="header-section-number">10.1</span> ANOVA<a href="applications-4.html#anova" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This section introduces Analysis of Variance (ANOVA) from the viewpoint of the linear regression model. We begin with the simplest case — a single covariate that indicates group membership (one-way ANOVA) — and show how this is equivalent to testing differences in means. We then generalize to the case with additional covariates (ANCOVA), explain how control variables improve estimation, and finish with a discussion of the role of randomization for the covariate of interest.</p>
+<hr />
+<div id="one-way-anova-a-single-covariate-differences-in-means" class="section level3 hasAnchor" number="10.1.1">
+<h3><span class="header-section-number">10.1.1</span> One-way ANOVA: a single covariate (differences in means)<a href="applications-4.html#one-way-anova-a-single-covariate-differences-in-means" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="conceptual-statement" class="section level4 hasAnchor" number="10.1.1.1">
+<h4><span class="header-section-number">10.1.1.1</span> Conceptual statement<a href="applications-4.html#conceptual-statement" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Suppose we have an outcome <span class="math inline">\(y\)</span> and a categorical factor with <span class="math inline">\(G\)</span> groups. Let <span class="math inline">\(g(i)\in\{1,\dots,G\}\)</span> denote the group of observation <span class="math inline">\(i\)</span>. A one-way ANOVA model can be written as the regression</p>
+<p><span class="math display">\[
+y_i = \mu + \tau_{g(i)} + e_i,\qquad e_i\sim N(0,\sigma^2),
+\]</span></p>
+<p>with the usual constraint <span class="math inline">\(\sum_{g=1}^G \tau_g = 0\)</span> (identifiability). Equivalently, we can encode the groups with dummy variables and write</p>
+<p><span class="math display">\[
+y_i = \beta_0 + \beta_1 x_{1,i} + \cdots + \beta_{G-1} x_{G-1,i} + e_i,
+\]</span></p>
+<p>where the <span class="math inline">\(x_{j,i}\)</span> are indicator (0/1) variables for groups 2..G (group 1 is baseline). Thus <strong>one-way ANOVA is an ordinary linear regression</strong> in which the covariates are the group indicators.</p>
+</div>
+<div id="anova-as-difference-in-means" class="section level4 hasAnchor" number="10.1.1.2">
+<h4><span class="header-section-number">10.1.1.2</span> ANOVA as difference-in-means<a href="applications-4.html#anova-as-difference-in-means" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For the two-group case (<span class="math inline">\(G=2\)</span>) this reduces to testing a difference of means. Let group 1 have mean <span class="math inline">\(\mu_1\)</span> and group 2 mean <span class="math inline">\(\mu_2\)</span>. The regression</p>
+<p><span class="math display">\[
+y_i = \beta_0 + \beta_1 x_i + e_i,
+\]</span></p>
+<p>with <span class="math inline">\(x_i=1\)</span> if observation <span class="math inline">\(i\)</span> is in group 2 and <span class="math inline">\(0\)</span> otherwise, yields <span class="math inline">\(\beta_0=\mu_1\)</span> and <span class="math inline">\(\beta_1=\mu_2-\mu_1\)</span>. The hypothesis</p>
+<p><span class="math display">\[
+H_0:\ \mu_1=\mu_2 \quad\Longleftrightarrow\quad H_0:\ \beta_1=0
+\]</span></p>
+<p>is then tested by the usual <span class="math inline">\(t\)</span>-test (or equivalently by an <span class="math inline">\(F\)</span>-test with 1 numerator df). The one-way ANOVA <span class="math inline">\(F\)</span> statistic for general <span class="math inline">\(G\)</span> compares between-group variability to within-group variability; algebraically it is the same as the regression <span class="math inline">\(F\)</span> that compares the model with group indicators to the intercept-only model.</p>
+<hr />
+</div>
+<div id="r-example-one-way-anova-difference-in-means" class="section level4 hasAnchor" number="10.1.1.3">
+<h4><span class="header-section-number">10.1.1.3</span> R example — one-way ANOVA / difference in means<a href="applications-4.html#r-example-one-way-anova-difference-in-means" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="applications-4.html#cb159-1" tabindex="-1"></a><span class="co"># Example: the built-in &#39;sleep&#39; dataset (two groups).</span></span>
+<span id="cb159-2"><a href="applications-4.html#cb159-2" tabindex="-1"></a><span class="fu">data</span>(sleep)   <span class="co"># R&#39;s sleep dataset: extra sleep for two groups</span></span>
+<span id="cb159-3"><a href="applications-4.html#cb159-3" tabindex="-1"></a><span class="fu">head</span>(sleep)</span></code></pre></div>
+<pre><code>##   extra group ID
+## 1   0.7     1  1
+## 2  -1.6     1  2
+## 3  -0.2     1  3
+## 4  -1.2     1  4
+## 5  -0.1     1  5
+## 6   3.4     1  6</code></pre>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="applications-4.html#cb161-1" tabindex="-1"></a><span class="co"># Fit one-way ANOVA using aov (equivalent to lm with factor)</span></span>
+<span id="cb161-2"><a href="applications-4.html#cb161-2" tabindex="-1"></a>fit_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(extra <span class="sc">~</span> group, <span class="at">data =</span> sleep)</span>
+<span id="cb161-3"><a href="applications-4.html#cb161-3" tabindex="-1"></a><span class="fu">summary</span>(fit_aov)</span></code></pre></div>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## group        1  12.48  12.482   3.463 0.0792 .
+## Residuals   18  64.89   3.605                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="applications-4.html#cb163-1" tabindex="-1"></a><span class="co"># Fit the equivalent linear model with a dummy</span></span>
+<span id="cb163-2"><a href="applications-4.html#cb163-2" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(extra <span class="sc">~</span> <span class="fu">factor</span>(group), <span class="at">data =</span> sleep)</span>
+<span id="cb163-3"><a href="applications-4.html#cb163-3" tabindex="-1"></a><span class="fu">summary</span>(fit_lm)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = extra ~ factor(group), data = sleep)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -2.430 -1.305 -0.580  1.455  3.170 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)      0.7500     0.6004   1.249   0.2276  
+## factor(group)2   1.5800     0.8491   1.861   0.0792 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.899 on 18 degrees of freedom
+## Multiple R-squared:  0.1613, Adjusted R-squared:  0.1147 
+## F-statistic: 3.463 on 1 and 18 DF,  p-value: 0.07919</code></pre>
+<details>
+<summary>
+<span style="color:green">Explanation of the code</span>
+</summary>
+<ul>
+<li>We use the built-in <code>sleep</code> dataset, which contains the sleep <strong>extra</strong> hours in two groups.</li>
+<li><code>aov(extra ~ group, data = sleep)</code> fits the one-way ANOVA model.</li>
+<li><code>lm(extra ~ factor(group), ...)</code> fits the equivalent regression with group indicators; <code>summary</code> reports coefficients and tests.</li>
+<li>The <code>F</code> test in <code>aov</code> and the <span class="math inline">\(t\)</span> test for the group coefficient in <code>lm</code> are numerically equivalent for the two-group problem.</li>
+</ul>
+</details>
+<hr />
+</div>
+</div>
+</div>
+<div id="ancova" class="section level2 hasAnchor" number="10.2">
+<h2><span class="header-section-number">10.2</span> ANCOVA<a href="applications-4.html#ancova" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="concept-and-notation" class="section level4 hasAnchor" number="10.2.0.1">
+<h4><span class="header-section-number">10.2.0.1</span> Concept and notation<a href="applications-4.html#concept-and-notation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>When additional continuous covariates are present, we may want to test group differences <em>after controlling</em> for these covariates. This is the Analysis of Covariance (ANCOVA) framework. Suppose <span class="math inline">\(\mathbf{z}_i\)</span> is a vector of control variables for observation <span class="math inline">\(i\)</span>. The ANCOVA model is:</p>
+<p><span class="math display">\[
+y_i = \beta_0 + \beta_{\text{grp}}&#39; \mathbf{x}_{i} + \boldsymbol{\gamma}&#39;\mathbf{z}_i + e_i,
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{x}_i\)</span> are group indicator variables and <span class="math inline">\(\boldsymbol{\gamma}\)</span> are coefficients for the controls. The hypothesis that the <span class="math inline">\(k\)</span> group effects are zero (no group differences after adjustment) is</p>
+<p><span class="math display">\[
+H_0:\ \beta_{\text{grp}} = \mathbf{0}.
+\]</span></p>
+</div>
+<div id="how-controls-act-as-partialling-out" class="section level3 hasAnchor" number="10.2.1">
+<h3><span class="header-section-number">10.2.1</span> How controls act as “partialling out”<a href="applications-4.html#how-controls-act-as-partialling-out" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Adding <span class="math inline">\(\mathbf{z}\)</span> does two things:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Reduces omitted-variable bias (if <span class="math inline">\(\mathbf{z}\)</span> is confounded with group)</strong>: by adjusting for covariates associated with both group and outcome, we make the conditional interpretation of <span class="math inline">\(\beta_{\text{grp}}\)</span> closer to a causal or conditional effect.</li>
+<li><strong>Improves precision</strong>: if <span class="math inline">\(\mathbf{z}\)</span> explains variance in <span class="math inline">\(y\)</span>, then residual variance <span class="math inline">\(\sigma^2\)</span> is smaller, which reduces the variance of coefficient estimators and increases power to detect group effects.</li>
+</ol>
+<p>In matrix terms, let <span class="math inline">\(\mathbf{X}=[\mathbf{X}*{\text{grp}},\mathbf{Z}]\)</span> be the full design matrix (group indicators and controls). The variance of the estimated group coefficients depends on the block <span class="math inline">\((\mathbf{X}&#39;\mathbf{X})^{-1}\)</span>. If <span class="math inline">\(\mathbf{Z}\)</span> explains variation in <span class="math inline">\(y\)</span> but is not collinear with <span class="math inline">\(\mathbf{X}*{\text{grp}}\)</span>, the diagonal entries of <span class="math inline">\((\mathbf{X}&#39;\mathbf{X})^{-1}\)</span> relevant to group coefficients shrink, improving standard errors.</p>
+</div>
+<div id="partial-f-test-in-ancova" class="section level3 hasAnchor" number="10.2.2">
+<h3><span class="header-section-number">10.2.2</span> Partial F-test in ANCOVA<a href="applications-4.html#partial-f-test-in-ancova" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To test group effects controlling for <span class="math inline">\(\mathbf{z}\)</span>, compare:</p>
+<ul>
+<li>Reduced model (controls only): <span class="math inline">\(y \sim \mathbf{Z}\)</span>, SSR<span class="math inline">\(_{\text{red}}\)</span>.</li>
+<li>Full model (controls + groups): <span class="math inline">\(y \sim \mathbf{Z} + \mathbf{X}*{\text{grp}}\)</span>, SSR<span class="math inline">\(*{\text{full}}\)</span>.</li>
+</ul>
+<p>The partial F statistic is</p>
+<p><span class="math display">\[
+F = \frac{(\text{SSR}*{\text{red}}-\text{SSR}*{\text{full}})/k}{\text{SSR}*{\text{full}}/(n-p*{\text{full}})},
+\]</span></p>
+<p>with <span class="math inline">\(k\)</span> = number of group d.f. in numerator. Under <span class="math inline">\(H_0\)</span> this follows <span class="math inline">\(F_{k, n-p_{\text{full}}}\)</span>.</p>
+<hr />
+</div>
+<div id="r-example-ancova-with-mtcars" class="section level3 hasAnchor" number="10.2.3">
+<h3><span class="header-section-number">10.2.3</span> R example — ANCOVA with <code>mtcars</code><a href="applications-4.html#r-example-ancova-with-mtcars" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We analyze whether the number of cylinders (<code>cyl</code>) affects <code>mpg</code> after controlling for weight (<code>wt</code>) and horsepower (<code>hp</code>).</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="applications-4.html#cb165-1" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb165-2"><a href="applications-4.html#cb165-2" tabindex="-1"></a></span>
+<span id="cb165-3"><a href="applications-4.html#cb165-3" tabindex="-1"></a><span class="co"># Fit reduced model: controls only</span></span>
+<span id="cb165-4"><a href="applications-4.html#cb165-4" tabindex="-1"></a>fit_red <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> mtcars)</span>
+<span id="cb165-5"><a href="applications-4.html#cb165-5" tabindex="-1"></a></span>
+<span id="cb165-6"><a href="applications-4.html#cb165-6" tabindex="-1"></a><span class="co"># Fit full model: controls + group indicator (cyl as factor)</span></span>
+<span id="cb165-7"><a href="applications-4.html#cb165-7" tabindex="-1"></a>fit_full <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="fu">factor</span>(cyl) <span class="sc">+</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> mtcars)</span>
+<span id="cb165-8"><a href="applications-4.html#cb165-8" tabindex="-1"></a></span>
+<span id="cb165-9"><a href="applications-4.html#cb165-9" tabindex="-1"></a><span class="co"># Partial F-test</span></span>
+<span id="cb165-10"><a href="applications-4.html#cb165-10" tabindex="-1"></a><span class="fu">anova</span>(fit_red, fit_full)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: mpg ~ wt + hp
+## Model 2: mpg ~ factor(cyl) + wt + hp
+##   Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  
+## 1     29 195.05                              
+## 2     27 160.78  2     34.27 2.8776 0.07364 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="applications-4.html#cb167-1" tabindex="-1"></a><span class="co"># Summaries</span></span>
+<span id="cb167-2"><a href="applications-4.html#cb167-2" tabindex="-1"></a><span class="fu">summary</span>(fit_full)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ factor(cyl) + wt + hp, data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.2612 -1.0320 -0.3210  0.9281  5.3947 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  35.84600    2.04102  17.563 2.67e-16 ***
+## factor(cyl)6 -3.35902    1.40167  -2.396 0.023747 *  
+## factor(cyl)8 -3.18588    2.17048  -1.468 0.153705    
+## wt           -3.18140    0.71960  -4.421 0.000144 ***
+## hp           -0.02312    0.01195  -1.934 0.063613 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.44 on 27 degrees of freedom
+## Multiple R-squared:  0.8572, Adjusted R-squared:  0.8361 
+## F-statistic: 40.53 on 4 and 27 DF,  p-value: 4.869e-11</code></pre>
+<details>
+<summary>
+<span style="color:green">Explanation of the code</span>
+</summary>
+<ul>
+<li><code>fit_red</code> estimates mpg using only controls <code>wt</code> and <code>hp</code>.</li>
+<li><code>fit_full</code> adds <code>factor(cyl)</code> (group indicators for cylinder counts).</li>
+<li><code>anova(fit_red, fit_full)</code> performs the partial F-test comparing the reduced and full models; the reported F tests whether <code>factor(cyl)</code> explains additional variance after controlling for <code>wt</code> and <code>hp</code>.</li>
+<li><code>summary(fit_full)</code> gives coefficient estimates for each group after adjustment and their standard errors.</li>
+</ul>
+</details>
+<hr />
+</div>
+<div id="why-controlling-improves-the-analysis" class="section level3 hasAnchor" number="10.2.4">
+<h3><span class="header-section-number">10.2.4</span> Why controlling improves the analysis?<a href="applications-4.html#why-controlling-improves-the-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><p><strong>Reduction in residual variance.</strong> If the controls explain genuine variation in <span class="math inline">\(y\)</span>, then <span class="math inline">\(\hat\sigma^2\)</span> from the full model is smaller than from a model without controls. Since standard errors for coefficients are proportional to <span class="math inline">\(\hat\sigma\)</span>, this increases power.</p></li>
+<li><p><strong>Removal of confounding.</strong> If group membership is correlated with control covariates that also affect <span class="math inline">\(y\)</span>, failing to control will bias the estimated group differences. Conditioning on <span class="math inline">\(\mathbf{Z}\)</span> recovers the conditional association of groups with <span class="math inline">\(y\)</span>.</p></li>
+<li><p><strong>Interpretation: conditional effects.</strong> Coefficients of the group indicators in the ANCOVA are interpreted as <strong>mean differences conditional on the controls</strong>.</p></li>
+<li><p><strong>Caveat — multicollinearity.</strong> If some controls are highly collinear with group indicators (e.g., almost all observations in one group have similar control values), then <span class="math inline">\((\mathbf{X}&#39;\mathbf{X})^{-1}\)</span> inflates and standard errors can increase. Design and variable selection matter.</p></li>
+</ol>
+<hr />
+</div>
+</div>
+<div id="effect-of-randomization-in-the-covariate-of-interest" class="section level2 hasAnchor" number="10.3">
+<h2><span class="header-section-number">10.3</span> Effect of randomization in the covariate of interest<a href="applications-4.html#effect-of-randomization-in-the-covariate-of-interest" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Randomization of the treatment (or group assignment) is central to causal inference and also simplifies the ANOVA/ANCOVA analysis.</p>
+<div id="key-consequences-of-randomization" class="section level3 hasAnchor" number="10.3.1">
+<h3><span class="header-section-number">10.3.1</span> Key consequences of randomization<a href="applications-4.html#key-consequences-of-randomization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Balance (in expectation).</strong> With random assignment, treatment groups are, in expectation, balanced on both observed and unobserved covariates: <span class="math inline">\(\mathbb{E}[\mathbf{Z}\mid \text{treatment}] = \mathbb{E}[\mathbf{Z}]\)</span>. As a result, simple between-group comparisons are unbiased for the average treatment effect without needing adjustment for covariates.</li>
+<li><strong>Orthogonality.</strong> Under complete randomization, the group indicators are (approximately) orthogonal to pre-treatment covariates; formally, <span class="math inline">\(\operatorname{Cov}(\mathbf{X}_{\text{grp}},\mathbf{Z})\approx \mathbf{0}\)</span> in large samples. This orthogonality yields simpler variance expressions and better behaved estimates.</li>
+<li><strong>Precision gain from adjusting.</strong> Even with randomization, adjusting for prognostic covariates in ANCOVA can <strong>increase precision</strong> (reduce standard errors) because controls explain residual variance. Because orthogonality prevents bias in coefficient estimates, adjustment is safe and typically recommended.</li>
+<li><strong>Finite-sample exactness.</strong> In randomized experiments with certain designs (e.g., completely randomized with normal errors), tests based on regression or ANOVA can be made exact (valid in finite samples), not only asymptotically.</li>
+</ul>
+</div>
+<div id="randomized-vs-observational-assignments" class="section level3 hasAnchor" number="10.3.2">
+<h3><span class="header-section-number">10.3.2</span> Randomized vs observational assignments<a href="applications-4.html#randomized-vs-observational-assignments" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>Randomized assignment:</strong> identification of the causal effect is straightforward; regression adjustments mainly improve precision.</li>
+<li><strong>Observational assignment:</strong> group differences may reflect confounding; adjustments are necessary to reduce bias, but residual confounding can remain.</li>
+</ul>
+<hr />
+</div>
+<div id="simulation-example-randomized-vs-non-randomized-brief" class="section level3 hasAnchor" number="10.3.3">
+<h3><span class="header-section-number">10.3.3</span> Simulation example: randomized vs non-randomized (brief)<a href="applications-4.html#simulation-example-randomized-vs-non-randomized-brief" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="applications-4.html#cb169-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb169-2"><a href="applications-4.html#cb169-2" tabindex="-1"></a></span>
+<span id="cb169-3"><a href="applications-4.html#cb169-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb169-4"><a href="applications-4.html#cb169-4" tabindex="-1"></a><span class="co"># Covariate strongly predictive of y</span></span>
+<span id="cb169-5"><a href="applications-4.html#cb169-5" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb169-6"><a href="applications-4.html#cb169-6" tabindex="-1"></a></span>
+<span id="cb169-7"><a href="applications-4.html#cb169-7" tabindex="-1"></a><span class="co"># Scenario A: randomized treatment</span></span>
+<span id="cb169-8"><a href="applications-4.html#cb169-8" tabindex="-1"></a>t_rand <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)  <span class="co"># random 0/1 assignment</span></span>
+<span id="cb169-9"><a href="applications-4.html#cb169-9" tabindex="-1"></a>y_rand <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">*</span> t_rand <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> z <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb169-10"><a href="applications-4.html#cb169-10" tabindex="-1"></a></span>
+<span id="cb169-11"><a href="applications-4.html#cb169-11" tabindex="-1"></a><span class="co"># Scenario B: observational treatment correlated with z</span></span>
+<span id="cb169-12"><a href="applications-4.html#cb169-12" tabindex="-1"></a>p_obs <span class="ot">&lt;-</span> <span class="fu">plogis</span>(<span class="fl">0.5</span> <span class="sc">*</span> z)     <span class="co"># higher z -&gt; more likely treated</span></span>
+<span id="cb169-13"><a href="applications-4.html#cb169-13" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, p_obs)</span>
+<span id="cb169-14"><a href="applications-4.html#cb169-14" tabindex="-1"></a>y_obs <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">*</span> t_obs <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> z <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb169-15"><a href="applications-4.html#cb169-15" tabindex="-1"></a></span>
+<span id="cb169-16"><a href="applications-4.html#cb169-16" tabindex="-1"></a><span class="co"># Estimate treatment effect without and with control</span></span>
+<span id="cb169-17"><a href="applications-4.html#cb169-17" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_rand <span class="sc">~</span> t_rand))</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y_rand ~ t_rand)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.1757 -1.5970 -0.2269  1.5051  5.9601 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   0.1313     0.2068   0.635    0.526    
+## t_rand        1.2751     0.2911   4.381 1.92e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.058 on 198 degrees of freedom
+## Multiple R-squared:  0.08836,    Adjusted R-squared:  0.08375 
+## F-statistic: 19.19 on 1 and 198 DF,  p-value: 1.916e-05</code></pre>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="applications-4.html#cb171-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_rand <span class="sc">~</span> t_rand <span class="sc">+</span> z))</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y_rand ~ t_rand + z)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.69988 -0.56149  0.04741  0.64025  2.50594 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.08778    0.10188   0.862     0.39    
+## t_rand       1.39337    0.14342   9.715   &lt;2e-16 ***
+## z            1.89692    0.07622  24.888   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.014 on 197 degrees of freedom
+## Multiple R-squared:   0.78,  Adjusted R-squared:  0.7778 
+## F-statistic: 349.3 on 2 and 197 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="applications-4.html#cb173-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_obs <span class="sc">~</span> t_obs))</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y_obs ~ t_obs)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.4996 -1.2988 -0.2802  1.2883  5.9878 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -0.6779     0.2022  -3.353 0.000958 ***
+## t_obs         2.7651     0.2845   9.719  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.012 on 198 degrees of freedom
+## Multiple R-squared:  0.323,  Adjusted R-squared:  0.3195 
+## F-statistic: 94.45 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="applications-4.html#cb175-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_obs <span class="sc">~</span> t_obs <span class="sc">+</span> z))</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y_obs ~ t_obs + z)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.35662 -0.70170  0.06625  0.71929  2.68551 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -0.1069     0.1058   -1.01    0.314    
+## t_obs         1.6670     0.1522   10.95   &lt;2e-16 ***
+## z             1.9226     0.0809   23.77   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.026 on 197 degrees of freedom
+## Multiple R-squared:  0.8249, Adjusted R-squared:  0.8231 
+## F-statistic: 464.1 on 2 and 197 DF,  p-value: &lt; 2.2e-16</code></pre>
+<details>
+<summary>
+<span style="color:green">Explanation of the code</span>
+</summary>
+<ul>
+<li>We simulate a prognostic covariate <code>z</code> that affects the outcome.</li>
+<li>In the randomized scenario (<code>t_rand</code>) treatment is independent of <code>z</code>. The unadjusted regression <code>y ~ t_rand</code> gives an (approximately) unbiased estimate of the treatment effect; adding <code>z</code> reduces the standard error.</li>
+<li>In the observational scenario, treatment depends on <code>z</code> (<code>t_obs</code>), creating confounding. The unadjusted regression <code>y ~ t_obs</code> is biased; adding <code>z</code> recovers a more accurate estimate (and reduces bias), though perfect adjustment requires all confounders to be observed.</li>
+</ul>
+</details>
+<hr />
+</div>
+<div id="practical-guidance-and-summary" class="section level3 hasAnchor" number="10.3.4">
+<h3><span class="header-section-number">10.3.4</span> Practical guidance and summary<a href="applications-4.html#practical-guidance-and-summary" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><strong>ANOVA = Regression.</strong> One-way ANOVA is a linear regression with group indicator covariates. Testing for equal means is testing coefficients of those indicators.</li>
+<li><strong>ANCOVA = ANOVA + controls.</strong> Adding covariates adjusts for confounding and improves precision when covariates explain outcome variability.</li>
+<li><strong>Partial F-tests</strong> compare nested models (with and without group indicators) controlling for other covariates; algebraically these are the same sums-of-squares comparisons used in classical ANOVA.</li>
+<li><strong>Randomization</strong> guarantees unbiasedness of group comparisons and typically simplifies inference; even when randomized, adjustment for prognostic covariates is advisable to gain efficiency.</li>
+<li><strong>Check assumptions.</strong> Classical ANOVA/ANCOVA relies on linearity, homoscedasticity (or robust alternatives), and (for exact small-sample <span class="math inline">\(p\)</span>-values) normality of errors; diagnostics remain important.</li>
+</ul>
+</div>
+<div id="anova-sums-of-squares-as-projection-matrix-decomposition" class="section level3 hasAnchor" number="10.3.5">
+<h3><span class="header-section-number">10.3.5</span> ANOVA sums-of-squares as projection (matrix) decomposition<a href="applications-4.html#anova-sums-of-squares-as-projection-matrix-decomposition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Below is a concise derivation that shows how the classical ANOVA decomposition of sums of squares maps directly to the regression decomposition using projection (hat) matrices. The derivation assumes the model includes an intercept (so that the column space of the intercept is the space of constant vectors).</p>
+<div id="notation" class="section level4 hasAnchor" number="10.3.5.1">
+<h4><span class="header-section-number">10.3.5.1</span> Notation<a href="applications-4.html#notation" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li><span class="math inline">\(\mathbf{y}\)</span>: <span class="math inline">\(n\times 1\)</span> response vector.<br />
+</li>
+<li><span class="math inline">\(\mathbf{X}\)</span>: <span class="math inline">\(n\times p\)</span> design matrix <strong>including</strong> a column of ones for the intercept.<br />
+</li>
+<li><span class="math inline">\(\mathbf{H} = \mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\)</span>: hat (projection) matrix onto <span class="math inline">\(\operatorname{col}(\mathbf{X})\)</span>.<br />
+</li>
+<li><span class="math inline">\(\mathbf{H}_0 = \dfrac{1}{n}\mathbf{1}\mathbf{1}&#39;\)</span>: hat matrix for the intercept-only model (projection onto constant vectors).<br />
+</li>
+<li><span class="math inline">\(\mathbf{I}\)</span>: <span class="math inline">\(n\times n\)</span> identity matrix.</li>
+</ul>
+<p>All projection matrices above are symmetric and idempotent.</p>
+<hr />
+</div>
+<div id="total-sum-of-squares-sst" class="section level4 hasAnchor" number="10.3.5.2">
+<h4><span class="header-section-number">10.3.5.2</span> Total Sum of Squares (SST)<a href="applications-4.html#total-sum-of-squares-sst" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Classically, the total sum of squares (using the mean as baseline) is
+<span class="math display">\[
+\text{SST}=\sum_{i=1}^n (y_i-\bar{y})^2.
+\]</span>
+In matrix form this is
+<span class="math display">\[
+\text{SST} = \mathbf{y}&#39;(\mathbf{I}-\mathbf{H}_0)\mathbf{y},
+\]</span>
+because <span class="math inline">\(\mathbf{H}_0\mathbf{y}=\bar{y}\,\mathbf{1}\)</span> is the projection of <span class="math inline">\(\mathbf{y}\)</span> onto the constant vector.</p>
+<hr />
+</div>
+<div id="error-residual-sum-of-squares-sse" class="section level4 hasAnchor" number="10.3.5.3">
+<h4><span class="header-section-number">10.3.5.3</span> Error (Residual) Sum of Squares (SSE)<a href="applications-4.html#error-residual-sum-of-squares-sse" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The residual sum of squares from the full model is
+<span class="math display">\[
+\text{SSE}=\sum_{i=1}^n (y_i-\hat{y}_i)^2
+= \mathbf{y}&#39;(\mathbf{I}-\mathbf{H})\mathbf{y},
+\]</span>
+since <span class="math inline">\(\mathbf{H}\mathbf{y}=\hat{\mathbf{y}}\)</span> is the projection of <span class="math inline">\(\mathbf{y}\)</span> onto <span class="math inline">\(\operatorname{col}(\mathbf{X})\)</span>.</p>
+<hr />
+</div>
+<div id="regression-between-sum-of-squares-ssr" class="section level4 hasAnchor" number="10.3.5.4">
+<h4><span class="header-section-number">10.3.5.4</span> Regression (Between) Sum of Squares (SSR)<a href="applications-4.html#regression-between-sum-of-squares-ssr" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The regression (or explained) sum of squares is defined by the identity
+<span class="math display">\[
+\text{SSR} = \text{SST} - \text{SSE}.
+\]</span>
+Using the matrix forms above,
+<span class="math display">\[\begin{align*}
+\text{SSR}
+&amp;= \mathbf{y}&#39;(\mathbf{I}-\mathbf{H}_0)\mathbf{y} - \mathbf{y}&#39;(\mathbf{I}-\mathbf{H})\mathbf{y} \\
+&amp;= \mathbf{y}&#39;\big(\mathbf{H}-\mathbf{H}_0\big)\mathbf{y}.
+\end{align*}\]</span></p>
+<p>Thus the portion of variability explained by the full model (over and above the intercept-only model) is the quadratic form with the idempotent matrix <span class="math inline">\(\mathbf{H}-\mathbf{H}_0\)</span>, which projects onto the subspace of <span class="math inline">\(\operatorname{col}(\mathbf{X})\)</span> orthogonal to the constant vector.</p>
+<hr />
+</div>
+<div id="orthogonality-and-additivity" class="section level4 hasAnchor" number="10.3.5.5">
+<h4><span class="header-section-number">10.3.5.5</span> Orthogonality and additivity<a href="applications-4.html#orthogonality-and-additivity" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Because <span class="math inline">\(\mathbf{H}\)</span> and <span class="math inline">\(\mathbf{H}_0\)</span> are projection matrices with <span class="math inline">\(\operatorname{col}(\mathbf{H}_0)\subseteq\operatorname{col}(\mathbf{H})\)</span>, the difference
+<span class="math display">\[
+\mathbf{M} \;=\; \mathbf{H}-\mathbf{H}_0
+\]</span>
+is itself symmetric and idempotent, and projects onto the <span class="math inline">\(p-1\)</span> dimensional subspace of predictors after removing the intercept. One checks that
+<span class="math display">\[
+(\mathbf{H}-\mathbf{H}_0)(\mathbf{I}-\mathbf{H}) = \mathbf{0},
+\]</span>
+so the subspace onto which <span class="math inline">\(\mathbf{M}\)</span> projects is orthogonal to the residual space of the full model. From this orthogonality it follows immediately that
+<span class="math display">\[
+\text{SST} = \text{SSR} + \text{SSE},
+\]</span>
+i.e. the sums-of-squares add (because the corresponding quadratic forms are on orthogonal subspaces).</p>
+<hr />
+</div>
+<div id="degrees-of-freedom-and-trace" class="section level4 hasAnchor" number="10.3.5.6">
+<h4><span class="header-section-number">10.3.5.6</span> Degrees of freedom and trace<a href="applications-4.html#degrees-of-freedom-and-trace" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The degrees of freedom associated to each sum of squares are equal to the trace (rank) of the corresponding idempotent matrix:</p>
+<ul>
+<li><span class="math inline">\(\text{df}_{\text{Total}} = \operatorname{tr}(\mathbf{I}-\mathbf{H}_0) = n-1\)</span>.<br />
+</li>
+<li><span class="math inline">\(\text{df}_{\text{Regression}} = \operatorname{tr}(\mathbf{H}-\mathbf{H}_0) = \operatorname{tr}(\mathbf{H})-\operatorname{tr}(\mathbf{H}_0) = p - 1\)</span>.<br />
+</li>
+<li><span class="math inline">\(\text{df}_{\text{Error}} = \operatorname{tr}(\mathbf{I}-\mathbf{H}) = n - p\)</span>.</li>
+</ul>
+<p>These trace identities give the familiar ANOVA degrees-of-freedom breakdown.</p>
+<hr />
+</div>
+<div id="remarks" class="section level4 hasAnchor" number="10.3.5.7">
+<h4><span class="header-section-number">10.3.5.7</span> Remarks<a href="applications-4.html#remarks" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<ul>
+<li>The matrix viewpoint makes transparent that one-way ANOVA, multiple regression, and ANCOVA are the same algebraic object: sums of squares are quadratic forms induced by projections onto nested linear subspaces.<br />
+</li>
+<li>The decomposition and orthogonality arguments above are the backbone of ANOVA inference and of the construction of <span class="math inline">\(F\)</span>-tests: a difference of quadratic forms projecting onto an added subspace yields a (scaled) <span class="math inline">\(\chi^2\)</span> in the numerator, independent of the residual <span class="math inline">\(\chi^2\)</span> in the denominator, producing the <span class="math inline">\(F\)</span>-statistic.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="variance-decomposition" class="section level2 hasAnchor" number="10.4">
+<h2><span class="header-section-number">10.4</span> Variance decomposition<a href="applications-4.html#variance-decomposition" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="notation-common-to-both-derivations" class="section level3 hasAnchor" number="10.4.1">
+<h3><span class="header-section-number">10.4.1</span> Notation (common to both derivations)<a href="applications-4.html#notation-common-to-both-derivations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>There are <span class="math inline">\(k\)</span> groups.</li>
+<li>Group <span class="math inline">\(j\)</span> has <span class="math inline">\(n_j\)</span> observations, <span class="math inline">\(j=1,\dots,k\)</span>, and total sample size <span class="math inline">\(n=\sum_{j=1}^k n_j\)</span>.</li>
+<li>Let <span class="math inline">\(y_{j i}\)</span> be the <span class="math inline">\(i\)</span>th observation in group <span class="math inline">\(j\)</span> (<span class="math inline">\(i=1,\dots,n_j\)</span>).</li>
+<li>Group means: <span class="math inline">\(\bar y_{j\cdot}=\dfrac{1}{n_j}\sum_{i=1}^{n_j} y_{j i}\)</span>.</li>
+<li>Overall (grand) mean: <span class="math inline">\(\bar y_{\cdot\cdot}=\dfrac{1}{n}\sum_{j=1}^k\sum_{i=1}^{n_j} y_{j i}\)</span>.</li>
+</ul>
+<p>We define the standard sums of squares:</p>
+<ul>
+<li><p><strong>Total sum of squares (SST)</strong>
+<span class="math display">\[
+\mathrm{SST}=\sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i}-\bar y_{\cdot\cdot})^2.
+\]</span></p></li>
+<li><p><strong>Within-groups (error) sum of squares (SSE)</strong>
+<span class="math display">\[
+\mathrm{SSE}=\sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i}-\bar y_{j\cdot})^2.
+\]</span></p></li>
+<li><p><strong>Between-groups (regression/explained) sum of squares (SSB)</strong>
+<span class="math display">\[
+\mathrm{SSB}=\sum_{j=1}^k n_j(\bar y_{j\cdot}-\bar y_{\cdot\cdot})^2.
+\]</span></p></li>
+</ul>
+<p>The ANOVA identity to prove is
+<span class="math display">\[
+\mathrm{SST}=\mathrm{SSB}+\mathrm{SSE}.
+\]</span></p>
+<hr />
+</div>
+<div id="scalar-elementwise-derivation" class="section level3 hasAnchor" number="10.4.2">
+<h3><span class="header-section-number">10.4.2</span> 1 — Scalar (elementwise) derivation<a href="applications-4.html#scalar-elementwise-derivation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Start from the decomposition of each deviation from the grand mean as the sum of a within-group deviation and the group mean deviation:</p>
+<p><span class="math display">\[
+y_{j i} - \bar y_{\cdot\cdot} = (y_{j i} - \bar y_{j\cdot}) + (\bar y_{j\cdot} - \bar y_{\cdot\cdot}).
+\]</span>
+Square both sides and sum over all observations:
+<span class="math display">\[\begin{align*}
+\mathrm{SST}
+  &amp;= \sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i}-\bar y_{\cdot\cdot})^2 \\
+  &amp;= \sum_{j=1}^k\sum_{i=1}^{n_j} \big[ (y_{j i} - \bar y_{j\cdot}) + (\bar y_{j\cdot} - \bar y_{\cdot\cdot}) \big]^2 \\
+  &amp;= \sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i} - \bar y_{j\cdot})^2 + 2\sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i} - \bar y_{j\cdot})(\bar y_{j\cdot}-\bar y_{\cdot\cdot}) + \sum_{j=1}^k\sum_{i=1}^{n_j} (\bar y_{j\cdot}-\bar y_{\cdot\cdot})^2
+\end{align*}\]</span></p>
+<p>Now simplify the middle term. For a fixed group <span class="math inline">\(j\)</span>,
+<span class="math display">\[
+\sum_{i=1}^{n_j} (y_{j i} - \bar y_{j\cdot}) = 0
+\]</span></p>
+<p>by the definition of the group mean. Therefore the cross term vanishes:</p>
+<p><span class="math display">\[
+\sum_{i=1}^{n_j} (y_{j i} - \bar y_{j\cdot})(\bar y_{j\cdot}-\bar y_{\cdot\cdot})
+= (\bar y_{j\cdot}-\bar y_{\cdot\cdot})\sum_{i=1}^{n_j}(y_{j i}-\bar y_{j\cdot}) = 0.
+\]</span>
+Hence the expansion reduces to</p>
+<p><span class="math display">\[
+\mathrm{SST} = \underbrace{\sum_{j=1}^k\sum_{i=1}^{n_j} (y_{j i} - \bar y_{j\cdot})^2}_{\mathrm{SSE}} + \underbrace{\sum_{j=1}^k n_j(\bar y_{j\cdot}-\bar y_{\cdot\cdot})^2}_{\mathrm{SSB}}.
+\]</span></p>
+<p>That is,
+<span class="math display">\[
+  \boxed{\mathrm{SST} = \mathrm{SSB} + \mathrm{SSE}.}
+\]</span></p>
+<p>This is the usual elementary proof used in introductory courses.</p>
+<hr />
+</div>
+<div id="matrix-projection-derivation" class="section level3 hasAnchor" number="10.4.3">
+<h3><span class="header-section-number">10.4.3</span> 2 — Matrix / projection derivation<a href="applications-4.html#matrix-projection-derivation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The matrix derivation exposes the geometric reason: ANOVA is a decomposition of the data vector <span class="math inline">\(\mathbf{y}\)</span> into orthogonal projections.</p>
+<p>Form the <span class="math inline">\(n\times 1\)</span> stacked data vector <span class="math inline">\(\mathbf{y}\)</span> (stack all observations in any order). Let</p>
+<ul>
+<li><span class="math inline">\(\mathbf{1}\)</span> be the <span class="math inline">\(n\times 1\)</span> vector of ones,</li>
+<li><span class="math inline">\(\mathbf{H}_0=\dfrac{1}{n}\mathbf{1}\mathbf{1}&#39;\)</span> be the projection onto the constant (intercept) subspace,</li>
+<li><span class="math inline">\(\mathbf{X}\)</span> be the <span class="math inline">\(n\times k\)</span> design matrix of group indicators in <em>cell-means</em> or <em>contrast</em> form (a column for each group mean or <span class="math inline">\(k-1\)</span> columns plus an intercept — the projection subspace is the same),</li>
+<li><span class="math inline">\(\mathbf{H}=\mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\)</span> be the hat matrix projecting onto the group subspace (all vectors constant within groups).</li>
+</ul>
+<p>Then SST, SSE and SSB can be written as quadratic forms:</p>
+<ul>
+<li><p>Total:
+<span class="math display">\[
+\mathrm{SST} = \mathbf{y}&#39;(\mathbf{I}-\mathbf{H}_0)\mathbf{y}.
+\]</span>
+(This measures deviation from the grand mean.)</p></li>
+<li><p>Error (within groups):
+<span class="math display">\[
+\mathrm{SSE} = \mathbf{y}&#39;(\mathbf{I}-\mathbf{H})\mathbf{y}.
+\]</span></p></li>
+<li><p>Between groups:
+<span class="math display">\[
+\mathrm{SSB} = \mathbf{y}&#39;(\mathbf{H}-\mathbf{H}_0)\mathbf{y}.
+\]</span></p></li>
+</ul>
+<p>These identities are immediate from the definitions of the projection matrices (e.g. <span class="math inline">\(\mathbf{H}\mathbf{y}=\widehat{\mathbf{y}}\)</span> is the vector of fitted values, constant within each group).</p>
+<p>Now note that (algebraically)
+<span class="math display">\[
+\mathbf{I}-\mathbf{H}_0 = (\mathbf{H}-\mathbf{H}_0) + (\mathbf{I}-\mathbf{H}).
+\]</span>
+Indeed rearrange:
+<span class="math display">\[
+(\mathbf{H}-\mathbf{H}_0) + (\mathbf{I}-\mathbf{H}) = \mathbf{I} - \mathbf{H}_0.
+\]</span>
+Thus the three quadratic forms add:
+<span class="math display">\[
+\mathbf{y}&#39;(\mathbf{I}-\mathbf{H}_0)\mathbf{y}
+= \mathbf{y}&#39;(\mathbf{H}-\mathbf{H}_0)\mathbf{y} + \mathbf{y}&#39;(\mathbf{I}-\mathbf{H})\mathbf{y},
+\]</span>
+which is</p>
+<p><span class="math display">\[
+\mathrm{SST} = \mathrm{SSB} + \mathrm{SSE}.
+\]</span></p>
+<p>Geometrically, <span class="math inline">\(\mathbf{H}-\mathbf{H}_0\)</span> and <span class="math inline">\(\mathbf{I}-\mathbf{H}\)</span> are orthogonal projectors: they project onto orthogonal subspaces (the explained subspace orthogonal to the intercept, and the residual subspace), so their quadratic forms are additive. The ranks (traces) of these idempotent matrices give the usual degrees of freedom:</p>
+<span class="math display">\[\begin{aligned}
+  \mathrm{df}(\mathrm{SST}) &amp;= n-1,\
+  \mathrm{df}(\mathrm{SSB}) &amp;= k-1,\
+  \mathrm{df}(\mathrm{SSE}) &amp;= n-k,
+\end{aligned}\]</span>
+<p>() &amp;= k-1,<br />
+() &amp;= n-k,
+\end{aligned}</p>
+<p>and the additivity of degrees of freedom follows from the trace additivity of the matrices.</p>
+<hr />
+</div>
+<div id="concluding-remarks" class="section level3 hasAnchor" number="10.4.4">
+<h3><span class="header-section-number">10.4.4</span> Concluding remarks<a href="applications-4.html#concluding-remarks" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>The elementary expansion shows the identity by direct algebra and uses only the fact that group deviations sum to zero.</li>
+<li>The matrix proof reveals the deeper geometric reason: ANOVA decomposes <span class="math inline">\(\mathbf{y}\)</span> into orthogonal projection components (grand-mean, group effects, residual), and orthogonality implies additivity of sums of squares.</li>
+</ul>
+<p>Either viewpoint is useful: the scalar proof is easy and constructive; the matrix viewpoint generalizes directly to ANCOVA, factorial ANOVA, and the projection-based distributional results (chi-square / <span class="math inline">\(F\)</span> tests).</p>
+
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
+<a href="normality-assumption.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>

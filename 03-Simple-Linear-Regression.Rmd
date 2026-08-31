@@ -1,117 +1,11 @@
 # Simple Linear Regression
 
-## Intro to SLR{#intro-to-slr}
-
-Simple linear regression (**SLR**) is a linear regression model with a single explanatory variable. It focuses on the linear relationship between one independent variable and one dependent variable, making it the most basic form of linear regression analysis.
-
----
-
-### A path not Taken
-
-The basic idea behind linear regression is to find the "best line" that describes the data. This idea admits several interpretations. One interpretation is to measure the distance between a candidate line and the data points. For a line $\mathcal{l}$ given by
-
-$$
-ax + by + c = 0
-$$
-
-the distance from a point $(x_i,y_i)$ to that line is
-
-$$
-d_i = d(\mathcal{l},(x_i,y_i)) = \frac{|ax_i + by_i + c|}{\sqrt{a^2+b^2}}.
-$$
-
-We could then pose the optimization problem
-
-$$
-\min_{a,b,c} \sum_{i=1}^n d_i.
-$$
-
-However, those familiar with regression will recognize that this is not the standard linear regression formulation. That does not make the distance-minimization problem unreasonable, only that its solution will generally differ from the usual linear regression solution.
-
-Linear regression, as commonly defined, is a particular optimization choice made because of its convenient properties. In the next section we introduce a model that refines the notion of a "best line."
-
----
-
-### SLR Model
-
-The model for simple linear regression is as follows:
-
-$$y_i = \beta_0 + \beta_1 x_i + e_i, \quad i\in\{1,\ldots,n\}$$
-
-where:
-
-* $y_i$ represents the $i$-th observation of the dependent variable.
-* $x_i$ represents the $i$-th observation of the independent variable.
-* $e_i$ represents the $i$-th observation of the error term.
-* $\beta_0$ is the intercept of the linear model, or regression line.
-* $\beta_1$ is the slope of the linear model, or regression line.
-* $n$ is the number of observations for both variables.
-
-Notice that in this framework, the error is not measuring the distance from the point
-to the regression line, but the vertical distance from the point to the regression line.
-Also, note that we are not making any assumptions about the error terms.
-
-In the case of the [wine example](#wine-example), we generated the data based on the following linear model:
-
-$$y_i = 75 + 1.5 x_i + e_i $$
-
-
-```{r slr-parts}
-dat <- read.csv(file = "Wine Data.csv")
-plot(x    = dat$Glasses,
-     y    = dat$Years,
-     xlab = "Avg. Glasses of Wine per Week",
-     ylab = "Life Expectancy (Years)")
-abline(a   = 75,
-       b   = 1.5,
-       col = 'red',
-       lwd = 2)
-abline(v   = 0,
-       lwd = 2)
-text(x = 0.25, y = 76, expression(beta[0] ~ "=75"))
-text(x = 3.25, y = 79, expression(beta[1] ~ "=1.5"))
-segments(x0 = c(2, 3),
-         x1 = c(3, 3),
-         y0 = c(78, 78),
-         y1 = c(78, 79.5),
-         lwd = 2,
-         col = 'blue')
-```
-
-In this case, the intercept $\beta_0$ is meaningful, as it represents the expected number of years a person would live if they didn’t drink wine at all. However, depending on the data, the intercept may or may not have a meaningful interpretation. The slope $\beta_1$ indicates that for each additional glass of wine consumed per week, our model predicts an increase of 1.5 years in life expectancy.
-
-In practice, we rarely know the true regression line. Instead, it must be estimated from the data. The goal is to find the "best" line that fits the data, where "best" means the line that minimizes the sum of squared errors (SSE) between the observed values and the values predicted by the model.
-
----
-
-### Possible Optimization Problems
-
-Other than minimizing the sum of squared errors (SSE), we can consider the following alternative optimization problems. Here \(e_i(\beta_0,\beta_1)=y_i-(\beta_0+\beta_1 x_i)\) denotes the residual.
-
-#### Minimizing the Sum of Absolute Errors
-
-$$
-\min_{\beta_0, \beta_1} \sum_{i=1}^n |e_i(\beta_0, \beta_1)|
-$$
-
-This L1 criterion is common in the machine-learning community and is more robust to outliers than the SSE. Laplace was among the first to investigate this approach when developing early methods for fitting lines to data.
-
-#### Minimizing the Maximum Error
-
-$$
-\min_{\beta_0, \beta_1} \max_{i=1}^n |e_i(\beta_0, \beta_1)|
-$$
-
-The minimax approach focuses on reducing the largest error and is appropriate when large errors can be catastrophic. Laplace also explored this formulation in his early work.
-
-#### Minimizing the Sum of Squared Errors
+We have established that we are going to solve the Sum of Least Squares Problem given by:
 
 $$
 \min_{\beta_0, \beta_1} \sum_{i=1}^n e_i(\beta_0, \beta_1)^2
 $$
-
-This is the standard formulation in simple linear regression (the least squares criterion), introduced by Legendre and Gauss (apparently independently). It remains widely used because of its convenient properties (closed-form solution, computational ease, and optimality under Gaussian error assumptions), which we will analyze later.
-
+In this section we solve the problem, examine the properties of the solutions and analyze the effects of standard transformations, and evaluate the fitting of the model.
 ---
 
 ## Least Squares Estimation
@@ -132,7 +26,8 @@ where we use $\hat{}$, to denote the specific critical point. And we have
 adopted the standard notation: 
 $$\bar{x} = \frac{1}{n}\sum_{i}^n x_i$$ 
 and 
-$$\bar{y} = \frac{1}{n}\sum_{i}^n y_i$$. 
+$$\bar{y} = \frac{1}{n}\sum_{i}^n y_i$$.
+
 It remains to see if this is indeed a minimum. One can check the second order conditions or argue 
 the quadratic form of the problem only admits a minimum.
 
@@ -171,7 +66,7 @@ And we can do a similar thing for $\beta_1$:
   &= \frac{\partial}{\partial \beta_1} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 
     & \text{def. } Q \\
   &= \sum_{i=1}^n \frac{\partial}{\partial \beta_1} (y_i - \beta_0 - \beta_1 x_i)^2 
-    & \text{linwarity of derivative} \\
+    & \text{linearity of derivative} \\
   &= \sum_{i = 1}^n 2(y_i -\beta_0 - \beta_1 x_i)(-x_i) 
     & \text{applying the derivative} \\
   &= -2\sum_{i = 1}^n y_i x_i + 2 \beta_0 \sum_{i = 1}^n x_i + 2 \beta_1 \sum_{i = 1}^n x_i^2 
