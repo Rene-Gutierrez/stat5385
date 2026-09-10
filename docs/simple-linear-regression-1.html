@@ -268,11 +268,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.7" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#residual-analysis"><i class="fa fa-check"></i><b>4.7</b> Residual Analysis</a>
 <ul>
 <li class="chapter" data-level="4.7.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#non-linear-regression-function"><i class="fa fa-check"></i><b>4.7.1</b> Non-linear regression function</a></li>
-<li class="chapter" data-level="4.7.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#heteroscedasticity"><i class="fa fa-check"></i><b>4.7.2</b> Heteroscedasticity</a></li>
+<li class="chapter" data-level="4.7.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#changing-residual-spread"><i class="fa fa-check"></i><b>4.7.2</b> Changing Residual Spread</a></li>
 <li class="chapter" data-level="4.7.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#outliers"><i class="fa fa-check"></i><b>4.7.3</b> Outliers</a></li>
-<li class="chapter" data-level="4.7.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#variables-ommited"><i class="fa fa-check"></i><b>4.7.4</b> Variables Ommited</a></li>
+<li class="chapter" data-level="4.7.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#variables-ommitted"><i class="fa fa-check"></i><b>4.7.4</b> Variables Ommitted</a></li>
 </ul></li>
-<li class="chapter" data-level="4.8" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#cross-validation"><i class="fa fa-check"></i><b>4.8</b> Cross-Validation</a></li>
+<li class="chapter" data-level="4.8" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#cross-validation"><i class="fa fa-check"></i><b>4.8</b> Cross-Validation</a>
+<ul>
+<li class="chapter" data-level="4.8.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#validation-error"><i class="fa fa-check"></i><b>4.8.1</b> Validation Error</a></li>
+<li class="chapter" data-level="4.8.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#holdout-validation"><i class="fa fa-check"></i><b>4.8.2</b> Holdout Validation</a></li>
+<li class="chapter" data-level="4.8.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>4.8.3</b> K-Fold Cross-Validation</a></li>
+<li class="chapter" data-level="4.8.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#other-cross-validation-procedures"><i class="fa fa-check"></i><b>4.8.4</b> Other Cross-Validation Procedures</a></li>
+<li class="chapter" data-level="4.8.5" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#summary-2"><i class="fa fa-check"></i><b>4.8.5</b> Summary</a></li>
+</ul></li>
 <li class="chapter" data-level="4.9" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#weighted-least-squares"><i class="fa fa-check"></i><b>4.9</b> Weighted Least Squares</a></li>
 <li class="chapter" data-level="4.10" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#model-in-matrix-form"><i class="fa fa-check"></i><b>4.10</b> Model in Matrix Form</a>
 <ul>
@@ -303,7 +310,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="6.2.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#simple-regressions"><i class="fa fa-check"></i><b>6.2.1</b> Simple Regressions</a></li>
 <li class="chapter" data-level="6.2.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#multiple-regression"><i class="fa fa-check"></i><b>6.2.2</b> Multiple Regression</a></li>
-<li class="chapter" data-level="6.2.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#summary-2"><i class="fa fa-check"></i><b>6.2.3</b> Summary</a></li>
+<li class="chapter" data-level="6.2.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#summary-3"><i class="fa fa-check"></i><b>6.2.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#least-squares-estimation-1"><i class="fa fa-check"></i><b>6.3</b> Least Squares Estimation</a></li>
 <li class="chapter" data-level="6.4" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#properties-of-the-estimates-1"><i class="fa fa-check"></i><b>6.4</b> Properties of the Estimates</a></li>
@@ -1509,10 +1516,8 @@ and
 <p><span id="def:total-sum-of-squares" class="definition"><strong>Definition 4.6  (Total Sum of Squares) </strong></span>The Total Sum of Squares is given by:
 <span class="math display">\[SS_{tot} = \sum_{i=1}^n (y_i - \bar{y})^2\]</span></p>
 </div>
-<p>The Total Sum of Squares is the fundamental measure of the total variability present in the observed responses. It quantifies how much the individual response values deviate, collectively, from their overall average. In other words, it is the baseline amount of variation in the dependent variable before any predictor information is used. You can think of it in several ways:</p>
+<p>The Total Sum of Squares is the fundamental measure of the total variability present in the observed responses. It quantifies how much the individual response values deviate, collectively, from their overall average. In other words, it is the baseline amount of variation in the response before any predictor information is used. You can think of it in several ways:</p>
 <ul>
-<li>As a proxy for uncertainty. The larger this quantity, the greater the uncertainty in the dependent variable.<br />
-</li>
 <li>It is proportional to the sample variance.<br />
 </li>
 <li>It is what you obtain when solving the following minimization problem:</li>
@@ -1520,7 +1525,7 @@ and
 <p><span class="math display">\[
 \min_{\beta_0} \sum_{i=1}^n (y_i - \beta_0)^2,
 \]</span></p>
-<p>that is, the best possible sum of squared errors when no information from the independent variables <span class="math inline">\(x_1,\ldots,x_n\)</span> is available.</p>
+<p>that is, the minimum sum of squared errors obtained when the explanatory variable is not used and every response is predicted by a single constant.</p>
 <div class="definition">
 <p><span id="def:residual-sum-of-squares" class="definition"><strong>Definition 4.7  (Residual Sum of Squares) </strong></span>The Residual Sum of Squares is given by:
 <span class="math display">\[ SS_{res} = \sum_{i=1}^n(\hat{e}_i)^2 = \sum_{i=1}^n(y_i - \hat{y}_i)^2\]</span></p>
@@ -1530,33 +1535,30 @@ and
 <ul>
 <li>Unexplained variability: RSS represents the portion of the data’s variability that the model does not capture. A smaller RSS indicates that the model’s predictions are closer to the observed values and that less variability remains unexplained.<br />
 </li>
-<li>Measure of fit error: RSS is a direct summary of model misspecification and random noise as reflected in the residuals; it expresses how far, in aggregate, observed outcomes stray from the fitted line.</li>
+<li>Measure of fit error: RSS is a direct summary of model misspecification; it expresses how far, in aggregate, observed outcomes stray from the fitted line.</li>
 </ul>
 <p>Key properties:</p>
 <ul>
 <li>Nonnegative and additive: RSS cannot be negative, and it increases when residuals grow larger in magnitude.<br />
 </li>
-<li>Minimization target: In ordinary least squares, the fitted coefficients are chosen to minimize RSS; thus RSS at the fitted coefficients is the smallest possible sum of squared residuals for the chosen model form.<br />
-</li>
-<li>Basis for variance estimation: RSS underlies the standard estimate of the model’s error variance, after accounting for the loss of degrees of freedom due to parameter estimation.</li>
+<li>Minimization target: In ordinary least squares, the fitted coefficients are chosen to minimize RSS; thus RSS at the fitted coefficients is the smallest possible sum of squared residuals for the chosen model form.</li>
 </ul>
 <p>Role in regression analysis:</p>
 <ul>
-<li>Diagnostic and evaluation metric: RSS is used together with total variability to compute proportions of variance explained and other fit measures. It is central to testing whether predictors provide a meaningful improvement over a simpler model and to constructing confidence intervals and prediction intervals.<br />
-</li>
+<li>Diagnostic and evaluation metric: RSS is used together with total variability to compute proportions of variance explained and other fit measures.</li>
 <li>Guide to improvement: Large RSS relative to total variability suggests the model is missing important structure or that noise is substantial; small RSS suggests good in‑sample fit (but not necessarily good out‑of‑sample performance).</li>
 </ul>
 <p>Practical notes:</p>
 <ul>
 <li>Dependence on scale and sample size: RSS depends on the units of the response and on the number of observations, so it is most useful in relative comparisons (e.g., between models on the same dataset) rather than as an absolute measure across datasets.<br />
 </li>
-<li>Use with diagnostics: Interpreting RSS should be accompanied by residual diagnostics and validation checks to ensure a low RSS reflects genuine explanatory power rather than overfitting or violated assumptions.</li>
+<li>Use with diagnostics: Interpreting RSS should be accompanied by residual diagnostics and validation checks to ensure a low RSS reflects genuine explanatory power..</li>
 </ul>
 <div class="definition">
 <p><span id="def:explained-sum-of-squares" class="definition"><strong>Definition 4.8  (Explained Sum of Squares) </strong></span>The Explained Sum of Squares is given by:
-<span class="math display">\[ SS_{reg} = \sum_{i=1}^n(\hat{y}_i - \bar{y}) = \sum_{i=1}^n(\hat{y}_i - \hat{\bar{y}})^2 \]</span></p>
+<span class="math display">\[ SS_{reg} = \sum_{i=1}^n(\hat{y}_i - \bar{y})^2 = \sum_{i=1}^n(\hat{y}_i - \hat{\bar{y}})^2 \]</span></p>
 </div>
-<p>The Explained Sum of Squares is the portion of the total variability in the dependent variable that is accounted for by the fitted regression model. It quantifies how much of the variation in the observed responses is captured by the model’s fitted values, as compared with using only a single constant (the sample mean).</p>
+<p>The Explained Sum of Squares is the portion of the total variability in the response that is accounted for by the fitted regression model. It quantifies how much of the variation in the observed responses is captured by the model’s fitted values, as compared with using only a single constant (the sample mean).</p>
 <p>Interpretation:</p>
 <ul>
 <li>It measures the improvement in fit achieved by the regression line relative to the baseline of predicting the mean for every observation.<br />
@@ -1568,9 +1570,6 @@ and
 <li>Nonnegative: it cannot be negative, because the fitted model cannot explain less variation than the baseline in a least‑squares fit.<br />
 </li>
 <li>Bounded above by the total variability: the explained portion cannot exceed the total variability present in the data, we will see this next.</li>
-<li>Basis for fit measures: it is the numerator in the fraction that expresses the proportion of variance explained by the model, and it plays a central role in analysis of variance decompositions and in F‑tests comparing nested models.<br />
-</li>
-<li>Sensitive to model choice: adding predictors or model flexibility can increase the explained sum of squares, which is why measures that penalize complexity are sometimes used when comparing models.</li>
 </ul>
 <div class="proposition">
 <p><span id="prp:prp-sum-of-squares-decomposition" class="proposition"><strong>Proposition 4.15  (Sum of Squares Decomposition) </strong></span>The <span class="math inline">\(SS_{tot}\)</span>, <span class="math inline">\(SS_{res}\)</span> and <span class="math inline">\(SS_{reg}\)</span> are related by the following identity:
@@ -1611,11 +1610,11 @@ SS_{tot}
 </div>
 </details>
 <div class="definition">
-<p><span id="def:coefficient-of-determmination" class="definition"><strong>Definition 4.9  (Coefficient of Determmination) </strong></span>If <span class="math inline">\(SS_{tot}&gt;0\)</span>, the Coefficient of Determmination is given by:
+<p><span id="def:coefficient-of-determination" class="definition"><strong>Definition 4.9  (Coefficient of Determination) </strong></span>If <span class="math inline">\(SS_{tot}&gt;0\)</span>, the Coefficient of Determination is given by:
 <span class="math display">\[ R^2 = \frac{SS_{reg}}{SS_{tot}} \]</span></p>
 </div>
 <div class="proposition">
-<p><span id="prp:prp-coefficient-of-determmination" class="proposition"><strong>Proposition 4.16  (Alternate Definition of the Coefficient of Determmination) </strong></span>If <span class="math inline">\(SS_{tot}&gt;0\)</span>, the Coefficient of Determmination can be defined alternatively as:
+<p><span id="prp:prp-coefficient-of-determination" class="proposition"><strong>Proposition 4.16  (Alternate Definition of the Coefficient of Determination) </strong></span>If <span class="math inline">\(SS_{tot}&gt;0\)</span>, the Coefficient of Determination can be defined alternatively as:
 <span class="math display">\[ R^2 = 1 - \frac{SS_{res}}{SS_{tot}} \]</span></p>
 </div>
 <details>
@@ -1637,7 +1636,7 @@ R^2
 </div>
 </details>
 <div class="proposition">
-<p><span id="prp:prp-coefficient-of-determmination-correlation" class="proposition"><strong>Proposition 4.17  </strong></span>The Coefficient of Determmination is related to the sample correlation by
+<p><span id="prp:prp-coefficient-of-determination-correlation" class="proposition"><strong>Proposition 4.17  (Coefficient of Determination and Correlation) </strong></span>The Coefficient of Determination is related to the sample correlation by
 <span class="math display">\[ R^2 = r_{xy}^2 \]</span></p>
 </div>
 <details>
@@ -1645,7 +1644,7 @@ R^2
 <span style="color:green">Proof</span>
 </summary>
 <div class="proof">
-<p><span id="unlabeled-div-12" class="proof"><em>Proof</em>. </span>First let us express <span class="math inline">\(SS_{reg}\)</span> in a more convinient way:</p>
+<p><span id="unlabeled-div-12" class="proof"><em>Proof</em>. </span>First let us express <span class="math inline">\(SS_{reg}\)</span> in a more convenient way:</p>
 <p><span class="math display">\[\begin{align*}
 SS_{reg}
   &amp;= \sum_{i=1}^n(\hat{y}_i - \bar{y})^2
@@ -1674,7 +1673,7 @@ Now, note that:
 Then
 <span class="math display">\[\begin{align*}
 R^2
-  &amp;= \frac{SS_reg}{SS_{tot}}
+  &amp;= \frac{SS_{reg}}{SS_{tot}}
     &amp; \text{def. } R^2 \\
   &amp;= \frac{\frac{S_{xy}^2}{S_{xx}} (n-1)}{S_{yy} (n-1)}  
     &amp; \text{prev. res.} \\
@@ -1687,10 +1686,22 @@ R^2
 \end{align*}\]</span></p>
 </div>
 </details>
-<div class="corollary">
-<p><span id="cor:prp-coefficient-of-determmination-0-1" class="corollary"><strong>Corollary 4.1  </strong></span>The Coefficient of Determmination is between 0 and 1.</p>
+<div class="proposition">
+<p><span id="prp:prp-coefficient-of-determination-0-1" class="proposition"><strong>Proposition 4.18  (Range of the coefficient of determination) </strong></span>The Coefficient of Determination is between 0 and 1.</p>
 </div>
-<p>The coefficient of determination is a summary measure that quantifies the fraction of the total variability in the dependent variable that is accounted for by a regression model. It expresses how much of the observed variation can be attributed to the systematic relationship captured by the model, as opposed to unexplained variation.</p>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-13" class="proof"><em>Proof</em>. </span><span class="math display">\[
+0\le r_{xy}^2\le1
+\quad\Longrightarrow\quad
+\boxed{0\le R^2\le1}.
+\]</span></p>
+</div>
+</details>
+<p>The coefficient of determination is a summary measure that quantifies the fraction of the total variability in the response that is accounted for by a regression model. It expresses how much of the observed variation can be attributed to the systematic relationship captured by the model, as opposed to unexplained variation.</p>
 <p>Interpretation:</p>
 <ul>
 <li>Proportion explained: The coefficient gives the proportion of the response variability that the model explains. A larger value indicates that a greater share of the variability is captured by the fitted relationship.<br />
@@ -1708,8 +1719,6 @@ R^2
 <p>Practical considerations and limitations:</p>
 <ul>
 <li>Not a test of causation: A high coefficient does not imply a causal relationship; it only describes the extent of linear association in the sample.<br />
-</li>
-<li>Sensitivity to model complexity: Adding predictors will not decrease this measure and can inflate it even for predictors with little true predictive value. Adjusted versions or cross‑validation are often used when comparing models of differing complexity.<br />
 </li>
 <li>Dependence on context and scale: While unitless, the coefficient’s practical meaning depends on the problem domain; what constitutes a “good” value varies by field and by the intrinsic variability of the outcome.<br />
 </li>
@@ -1729,7 +1738,7 @@ The coefficient of determination quantifies the share of total variability expla
 </li>
 <li>The data are noisy. Substantial noise can reduce <span class="math inline">\(R^2\)</span> even when the true relationship between the variables is linear.</li>
 </ul>
-<p>As an example of noisy data, recall the Ad spending data. The data was generated under a linear model, so the relationship between the variables is linear. You can verify this by looking at the code where the data is generated in the introduction. In the following example the effects of adding additional noise to the data can be analyzed. Three noise leves are considered:</p>
+<p>As an example of noisy data, recall the Ad spending data. The data was generated under a linear model, so the relationship between the variables is linear. You can verify this by looking at the code where the data is generated in the introduction. In the following example the effects of adding additional noise to the data can be analyzed. Three noise levels are considered:</p>
 <ul>
 <li>Level1: Small Noise.</li>
 <li>Level2: Medium Noise.</li>
@@ -1898,32 +1907,32 @@ The coefficient of determination quantifies the share of total variability expla
 ## F-statistic:  12.7 on 1 and 98 DF,  p-value: 0.0005672</code></pre>
 <p>here where we observe that the point cloud is more dispersed and looks less than a line
 the more noise is added, but the estimated regression line changes only a little bit.
-We can also see how the <span class="math inline">\(R^2\)</span> becomes smaller as more noise is added.</p>
+We can also see how the <span class="math inline">\(R^2\)</span> generally becomes smaller as more noise is added.</p>
 <hr />
 </div>
 <div id="residual-analysis" class="section level2 hasAnchor" number="4.7">
 <h2><span class="header-section-number">4.7</span> Residual Analysis<a href="simple-linear-regression-1.html#residual-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>While the coefficient of determination (<span class="math inline">\(R^2\)</span>) provides a measure of how well the data fit a linear model, it cannot explain why the fit is good or poor. To gain insights into potential problems with the model, the most straightforward approach is to examine the residuals or estimated errors. Residual analysis helps identify issues that can compromise the validity of the model’s assumptions.</p>
+<p>While the coefficient of determination (<span class="math inline">\(R^2\)</span>) provides a measure of how well the data fit a linear model, it cannot explain why the fit is good or poor. To gain insights into potential problems with the model, the most straightforward approach is to examine the residuals or estimated errors. Residual analysis helps identify systematic patterns that indicate that the fitted linear model may be inadequate.</p>
 <p>Currently, we focus on four common problems that residual analysis can reveal:</p>
 <ul>
-<li><p><strong>The regression function is not truly linear.</strong><br />
+<li><p><strong>Nonlinear structure</strong><br />
 If the relationship between the predictor and response is nonlinear, then a linear model will not capture the true pattern, leading to systematic patterns in the residuals.</p></li>
-<li><p><strong>The variance of the error terms is not constant (heteroscedasticity).</strong><br />
+<li><p><strong>Changing residual spread</strong><br />
 Non-constant variance means that the spread of the residuals varies with the fitted values or predictor, which violates a key assumption of linear regression and can affect inference.</p></li>
-<li><p><strong>There are outliers.</strong><br />
+<li><p><strong>Unusual observations</strong><br />
 Outliers are observations that deviate markedly from the overall pattern and can disproportionately influence the estimated regression coefficients or inflate measures of error.</p></li>
-<li><p><strong>Important variables are omitted.</strong><br />
-Omitting relevant variables leads to biased residuals and can cause the model to systematically under- or over-predict responses based on unaccounted factors.</p></li>
+<li><p><strong>Structure associated with variables not included in the model</strong><br />
+Omitting relevant variables leads can cause the model to systematically under- or over-predict responses based on unaccounted factors.</p></li>
 </ul>
 <hr />
 <div id="non-linear-regression-function" class="section level3 hasAnchor" number="4.7.1">
 <h3><span class="header-section-number">4.7.1</span> Non-linear regression function<a href="simple-linear-regression-1.html#non-linear-regression-function" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In many real-world situations, the relationship between the variables of interest may not be well described by a simple straight line. While linear regression is a powerful and widely used technique, it relies on the assumption that the true relationship between the predictor and response variables is linear.</p>
+<p>In many real-world situations, the relationship between the variables of interest may not be well described by a simple straight line. While linear regression is a powerful and widely used technique, it implicitly relies on the assumption that the true relationship between the predictor and response variables is linear, even if no such assumption is stated explicitly.</p>
 <p>However, when this assumption does not hold, the linear model can lead to poor fits, systematic bias, and misleading inferences. To better understand the nature of the relationship, it is important to examine the fitted regression function and related residuals carefully.</p>
 <p>Consider the example of analyzing the relationship between burger price and the number of burgers sold.</p>
 <p><img src="_main_files/figure-html/burgers-residuals-1.png" width="672" />
 Here we can clearly appreciate that there is something wrong. The residuals clearly
-indicate that a non linear relationship is present in the data. One can solve these
+indicate that a nonlinear relationship is present in the data. One can solve these
 problem by transforming one or both of the variables and then applying linear
 regression. Common transformations functions <span class="math inline">\(g\)</span> are (but are not limited to):</p>
 <ul>
@@ -1931,7 +1940,7 @@ regression. Common transformations functions <span class="math inline">\(g\)</sp
 <li><span class="math inline">\(g(x) = \sqrt{x}\)</span></li>
 <li><span class="math inline">\(g(x) = log(x)\)</span></li>
 </ul>
-<p>This transformations can be applied to the independent variable, to the dependent
+<p>These transformations can be applied to the explanatory variable, to the dependent
 variable of both.</p>
 <p>In the next example we work with <span class="math inline">\(log(\text{Burgers Sold})\)</span> instead of directly
 working with “Burgers Sold”.</p>
@@ -2008,6 +2017,7 @@ is the best one?</p>
 ## Residual standard error: 4.449 on 98 degrees of freedom
 ## Multiple R-squared:  0.9455, Adjusted R-squared:  0.9449 
 ## F-statistic:  1699 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><span class="math inline">\(R^2\)</span> can compare models fitted to the same response scale, but it cannot fairly compare models when the response itself has been transformed. To compare such models, we need a common performance measure evaluated on the original response scale.</p>
 <p>We will see other ways to choose the transformation later.</p>
 <p>Why non-linearity matters:</p>
 <ul>
@@ -2024,14 +2034,12 @@ is the best one?</p>
 <p>In summary, recognizing when the relationship is non-linear is crucial for building accurate models. By analyzing the fitted line and residuals plots, analysts can identify these cases and take appropriate steps to improve their modeling approach, leading to better understanding and more reliable predictions.</p>
 <hr />
 </div>
-<div id="heteroscedasticity" class="section level3 hasAnchor" number="4.7.2">
-<h3><span class="header-section-number">4.7.2</span> Heteroscedasticity<a href="simple-linear-regression-1.html#heteroscedasticity" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In linear regression modeling, one of the key assumptions is that the variability (or variance) of the errors remains constant across all levels of the explanatory variable. This assumption is known as homoscedasticity. When this assumption is violated–that is, when the variance of the errors is not constant but instead depends on the level of the predictor–it is referred to as <strong>heteroscedasticity</strong>.</p>
-<p><strong>Definition and intuition</strong><br />
-Heteroscedasticity occurs when the spread or dispersion of the residuals changes systematically with the value of the independent variable. For example, as the value of the predictor increases, the errors or deviations in the response variable may become larger or smaller, leading to a funnel-shaped or other non-uniform pattern in the residuals plot.</p>
+<div id="changing-residual-spread" class="section level3 hasAnchor" number="4.7.2">
+<h3><span class="header-section-number">4.7.2</span> Changing Residual Spread<a href="simple-linear-regression-1.html#changing-residual-spread" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Sometimes the magnitude of the residuals changes systematically across the range of the explanatory variable. For example, residuals may be tightly concentrated for small values of <span class="math inline">\(x\)</span> and more dispersed for larger values. This pattern will later be formalized through an assumption about the variance of the errors and is commonly called heteroscedasticity.</p>
 <p><strong>An illustrative example</strong><br />
 Consider a new data set with the heights of several children. Suppose we believe there is a linear relationship between a child’s age and height: as children grow older, their height increases. However, it is also reasonable to expect that the variability in height differences increases for older children than for younger children: taller children tend to have more variation in height than shorter children.<br />
-This expectation can be visualized in a simulated data set where the residuals (the deviations from the fitted line) tend to increase with age, forming a funnel shape in the residuals plot. Such a pattern indicates heteroscedasticity, where the error variance depends on the predictor.</p>
+This expectation can be visualized in a simulated data set where the residuals (the deviations from the fitted line) tend to increase with age, forming a funnel shape in the residuals plot.</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="simple-linear-regression-1.html#cb45-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Height Data.csv&quot;</span>)</span>
 <span id="cb45-2"><a href="simple-linear-regression-1.html#cb45-2" tabindex="-1"></a></span>
 <span id="cb45-3"><a href="simple-linear-regression-1.html#cb45-3" tabindex="-1"></a>outReg <span class="ot">&lt;-</span> <span class="fu">lm</span>(Height <span class="sc">~</span> Age, <span class="at">data =</span> dat)</span>
@@ -2058,7 +2066,7 @@ This expectation can be visualized in a simulated data set where the residuals (
 <span id="cb45-24"><a href="simple-linear-regression-1.html#cb45-24" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
 <span id="cb45-25"><a href="simple-linear-regression-1.html#cb45-25" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/height-data-residuals-1.png" width="672" /></p>
-<p>While one can infer this error behavior from the original scatter plot, the residuals plot makes this pattern much more clearly visible. In the residual plot, it is evident that the errors increase with the age of the children. While this is not inherently problematic when using least squares estimation, it may be advisable to consider alternative methods that do not penalize all errors equally—particularly the larger errors at later ages—such as weighted least squares.</p>
+<p>While one can infer this error behavior from the original scatter plot, the residuals plot makes this pattern much more clearly visible. In the residual plot, it is evident that the spread of the residuals increases with age of the children. While this is not inherently problematic when using least squares estimation, it may be advisable to consider alternative methods that do not penalize all errors equally—particularly the larger errors at later ages—such as weighted least squares.</p>
 <p>While heteroscedasticity does not bias the estimates of the regression coefficients themselves, it affects the accuracy and precision of these estimates and the associated inference metrics. Specifically, standard errors may be underestimated or overestimated, leading to incorrect conclusions about the significance of predictors.</p>
 <p>Several strategies can be used to address heteroscedasticity, including:</p>
 <ul>
@@ -2074,9 +2082,9 @@ This expectation can be visualized in a simulated data set where the residuals (
 <h3><span class="header-section-number">4.7.3</span> Outliers<a href="simple-linear-regression-1.html#outliers" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>In the context of linear regression analysis, <strong>outliers</strong> are data points that do not conform to the general pattern established by the majority of the observations. While most data points may align well with the fitted regression line, a few observations might deviate substantially from this pattern, standing out as unusual or extreme relative to the rest.</p>
 <p>Outliers can arise for various reasons, including measurement errors, data entry mistakes, or genuinely rare or unusual cases. Regardless of their origin, these outlying points can have a disproportionate influence on the results of the regression analysis, often skewing the estimated coefficients, inflating the residuals, and affecting overall model fit.</p>
-<p>It is important to identify and understand outliers because they can mislead the analysis. They may unduly influence the estimated relationship between the predictor and response variables, leading to biased estimates of the slope and intercept. Moreover, outliers can inflate measures of error, such as the residual sum of squares, making the model seem less accurate than it truly is for the majority of the data.</p>
+<p>It is important to identify and understand outliers because they can mislead the analysis. They may unduly influence the estimated relationship between the predictor and response variables. Outliers can substantially change the estimated slope and intercept. Moreover, outliers can inflate measures of error, such as the residual sum of squares, making the model seem less accurate than it truly is for the majority of the data.</p>
 <p>Detecting outliers typically involves examining residuals, especially those that are unusually large or small compared to typical residuals. Residual plots can reveal these points as isolated dots that are far away from the bulk of the data cloud. Statistical rules and diagnostic tools can also be used to flag potential outliers for further investigation.</p>
-<p>Once identified, outliers demand careful consideration. Some outliers may be due to data collection or entry errors and should be corrected or removed. Others may represent genuine but rare phenomena, and understanding their context is essential before deciding how to handle them in the analysis.</p>
+<p>Once identified, outliers demand careful consideration. If an unusual observation results from a confirmed recording or measurement error, correct the error when possible. Genuine observations should not be removed solely because they are unusual; their context and influence should be investigated.</p>
 <p>Dealing with outliers involves balancing the goal of accurately modeling the typical relationship while acknowledging that outliers can carry important information or indicate special cases. Sometimes, it is appropriate to analyze the data both with and without outliers, or to apply robust regression methods designed to reduce the influence of extreme observations.</p>
 <p>In the next example, we work with the Wine data set and add outliers, to see the
 effect this might have on the estimation.</p>
@@ -2214,11 +2222,11 @@ The presence of outliers, will also be more clear when looking at the residuals.
 <span id="cb47-41"><a href="simple-linear-regression-1.html#cb47-41" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
 <span id="cb47-42"><a href="simple-linear-regression-1.html#cb47-42" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Average Glasses per Week&quot;</span>,</span>
 <span id="cb47-43"><a href="simple-linear-regression-1.html#cb47-43" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
-<span id="cb47-44"><a href="simple-linear-regression-1.html#cb47-44" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Left Outlier&quot;</span>,</span>
+<span id="cb47-44"><a href="simple-linear-regression-1.html#cb47-44" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Right Outlier&quot;</span>,</span>
 <span id="cb47-45"><a href="simple-linear-regression-1.html#cb47-45" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">16</span>)</span>
 <span id="cb47-46"><a href="simple-linear-regression-1.html#cb47-46" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
 <span id="cb47-47"><a href="simple-linear-regression-1.html#cb47-47" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb47-48"><a href="simple-linear-regression-1.html#cb47-48" tabindex="-1"></a><span class="co"># Outlier on the right side</span></span>
+<span id="cb47-48"><a href="simple-linear-regression-1.html#cb47-48" tabindex="-1"></a><span class="co"># Outlier on the center</span></span>
 <span id="cb47-49"><a href="simple-linear-regression-1.html#cb47-49" tabindex="-1"></a><span class="co"># Adds Observation</span></span>
 <span id="cb47-50"><a href="simple-linear-regression-1.html#cb47-50" tabindex="-1"></a>x[<span class="dv">21</span>] <span class="ot">&lt;-</span> <span class="dv">2</span></span>
 <span id="cb47-51"><a href="simple-linear-regression-1.html#cb47-51" tabindex="-1"></a>y[<span class="dv">21</span>] <span class="ot">&lt;-</span> <span class="dv">95</span></span>
@@ -2228,7 +2236,7 @@ The presence of outliers, will also be more clear when looking at the residuals.
 <span id="cb47-55"><a href="simple-linear-regression-1.html#cb47-55" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
 <span id="cb47-56"><a href="simple-linear-regression-1.html#cb47-56" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Average Glasses per Week&quot;</span>,</span>
 <span id="cb47-57"><a href="simple-linear-regression-1.html#cb47-57" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
-<span id="cb47-58"><a href="simple-linear-regression-1.html#cb47-58" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Left Outlier&quot;</span>,</span>
+<span id="cb47-58"><a href="simple-linear-regression-1.html#cb47-58" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Center Outlier&quot;</span>,</span>
 <span id="cb47-59"><a href="simple-linear-regression-1.html#cb47-59" tabindex="-1"></a>     <span class="at">pch =</span> <span class="dv">16</span>)</span>
 <span id="cb47-60"><a href="simple-linear-regression-1.html#cb47-60" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
 <span id="cb47-61"><a href="simple-linear-regression-1.html#cb47-61" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
@@ -2310,14 +2318,14 @@ And we can also see how the <span class="math inline">\(R^2\)</span> changes:</p
 ## Residual standard error: 4.214 on 19 degrees of freedom
 ## Multiple R-squared:  0.3459, Adjusted R-squared:  0.3114 
 ## F-statistic: 10.05 on 1 and 19 DF,  p-value: 0.005048</code></pre>
-<p>Outliers located at the edges of the explanatory variable range often possess higher leverage, which means they have a disproportionate influence on the estimated regression coefficients, including the slope. Leverage points are data points that are far from the center of the predictor distribution and can exert undue influence on the fitted line.</p>
+<p>Observations with explanatory-variable values far from the center of the observed <span class="math inline">\(x\)</span> values can have greater potential to change the fitted line. This phenomenon will be studied later through the concept of leverage.</p>
 <hr />
 </div>
-<div id="variables-ommited" class="section level3 hasAnchor" number="4.7.4">
-<h3><span class="header-section-number">4.7.4</span> Variables Ommited<a href="simple-linear-regression-1.html#variables-ommited" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>When analyzing the residuals from a regression model, one of the key assumptions is that there should be no systematic pattern or structure in the residual plots. If the residuals appear randomly scattered around zero, it suggests that the model has effectively captured all the systematic variation in the response variable, and no important information has been left out.</p>
-<p>However, in practice, the absence of an apparent pattern in the residuals may be misleading if some relevant variables have been omitted from the model. Sometimes, the pattern is only visible when residuals are examined in relation to other variables not included as predictors. This situation indicates that the model may be missing important factors that explain variability in the response, leading to biased or incomplete conclusions.</p>
-<p>To illustrate this concept, consider the example of analyzing children’s heights. Suppose the initial model predicts height based solely on age. When you examine the residuals, they might seem to lack any obvious pattern (beyond heteroscedasticity), suggesting a reasonable fit. Yet, if the data set also includes the sex of the children as an additional variable, and this variable affects height, then ignoring sex in the model can cause a pattern to emerge in the residuals when they are grouped or compared by sex.</p>
+<div id="variables-ommitted" class="section level3 hasAnchor" number="4.7.4">
+<h3><span class="header-section-number">4.7.4</span> Variables Ommitted<a href="simple-linear-regression-1.html#variables-ommitted" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When analyzing the residuals from a regression model, one of the key assumptions is that there should be no systematic pattern or structure in the residual plots. If residuals show no systematic pattern against the explanatory variable, there may be no obvious remaining structure associated with that variable. However, residuals may still contain systematic structure associated with other variables that were not included in the model.</p>
+<p>However, in practice, the absence of an apparent pattern in the residuals may be misleading if some relevant variables have been omitted from the model. Omission of a relevant variable can leave systematic patterns in the residuals and can change the fitted relationship obtained from the reduced model.</p>
+<p>To illustrate this concept, consider the example of analyzing children’s heights. Suppose the initial model predicts height based solely on age. When you examine the residuals, they might seem to lack any obvious pattern (beyond heteroscedasticity), suggesting a reasonable fit. Yet, if the data set also includes the sex of the children as an additional variable, and if height differs systematically between the groups defined by sex, then ignoring sex in the model can cause a pattern to emerge in the residuals when they are grouped or compared by sex.</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="simple-linear-regression-1.html#cb56-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Height Data.csv&quot;</span>)</span>
 <span id="cb56-2"><a href="simple-linear-regression-1.html#cb56-2" tabindex="-1"></a></span>
 <span id="cb56-3"><a href="simple-linear-regression-1.html#cb56-3" tabindex="-1"></a><span class="co"># Fits linear Model</span></span>
@@ -2355,135 +2363,197 @@ And we can also see how the <span class="math inline">\(R^2\)</span> changes:</p
 </div>
 <div id="cross-validation" class="section level2 hasAnchor" number="4.8">
 <h2><span class="header-section-number">4.8</span> Cross-Validation<a href="simple-linear-regression-1.html#cross-validation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When testing different models, a good idea to evaluate the performance of each
-model beyond <span class="math inline">\(R^2\)</span>, is to separate your data set into a training set and a
-validation or test set. Doing this is called cross-validation. There are several
-alternatives to doing cross-validation, here are a few of the most relevant ones:</p>
+<p>So far, we have evaluated fitted regression models using quantities such as <span class="math inline">\(R^2\)</span> and residual plots. These tools describe how well a model fits the observations that were used to estimate its coefficients. However, a model that fits the observed data well does not necessarily predict new observations well.</p>
+<p>To evaluate predictive performance, we need to assess the model using observations that were not used when estimating its coefficients. This general process is called <strong>model validation</strong>.</p>
+<p>A simple approach is to divide the data into two parts:</p>
+<ul>
+<li><strong>Training set:</strong> observations used to estimate the regression model.</li>
+<li><strong>Validation set:</strong> observations not used during estimation and instead used to evaluate the predictive performance of the fitted model.</li>
+</ul>
+<p>A third set, called a <strong>test set</strong>, may also be kept separate. The validation data can be used repeatedly when comparing models or choosing transformations, while the test data should ideally be used only after the final model has been selected.</p>
+<p>A single separation of the observations into training and validation sets is usually called the <strong>holdout method</strong>. In contrast, <strong>cross-validation</strong> repeatedly changes which observations are used for training and validation so that predictive performance can be evaluated across different subsets of the data.</p>
+<hr />
+<div id="validation-error" class="section level3 hasAnchor" number="4.8.1">
+<h3><span class="header-section-number">4.8.1</span> Validation Error<a href="simple-linear-regression-1.html#validation-error" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Suppose a validation set contains observations indexed by <span class="math inline">\(\mathcal{V}\)</span>. After estimating the model using only the training observations, let <span class="math inline">\(\hat{y}_i\)</span> denote the prediction for a validation observation <span class="math inline">\(i\in\mathcal{V}\)</span>.</p>
+<p>One possible measure of predictive performance is the Mean Squared Error (MSE):</p>
+<p><span class="math display">\[
+MSE_{\mathcal{V}}
+=
+\frac{1}{|\mathcal{V}|}
+\sum_{i\in\mathcal{V}}
+(y_i-\hat{y}_i)^2.
+\]</span></p>
+<p>A smaller validation MSE indicates that, on average, the fitted model produces predictions closer to the observed responses for observations that were not used to estimate the model.</p>
+<p>The important distinction is that the residual sum of squares measures errors on observations used to fit the model, while validation error measures prediction errors on observations that were not used in the fitting process.</p>
+<hr />
+</div>
+<div id="holdout-validation" class="section level3 hasAnchor" number="4.8.2">
+<h3><span class="header-section-number">4.8.2</span> Holdout Validation<a href="simple-linear-regression-1.html#holdout-validation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The <strong>holdout method</strong> randomly separates the observations into a training set and a validation set. The model is estimated using the training observations and then used to predict the responses in the validation set.</p>
+<p>This method is simple and computationally inexpensive. However, the estimated predictive performance can depend substantially on the particular observations assigned to the training and validation sets.</p>
+<p>Cross-validation reduces this dependence by repeating the training-validation process using several different subsets of observations.</p>
+<hr />
+</div>
+<div id="k-fold-cross-validation" class="section level3 hasAnchor" number="4.8.3">
+<h3><span class="header-section-number">4.8.3</span> K-Fold Cross-Validation<a href="simple-linear-regression-1.html#k-fold-cross-validation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In <span class="math inline">\(k\)</span>-fold cross-validation, the observations are divided into <span class="math inline">\(k\)</span> approximately equal-sized groups, called <strong>folds</strong>:</p>
+<p><span class="math display">\[
+\mathcal{F}_1,\ldots,\mathcal{F}_k.
+\]</span></p>
+<p>For each fold <span class="math inline">\(j\)</span>:</p>
 <ol style="list-style-type: decimal">
-<li><strong>Holdout Method (Train/Test Split)</strong>
-<ul>
-<li><strong>Description</strong>: The data is split into two (or three) sets: training and test (and sometimes validation). The model is trained on the training set and evaluated on the test set.</li>
-<li><strong>Use Case</strong>: Simple to implement, but has high variance. The performance may depend on the specific split.</li>
-</ul></li>
-<li><strong>K-Fold Cross-Validation</strong>
-<ul>
-<li><strong>Description</strong>: The data is divided into <span class="math inline">\(k\)</span> equal-sized folds (subsets). The model is trained on <span class="math inline">\(k-1\)</span> folds and tested on the remaining fold. This process is repeated <span class="math inline">\(k\)</span> times, with each fold used as the test set once.</li>
-<li><strong>Use Case</strong>:
-<ul>
-<li>Works well for most applications and balances the bias-variance tradeoff.</li>
-<li>Common choices for <span class="math inline">\(k\)</span>: 5, 10.</li>
-</ul></li>
-</ul></li>
-<li><strong>Leave-One-Out Cross-Validation (LOOCV)</strong>
-<ul>
-<li><strong>Description</strong>: Each data point is used once as a test set, and the rest of the data is used as the training set. This results in <span class="math inline">\(n\)</span> iterations, where <span class="math inline">\(n\)</span> is the number of samples.</li>
-<li><strong>Use Case</strong>: Good when the dataset is small, but can be computationally expensive for large datasets.</li>
-</ul></li>
-<li><strong>Leave-P-Out Cross-Validation (LPOCV)</strong>
-<ul>
-<li><strong>Description</strong>: Similar to LOOCV, but instead of leaving out one data point, <span class="math inline">\(p\)</span> data points are left out. This creates <span class="math inline">\(\binom{n}{p}\)</span> different training/testing splits.</li>
-<li><strong>Use Case</strong>: Rarely used due to its high computational cost for large datasets but might be useful in specific scenarios.</li>
-</ul></li>
-<li><strong>Stratified K-Fold Cross-Validation</strong>
-<ul>
-<li><strong>Description</strong>: Similar to K-fold cross-validation but ensures that each fold has the same proportion of each class in classification tasks (i.e., balanced classes in each fold).</li>
-<li><strong>Use Case</strong>: Useful for imbalanced datasets in classification problems.</li>
-</ul></li>
-<li><strong>Repeated K-Fold Cross-Validation</strong>
-<ul>
-<li><strong>Description</strong>: A variation of K-Fold Cross-Validation where the process is repeated multiple times with different random splits.</li>
-<li><strong>Use Case</strong>: Provides more robust estimates of model performance, particularly when the dataset is small.</li>
-</ul></li>
+<li>The observations in <span class="math inline">\(\mathcal{F}_j\)</span> are treated as the validation set.</li>
+<li>The remaining <span class="math inline">\(k-1\)</span> folds are used as the training set.</li>
+<li>The model is estimated using the training observations.</li>
+<li>Predictions are obtained for the observations in <span class="math inline">\(\mathcal{F}_j\)</span>.</li>
+<li>The prediction errors on the validation fold are recorded.</li>
 </ol>
-<p>Here is an example of <span class="math inline">\(k\)</span>-fold Cross-Validation using the “Burger Data” set.</p>
+<p>Therefore, every observation is used for validation exactly once and for training in the remaining <span class="math inline">\(k-1\)</span> fits.</p>
+<p>If <span class="math inline">\(\hat{y}_i^{(-j)}\)</span> denotes the prediction for observation <span class="math inline">\(i\in\mathcal{F}_j\)</span> obtained from the model fitted without fold <span class="math inline">\(j\)</span>, then the Mean Squared Error for fold <span class="math inline">\(j\)</span> is</p>
+<p><span class="math display">\[
+MSE_j
+=
+\frac{1}{|\mathcal{F}_j|}
+\sum_{i\in\mathcal{F}_j}
+\left(y_i-\hat{y}_i^{(-j)}\right)^2.
+\]</span></p>
+<p>The overall <span class="math inline">\(k\)</span>-fold cross-validation error is</p>
+<p><span class="math display">\[
+CV_{\text{MSE}}
+=
+\frac{1}{n}
+\sum_{j=1}^k
+\sum_{i\in\mathcal{F}_j}
+\left(y_i-\hat{y}_i^{(-j)}\right)^2.
+\]</span></p>
+<p>When all folds have the same size, this is equivalent to averaging the <span class="math inline">\(k\)</span> fold-specific MSE values.</p>
+<p>Common choices are <span class="math inline">\(k=5\)</span> and <span class="math inline">\(k=10\)</span>. These choices allow most observations to be used for estimating the model while requiring substantially fewer model fits than procedures that leave out observations one at a time.</p>
+<hr />
+</div>
+<div id="other-cross-validation-procedures" class="section level3 hasAnchor" number="4.8.4">
+<h3><span class="header-section-number">4.8.4</span> Other Cross-Validation Procedures<a href="simple-linear-regression-1.html#other-cross-validation-procedures" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Two closely related variations are also useful:</p>
+<ul>
+<li><p><strong>Leave-One-Out Cross-Validation (LOOCV):</strong> Each observation forms its own validation set. The model is therefore estimated <span class="math inline">\(n\)</span> times, each time using the remaining <span class="math inline">\(n-1\)</span> observations. LOOCV uses almost all available observations for training in each fit, but it can require substantially more computation than <span class="math inline">\(k\)</span>-fold cross-validation.</p></li>
+<li><p><strong>Repeated K-Fold Cross-Validation:</strong> The complete <span class="math inline">\(k\)</span>-fold procedure is repeated several times using different random divisions into folds. This makes it possible to examine how sensitive the estimated predictive performance is to the particular partition of the observations.</p></li>
+</ul>
+<p>In this course, we will primarily use <span class="math inline">\(k\)</span>-fold cross-validation because it provides a simple and computationally practical way to compare the predictive performance of different regression models.</p>
+<p>We now illustrate <span class="math inline">\(k\)</span>-fold cross-validation using the Burger Data. In particular, we will compare models involving transformations of the explanatory variable, the response variable, or both.</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="simple-linear-regression-1.html#cb57-1" tabindex="-1"></a><span class="do">### Cross Validation Example</span></span>
-<span id="cb57-2"><a href="simple-linear-regression-1.html#cb57-2" tabindex="-1"></a></span>
-<span id="cb57-3"><a href="simple-linear-regression-1.html#cb57-3" tabindex="-1"></a><span class="co"># Read Data</span></span>
-<span id="cb57-4"><a href="simple-linear-regression-1.html#cb57-4" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Burger Data.csv&quot;</span>)</span>
-<span id="cb57-5"><a href="simple-linear-regression-1.html#cb57-5" tabindex="-1"></a></span>
-<span id="cb57-6"><a href="simple-linear-regression-1.html#cb57-6" tabindex="-1"></a><span class="co"># Saves Variables</span></span>
-<span id="cb57-7"><a href="simple-linear-regression-1.html#cb57-7" tabindex="-1"></a>x <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price</span>
-<span id="cb57-8"><a href="simple-linear-regression-1.html#cb57-8" tabindex="-1"></a>y <span class="ot">&lt;-</span> dat<span class="sc">$</span>Burgers</span>
-<span id="cb57-9"><a href="simple-linear-regression-1.html#cb57-9" tabindex="-1"></a></span>
-<span id="cb57-10"><a href="simple-linear-regression-1.html#cb57-10" tabindex="-1"></a><span class="co"># Number of Observations</span></span>
-<span id="cb57-11"><a href="simple-linear-regression-1.html#cb57-11" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
-<span id="cb57-12"><a href="simple-linear-regression-1.html#cb57-12" tabindex="-1"></a></span>
-<span id="cb57-13"><a href="simple-linear-regression-1.html#cb57-13" tabindex="-1"></a><span class="co"># Number of Folds</span></span>
-<span id="cb57-14"><a href="simple-linear-regression-1.html#cb57-14" tabindex="-1"></a>numFol <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb57-15"><a href="simple-linear-regression-1.html#cb57-15" tabindex="-1"></a><span class="co"># Fold Size</span></span>
-<span id="cb57-16"><a href="simple-linear-regression-1.html#cb57-16" tabindex="-1"></a>sizFol <span class="ot">&lt;-</span> <span class="fu">round</span>(n <span class="sc">/</span> numFol)</span>
-<span id="cb57-17"><a href="simple-linear-regression-1.html#cb57-17" tabindex="-1"></a></span>
-<span id="cb57-18"><a href="simple-linear-regression-1.html#cb57-18" tabindex="-1"></a><span class="co"># List Containing the Fold indices</span></span>
-<span id="cb57-19"><a href="simple-linear-regression-1.html#cb57-19" tabindex="-1"></a>fol <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb57-20"><a href="simple-linear-regression-1.html#cb57-20" tabindex="-1"></a><span class="co"># Select Fold Indeces</span></span>
-<span id="cb57-21"><a href="simple-linear-regression-1.html#cb57-21" tabindex="-1"></a><span class="co"># Initialization</span></span>
-<span id="cb57-22"><a href="simple-linear-regression-1.html#cb57-22" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
-<span id="cb57-23"><a href="simple-linear-regression-1.html#cb57-23" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numFol){</span>
-<span id="cb57-24"><a href="simple-linear-regression-1.html#cb57-24" tabindex="-1"></a>  <span class="co"># Computes the remaining number of indices</span></span>
-<span id="cb57-25"><a href="simple-linear-regression-1.html#cb57-25" tabindex="-1"></a>  numInd   <span class="ot">&lt;-</span> <span class="fu">length</span>(ind)</span>
-<span id="cb57-26"><a href="simple-linear-regression-1.html#cb57-26" tabindex="-1"></a>  <span class="co"># Randomly selects indices from the remaining indeces</span></span>
-<span id="cb57-27"><a href="simple-linear-regression-1.html#cb57-27" tabindex="-1"></a>  indFol   <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(ind), <span class="at">size =</span> sizFol, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb57-28"><a href="simple-linear-regression-1.html#cb57-28" tabindex="-1"></a>  <span class="co"># Saves the inidices to the list of Fold Indeces</span></span>
-<span id="cb57-29"><a href="simple-linear-regression-1.html#cb57-29" tabindex="-1"></a>  fol[[i]] <span class="ot">&lt;-</span> ind[indFol]</span>
-<span id="cb57-30"><a href="simple-linear-regression-1.html#cb57-30" tabindex="-1"></a>  <span class="co"># Removes the indices from the indeces vector</span></span>
-<span id="cb57-31"><a href="simple-linear-regression-1.html#cb57-31" tabindex="-1"></a>  ind      <span class="ot">&lt;-</span> ind[<span class="sc">-</span> indFol]</span>
-<span id="cb57-32"><a href="simple-linear-regression-1.html#cb57-32" tabindex="-1"></a>}</span>
-<span id="cb57-33"><a href="simple-linear-regression-1.html#cb57-33" tabindex="-1"></a></span>
-<span id="cb57-34"><a href="simple-linear-regression-1.html#cb57-34" tabindex="-1"></a><span class="co"># Models to try</span></span>
-<span id="cb57-35"><a href="simple-linear-regression-1.html#cb57-35" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(x, <span class="fu">log</span>(x),      x, <span class="fu">log</span>(x))</span>
-<span id="cb57-36"><a href="simple-linear-regression-1.html#cb57-36" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">cbind</span>(y,      y, <span class="fu">log</span>(y), <span class="fu">log</span>(y))</span>
-<span id="cb57-37"><a href="simple-linear-regression-1.html#cb57-37" tabindex="-1"></a></span>
-<span id="cb57-38"><a href="simple-linear-regression-1.html#cb57-38" tabindex="-1"></a><span class="co"># Number of Models to compare</span></span>
-<span id="cb57-39"><a href="simple-linear-regression-1.html#cb57-39" tabindex="-1"></a>numMod <span class="ot">&lt;-</span> <span class="fu">dim</span>(Y)[<span class="dv">2</span>]</span>
-<span id="cb57-40"><a href="simple-linear-regression-1.html#cb57-40" tabindex="-1"></a><span class="co"># Saves the validation metric for each model and each fold </span></span>
-<span id="cb57-41"><a href="simple-linear-regression-1.html#cb57-41" tabindex="-1"></a>matMet <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> numFol, <span class="at">ncol =</span> numMod)</span>
-<span id="cb57-42"><a href="simple-linear-regression-1.html#cb57-42" tabindex="-1"></a></span>
+<span id="cb57-2"><a href="simple-linear-regression-1.html#cb57-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb57-3"><a href="simple-linear-regression-1.html#cb57-3" tabindex="-1"></a></span>
+<span id="cb57-4"><a href="simple-linear-regression-1.html#cb57-4" tabindex="-1"></a><span class="co"># Read Data</span></span>
+<span id="cb57-5"><a href="simple-linear-regression-1.html#cb57-5" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Burger Data.csv&quot;</span>)</span>
+<span id="cb57-6"><a href="simple-linear-regression-1.html#cb57-6" tabindex="-1"></a></span>
+<span id="cb57-7"><a href="simple-linear-regression-1.html#cb57-7" tabindex="-1"></a><span class="co"># Saves Variables</span></span>
+<span id="cb57-8"><a href="simple-linear-regression-1.html#cb57-8" tabindex="-1"></a>x <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price</span>
+<span id="cb57-9"><a href="simple-linear-regression-1.html#cb57-9" tabindex="-1"></a>y <span class="ot">&lt;-</span> dat<span class="sc">$</span>Burgers</span>
+<span id="cb57-10"><a href="simple-linear-regression-1.html#cb57-10" tabindex="-1"></a></span>
+<span id="cb57-11"><a href="simple-linear-regression-1.html#cb57-11" tabindex="-1"></a><span class="co"># Number of Observations</span></span>
+<span id="cb57-12"><a href="simple-linear-regression-1.html#cb57-12" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
+<span id="cb57-13"><a href="simple-linear-regression-1.html#cb57-13" tabindex="-1"></a></span>
+<span id="cb57-14"><a href="simple-linear-regression-1.html#cb57-14" tabindex="-1"></a><span class="co"># Number of Folds</span></span>
+<span id="cb57-15"><a href="simple-linear-regression-1.html#cb57-15" tabindex="-1"></a>numFol <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb57-16"><a href="simple-linear-regression-1.html#cb57-16" tabindex="-1"></a><span class="co"># Fold Size</span></span>
+<span id="cb57-17"><a href="simple-linear-regression-1.html#cb57-17" tabindex="-1"></a>sizFol <span class="ot">&lt;-</span> <span class="fu">round</span>(n <span class="sc">/</span> numFol)</span>
+<span id="cb57-18"><a href="simple-linear-regression-1.html#cb57-18" tabindex="-1"></a></span>
+<span id="cb57-19"><a href="simple-linear-regression-1.html#cb57-19" tabindex="-1"></a><span class="co"># List Containing the Fold indices</span></span>
+<span id="cb57-20"><a href="simple-linear-regression-1.html#cb57-20" tabindex="-1"></a>fol <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb57-21"><a href="simple-linear-regression-1.html#cb57-21" tabindex="-1"></a><span class="co"># Select Fold Indices</span></span>
+<span id="cb57-22"><a href="simple-linear-regression-1.html#cb57-22" tabindex="-1"></a><span class="co"># Initialization</span></span>
+<span id="cb57-23"><a href="simple-linear-regression-1.html#cb57-23" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb57-24"><a href="simple-linear-regression-1.html#cb57-24" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numFol){</span>
+<span id="cb57-25"><a href="simple-linear-regression-1.html#cb57-25" tabindex="-1"></a>  <span class="co"># Computes the remaining number of indices</span></span>
+<span id="cb57-26"><a href="simple-linear-regression-1.html#cb57-26" tabindex="-1"></a>  numInd   <span class="ot">&lt;-</span> <span class="fu">length</span>(ind)</span>
+<span id="cb57-27"><a href="simple-linear-regression-1.html#cb57-27" tabindex="-1"></a>  <span class="co"># Randomly selects indices from the remaining indices</span></span>
+<span id="cb57-28"><a href="simple-linear-regression-1.html#cb57-28" tabindex="-1"></a>  indFol   <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(ind), <span class="at">size =</span> sizFol, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb57-29"><a href="simple-linear-regression-1.html#cb57-29" tabindex="-1"></a>  <span class="co"># Saves the indices to the list of Fold Indices</span></span>
+<span id="cb57-30"><a href="simple-linear-regression-1.html#cb57-30" tabindex="-1"></a>  fol[[i]] <span class="ot">&lt;-</span> ind[indFol]</span>
+<span id="cb57-31"><a href="simple-linear-regression-1.html#cb57-31" tabindex="-1"></a>  <span class="co"># Removes the indices from the indices vector</span></span>
+<span id="cb57-32"><a href="simple-linear-regression-1.html#cb57-32" tabindex="-1"></a>  ind      <span class="ot">&lt;-</span> ind[<span class="sc">-</span> indFol]</span>
+<span id="cb57-33"><a href="simple-linear-regression-1.html#cb57-33" tabindex="-1"></a>}</span>
+<span id="cb57-34"><a href="simple-linear-regression-1.html#cb57-34" tabindex="-1"></a></span>
+<span id="cb57-35"><a href="simple-linear-regression-1.html#cb57-35" tabindex="-1"></a><span class="co"># Models to try</span></span>
+<span id="cb57-36"><a href="simple-linear-regression-1.html#cb57-36" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(x, <span class="fu">log</span>(x),      x, <span class="fu">log</span>(x))</span>
+<span id="cb57-37"><a href="simple-linear-regression-1.html#cb57-37" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">cbind</span>(y,      y, <span class="fu">log</span>(y), <span class="fu">log</span>(y))</span>
+<span id="cb57-38"><a href="simple-linear-regression-1.html#cb57-38" tabindex="-1"></a></span>
+<span id="cb57-39"><a href="simple-linear-regression-1.html#cb57-39" tabindex="-1"></a><span class="co"># Number of Models to compare</span></span>
+<span id="cb57-40"><a href="simple-linear-regression-1.html#cb57-40" tabindex="-1"></a>numMod <span class="ot">&lt;-</span> <span class="fu">dim</span>(Y)[<span class="dv">2</span>]</span>
+<span id="cb57-41"><a href="simple-linear-regression-1.html#cb57-41" tabindex="-1"></a><span class="co"># Saves the validation metric for each model and each fold </span></span>
+<span id="cb57-42"><a href="simple-linear-regression-1.html#cb57-42" tabindex="-1"></a>matMet <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> numFol, <span class="at">ncol =</span> numMod)</span>
 <span id="cb57-43"><a href="simple-linear-regression-1.html#cb57-43" tabindex="-1"></a></span>
-<span id="cb57-44"><a href="simple-linear-regression-1.html#cb57-44" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb57-45"><a href="simple-linear-regression-1.html#cb57-45" tabindex="-1"></a><span class="co"># Loops through the models</span></span>
-<span id="cb57-46"><a href="simple-linear-regression-1.html#cb57-46" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numMod){</span>
-<span id="cb57-47"><a href="simple-linear-regression-1.html#cb57-47" tabindex="-1"></a>  yMod <span class="ot">&lt;-</span> Y[, k]</span>
-<span id="cb57-48"><a href="simple-linear-regression-1.html#cb57-48" tabindex="-1"></a>  xMod <span class="ot">&lt;-</span> X[, k]</span>
-<span id="cb57-49"><a href="simple-linear-regression-1.html#cb57-49" tabindex="-1"></a>  <span class="co"># Plots Transformed Data (All)</span></span>
-<span id="cb57-50"><a href="simple-linear-regression-1.html#cb57-50" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="at">x =</span> xMod,</span>
-<span id="cb57-51"><a href="simple-linear-regression-1.html#cb57-51" tabindex="-1"></a>       <span class="at">y =</span> yMod,</span>
-<span id="cb57-52"><a href="simple-linear-regression-1.html#cb57-52" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
-<span id="cb57-53"><a href="simple-linear-regression-1.html#cb57-53" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;Burgers&quot;</span>,</span>
-<span id="cb57-54"><a href="simple-linear-regression-1.html#cb57-54" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;Model &quot;</span>, k),</span>
-<span id="cb57-55"><a href="simple-linear-regression-1.html#cb57-55" tabindex="-1"></a>       <span class="at">pch  =</span> <span class="dv">16</span>)</span>
-<span id="cb57-56"><a href="simple-linear-regression-1.html#cb57-56" tabindex="-1"></a>  <span class="co"># Plots Regression Line (All)</span></span>
-<span id="cb57-57"><a href="simple-linear-regression-1.html#cb57-57" tabindex="-1"></a>  outReg   <span class="ot">&lt;-</span> <span class="fu">lm</span>(yMod <span class="sc">~</span> xMod)</span>
-<span id="cb57-58"><a href="simple-linear-regression-1.html#cb57-58" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">a   =</span> outReg<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb57-59"><a href="simple-linear-regression-1.html#cb57-59" tabindex="-1"></a>         <span class="at">b   =</span> outReg<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb57-60"><a href="simple-linear-regression-1.html#cb57-60" tabindex="-1"></a>         <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb57-61"><a href="simple-linear-regression-1.html#cb57-61" tabindex="-1"></a>         <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb57-62"><a href="simple-linear-regression-1.html#cb57-62" tabindex="-1"></a>  metFol <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> numFol)</span>
-<span id="cb57-63"><a href="simple-linear-regression-1.html#cb57-63" tabindex="-1"></a>  <span class="co"># Loops through the folds</span></span>
-<span id="cb57-64"><a href="simple-linear-regression-1.html#cb57-64" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numFol){</span>
-<span id="cb57-65"><a href="simple-linear-regression-1.html#cb57-65" tabindex="-1"></a>    <span class="co"># At Each Fold do Linear Regression without the test set</span></span>
-<span id="cb57-66"><a href="simple-linear-regression-1.html#cb57-66" tabindex="-1"></a>    outReg   <span class="ot">&lt;-</span> <span class="fu">lm</span>(yMod[<span class="sc">-</span>fol[[i]]] <span class="sc">~</span> xMod[<span class="sc">-</span>fol[[i]]])</span>
-<span id="cb57-67"><a href="simple-linear-regression-1.html#cb57-67" tabindex="-1"></a>    <span class="co"># Evaluate Out of Sample</span></span>
-<span id="cb57-68"><a href="simple-linear-regression-1.html#cb57-68" tabindex="-1"></a>    yHatOut   <span class="ot">&lt;-</span> outReg<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outReg<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> xMod[fol[[i]]] </span>
-<span id="cb57-69"><a href="simple-linear-regression-1.html#cb57-69" tabindex="-1"></a>    <span class="cf">if</span>(k <span class="sc">&gt;=</span> <span class="dv">3</span> ){</span>
-<span id="cb57-70"><a href="simple-linear-regression-1.html#cb57-70" tabindex="-1"></a>      metEva    <span class="ot">&lt;-</span> <span class="fu">mean</span>((<span class="fu">exp</span>(yMod[fol[[i]]]) <span class="sc">-</span> <span class="fu">exp</span>(yHatOut))<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb57-71"><a href="simple-linear-regression-1.html#cb57-71" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb57-72"><a href="simple-linear-regression-1.html#cb57-72" tabindex="-1"></a>      metEva    <span class="ot">&lt;-</span> <span class="fu">mean</span>((yMod[fol[[i]]] <span class="sc">-</span> yHatOut)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb57-73"><a href="simple-linear-regression-1.html#cb57-73" tabindex="-1"></a>    }</span>
-<span id="cb57-74"><a href="simple-linear-regression-1.html#cb57-74" tabindex="-1"></a>    metFol[i] <span class="ot">&lt;-</span> metEva</span>
-<span id="cb57-75"><a href="simple-linear-regression-1.html#cb57-75" tabindex="-1"></a>  }</span>
-<span id="cb57-76"><a href="simple-linear-regression-1.html#cb57-76" tabindex="-1"></a>  matMet[, k] <span class="ot">&lt;-</span> metFol</span>
-<span id="cb57-77"><a href="simple-linear-regression-1.html#cb57-77" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb57-44"><a href="simple-linear-regression-1.html#cb57-44" tabindex="-1"></a></span>
+<span id="cb57-45"><a href="simple-linear-regression-1.html#cb57-45" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb57-46"><a href="simple-linear-regression-1.html#cb57-46" tabindex="-1"></a><span class="co"># Loops through the models</span></span>
+<span id="cb57-47"><a href="simple-linear-regression-1.html#cb57-47" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numMod){</span>
+<span id="cb57-48"><a href="simple-linear-regression-1.html#cb57-48" tabindex="-1"></a>  yMod <span class="ot">&lt;-</span> Y[, k]</span>
+<span id="cb57-49"><a href="simple-linear-regression-1.html#cb57-49" tabindex="-1"></a>  xMod <span class="ot">&lt;-</span> X[, k]</span>
+<span id="cb57-50"><a href="simple-linear-regression-1.html#cb57-50" tabindex="-1"></a>  <span class="co"># Plots Transformed Data (All)</span></span>
+<span id="cb57-51"><a href="simple-linear-regression-1.html#cb57-51" tabindex="-1"></a>  <span class="cf">if</span>(k <span class="sc">==</span> <span class="dv">1</span>){</span>
+<span id="cb57-52"><a href="simple-linear-regression-1.html#cb57-52" tabindex="-1"></a>    <span class="fu">plot</span>(<span class="at">x =</span> xMod,</span>
+<span id="cb57-53"><a href="simple-linear-regression-1.html#cb57-53" tabindex="-1"></a>       <span class="at">y =</span> yMod,</span>
+<span id="cb57-54"><a href="simple-linear-regression-1.html#cb57-54" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
+<span id="cb57-55"><a href="simple-linear-regression-1.html#cb57-55" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;Burgers&quot;</span>,</span>
+<span id="cb57-56"><a href="simple-linear-regression-1.html#cb57-56" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;Model &quot;</span>, k),</span>
+<span id="cb57-57"><a href="simple-linear-regression-1.html#cb57-57" tabindex="-1"></a>       <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb57-58"><a href="simple-linear-regression-1.html#cb57-58" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span>(k <span class="sc">==</span> <span class="dv">2</span>) {</span>
+<span id="cb57-59"><a href="simple-linear-regression-1.html#cb57-59" tabindex="-1"></a>    <span class="fu">plot</span>(<span class="at">x =</span> xMod,</span>
+<span id="cb57-60"><a href="simple-linear-regression-1.html#cb57-60" tabindex="-1"></a>       <span class="at">y =</span> yMod,</span>
+<span id="cb57-61"><a href="simple-linear-regression-1.html#cb57-61" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;log(Price) ($)&quot;</span>,</span>
+<span id="cb57-62"><a href="simple-linear-regression-1.html#cb57-62" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;Burgers&quot;</span>,</span>
+<span id="cb57-63"><a href="simple-linear-regression-1.html#cb57-63" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;Model &quot;</span>, k),</span>
+<span id="cb57-64"><a href="simple-linear-regression-1.html#cb57-64" tabindex="-1"></a>       <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb57-65"><a href="simple-linear-regression-1.html#cb57-65" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span>(k <span class="sc">==</span> <span class="dv">3</span>){</span>
+<span id="cb57-66"><a href="simple-linear-regression-1.html#cb57-66" tabindex="-1"></a>    <span class="fu">plot</span>(<span class="at">x =</span> xMod,</span>
+<span id="cb57-67"><a href="simple-linear-regression-1.html#cb57-67" tabindex="-1"></a>       <span class="at">y =</span> yMod,</span>
+<span id="cb57-68"><a href="simple-linear-regression-1.html#cb57-68" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
+<span id="cb57-69"><a href="simple-linear-regression-1.html#cb57-69" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;log(Burgers)&quot;</span>,</span>
+<span id="cb57-70"><a href="simple-linear-regression-1.html#cb57-70" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;Model &quot;</span>, k),</span>
+<span id="cb57-71"><a href="simple-linear-regression-1.html#cb57-71" tabindex="-1"></a>       <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb57-72"><a href="simple-linear-regression-1.html#cb57-72" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb57-73"><a href="simple-linear-regression-1.html#cb57-73" tabindex="-1"></a>    <span class="fu">plot</span>(<span class="at">x =</span> xMod,</span>
+<span id="cb57-74"><a href="simple-linear-regression-1.html#cb57-74" tabindex="-1"></a>       <span class="at">y =</span> yMod,</span>
+<span id="cb57-75"><a href="simple-linear-regression-1.html#cb57-75" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;log(Price) ($)&quot;</span>,</span>
+<span id="cb57-76"><a href="simple-linear-regression-1.html#cb57-76" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;log(Burgers)&quot;</span>,</span>
+<span id="cb57-77"><a href="simple-linear-regression-1.html#cb57-77" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste0</span>(<span class="st">&quot;Model &quot;</span>, k),</span>
+<span id="cb57-78"><a href="simple-linear-regression-1.html#cb57-78" tabindex="-1"></a>       <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb57-79"><a href="simple-linear-regression-1.html#cb57-79" tabindex="-1"></a>  }</span>
+<span id="cb57-80"><a href="simple-linear-regression-1.html#cb57-80" tabindex="-1"></a>  </span>
+<span id="cb57-81"><a href="simple-linear-regression-1.html#cb57-81" tabindex="-1"></a>  <span class="co"># Plots Regression Line (All)</span></span>
+<span id="cb57-82"><a href="simple-linear-regression-1.html#cb57-82" tabindex="-1"></a>  outReg   <span class="ot">&lt;-</span> <span class="fu">lm</span>(yMod <span class="sc">~</span> xMod)</span>
+<span id="cb57-83"><a href="simple-linear-regression-1.html#cb57-83" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">a   =</span> outReg<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb57-84"><a href="simple-linear-regression-1.html#cb57-84" tabindex="-1"></a>         <span class="at">b   =</span> outReg<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb57-85"><a href="simple-linear-regression-1.html#cb57-85" tabindex="-1"></a>         <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb57-86"><a href="simple-linear-regression-1.html#cb57-86" tabindex="-1"></a>         <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb57-87"><a href="simple-linear-regression-1.html#cb57-87" tabindex="-1"></a>  metFol <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> numFol)</span>
+<span id="cb57-88"><a href="simple-linear-regression-1.html#cb57-88" tabindex="-1"></a>  <span class="co"># Loops through the folds</span></span>
+<span id="cb57-89"><a href="simple-linear-regression-1.html#cb57-89" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numFol){</span>
+<span id="cb57-90"><a href="simple-linear-regression-1.html#cb57-90" tabindex="-1"></a>    <span class="co"># At Each Fold do Linear Regression without the test set</span></span>
+<span id="cb57-91"><a href="simple-linear-regression-1.html#cb57-91" tabindex="-1"></a>    outReg   <span class="ot">&lt;-</span> <span class="fu">lm</span>(yMod[<span class="sc">-</span>fol[[i]]] <span class="sc">~</span> xMod[<span class="sc">-</span>fol[[i]]])</span>
+<span id="cb57-92"><a href="simple-linear-regression-1.html#cb57-92" tabindex="-1"></a>    <span class="co"># Evaluate Out of Sample</span></span>
+<span id="cb57-93"><a href="simple-linear-regression-1.html#cb57-93" tabindex="-1"></a>    yHatOut   <span class="ot">&lt;-</span> outReg<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outReg<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> xMod[fol[[i]]] </span>
+<span id="cb57-94"><a href="simple-linear-regression-1.html#cb57-94" tabindex="-1"></a>    <span class="cf">if</span>(k <span class="sc">&gt;=</span> <span class="dv">3</span> ){</span>
+<span id="cb57-95"><a href="simple-linear-regression-1.html#cb57-95" tabindex="-1"></a>      metEva    <span class="ot">&lt;-</span> <span class="fu">mean</span>((<span class="fu">exp</span>(yMod[fol[[i]]]) <span class="sc">-</span> <span class="fu">exp</span>(yHatOut))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb57-96"><a href="simple-linear-regression-1.html#cb57-96" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb57-97"><a href="simple-linear-regression-1.html#cb57-97" tabindex="-1"></a>      metEva    <span class="ot">&lt;-</span> <span class="fu">mean</span>((yMod[fol[[i]]] <span class="sc">-</span> yHatOut)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb57-98"><a href="simple-linear-regression-1.html#cb57-98" tabindex="-1"></a>    }</span>
+<span id="cb57-99"><a href="simple-linear-regression-1.html#cb57-99" tabindex="-1"></a>    metFol[i] <span class="ot">&lt;-</span> metEva</span>
+<span id="cb57-100"><a href="simple-linear-regression-1.html#cb57-100" tabindex="-1"></a>  }</span>
+<span id="cb57-101"><a href="simple-linear-regression-1.html#cb57-101" tabindex="-1"></a>  matMet[, k] <span class="ot">&lt;-</span> metFol</span>
+<span id="cb57-102"><a href="simple-linear-regression-1.html#cb57-102" tabindex="-1"></a>}</span></code></pre></div>
 <p><img src="_main_files/figure-html/cross-validation-1.png" width="672" /></p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="simple-linear-regression-1.html#cb58-1" tabindex="-1"></a><span class="co"># Box plot of the MSE</span></span>
-<span id="cb58-2"><a href="simple-linear-regression-1.html#cb58-2" tabindex="-1"></a><span class="fu">boxplot</span>(matMet, <span class="at">outline =</span> <span class="cn">FALSE</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Models&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;MSE&quot;</span>)</span>
-<span id="cb58-3"><a href="simple-linear-regression-1.html#cb58-3" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">1</span>, <span class="at">at =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;y~x&quot;</span>, <span class="st">&quot;y~log(x)&quot;</span>, <span class="st">&quot;log(y)~x&quot;</span>, <span class="st">&quot;log(y)~log(x)&quot;</span>))</span>
-<span id="cb58-4"><a href="simple-linear-regression-1.html#cb58-4" tabindex="-1"></a></span>
-<span id="cb58-5"><a href="simple-linear-regression-1.html#cb58-5" tabindex="-1"></a><span class="co"># Displays the Results of Cross-Validation</span></span>
-<span id="cb58-6"><a href="simple-linear-regression-1.html#cb58-6" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">colMeans</span>(matMet))</span>
-<span id="cb58-7"><a href="simple-linear-regression-1.html#cb58-7" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="st">&quot;Model 1&quot;</span>, <span class="st">&quot;Model 2&quot;</span>, <span class="st">&quot;Model 3&quot;</span>, <span class="st">&quot;Model 4&quot;</span>), tab)</span>
-<span id="cb58-8"><a href="simple-linear-regression-1.html#cb58-8" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(tab, <span class="fu">apply</span>(<span class="at">X =</span> matMet, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> sd))</span>
-<span id="cb58-9"><a href="simple-linear-regression-1.html#cb58-9" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Model&quot;</span>, <span class="st">&quot;Mean&quot;</span>, <span class="st">&quot;SD&quot;</span>)</span>
-<span id="cb58-10"><a href="simple-linear-regression-1.html#cb58-10" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div>
+<span id="cb58-2"><a href="simple-linear-regression-1.html#cb58-2" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb58-3"><a href="simple-linear-regression-1.html#cb58-3" tabindex="-1"></a><span class="fu">boxplot</span>(matMet, <span class="at">outline =</span> <span class="cn">FALSE</span>, <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Models&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;MSE&quot;</span>)</span>
+<span id="cb58-4"><a href="simple-linear-regression-1.html#cb58-4" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">1</span>, <span class="at">at =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;y~x&quot;</span>, <span class="st">&quot;y~log(x)&quot;</span>, <span class="st">&quot;log(y)~x&quot;</span>, <span class="st">&quot;log(y)~log(x)&quot;</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/cross-validation-2.png" width="672" /></p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="simple-linear-regression-1.html#cb59-1" tabindex="-1"></a><span class="co"># Displays the Results of Cross-Validation</span></span>
+<span id="cb59-2"><a href="simple-linear-regression-1.html#cb59-2" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">colMeans</span>(matMet))</span>
+<span id="cb59-3"><a href="simple-linear-regression-1.html#cb59-3" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="st">&quot;Model 1&quot;</span>, <span class="st">&quot;Model 2&quot;</span>, <span class="st">&quot;Model 3&quot;</span>, <span class="st">&quot;Model 4&quot;</span>), tab)</span>
+<span id="cb59-4"><a href="simple-linear-regression-1.html#cb59-4" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(tab, <span class="fu">apply</span>(<span class="at">X =</span> matMet, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> sd))</span>
+<span id="cb59-5"><a href="simple-linear-regression-1.html#cb59-5" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Model&quot;</span>, <span class="st">&quot;Mean&quot;</span>, <span class="st">&quot;SD&quot;</span>)</span>
+<span id="cb59-6"><a href="simple-linear-regression-1.html#cb59-6" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2495,31 +2565,49 @@ alternatives to doing cross-validation, here are a few of the most relevant ones
 <tbody>
 <tr class="odd">
 <td align="left">Model 1</td>
-<td align="right">78.38</td>
-<td align="right">88.40</td>
+<td align="right">78.61</td>
+<td align="right">74.83</td>
 </tr>
 <tr class="even">
 <td align="left">Model 2</td>
-<td align="right">19.74</td>
-<td align="right">8.72</td>
+<td align="right">20.15</td>
+<td align="right">8.26</td>
 </tr>
 <tr class="odd">
 <td align="left">Model 3</td>
-<td align="right">39.28</td>
-<td align="right">46.96</td>
+<td align="right">39.39</td>
+<td align="right">41.47</td>
 </tr>
 <tr class="even">
 <td align="left">Model 4</td>
-<td align="right">364.82</td>
-<td align="right">1013.20</td>
+<td align="right">331.60</td>
+<td align="right">890.85</td>
 </tr>
 </tbody>
 </table>
-<p><img src="_main_files/figure-html/cross-validation-2.png" width="672" />
-When performing cross-validation, it is essential to calculate error metrics in the original units of the response variable before any transformation. Transformations like scaling or logging change the scale of the data, which can make errors appear smaller or larger in the transformed units and lead to misleading comparisons.</p>
-<p>For example, compare the scale of the dependent variable in Models 3 and 4 with those in Models 1 and 2. Since the range of values after transforming in Models 3 and 4 is smaller, the squared errors tend to be smaller simply because of this change, making it unfair to compare these errors to those from Models 1 and 2. Similarly, if income is measured in dollars and then log-transformed, errors in the transformed scale do not directly reflect dollar amounts. To evaluate model performance correctly, predictions should be transformed back to the original units before computing errors or other accuracy metrics.</p>
-<p>Always perform validation in the original units to ensure that results are meaningful and comparable in real-world terms. Keep the transformation parameters consistent for new data, and report errors in the original units for clear, interpretable results.</p>
+<p>When performing cross-validation, it is essential to calculate error metrics in the original units of the response variable before any transformation. Transformations like scaling or logging change the scale of the data, which can make errors appear smaller or larger in the transformed units and lead to misleading comparisons.</p>
+<p>For example, compare the scale of the response in Models 3 and 4 with those in Models 1 and 2. Since the range of values after transforming in Models 3 and 4 is smaller, the squared errors tend to be smaller simply because of this change, making it unfair to compare these errors to those from Models 1 and 2. Similarly, if income is measured in dollars and then log-transformed, errors in the transformed scale do not directly reflect dollar amounts. To evaluate model performance correctly, predictions should be transformed back to the original units before computing errors or other accuracy metrics.</p>
+<p>When models are intended to predict the same original response, compare them using the same evaluation scale and metric to ensure that results are meaningful and comparable in real-world terms. Keep the transformation parameters consistent for new data, and report errors in the same units for clear, interpretable results.</p>
+</div>
+<div id="summary-2" class="section level3 hasAnchor" number="4.8.5">
+<h3><span class="header-section-number">4.8.5</span> Summary<a href="simple-linear-regression-1.html#summary-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[
+\boxed{
+\begin{array}{lll}
+R^2
+&amp;:&amp;
+\text{How well does the model fit the observed training data?}\\[1mm]
+\text{Residual analysis}
+&amp;:&amp;
+\text{What structure or problems remain after fitting?}\\[1mm]
+\text{Cross-validation}
+&amp;:&amp;
+\text{How well does the fitted procedure predict held-out observations?}
+\end{array}
+}
+\]</span></p>
 <hr />
+</div>
 </div>
 <div id="weighted-least-squares" class="section level2 hasAnchor" number="4.9">
 <h2><span class="header-section-number">4.9</span> Weighted Least Squares<a href="simple-linear-regression-1.html#weighted-least-squares" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -2528,7 +2616,7 @@ When performing cross-validation, it is essential to calculate error metrics in 
 - Heteroscedasticity means some observations are inherently more variable than others. Treating all observations as equally informative gives undue influence to noisy points and reduces overall estimation precision.<br />
 - WLS assigns each observation a weight that reflects its reliability: observations with smaller error variance receive larger weight, and those with larger error variance receive smaller weight. In effect, the method downweights noisy observations and upweights precise ones, producing estimates that place greater trust in the most informative data.<br />
 - In the ideal case, weights are chosen to be inversely related to the true error variances; this makes the weighted estimator the most efficient among linear unbiased estimators under the model.</p>
-<p>In a simple linear regression model with one independent variable, OLS minimizes the sum of squared residuals:</p>
+<p>In a simple linear regression model with one explanatory variable, OLS minimizes the sum of squared residuals:</p>
 <p><span class="math display">\[ \min \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
 \]</span></p>
 <p>Weighted Least Squares (WLS) corrects for heteroscedasticity by minimizing the weighted sum of squared residuals:
@@ -2536,7 +2624,7 @@ When performing cross-validation, it is essential to calculate error metrics in 
 \min \sum_{i=1}^{n} w_i (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
 \]</span></p>
 <div class="proposition">
-<p><span id="prp:prp-weighted-least-squares-estimators" class="proposition"><strong>Proposition 4.18  (Weighted Least Squares Estimators) </strong></span>The solution to the Weithed Least Squares problem:
+<p><span id="prp:prp-weighted-least-squares-estimators" class="proposition"><strong>Proposition 4.19  (Weighted Least Squares Estimators) </strong></span>The solution to the Weithed Least Squares problem:
 <span class="math display">\[
 \min_{\beta_0,\beta_1} \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
 \]</span>
@@ -2549,7 +2637,7 @@ is given by:
 <span style="color:green">Proof</span>
 </summary>
 <div class="proof">
-<p><span id="unlabeled-div-13" class="proof"><em>Proof</em>. </span>First define the weighted residual sum of squares, the objective function, as:
+<p><span id="unlabeled-div-14" class="proof"><em>Proof</em>. </span>First define the weighted residual sum of squares, the objective function, as:
 <span class="math display">\[Q_w(\beta_0, \beta_1) = \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2\]</span>
 We aim to minimize <span class="math inline">\(Q(\beta_0, \beta_1)\)</span> with respect to <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.
 We will do so by finding its critical points.
@@ -2670,7 +2758,7 @@ where:</p>
 equivalent to:
 <span class="math display">\[\min_{\boldsymbol{\beta}} Q(\boldsymbol{\beta}) = \left( \mathbf{y}&#39;\mathbf{y}- \mathbf{y}&#39;\mathbf{X}\boldsymbol{\beta}- \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{y}+ \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{X}\boldsymbol{\beta}\right)\]</span></p>
 <div class="proposition">
-<p><span id="prp:prp-lse-matrix-solution" class="proposition"><strong>Proposition 4.19  </strong></span>The solution to the Least Squres minimization problem in matrix form is given by:
+<p><span id="prp:prp-lse-matrix-solution" class="proposition"><strong>Proposition 4.20  </strong></span>The solution to the Least Squres minimization problem in matrix form is given by:
 <span class="math display">\[\hat{\boldsymbol{\beta}} = \left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\mathbf{X}&#39;\mathbf{y}\]</span></p>
 </div>
 <details>
@@ -2678,7 +2766,7 @@ equivalent to:
 <span style="color:green">Proof</span>
 </summary>
 <div class="proof">
-<p><span id="unlabeled-div-14" class="proof"><em>Proof</em>. </span>The procedure to find the estimators is very similar, working with the gradient
+<p><span id="unlabeled-div-15" class="proof"><em>Proof</em>. </span>The procedure to find the estimators is very similar, working with the gradient
 instead of the partial derivatives:
 <span class="math display">\[\nabla_\beta Q = \mathbf{0} \]</span>
 Now
@@ -2707,7 +2795,7 @@ This shows that the solution is indeed a minimum.</p>
 </div>
 </details>
 <div class="proposition">
-<p><span id="prp:prp-lse-matrix-solution-equal" class="proposition"><strong>Proposition 4.20  </strong></span>The solution to the Least Squres minimization problem in matrix form is given by
+<p><span id="prp:prp-lse-matrix-solution-equal" class="proposition"><strong>Proposition 4.21  </strong></span>The solution to the Least Squres minimization problem in matrix form is given by
 is equivalent to the solution in of the model expressed in scalar form.</p>
 </div>
 <details>
@@ -2715,7 +2803,7 @@ is equivalent to the solution in of the model expressed in scalar form.</p>
 <span style="color:green">Proof</span>
 </summary>
 <div class="proof">
-<p><span id="unlabeled-div-15" class="proof"><em>Proof</em>. </span>We need to show that each of the components of <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\hat{\beta}_0,\hat{\beta_1})\)</span>
+<p><span id="unlabeled-div-16" class="proof"><em>Proof</em>. </span>We need to show that each of the components of <span class="math inline">\(\hat{\boldsymbol{\beta}} = (\hat{\beta}_0,\hat{\beta_1})\)</span>
 are the same of the scalar solution. To do so, we need to go through the matrix
 computations.
 <span class="math display">\[\begin{align*}
@@ -2888,7 +2976,7 @@ by noticing that we can write the Weighted Least Squares function as follows:</p
           0      &amp;      0 &amp; \ldots &amp; w_n    
         \end{matrix} \right]\]</span></p>
 <div class="proposition">
-<p><span id="prp:prp-weighted-least-squares-estimators-matrix" class="proposition"><strong>Proposition 4.21  (Weighted Least Squares Estimators in Matrix Form) </strong></span>The solution to the Weithed Least Squares problem in matrix form:
+<p><span id="prp:prp-weighted-least-squares-estimators-matrix" class="proposition"><strong>Proposition 4.22  (Weighted Least Squares Estimators in Matrix Form) </strong></span>The solution to the Weithed Least Squares problem in matrix form:
 <span class="math display">\[
 \min_{\boldsymbol{\beta}} (\mathbf{y}- \mathbf{X}\boldsymbol{\beta})&#39;\mathbf{W}(\mathbf{y}- \mathbf{X}\boldsymbol{\beta})
 \]</span>
@@ -2900,7 +2988,7 @@ is given by:
 <span style="color:green">Proof</span>
 </summary>
 <div class="proof">
-<p><span id="unlabeled-div-16" class="proof"><em>Proof</em>. </span>Note we can write the objective function as:
+<p><span id="unlabeled-div-17" class="proof"><em>Proof</em>. </span>Note we can write the objective function as:
 <span class="math display">\[Q_w = \mathbf{y}&#39;\mathbf{W}\mathbf{y}-\mathbf{y}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}- \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{W}\mathbf{y}+ \boldsymbol{\beta}&#39;\mathbf{X}&#39;\mathbf{W}\mathbf{X}\boldsymbol{\beta}\]</span>
 then computing the gradient we have that:
 <span class="math display">\[\begin{align*}

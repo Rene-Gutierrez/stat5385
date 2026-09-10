@@ -268,11 +268,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.7" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#residual-analysis"><i class="fa fa-check"></i><b>4.7</b> Residual Analysis</a>
 <ul>
 <li class="chapter" data-level="4.7.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#non-linear-regression-function"><i class="fa fa-check"></i><b>4.7.1</b> Non-linear regression function</a></li>
-<li class="chapter" data-level="4.7.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#heteroscedasticity"><i class="fa fa-check"></i><b>4.7.2</b> Heteroscedasticity</a></li>
+<li class="chapter" data-level="4.7.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#changing-residual-spread"><i class="fa fa-check"></i><b>4.7.2</b> Changing Residual Spread</a></li>
 <li class="chapter" data-level="4.7.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#outliers"><i class="fa fa-check"></i><b>4.7.3</b> Outliers</a></li>
-<li class="chapter" data-level="4.7.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#variables-ommited"><i class="fa fa-check"></i><b>4.7.4</b> Variables Ommited</a></li>
+<li class="chapter" data-level="4.7.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#variables-ommitted"><i class="fa fa-check"></i><b>4.7.4</b> Variables Ommitted</a></li>
 </ul></li>
-<li class="chapter" data-level="4.8" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#cross-validation"><i class="fa fa-check"></i><b>4.8</b> Cross-Validation</a></li>
+<li class="chapter" data-level="4.8" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#cross-validation"><i class="fa fa-check"></i><b>4.8</b> Cross-Validation</a>
+<ul>
+<li class="chapter" data-level="4.8.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#validation-error"><i class="fa fa-check"></i><b>4.8.1</b> Validation Error</a></li>
+<li class="chapter" data-level="4.8.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#holdout-validation"><i class="fa fa-check"></i><b>4.8.2</b> Holdout Validation</a></li>
+<li class="chapter" data-level="4.8.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>4.8.3</b> K-Fold Cross-Validation</a></li>
+<li class="chapter" data-level="4.8.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#other-cross-validation-procedures"><i class="fa fa-check"></i><b>4.8.4</b> Other Cross-Validation Procedures</a></li>
+<li class="chapter" data-level="4.8.5" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#summary-2"><i class="fa fa-check"></i><b>4.8.5</b> Summary</a></li>
+</ul></li>
 <li class="chapter" data-level="4.9" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#weighted-least-squares"><i class="fa fa-check"></i><b>4.9</b> Weighted Least Squares</a></li>
 <li class="chapter" data-level="4.10" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#model-in-matrix-form"><i class="fa fa-check"></i><b>4.10</b> Model in Matrix Form</a>
 <ul>
@@ -303,7 +310,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="6.2.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#simple-regressions"><i class="fa fa-check"></i><b>6.2.1</b> Simple Regressions</a></li>
 <li class="chapter" data-level="6.2.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#multiple-regression"><i class="fa fa-check"></i><b>6.2.2</b> Multiple Regression</a></li>
-<li class="chapter" data-level="6.2.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#summary-2"><i class="fa fa-check"></i><b>6.2.3</b> Summary</a></li>
+<li class="chapter" data-level="6.2.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#summary-3"><i class="fa fa-check"></i><b>6.2.3</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#least-squares-estimation-1"><i class="fa fa-check"></i><b>6.3</b> Least Squares Estimation</a></li>
 <li class="chapter" data-level="6.4" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#properties-of-the-estimates-1"><i class="fa fa-check"></i><b>6.4</b> Properties of the Estimates</a></li>
@@ -484,52 +491,52 @@ When we studied influential observations and outliers, we saw how removing certa
 <p>Bootstrapping allows us to go much further. By repeatedly resampling the data and refitting the model, we can build empirical distributions for our estimates and thus quantify their variability.</p>
 <p>Let’s illustrate this using GDP data.</p>
 <hr />
-<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="bootstrapping.html#cb149-1" tabindex="-1"></a><span class="co"># Data Load</span></span>
-<span id="cb149-2"><a href="bootstrapping.html#cb149-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Gdp data.csv&quot;</span>)</span>
-<span id="cb149-3"><a href="bootstrapping.html#cb149-3" tabindex="-1"></a></span>
-<span id="cb149-4"><a href="bootstrapping.html#cb149-4" tabindex="-1"></a><span class="co"># Assigns Values</span></span>
-<span id="cb149-5"><a href="bootstrapping.html#cb149-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>])</span>
-<span id="cb149-6"><a href="bootstrapping.html#cb149-6" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(dat<span class="sc">$</span>gdp)</span>
-<span id="cb149-7"><a href="bootstrapping.html#cb149-7" tabindex="-1"></a></span>
-<span id="cb149-8"><a href="bootstrapping.html#cb149-8" tabindex="-1"></a><span class="co"># Regression without Bootstrapping</span></span>
-<span id="cb149-9"><a href="bootstrapping.html#cb149-9" tabindex="-1"></a>norReg <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X)</span>
-<span id="cb149-10"><a href="bootstrapping.html#cb149-10" tabindex="-1"></a></span>
-<span id="cb149-11"><a href="bootstrapping.html#cb149-11" tabindex="-1"></a><span class="co"># Number of Observations</span></span>
-<span id="cb149-12"><a href="bootstrapping.html#cb149-12" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
-<span id="cb149-13"><a href="bootstrapping.html#cb149-13" tabindex="-1"></a></span>
-<span id="cb149-14"><a href="bootstrapping.html#cb149-14" tabindex="-1"></a><span class="co"># Design Matrix</span></span>
-<span id="cb149-15"><a href="bootstrapping.html#cb149-15" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), X)</span>
-<span id="cb149-16"><a href="bootstrapping.html#cb149-16" tabindex="-1"></a></span>
-<span id="cb149-17"><a href="bootstrapping.html#cb149-17" tabindex="-1"></a><span class="co"># Number of Variables</span></span>
-<span id="cb149-18"><a href="bootstrapping.html#cb149-18" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
-<span id="cb149-19"><a href="bootstrapping.html#cb149-19" tabindex="-1"></a></span>
-<span id="cb149-20"><a href="bootstrapping.html#cb149-20" tabindex="-1"></a><span class="co"># Number of Bootstrapping Samples</span></span>
-<span id="cb149-21"><a href="bootstrapping.html#cb149-21" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb149-22"><a href="bootstrapping.html#cb149-22" tabindex="-1"></a></span>
-<span id="cb149-23"><a href="bootstrapping.html#cb149-23" tabindex="-1"></a><span class="co"># Bootstrapping Coefficient Estimates</span></span>
-<span id="cb149-24"><a href="bootstrapping.html#cb149-24" tabindex="-1"></a>booCoe <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> m, <span class="at">ncol =</span> p)</span>
-<span id="cb149-25"><a href="bootstrapping.html#cb149-25" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
-<span id="cb149-26"><a href="bootstrapping.html#cb149-26" tabindex="-1"></a>  <span class="co"># Sample Selection</span></span>
-<span id="cb149-27"><a href="bootstrapping.html#cb149-27" tabindex="-1"></a>  booSel <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">size =</span> n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb149-28"><a href="bootstrapping.html#cb149-28" tabindex="-1"></a>  <span class="co"># Bootstrap Samples</span></span>
-<span id="cb149-29"><a href="bootstrapping.html#cb149-29" tabindex="-1"></a>  Xb <span class="ot">&lt;-</span> X[booSel, ]</span>
-<span id="cb149-30"><a href="bootstrapping.html#cb149-30" tabindex="-1"></a>  yb <span class="ot">&lt;-</span> y[booSel]</span>
-<span id="cb149-31"><a href="bootstrapping.html#cb149-31" tabindex="-1"></a>  <span class="co"># Coefficient Estimation</span></span>
-<span id="cb149-32"><a href="bootstrapping.html#cb149-32" tabindex="-1"></a>  booCoe[i, ] <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Xb) <span class="sc">%*%</span> Xb, <span class="fu">t</span>(Xb) <span class="sc">%*%</span> yb)</span>
-<span id="cb149-33"><a href="bootstrapping.html#cb149-33" tabindex="-1"></a>}</span>
-<span id="cb149-34"><a href="bootstrapping.html#cb149-34" tabindex="-1"></a></span>
-<span id="cb149-35"><a href="bootstrapping.html#cb149-35" tabindex="-1"></a><span class="co"># Plots the distribution for each coefficient with the point estimate without suing bootstrapping</span></span>
-<span id="cb149-36"><a href="bootstrapping.html#cb149-36" tabindex="-1"></a><span class="fu">boxplot</span>(booCoe,</span>
-<span id="cb149-37"><a href="bootstrapping.html#cb149-37" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.5</span>),</span>
-<span id="cb149-38"><a href="bootstrapping.html#cb149-38" tabindex="-1"></a>        <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
-<span id="cb149-39"><a href="bootstrapping.html#cb149-39" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">1</span>, <span class="at">at =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Intercept&quot;</span>, <span class="st">&quot;Inf&quot;</span>, <span class="st">&quot;Une&quot;</span>, <span class="st">&quot;Int&quot;</span>, <span class="st">&quot;Gov&quot;</span>, <span class="st">&quot;Exp&quot;</span>))</span>
-<span id="cb149-40"><a href="bootstrapping.html#cb149-40" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb149-41"><a href="bootstrapping.html#cb149-41" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
-<span id="cb149-42"><a href="bootstrapping.html#cb149-42" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb149-43"><a href="bootstrapping.html#cb149-43" tabindex="-1"></a><span class="fu">points</span>(norReg<span class="sc">$</span>coefficients, <span class="at">pch =</span> <span class="dv">17</span>, <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="bootstrapping.html#cb150-1" tabindex="-1"></a><span class="co"># Data Load</span></span>
+<span id="cb150-2"><a href="bootstrapping.html#cb150-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Gdp data.csv&quot;</span>)</span>
+<span id="cb150-3"><a href="bootstrapping.html#cb150-3" tabindex="-1"></a></span>
+<span id="cb150-4"><a href="bootstrapping.html#cb150-4" tabindex="-1"></a><span class="co"># Assigns Values</span></span>
+<span id="cb150-5"><a href="bootstrapping.html#cb150-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>])</span>
+<span id="cb150-6"><a href="bootstrapping.html#cb150-6" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(dat<span class="sc">$</span>gdp)</span>
+<span id="cb150-7"><a href="bootstrapping.html#cb150-7" tabindex="-1"></a></span>
+<span id="cb150-8"><a href="bootstrapping.html#cb150-8" tabindex="-1"></a><span class="co"># Regression without Bootstrapping</span></span>
+<span id="cb150-9"><a href="bootstrapping.html#cb150-9" tabindex="-1"></a>norReg <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X)</span>
+<span id="cb150-10"><a href="bootstrapping.html#cb150-10" tabindex="-1"></a></span>
+<span id="cb150-11"><a href="bootstrapping.html#cb150-11" tabindex="-1"></a><span class="co"># Number of Observations</span></span>
+<span id="cb150-12"><a href="bootstrapping.html#cb150-12" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
+<span id="cb150-13"><a href="bootstrapping.html#cb150-13" tabindex="-1"></a></span>
+<span id="cb150-14"><a href="bootstrapping.html#cb150-14" tabindex="-1"></a><span class="co"># Design Matrix</span></span>
+<span id="cb150-15"><a href="bootstrapping.html#cb150-15" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), X)</span>
+<span id="cb150-16"><a href="bootstrapping.html#cb150-16" tabindex="-1"></a></span>
+<span id="cb150-17"><a href="bootstrapping.html#cb150-17" tabindex="-1"></a><span class="co"># Number of Variables</span></span>
+<span id="cb150-18"><a href="bootstrapping.html#cb150-18" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb150-19"><a href="bootstrapping.html#cb150-19" tabindex="-1"></a></span>
+<span id="cb150-20"><a href="bootstrapping.html#cb150-20" tabindex="-1"></a><span class="co"># Number of Bootstrapping Samples</span></span>
+<span id="cb150-21"><a href="bootstrapping.html#cb150-21" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb150-22"><a href="bootstrapping.html#cb150-22" tabindex="-1"></a></span>
+<span id="cb150-23"><a href="bootstrapping.html#cb150-23" tabindex="-1"></a><span class="co"># Bootstrapping Coefficient Estimates</span></span>
+<span id="cb150-24"><a href="bootstrapping.html#cb150-24" tabindex="-1"></a>booCoe <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> m, <span class="at">ncol =</span> p)</span>
+<span id="cb150-25"><a href="bootstrapping.html#cb150-25" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
+<span id="cb150-26"><a href="bootstrapping.html#cb150-26" tabindex="-1"></a>  <span class="co"># Sample Selection</span></span>
+<span id="cb150-27"><a href="bootstrapping.html#cb150-27" tabindex="-1"></a>  booSel <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">size =</span> n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb150-28"><a href="bootstrapping.html#cb150-28" tabindex="-1"></a>  <span class="co"># Bootstrap Samples</span></span>
+<span id="cb150-29"><a href="bootstrapping.html#cb150-29" tabindex="-1"></a>  Xb <span class="ot">&lt;-</span> X[booSel, ]</span>
+<span id="cb150-30"><a href="bootstrapping.html#cb150-30" tabindex="-1"></a>  yb <span class="ot">&lt;-</span> y[booSel]</span>
+<span id="cb150-31"><a href="bootstrapping.html#cb150-31" tabindex="-1"></a>  <span class="co"># Coefficient Estimation</span></span>
+<span id="cb150-32"><a href="bootstrapping.html#cb150-32" tabindex="-1"></a>  booCoe[i, ] <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Xb) <span class="sc">%*%</span> Xb, <span class="fu">t</span>(Xb) <span class="sc">%*%</span> yb)</span>
+<span id="cb150-33"><a href="bootstrapping.html#cb150-33" tabindex="-1"></a>}</span>
+<span id="cb150-34"><a href="bootstrapping.html#cb150-34" tabindex="-1"></a></span>
+<span id="cb150-35"><a href="bootstrapping.html#cb150-35" tabindex="-1"></a><span class="co"># Plots the distribution for each coefficient with the point estimate without suing bootstrapping</span></span>
+<span id="cb150-36"><a href="bootstrapping.html#cb150-36" tabindex="-1"></a><span class="fu">boxplot</span>(booCoe,</span>
+<span id="cb150-37"><a href="bootstrapping.html#cb150-37" tabindex="-1"></a>        <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.5</span>),</span>
+<span id="cb150-38"><a href="bootstrapping.html#cb150-38" tabindex="-1"></a>        <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb150-39"><a href="bootstrapping.html#cb150-39" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side =</span> <span class="dv">1</span>, <span class="at">at =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Intercept&quot;</span>, <span class="st">&quot;Inf&quot;</span>, <span class="st">&quot;Une&quot;</span>, <span class="st">&quot;Int&quot;</span>, <span class="st">&quot;Gov&quot;</span>, <span class="st">&quot;Exp&quot;</span>))</span>
+<span id="cb150-40"><a href="bootstrapping.html#cb150-40" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb150-41"><a href="bootstrapping.html#cb150-41" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb150-42"><a href="bootstrapping.html#cb150-42" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb150-43"><a href="bootstrapping.html#cb150-43" tabindex="-1"></a><span class="fu">points</span>(norReg<span class="sc">$</span>coefficients, <span class="at">pch =</span> <span class="dv">17</span>, <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))</span></code></pre></div>
 <p><img src="_main_files/figure-html/bootstrapping-coefficients-1.png" width="672" /></p>
-<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="bootstrapping.html#cb150-1" tabindex="-1"></a><span class="co"># Compare to the Summary of the regression without Bootstrapping</span></span>
-<span id="cb150-2"><a href="bootstrapping.html#cb150-2" tabindex="-1"></a><span class="fu">summary</span>(norReg)</span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="bootstrapping.html#cb151-1" tabindex="-1"></a><span class="co"># Compare to the Summary of the regression without Bootstrapping</span></span>
+<span id="cb151-2"><a href="bootstrapping.html#cb151-2" tabindex="-1"></a><span class="fu">summary</span>(norReg)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y ~ X)
@@ -582,10 +589,10 @@ Government expenditure and exports have very little variability.</p>
 <p>Notice this relationships and the number of <code>*</code> in the summary of the regular linear regression. Whenever a coefficient has all (or almost all) of its observations on one side of the red line, the summary assigns more <code>*</code>, while when a coefficient that has several observations on either side of the line, has no <code>*</code> indicating little significance.</p>
 <hr />
 <p>We can also explore how the estimated coefficients relate to each other.</p>
-<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="bootstrapping.html#cb152-1" tabindex="-1"></a><span class="co"># Data Frame</span></span>
-<span id="cb152-2"><a href="bootstrapping.html#cb152-2" tabindex="-1"></a>booCoeDf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(booCoe)</span>
-<span id="cb152-3"><a href="bootstrapping.html#cb152-3" tabindex="-1"></a><span class="fu">colnames</span>(booCoeDf) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Intercept&quot;</span>, <span class="st">&quot;Inf&quot;</span>, <span class="st">&quot;Une&quot;</span>, <span class="st">&quot;Int&quot;</span>, <span class="st">&quot;Gov&quot;</span>, <span class="st">&quot;Exp&quot;</span>)</span>
-<span id="cb152-4"><a href="bootstrapping.html#cb152-4" tabindex="-1"></a><span class="fu">pairs</span>(booCoeDf)</span></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="bootstrapping.html#cb153-1" tabindex="-1"></a><span class="co"># Data Frame</span></span>
+<span id="cb153-2"><a href="bootstrapping.html#cb153-2" tabindex="-1"></a>booCoeDf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(booCoe)</span>
+<span id="cb153-3"><a href="bootstrapping.html#cb153-3" tabindex="-1"></a><span class="fu">colnames</span>(booCoeDf) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Intercept&quot;</span>, <span class="st">&quot;Inf&quot;</span>, <span class="st">&quot;Une&quot;</span>, <span class="st">&quot;Int&quot;</span>, <span class="st">&quot;Gov&quot;</span>, <span class="st">&quot;Exp&quot;</span>)</span>
+<span id="cb153-4"><a href="bootstrapping.html#cb153-4" tabindex="-1"></a><span class="fu">pairs</span>(booCoeDf)</span></code></pre></div>
 <p><img src="_main_files/figure-html/bootstraping-coefficients-correlation-1.png" width="672" /></p>
 <details>
 <summary>
@@ -600,45 +607,45 @@ In contrast, <strong>government expenditure</strong> and <strong>exports</strong
 <h3><span class="header-section-number">7.2.1</span> Bootstrapping Predictions<a href="bootstrapping.html#bootstrapping-predictions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Bootstrapping can be applied not only to model coefficients but also to <strong>predicted values</strong>.
 We can use bootstrap samples to construct <strong>confidence intervals</strong> for the mean predictions and <strong>prediction intervals</strong> for individual outcomes.</p>
-<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="bootstrapping.html#cb153-1" tabindex="-1"></a><span class="co"># Mean Estimates</span></span>
-<span id="cb153-2"><a href="bootstrapping.html#cb153-2" tabindex="-1"></a>yh <span class="ot">&lt;-</span> booCoe <span class="sc">%*%</span> <span class="fu">t</span>(X)</span>
-<span id="cb153-3"><a href="bootstrapping.html#cb153-3" tabindex="-1"></a></span>
-<span id="cb153-4"><a href="bootstrapping.html#cb153-4" tabindex="-1"></a><span class="co"># Bootstrap Prediction Quantiles 2.5% and 97.5%</span></span>
-<span id="cb153-5"><a href="bootstrapping.html#cb153-5" tabindex="-1"></a>booConQua <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> yh, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
-<span id="cb153-6"><a href="bootstrapping.html#cb153-6" tabindex="-1"></a></span>
-<span id="cb153-7"><a href="bootstrapping.html#cb153-7" tabindex="-1"></a><span class="co"># Plots the Intervals and Observations</span></span>
-<span id="cb153-8"><a href="bootstrapping.html#cb153-8" tabindex="-1"></a><span class="co"># Number of Plots</span></span>
-<span id="cb153-9"><a href="bootstrapping.html#cb153-9" tabindex="-1"></a>numPlo <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb153-10"><a href="bootstrapping.html#cb153-10" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(y, booConQua)</span>
-<span id="cb153-11"><a href="bootstrapping.html#cb153-11" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(y, booConQua)</span>
-<span id="cb153-12"><a href="bootstrapping.html#cb153-12" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb153-13"><a href="bootstrapping.html#cb153-13" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> n <span class="sc">/</span> numPlo</span>
-<span id="cb153-14"><a href="bootstrapping.html#cb153-14" tabindex="-1"></a>xSet <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">nrow =</span> numPlo, <span class="at">ncol =</span> n <span class="sc">/</span> numPlo)</span>
-<span id="cb153-15"><a href="bootstrapping.html#cb153-15" tabindex="-1"></a></span>
-<span id="cb153-16"><a href="bootstrapping.html#cb153-16" tabindex="-1"></a><span class="co"># Bootstrap Confidence Intervals Plot</span></span>
-<span id="cb153-17"><a href="bootstrapping.html#cb153-17" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(numPlo, <span class="dv">1</span>))</span>
-<span id="cb153-18"><a href="bootstrapping.html#cb153-18" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb153-19"><a href="bootstrapping.html#cb153-19" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numPlo){</span>
-<span id="cb153-20"><a href="bootstrapping.html#cb153-20" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NULL</span>,</span>
-<span id="cb153-21"><a href="bootstrapping.html#cb153-21" tabindex="-1"></a>       <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
-<span id="cb153-22"><a href="bootstrapping.html#cb153-22" tabindex="-1"></a>       <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
-<span id="cb153-23"><a href="bootstrapping.html#cb153-23" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;GDP % Growth&quot;</span>,</span>
-<span id="cb153-24"><a href="bootstrapping.html#cb153-24" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Countries&quot;</span>,</span>
-<span id="cb153-25"><a href="bootstrapping.html#cb153-25" tabindex="-1"></a>       <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
-<span id="cb153-26"><a href="bootstrapping.html#cb153-26" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="at">x0  =</span> xSet[i, ],</span>
-<span id="cb153-27"><a href="bootstrapping.html#cb153-27" tabindex="-1"></a>           <span class="at">x1  =</span> xSet[i, ],</span>
-<span id="cb153-28"><a href="bootstrapping.html#cb153-28" tabindex="-1"></a>           <span class="at">y0  =</span> booConQua[<span class="dv">1</span>, xSet[i, ]],</span>
-<span id="cb153-29"><a href="bootstrapping.html#cb153-29" tabindex="-1"></a>           <span class="at">y1  =</span> booConQua[<span class="dv">2</span>, xSet[i, ]],</span>
-<span id="cb153-30"><a href="bootstrapping.html#cb153-30" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">3</span>)</span>
-<span id="cb153-31"><a href="bootstrapping.html#cb153-31" tabindex="-1"></a>  <span class="fu">points</span>(<span class="at">x   =</span> xSet[i, ],</span>
-<span id="cb153-32"><a href="bootstrapping.html#cb153-32" tabindex="-1"></a>         <span class="at">y   =</span> y[xSet[i, ]],</span>
-<span id="cb153-33"><a href="bootstrapping.html#cb153-33" tabindex="-1"></a>         <span class="at">pch =</span> <span class="dv">16</span>,</span>
-<span id="cb153-34"><a href="bootstrapping.html#cb153-34" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.75</span>))</span>
-<span id="cb153-35"><a href="bootstrapping.html#cb153-35" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="bootstrapping.html#cb154-1" tabindex="-1"></a><span class="co"># Mean Estimates</span></span>
+<span id="cb154-2"><a href="bootstrapping.html#cb154-2" tabindex="-1"></a>yh <span class="ot">&lt;-</span> booCoe <span class="sc">%*%</span> <span class="fu">t</span>(X)</span>
+<span id="cb154-3"><a href="bootstrapping.html#cb154-3" tabindex="-1"></a></span>
+<span id="cb154-4"><a href="bootstrapping.html#cb154-4" tabindex="-1"></a><span class="co"># Bootstrap Prediction Quantiles 2.5% and 97.5%</span></span>
+<span id="cb154-5"><a href="bootstrapping.html#cb154-5" tabindex="-1"></a>booConQua <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> yh, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb154-6"><a href="bootstrapping.html#cb154-6" tabindex="-1"></a></span>
+<span id="cb154-7"><a href="bootstrapping.html#cb154-7" tabindex="-1"></a><span class="co"># Plots the Intervals and Observations</span></span>
+<span id="cb154-8"><a href="bootstrapping.html#cb154-8" tabindex="-1"></a><span class="co"># Number of Plots</span></span>
+<span id="cb154-9"><a href="bootstrapping.html#cb154-9" tabindex="-1"></a>numPlo <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb154-10"><a href="bootstrapping.html#cb154-10" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(y, booConQua)</span>
+<span id="cb154-11"><a href="bootstrapping.html#cb154-11" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(y, booConQua)</span>
+<span id="cb154-12"><a href="bootstrapping.html#cb154-12" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb154-13"><a href="bootstrapping.html#cb154-13" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> n <span class="sc">/</span> numPlo</span>
+<span id="cb154-14"><a href="bootstrapping.html#cb154-14" tabindex="-1"></a>xSet <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">nrow =</span> numPlo, <span class="at">ncol =</span> n <span class="sc">/</span> numPlo)</span>
+<span id="cb154-15"><a href="bootstrapping.html#cb154-15" tabindex="-1"></a></span>
+<span id="cb154-16"><a href="bootstrapping.html#cb154-16" tabindex="-1"></a><span class="co"># Bootstrap Confidence Intervals Plot</span></span>
+<span id="cb154-17"><a href="bootstrapping.html#cb154-17" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(numPlo, <span class="dv">1</span>))</span>
+<span id="cb154-18"><a href="bootstrapping.html#cb154-18" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb154-19"><a href="bootstrapping.html#cb154-19" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numPlo){</span>
+<span id="cb154-20"><a href="bootstrapping.html#cb154-20" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NULL</span>,</span>
+<span id="cb154-21"><a href="bootstrapping.html#cb154-21" tabindex="-1"></a>       <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb154-22"><a href="bootstrapping.html#cb154-22" tabindex="-1"></a>       <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb154-23"><a href="bootstrapping.html#cb154-23" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;GDP % Growth&quot;</span>,</span>
+<span id="cb154-24"><a href="bootstrapping.html#cb154-24" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Countries&quot;</span>,</span>
+<span id="cb154-25"><a href="bootstrapping.html#cb154-25" tabindex="-1"></a>       <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb154-26"><a href="bootstrapping.html#cb154-26" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="at">x0  =</span> xSet[i, ],</span>
+<span id="cb154-27"><a href="bootstrapping.html#cb154-27" tabindex="-1"></a>           <span class="at">x1  =</span> xSet[i, ],</span>
+<span id="cb154-28"><a href="bootstrapping.html#cb154-28" tabindex="-1"></a>           <span class="at">y0  =</span> booConQua[<span class="dv">1</span>, xSet[i, ]],</span>
+<span id="cb154-29"><a href="bootstrapping.html#cb154-29" tabindex="-1"></a>           <span class="at">y1  =</span> booConQua[<span class="dv">2</span>, xSet[i, ]],</span>
+<span id="cb154-30"><a href="bootstrapping.html#cb154-30" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb154-31"><a href="bootstrapping.html#cb154-31" tabindex="-1"></a>  <span class="fu">points</span>(<span class="at">x   =</span> xSet[i, ],</span>
+<span id="cb154-32"><a href="bootstrapping.html#cb154-32" tabindex="-1"></a>         <span class="at">y   =</span> y[xSet[i, ]],</span>
+<span id="cb154-33"><a href="bootstrapping.html#cb154-33" tabindex="-1"></a>         <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb154-34"><a href="bootstrapping.html#cb154-34" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.75</span>))</span>
+<span id="cb154-35"><a href="bootstrapping.html#cb154-35" tabindex="-1"></a>}</span></code></pre></div>
 <p><img src="_main_files/figure-html/bootstrap-in-sample-mean-predictions-1.png" width="672" /></p>
-<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="bootstrapping.html#cb154-1" tabindex="-1"></a><span class="co"># Coverage of the Bootstrap Confidence Intervals</span></span>
-<span id="cb154-2"><a href="bootstrapping.html#cb154-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Bootstrap Confidence Intervals Coverage = &quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>((y <span class="sc">&gt;</span> booConQua[<span class="dv">1</span>, ]) <span class="sc">&amp;</span> (y <span class="sc">&lt;</span> booConQua[<span class="dv">2</span>, ])) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>) ))</span></code></pre></div>
-<pre><code>## [1] &quot;Bootstrap Confidence Intervals Coverage = 28.06&quot;</code></pre>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="bootstrapping.html#cb155-1" tabindex="-1"></a><span class="co"># Coverage of the Bootstrap Confidence Intervals</span></span>
+<span id="cb155-2"><a href="bootstrapping.html#cb155-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Bootstrap Confidence Intervals Coverage = &quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>((y <span class="sc">&gt;</span> booConQua[<span class="dv">1</span>, ]) <span class="sc">&amp;</span> (y <span class="sc">&lt;</span> booConQua[<span class="dv">2</span>, ])) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>) ))</span></code></pre></div>
+<pre><code>## [1] &quot;Bootstrap Confidence Intervals Coverage = 27.55&quot;</code></pre>
 <details>
 <summary>
 <span style="color:green">Explanation of the Code</span>
@@ -659,63 +666,63 @@ This is expected, because these intervals quantify uncertainty in the <em>mean r
 <div id="adding-prediction-intervals" class="section level3 hasAnchor" number="7.2.2">
 <h3><span class="header-section-number">7.2.2</span> Adding Prediction Intervals<a href="bootstrapping.html#adding-prediction-intervals" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>To include the effect of random errors, we can also bootstrap the residuals and use them to construct <strong>prediction intervals</strong>.</p>
-<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="bootstrapping.html#cb156-1" tabindex="-1"></a><span class="do">### Error Bootstrapping Samples</span></span>
-<span id="cb156-2"><a href="bootstrapping.html#cb156-2" tabindex="-1"></a>eh <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">t</span>(yh) <span class="sc">-</span> y)</span>
-<span id="cb156-3"><a href="bootstrapping.html#cb156-3" tabindex="-1"></a></span>
-<span id="cb156-4"><a href="bootstrapping.html#cb156-4" tabindex="-1"></a><span class="do">### Then we re-sample the errors</span></span>
-<span id="cb156-5"><a href="bootstrapping.html#cb156-5" tabindex="-1"></a>eh <span class="ot">&lt;-</span> eh[<span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>(m <span class="sc">*</span> n), <span class="at">size =</span> m <span class="sc">*</span> n, <span class="at">replace =</span> <span class="cn">FALSE</span>)]</span>
-<span id="cb156-6"><a href="bootstrapping.html#cb156-6" tabindex="-1"></a></span>
-<span id="cb156-7"><a href="bootstrapping.html#cb156-7" tabindex="-1"></a><span class="co"># Adds the resampled errors to the bootstrap observations sample</span></span>
-<span id="cb156-8"><a href="bootstrapping.html#cb156-8" tabindex="-1"></a>yp <span class="ot">&lt;-</span> yh <span class="sc">+</span> eh</span>
-<span id="cb156-9"><a href="bootstrapping.html#cb156-9" tabindex="-1"></a></span>
-<span id="cb156-10"><a href="bootstrapping.html#cb156-10" tabindex="-1"></a><span class="co"># Bootstrap Prediction Quantiles 2.5% and 97.5%</span></span>
-<span id="cb156-11"><a href="bootstrapping.html#cb156-11" tabindex="-1"></a>booPreQua <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> yp, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
-<span id="cb156-12"><a href="bootstrapping.html#cb156-12" tabindex="-1"></a></span>
-<span id="cb156-13"><a href="bootstrapping.html#cb156-13" tabindex="-1"></a><span class="co"># Plots the Intervals and Observations</span></span>
-<span id="cb156-14"><a href="bootstrapping.html#cb156-14" tabindex="-1"></a><span class="co"># Number of Plots</span></span>
-<span id="cb156-15"><a href="bootstrapping.html#cb156-15" tabindex="-1"></a>numPlo <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb156-16"><a href="bootstrapping.html#cb156-16" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(y, booPreQua)</span>
-<span id="cb156-17"><a href="bootstrapping.html#cb156-17" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(y, booPreQua)</span>
-<span id="cb156-18"><a href="bootstrapping.html#cb156-18" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb156-19"><a href="bootstrapping.html#cb156-19" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> n <span class="sc">/</span> numPlo</span>
-<span id="cb156-20"><a href="bootstrapping.html#cb156-20" tabindex="-1"></a>xSet <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">nrow =</span> numPlo, <span class="at">ncol =</span> n <span class="sc">/</span> numPlo)</span>
-<span id="cb156-21"><a href="bootstrapping.html#cb156-21" tabindex="-1"></a></span>
-<span id="cb156-22"><a href="bootstrapping.html#cb156-22" tabindex="-1"></a><span class="co"># Non-Covered Observations</span></span>
-<span id="cb156-23"><a href="bootstrapping.html#cb156-23" tabindex="-1"></a>nonCov <span class="ot">&lt;-</span> ((y <span class="sc">&gt;</span> booPreQua[<span class="dv">1</span>, ]) <span class="sc">&amp;</span> (y <span class="sc">&lt;</span> booPreQua[<span class="dv">2</span>, ]))</span>
-<span id="cb156-24"><a href="bootstrapping.html#cb156-24" tabindex="-1"></a></span>
-<span id="cb156-25"><a href="bootstrapping.html#cb156-25" tabindex="-1"></a><span class="co"># Bootstrap Confidence Intervals Plot</span></span>
-<span id="cb156-26"><a href="bootstrapping.html#cb156-26" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(numPlo, <span class="dv">1</span>))</span>
-<span id="cb156-27"><a href="bootstrapping.html#cb156-27" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb156-28"><a href="bootstrapping.html#cb156-28" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numPlo){</span>
-<span id="cb156-29"><a href="bootstrapping.html#cb156-29" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NULL</span>,</span>
-<span id="cb156-30"><a href="bootstrapping.html#cb156-30" tabindex="-1"></a>       <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
-<span id="cb156-31"><a href="bootstrapping.html#cb156-31" tabindex="-1"></a>       <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
-<span id="cb156-32"><a href="bootstrapping.html#cb156-32" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;GDP % Growth&quot;</span>,</span>
-<span id="cb156-33"><a href="bootstrapping.html#cb156-33" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Countries&quot;</span>,</span>
-<span id="cb156-34"><a href="bootstrapping.html#cb156-34" tabindex="-1"></a>       <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
-<span id="cb156-35"><a href="bootstrapping.html#cb156-35" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="at">x0  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb156-36"><a href="bootstrapping.html#cb156-36" tabindex="-1"></a>           <span class="at">x1  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb156-37"><a href="bootstrapping.html#cb156-37" tabindex="-1"></a>           <span class="at">y0  =</span> booConQua[<span class="dv">1</span>, xSet[i, ]],</span>
-<span id="cb156-38"><a href="bootstrapping.html#cb156-38" tabindex="-1"></a>           <span class="at">y1  =</span> booConQua[<span class="dv">2</span>, xSet[i, ]],</span>
-<span id="cb156-39"><a href="bootstrapping.html#cb156-39" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">3</span>)</span>
-<span id="cb156-40"><a href="bootstrapping.html#cb156-40" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="at">x0  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb156-41"><a href="bootstrapping.html#cb156-41" tabindex="-1"></a>           <span class="at">x1  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb156-42"><a href="bootstrapping.html#cb156-42" tabindex="-1"></a>           <span class="at">y0  =</span> booPreQua[<span class="dv">1</span>, xSet[i, ]],</span>
-<span id="cb156-43"><a href="bootstrapping.html#cb156-43" tabindex="-1"></a>           <span class="at">y1  =</span> booPreQua[<span class="dv">2</span>, xSet[i, ]],</span>
-<span id="cb156-44"><a href="bootstrapping.html#cb156-44" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">1</span>)</span>
-<span id="cb156-45"><a href="bootstrapping.html#cb156-45" tabindex="-1"></a>  <span class="fu">points</span>(<span class="at">x   =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb156-46"><a href="bootstrapping.html#cb156-46" tabindex="-1"></a>         <span class="at">y   =</span> y[xSet[i, ]],</span>
-<span id="cb156-47"><a href="bootstrapping.html#cb156-47" tabindex="-1"></a>         <span class="at">pch =</span> <span class="dv">16</span>,</span>
-<span id="cb156-48"><a href="bootstrapping.html#cb156-48" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.75</span>))</span>
-<span id="cb156-49"><a href="bootstrapping.html#cb156-49" tabindex="-1"></a>  <span class="fu">points</span>(<span class="at">x   =</span> xSet[i, ][<span class="sc">!</span>nonCov[xSet[i, ]]] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
-<span id="cb156-50"><a href="bootstrapping.html#cb156-50" tabindex="-1"></a>         <span class="at">y   =</span> y[xSet[i, ][<span class="sc">!</span>nonCov[xSet[i, ]]]],</span>
-<span id="cb156-51"><a href="bootstrapping.html#cb156-51" tabindex="-1"></a>         <span class="at">pch =</span> <span class="dv">16</span>,</span>
-<span id="cb156-52"><a href="bootstrapping.html#cb156-52" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.75</span>))</span>
-<span id="cb156-53"><a href="bootstrapping.html#cb156-53" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="bootstrapping.html#cb157-1" tabindex="-1"></a><span class="do">### Error Bootstrapping Samples</span></span>
+<span id="cb157-2"><a href="bootstrapping.html#cb157-2" tabindex="-1"></a>eh <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">t</span>(yh) <span class="sc">-</span> y)</span>
+<span id="cb157-3"><a href="bootstrapping.html#cb157-3" tabindex="-1"></a></span>
+<span id="cb157-4"><a href="bootstrapping.html#cb157-4" tabindex="-1"></a><span class="do">### Then we re-sample the errors</span></span>
+<span id="cb157-5"><a href="bootstrapping.html#cb157-5" tabindex="-1"></a>eh <span class="ot">&lt;-</span> eh[<span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>(m <span class="sc">*</span> n), <span class="at">size =</span> m <span class="sc">*</span> n, <span class="at">replace =</span> <span class="cn">FALSE</span>)]</span>
+<span id="cb157-6"><a href="bootstrapping.html#cb157-6" tabindex="-1"></a></span>
+<span id="cb157-7"><a href="bootstrapping.html#cb157-7" tabindex="-1"></a><span class="co"># Adds the resampled errors to the bootstrap observations sample</span></span>
+<span id="cb157-8"><a href="bootstrapping.html#cb157-8" tabindex="-1"></a>yp <span class="ot">&lt;-</span> yh <span class="sc">+</span> eh</span>
+<span id="cb157-9"><a href="bootstrapping.html#cb157-9" tabindex="-1"></a></span>
+<span id="cb157-10"><a href="bootstrapping.html#cb157-10" tabindex="-1"></a><span class="co"># Bootstrap Prediction Quantiles 2.5% and 97.5%</span></span>
+<span id="cb157-11"><a href="bootstrapping.html#cb157-11" tabindex="-1"></a>booPreQua <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> yp, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> quantile, <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb157-12"><a href="bootstrapping.html#cb157-12" tabindex="-1"></a></span>
+<span id="cb157-13"><a href="bootstrapping.html#cb157-13" tabindex="-1"></a><span class="co"># Plots the Intervals and Observations</span></span>
+<span id="cb157-14"><a href="bootstrapping.html#cb157-14" tabindex="-1"></a><span class="co"># Number of Plots</span></span>
+<span id="cb157-15"><a href="bootstrapping.html#cb157-15" tabindex="-1"></a>numPlo <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb157-16"><a href="bootstrapping.html#cb157-16" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(y, booPreQua)</span>
+<span id="cb157-17"><a href="bootstrapping.html#cb157-17" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(y, booPreQua)</span>
+<span id="cb157-18"><a href="bootstrapping.html#cb157-18" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb157-19"><a href="bootstrapping.html#cb157-19" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> n <span class="sc">/</span> numPlo</span>
+<span id="cb157-20"><a href="bootstrapping.html#cb157-20" tabindex="-1"></a>xSet <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="dv">1</span><span class="sc">:</span>n, <span class="at">nrow =</span> numPlo, <span class="at">ncol =</span> n <span class="sc">/</span> numPlo)</span>
+<span id="cb157-21"><a href="bootstrapping.html#cb157-21" tabindex="-1"></a></span>
+<span id="cb157-22"><a href="bootstrapping.html#cb157-22" tabindex="-1"></a><span class="co"># Non-Covered Observations</span></span>
+<span id="cb157-23"><a href="bootstrapping.html#cb157-23" tabindex="-1"></a>nonCov <span class="ot">&lt;-</span> ((y <span class="sc">&gt;</span> booPreQua[<span class="dv">1</span>, ]) <span class="sc">&amp;</span> (y <span class="sc">&lt;</span> booPreQua[<span class="dv">2</span>, ]))</span>
+<span id="cb157-24"><a href="bootstrapping.html#cb157-24" tabindex="-1"></a></span>
+<span id="cb157-25"><a href="bootstrapping.html#cb157-25" tabindex="-1"></a><span class="co"># Bootstrap Confidence Intervals Plot</span></span>
+<span id="cb157-26"><a href="bootstrapping.html#cb157-26" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(numPlo, <span class="dv">1</span>))</span>
+<span id="cb157-27"><a href="bootstrapping.html#cb157-27" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb157-28"><a href="bootstrapping.html#cb157-28" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numPlo){</span>
+<span id="cb157-29"><a href="bootstrapping.html#cb157-29" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="cn">NULL</span>,</span>
+<span id="cb157-30"><a href="bootstrapping.html#cb157-30" tabindex="-1"></a>       <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb157-31"><a href="bootstrapping.html#cb157-31" tabindex="-1"></a>       <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb157-32"><a href="bootstrapping.html#cb157-32" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">&quot;GDP % Growth&quot;</span>,</span>
+<span id="cb157-33"><a href="bootstrapping.html#cb157-33" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">&quot;Countries&quot;</span>,</span>
+<span id="cb157-34"><a href="bootstrapping.html#cb157-34" tabindex="-1"></a>       <span class="at">xaxt =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb157-35"><a href="bootstrapping.html#cb157-35" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="at">x0  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb157-36"><a href="bootstrapping.html#cb157-36" tabindex="-1"></a>           <span class="at">x1  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb157-37"><a href="bootstrapping.html#cb157-37" tabindex="-1"></a>           <span class="at">y0  =</span> booConQua[<span class="dv">1</span>, xSet[i, ]],</span>
+<span id="cb157-38"><a href="bootstrapping.html#cb157-38" tabindex="-1"></a>           <span class="at">y1  =</span> booConQua[<span class="dv">2</span>, xSet[i, ]],</span>
+<span id="cb157-39"><a href="bootstrapping.html#cb157-39" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb157-40"><a href="bootstrapping.html#cb157-40" tabindex="-1"></a>  <span class="fu">segments</span>(<span class="at">x0  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb157-41"><a href="bootstrapping.html#cb157-41" tabindex="-1"></a>           <span class="at">x1  =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb157-42"><a href="bootstrapping.html#cb157-42" tabindex="-1"></a>           <span class="at">y0  =</span> booPreQua[<span class="dv">1</span>, xSet[i, ]],</span>
+<span id="cb157-43"><a href="bootstrapping.html#cb157-43" tabindex="-1"></a>           <span class="at">y1  =</span> booPreQua[<span class="dv">2</span>, xSet[i, ]],</span>
+<span id="cb157-44"><a href="bootstrapping.html#cb157-44" tabindex="-1"></a>           <span class="at">lwd =</span> <span class="dv">1</span>)</span>
+<span id="cb157-45"><a href="bootstrapping.html#cb157-45" tabindex="-1"></a>  <span class="fu">points</span>(<span class="at">x   =</span> xSet[i, ] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb157-46"><a href="bootstrapping.html#cb157-46" tabindex="-1"></a>         <span class="at">y   =</span> y[xSet[i, ]],</span>
+<span id="cb157-47"><a href="bootstrapping.html#cb157-47" tabindex="-1"></a>         <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb157-48"><a href="bootstrapping.html#cb157-48" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">0.75</span>))</span>
+<span id="cb157-49"><a href="bootstrapping.html#cb157-49" tabindex="-1"></a>  <span class="fu">points</span>(<span class="at">x   =</span> xSet[i, ][<span class="sc">!</span>nonCov[xSet[i, ]]] <span class="sc">-</span> (i <span class="sc">-</span> <span class="dv">1</span>),</span>
+<span id="cb157-50"><a href="bootstrapping.html#cb157-50" tabindex="-1"></a>         <span class="at">y   =</span> y[xSet[i, ][<span class="sc">!</span>nonCov[xSet[i, ]]]],</span>
+<span id="cb157-51"><a href="bootstrapping.html#cb157-51" tabindex="-1"></a>         <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb157-52"><a href="bootstrapping.html#cb157-52" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.75</span>))</span>
+<span id="cb157-53"><a href="bootstrapping.html#cb157-53" tabindex="-1"></a>}</span></code></pre></div>
 <p><img src="_main_files/figure-html/bootstrapping-prediction_intervales-1.png" width="672" /></p>
-<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="bootstrapping.html#cb157-1" tabindex="-1"></a><span class="co"># Coverage of the Bootstrap Confidence Intervals</span></span>
-<span id="cb157-2"><a href="bootstrapping.html#cb157-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Bootstrap Predictive Intervals Coverage = &quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>((y <span class="sc">&gt;</span> booPreQua[<span class="dv">1</span>, ]) <span class="sc">&amp;</span> (y <span class="sc">&lt;</span> booPreQua[<span class="dv">2</span>, ])) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>) ))</span></code></pre></div>
-<pre><code>## [1] &quot;Bootstrap Predictive Intervals Coverage = 95.41&quot;</code></pre>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="bootstrapping.html#cb158-1" tabindex="-1"></a><span class="co"># Coverage of the Bootstrap Confidence Intervals</span></span>
+<span id="cb158-2"><a href="bootstrapping.html#cb158-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Bootstrap Predictive Intervals Coverage = &quot;</span>, <span class="fu">round</span>(<span class="fu">mean</span>((y <span class="sc">&gt;</span> booPreQua[<span class="dv">1</span>, ]) <span class="sc">&amp;</span> (y <span class="sc">&lt;</span> booPreQua[<span class="dv">2</span>, ])) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>) ))</span></code></pre></div>
+<pre><code>## [1] &quot;Bootstrap Predictive Intervals Coverage = 94.39&quot;</code></pre>
 <details>
 <summary>
 <span style="color:green">Explanation of the Code</span>

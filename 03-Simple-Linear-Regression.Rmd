@@ -1505,27 +1505,27 @@ We can also see how the $R^2$ generally becomes smaller as more noise is added.
 
 ## Residual Analysis
 
-While the coefficient of determination (\(R^2\)) provides a measure of how well the data fit a linear model, it cannot explain why the fit is good or poor. To gain insights into potential problems with the model, the most straightforward approach is to examine the residuals or estimated errors. Residual analysis helps identify issues that can compromise the validity of the model's assumptions. 
+While the coefficient of determination (\(R^2\)) provides a measure of how well the data fit a linear model, it cannot explain why the fit is good or poor. To gain insights into potential problems with the model, the most straightforward approach is to examine the residuals or estimated errors. Residual analysis helps identify systematic patterns that indicate that the fitted linear model may be inadequate. 
 
 Currently, we focus on four common problems that residual analysis can reveal:
 
-* **The regression function is not truly linear.**  
+* **Nonlinear structure**  
   If the relationship between the predictor and response is nonlinear, then a linear model will not capture the true pattern, leading to systematic patterns in the residuals.
 
-* **The variance of the error terms is not constant (heteroscedasticity).**  
+* **Changing residual spread**  
   Non-constant variance means that the spread of the residuals varies with the fitted values or predictor, which violates a key assumption of linear regression and can affect inference.
 
-* **There are outliers.**  
+* **Unusual observations**  
   Outliers are observations that deviate markedly from the overall pattern and can disproportionately influence the estimated regression coefficients or inflate measures of error.
 
-* **Important variables are omitted.**  
-  Omitting relevant variables leads to biased residuals and can cause the model to systematically under- or over-predict responses based on unaccounted factors.
+* **Structure associated with variables not included in the model**  
+  Omitting relevant variables leads can cause the model to systematically under- or over-predict responses based on unaccounted factors.
   
 ***
 
 ### Non-linear regression function
 
-In many real-world situations, the relationship between the variables of interest may not be well described by a simple straight line. While linear regression is a powerful and widely used technique, it relies on the assumption that the true relationship between the predictor and response variables is linear. 
+In many real-world situations, the relationship between the variables of interest may not be well described by a simple straight line. While linear regression is a powerful and widely used technique, it implicitly relies on the assumption that the true relationship between the predictor and response variables is linear, even if no such assumption is stated explicitly.
 
 However, when this assumption does not hold, the linear model can lead to poor fits, systematic bias, and misleading inferences. To better understand the nature of the relationship, it is important to examine the fitted regression function and related residuals carefully.
 
@@ -1559,7 +1559,7 @@ abline(h   = 0,
        lwd = 2)
 ```
 Here we can clearly appreciate that there is something wrong. The residuals clearly
-indicate that a non linear relationship is present in the data. One can solve these
+indicate that a nonlinear relationship is present in the data. One can solve these
 problem by transforming one or both of the variables and then applying linear
 regression. Common transformations functions $g$ are (but are not limited to):
 
@@ -1567,7 +1567,7 @@ regression. Common transformations functions $g$ are (but are not limited to):
 * $g(x) = \sqrt{x}$
 * $g(x) = log(x)$
 
-This transformations can be applied to the explanatory variable, to the dependent
+These transformations can be applied to the explanatory variable, to the dependent
 variable of both.
 
 In the next example we work with $log(\text{Burgers Sold})$ instead of directly 
@@ -1651,6 +1651,9 @@ summary(outRegOri)
 summary(outRegTr1)
 summary(outRegTr2)
 ```
+
+$R^2$ can compare models fitted to the same response scale, but it cannot fairly compare models when the response itself has been transformed. To compare such models, we need a common performance measure evaluated on the original response scale.
+
 We will see other ways to choose the transformation later.
 
 Why non-linearity matters:
@@ -1670,16 +1673,13 @@ In summary, recognizing when the relationship is non-linear is crucial for build
 
 ***
 
-### Heteroscedasticity
+### Changing Residual Spread
 
-In linear regression modeling, one of the key assumptions is that the variability (or variance) of the errors remains constant across all levels of the explanatory variable. This assumption is known as homoscedasticity. When this assumption is violated–that is, when the variance of the errors is not constant but instead depends on the level of the predictor–it is referred to as **heteroscedasticity**.
-
-**Definition and intuition**  
-Heteroscedasticity occurs when the spread or dispersion of the residuals changes systematically with the value of the explanatory variable. For example, as the value of the predictor increases, the errors or deviations in the response variable may become larger or smaller, leading to a funnel-shaped or other non-uniform pattern in the residuals plot.
+Sometimes the magnitude of the residuals changes systematically across the range of the explanatory variable. For example, residuals may be tightly concentrated for small values of $x$ and more dispersed for larger values. This pattern will later be formalized through an assumption about the variance of the errors and is commonly called heteroscedasticity.
 
 **An illustrative example**  
 Consider a new data set with the heights of several children. Suppose we believe there is a linear relationship between a child's age and height: as children grow older, their height increases. However, it is also reasonable to expect that the variability in height differences increases for older children than for younger children: taller children tend to have more variation in height than shorter children.  
-This expectation can be visualized in a simulated data set where the residuals (the deviations from the fitted line) tend to increase with age, forming a funnel shape in the residuals plot. Such a pattern indicates heteroscedasticity, where the error variance depends on the predictor.
+This expectation can be visualized in a simulated data set where the residuals (the deviations from the fitted line) tend to increase with age, forming a funnel shape in the residuals plot.
 
 ```{r height-data-residuals}
 dat <- read.csv("Height Data.csv")
@@ -1709,7 +1709,7 @@ abline(h   = 0,
        lwd = 2)
 ```
 
-While one can infer this error behavior from the original scatter plot, the residuals plot makes this pattern much more clearly visible. In the residual plot, it is evident that the errors increase with the age of the children. While this is not inherently problematic when using least squares estimation, it may be advisable to consider alternative methods that do not penalize all errors equally—particularly the larger errors at later ages—such as weighted least squares.
+While one can infer this error behavior from the original scatter plot, the residuals plot makes this pattern much more clearly visible. In the residual plot, it is evident that the spread of the residuals increases with age of the children. While this is not inherently problematic when using least squares estimation, it may be advisable to consider alternative methods that do not penalize all errors equally—particularly the larger errors at later ages—such as weighted least squares.
 
 
 While heteroscedasticity does not bias the estimates of the regression coefficients themselves, it affects the accuracy and precision of these estimates and the associated inference metrics. Specifically, standard errors may be underestimated or overestimated, leading to incorrect conclusions about the significance of predictors.
@@ -1728,11 +1728,11 @@ In the context of linear regression analysis, **outliers** are data points that 
 
 Outliers can arise for various reasons, including measurement errors, data entry mistakes, or genuinely rare or unusual cases. Regardless of their origin, these outlying points can have a disproportionate influence on the results of the regression analysis, often skewing the estimated coefficients, inflating the residuals, and affecting overall model fit.
 
-It is important to identify and understand outliers because they can mislead the analysis. They may unduly influence the estimated relationship between the predictor and response variables, leading to biased estimates of the slope and intercept. Moreover, outliers can inflate measures of error, such as the residual sum of squares, making the model seem less accurate than it truly is for the majority of the data.
+It is important to identify and understand outliers because they can mislead the analysis. They may unduly influence the estimated relationship between the predictor and response variables. Outliers can substantially change the estimated slope and intercept. Moreover, outliers can inflate measures of error, such as the residual sum of squares, making the model seem less accurate than it truly is for the majority of the data.
 
 Detecting outliers typically involves examining residuals, especially those that are unusually large or small compared to typical residuals. Residual plots can reveal these points as isolated dots that are far away from the bulk of the data cloud. Statistical rules and diagnostic tools can also be used to flag potential outliers for further investigation.
 
-Once identified, outliers demand careful consideration. Some outliers may be due to data collection or entry errors and should be corrected or removed. Others may represent genuine but rare phenomena, and understanding their context is essential before deciding how to handle them in the analysis.
+Once identified, outliers demand careful consideration. If an unusual observation results from a confirmed recording or measurement error, correct the error when possible. Genuine observations should not be removed solely because they are unusual; their context and influence should be investigated.
 
 Dealing with outliers involves balancing the goal of accurately modeling the typical relationship while acknowledging that outliers can carry important information or indicate special cases. Sometimes, it is appropriate to analyze the data both with and without outliers, or to apply robust regression methods designed to reduce the influence of extreme observations.
 
@@ -1876,11 +1876,11 @@ plot(x    = x,
      xlim = c(xmin, xmax),
      xlab = "Average Glasses per Week",
      ylab = "Residuals",
-     main = "Left Outlier",
+     main = "Right Outlier",
      pch = 16)
 abline(h   = 0,
        lwd = 2)
-# Outlier on the right side
+# Outlier on the center
 # Adds Observation
 x[21] <- 2
 y[21] <- 95
@@ -1890,7 +1890,7 @@ plot(x    = x,
      xlim = c(xmin, xmax),
      xlab = "Average Glasses per Week",
      ylab = "Residuals",
-     main = "Left Outlier",
+     main = "Center Outlier",
      pch = 16)
 abline(h   = 0,
        lwd = 2)
@@ -1904,17 +1904,17 @@ summary(outRegRig)
 summary(outRegCen)
 ```
 
-Outliers located at the edges of the explanatory variable range often possess higher leverage, which means they have a disproportionate influence on the estimated regression coefficients, including the slope. Leverage points are data points that are far from the center of the predictor distribution and can exert undue influence on the fitted line.
+Observations with explanatory-variable values far from the center of the observed $x$ values can have greater potential to change the fitted line. This phenomenon will be studied later through the concept of leverage.
 
 ***
 
-### Variables Ommited
+### Variables Ommitted
 
-When analyzing the residuals from a regression model, one of the key assumptions is that there should be no systematic pattern or structure in the residual plots. If the residuals appear randomly scattered around zero, it suggests that the model has effectively captured all the systematic variation in the response variable, and no important information has been left out.
+When analyzing the residuals from a regression model, one of the key assumptions is that there should be no systematic pattern or structure in the residual plots. If residuals show no systematic pattern against the explanatory variable, there may be no obvious remaining structure associated with that variable. However, residuals may still contain systematic structure associated with other variables that were not included in the model.
 
-However, in practice, the absence of an apparent pattern in the residuals may be misleading if some relevant variables have been omitted from the model. Sometimes, the pattern is only visible when residuals are examined in relation to other variables not included as predictors. This situation indicates that the model may be missing important factors that explain variability in the response, leading to biased or incomplete conclusions.
+However, in practice, the absence of an apparent pattern in the residuals may be misleading if some relevant variables have been omitted from the model. Omission of a relevant variable can leave systematic patterns in the residuals and can change the fitted relationship obtained from the reduced model.
 
-To illustrate this concept, consider the example of analyzing children's heights. Suppose the initial model predicts height based solely on age. When you examine the residuals, they might seem to lack any obvious pattern (beyond heteroscedasticity), suggesting a reasonable fit. Yet, if the data set also includes the sex of the children as an additional variable, and this variable affects height, then ignoring sex in the model can cause a pattern to emerge in the residuals when they are grouped or compared by sex.
+To illustrate this concept, consider the example of analyzing children's heights. Suppose the initial model predicts height based solely on age. When you examine the residuals, they might seem to lack any obvious pattern (beyond heteroscedasticity), suggesting a reasonable fit. Yet, if the data set also includes the sex of the children as an additional variable, and if height differs systematically between the groups defined by sex, then ignoring sex in the model can cause a pattern to emerge in the residuals when they are grouped or compared by sex.
 
 ```{r height-other-var}
 dat <- read.csv("Height Data.csv")
@@ -1971,43 +1971,124 @@ In practice, examining residuals against other variables, not just the predictor
 
 
 
+
+
+
+
+
+
+
+
 ## Cross-Validation
 
-When testing different models, a good idea to evaluate the performance of each
-model beyond $R^2$, is to separate your data set into a training set and a 
-validation or test set. Doing this is called cross-validation. There are several
-alternatives to doing cross-validation, here are a few of the most relevant ones:
+So far, we have evaluated fitted regression models using quantities such as $R^2$ and residual plots. These tools describe how well a model fits the observations that were used to estimate its coefficients. However, a model that fits the observed data well does not necessarily predict new observations well.
 
-1. **Holdout Method (Train/Test Split)**
-   - **Description**: The data is split into two (or three) sets: training and test (and sometimes validation). The model is trained on the training set and evaluated on the test set.
-   - **Use Case**: Simple to implement, but has high variance. The performance may depend on the specific split.
+To evaluate predictive performance, we need to assess the model using observations that were not used when estimating its coefficients. This general process is called **model validation**.
 
-2. **K-Fold Cross-Validation**
-   - **Description**: The data is divided into \( k \) equal-sized folds (subsets). The model is trained on \( k-1 \) folds and tested on the remaining fold. This process is repeated \( k \) times, with each fold used as the test set once.
-   - **Use Case**: 
-     - Works well for most applications and balances the bias-variance tradeoff.
-     - Common choices for \( k \): 5, 10.
+A simple approach is to divide the data into two parts:
 
-3. **Leave-One-Out Cross-Validation (LOOCV)**
-   - **Description**: Each data point is used once as a test set, and the rest of the data is used as the training set. This results in \( n \) iterations, where \( n \) is the number of samples.
-   - **Use Case**: Good when the dataset is small, but can be computationally expensive for large datasets.
+* **Training set:** observations used to estimate the regression model.
+* **Validation set:** observations not used during estimation and instead used to evaluate the predictive performance of the fitted model.
 
-4. **Leave-P-Out Cross-Validation (LPOCV)**
-   - **Description**: Similar to LOOCV, but instead of leaving out one data point, \( p \) data points are left out. This creates \( \binom{n}{p} \) different training/testing splits.
-   - **Use Case**: Rarely used due to its high computational cost for large datasets but might be useful in specific scenarios.
+A third set, called a **test set**, may also be kept separate. The validation data can be used repeatedly when comparing models or choosing transformations, while the test data should ideally be used only after the final model has been selected.
 
-5. **Stratified K-Fold Cross-Validation**
-   - **Description**: Similar to K-fold cross-validation but ensures that each fold has the same proportion of each class in classification tasks (i.e., balanced classes in each fold).
-   - **Use Case**: Useful for imbalanced datasets in classification problems.
-     
-6. **Repeated K-Fold Cross-Validation**
-   - **Description**: A variation of K-Fold Cross-Validation where the process is repeated multiple times with different random splits.
-   - **Use Case**: Provides more robust estimates of model performance, particularly when the dataset is small.
-     
-Here is an example of \(k\)-fold Cross-Validation using the "Burger Data" set.
+A single separation of the observations into training and validation sets is usually called the **holdout method**. In contrast, **cross-validation** repeatedly changes which observations are used for training and validation so that predictive performance can be evaluated across different subsets of the data.
+
+---
+
+### Validation Error
+
+Suppose a validation set contains observations indexed by $\mathcal{V}$. After estimating the model using only the training observations, let $\hat{y}_i$ denote the prediction for a validation observation $i\in\mathcal{V}$.
+
+One possible measure of predictive performance is the Mean Squared Error (MSE):
+
+$$
+MSE_{\mathcal{V}}
+=
+\frac{1}{|\mathcal{V}|}
+\sum_{i\in\mathcal{V}}
+(y_i-\hat{y}_i)^2.
+$$
+
+A smaller validation MSE indicates that, on average, the fitted model produces predictions closer to the observed responses for observations that were not used to estimate the model.
+
+The important distinction is that the residual sum of squares measures errors on observations used to fit the model, while validation error measures prediction errors on observations that were not used in the fitting process.
+
+---
+
+### Holdout Validation
+
+The **holdout method** randomly separates the observations into a training set and a validation set. The model is estimated using the training observations and then used to predict the responses in the validation set.
+
+This method is simple and computationally inexpensive. However, the estimated predictive performance can depend substantially on the particular observations assigned to the training and validation sets.
+
+Cross-validation reduces this dependence by repeating the training-validation process using several different subsets of observations.
+
+---
+
+### K-Fold Cross-Validation
+
+In $k$-fold cross-validation, the observations are divided into $k$ approximately equal-sized groups, called **folds**:
+
+$$
+\mathcal{F}_1,\ldots,\mathcal{F}_k.
+$$
+
+For each fold $j$:
+
+1. The observations in $\mathcal{F}_j$ are treated as the validation set.
+2. The remaining $k-1$ folds are used as the training set.
+3. The model is estimated using the training observations.
+4. Predictions are obtained for the observations in $\mathcal{F}_j$.
+5. The prediction errors on the validation fold are recorded.
+
+Therefore, every observation is used for validation exactly once and for training in the remaining $k-1$ fits.
+
+If $\hat{y}_i^{(-j)}$ denotes the prediction for observation $i\in\mathcal{F}_j$ obtained from the model fitted without fold $j$, then the Mean Squared Error for fold $j$ is
+
+$$
+MSE_j
+=
+\frac{1}{|\mathcal{F}_j|}
+\sum_{i\in\mathcal{F}_j}
+\left(y_i-\hat{y}_i^{(-j)}\right)^2.
+$$
+
+The overall $k$-fold cross-validation error is
+
+$$
+CV_{\text{MSE}}
+=
+\frac{1}{n}
+\sum_{j=1}^k
+\sum_{i\in\mathcal{F}_j}
+\left(y_i-\hat{y}_i^{(-j)}\right)^2.
+$$
+
+When all folds have the same size, this is equivalent to averaging the $k$ fold-specific MSE values.
+
+Common choices are $k=5$ and $k=10$. These choices allow most observations to be used for estimating the model while requiring substantially fewer model fits than procedures that leave out observations one at a time.
+
+---
+
+### Other Cross-Validation Procedures
+
+Two closely related variations are also useful:
+
+* **Leave-One-Out Cross-Validation (LOOCV):** Each observation forms its own validation set. The model is therefore estimated $n$ times, each time using the remaining $n-1$ observations. LOOCV uses almost all available observations for training in each fit, but it can require substantially more computation than $k$-fold cross-validation.
+
+* **Repeated K-Fold Cross-Validation:** The complete $k$-fold procedure is repeated several times using different random divisions into folds. This makes it possible to examine how sensitive the estimated predictive performance is to the particular partition of the observations.
+
+In this course, we will primarily use $k$-fold cross-validation because it provides a simple and computationally practical way to compare the predictive performance of different regression models.
+
+We now illustrate $k$-fold cross-validation using the Burger Data. In particular, we will compare models involving transformations of the explanatory variable, the response variable, or both.
+
+
+### Cross Validation Example
 
 ```{r cross-validation}
 ### Cross Validation Example
+set.seed(2026)
 
 # Read Data
 dat <- read.csv(file = "Burger Data.csv")
@@ -2026,17 +2107,17 @@ sizFol <- round(n / numFol)
 
 # List Containing the Fold indices
 fol <- list()
-# Select Fold Indeces
+# Select Fold Indices
 # Initialization
 ind <- 1:n
 for(i in 1:numFol){
   # Computes the remaining number of indices
   numInd   <- length(ind)
-  # Randomly selects indices from the remaining indeces
+  # Randomly selects indices from the remaining indices
   indFol   <- sample(x = 1:length(ind), size = sizFol, replace = FALSE)
-  # Saves the inidices to the list of Fold Indeces
+  # Saves the indices to the list of Fold Indices
   fol[[i]] <- ind[indFol]
-  # Removes the indices from the indeces vector
+  # Removes the indices from the indices vector
   ind      <- ind[- indFol]
 }
 
@@ -2056,12 +2137,36 @@ for(k in 1:numMod){
   yMod <- Y[, k]
   xMod <- X[, k]
   # Plots Transformed Data (All)
-  plot(x = xMod,
+  if(k == 1){
+    plot(x = xMod,
        y = yMod,
        xlab = "Price ($)",
        ylab = "Burgers",
        main = paste0("Model ", k),
        pch  = 16)
+  } else if(k == 2) {
+    plot(x = xMod,
+       y = yMod,
+       xlab = "log(Price) ($)",
+       ylab = "Burgers",
+       main = paste0("Model ", k),
+       pch  = 16)
+  } else if(k == 3){
+    plot(x = xMod,
+       y = yMod,
+       xlab = "Price ($)",
+       ylab = "log(Burgers)",
+       main = paste0("Model ", k),
+       pch  = 16)
+  } else {
+    plot(x = xMod,
+       y = yMod,
+       xlab = "log(Price) ($)",
+       ylab = "log(Burgers)",
+       main = paste0("Model ", k),
+       pch  = 16)
+  }
+  
   # Plots Regression Line (All)
   outReg   <- lm(yMod ~ xMod)
   abline(a   = outReg$coefficients[1],
@@ -2086,6 +2191,7 @@ for(k in 1:numMod){
 }
 
 # Box plot of the MSE
+par(mfrow=c(1, 1))
 boxplot(matMet, outline = FALSE, xaxt = "n", xlab = "Models", ylab = "MSE")
 axis(side = 1, at = c(1, 2, 3, 4), labels = c("y~x", "y~log(x)", "log(y)~x", "log(y)~log(x)"))
 
@@ -2100,9 +2206,34 @@ When performing cross-validation, it is essential to calculate error metrics in 
 
 For example, compare the scale of the response in Models 3 and 4 with those in Models 1 and 2. Since the range of values after transforming in Models 3 and 4 is smaller, the squared errors tend to be smaller simply because of this change, making it unfair to compare these errors to those from Models 1 and 2. Similarly, if income is measured in dollars and then log-transformed, errors in the transformed scale do not directly reflect dollar amounts. To evaluate model performance correctly, predictions should be transformed back to the original units before computing errors or other accuracy metrics.
 
-Always perform validation in the original units to ensure that results are meaningful and comparable in real-world terms. Keep the transformation parameters consistent for new data, and report errors in the original units for clear, interpretable results.
+When models are intended to predict the same original response, compare them using the same evaluation scale and metric to ensure that results are meaningful and comparable in real-world terms. Keep the transformation parameters consistent for new data, and report errors in the same units for clear, interpretable results.
+
+### Summary
+
+$$
+\boxed{
+\begin{array}{lll}
+R^2
+&:&
+\text{How well does the model fit the observed training data?}\\[1mm]
+\text{Residual analysis}
+&:&
+\text{What structure or problems remain after fitting?}\\[1mm]
+\text{Cross-validation}
+&:&
+\text{How well does the fitted procedure predict held-out observations?}
+\end{array}
+}
+$$
 
 ***
+
+
+
+
+
+
+
 
 ## Weighted Least Squares
 
@@ -2115,12 +2246,12 @@ Motivation and intuition
 
 In a simple linear regression model with one explanatory variable, OLS minimizes the sum of squared residuals:
 
-$$ \min \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
+$$ \min \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
 $$
 
 Weighted Least Squares (WLS) corrects for heteroscedasticity by minimizing the weighted sum of squared residuals:
 $$
-\min \sum_{i=1}^{n} w_i (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
+\min \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
 $$
 
 ```{proposition, prp-weighted-least-squares-estimators, name="Weighted Least Squares Estimators"}
@@ -2241,6 +2372,18 @@ Weighted Least Squares adapts the least‑squares framework to give more influen
 
 ***
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## Model in Matrix Form
 
 We can specify the same model as in [Model](#slr-model), in matrix form as follows:
@@ -2256,8 +2399,8 @@ where:
 
 In this way we can re-write our minimization problem as follows:
 
-$$ \min_{\bgb} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min_{\bgb} \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
-= \min_{\bgb} \sum_{i=1}^{n} (\by - \bX \bgb)'(\by - \bX \bgb)$$
+$$ \min_{\bgb} \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
+= \min_{\bgb} (\by - \bX \bgb)'(\by - \bX \bgb)$$
 equivalent to:
 $$\min_{\bgb} Q(\bgb) = \left( \by'\by - \by'\bX\bgb - \bgb'\bX'\by + \bgb'\bX'\bX\bgb \right)$$
 
