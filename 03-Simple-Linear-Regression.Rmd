@@ -1172,9 +1172,8 @@ The Total Sum of Squares is given by:
 $$SS_{tot} = \sum_{i=1}^n (y_i - \bar{y})^2$$
 ```
 
-The Total Sum of Squares is the fundamental measure of the total variability present in the observed responses. It quantifies how much the individual response values deviate, collectively, from their overall average. In other words, it is the baseline amount of variation in the dependent variable before any predictor information is used. You can think of it in several ways:
+The Total Sum of Squares is the fundamental measure of the total variability present in the observed responses. It quantifies how much the individual response values deviate, collectively, from their overall average. In other words, it is the baseline amount of variation in the response before any predictor information is used. You can think of it in several ways:
 
-* As a proxy for uncertainty. The larger this quantity, the greater the uncertainty in the dependent variable.  
 * It is proportional to the sample variance.  
 * It is what you obtain when solving the following minimization problem:
 
@@ -1182,7 +1181,7 @@ $$
 \min_{\beta_0} \sum_{i=1}^n (y_i - \beta_0)^2,
 $$
 
-that is, the best possible sum of squared errors when no information from the independent variables \(x_1,\ldots,x_n\) is available.
+that is, the minimum sum of squared errors obtained when the explanatory variable is not used and every response is predicted by a single constant.
 
 ```{definition, residual-sum-of-squares, name="Residual Sum of Squares"}
 The Residual Sum of Squares is given by:
@@ -1194,30 +1193,29 @@ The Residual Sum of Squares (RSS) is the aggregate measure of the discrepancies 
 Interpretation:
 
 * Unexplained variability: RSS represents the portion of the data’s variability that the model does not capture. A smaller RSS indicates that the model’s predictions are closer to the observed values and that less variability remains unexplained.  
-* Measure of fit error: RSS is a direct summary of model misspecification and random noise as reflected in the residuals; it expresses how far, in aggregate, observed outcomes stray from the fitted line.
+* Measure of fit error: RSS is a direct summary of model misspecification; it expresses how far, in aggregate, observed outcomes stray from the fitted line.
 
 Key properties:
 
 * Nonnegative and additive: RSS cannot be negative, and it increases when residuals grow larger in magnitude.  
-* Minimization target: In ordinary least squares, the fitted coefficients are chosen to minimize RSS; thus RSS at the fitted coefficients is the smallest possible sum of squared residuals for the chosen model form.  
-* Basis for variance estimation: RSS underlies the standard estimate of the model’s error variance, after accounting for the loss of degrees of freedom due to parameter estimation.
+* Minimization target: In ordinary least squares, the fitted coefficients are chosen to minimize RSS; thus RSS at the fitted coefficients is the smallest possible sum of squared residuals for the chosen model form.
 
 Role in regression analysis:
 
-* Diagnostic and evaluation metric: RSS is used together with total variability to compute proportions of variance explained and other fit measures. It is central to testing whether predictors provide a meaningful improvement over a simpler model and to constructing confidence intervals and prediction intervals.  
+* Diagnostic and evaluation metric: RSS is used together with total variability to compute proportions of variance explained and other fit measures.
 * Guide to improvement: Large RSS relative to total variability suggests the model is missing important structure or that noise is substantial; small RSS suggests good in‑sample fit (but not necessarily good out‑of‑sample performance).
 
 Practical notes:
 
 * Dependence on scale and sample size: RSS depends on the units of the response and on the number of observations, so it is most useful in relative comparisons (e.g., between models on the same dataset) rather than as an absolute measure across datasets.  
-* Use with diagnostics: Interpreting RSS should be accompanied by residual diagnostics and validation checks to ensure a low RSS reflects genuine explanatory power rather than overfitting or violated assumptions.
+* Use with diagnostics: Interpreting RSS should be accompanied by residual diagnostics and validation checks to ensure a low RSS reflects genuine explanatory power..
 
 ```{definition, explained-sum-of-squares, name="Explained Sum of Squares"}
 The Explained Sum of Squares is given by:
-$$ SS_{reg} = \sumin (\hy_i - \bar{y}) = \sumin (\hy_i - \hat{\bar{y}})^2 $$
+$$ SS_{reg} = \sumin (\hy_i - \bar{y})^2 = \sumin (\hy_i - \hat{\bar{y}})^2 $$
 ```
 
-The Explained Sum of Squares is the portion of the total variability in the dependent variable that is accounted for by the fitted regression model. It quantifies how much of the variation in the observed responses is captured by the model’s fitted values, as compared with using only a single constant (the sample mean).
+The Explained Sum of Squares is the portion of the total variability in the response that is accounted for by the fitted regression model. It quantifies how much of the variation in the observed responses is captured by the model’s fitted values, as compared with using only a single constant (the sample mean).
 
 Interpretation:
 
@@ -1227,9 +1225,7 @@ Interpretation:
 Key properties:
 
 * Nonnegative: it cannot be negative, because the fitted model cannot explain less variation than the baseline in a least‑squares fit.  
-* Bounded above by the total variability: the explained portion cannot exceed the total variability present in the data, we will see this next. 
-* Basis for fit measures: it is the numerator in the fraction that expresses the proportion of variance explained by the model, and it plays a central role in analysis of variance decompositions and in F‑tests comparing nested models.  
-* Sensitive to model choice: adding predictors or model flexibility can increase the explained sum of squares, which is why measures that penalize complexity are sometimes used when comparing models.
+* Bounded above by the total variability: the explained portion cannot exceed the total variability present in the data, we will see this next.
 
 ```{proposition, prp-sum-of-squares-decomposition, name = "Sum of Squares Decomposition"}
 The $SS_{tot}$, $SS_{res}$ and $SS_{reg}$ are related by the following identity:
@@ -1268,18 +1264,18 @@ SS_{tot}
 ```
 </details>
 
-```{definition, coefficient-of-determmination, name="Coefficient of Determmination"}
-If $SS_{tot}>0$, the Coefficient of Determmination is given by:
+```{definition, coefficient-of-determination, name="Coefficient of Determination"}
+If $SS_{tot}>0$, the Coefficient of Determination is given by:
   $$ R^2 = \frac{SS_{reg}}{SS_{tot}} $$
 ```
 
-```{proposition, prp-coefficient-of-determmination, name = "Alternate Definition of the Coefficient of Determmination"}
-If $SS_{tot}>0$, the Coefficient of Determmination can be defined alternatively as:
+```{proposition, prp-coefficient-of-determination, name = "Alternate Definition of the Coefficient of Determination"}
+If $SS_{tot}>0$, the Coefficient of Determination can be defined alternatively as:
   $$ R^2 = 1 - \frac{SS_{res}}{SS_{tot}} $$
 ```
 
 <details><summary><span style="color:green">Proof</span></summary>
-```{proof, pro-coefficient-of-determminatio}
+```{proof, pro-coefficient-of-determinatio}
 \begin{align*}
 R^2 
   &= \frac{SS_{reg}}{SS_{tot}}
@@ -1295,14 +1291,14 @@ R^2
 </details>
 
 
-```{proposition, prp-coefficient-of-determmination-correlation}
-The Coefficient of Determmination is related to the sample correlation by
+```{proposition, prp-coefficient-of-determination-correlation, name="Coefficient of Determination and Correlation"}
+The Coefficient of Determination is related to the sample correlation by
   $$ R^2 = r_{xy}^2 $$
 ```
 
 <details><summary><span style="color:green">Proof</span></summary>
-```{proof, pro-coefficient-of-determmination-correlation}
-First let us express $SS_{reg}$ in a more convinient way:
+```{proof, pro-coefficient-of-determination-correlation}
+First let us express $SS_{reg}$ in a more convenient way:
 
 \begin{align*}
 SS_{reg} 
@@ -1332,7 +1328,7 @@ Now, note that:
 Then
 \begin{align*}
 R^2 
-  &= \frac{SS_reg}{SS_{tot}} 
+  &= \frac{SS_{reg}}{SS_{tot}} 
     & \text{def. } R^2 \\
   &= \frac{\frac{S_{xy}^2}{S_{xx}} (n-1)}{S_{yy} (n-1)}  
     & \text{prev. res.} \\
@@ -1346,11 +1342,21 @@ R^2
 ```
 </details>
 
-```{corollary, prp-coefficient-of-determmination-0-1}
-The Coefficient of Determmination is between 0 and 1.
+```{proposition, prp-coefficient-of-determination-0-1, name="Range of the coefficient of determination"}
+The Coefficient of Determination is between 0 and 1.
 ```
 
-The coefficient of determination is a summary measure that quantifies the fraction of the total variability in the dependent variable that is accounted for by a regression model. It expresses how much of the observed variation can be attributed to the systematic relationship captured by the model, as opposed to unexplained variation.
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-coefficient-of-determination-0-1}
+$$
+0\le r_{xy}^2\le1
+\quad\Longrightarrow\quad
+\boxed{0\le R^2\le1}.
+$$
+```
+</details>
+
+The coefficient of determination is a summary measure that quantifies the fraction of the total variability in the response that is accounted for by a regression model. It expresses how much of the observed variation can be attributed to the systematic relationship captured by the model, as opposed to unexplained variation.
 
 Interpretation:
 
@@ -1365,8 +1371,7 @@ Key properties:
 
 Practical considerations and limitations:
 
-* Not a test of causation: A high coefficient does not imply a causal relationship; it only describes the extent of linear association in the sample.  
-* Sensitivity to model complexity: Adding predictors will not decrease this measure and can inflate it even for predictors with little true predictive value. Adjusted versions or cross‑validation are often used when comparing models of differing complexity.  
+* Not a test of causation: A high coefficient does not imply a causal relationship; it only describes the extent of linear association in the sample.   
 * Dependence on context and scale: While unitless, the coefficient’s practical meaning depends on the problem domain; what constitutes a “good” value varies by field and by the intrinsic variability of the outcome.  
 * Reliance on model assumptions: Interpretation in terms of explained variance assumes the model form is appropriate; violations of assumptions or influential observations can make the coefficient misleading.
 
@@ -1383,7 +1388,7 @@ The larger the $R^2$, the better the fit of the linear model. A low $R^2$ can ar
 - The data are not well described by a linear relationship. In that case a linear model will explain little of the association (although sometimes a linear model can still serve as a useful approximation to a nonlinear relationship).  
 - The data are noisy. Substantial noise can reduce $R^2$ even when the true relationship between the variables is linear.
 
-As an example of noisy data, recall the Ad spending data. The data was generated under a linear model, so the relationship between the variables is linear. You can verify this by looking at the code where the data is generated in the introduction. In the following example the effects of adding additional noise to the data can be analyzed. Three noise leves are considered:
+As an example of noisy data, recall the Ad spending data. The data was generated under a linear model, so the relationship between the variables is linear. You can verify this by looking at the code where the data is generated in the introduction. In the following example the effects of adding additional noise to the data can be analyzed. Three noise levels are considered:
 
 * Level1: Small Noise.
 * Level2: Medium Noise.
@@ -1479,9 +1484,24 @@ summary(outRegNoiLe3)
 
 here where we observe that the point cloud is more dispersed and looks less than a line
 the more noise is added, but the estimated regression line changes only a little bit.
-We can also see how the $R^2$ becomes smaller as more noise is added.
+We can also see how the $R^2$ generally becomes smaller as more noise is added.
 
 ***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Residual Analysis
 
@@ -1547,7 +1567,7 @@ regression. Common transformations functions $g$ are (but are not limited to):
 * $g(x) = \sqrt{x}$
 * $g(x) = log(x)$
 
-This transformations can be applied to the independent variable, to the dependent
+This transformations can be applied to the explanatory variable, to the dependent
 variable of both.
 
 In the next example we work with $log(\text{Burgers Sold})$ instead of directly 
@@ -1655,7 +1675,7 @@ In summary, recognizing when the relationship is non-linear is crucial for build
 In linear regression modeling, one of the key assumptions is that the variability (or variance) of the errors remains constant across all levels of the explanatory variable. This assumption is known as homoscedasticity. When this assumption is violated–that is, when the variance of the errors is not constant but instead depends on the level of the predictor–it is referred to as **heteroscedasticity**.
 
 **Definition and intuition**  
-Heteroscedasticity occurs when the spread or dispersion of the residuals changes systematically with the value of the independent variable. For example, as the value of the predictor increases, the errors or deviations in the response variable may become larger or smaller, leading to a funnel-shaped or other non-uniform pattern in the residuals plot.
+Heteroscedasticity occurs when the spread or dispersion of the residuals changes systematically with the value of the explanatory variable. For example, as the value of the predictor increases, the errors or deviations in the response variable may become larger or smaller, leading to a funnel-shaped or other non-uniform pattern in the residuals plot.
 
 **An illustrative example**  
 Consider a new data set with the heights of several children. Suppose we believe there is a linear relationship between a child's age and height: as children grow older, their height increases. However, it is also reasonable to expect that the variability in height differences increases for older children than for younger children: taller children tend to have more variation in height than shorter children.  
@@ -2078,7 +2098,7 @@ knitr::kable(tab, digits = 2)
 ```
 When performing cross-validation, it is essential to calculate error metrics in the original units of the response variable before any transformation. Transformations like scaling or logging change the scale of the data, which can make errors appear smaller or larger in the transformed units and lead to misleading comparisons.
 
-For example, compare the scale of the dependent variable in Models 3 and 4 with those in Models 1 and 2. Since the range of values after transforming in Models 3 and 4 is smaller, the squared errors tend to be smaller simply because of this change, making it unfair to compare these errors to those from Models 1 and 2. Similarly, if income is measured in dollars and then log-transformed, errors in the transformed scale do not directly reflect dollar amounts. To evaluate model performance correctly, predictions should be transformed back to the original units before computing errors or other accuracy metrics.
+For example, compare the scale of the response in Models 3 and 4 with those in Models 1 and 2. Since the range of values after transforming in Models 3 and 4 is smaller, the squared errors tend to be smaller simply because of this change, making it unfair to compare these errors to those from Models 1 and 2. Similarly, if income is measured in dollars and then log-transformed, errors in the transformed scale do not directly reflect dollar amounts. To evaluate model performance correctly, predictions should be transformed back to the original units before computing errors or other accuracy metrics.
 
 Always perform validation in the original units to ensure that results are meaningful and comparable in real-world terms. Keep the transformation parameters consistent for new data, and report errors in the original units for clear, interpretable results.
 
@@ -2093,7 +2113,7 @@ Motivation and intuition
 - WLS assigns each observation a weight that reflects its reliability: observations with smaller error variance receive larger weight, and those with larger error variance receive smaller weight. In effect, the method downweights noisy observations and upweights precise ones, producing estimates that place greater trust in the most informative data.  
 - In the ideal case, weights are chosen to be inversely related to the true error variances; this makes the weighted estimator the most efficient among linear unbiased estimators under the model.
 
-In a simple linear regression model with one independent variable, OLS minimizes the sum of squared residuals:
+In a simple linear regression model with one explanatory variable, OLS minimizes the sum of squared residuals:
 
 $$ \min \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \min \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
 $$
