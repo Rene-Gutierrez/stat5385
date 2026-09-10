@@ -1,35 +1,37 @@
 # Simple Linear Regression
 
-We have established that we are going to solve the Sum of Least Squares Problem given by:
+We have established that we are going to solve the Sum of Least Squares problem given by:
 
 $$
-\min_{\beta_0, \beta_1} \sum_{i=1}^n e_i(\beta_0, \beta_1)^2
+\min_{\beta_0, \beta_1} \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2
 $$
 In this section we solve the problem, examine the properties of the solutions and analyze the effects of standard transformations, and evaluate the fitting of the model.
----
+
+***
 
 ## Least Squares Estimation
 
-
-As explained before, we want to minimize the SSE. Define
+Let
 
 $$Q(\beta_0, \beta_1) = \sum_{i=1}^n (e_i(\beta_0, \beta_1))^2 
 = \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2  $$
 
-Because Q is differentiable (in fact a convex quadratic), we find its minimum by setting the gradient to zero.
+denote the objective function of the SLR problem.
 
-The solution to this minimization problem is given by:
-
+```{proposition, prp-slr-least-squares-solution, name="Least-Squares Solution for Simple Linear Regression"}
+Suppose that the explanatory variable is not constant, that is,
+$$\sum_{i=1}^n(x_i-\bar x)^2>0$$
+The unique solution to the Simple Linear Regression optimization problem:
+$$\min_{\beta_0, \beta_1} Q(\beta_0, \beta_1) = \sum_{i=1}^n (e_i(\beta_0, \beta_1))^2 
+= \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2 $$
+is given by:
 $$ \hat{\beta}_1 = \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2} $$
 $$ \hat{\beta_0} = \bar{y} - \hat{\beta}_1 \bar{x}$$
-where we use $\hat{}$, to denote the specific critical point. And we have 
-adopted the standard notation: 
+where we use $\hat{}$, to denote the solution of the problem. And we have adopted the standard notation: 
 $$\bar{x} = \frac{1}{n}\sum_{i}^n x_i$$ 
 and 
 $$\bar{y} = \frac{1}{n}\sum_{i}^n y_i$$.
-
-It remains to see if this is indeed a minimum. One can check the second order conditions or argue 
-the quadratic form of the problem only admits a minimum.
+```
 
 <details><summary><span style="color:green">Derivation</span></summary>
 
@@ -55,7 +57,7 @@ Then we have that:
 
 \begin{align}
 \frac{\partial Q}{\partial \beta_0} = 0 
-  &\iff -2 \left( n \beta_0 - n \bar{y} + n\beta_1 \bar{x} \right) = 0 \notag \\
+  &\iff 2 \left( n \beta_0 - n \bar{y} + n\beta_1 \bar{x} \right) = 0 \notag \\
   &\iff \beta_0 = \bar{y} - \beta_1 \bar{x} \tag{1}
 \end{align}
 
@@ -101,20 +103,74 @@ so, the only critical point for $Q(\beta_0,\beta_1)$ is when:
 $$ \hat{\beta}_1 = \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2} $$
 $$ \hat{\beta_0} = \bar{y} - \hat{\beta}_1 \bar{x}$$
 
+Now, the Hessian of $Q$ is given by:
+
+$$
+\mathbf H_Q
+=
+2
+\begin{bmatrix}
+n & \sum_i x_i\\
+\sum_i x_i & \sum_i x_i^2
+\end{bmatrix}.
+$$
+
+Its determinant is
+
+$$
+4\left(
+n\sum_i x_i^2-\left(\sum_i x_i\right)^2
+\right)
+=
+4n\sum_i(x_i-\bar x)^2.
+$$
+
+Thus, when the $x_i$ are not all equal, the Hessian is positive definite and the critical point is the unique global minimum.
+
 </details>
 
-Now, if we introduce the further notation for the sample variance and covariance:
+Notice that we require that:
 
-$$ S^2_{xx} = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2 $$
+$$
+\sum_{i=1}^n(x_i-\bar x)^2>0,
+$$
+that is equivalent to require that the explanatory variable is not constant.
+
+```{definition, def-simple-normal-equations, name="Normal Equations for Simple Linear Regression"}
+The normal equations for Simple Linear Regression are given by:
+$$
+\sum_{i=1}^n (y_i-\beta_0-\beta_1x_i)=0
+$$
+and
+$$
+\sum_{i=1}^n x_i(y_i-\beta_0-\beta_1x_i)=0
+$$
+```
+
+
+these are obtained as intermediate steps to finding the solution to the LS problem, we will use them later.
+
+Now, if we introduce the further notation for the sample variance and covariance.
+
+::: {.notation}
+**Notation Variance and Covariance**
+$$ S_{xx} = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2 $$
 $$ S_{xy}   = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) $$
+:::
 
-and note that:
+```{proposition, prp-slr-alternative-variance-covariance, name="Alternative formulas for Variance and Covariance"}
+The variance can be alternative computed as:
+$$ S_{xx} = \frac{1}{n-1} \left( \sum_{i=1}^n  x_i^2 - n\bar{x}^2 \right)$$
+and the covariance as:
+$$ S_{xy} = \frac{1}{n-1} \left( \sum_{i=1}^n  x_iy_i - n\bar{x} \bar{y} \right)  $$
+```
 
-$$\sum_{i=1}^n (x_i - \bar{x})^2 = \sum_{i=1}^n x_i^2 - n\bar{x}^2 $$
 <details><summary><span style="color:green">Derivation</span></summary>
 
 \begin{align*}
-\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2
+S_{xx} 
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2 
+    & \text{def. var.} \\
   &= \frac{1}{n-1} \sum_{i=1}^n (x_i^2 - 2\bar{x}x_i + \bar{x}^2) 
     & \text{exp. square} \\
   &= \frac{1}{n-1} \left[ \sum_{i=1}^n x_i^2 - 2\bar{x}\sum_{i=1}^n x_i + \sum_{i=1}^n \bar{x}^2 \right]
@@ -123,20 +179,15 @@ $$\sum_{i=1}^n (x_i - \bar{x})^2 = \sum_{i=1}^n x_i^2 - n\bar{x}^2 $$
     & \text{def. } \bar{x} \\
   &= \frac{1}{n-1} \left[ \sum_{i=1}^n x_i^2 - 2n\bar{x}^2 + n \bar{x}^2 \right]
     & \\
-  &= \frac{1}{n-1} \sum_{i=1}^n x_i^2 - n\bar{x}^2
+  &= \frac{1}{n-1} \left[\sum_{i=1}^n x_i^2 - n\bar{x}^2 \right]
     & \\
 \end{align*}
-
-</details>
-
 and
-
-$$ \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) = \sum_{i=1}^n x_iy_i - n\bar{x} \bar{y} $$
-<details><summary><span style="color:green">Derivation</span></summary>
-
 \begin{align*}
-\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})
-  &= \frac{1}{n-1} \sum_{i=1}^n (x_iy_i - \bar{x}y_i - \bar{y}x_i + \bar{x}\bar{y})  
+S_{xy}
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})
+    & \text{def. cov.} \\
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_iy_i - \bar{x}y_i - \bar{y}x_i + \bar{x}\bar{y}) 
     & \text{exp. prod.} \\
   &= \frac{1}{n-1} \left[ \sum_{i=1}^n x_iy_i - \bar{x} \sum_{i=1}^ny_i - \bar{y} \sum_{i=1}^n x_i + \sum_{i=1}^n \bar{x}\bar{y} \right]
     & \text{lin. sum} \\
@@ -148,37 +199,70 @@ $$ \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) = \sum_{i=1}^n x_iy_i - n\bar{x} 
 
 </details>
 
-Then we can express $\hat{\beta}_1$ as:
+using this alternative representation, we can write the solution of the LS problem in a more succinct form.
 
-$$\hat{\beta}_1 = \frac{(n-1)S_{xy}}{(n-1)S_{xx}^2}=\frac{S_{xy}}{S_{xx}} $$
+```{proposition, prp-slr-alternative-ls-beta-1, name="Alternative formula for the slope"}
+The solution for the slope in the LS problem can be written as:
+$$\hat{\beta}_1 =\frac{S_{xy}}{S_{xx}} $$
+```
 
-Now notice that in order to find the Least Squares estimates you don't require
-the complete data set, but only require the following quantities (Suffient Statistics):
+<details><summary><span style="color:green">Derivation</span></summary>
 
-* $\bar{y}$.
-* $\bar{x}$.
-* $S_{xx}$.
-* $S_{xy}$.
+$$\hat{\beta}_1 = \frac{\sum_{i = 1}^n y_i x_i - n \bar{y} \bar{x}}{\sum_{i = 1}^n x_i^2 - n \bar{x}^2} = \frac{(n-1)S_{xy}}{(n-1)S_{xx}}=\frac{S_{xy}}{S_{xx}} $$
 
-### Other estimated quantites
+</details>
 
-If we substitute the least-squares estimates into the regression model we obtain the fitted (predicted) values and residuals.
 
+The least-squares estimates do not require the individual observations once the following four data summaries are known:
+
+$$
+\bar x,\qquad
+\bar y,\qquad
+S_{xx},\qquad
+S_{xy}.
+$$
+
+***
+
+### Computational Properties of Least Squares
+
+The least-squares solution in simple linear regression (SLR) enjoys several important and useful properties that are not generally shared by minimax or least-absolute-value fits (even for the same linear model). Below is a concise, polished list of these properties with brief explanations.
+
+- **Unique Closed-form solution.**  
+  The normal equations yield explicit formulas (e.g. \(\hat\beta_1 = S_{xy}/S_{xx}\), \(\hat\beta_0=\bar y-\hat\beta_1\bar x\)). Closed-form expressions provide direct insight into how the estimates depend on the data.
+
+- **Computationally cheap (O(n)).**  
+  Only a few sums (or averages and second moments) are needed, so the estimates can be computed in linear time and with constant memory beyond the data summaries.
+
+- **Depends only on a few data summaries.**  
+  The estimates require only \(\bar x,\bar y, S_{xx}, S_{xy} \)
+  
+***
+
+## Fitted Values and Residuals
+
+We can obtain new quantities related to the fitted model if we substitute the solutions to the LS problem.
+
+```{definition, def-fitted-values-residuals, name="Fitted values and residuals."}
 The fitted value for observation $i$ is
 $$
 \hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1 x_i,
 $$
 
-and the residual (estimated error) is
+and the residual after fitting is
 $$
 \hat{e}_i = y_i - \hat{y}_i = y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i.
 $$
+```
 
-And we can also compare our estimated regression line (blue) with the real 
-regression line (red) in the following as follows:
+The residual is the vertical difference remaining after replacing the unknown coefficients $\beta_0,\beta_1$ with the solution to the LS problem $\hat{\beta}_0, \hat{\beta}_1$.
+
+And we can also compare our estimated regression line (blue) with the data-generating line (red) in the following as follows:
 
 ```{r slr-real-vs-est}
+dat    <- read.csv(file = "Wine Data.csv")
 outReg <- lm(Years ~ Glasses, data = dat)
+
 plot(x    = dat$Glasses,
      y    = dat$Years,
      xlab = "Avg. Glasses of Wine per Week",
@@ -193,27 +277,14 @@ abline(a   = outReg$coefficients[1],
        lwd = 2)
 ```
 
----
-
-### Properties of the SLR problem
-
-The least-squares solution in simple linear regression (SLR) enjoys several important and useful properties that are not generally shared by minimax or least-absolute-value fits (even for the same linear model). Below is a concise, polished list of these properties with brief explanations.
-
-- **Closed-form solution.**  
-  The normal equations yield explicit formulas (e.g. \(\hat\beta_1 = S_{xy}/S_{xx}\), \(\hat\beta_0=\bar y-\hat\beta_1\bar x\)). Closed-form expressions provide direct insight into how the estimates depend on the data.
-
-- **Computationally cheap (O(n)).**  
-  Only a few sums (or averages and second moments) are needed, so the estimates can be computed in linear time and with constant memory beyond the data summaries.
-
-- **Depends only on a few summary statistics (sufficient-type summaries).**  
-  The estimates require only \(\bar x,\bar y,S_{xx}^2,S_{xx} \)
-  
----
+***
 
 ## Properties of the Estimates
 
-Before analyzing more properties of the least squares problem, let us define the 
-following variables:
+Before analyzing more properties of the least squares problem, let us establish the following notation:
+
+::: {.notation}
+**Vector variables**
 
 * $\mathbf{y} = (y_1,\ldots,y_n)'$.
 * $\mathbf{x} = (x_1,\ldots,x_n)'$.
@@ -221,89 +292,109 @@ following variables:
 * $\hat{\mathbf{y}} = (\hat{y}_1,\ldots,\hat{y}_n)'$.
 * $\hat{\mathbf{e}} = (\hat{e}_1,\ldots,\hat{e}_n)'$.
 * $\mathbb{1} = (1,\ldots,1)'$.
+:::
 
 As a bonus, we can write the Linear regression model as follows:
 
 $$ \mathbf{y} = \beta_0 \mathbb{1} + \beta_1 \mathbf{x} + \mathbf{e} $$
 
----
+Also, we will use yet another way to write the covariance formula:
 
-### $\hat{\beta}_0$ and $\hat{\beta}_1$ are linear combinations of 
-$\mathbf{y}$
+```{proposition, prp-slr-alternative-covariance-2, name="Alternative formula for the covariance"}
+The covariance can be alternative computed as:
+$$ S_{xy} = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x}) y_i $$
+```
 
-The estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ are linear combinations of 
-$\mathbf{y} = (y_1,\ldots,y_n)'$.
-
-First note the following:
-
-$$ \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) =  \sum_{i=1}^n (x_i - \bar{x}) y_i $$
 <details><summary><span style="color:green">Derivation</span></summary>
 
 \begin{align*}
-\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) 
-  &= \sum_{i=1}^n x_i y_i - n \bar{x} \bar{y} 
+S_{xy}
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) 
+    & \text{} \\
+  &= \frac{1}{n-1} \left[ \sum_{i=1}^n x_i y_i - n \bar{x} \bar{y} \right] 
     & \text{dist. prod.} \\
-  &= \sum_{i=1}^n x_i y_i - \bar{x} \sum_{i=1}^n y_i  
+  &= \frac{1}{n-1} \left[ \sum_{i=1}^n x_i y_i - \bar{x} \sum_{i=1}^n y_i \right]  
     & \text{def. } \bar{y} \\
-  &= \sum_{i=1}^n x_i y_i - \sum_{i=1}^n \bar{x} y_i  
+  &= \frac{1}{n-1} \left[ \sum_{i=1}^n x_i y_i - \sum_{i=1}^n \bar{x} y_i \right]  
     & \text{liniarity of sum} \\
-  &= \sum_{i=1}^n (x_i y_i - \bar{x} y_i)   
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_i y_i - \bar{x} y_i)   
     & \text{ass. sum} \\
-  &= \sum_{i=1}^n (x_i - \bar{x}) y_i    
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x}) y_i    
     & \text{factoring } y_i \\
 \end{align*}
 
 </details>
 
-Then
+Now we can establish the following several properties of the fitted quantities.
 
-$$ \hat{\beta}_1 =  \frac{\sum_{i = 1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2} = \frac{\sum_{i=1}^n (x_i - \bar{x}) y_i}{\sum_{i=1}^n (x_i - \bar{x})^2} = \sum_{i=1}^n\frac{(x_i - \bar{x}) }{\sum_{i=1}^n (x_i - \bar{x})^2}y_i $$
-
-and similarly:
-
-$$ \hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x} = \sum_{i=1}^n \frac{y_i}{n} - \sum_{i=1}^n\frac{(x_i - \bar{x}) }{\sum_{j = 1}^n x_j^2 - n \bar{x}^2}y_i \bar{x} = \sum_{i=1}^n \left( \frac{1}{n} - \frac{(x_i - \bar{x}) }{\sum_{j = 1}^n x_j^2 - n \bar{x}^2} \bar{x} \right)y_i $$
-
----
-
-### The sum of the residuals is $0$
-
-That is:
-
-$$ \sum_{i=1}^n \hat{e}_i = 0 $$
+```{proposition, prp-slr-properties-of-the-estimates, name="Properties of the estimates."}
+The solution of the LS problem and the associated fitted values have the following properties:
+  
+1. The estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ are linear combinations of $\mathbf{y} = (y_1,\ldots,y_n)'$.
+2. The sum of the residuals is $0$ or  $\langle \hbe, \mathbb{1} \rangle = 0$.
+3. The residuals and $\mathbf{x}$ are orthogonal or $\langle \hbe, \mathbf{x} \rangle = 0$.
+4. The residuals and the fitted values are orthogonal or $\langle \hbe, \mathbf{\hat{y}} \rangle = 0$.
+5. The response $\mathbf{y}$ and the fitted values $\mathbf{\hat{y}}$ have the same average.
+```
 
 <details><summary><span style="color:green">Derivation</span></summary>
 
+1. The estimates $\hat{\beta}_0$ and $\hat{\beta}_1$ are linear combinations of $\mathbf{y} = (y_1,\ldots,y_n)'$.
+
+Using Proposition \@ref(prp:prp-slr-alternative-covariance-2)
+
 \begin{align*}
-\sum_{i=1}^n \hat{e}_i 
+\hat{\beta}_1
+  &= \frac{S_{xy}}{S_{xx}}  
+    & \text{def. } \hat{\beta}_1 \\
+  &= \frac{\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x}) y_i}{S_{xx}}  
+    & \text{prop.} \\
+  &= \sum_{i=1}^n \frac{(x_i - \bar{x})}{(n-1)S_{xx}}y_i  
+    & \text{}  \\
+  &= \sum_{i=1}^n a_i y_i  
+    & a_i = \frac{(x_i - \bar{x})}{(n-1)S_{xx}}
+\end{align*}
+
+and
+
+\begin{align*}
+\hat{\beta}_0 
+  &= \bar{y} - \hat{\beta}_1 \bar{x}
+    & \text{def. } \hat{\beta}_0 \\
+  &= \sum_{i=1}^n \frac{y_i}{n} - \sum_{i=1}^n a_i y_i \bar{x} 
+    & \text{prev. res.} \\
+  &= \sum_{i=1}^n \left( \frac{1}{n} - a_i \bar{x} \right)y_i
+    & \text{lin. sum} \\
+  &= \sum_{i=1}^n b_i y_i
+    & b_i = \frac{1}{n} - a_i \bar{x}
+\end{align*}
+
+2. The sum of the residuals is $0$ or  $\langle \hbe, \mathbb{1} \rangle = 0$.
+
+\begin{align*}
+\langle \hbe, \mathbb{1} \rangle 
+  &= \sum_{i=1}^n \hat{e}_i
+    & \text{dot prod.} \\
   &= \sum_{i=1}^n(y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)    
     & \text{def. } \hbe \\
   &= \sum_{i=1}^n y_i - \sum_{i=1}^n \hat{\beta}_0 - \hat{\beta}_1 \sum_{i=1}^n x_i    
-    & \text{linearity sum} \\
+    & \text{lin. sum} \\
   &= n\bar{y} - n \hat{\beta}_0 - n \hat{\beta}_1 \bar{x}     
     &  \\
   &= n\bar{y} - n (\bar{y} - \hat{\beta}_1 \bar{x}) - n \hat{\beta}_1 \bar{x}      
     & \text{def. } \hat{\beta}_0 \\
   &= n\bar{y} - n \bar{y} + n \hat{\beta}_1 \bar{x} - n \hat{\beta}_1 \bar{x}      
-    & \text{dist.} n \\
+    & \text{dist. } n \\
   &= 0
 \end{align*}
 
-</details>
 
----
-
-### $\hat{\mathbf{e}}$ and $\mathbf{x}$ are orthogonal
-
-We need to show that:
-
-$$ \langle \hbe, \bx \rangle = 0 $$
-
-<details><summary><span style="color:green">Derivation</span></summary>
+3. The residuals and $\mathbf{x}$ are orthogonal or $\langle \hbe, \mathbf{x} \rangle = 0$.
 
 \begin{align*}
 \langle \hbe, \bx \rangle 
   &= \sum_{i=1}^{n} \he_i x_i 
-    & \text{def. dot prod.} \\
+    & \text{dot prod.} \\
   &= \sum_{i=1}^{n}  (y_i - \hgb_0 - \hgb_1 x_i)x_i 
     & \text{def. } \hat{e}_i \\
   &= \sum_{i=1}^{n}  (y_i x_i - \hgb_0x_i - \hgb_1 x_i x_i) 
@@ -324,22 +415,12 @@ $$ \langle \hbe, \bx \rangle = 0 $$
   &=0
 \end{align*}
 
-</details>
-
----
-
-### $\hby$ and $\hbe$ are orthogonal
-
-We need to show that:
-
-$$ \langle \hbe, \hby \rangle = 0 $$
-
-<details><summary><span style="color:green">Derivation</span></summary>
+4. The residuals and the fitted values are orthogonal or $\langle \hbe, \mathbf{\hat{y}} \rangle = 0$.
 
 \begin{align*}
 \langle \hbe, \hby \rangle 
   &= \sum_{i=1}^{n} \he_i \hy_i 
-    & \text{def. dot prod.} \\
+    & \text{dot prod.} \\
   &= \sum_{i=1}^{n} \he_i(\hgb_0 + \hgb_1 x_i)  
     & \text{def. } \hat{y}_i \\
   &= \sum_{i=1}^{n} (\he_i \hgb_0 + \he_i \hgb_1 x_i) 
@@ -354,16 +435,8 @@ $$ \langle \hbe, \hby \rangle = 0 $$
     &  \langle \hbe, \bx \rangle = 0 \\
 \end{align*}
 
-</details>
 
----
-
-### The average of $\hby$ and $\by$ are the same
-
-That is:
-
-$$ \frac{1}{n} \sum_{i=1}^n \hy_i = \bar{y} $$
-<details><summary><span style="color:green">Derivation</span></summary>
+5. The response $\mathbf{y}$ and the fitted values $\mathbf{\hat{y}}$ have the same average.
 
 \begin{align*}
 \frac{1}{n} \sum_{i=1}^n \hy_i 
@@ -371,27 +444,126 @@ $$ \frac{1}{n} \sum_{i=1}^n \hy_i = \bar{y} $$
     & \text{def. } \hat{y}_i \\
   &= \frac{1}{n} (n \hgb_0 + \hgb_1 \sum_{i=1}^n x_i) 
     & \text{dist. sum} \\
-  &= \frac{1}{n} (n \hgb_0 + n \hgb_1 \bx) 
-    & \text{dist. } n \\
-  &= \hgb_0 + \hgb_1 \bx 
+  &= \frac{1}{n} (n \hgb_0 + n \hgb_1 \bar{x}) 
+    & \text{} \\
+  &= \hgb_0 + \hgb_1 \bar{x}
+    & \text{} \\
+  &= \bar{y} - \hgb_1 \bar{x}  + \hgb_1 \bar{x}
     & \text{def. } \hat{\beta}_0 \\
-  &= \bar{y} - \hgb_1 \bx  + \hgb_1 \bx \\
-    & \\
   &= \bar{y} \\
     & \\
 \end{align*}
 
 </details>
 
-All these properties of the estimates, are the result of solving the least squares
-problem. If another problem is solve, several of these properties, if not all of them, 
-will be lost.
+This derivation for (2-5) just uses simple substitutions and algebra. However, there is a more elegant derivation that starts with the **normal equations** and the vector notation.
 
----
+<details><summary><span style="color:green">Alternative derivation</span></summary>
 
-## Centering and Standarizing the Data
+2. The sum of the residuals is $0$ or  $\langle \hbe, \mathbb{1} \rangle = 0$.
 
-Some transformations of the data can aid regression analysis or make coefficient interpretations more intuitive. Two standard linear transformations are centering and standardization. Before discussing their implications for linear regression, we define each transformation and analyze its effect on the data itself.
+Evaluating the first normal equation in definition \@ref(def:def-simple-normal-equations) at the LS solution, we have that:
+
+\begin{align*}
+\sum_{i=1}^n (y_i-\hat\beta_0-\hat\beta_1 x_i)=0 
+  & \implies \sum_{i=1}^n \hat{e}_i=0
+    & \text{def. } \hat{e}_i \\ 
+  & \implies \langle \hbe, \mathbb{1} \rangle = 0
+    & \text{dot prod.} 
+\end{align*}
+
+
+3. The residuals and $\mathbf{x}$ are orthogonal or $\langle \hbe, \mathbf{x} \rangle = 0$.
+
+Evaluating the second normal equation in definition \@ref(def:def-simple-normal-equations) at the LS solution, we have that:
+
+\begin{align*}
+\sum_{i=1}^n (y_i-\hat\beta_0-\hat\beta_1x_i)x_i=0 
+  & \implies \sum_{i=1}^n \hat{e}_i x_i=0
+    & \text{def. } \hat{e}_i \\ 
+  & \implies \langle \hbe, \mathbf{x} \rangle = 0
+    & \text{dot prod.} 
+\end{align*}
+
+4. The residuals and and the fitted values are orthogonal or $\langle \hbe, \mathbf{\hat{y}} \rangle = 0$.
+
+\begin{align*}
+\langle \hbe, \hby \rangle 
+  &= \langle \hbe, \hat\beta_0 \mathbb{1} + \hat\beta_1\mathbf x \rangle
+    & \text{def. } \hby \\ 
+  &= \beta_0 \langle \hbe, \hat \mathbb{1} \rangle + \hat\beta_1 \langle \hbe, \mathbf x \rangle
+    & \text{def. } \hby \\
+  &= 0 
+    &  \langle \hbe, \bx \rangle = 0,  \langle \hbe, \mathbf x \rangle = 0
+\end{align*}
+
+
+5. The response $\mathbf{y}$ and the fitted values $\mathbf{\hat{y}}$ have the same average.
+
+We have that
+
+$$
+0
+=
+\sum_{i=1}^n\hat{e}_i
+=
+\sum_{i=1}^n(y_i-\hat y_i)
+=
+\sum_{i=1}^n y_i - \sum_{i=1}^n\hat y_i
+=
+n \bar{y} - n \hat{\bar{y}} 
+$$
+
+Therefore,
+
+$$
+n \bar{y} = n \hat{\bar{y}} \implies \bar{y} = \hat{\bar{y}} 
+$$
+
+</details>
+
+This alternative derivation, emphasizes a nice logical:
+
+$$
+\boxed{
+\text{least-squares first-order conditions}
+\Longrightarrow
+\begin{cases}
+\sum_i\hat e_i=0,\\
+\sum_i x_i\hat e_i=0
+\end{cases}
+\Longrightarrow
+\hat{\mathbf e}\perp\mathbf 1,\mathbf x
+\Longrightarrow
+\hat{\mathbf e}\perp\hat{\mathbf y}
+}
+$$
+
+Lastly, these properties are consequences of the least-squares optimization problem and the inclusion of an intercept. They do not require any assumptions about the distribution, mean, or variance of the errors. If a different fitting criterion is used, these identities are not generally preserved.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Centering and Standardizing the Data
+
+Centering and standardizing the data is a very common transformation of the data before performing lnear regression. In this section we analyze the effects that centering and standardizing the data have on the data itself.
 
 ```{definition, def-centered-variable, name="Centered variable"}
 Given observations $\{x_i\}_{i=1}^n$, then the centered version of observation
@@ -399,7 +571,7 @@ $i$, denoted by $x_i^c$ is given by:
 $$x_i^c = x_i - \bar{x}$$
 ```
 
-```{proposition, prp-centered-variable-mean-0}
+```{proposition, prp-centered-variable-mean-0, name="Mean of a centered variable"}
 The centered observations $\{x_i^c\}_{i=1}^n$ have mean $0$.
 ```
 
@@ -424,7 +596,7 @@ We need to show that:
 ```
 </details>
 
-```{proposition, prp-centered-variable-variance-equal}
+```{proposition, prp-centered-variable-variance-equal, name="Variance of a centered variable"}
 The centered observations $\{x_i^c\}_{i=1}^n$ have the same sample variance as
 the original observations $\{x_i\}_{i=1}^n$.
 ```
@@ -448,7 +620,7 @@ S_{xx}^c
 ```
 </details>
 
-```{proposition, prp-centered-variable-covariance-equal}
+```{proposition, prp-centered-variable-covariance-equal, name="Covariance of a centered variable"}
 The centered observations $\{x_i^c\}_{i=1}^n$ and $\{y_i^c\}_{i=1}^n$ have the same sample covariance as
 the original observations $\{x_i\}_{i=1}^n$ and $\{y_i\}_{i=1}^n$.
 ```
@@ -460,7 +632,7 @@ We need to show that:
   
 \begin{align*}
 S_{xy}^c 
-  &= \frac{1}{n-1} \sum_{i=1}^n (x_i^c - \bar{x})(y_i^c - \bar{y})
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_i^c - \bar{x}^c)(y_i^c - \bar{y}^c)
     & \text{def. } S_{xy}^c \\
   &= \frac{1}{n-1} \sum_{i=1}^n (x_i^c)(y_i^c)
     & \bar{x}^c = 0,\bar{y}^c = 0 \\
@@ -474,23 +646,23 @@ S_{xy}^c
 
 Effect on the data:
 
-* Location: The mean of the centered variable is zero. Centering moves the distribution so that its central point is at the origin.
+* Location: The mean of the centered variable is zero. Centering shifts all observations by the same amount so that their sample mean becomes zero.
 * Spread and shape: Centering does not change the spread (variance or standard deviation) or the shape (skewness/kurtosis) of the distribution; only the location changes.
 * Units and interpretation: Units remain the same; only the zero point is shifted.
-* Linear relationships: Pairwise linear relationships are unchanged in magnitude.
+* Centering preserves all pairwise differences, that is $ x_i^c-x_j^c=x_i-x_j$.
 * Numerical effects: Centering often reduces the magnitude of numerical values and can improve numerical stability in computations.
 
-```{definition, def-standarized-variable, name="Standarized variable"}
-Given observations $\{x_i\}_{i=1}^n$, then the standarized version of observation
+```{definition, def-standardized-variable, name="Standardized variable"}
+Given observations $\{x_i\}_{i=1}^n$, with $S_{xx}>0$, then the standardized version of observation
 $i$, denoted by $x_i^s$, is given by:
 $$x_i^s = \frac{x_i - \bar{x}}{\sqrt{S_{xx}}} = \frac{x_i^c}{\sqrt{S_{xx}}}$$
 ```
 
-```{proposition, prp-standarized-variable-equal-1}
+```{proposition, prp-standardized-variable-equal-1, name="Correlation of  standardized variable"}
 The standardized observations $\{x_i^s\}_{i=1}^n$ have mean of $0$ and variance $1$.
 ```
 <details><summary><span style="color:green">Proof</span></summary>
-```{proof, pro-standarized-variable-equal-1}
+```{proof, pro-standardized-variable-equal-1}
 We need to show that:
   $$ \bar{x}^s = 0 $$
 and
@@ -498,8 +670,8 @@ and
 
 First, let us show that $\bar{x}^s = 0$.
 \begin{align*}
-\bar{x}^s = 0 
-  &=  \frac{1}{n} \sum_{i=1}^n x_i^c
+\bar{x}^s
+  &=  \frac{1}{n} \sum_{i=1}^n x_i^s
     & \text{def. } \bar{x}^s \\
   &= \frac{1}{n} \sum_{i=1}^n \frac{x_i^c}{\sqrt{S_{xx}}}
     & \text{def. } x_i^s \\
@@ -534,52 +706,36 @@ S_{xx}^s
 
 Effect on the data:
 
-* Location and scale: The standardized variable has mean zero and a typical magnitude of one.
+* Location and scale: The standardized observations have sample mean $0$, sample variance $1$, and therefore sample standard deviation $1$.
 * Units: Units are removed; values are expressed in "standard‑deviation units" relative to the original scale.
-* Shape: The shape of the distribution (skewness, kurtosis) is unchanged; only location and scale are affected.
 * Comparability: Variables measured on different original scales become directly comparable after standardization, because they share a common scale.
-* Sensitivity to outliers: The standardization factor is sensitive to extreme values if the sample standard deviation is used; robust alternatives (median and robust spread) can be substituted when outliers are a concern.
-
-### Remarks on Centering and Standarization
-
-* Standardization implies centering. Every standardized variable is centered; the converse need not hold.
-* Both operations are linear transformations: they preserve linear relationships among variables and do not change correlation signs, though numeric slope values will change according to scale.
-* Centering is often sufficient when the goal is to simplify interpretation of an intercept or reduce collinearity with polynomial or interaction terms.
-* Standardization is recommended when predictors have different units or scales, when comparing effect sizes, or when using algorithms or penalties that depend on predictor scale.
-* When applying transformations in modeling workflows, compute centering/standardization parameters (means and spread measures) on the training data and apply the same transformations to validation and test sets to avoid data leakage.
-* Record and report the transformations so coefficients and predictions can be interpreted or converted back to original units when needed.
-
-### Summary Centering and Standarizing
-
-* Centering shifts a variable so its mean is zero; it changes location only and leaves spread and shape intact.  
-* Standardization shifts and rescales so that the variable has mean zero and unit typical magnitude; it removes units and facilitates comparability.  
-- Both are linear, preserve linear association, and are valuable preprocessing steps; the choice between them depends on interpretive goals, numerical stability needs, and sensitivity to outliers.
+* Sensitivity to outliers: The standardization factor is sensitive to extreme values if the sample standard deviation is used.
 
 Now, let us introduce the sample correlation.
 
 ```{definition, sample-correlation, name="Sample Correlation"}
-Given observations $\{x_i\}_{i=1}^n$ and $\{y_i\}_{i=1}^n$, the sample correlation 
+Given observations $\{x_i\}_{i=1}^n$ and $\{y_i\}_{i=1}^n$, with $S_{xx}>0$ and $S_{yy}>0$, the sample correlation 
 is given by:
 $$ r_{xy} = \frac{S_{xy}}{\sqrt{S_{xx}{S_{yy}}}} $$  
 ```
 
-```{proposition, covariance-standarized-equal-correlation}
+```{proposition, covariance-standardized-equal-correlation, name="Standardized covariance is equal to correlation"}
 The sample covariance of the standardized observations $\{x_i^s\}_{i=1}^n$ and 
-$\{x_i^s\}_{i=1}^n$ is equal to the correlation of the original observations
-$\{x_i\}_{i=1}^n$ and $\{x_i\}_{i=1}^n$
+$\{y_i^s\}_{i=1}^n$ is equal to the correlation of the original observations
+$\{x_i\}_{i=1}^n$ and $\{y_i\}_{i=1}^n$
 ```
 
 <details><summary><span style="color:green">Proof</span></summary>
-```{proof, pro-covariance-standarized-equal-correlation}
+```{proof, pro-covariance-standardized-equal-correlation}
 \begin{align*}
 S_{xy}^s
-  &= \frac{1}{n-1} \sum_{i=1} (x_i^s - \bar{x}^s)(y_i^s - \bar{x}^s)
-    & \text{def. } S_{xx}^s \\
-  &= \frac{1}{n-1} \sum_{i=1} (x_i^s)(y_i^s) 
+  &= \frac{1}{n-1} \sum_{i=1}^n (x_i^s - \bar{x}^s)(y_i^s - \bar{y}^s)
+    & \text{def. } S_{xy}^s \\
+  &= \frac{1}{n-1} \sum_{i=1}^n x_i^s y_i^s  
     & \bar{x}^s=0,\bar{y}^s=0 \\
-  &= \frac{1}{n-1} \sum_{i=1} \left(\frac{x_i - \bar{x}}{\sqrt{S_{xx}}}\right) \left(\frac{y_i - \bar{y}}{\sqrt{S_{yy}}}\right) 
-    & \text{def. } x^c_i,y^c_i \\
-  &= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}}\frac{1}{n-1} \sum_{i=1} (x_i - \bar{x}) (y_i - \bar{y}) 
+  &= \frac{1}{n-1} \sum_{i=1}^n \left(\frac{x_i - \bar{x}}{\sqrt{S_{xx}}}\right) \left(\frac{y_i - \bar{y}}{\sqrt{S_{yy}}}\right) 
+    & \text{def. } x^s_i,y^s_i \\
+  &= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}}\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x}) (y_i - \bar{y}) 
     & \text{lin. sum} \\
   &= \frac{1}{\sqrt{S_{yy}}\sqrt{S_{xx}}} S_{xy} 
     & \text{def. } S_{xy} \\
@@ -589,25 +745,80 @@ S_{xy}^s
 ```
 </details>
 
-With this results, we can analyze the effects of the following 3 scenarios on the
+Finally, we show that the sample correlation is between $-1$ and $1$.
+
+```{proposition, prp-correlation-1-and-1, name="Correlation range"}
+The sample correlation $r_{xy}$ lies in $[-1,1]$.
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+```{proof, pro-correlation-1-and-1}
+First let us show that $\frac{1}{n-1} \sum_{i=1}^n (x_i^s + y_i^s)^2=2(1 + r_{xy})$ 
+\begin{align*}
+\frac{\sum_{i=1}^n (x_i^s + y_i^s)^2}{n-1} 
+  &= \frac{1}{n-1} \sum_{i=1}^n \left((x_i^s)^2 + 2x_i^s y_i^s + (y_i^s)^2 \right)
+    & \\
+  &= \frac{\sum_{i=1}^n (x_i^s)^2}{n-1}  + 2\frac{\sum_{i=1}^n x_i^sy_i^s}{n-1}  + \frac{\sum_{i=1}^n (y_i^s)^2}{n-1} 
+    & \text{lin. sum} \\
+  &= \frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)^2}{n-1}  + 2\frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)(y_i^s - \bar{y}^s)}{n-1}  
+    & \\
+  &\quad + \frac{\sum_{i=1}^n (y_i^s - \bar{y}^s)^2}{n-1} 
+    &  \bar{x}^s=\bar{y}^s=0 \\
+  &= S_{xx}^s + 2 S_{xy}^s + S_{yy}^s 
+    &  \text{def. } S_{xx}^s,S_{xy}^s,S_{yy}^s \\
+  &= 1 + 2r_{xy} + 1 
+    &  S_{xy}^s=r_{xy} \\
+  &= 2(1 + r_{xy}) 
+    & \\
+\end{align*}
+similarly, it can be shown that $\frac{1}{n-1} \sum_{i=1}^n (x_i^s - y_i^s)^2=2(1 - r_{xy})$
+\begin{align*}
+\frac{\sum_{i=1}^n (x_i^s - y_i^s)^2}{n-1} 
+  &= \frac{1}{n-1} \sum_{i=1}^n \left((x_i^s)^2 - 2x_i^s y_i^s + (y_i^s)^2 \right)
+    & \\
+  &= \frac{\sum_{i=1}^n (x_i^s)^2}{n-1}  - 2\frac{\sum_{i=1}^n x_i^sy_i^s}{n-1}  + \frac{\sum_{i=1}^n (y_i^s)^2}{n-1} 
+    & \text{lin. sum} \\
+  &= \frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)^2}{n-1}  - 2\frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)(y_i^s - \bar{y}^s)}{n-1}  
+    & \\
+  &\quad + \frac{\sum_{i=1}^n (y_i^s - \bar{y}^s)^2}{n-1} 
+    &  \bar{x}^s=\bar{y}^s=0 \\
+  &= S_{xx}^s - 2 S_{xy}^s + S_{yy}^s 
+    &  \text{def. } S_{xx}^s,S_{xy}^s,S_{yy}^s \\
+  &= 1 - 2r_{xy} + 1 
+    &  S_{xy}^s=r_{xy} \\
+  &= 2(1 - r_{xy}) 
+    & \\
+\end{align*}
+Now since, 
+$$\frac{1}{n-1} \sum_{i=1}^n (x_i^s + y_i^s)^2, \frac{1}{n-1} \sum_{i=1}^n (x_i^s - y_i^s)^2 \geq 0$$
+then
+$$2(1 + r_{xy}) \geq 0 => r_{xy} \geq -1$$
+  and
+$$2(1 - r_{xy}) \geq 0 => r_{xy} \leq  1$$
+Then
+$$ -1 \leq r_{xy} \leq 1 $$
+```
+</details>
+
+With these results, we can analyze the effects of the following 3 scenarios on the
 estimated coefficients:
 
-* Independent variable centered.
-* Both, independent and dependent variable centered.
-* Both, independent and dependent variable standardized.
+* Explanatory variable centered.
+* Both, response and explanatory variable centered.
+* Both, response and explanatory variable standardized.
 
----
+***
 
 ## Centering and Standarizing in SLR
 
-Centering and standardizing are two common preprocessing steps for continuous variables before fitting a regression model. They are simple linear transformations of the data but have important practical and interpretive consequences.
+Centering and standardizing are two common preprocessing steps for continuous variables before fitting a regression model. They are simple location-scale transformations of the data but have important practical and interpretive consequences.
 
----
+***
 
-### Centered Independent Variable
+### Centered Explanatory Variable
 
-```{proposition, prp-centered-independent-variable}
-The LS estimators $\hgb^c_0, \hgb^c_1$ with centered independent variables $\{x_i^c\}_{i=1}^n$ and original dependent variables $\{y_i\}_{i=1}^n$ can be expressed in terms of the original estimators and data as follows:
+```{proposition, prp-centered-independent-variable, name="Estimators with centered explanatory variable"}
+The LS estimators $\hgb^c_0, \hgb^c_1$ with centered explanatory variables $\{x_i^c\}_{i=1}^n$ and original response $\{y_i\}_{i=1}^n$ can be expressed in terms of the original estimators and data as follows:
 $$\hgb_1^c = \hgb_1$$
   and
 $$\hgb_0^c = \bar{y}$$
@@ -615,7 +826,7 @@ $$\hgb_0^c = \bar{y}$$
 
 <details><summary><span style="color:green">Proof</span></summary>
 ```{proof, pro-centered-independent-variable}
-First lets compute $\beta_1^c$
+First let us compute $\beta_1^c$
 \begin{align*}
 \hgb_1^c
   &= \frac{S_{xy}^c}{S_{xx}^c}
@@ -627,7 +838,7 @@ First lets compute $\beta_1^c$
 and
 \begin{align*}
 \hgb_0^c
-  &= \bar{y} - \hgb_^c \bar{x}^c
+  &= \bar{y} - \hgb_^c_1 \bar{x}^c
     & \text{def. } \hgb_0^c \\
   &= \bar{y} - \hgb_1^c 0 
     & \bar{x}^c=0 \\
@@ -636,11 +847,39 @@ and
 ```
 </details>
 
-So centering the dependent variable doesn't change the value of the estimated 
-slope and makes the estimated intercept to coincide with the mean of the independent variable.
+Centering the explanatory variable does not change the estimated slope, while the estimated intercept becomes the sample mean of the response variable.
 
-We can see this in one of our example data sets, looking at the ad spending data
-we can perform linear regression on the original data and the centered data:
+We have established that:
+
+$$
+  \overline{\hat y}=\bar y.
+$$
+  
+When the explanatory variable is centered,
+
+$$
+  \bar x^c=0.
+$$
+  
+So the fitted line is
+
+$$
+  \hat y_i
+=
+  \hat\beta_0^c
++
+  \hat\beta_1^cx_i^c.
+$$
+  
+At $x_i^c=0$—the original average explanatory-variable value—the fitted value is
+
+$$
+  \hat\beta_0^c=\bar y.
+$$
+  
+This gives us an intuitive interpretation: the centered regression line passes through $(0,\bar y)$ because the original least-squares line passes through $(\bar x,\bar y)$.
+
+We can see this in one of our example data sets, looking at the ad spending data we can perform linear regression on the original data and the centered data:
 
 ```{r center-x}
 # Read Data
@@ -668,7 +907,7 @@ abline(a   = outRegOri$coefficients[1],
        b   = outRegOri$coefficients[2],
        col = 'red',
        lwd = 2)
-## Independent Variable centered data
+## Explanatory Variable centered data
 # Plots the points
 plot(x    = xCen,
      y    = y,
@@ -690,27 +929,25 @@ Effect on the fitted model:
 * The intercept becomes the predicted response at the typical predictor value (the predictor average), which makes the intercept directly interpretable as a typical outcome.  
 * Predictions for any observation are unchanged after converting back to the original predictor scale.
 
-Statistical and numerical consequences:
+Numerical consequences:
 
-* The sampling variability of the slope estimator is unaffected.   
 * Centering often improves numerical stability in computation because predictor 
 values are closer to zero, reducing the chance of poor conditioning or round-off error.
 
 Practical considerations:
 
 * Centering is especially useful when the intercept at an observed or typical 
-predictor value is of substantive interest.  
-* It is recommended when polynomial terms or interactions are present, because it reduces collinearity between lower- and higher-order terms.  
+predictor value is of substantive interest.   
 * Always record the predictor mean used for centering so that future predictions
 or reporting can be done on the original scale.
 
----
+***
 
 ### Both Variables Centered
 
 
-```{proposition, prp-centered-both-variable}
-The LS estimators $\hgb^c_0, \hgb^c_1$ with centered independent variables $\{x_i^c\}_{i=1}^n$ and centered dependent variables $\{y_i^c\}_{i=1}^n$ can be expressed in terms of the original estimators and data as follows:
+```{proposition, prp-centered-both-variable, name="Estimators with centered variables"}
+The LS estimators $\hgb^c_0, \hgb^c_1$ with centered explanatory variable $\{x_i^c\}_{i=1}^n$ and centered response $\{y_i^c\}_{i=1}^n$ can be expressed in terms of the original estimators and data as follows:
 $$\hgb_1^c = \hgb_1$$
   and
 $$\hgb_0^c = 0$$
@@ -740,7 +977,7 @@ and
 </details>
 
 Again, the slope doesn't change while the estimate of the intercept becomes zero
-(the new mean of the centered dependent variable).
+(the new mean of the centered response).
 
 The effect of this transformation can be observed, in the following example:
 
@@ -793,12 +1030,12 @@ abline(h   = 0,
 
 Effect on the fitted model
 
-* The fitted line passes through the origin in the centered coordinate system, so there is no separate intercept to estimate in the transformed model.  
+* The estimated intercept is zero, so the fitted line passes through the origin in centered coordinates.
 * The estimated slope remains the same numerical quantity as in the original regression fitted to deviations; the relationship described by the slope is identical to the original slope.
 
-Inference and numerical consequences  
+Numerical consequences  
 
-* There is no intercept estimate to interpret in the centered model, and the slope is naturally interpreted as how deviations in the response correspond to deviations in the predictor.  
+* The estimated intercept equals zero, so its interpretation is immediate in the centered coordinates, and the slope is naturally interpreted as how deviations in the response correspond to deviations in the predictor.  
 * Because centering reduces magnitudes, numerical conditioning and stability often improve.
 
 Practical considerations:
@@ -807,14 +1044,14 @@ Practical considerations:
 * It simplifies algebraic decompositions of variance and can make interpretation of component sums of squares more direct.  
 * Keep the centering constants so that any transformations of predictions or coefficients back to original units are straightforward.
 
----
+***
 
-### Both variables Standarized
+### Both variables Standardized
 
 Finally, we analyze the effect of standardization.
 
-```{proposition, prp-standardized-both-variable}
-The LS estimators $\hgb^s_0, \hgb^s_1$ with standardized independent variables $\{x_i^c\}_{i=1}^n$ and standardized dependent variables $\{y_i^c\}_{i=1}^n$ can be expressed in terms of the original variables as follows:
+```{proposition, prp-standardized-both-variable, name="Estimators with standardized variables"}
+The LS estimators $\hgb^s_0, \hgb^s_1$ with standardized explanatory variables $\{x_i^s\}_{i=1}^n$ and standardized responses $\{y_i^s\}_{i=1}^n$ can be expressed in terms of the original variables as follows:
 $$\hgb_1^s = r_{xy}$$
   and
 $$\hgb_0^s = 0$$
@@ -822,7 +1059,7 @@ $$\hgb_0^s = 0$$
 
 <details><summary><span style="color:green">Proof</span></summary>
 ```{proof, pro-standardized-both-variable}
-First lets compute $\beta_1^c$
+First lets compute $\beta_1^s$
 \begin{align*}
 \hgb_1^s
   &= \frac{S_{xy}^s}{S_{xx}^s}
@@ -843,7 +1080,7 @@ and
 ```
 </details>
 
-So, the estimate of the slope is the sample correlation of the original observations.
+So, the estimate of the slope is the sample correlation of the original observations. Which implies that the slope of the regression analysis after standardizing both variables is going to be in the interval $[-1, 1]$.
 
 Again, we can see this graphically:
 
@@ -879,8 +1116,8 @@ abline(a   = outRegOri$coefficients[1],
 # Plots the points
 plot(x    = xSta,
      y    = ySta,
-     xlab = "Ad spending (Centered)",
-     ylab = "Revenue",
+     xlab = "Ad spending (Standardized)",
+     ylab = "Revenue (Standardized)",
      pch  = 16)
 # Plots the regression line
 abline(a   = outRegSta$coefficients[1],
@@ -893,89 +1130,36 @@ abline(h   = 0,
        lwd = 2)
 ```
 
-finally, we show that the sample correlation is between $-1$ and $1$.
-
-```{proposition, prp-correlation-1-and-1}
-The sample correlation $r_{xy}$ lies in $[-1,1]$.
-```
-
-<details><summary><span style="color:green">Proof</span></summary>
-```{proof, pro-correlation-1-and-1}
-First let us show that $\frac{1}{n-1} \sum_{i=1}^n (x_i^s + y_i^s)^2=2(1 + r_{xy})$ 
-\begin{align*}
-\frac{\sum_{i=1}^n (x_i^s + y_i^s)^2}{n-1} 
-  &= \frac{1}{n-1} \sum_{i=1}^n \left((x_i^s)^2 + 2x_i^s y_i^s + (y_i^s)^2 \right)
-    & \\
-  &= \frac{\sum_{i=1}^n (x_i^s)^2}{n-1}  + 2\frac{\sum_{i=1}^n x_i^sy_i^s}{n-1}  + \frac{\sum_{i=1}^n (y_i^s)^2}{n-1} 
-    & \text{lin. sum} \\
-  &= \frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)^2}{n-1}  + 2\frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)(y_i^s - \bar{y}^s)}{n-1}  
-    & \\
-  &\quad + \frac{\sum_{i=1}^n (y_i^s - \bar{y}^s)^2}{n-1} 
-    &  \bar{x}^s=\bar{y}^s=0 \\
-  &= S_{xx}^2 + 2 S_{xy}^s + S_{yy}^s 
-    &  \text{def. } S_{xx}^2,S_{xy}^s,S_{yy}^s \\
-  &= 1 + 2r_{xy} + 1 
-    &  S_{xy}^s=r_{xy} \\
-  &= 2(1 + r_{xy}) 
-    & \\
-\end{align*}
-similarly, it can be shown that $\frac{1}{n-1} \sum_{i=1}^n (x_i^s - y_i^s)^2=2(1 - r_{xy})$
-\begin{align*}
-\frac{\sum_{i=1}^n (x_i^s - y_i^s)^2}{n-1} 
-  &= \frac{1}{n-1} \sum_{i=1}^n \left((x_i^s)^2 - 2x_i^s y_i^s + (y_i^s)^2 \right)
-    & \\
-  &= \frac{\sum_{i=1}^n (x_i^s)^2}{n-1}  - 2\frac{\sum_{i=1}^n x_i^sy_i^s}{n-1}  + \frac{\sum_{i=1}^n (y_i^s)^2}{n-1} 
-    & \text{lin. sum} \\
-  &= \frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)^2}{n-1}  - 2\frac{\sum_{i=1}^n (x_i^s - \bar{x}^s)(y_i^s - \bar{y}^s)}{n-1}  
-    & \\
-  &\quad + \frac{\sum_{i=1}^n (y_i^s - \bar{y}^s)^2}{n-1} 
-    &  \bar{x}^s=\bar{y}^s=0 \\
-  &= S_{xx}^2 - 2 S_{xy}^s + S_{yy}^s 
-    &  \text{def. } S_{xx}^2,S_{xy}^s,S_{yy}^s \\
-  &= 1 - 2r_{xy} + 1 
-    &  S_{xy}^s=r_{xy} \\
-  &= 2(1 - r_{xy}) 
-    & \\
-\end{align*}
-Now since, 
-$$\frac{1}{n-1} \sum_{i=1}^n (x_i^s + y_i^s)^2, \frac{1}{n-1} \sum_{i=1}^n (x_i^s - y_i^s)^2 \geq 0$$
-then
-$$2(1 + r_{xy}) \geq 0 => r_{xy} \geq -1$$
-  and
-$$2(1 - r_{xy}) \geq 0 => r_{xy} \leq  1$$
-Then
-$$ -1 \leq r_{xy} \leq 1 $$
-```
-</details>
-
-which implies that the slope of the regression analysis after standarizing both
-variables is going to be in the interval $(-1, 1)$.
-
 Effect on the fitted model:
 
-* The model has no intercept in the standardized coordinates; the estimated slope is unitless and expresses change in the response in standard‑deviation units per one standard‑deviation change in the predictor.  
-* In the simple linear setting, the standardized slope equals the correlation between predictor and response; its squared value equals the proportion of variance explained by the predictor, as we will see in the next section.
+*The estimated intercept is zero in the standardized coordinates; the estimated slope is unitless and expresses change in the response in standard‑deviation units per one standard‑deviation change in the predictor.  
+* In the simple linear setting, the standardized slope equals the correlation between predictor and response.
 
 Numerical consequences:
 
-* Standardization often improves numerical conditioning and is recommended before applying algorithms or regularization methods that are sensitive to variable scale.  
-
-Practical considerations:
-
-* Standard errors and any inferential statements refer to the transformed units; translating results back to original units requires reversing the standardization.
-* Standardize when you need unitless effect sizes or when preparing inputs for penalized regression or gradient-based optimization.  
-* Be mindful of outliers: standardization using a classical spread measure can be heavily influenced by extreme values; consider robust scaling if outliers are a concern.  
-* Save the centering and scaling constants from the training data to apply the same transformation to new observations and to allow conversion of results back to original units for presentation.
+* Standardization often improves numerical conditioning.
 
 ### Summary of Centering and Standarizing in SLR
 
-* Center the predictor when you want a meaningful intercept. 
-* Centering is a minimal, low‑risk transformation useful in many settings.  
-* Center both variables when the focus is on deviations from typical values or when simplifying variance decomposition is helpful.
-* Standardize both variables when you want unitless, comparable coefficients or when scale sensitivity of algorithms or penalties is a concern.  
-* In all cases, transformations do not change the underlying linear relationship or predictive performance (once predictions are transformed back), but they change numerical values and interpretation of coefficients. Always document and retain the transformation constants computed from the training sample to ensure valid application to new data and correct interpretation of results.
+* Centering $x$ leaves the slope unchanged and changes the intercept to $\bar y$.
+* Centering both $x$ and $y$ leaves the slope unchanged and makes the intercept $0$.
+* Standardizing both variables makes the intercept $0$ and the slope equal to $r_{xy}$.
+* These transformations change the numerical representation of the fitted model but not the fitted relationship after converting between scales.
 
----
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Coefficient of Determination
 
@@ -985,7 +1169,7 @@ So far we have focused on finding the “best” line by estimating the coeffici
 
 ```{definition, total-sum-of-squares, name="Total Sum of Squares"}
 The Total Sum of Squares is given by:
-$$SS_{tot} = \sum_{i=1}^n (y_i - \bar{y})$$
+$$SS_{tot} = \sum_{i=1}^n (y_i - \bar{y})^2$$
 ```
 
 The Total Sum of Squares is the fundamental measure of the total variability present in the observed responses. It quantifies how much the individual response values deviate, collectively, from their overall average. In other words, it is the baseline amount of variation in the dependent variable before any predictor information is used. You can think of it in several ways:
@@ -1030,7 +1214,7 @@ Practical notes:
 
 ```{definition, explained-sum-of-squares, name="Explained Sum of Squares"}
 The Explained Sum of Squares is given by:
-$$ SS_{reg} = \sumin (\hy_i - \bar{y}) = \sumin (\hy_i - \hat{\bar{y}}) $$
+$$ SS_{reg} = \sumin (\hy_i - \bar{y}) = \sumin (\hy_i - \hat{\bar{y}})^2 $$
 ```
 
 The Explained Sum of Squares is the portion of the total variability in the dependent variable that is accounted for by the fitted regression model. It quantifies how much of the variation in the observed responses is captured by the model’s fitted values, as compared with using only a single constant (the sample mean).
@@ -1085,12 +1269,12 @@ SS_{tot}
 </details>
 
 ```{definition, coefficient-of-determmination, name="Coefficient of Determmination"}
-The Coefficient of Determmination is given by:
+If $SS_{tot}>0$, the Coefficient of Determmination is given by:
   $$ R^2 = \frac{SS_{reg}}{SS_{tot}} $$
 ```
 
 ```{proposition, prp-coefficient-of-determmination, name = "Alternate Definition of the Coefficient of Determmination"}
-The Coefficient of Determmination can be defined alternatively as:
+If $SS_{tot}>0$, the Coefficient of Determmination can be defined alternatively as:
   $$ R^2 = 1 - \frac{SS_{res}}{SS_{tot}} $$
 ```
 
@@ -1100,7 +1284,7 @@ The Coefficient of Determmination can be defined alternatively as:
 R^2 
   &= \frac{SS_{reg}}{SS_{tot}}
     & \text{def. } R^2 \\
-  &= 1 - \frac{SS_{tot} - SS_{res}}{SS_{tot}} 
+  &= \frac{SS_{tot} - SS_{res}}{SS_{tot}} 
     & SS_{tot} = SS_{res} + SS_{reg} \\
   &= \frac{SS_{tot}}{SS_{tot}} - \frac{SS_{res}}{SS_{tot}}  
     & \\
@@ -1109,6 +1293,7 @@ R^2
 \end{align*}
 ```
 </details>
+
 
 ```{proposition, prp-coefficient-of-determmination-correlation}
 The Coefficient of Determmination is related to the sample correlation by
@@ -1296,7 +1481,7 @@ here where we observe that the point cloud is more dispersed and looks less than
 the more noise is added, but the estimated regression line changes only a little bit.
 We can also see how the $R^2$ becomes smaller as more noise is added.
 
----
+***
 
 ## Residual Analysis
 
@@ -1316,7 +1501,7 @@ Currently, we focus on four common problems that residual analysis can reveal:
 * **Important variables are omitted.**  
   Omitting relevant variables leads to biased residuals and can cause the model to systematically under- or over-predict responses based on unaccounted factors.
   
----
+***
 
 ### Non-linear regression function
 
@@ -1463,7 +1648,7 @@ Addressing non-linearity:
 
 In summary, recognizing when the relationship is non-linear is crucial for building accurate models. By analyzing the fitted line and residuals plots, analysts can identify these cases and take appropriate steps to improve their modeling approach, leading to better understanding and more reliable predictions.
 
----
+***
 
 ### Heteroscedasticity
 
@@ -1515,7 +1700,7 @@ Several strategies can be used to address heteroscedasticity, including:
 * Using heteroscedasticity-robust standard errors that adjust the inference procedures to account for non-constant variance.  
 * Employing alternative modeling approaches such as weighted least squares, where observations are weighted inversely proportional to their variance, or explicitly modeling the variance function.
 
----
+***
 
 ### Outliers
 
@@ -1701,7 +1886,7 @@ summary(outRegCen)
 
 Outliers located at the edges of the explanatory variable range often possess higher leverage, which means they have a disproportionate influence on the estimated regression coefficients, including the slope. Leverage points are data points that are far from the center of the predictor distribution and can exert undue influence on the fitted line.
 
----
+***
 
 ### Variables Ommited
 
@@ -1748,7 +1933,23 @@ This example underscores the importance of considering all relevant variables wh
 
 In practice, examining residuals against other variables, not just the predictor, provides crucial diagnostic information. Detecting such patterns alerts analysts to possible omitted variables, prompting further investigation, model refinement, and ultimately, more valid and reliable conclusions.
 
----
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Cross-Validation
 
@@ -1881,7 +2082,7 @@ For example, compare the scale of the dependent variable in Models 3 and 4 with 
 
 Always perform validation in the original units to ensure that results are meaningful and comparable in real-world terms. Keep the transformation parameters consistent for new data, and report errors in the original units for clear, interpretable results.
 
----
+***
 
 ## Weighted Least Squares
 
@@ -2018,7 +2219,7 @@ Limitations and cautions:
 
 Weighted Least Squares adapts the least‑squares framework to give more influence to precise observations and less to noisy ones, restoring efficiency when error variances vary across observations. The guiding principle is straightforward: lower variance implies higher weight, and higher variance implies lower weight. Effective use of WLS depends on sensible choices or estimates of the weights and appropriate calculation of standard errors for valid inference.
 
----
+***
 
 ## Model in Matrix Form
 
@@ -2253,7 +2454,7 @@ Then we have that:
 ```
 </details>
 
----
+***
 
 ### Weighted Least Squares in Matrix Form
 
