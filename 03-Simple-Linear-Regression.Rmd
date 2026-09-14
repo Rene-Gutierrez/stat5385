@@ -649,7 +649,7 @@ Effect on the data:
 * Location: The mean of the centered variable is zero. Centering shifts all observations by the same amount so that their sample mean becomes zero.
 * Spread and shape: Centering does not change the spread (variance or standard deviation) or the shape (skewness/kurtosis) of the distribution; only the location changes.
 * Units and interpretation: Units remain the same; only the zero point is shifted.
-* Centering preserves all pairwise differences, that is $ x_i^c-x_j^c=x_i-x_j$.
+* Centering preserves all pairwise differences, that is $x_i^c-x_j^c=x_i-x_j$.
 * Numerical effects: Centering often reduces the magnitude of numerical values and can improve numerical stability in computations.
 
 ```{definition, def-standardized-variable, name="Standardized variable"}
@@ -1994,7 +1994,7 @@ A third set, called a **test set**, may also be kept separate. The validation da
 
 A single separation of the observations into training and validation sets is usually called the **holdout method**. In contrast, **cross-validation** repeatedly changes which observations are used for training and validation so that predictive performance can be evaluated across different subsets of the data.
 
----
+***
 
 ### Validation Error
 
@@ -2014,7 +2014,7 @@ A smaller validation MSE indicates that, on average, the fitted model produces p
 
 The important distinction is that the residual sum of squares measures errors on observations used to fit the model, while validation error measures prediction errors on observations that were not used in the fitting process.
 
----
+***
 
 ### Holdout Validation
 
@@ -2024,7 +2024,134 @@ This method is simple and computationally inexpensive. However, the estimated pr
 
 Cross-validation reduces this dependence by repeating the training-validation process using several different subsets of observations.
 
----
+Here is an example of the holdout method using the Burgers Data set.
+
+```{r holdout-validation}
+### Holdout Validation Example
+set.seed(2026)
+
+# Read Data
+dat <- read.csv(file = "Burger Data.csv")
+
+# Saves Variables
+x <- dat$Price
+y <- dat$Burgers
+
+# Data Exploration
+par(mfrow = c(1, 1))
+plot(x = x,
+     y = y,
+     xlab = "Price ($)",
+     ylab = "Burgers",
+     pch  = 16)
+
+# Number of Observations
+n <- length(y)
+
+# Training Set Size
+traSiz <- 0.8
+
+# Training Set
+refInd <- sample(x = 1:n, size = n, replace = FALSE)
+traInd <- refInd[1:ceiling(n * traSiz)]
+yTra   <- y[traInd]
+xTra   <- x[traInd]
+
+# Validation Set
+yTes <- y[-traInd]
+xTes <- x[-traInd]
+
+
+# Model 1
+# Fit Model using the Training Data
+traOut1 <- lm(yTra ~ xTra)
+
+# Validation Predictions
+yPre <- traOut1$coefficients[1] + traOut1$coefficients[2] * xTes
+
+# MSE Validation 1
+mseVal1 <- mean((yTes - yPre)^2)
+
+# Model 2 (Explanatory Variable Log-transformed)
+xTrf <- log(xTra)
+
+# Fit Model using the Training Data
+traOut2 <- lm(yTra ~ xTrf)
+
+# Validation Predictions
+yPre <- traOut2$coefficients[1] + traOut2$coefficients[2] * log(xTes)
+
+# MSE
+mseVal2 <- mean((yTes - yPre)^2)
+
+# Model 3 (Response Transformed)
+yTrf <- log(yTra)
+
+# Fit Model using the Training Data
+traOut3 <- lm(yTrf ~ xTra)
+
+# Validation Predictions
+yPre <- exp(traOut3$coefficients[1] + traOut3$coefficients[2] * xTes)
+
+# MSE
+mseVal3 <- mean((yTes - yPre)^2)
+
+# Results Table
+tab           <- c(mseVal1, mseVal2, mseVal3)
+tab           <- as.data.frame(tab)
+tab           <- cbind(c("Model 1", "Model 2", "Model 3"), tab)
+colnames(tab) <- c("Model", "MSE")
+print(tab)
+
+# Fit Plots
+par(mfrow = c(2, 3))
+# In Sample Fit
+plot(x = xTra,
+     y = yTra,
+     xlab = "Price ($)",
+     ylab = "Burgers",
+     main = "In Sample Fit Model 1",
+     pch  = 16)
+abline(a = traOut1$coefficients[1], b = traOut1$coefficients[2], lwd = 2, col = 'red')
+plot(x = log(xTra),
+     y = yTra,
+     xlab = "log(Price) ($)",
+     ylab = "Burgers",
+     main = "In Sample Fit Model 2",
+     pch  = 16)
+abline(a = traOut2$coefficients[1], b = traOut2$coefficients[2], lwd = 2, col = 'red')
+plot(x = xTra,
+     y = log(yTra),
+     xlab = "Price ($)",
+     ylab = "log(Burgers)",
+     main = "In Sample Fit Model 3",
+     pch  = 16)
+abline(a = traOut3$coefficients[1], b = traOut3$coefficients[2], lwd = 2, col = 'red')
+## Out of Sample Fit
+plot(x = xTes,
+     y = yTes,
+     xlab = "Price ($)",
+     ylab = "Burgers",
+     main = "Out of Sample Fit Model 1",
+     pch  = 16)
+abline(a = traOut1$coefficients[1], b = traOut1$coefficients[2], lwd = 2, col = 'red')
+plot(x = log(xTes),
+     y = yTes,
+     xlab = "log(Price) ($)",
+     ylab = "Burgers",
+     main = "Out of Sample Fit Model 2",
+     pch  = 16)
+abline(a = traOut2$coefficients[1], b = traOut2$coefficients[2], lwd = 2, col = 'red')
+plot(x = xTes,
+     y = log(yTes),
+     xlab = "Price ($)",
+     ylab = "log(Burgers)",
+     main = "Out of Sample Fit Model 3",
+     pch  = 16)
+abline(a = traOut3$coefficients[1], b = traOut3$coefficients[2], lwd = 2, col = 'red')
+```
+
+***
 
 ### K-Fold Cross-Validation
 
@@ -2069,7 +2196,7 @@ When all folds have the same size, this is equivalent to averaging the $k$ fold-
 
 Common choices are $k=5$ and $k=10$. These choices allow most observations to be used for estimating the model while requiring substantially fewer model fits than procedures that leave out observations one at a time.
 
----
+***
 
 ### Other Cross-Validation Procedures
 
@@ -2083,6 +2210,7 @@ In this course, we will primarily use $k$-fold cross-validation because it provi
 
 We now illustrate $k$-fold cross-validation using the Burger Data. In particular, we will compare models involving transformations of the explanatory variable, the response variable, or both.
 
+***
 
 ### Cross Validation Example
 
@@ -2208,6 +2336,8 @@ For example, compare the scale of the response in Models 3 and 4 with those in M
 
 When models are intended to predict the same original response, compare them using the same evaluation scale and metric to ensure that results are meaningful and comparable in real-world terms. Keep the transformation parameters consistent for new data, and report errors in the same units for clear, interpretable results.
 
+***
+
 ### Summary
 
 $$
@@ -2237,48 +2367,260 @@ $$
 
 ## Weighted Least Squares
 
-Weighted Least Squares is a generalization of Ordinary Least Squares designed to handle situations in which the assumption of constant error variance is violated. When the variability of the errors differs across observations—i.e., when heteroscedasticity is present—OLS estimators remain unbiased but are no longer the most efficient linear estimators. WLS addresses this inefficiency by incorporating information about the relative precision of individual observations into the fitting procedure.
+Ordinary Least Squares assigns the same importance to every squared residual. However, the least-squares framework can be generalized by allowing different observations to contribute differently to the objective function.
 
-Motivation and intuition  
-- Heteroscedasticity means some observations are inherently more variable than others. Treating all observations as equally informative gives undue influence to noisy points and reduces overall estimation precision.  
-- WLS assigns each observation a weight that reflects its reliability: observations with smaller error variance receive larger weight, and those with larger error variance receive smaller weight. In effect, the method downweights noisy observations and upweights precise ones, producing estimates that place greater trust in the most informative data.  
-- In the ideal case, weights are chosen to be inversely related to the true error variances; this makes the weighted estimator the most efficient among linear unbiased estimators under the model.
+Let $w_1,\ldots,w_n$ be fixed positive weights. Instead of minimizing the ordinary residual sum of squares,
 
-In a simple linear regression model with one explanatory variable, OLS minimizes the sum of squared residuals:
-
-$$ \min \sum_{i=1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2
+$$
+Q(\beta_0,\beta_1)
+=
+\sum_{i=1}^{n}
+(y_i-\beta_0-\beta_1x_i)^2,
 $$
 
-Weighted Least Squares (WLS) corrects for heteroscedasticity by minimizing the weighted sum of squared residuals:
+Weighted Least Squares (WLS) minimizes the **weighted residual sum of squares**
+
 $$
-\min \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
+Q_w(\beta_0,\beta_1)
+=
+\sum_{i=1}^{n}
+w_i(y_i-\beta_0-\beta_1x_i)^2.
 $$
+
+Thus, the Weighted Least Squares estimates are defined by
+
+$$
+(\hgb_0^w,\hgb_1^w)
+=
+\underset{(\beta_0,\beta_1)\in\mathbb{R}^2}{\operatorname{argmin}}
+\;
+Q_w(\beta_0,\beta_1).
+$$
+
+An observation with a larger value of $w_i$ contributes more to the objective function, while an observation with a smaller value contributes less. At this point, the weights are treated simply as **given constants defining the optimization problem**. Their statistical interpretation and methods for choosing them will be considered later, once probability and variance assumptions have been introduced.
+
+When $w_i=1$ for every $i$, the weighted objective reduces to the ordinary least-squares objective. Thus, OLS is a special case of WLS.
+
+### Weighted Quantities
+
+The solution to the WLS problem has a form analogous to the OLS solution. To make this relationship explicit, define the following quantities.
+
+```{definition, def-weighted-mean, name="Weighted Mean"}
+Given observations $\{x_i\}_{i=1}^n$, and positive fixed weights $w_1,\ldots,w_n$, then the weighted mean of the observations is given by:
+$$
+\bar{x}^w
+=
+\frac{\sum_{i=1}^{n}w_ix_i}
+{\sum_{i=1}^{n}w_i}
+$$
+```
+
+These quantity play the same role for WLS that the mean play for OLS.
+
+```{definition, def-weighted-variance, name="Weighted Variance"}
+Given observations $\{x_i\}_{i=1}^n$, and positive fixed weights $w_1,\ldots,w_n$, then the weighted variance of the observations is given by:
+$$
+S_{xx}^w=\frac{1}{\sum_{i=1}^n w_i}\sum_{i=1}^{n}w_i(x_i-\bar{x}^w)^2.
+$$
+```
+
+When the weights are positive, this quantity is positive whenever the $x_i$ values are not all identical. This condition guarantees that the weighted slope is uniquely determined.
+
+```{definition, def-weighted-covariance, name="Weighted Covariance"}
+Given observations $\{x_i\}_{i=1}^n$, $\{y_i\}_{i=1}^n$, and positive fixed weights $w_1,\ldots,w_n$, then the weighted covariance of the observations is given by:
+$$
+S_{xy}^w=\frac{1}{\sum_{i=1}^n w_i}\sum_{i=1}^{n}w_i(x_i-\bar{x}^w)(y_i-\bar{y}^w).
+$$
+```
+
+Notice that the normalization used in the definitions of $S_{xx}^w$ and $S_{xy}^w$ is different from the normalization used earlier for $S_{xx}$ and $S_{xy}$. In particular, if all weights are equal to one,
+
+$$
+  S_{xx}^w
+=
+  \frac{1}{n}\sum_{i=1}^n(x_i-\bar{x})^2
+=
+  \frac{n-1}{n}S_{xx},
+$$
+  
+  and similarly,
+
+$$
+  S_{xy}^w
+=
+  \frac{1}{n}\sum_{i=1}^n(x_i-\bar{x})(y_i-\bar{y})
+=
+  \frac{n-1}{n}S_{xy}.
+$$
+  
+  Thus, $S_{xx}^w$ and $S_{xy}^w$ do not individually reduce to the previously defined $S_{xx}$ and $S_{xy}$. However, they differ from them by the same multiplicative factor. Consequently,
+
+$$
+  \frac{S_{xy}^w}{S_{xx}^w}
+=
+  \frac{S_{xy}}{S_{xx}}
+$$
+  
+  when all weights are equal, so the WLS slope reduces to the OLS slope.
+  
+
+```{proposition, prp-alternative-variance-covariance, name="Alternative Weighted Variance and Covariance"}
+Let $w_i>0$ for every $i$, then the weighted variance and covariance, can be erpressed as:
+$$
+S_{xx}^w = \frac{1}{\sum_{i=1}w_i}  \left( \sum_{i=1}^n  w_i x_i^2 - (\bar{x}^w)^2  \sum_{i=1}w_i \right) 
+$$
+  and
+$$
+S_{xy}^w = \frac{1}{\sum_{i=1}w_i}  \left( \sum_{i=1}^n  w_i x_i y_i - \bar{x}^w \bar{y}^w \sum_{i=1}w_i \right) 
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+First, consider the weighted variance. By definition,
+
+\begin{align*}
+S_{xx}^w
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \sum_{i=1}^n w_i(x_i-\bar{x}^w)^2
+    & \text{def. } S_{xx}^w \\
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \sum_{i=1}^n
+     w_i\left(x_i^2-2x_i\bar{x}^w+(\bar{x}^w)^2\right)
+    & \text{exp. sq.} \\
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \left(
+       \sum_{i=1}^n w_i x_i^2
+       -2\bar{x}^w\sum_{i=1}^n w_i x_i
+       +(\bar{x}^w)^2\sum_{i=1}^n w_i
+     \right)
+    & \text{lin. sum} \\
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \left(
+       \sum_{i=1}^n w_i x_i^2
+       -2\bar{x}^w
+       \left(
+         \bar{x}^w\sum_{i=1}^n w_i
+       \right)
+       +(\bar{x}^w)^2\sum_{i=1}^n w_i
+     \right)
+    & \text{def. } \bar{x}^w \\
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \left(
+       \sum_{i=1}^n w_i x_i^2
+       -2(\bar{x}^w)^2\sum_{i=1}^n w_i
+       +(\bar{x}^w)^2\sum_{i=1}^n w_i
+     \right)
+    & \\
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \left(
+       \sum_{i=1}^n w_i x_i^2
+       -(\bar{x}^w)^2\sum_{i=1}^n w_i
+     \right)
+    & \text{sim.}
+\end{align*}
+
+
+Now consider the weighted covariance. By definition,
+
+\begin{align*}
+S_{xy}^w
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \sum_{i=1}^n w_i(x_i-\bar{x}^w)(y_i-\bar{y}^w) 
+    & \text{def. } S_{xy}^w \\
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \sum_{i=1}^n w_i 
+     \left(
+       x_i y_i
+       -x_i\bar{y}^w
+       -\bar{x}^w y_i
+       +\bar{x}^w\bar{y}^w
+     \right)
+    & \text{exp. pro.} \\
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \left(
+       \sum_{i=1}^n w_i x_i y_i
+       -\bar{y}^w\sum_{i=1}^n w_i x_i
+       -\bar{x}^w\sum_{i=1}^n w_i y_i
+       +\bar{x}^w\bar{y}^w\sum_{i=1}^n w_i
+     \right)
+    & \text{lin. sum} \\
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \left(
+       \sum_{i=1}^n w_i x_i y_i
+       -\bar{y}^w
+       \left(
+         \bar{x}^w\sum_{i=1}^n w_i
+       \right)
+       -\bar{x}^w
+       \left(
+         \bar{y}^w\sum_{i=1}^n w_i
+       \right)
+       +\bar{x}^w\bar{y}^w\sum_{i=1}^n w_i
+     \right)
+    & \text{def. } \bar{x}^w, \bar{y}^w \\
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \left(
+       \sum_{i=1}^n w_i x_i y_i
+       -\bar{x}^w\bar{y}^w\sum_{i=1}^n w_i
+       -\bar{x}^w\bar{y}^w\sum_{i=1}^n w_i
+       +\bar{x}^w\bar{y}^w\sum_{i=1}^n w_i
+     \right)
+    & \text{} \\
+  &= \frac{1}{\sum_{i=1}^n w_i}
+     \left(
+       \sum_{i=1}^n w_i x_i y_i
+       -\bar{x}^w\bar{y}^w\sum_{i=1}^n w_i
+     \right)
+    & \text{sim.} \\
+\end{align*}
+
+</details>
+
+***
+
+### Solution to WLS
+
+Now we move to solve the WLS problem.
 
 ```{proposition, prp-weighted-least-squares-estimators, name="Weighted Least Squares Estimators"}
-The solution to the Weithed Least Squares problem:
-$$
-\min_{\beta_0,\beta_1} \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
-$$
-is given by:
-$$\hgb_1^w = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}},$$
+Let $w_i>0$ for every $i$, and suppose that the $x_i$ values are not all identical. Then the Weighted Least Squares problem
 
-$$\hgb_0^w = \frac{\sum_{i=1}^{n} w_i y_i - \beta_1^w \sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}.$$
+$$
+\min_{\beta_0,\beta_1}
+\sum_{i=1}^{n}
+w_i(y_i-\beta_0-\beta_1x_i)^2
+$$
+
+has a unique solution given by
+
+$$
+\hgb_1^w
+=
+\frac{S_{xy}^w}{S_{xx}^w},
+$$
+
+and
+
+$$
+\hgb_0^w = \bar{y}^w-\hgb_1^w \bar{x}^w.
+$$
 ```
 
 <details><summary><span style="color:green">Proof</span></summary>
 ```{proof, pro-weighted-least-squares-estimators}
 First define the weighted residual sum of squares, the objective function, as:
 $$Q_w(\beta_0, \beta_1) = \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2$$
-We aim to minimize $Q(\beta_0, \beta_1)$ with respect to $\beta_0$ and $\beta_1$.
+We aim to minimize $Q_w(\beta_0, \beta_1)$ with respect to $\beta_0$ and $\beta_1$.
 We will do so by finding its critical points.
 \begin{align*}
 \frac{\partial Q_w}{\partial \beta_0}  
   &= \frac{\partial}{\partial \beta_0} \sum_{i=1}^{n} w_i (y_i - \beta_0 - \beta_1 x_i)^2
     & \text{def. } Q_w \\
   &= \sum_{i=1}^{n} \frac{\partial}{\partial \beta_0} w_i (y_i - \beta_0 - \beta_1 x_i)^2
-    & \text{lin. dev.} \\
+    & \text{lin. der.} \\
   &= \sum_{i=1}^{n} -2  w_i (y_i - \beta_0 - \beta_1 x_i)
-    & \\
+    & \text{der.} \\
   &= \sum_{i=1}^{n} -2  \left( w_i y_i - w_i \beta_0 - w_i \beta_1 x_i \right)
     & \\
   &= -2  \sum_{i=1}^{n} w_i y_i + 2 \beta_0 \sum_{i=1}^{n} w_i + 2 \beta_1 \sum_{i=1}^{n} w_i x_i
@@ -2334,41 +2676,389 @@ First, we solve for \( \beta_1 \) by multiplying equation (1) by $\frac{\sum_{i=
   &\implies \beta_1 \left( \sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i} \right) = \sum_{i=1}^{n} w_i y_i x_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}
     & \\
   &\implies \beta_1 = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}}
-    & \\
+    &
 \end{align*}
-Then the weighted estimators for $\beta_0$ and $\beta_1$ are:
-$$\hgb_1^w = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}},$$
 
-$$\hgb_0^w = \frac{\sum_{i=1}^{n} w_i y_i - \beta_1 \sum_{i=1}^{n} w_i x_i}{\sum_{i=1}^{n} w_i}.$$
+Now using the wighted quantities definition we have that:
+  
+\begin{align*}
+\beta_1
+  & = \frac{\sum_{i=1}^{n} w_i x_i y_i - \frac{\sum_{i=1}^{n} w_i x_i \sum_{i=1}^{n} w_i y_i}{\sum_{i=1}^{n} w_i}}{\sum_{i=1}^{n} w_i x_i^2 - \frac{\left( \sum_{i=1}^{n} w_i x_i \right)^2}{\sum_{i=1}^{n} w_i}}
+    & \\
+  & = \frac{\sum_{i=1}^{n} w_i x_i y_i - \bar{x}^w \bar{y}^w \sum_{i=1}^{n} w_i}{\sum_{i=1}^{n} w_i x_i^2 - (\bar{x}^w)^2 \sum_{i=1}^{n} w_i}
+    & \text{def. } \bar{x}^w, \bar{y}^w \\
+  & = \frac{\frac{1}{\sum_{i=1}^{n} w_i} \left( \sum_{i=1}^{n} w_i x_i y_i - \bar{x}^w \bar{y}^w \sum_{i=1}^{n} w_i \right)}{\frac{1}{\sum_{i=1}^{n} w_i} \left( \sum_{i=1}^{n} w_i x_i^2 - (\bar{x}^w)^2 \sum_{i=1}^{n} w_i \right)}
+    &  \\
+  & = \frac{S_{xy}^w}{S_{xx}^w}
+    & \text{def. } S_{xx}^w, S_{xy}^w 
+\end{align*}
+
+Now, going back to equation 1, we have that:
+
+\begin{align*}
+\sum_{i=1}^{n} w_i y_i = \beta_0 \sum_{i=1}^{n} w_i + \beta_1 \sum_{i=1}^{n} w_i x_i
+  & \implies \beta_0 \sum_{i=1}^{n} w_i = \sum_{i=1}^{n} w_i y_i - \beta_1 \sum_{i=1}^{n} w_i x_i 
+    & \\
+  & \implies \beta_0 \sum_{i=1}^{n} w_i = \bar{y}^w \sum_{i=1}^{n} w_i - \beta_1 \bar{x}^w \sum_{i=1}^{n} w_i 
+    & \text{def. } \bar{x}^w, \bar{y}^w \\
+  & \implies \beta_0  = \bar{y}^w - \beta_1 \bar{x}^w 
+    & \text{sim. } \\
+\end{align*}
+
+Then, the weighted estimators are given by:
+  
+$$
+\hat{\beta}_1^w = \frac{S_{xy}^w}{S_{xx}^w}
+$$
+  
+and
+
+$$
+\hat{\beta}_0^w = \bar{y}^w - \hat{\beta}_1^w \bar{x}^w
+$$
+  
+Finally, we verify that the critical point obtained above is indeed a minimum. Consider the second partial derivatives of $Q_w(\beta_0,\beta_1)$:
+
+\begin{align*}
+\frac{\partial^2 Q_w}{\partial \beta_0^2}
+  &= \frac{\partial}{\partial \beta_0}
+    \left[
+      -2\left(
+        \sum_{i=1}^n w_i y_i -\beta_0\sum_{i=1}^n w_i -\beta_1\sum_{i=1}^n w_i x_i
+      \right)
+    \right]
+  & \\
+  &= 2\sum_{i=1}^n w_i
+  &
+\end{align*}
+
+Similarly,
+
+\begin{align*}
+\frac{\partial^2 Q_w}{\partial \beta_1^2}
+  &= \frac{\partial}{\partial \beta_1}
+    \left[
+     -2\left(
+        \sum_{i=1}^n w_i y_i x_i
+        -\beta_0\sum_{i=1}^n w_i x_i
+        -\beta_1\sum_{i=1}^n w_i x_i^2
+      \right)
+    \right]
+  & \\
+  &= 2\sum_{i=1}^n w_i x_i^2
+  &
+\end{align*}
+
+and
+
+\begin{align*}
+\frac{\partial^2 Q_w}{\partial \beta_0\partial\beta_1}
+  &= \frac{\partial}{\partial \beta_1}
+    \left[
+      -2\left(
+        \sum_{i=1}^n w_i y_i
+        -\beta_0\sum_{i=1}^n w_i
+        -\beta_1\sum_{i=1}^n w_i x_i
+      \right)
+    \right]
+  & \\
+  &= 2\sum_{i=1}^n w_i x_i.
+  &
+\end{align*}
+
+Therefore, the Hessian matrix of $Q_w$ is
+
+$$
+\mathbf{H}_{Q_w} = 2
+\begin{bmatrix}
+  \sum_{i=1}^n w_i
+  & \sum_{i=1}^n w_i x_i \\
+  \sum_{i=1}^n w_i x_i
+  & \sum_{i=1}^n w_i x_i^2
+\end{bmatrix}.
+$$
+
+To show that the critical point is a strict minimum, we show that $\mathbf{H}_{Q_w}$ is positive definite. The first leading principal minor is
+
+\begin{align*}
+[\mathbf{H}_{Q_w}]_1
+  &= 2\sum_{i=1}^n w_i
+  & \\
+  &>0
+  & w_i>0 \forall i.
+\end{align*}
+
+The determinant of the Hessian is
+
+\begin{align*}
+\det(\mathbf{H}_{Q_w})
+  &= 
+    4\left[
+      \left(\sum_{i=1}^n w_i\right) \left(\sum_{i=1}^n w_i x_i^2\right) - \left(\sum_{i=1}^n w_i x_i\right)^2
+    \right]
+  & \\
+  &= 
+    4\left[
+      \left(\sum_{i=1}^n w_i\right) \left(\sum_{i=1}^n w_i x_i^2\right) - \left(\bar{x}^w\sum_{i=1}^n w_i\right)^2
+    \right]
+  & \text{def. } \bar{x}^w \\
+  &= 
+    4\left[
+      \left(\sum_{i=1}^n w_i\right) \left(\sum_{i=1}^n w_i x_i^2\right) - (\bar{x}^w)^2 \left(\sum_{i=1}^n w_i\right)^2
+    \right]
+  & \\
+  &= 
+    4\left(\sum_{i=1}^n w_i\right)^2 \left[\frac{\sum_{i=1}^n w_i x_i^2} {\sum_{i=1}^n w_i}-(\bar{x}^w)^2\right]
+  & \text{factor} \\
+  &= 4\left(\sum_{i=1}^n w_i\right)^2 S_{xx}^w
+  & \text{def. } S_{xx}^w.
+\end{align*}
+
+Since the $x_i$ values are not all identical and $w_i>0$ for every $i$, and $S_{xx}^w>0$, then
+
+$$
+\det(\mathbf{H}_{Q_w})>0.
+$$
+
+Since the first leading principal minor is positive and the determinant is positive, $\mathbf{H}_{Q_w}$ is positive definite. Therefore, $Q_w(\beta_0,\beta_1)$ is strictly convex, and its critical point is its unique global minimum.
+
+Hence,
+
+$$
+\hat{\beta}_1^w=\frac{S_{xy}^w}{S_{xx}^w}
+$$
+
+and
+
+$$
+\hat{\beta}_0^w=\bar{y}^w-\hat{\beta}_1^w\bar{x}^w
+$$
+
+are the unique minimizers of the Weighted Least Squares objective.
+
 ```
 </details>
 
-How weights are determined?
 
-* When the error variances are known a priori, weights can be set directly in inverse proportion to those variances.  
-* In practice, true variances are usually unknown. Weights are therefore often based on estimates or proxies for the variances—obtained from repeated measurements, external information, or preliminary residual analysis. Iterative procedures can be used to refine weights if needed.  
-* Choosing appropriate weights is crucial: good weights improve efficiency and inference, whereas poorly chosen weights can degrade performance.
 
-Implementation and relationship to OLS:
+The weighted-mean representation makes the connection with OLS immediate. The WLS slope is obtained by comparing weighted deviations of $x_i$ and $y_i$ from their corresponding weighted means, while the intercept ensures that the fitted line passes through the **weighted centroid**
 
-* WLS reduces to OLS when all weights are equal; thus OLS is a special case of WLS.  
-* Implementation typically entails reweighting observations and solving the weighted normal equations; many statistical software packages provide direct WLS fitting routines.  
-* It is important to record and use the same weights for prediction and validation to maintain consistency.
+$$
+(\bar{x}^w,\bar{y}^w).
+$$
 
-Diagnostics and when to consider WLS:
+***
 
-* Residual plots that show changing spread with the predictor or fitted values suggest heteroscedasticity and motivate consideration of WLS.  
-* Even when heteroscedasticity is modest, WLS can improve precision; where heteroscedasticity is severe, it can substantially alter conclusions.
+### Weighted Normal Equations
 
-Limitations and cautions:
+If we define the WLS residuals by
 
-* Weight specification is critical. If weights do not reflect the actual variance structure, WLS may not improve and can even worsen inference.  
-* When reliable information about the variance structure is unavailable, robust (heteroscedasticity‑consistent) standard errors or other methods may be preferable to poorly specified weighting.  
-* WLS addresses nonconstant variance but does not by itself resolve other model problems such as nonlinearity, omitted variables, or influential outliers.
+$$
+\hat{e}_i^w
+=
+y_i-\hgb_0^w-\hgb_1^wx_i,
+$$
 
-**Summary**
+the first-order conditions used in the derivation can be written as
 
-Weighted Least Squares adapts the least‑squares framework to give more influence to precise observations and less to noisy ones, restoring efficiency when error variances vary across observations. The guiding principle is straightforward: lower variance implies higher weight, and higher variance implies lower weight. Effective use of WLS depends on sensible choices or estimates of the weights and appropriate calculation of standard errors for valid inference.
+$$
+\sum_{i=1}^{n}w_i\hat{e}_i^w=0
+$$
+
+and
+
+$$
+\sum_{i=1}^{n}w_ix_i\hat{e}_i^w=0.
+$$
+
+These are the **weighted normal equations**.
+
+To interpret these equations geometrically, define the weighted inner product between two vectors $\mathbf{a},\mathbf{b}\in\mathbb{R}^n$ as
+
+```{definition, def-weighted-inner-product, name="Weighted Inner Product"}
+Given vectors $\mathbf{a}=(a_1,\ldots,a_n)'$ and $\mathbf{b}=(b_1,\ldots,b_n)'$, and positive fixed weights $w_1,\ldots,w_n$, the weighted inner product is defined as
+
+$$
+\langle\mathbf{a},\mathbf{b}\rangle_w
+=
+\sum_{i=1}^n w_i a_i b_i.
+$$
+```
+
+Let
+
+$$
+\hat{\mathbf{e}}^w
+=
+(\hat{e}_1^w,\ldots,\hat{e}_n^w)',
+$$
+
+$$
+\mathbf{1}
+=
+(1,\ldots,1)',
+$$
+
+and
+
+$$
+\mathbf{x}
+=
+(x_1,\ldots,x_n)'.
+$$
+
+Then the weighted normal equations can be written as
+
+$$
+\langle\hat{\mathbf{e}}^w,\mathbf{1}\rangle_w
+=
+0
+$$
+
+and
+
+$$
+\langle\hat{\mathbf{e}}^w,\mathbf{x}\rangle_w
+=
+0.
+$$
+
+Thus, the weighted residual vector is orthogonal, under the weighted inner product, to both the constant vector $\mathbf{1}$ and the explanatory-variable vector $\mathbf{x}$.
+
+The first weighted normal equation also states that the residuals have weighted mean zero:
+
+$$
+\frac{\sum_{i=1}^{n}w_i\hat{e}_i^w}
+{\sum_{i=1}^{n}w_i}
+=
+0.
+$$
+
+It also provides another way to obtain the intercept. Since
+
+$$
+\sum_{i=1}^{n}
+w_i
+(y_i-\hgb_0^w-\hgb_1^wx_i)
+=
+0,
+$$
+
+dividing by $\sum_{i=1}^{n}w_i$ gives
+
+$$
+\bar{y}^w-\hgb_0^w-\hgb_1^w\bar{x}^w=0,
+$$
+
+and therefore
+
+$$
+\hgb_0^w
+=
+\bar{y}^w-\hgb_1^w\bar{x}^w.
+$$
+
+Consequently,
+
+$$
+\hat{y}(\bar{x}^w)
+=
+\hgb_0^w+\hgb_1^w\bar{x}^w
+=
+\bar{y}^w.
+$$
+
+Thus, just as the OLS fitted line passes through $(\bar{x},\bar{y})$, the WLS fitted line passes through the weighted centroid
+
+$$
+(\bar{x}^w,\bar{y}^w).
+$$
+
+We can also show that the weighted residuals are orthogonal to the fitted values. Define
+
+$$
+\hat{\mathbf{y}}^w
+=
+\hgb_0^w\mathbf{1}
++
+\hgb_1^w\mathbf{x}.
+$$
+
+Then,
+
+\begin{align*}
+\left\langle
+\hat{\mathbf{e}}^w,
+\hat{\mathbf{y}}^w
+\right\rangle_w
+&=
+\left\langle
+\hat{\mathbf{e}}^w,
+\hgb_0^w\mathbf{1}
++
+\hgb_1^w\mathbf{x}
+\right\rangle_w
+& \text{def. } \hat{\mathbf{y}}^w \\
+&=
+\hgb_0^w
+\left\langle
+\hat{\mathbf{e}}^w,\mathbf{1}
+\right\rangle_w
++
+\hgb_1^w
+\left\langle
+\hat{\mathbf{e}}^w,\mathbf{x}
+\right\rangle_w
+& \text{lin. inn. pro.} \\
+&=
+\hgb_0^w(0)+\hgb_1^w(0)
+& \text{weighted normal eq.} \\
+&=
+0.
+&
+\end{align*}
+
+Therefore,
+
+$$
+\left\langle
+\hat{\mathbf{e}}^w,
+\hat{\mathbf{y}}^w
+\right\rangle_w
+=
+0.
+$$
+
+Hence, under the weighted inner product, the WLS residuals are orthogonal to the fitted values, exactly paralleling the corresponding OLS property.
+
+***
+
+### Choice of Weights
+
+For the present chapter, the weights $w_1,\ldots,w_n$ are treated as **given positive constants**. They determine how strongly each observation contributes to the optimization criterion.
+
+The statistical question of how weights should be chosen from information about the variability of the observations is postponed until the probabilistic regression model has been introduced. At that point, the connection between WLS, nonconstant variances, efficiency, and statistical inference can be developed from the appropriate assumptions rather than assumed here.
+
+One useful property that can already be established without probability is that multiplying every weight by the same positive constant does not change the solution. For any $c>0$,
+
+$$
+\sum_{i=1}^{n}
+cw_i(y_i-\beta_0-\beta_1x_i)^2
+=
+cQ_w(\beta_0,\beta_1).
+$$
+
+Since multiplying the objective function by a positive constant does not change its minimizer, the weights determine only the **relative importance** of the observations.
+
+***
+
+### Role of Weighted Least Squares
+
+At this stage of the course, WLS should be viewed as another **least-squares optimization problem**.
+
+OLS minimizes ordinary Euclidean squared error, while WLS modifies the loss function by assigning different contributions to different observations. The fundamental optimization ideas remain the same: define an objective function, derive its first-order conditions, solve the resulting normal equations, and study the geometry and properties of the fitted values and residuals.
+
+No probabilistic justification for a particular choice of weights is required here. The statistical motivation for WLS will follow later from the regression model once assumptions about the mean and variance of the errors have been introduced.
 
 ***
 
@@ -2391,11 +3081,15 @@ We can specify the same model as in [Model](#slr-model), in matrix form as follo
 $$\by = \bX \bgb + \be$$
 where:
 
-* $\by={y_1,\ldots,y_n}'$
-* $\be={e_1,\ldots,e_n}'$
-* $\bgb={\beta_0,\beta_1}'$
-* $\bX=\begin{bmatrix}𝟙  & \bx \end{bmatrix}$
-* $𝟙={1,\ldots,1}'$ (1 $n$-times).
+$$ \mathbf y= \begin{bmatrix} y_1\\ \vdots\\ y_n \end{bmatrix}, \qquad
+\mathbf e= \begin{bmatrix} e_1\\ \vdots\\ e_n \end{bmatrix}, \qquad 
+\boldsymbol\beta= \begin{bmatrix} \beta_0\\ \beta_1 \end{bmatrix}, $$
+
+and
+
+$$ \mathbf X= \begin{bmatrix} 1 & x_1\\ \vdots & \vdots\\ 1 & x_n \end{bmatrix} = 
+\begin{bmatrix} \mathbb 1 & \mathbf x \end{bmatrix}. $$
+
 
 In this way we can re-write our minimization problem as follows:
 
@@ -2405,7 +3099,7 @@ equivalent to:
 $$\min_{\bgb} Q(\bgb) = \left( \by'\by - \by'\bX\bgb - \bgb'\bX'\by + \bgb'\bX'\bX\bgb \right)$$
 
 ```{proposition, prp-lse-matrix-solution}
-The solution to the Least Squres minimization problem in matrix form is given by:
+Suppose $\mathbf X$ has full column rank, equivalently in SLR, $\mathbf x$ is not constant, then solution to the Least Squres minimization problem in matrix form is given by:
   $$\hat{\bgb} = \left(\bX' \bX \right)^{-1}\bX'\by$$
 ```
 
@@ -2413,12 +3107,12 @@ The solution to the Least Squres minimization problem in matrix form is given by
 ```{proof, pro-lse-matrix-solution}
 The procedure to find the estimators is very similar, working with the gradient
 instead of the partial derivatives:
-$$\nabla_\beta Q = \mathbf{0} $$
+$$\nabla_{\boldsymbol\beta} Q = \mathbf{0} $$
   Now
-$$\nabla_\beta Q = -\bX'\by -\bX'\by + 2 \bX' \bX \bgb $$
+$$\nabla_{\boldsymbol\beta} Q = -\bX'\by -\bX'\by + 2 \bX' \bX \bgb $$
 Then, making the gradient equal to zero, we have:
 \begin{align*}
-\nabla_\beta Q
+\nabla_{\boldsymbol\beta} Q
   &= 0
     & \\
   & \implies -\bX'\by -\bX'\by + 2 \bX' \bX \bgb = 0
@@ -2431,23 +3125,26 @@ Then, making the gradient equal to zero, we have:
 \end{align*}
 Notice how we find the estimates much easier. It is also easy to show that a
 minimum is attained by computing the **Hessian Matrix** of $Q$
-  The Hessian matrix is given by:
-$$H_Q = 2 \bX' \bX$$
-Notice that
-$$ \bX' \bX$$
-is [positive-definite](#positive-definite-matrix) if $\bx$ is not a constant vector.
-  This shows that the solution is indeed a minimum.
+
+The Hessian matrix is given by:
+$$\bH_Q = 2 \bX' \bX$$
+
+Since $\mathbf X$ has full column rank, then
+
+$$ \mathbf a'\mathbf X'\mathbf X\mathbf a = \|\mathbf X\mathbf a\|^2>0 $$
+
+for every nonzero $\mathbf a$. Thus the Hessian is [positive-definite](#positive-definite-matrix) and the solution is the unique global minimum.
 ```
 </details>
 
 ```{proposition, prp-lse-matrix-solution-equal}
-The solution to the Least Squres minimization problem in matrix form is given by 
+The solution to the Least Squres minimization problem in matrix form is given
 is equivalent to the solution in of the model expressed in scalar form.
 ```
 
 <details><summary><span style="color:green">Proof</span></summary>
 ```{proof, pro-lse-lse-matrix-solution-equal}
-We need to show that each of the components of $\hat{\bgb} = (\hat{\beta}_0,\hat{\beta_1})$
+We need to show that each of the components of $\hat{\bgb} = (\hat{\beta}_0,\hat{\beta_1})'$
   are the same of the scalar solution. To do so, we need to go through the matrix
 computations.
 \begin{align*}
@@ -2535,7 +3232,7 @@ Combining all of this operations we have that:
 
 \begin{align*}
 \hat{\bgb}
-  &= (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}
+  &= (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}^' \mathbf{y}
     & \\
   &= \frac{1}{n \sum_{i=1}^n x_i^2 - n^2 \left( \bar{x} \right)^2}
     \begin{bmatrix}
@@ -2558,13 +3255,13 @@ Combining all of this operations we have that:
       n \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
       n \left( \sum_{i=1}^n x_i y_i - n \bar{y} \bar{x} \right)   
     \end{bmatrix} 
-    & S{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1} \\
+    & S_{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1} \\
   &= \frac{1}{n(n-1)S_{xx}}
     \begin{bmatrix}
       n \left( \bar{y} \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^n x_i y_i \right) \\
-      n (n-1) S{xy}   
+      n (n-1) S_{xy}   
     \end{bmatrix} 
-    & S{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
+    & S_{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
 \end{align*}
 
 Now, notice that:
@@ -2574,37 +3271,37 @@ Now, notice that:
       & \text{adding 0} \\
     &= \bar{y} \left(\sum_{i=1}^n x_i^2 -n \bar{x}^2 \right) + \bar{x}\left(n \bar{y}\bar{x} - \sum_{i=1}^n x_i y_i \right)
       & \\
-    &= \bar{y} (n-1)S_{xx} - \bar{x}(n-1)S_{yx}
-      & S{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1}, S{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
-    &= (n-1)\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right)
-      & S{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1}, S{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
+    &= \bar{y} (n-1)S_{xx} - \bar{x}(n-1)S_{xy}
+      & S_{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1}, S_{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
+    &= (n-1)\left(\bar{y} S_{xx} - S_{xy} \bar{x} \right)
+      & S_{xx}=\frac{\sum_{i=1}^n x_i^2 - n \left( \bar{x} \right)^2}{n-1}, S_{xy}=\frac{\sum_{i=1}^n x_iy_i - n \bar{x}\bar{y}}{n-1} \\
 \end{align*}
 Then we have that:
 \begin{align*}
 \hat{\bgb}
   &= \frac{1}{n(n-1)S_{xx}}
     \begin{bmatrix}
-      n (n-1)\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right) \\
-      n (n-1) S{xy}   
+      n (n-1)\left(\bar{y} S_{xx} - S_{xy} \bar{x} \right) \\
+      n (n-1) S_{xy}   
     \end{bmatrix}
     & \\
   &= \begin{bmatrix}
-      \frac{n (n-1)\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right)}{n(n-1)S_{xx}} \\
-      \frac{n (n-1) S{xy}}{n(n-1)S_{xx}}   
+      \frac{n (n-1)\left(\bar{y} S_{xx} - S_{xy} \bar{x} \right)}{n(n-1)S_{xx}} \\
+      \frac{n (n-1) S_{xy}}{n(n-1)S_{xx}}   
     \end{bmatrix}
     & \\
   &= \begin{bmatrix}
-      \frac{\left(\bar{y} S_{xx} - S_{yx} \bar{x} \right)}{S_{xx}} \\
-      \frac{S{xy}}{S_{xx}}   
+      \frac{\left(\bar{y} S_{xx} - S_{xy} \bar{x} \right)}{S_{xx}} \\
+      \frac{S_{xy}}{S_{xx}}   
     \end{bmatrix}
     & \\
   &= \begin{bmatrix}
-      \frac{\bar{y} S_{xx}}{S_{xx}} - \frac{S_{yx} \bar{x}}{S_{xx}} \\
+      \frac{\bar{y} S_{xx}}{S_{xx}} - \frac{S_{xy} \bar{x}}{S_{xx}} \\
       \hat{\beta}_1   
     \end{bmatrix}
-    & \hat{\beta}_1 = \frac{S{xy}}{S_{xx}}\\
+    & \hat{\beta}_1 = \frac{S_{xy}}{S_{xx}}\\
   &= \begin{bmatrix}
-      \bar{y} - \bar{x}\frac{S_{yx}}{S_{xx}} \\
+      \bar{y} - \bar{x}\frac{S_{xy}}{S_{xx}} \\
       \hat{\beta}_1   
     \end{bmatrix}
     & \\
@@ -2612,7 +3309,7 @@ Then we have that:
       \bar{y} - \bar{x}\hat{\beta}_1 \\
       \hat{\beta}_1   
     \end{bmatrix}
-    & \hat{\beta}_1 = \frac{S{xy}}{S_{xx}}\\
+    & \hat{\beta}_1 = \frac{S_{xy}}{S_{xx}}\\
 \end{align*}
 ```
 </details>
@@ -2638,17 +3335,28 @@ $$\bW = \left[\begin{matrix}
 
 
 ```{proposition, prp-weighted-least-squares-estimators-matrix, name="Weighted Least Squares Estimators in Matrix Form"}
-The solution to the Weithed Least Squares problem in matrix form:
-$$
-\min_{\bgb} (\by - \bX \bgb)'\bW (\by - \bX \bgb)
-$$
-is given by:
-$$\hat{\bgb}^w = \left(\bX'\bW\bX\right)^{-1}\bX'\bW\by $$
+Let
+$$ \mathbf{W} = \operatorname{diag}(w_1,\ldots,w_n), $$ 
+where $w_i>0$ for every $i$, and suppose that $\mathbf{X}$ has full column rank. Then the Weighted Least Squares problem 
+$$ \min_{\boldsymbol{\beta}} (\mathbf{y}-\mathbf{X}\boldsymbol{\beta})' \mathbf{W} (\mathbf{y}-\mathbf{X}\boldsymbol{\beta}) $$ has the unique solution $$ \hat{\boldsymbol{\beta}}^w = (\mathbf{X}'\mathbf{W}\mathbf{X})^{-1} \mathbf{X}'\mathbf{W}\mathbf{y}. $$
 ```
 
 <details><summary><span style="color:green">Proof</span></summary>
 ```{proof, pro-weighted-least-squares-estimators-matrix}
-Note we can write the objective function as:
+Before doing the derivative, we have that
+\begin{align*}
+\mathbf{a}'\mathbf{X}'\mathbf{W}\mathbf{X}\mathbf{a} 
+  &= (\mathbf{X}\mathbf{a})' \mathbf{W} (\mathbf{X}\mathbf{a}) 
+    & \text{assoc. matrix mult.} \\ 
+  &>0, 
+    & \text{if} \mathbf{X}\mathbf{a}\neq\mathbf{0}. 
+\end{align*} 
+
+Since $\mathbf{X}$ has full column rank, 
+
+$$ \mathbf{X}\mathbf{a}=\mathbf{0} \quad \iff \quad \mathbf{a}=\mathbf{0}. $$ Therefore, if $\mathbf{a}\neq\mathbf{0}$, then $\mathbf{X}\mathbf{a}\neq\mathbf{0}$. Since $\mathbf{W}$ is positive definite, $$ (\mathbf{X}\mathbf{a})' \mathbf{W} (\mathbf{X}\mathbf{a}) >0. $$ Hence, $$ \mathbf{a}'\mathbf{X}'\mathbf{W}\mathbf{X}\mathbf{a}>0 $$ for every nonzero $\mathbf{a}$, and therefore $\mathbf{X}'\mathbf{W}\mathbf{X}$ is positive definite. Since every positive definite matrix is invertible, $$ (\mathbf{X}'\mathbf{W}\mathbf{X})^{-1} $$ exists.
+
+Now we can write the objective function as:
   $$Q_w = \by'\bW\by -\by'\bW\bX\bgb - \bgb'\bX'\bW\by + \bgb'\bX'\bW\bX \bgb $$
 then computing the gradient we have that:
 \begin{align*}
@@ -2683,9 +3391,994 @@ And the Hessian Matrix is given by:
 
 $$H_{Q_w} = 2 \bX'\bW\bX$$
 
-which is positive-definite under the same conditions that before and if the entries
-of $\bW$ are positive.
+Since $\mathbf{X}'\mathbf{W}\mathbf{X}$ is positive definite, the weighted least-squares objective is strictly convex in $\boldsymbol{\beta}$. Therefore, this critical point is the unique global minimum.
 ```
 </details>
 
 Again, using matrix notation, the computations become much more easier.
+
+## Exercises
+
+The following exercises review the main ideas developed in this chapter. Some exercises focus on algebra and derivations, while others use R to examine the behavior of least squares, residuals, transformations, $R^2$, cross-validation, and weighted least squares.
+
+---
+
+### Least Squares Estimation
+
+#### Exercise 1
+
+Consider the following observations:
+
+| $x_i$ | $y_i$ |
+| ----: | ----: |
+|     1 |     4 |
+|     2 |     5 |
+|     3 |     8 |
+|     4 |    10 |
+|     5 |    13 |
+
+1. Compute $\bar{x}$ and $\bar{y}$.
+2. Compute $S_{xx}$ and $S_{xy}$.
+3. Use
+
+$$
+\hat{\beta}_1=\frac{S_{xy}}{S_{xx}}
+$$
+
+to compute the least-squares slope.
+4. Compute
+
+$$
+\hat{\beta}_0=\bar{y}-\hat{\beta}_1\bar{x}.
+$$
+
+5. Write the fitted regression line.
+6. Verify your calculations using `lm()` in R.
+
+---
+
+#### Exercise 2
+
+Suppose the following summaries are available for a data set:
+
+$$
+\bar{x}=12,\qquad
+\bar{y}=35,\qquad
+S_{xx}=16,\qquad
+S_{xy}=24.
+$$
+
+1. Compute $\hat{\beta}_1$.
+2. Compute $\hat{\beta}_0$.
+3. Find the fitted value when $x=12$.
+4. Explain why your answer in part 3 is related to $\bar{y}$.
+5. Explain why the original observations are not required to compute the least-squares estimates once these four summaries are known.
+
+---
+
+#### Exercise 3
+
+Starting from
+
+$$
+Q(\beta_0,\beta_1)
+=
+\sum_{i=1}^n
+(y_i-\beta_0-\beta_1x_i)^2,
+$$
+
+derive the two normal equations:
+
+$$
+\sum_{i=1}^n
+(y_i-\beta_0-\beta_1x_i)=0
+$$
+
+and
+
+$$
+\sum_{i=1}^n
+x_i(y_i-\beta_0-\beta_1x_i)=0.
+$$
+
+Then use the first normal equation to show that, at the least-squares solution,
+
+$$
+\hat{\beta}_0
+=
+\bar{y}-\hat{\beta}_1\bar{x}.
+$$
+
+---
+
+#### Exercise 4
+
+Suppose that
+
+$$
+x_1=x_2=\cdots=x_n.
+$$
+
+1. Compute
+
+$$
+\sum_{i=1}^n(x_i-\bar{x})^2.
+$$
+
+2. What happens to $S_{xx}$?
+3. Explain why
+
+$$
+\hat{\beta}_1=\frac{S_{xy}}{S_{xx}}
+$$
+
+cannot be computed.
+4. Explain, in terms of the explanatory variable, why a unique slope cannot be determined in this case.
+
+---
+
+### Fitted Values and Residuals
+
+#### Exercise 5
+
+Using the data from Exercise 1:
+
+1. Compute each fitted value
+
+$$
+\hat{y}_i
+=
+\hat{\beta}_0+\hat{\beta}_1x_i.
+$$
+
+2. Compute each residual
+
+$$
+\hat{e}_i=y_i-\hat{y}_i.
+$$
+
+3. Compute
+
+$$
+\sum_{i=1}^n\hat{e}_i.
+$$
+
+4. Compute
+
+$$
+\sum_{i=1}^n x_i\hat{e}_i.
+$$
+
+5. Verify the two results using the properties of the least-squares solution.
+
+---
+
+#### Exercise 6
+
+Read the Wine Data and fit the model used in the chapter.
+
+```r
+dat <- read.csv("Wine Data.csv")
+
+x <- dat$Glasses
+y <- dat$Years
+
+outReg <- lm(y ~ x)
+```
+
+Without using `outReg$residuals`:
+
+1. Compute the fitted values directly from `outReg$coefficients`.
+2. Compute the residuals directly from the fitted values.
+3. Verify that the sum of the residuals is approximately zero.
+4. Verify that the residuals and $\mathbf{x}$ are orthogonal by computing
+
+```r
+sum(x * residuals)
+```
+
+5. Verify that the residuals and fitted values are orthogonal.
+6. Compare `mean(y)` and `mean(fitted.values)`.
+
+Explain how each result corresponds to a property established in the chapter.
+
+---
+
+#### Exercise 7
+
+Show algebraically that if
+
+$$
+\sum_{i=1}^n\hat{e}_i=0,
+$$
+
+then
+
+$$
+\frac{1}{n}\sum_{i=1}^n\hat{y}_i
+=
+\bar{y}.
+$$
+
+Begin with
+
+$$
+\hat{e}_i=y_i-\hat{y}_i.
+$$
+
+---
+
+### Centering and Standardizing
+
+#### Exercise 8
+
+Let
+
+$$
+x=(4,7,9,10,15)'.
+$$
+
+1. Compute $\bar{x}$.
+2. Construct the centered observations
+
+$$
+x_i^c=x_i-\bar{x}.
+$$
+
+3. Compute the mean of the centered observations.
+4. Compute the sample variance of the original observations.
+5. Compute the sample variance of the centered observations.
+6. Verify that
+
+$$
+S_{xx}^c=S_{xx}.
+$$
+
+7. Verify that all pairwise differences are preserved by checking several values of
+
+$$
+x_i^c-x_j^c=x_i-x_j.
+$$
+
+---
+
+#### Exercise 9
+
+Using the Ad Spending Data:
+
+```r
+dat <- read.csv("Ad spending Data.csv")
+
+x <- dat$Ad.Spending
+y <- dat$Revenue
+```
+
+1. Fit the original regression
+
+```r
+outRegOri <- lm(y ~ x)
+```
+
+2. Center the explanatory variable:
+
+```r
+xCen <- x - mean(x)
+```
+
+3. Fit
+
+```r
+outRegCen <- lm(y ~ xCen)
+```
+
+4. Compare the two estimated slopes.
+5. Compare the two estimated intercepts.
+6. Verify that the intercept from the centered regression is $\bar{y}$.
+7. Explain why $x^c=0$ corresponds to the original value $x=\bar{x}$.
+8. Plot both fitted relationships.
+
+---
+
+#### Exercise 10
+
+Using the Ad Spending Data, center both variables:
+
+$$
+x_i^c=x_i-\bar{x},
+$$
+
+$$
+y_i^c=y_i-\bar{y}.
+$$
+
+1. Fit the original regression.
+2. Fit
+
+$$
+y_i^c
+=
+\beta_0^c+\beta_1^cx_i^c+e_i.
+$$
+
+3. Compare $\hat{\beta}_1^c$ with the original $\hat{\beta}_1$.
+4. Verify that $\hat{\beta}_0^c$ is approximately zero.
+5. Plot the centered data and fitted line.
+6. Explain why the fitted line passes through the origin in centered coordinates.
+
+---
+
+#### Exercise 11
+
+Using any data set in the chapter having $S_{xx}>0$ and $S_{yy}>0$:
+
+1. Standardize $x$ using
+
+$$
+x_i^s
+=
+\frac{x_i-\bar{x}}{\sqrt{S_{xx}}}.
+$$
+
+2. Standardize $y$ in the same way.
+3. Verify numerically that
+
+$$
+\bar{x}^s=0,
+\qquad
+\bar{y}^s=0.
+$$
+
+4. Verify that
+
+$$
+S_{xx}^s=1,
+\qquad
+S_{yy}^s=1.
+$$
+
+5. Fit a regression of $y^s$ on $x^s$.
+6. Compute the sample correlation of the original $x$ and $y$.
+7. Verify that
+
+$$
+\hat{\beta}_1^s=r_{xy}.
+$$
+
+8. Verify that the standardized intercept is approximately zero.
+
+---
+
+#### Exercise 12
+
+Suppose the sample correlation between an explanatory variable and a response is
+
+$$
+r_{xy}=-0.75.
+$$
+
+Both variables are standardized before fitting the simple linear regression.
+
+1. What is the estimated intercept?
+2. What is the estimated slope?
+3. Is the fitted line increasing or decreasing?
+4. Explain why the magnitude of the standardized slope cannot exceed $1$.
+
+---
+
+### Coefficient of Determination
+
+#### Exercise 13
+
+For a fitted regression model, suppose
+
+$$
+SS_{tot}=500
+$$
+
+and
+
+$$
+SS_{res}=125.
+$$
+
+1. Compute $SS_{reg}$ using
+
+$$
+SS_{tot}=SS_{reg}+SS_{res}.
+$$
+
+2. Compute
+
+$$
+R^2=\frac{SS_{reg}}{SS_{tot}}.
+$$
+
+3. Verify the answer using
+
+$$
+R^2
+=
+1-\frac{SS_{res}}{SS_{tot}}.
+$$
+
+4. Interpret the resulting $R^2$ using the language of explained and unexplained variability.
+
+---
+
+#### Exercise 14
+
+Suppose
+
+$$
+r_{xy}=0.8.
+$$
+
+1. Compute $R^2$.
+
+Now suppose instead that
+
+$$
+r_{xy}=-0.8.
+$$
+
+2. Compute $R^2$ again.
+3. What changed?
+4. What did not change?
+5. Explain why $R^2$ does not contain the direction of the linear relationship.
+
+---
+
+#### Exercise 15
+
+Use the Ad Spending Data and reproduce the idea of adding noise developed in the chapter.
+
+Start with
+
+```r
+dat <- read.csv("Ad spending Data.csv")
+
+x <- dat$Ad.Spending
+y <- dat$Revenue
+```
+
+Generate several new responses by adding progressively larger amounts of noise using `rnorm()`.
+
+For each response:
+
+1. Plot the response against $x$.
+2. Fit a simple linear regression.
+3. Add the fitted regression line.
+4. Record the estimated slope.
+5. Record $R^2$.
+6. Compare the point clouds as more noise is added.
+7. Describe what happens to $R^2$.
+8. Determine whether the fitted slopes change as dramatically as the appearance of the point clouds.
+
+Use the results to explain why a small $R^2$ can occur even when the relationship used to generate the data is linear.
+
+---
+
+### Residual Analysis
+
+#### Exercise 16
+
+Use the Burger Data.
+
+```r
+dat <- read.csv("Burger Data.csv")
+
+x <- dat$Price
+y <- dat$Burgers
+```
+
+Fit the model
+
+```r
+outReg <- lm(y ~ x)
+```
+
+1. Plot the original observations and fitted line.
+2. Plot the residuals against `Price`.
+3. Add a horizontal line at zero.
+4. Describe the systematic pattern in the residuals.
+5. Explain why this pattern indicates that a straight line does not adequately describe the relationship.
+
+Now fit the following two alternatives:
+
+```r
+outReg1 <- lm(log(y) ~ x)
+outReg2 <- lm(y ~ log(x))
+```
+
+6. Construct the corresponding scatterplots and residual plots.
+7. Describe which transformations make the relationship look more linear.
+8. Compare $R^2$ only where the response is measured on the same scale.
+9. Explain why $R^2$ should not be directly used to compare `lm(y ~ x)` with `lm(log(y) ~ x)`.
+
+---
+
+#### Exercise 17
+
+Generate or modify a data set so that the response follows an approximately linear relationship with $x$, but the spread around the line becomes larger as $x$ increases.
+
+1. Plot the observations.
+2. Fit a simple linear regression.
+3. Plot the residuals against $x$.
+4. Describe how the spread of the residuals changes.
+5. Explain why the residual plot makes the changing residual spread easier to see than the original scatterplot.
+
+Do not change the fitting method in this exercise. The objective is only to identify the pattern.
+
+---
+
+#### Exercise 18
+
+Use the Wine Data.
+
+1. Fit the original regression and record:
+
+   * the estimated intercept,
+   * the estimated slope,
+   * $R^2$.
+
+2. Add one unusual observation to the data.
+
+3. Refit the regression.
+
+4. Compare the fitted line with the original fitted line.
+
+5. Plot the residuals.
+
+6. Compare $R^2$ before and after adding the unusual observation.
+
+7. Move the unusual observation to a different explanatory-variable value and repeat the analysis.
+
+8. Describe how the location of the unusual observation changes its effect on the fitted line.
+
+Do not use concepts introduced later in the course. Base your discussion only on the fitted coefficients, residuals, plots, and $R^2$.
+
+---
+
+#### Exercise 19
+
+Use the Height Data.
+
+Fit
+
+```r
+outReg <- lm(Height ~ Age, data = dat)
+```
+
+1. Plot the residuals against age.
+2. Plot the residuals for the two values of `Sex` separately, as done in the chapter.
+3. Compare the location of the residuals in the two groups.
+4. Explain what structure appears after the observations are separated by `Sex`.
+5. Explain why examining residuals only against the explanatory variable may fail to reveal all remaining structure.
+
+---
+
+### Cross-Validation
+
+#### Exercise 20
+
+Using the Burger Data, randomly divide the observations into:
+
+* a training set containing approximately $80%$ of the observations;
+* a validation set containing the remaining observations.
+
+Fit
+
+$$
+y=\beta_0+\beta_1x+e
+$$
+
+using only the training observations.
+
+1. Obtain predictions for the validation observations.
+2. Compute
+
+$$
+MSE_{\mathcal V}
+=
+\frac{1}{|\mathcal V|}
+\sum_{i\in\mathcal V}
+(y_i-\hat{y}_i)^2.
+$$
+
+3. Repeat the random division using a different seed.
+4. Compare the two validation MSE values.
+5. Explain why the holdout result can depend on the particular training-validation division.
+
+---
+
+#### Exercise 21
+
+Using the Burger Data, compare the following models:
+
+$$
+y\sim x,
+$$
+
+$$
+y\sim\log(x),
+$$
+
+$$
+\log(y)\sim x.
+$$
+
+Use the same training and validation observations for every model.
+
+1. Fit each model using the training observations.
+2. Obtain validation predictions.
+3. For the model using $\log(y)$, transform the predictions back to the original response scale using `exp()`.
+4. Compute validation MSE in the original response units for all models.
+5. Determine which model has the smallest validation MSE.
+6. Compare your conclusion with what you see in the corresponding scatterplots and residual plots.
+
+---
+
+#### Exercise 22
+
+Implement $5$-fold cross-validation for the model
+
+$$
+y\sim x
+$$
+
+using one of the data sets from the chapter.
+
+For each fold:
+
+1. Use that fold as the validation set.
+2. Use the other four folds as the training set.
+3. Fit the model using the training observations.
+4. Predict the responses in the validation fold.
+5. Compute the fold-specific MSE.
+
+Then:
+
+6. Compute the overall cross-validation error.
+7. Verify that every observation was used once for validation.
+8. Repeat the complete procedure using a different random division into folds.
+9. Compare the two cross-validation results.
+
+---
+
+### Weighted Least Squares
+
+#### Exercise 23
+
+Consider
+
+$$
+x=(1,2,3,4)',
+$$
+
+$$
+y=(2,4,5,9)',
+$$
+
+with weights
+
+$$
+w=(1,1,2,4)'.
+$$
+
+1. Compute the weighted means
+
+$$
+\bar{x}^w
+=
+\frac{\sum_iw_ix_i}{\sum_iw_i}
+$$
+
+and
+
+$$
+\bar{y}^w
+=
+\frac{\sum_iw_iy_i}{\sum_iw_i}.
+$$
+
+2. Compute $S_{xx}^w$.
+3. Compute $S_{xy}^w$.
+4. Compute
+
+$$
+\hat{\beta}_1^w
+=
+\frac{S_{xy}^w}{S_{xx}^w}.
+$$
+
+5. Compute
+
+$$
+\hat{\beta}_0^w
+=
+\bar{y}^w-\hat{\beta}_1^w\bar{x}^w.
+$$
+
+6. Verify that the fitted WLS line passes through
+
+$$
+(\bar{x}^w,\bar{y}^w).
+$$
+
+---
+
+#### Exercise 24
+
+Using the observations from Exercise 23:
+
+1. Compute the WLS fit using the original weights
+
+$$
+w=(1,1,2,4)'.
+$$
+
+2. Multiply every weight by $10$ and recompute the WLS fit.
+3. Compare the two estimated intercepts.
+4. Compare the two estimated slopes.
+5. Explain why multiplying all weights by the same positive constant does not change the solution.
+
+---
+
+#### Exercise 25
+
+Using any data set with nonconstant $x$:
+
+1. Fit the ordinary least-squares regression.
+2. Fit weighted least squares with
+
+$$
+w_i=1
+$$
+
+for every observation.
+3. Compare the estimated intercepts and slopes.
+4. Show algebraically why
+
+$$
+\frac{S_{xy}^w}{S_{xx}^w}
+=
+\frac{S_{xy}}{S_{xx}}
+$$
+
+when all weights are equal.
+5. Explain why OLS is a special case of WLS.
+
+---
+
+#### Exercise 26
+
+For a WLS fit, compute the weighted residuals
+
+$$
+\hat{e}_i^w
+=
+y_i-\hat{\beta}_0^w-\hat{\beta}_1^wx_i.
+$$
+
+Verify numerically that
+
+$$
+\sum_{i=1}^nw_i\hat{e}_i^w=0
+$$
+
+and
+
+$$
+\sum_{i=1}^nw_ix_i\hat{e}_i^w=0.
+$$
+
+Then compute the weighted fitted values and verify that
+
+$$
+\sum_{i=1}^n
+w_i\hat{e}_i^w\hat{y}_i^w
+=
+0.
+$$
+
+Explain how these calculations parallel the corresponding properties of ordinary least squares.
+
+---
+
+### Matrix Form
+
+#### Exercise 27
+
+For the data
+
+$$
+x=(1,2,3)',
+\qquad
+y=(2,5,7)',
+$$
+
+construct
+
+$$
+\mathbf{X}
+=
+\begin{bmatrix}
+1 & x_1\\
+1 & x_2\\
+1 & x_3
+\end{bmatrix}
+$$
+
+and
+
+$$
+\mathbf{y}
+=
+\begin{bmatrix}
+y_1\\
+y_2\\
+y_3
+\end{bmatrix}.
+$$
+
+Then compute:
+
+1. $\mathbf{X}'\mathbf{X}$.
+2. $\mathbf{X}'\mathbf{y}$.
+3. $(\mathbf{X}'\mathbf{X})^{-1}$.
+4.
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}.
+$$
+
+5. Fit the same model using `lm()`.
+6. Verify that the scalar and matrix solutions are identical.
+
+---
+
+#### Exercise 28
+
+Using a data set from the chapter, construct $\mathbf{X}$ and $\mathbf{y}$ directly in R.
+
+Compute
+
+```r
+betaHat <- solve(t(X) %*% X) %*% t(X) %*% y
+```
+
+and compare the result with
+
+```r
+lm(y ~ x)$coefficients
+```
+
+Then:
+
+1. Compute
+
+$$
+\hat{\mathbf y}
+=
+\mathbf X\hat{\boldsymbol\beta}.
+$$
+
+2. Compute
+
+$$
+\hat{\mathbf e}
+=
+\mathbf y-\hat{\mathbf y}.
+$$
+
+3. Verify
+
+$$
+\mathbf X'\hat{\mathbf e}
+=
+\mathbf 0.
+$$
+
+4. Explain how the two components of this matrix equation correspond to the two normal equations.
+
+---
+
+#### Exercise 29
+
+Using positive weights $w_1,\ldots,w_n$, construct
+
+$$
+\mathbf W
+=
+\operatorname{diag}(w_1,\ldots,w_n).
+$$
+
+Compute
+
+$$
+\hat{\boldsymbol\beta}^w
+=
+(\mathbf X'\mathbf W\mathbf X)^{-1}
+\mathbf X'\mathbf W\mathbf y.
+$$
+
+1. Compare the result with the scalar WLS formulas
+
+$$
+\hat{\beta}_1^w
+=
+\frac{S_{xy}^w}{S_{xx}^w}
+$$
+
+and
+
+$$
+\hat{\beta}_0^w
+=
+\bar{y}^w-\hat{\beta}_1^w\bar{x}^w.
+$$
+
+2. Verify numerically that the two approaches produce the same solution.
+3. Compute the weighted residual vector.
+4. Verify
+
+$$
+\mathbf X'\mathbf W\hat{\mathbf e}^w
+=
+\mathbf 0.
+$$
+
+5. Explain how this matrix equation represents the weighted normal equations.
+
+---
+
+### Comprehensive Exercise
+
+#### Exercise 30
+
+Select one of the data sets used in this chapter.
+
+Perform a complete simple linear regression analysis using only the tools introduced in this chapter.
+
+Your analysis should include:
+
+1. A scatterplot of the explanatory variable and response.
+2. The least-squares estimates $\hat{\beta}_0$ and $\hat{\beta}_1$.
+3. The fitted regression line.
+4. The fitted values and residuals.
+5. Verification that the residuals sum to zero.
+6. A residual plot.
+7. $SS_{tot}$, $SS_{res}$, and $SS_{reg}$.
+8. Verification of
+
+$$
+SS_{tot}=SS_{reg}+SS_{res}.
+$$
+
+9. The coefficient of determination $R^2$.
+10. The sample correlation $r_{xy}$.
+11. Verification that
+
+$$
+R^2=r_{xy}^2.
+$$
+
+12. Centering of the explanatory variable and comparison of the new coefficients with the original coefficients.
+13. Standardization of both variables and verification that the standardized slope equals the sample correlation.
+14. Examination of the residual plot for:
+
+    * nonlinear structure,
+    * changing residual spread,
+    * unusual observations,
+    * possible structure associated with another available variable.
+15. A holdout or $k$-fold cross-validation calculation.
+16. A short comparison of what was learned from:
+
+    * $R^2$,
+    * residual analysis,
+    * cross-validation.
+
+Your conclusions should use only the concepts developed in this chapter.
+
