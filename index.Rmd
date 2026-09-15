@@ -18,19 +18,21 @@ Find the github page for the course (with the data sets) here: [Github](https://
 ### Class Schedule
 
 * Class 1:  Class Introduction
-* Class 2:  [Regression Introduction](#introduction)
-* Class 3:  [Intro to Simple Linear Regression](#intro-to-slr)
-* Class 4:  [Properties of the Simple Linear Regression Problem](#properties-of-the-estimates)
-* Class 5:  [Centered and Standarized Data](#centering-and-standarizing-the-data)
-* Class 6:  Topics:
+* Class 2:  Topics:
+  - [Regression Introduction](#introduction)
+  - [Least Squares Estimation](#intro-to-slr)
+* Class 3:  [Properties of the Simple Linear Regression Problem](#properties-of-the-estimates)
+* Class 4:  [Centered and Standarized Data](#centering-and-standarizing-the-data)
+* Class 5:  Topics:
   - [Coefficient of Determination](#coefficient-of-determination)
   - [Residual Analysis](#residual-analysis)
-* Class 7:  Topics:
+* Class 6:  Topics:
   - [Cross-validation](#cross-validation)
   - [Weighted Least Squares](#weighted-least-squares)
+* Class 7:  Topics:
+  - [Model in Matrix Form](#model-in-matrix-form)
   - [Project 1 - Overview](https://www.kaggle.com/competitions/stat-5385-6385-project-1-2025/overview)
-* Class 8:  [Model in Matrix Form](#model-in-matrix-form)
-* Class 9:  [Polynomial Regression](#polynomial-regression),
+* Class 8: [Polynomial Regression](#polynomial-regression)
 * Class 10: Topics:
   - [Properties of the Estimates](#properties-of-the-estimates-1)
   - [Multiple $R^2$](#multiple-r2)

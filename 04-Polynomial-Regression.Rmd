@@ -1,65 +1,483 @@
 # Polynomial Regression
 
-Polynomial regression is an extension of linear regression that fits a curve to capture more complex patterns in the data. In practice we still use a linear model in the coefficients, but we model the response as a polynomial function of the predictor.
+Polynomial regression extends linear regression by allowing the relationship between the explanatory variable and the response to be nonlinear. Although the resulting fitted relationship is nonlinear in $x$, the model remains **linear in its coefficients**.
 
-In polynomial regression the model takes the form:
+A polynomial regression model of degree $k$ has the form
 
 $$
-y = \beta_0 + \beta_1 x + \beta_2 x^2 + \dots + \beta_k x^k + e
+y
+=
+\beta_0
++
+\beta_1x
++
+\beta_2x^2
++
+\cdots
++
+\beta_kx^k
++
+e,
 $$
 
 where
-- $y$ is the dependent variable,
-- $x$ is the independent variable,
-- $\beta_0, \beta_1, \dots, \beta_k$ are coefficients,
-- $e$ is the error term.
+
+* $y$ is the response variable,
+* $x$ is the explanatory variable,
+* $\beta_0,\beta_1,\ldots,\beta_k$ are coefficients,
+* $e$ is the error term.
+
+Thus, polynomial regression does not require a new estimation principle. It remains a least-squares problem, but with transformed versions of the original explanatory variable included as additional predictors.
 
 ---
 
 ## Motivation
 
-Polynomial regression is useful when the data exhibits a nonlinear trend that cannot be well approximated by a straight line. By increasing the degree of the polynomial, the model can fit more complex patterns, though caution is needed to avoid overfitting.
+Polynomial regression is useful when the relationship between the response and explanatory variable displays curvature that cannot be represented adequately by a straight line.
 
-There are two main scenarios for using polynomial regression:
+There are two main motivations for considering a polynomial model:
 
-The underlying process is inherently polynomial.
-A polynomial provides a good approximation for the relationship.
-If you know that the phenomenon you're modeling follows a polynomial function, there's no need to worry about overfitting. You can confidently use the polynomial degree that best fits the known relationship.
+1. The underlying relationship may itself have a polynomial structure.
+2. A polynomial may provide a useful approximation to a more complicated nonlinear relationship over the region of interest.
 
-### Taylor polynomials and polynomial regression
+The degree of the polynomial controls the flexibility of the fitted relationship. Higher-degree polynomials can represent more complicated shapes, but increasing the degree unnecessarily can produce unstable fits and poor predictions, particularly outside the observed range of the explanatory variable.
 
-A natural motivation for polynomial regression comes from the idea of **Taylor polynomials**. A smooth function $f(x)$ can be approximated locally (near a point $x_0$) by a polynomial whose coefficients are derivatives of $f$ at $x_0$. The Taylor polynomial of degree $k$ around $x_0$ provides a polynomial that approximates $f(x)$ well *in a neighborhood of $x_0$*.
+### Taylor Polynomials and Polynomial Regression
 
-Translating this idea to regression:
-- We often do not know the true function $f$ relating $x$ to $y$, but we can approximate it locally by a polynomial.
-- Fitting a polynomial regression model is therefore analogous to estimating the coefficients of a Taylor polynomial that approximates the unknown regression function in the region of the data.
-- Because Taylor approximations are *local*, the choice of the expansion point matters: the polynomial is most accurate near that point and less accurate far away. Overfitting can become a significant issue, particularly outside the range of the data used for model fitting, where predictions can be unreliable.
+One mathematical motivation for polynomial regression comes from **Taylor approximation**.
+
+If a sufficiently smooth function $f(x)$ is known, its Taylor polynomial of degree $k$ around a point $x_0$ is
+
+$$
+f(x)
+\approx
+f(x_0)
++
+f'(x_0)(x-x_0)
++
+\frac{f''(x_0)}{2!}(x-x_0)^2
++
+\cdots
++
+\frac{f^{(k)}(x_0)}{k!}(x-x_0)^k.
+$$
+
+This shows that a smooth nonlinear function can often be approximated by a polynomial over a sufficiently limited region.
+
+However, a **Taylor polynomial and a polynomial regression model are not the same object**.
+
+In a Taylor approximation, the coefficients are determined by derivatives of a known function at a particular expansion point $x_0$. In polynomial regression, the underlying relationship is generally unknown, and the coefficients are instead estimated from observed data by minimizing a least-squares criterion.
+
+Thus, Taylor polynomials motivate the use of polynomial functions as approximations to smooth nonlinear relationships, but polynomial regression does not require the fitted coefficients to correspond to derivatives at an expansion point.
+
+In particular, polynomial regression is ordinarily fitted over the observed data as a whole. The choice of a point used to center the explanatory variable changes the **parameterization** of the polynomial, but it does not change the class of polynomial functions being fitted.
 
 ---
 
-## Why use the sample mean as the expansion (center) point?
+## Polynomial Regression as a Linear Model
 
-Since Taylor approximations are local, it is natural to choose an expansion point near the bulk of the observed $x$ values. The **sample mean** $\bar{x}$ is a canonical choice for several reasons:
+Although polynomial regression represents a nonlinear relationship between $x$ and $y$, it remains linear in the coefficients.
 
-1. **Local accuracy where data concentrate.**  
-   The polynomial approximation is most accurate near the expansion point. Choosing $x_0 = \bar{x}$ places that point at the center of the observed predictor distribution, so the approximation tends to be good across the typical range of the data rather than skewed toward the extremes.
+For a polynomial of degree $k$, define
 
-2. **Interpretability of the intercept.**  
-   When we center $x$ at $\bar{x}$, the intercept $\beta_0$ becomes the model's predicted value at the average predictor: it is an estimate of the mean response at the typical $x$. This often yields a more meaningful intercept than the value at $x=0$ (which may be outside the data range).
+$$
+\boldsymbol{\beta}
+=
+\begin{pmatrix}
+\beta_0\\
+\beta_1\\
+\vdots\\
+\beta_k
+\end{pmatrix}
+$$
 
-3. **Numerical stability and reduced multicollinearity.**  
-   Polynomial terms of raw $x$ are often highly correlated (e.g., $x$ and $x^2$), which inflates condition numbers and makes estimation numerically unstable. Centering (subtracting $\bar{x}$) reduces the correlation between powers of the predictor and typically produces a design matrix with much better numerical properties.
+and
 
-4. **Smaller average approximation error.**  
-   If you think of approximation error averaged over the empirical distribution of $x$, centering at the mean tends to minimize the average distance between $x$ and the expansion point; this makes the Taylor approximation, on average, closer to the true function on the observed data.
+$$
+\mathbf{X}
+=
+\begin{pmatrix}
+1 & x_1 & x_1^2 & \cdots & x_1^k\\
+1 & x_2 & x_2^2 & \cdots & x_2^k\\
+\vdots & \vdots & \vdots & & \vdots\\
+1 & x_n & x_n^2 & \cdots & x_n^k
+\end{pmatrix}.
+$$
+
+Then the polynomial model can be written as
+
+$$
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{e}.
+$$
+
+Consequently, the least-squares problem is
+
+$$
+\min_{\boldsymbol{\beta}}
+\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+\|^2.
+$$
+
+Therefore, polynomial regression uses exactly the same least-squares principle developed previously. The only difference is that the columns of the design matrix now contain powers of the same explanatory variable.
+
+For example, a quadratic model
+
+$$
+y_i
+=
+\beta_0
++
+\beta_1x_i
++
+\beta_2x_i^2
++
+e_i
+$$
+
+uses the design matrix
+
+$$
+\mathbf{X}
+=
+\begin{pmatrix}
+1 & x_1 & x_1^2\\
+1 & x_2 & x_2^2\\
+\vdots & \vdots & \vdots\\
+1 & x_n & x_n^2
+\end{pmatrix}.
+$$
+
+The important distinction is therefore between being **linear in the explanatory variable** and being **linear in the coefficients**. Polynomial regression is nonlinear in $x$, but linear in $\boldsymbol{\beta}$.
+
+---
+
+## Centering and Reparameterization
+
+Polynomial models can be written using powers of $x$ directly, or using powers of a centered explanatory variable.
+
+```{proposition, prp-polynomial-centering-reparameterization, name="Centering as a Reparameterization of Polynomial Regression"}
+Let $c\in\mathbb{R}$ be any fixed constant and define the centered explanatory variable
+
+$$
+x^c=x-c.
+$$
+
+Then the class of polynomial functions of degree at most $k$ generated by
+
+$$
+1,x,x^2,\ldots,x^k
+$$
+
+is the same as the class generated by
+
+$$
+1,x^c,(x^c)^2,\ldots,(x^c)^k.
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-polynomial-centering-reparameterization}
+First, consider a polynomial of degree at most $k$ written in terms of the original explanatory variable,
+
+$$
+p(x)
+=
+\sum_{j=0}^k\beta_jx^j.
+$$
+
+Since
+
+$$
+x=x^c+c,
+$$
+
+we can substitute $x^c+c$ for $x$. Then,
+
+\begin{align*}
+p(x)
+  &= \sum_{j=0}^k \beta_jx^j
+    & \text{def. } p(x) \\
+  &= \sum_{j=0}^k \beta_j(x^c+c)^j
+    & \text{sub. } x=x^c+c \\
+  &= \sum_{j=0}^k
+     \beta_j
+     \sum_{r=0}^j
+     {j\choose r}
+     (x^c)^r c^{j-r}
+    & \text{binomial theorem} \\
+  &= \sum_{r=0}^k
+     \left[
+       \sum_{j=r}^k
+       \beta_j
+       {j\choose r}
+       c^{j-r}
+     \right]
+     (x^c)^r
+    & \text{rearrange sums}.
+\end{align*}
+
+Define
+
+$$
+\alpha_r
+=
+\sum_{j=r}^k
+\beta_j
+{j\choose r}
+c^{j-r},
+\qquad
+r=0,\ldots,k.
+$$
+
+Then,
+
+$$
+p(x)
+=
+\sum_{r=0}^k
+\alpha_r(x^c)^r.
+$$
+
+Therefore, every polynomial of degree at most $k$ written in terms of
+
+$$
+1,x,x^2,\ldots,x^k
+$$
+
+can also be written in terms of
+
+$$
+1,x^c,(x^c)^2,\ldots,(x^c)^k.
+$$
+
+Now we show the converse. Since
+
+$$
+x^c=x-c,
+$$
+
+consider a polynomial written in terms of the centered explanatory variable,
+
+$$
+q(x^c)
+=
+\sum_{j=0}^k\alpha_j(x^c)^j.
+$$
+
+Then,
+
+\begin{align*}
+q(x^c)
+  &= \sum_{j=0}^k\alpha_j(x^c)^j
+    & \text{def. } q(x^c) \\
+  &= \sum_{j=0}^k\alpha_j(x-c)^j
+    & \text{sub. } x^c=x-c \\
+  &= \sum_{j=0}^k
+     \alpha_j
+     \sum_{r=0}^j
+     {j\choose r}
+     x^r(-c)^{j-r}
+    & \text{binomial theorem} \\
+  &= \sum_{r=0}^k
+     \left[
+       \sum_{j=r}^k
+       \alpha_j
+       {j\choose r}
+       (-c)^{j-r}
+     \right]
+     x^r
+    & \text{rearrange sums}.
+\end{align*}
+
+Define
+
+$$
+\beta_r
+=
+\sum_{j=r}^k
+\alpha_j
+{j\choose r}
+(-c)^{j-r},
+\qquad
+r=0,\ldots,k.
+$$
+
+Then,
+
+$$
+q(x^c)
+=
+\sum_{r=0}^k\beta_rx^r.
+$$
+
+Therefore, every polynomial of degree at most $k$ written in terms of the centered explanatory variable can also be written in terms of the original explanatory variable.
+
+Hence,
+
+$$
+\operatorname{span}
+\left\{
+1,x,x^2,\ldots,x^k
+\right\}
+=
+\operatorname{span}
+\left\{
+1,x^c,(x^c)^2,\ldots,(x^c)^k
+\right\}.
+$$
+
+Thus, centering does not change the class of polynomial functions. It only changes the coefficients used to represent a particular polynomial.
+
+Now consider the observed explanatory values $x_1,\ldots,x_n$. The uncentered polynomial design matrix is
+
+$$
+\mathbf{X}
+=
+\begin{pmatrix}
+1 & x_1 & x_1^2 & \cdots & x_1^k\\
+1 & x_2 & x_2^2 & \cdots & x_2^k\\
+\vdots & \vdots & \vdots & & \vdots\\
+1 & x_n & x_n^2 & \cdots & x_n^k
+\end{pmatrix},
+$$
+
+while the centered polynomial design matrix is
+
+$$
+\mathbf{X}_c
+=
+\begin{pmatrix}
+1 & x_1^c & (x_1^c)^2 & \cdots & (x_1^c)^k\\
+1 & x_2^c & (x_2^c)^2 & \cdots & (x_2^c)^k\\
+\vdots & \vdots & \vdots & & \vdots\\
+1 & x_n^c & (x_n^c)^2 & \cdots & (x_n^c)^k
+\end{pmatrix}.
+$$
+
+From the identities established above, every column of $\mathbf{X}$ is a linear combination of the columns of $\mathbf{X}_c$. Therefore,
+
+$$
+\mathcal{C}(\mathbf{X})
+\subseteq
+\mathcal{C}(\mathbf{X}_c).
+$$
+
+Similarly, every column of $\mathbf{X}_c$ is a linear combination of the columns of $\mathbf{X}$. Therefore,
+
+$$
+\mathcal{C}(\mathbf{X}_c)
+\subseteq
+\mathcal{C}(\mathbf{X}).
+$$
+
+Hence,
+
+$$
+\mathcal{C}(\mathbf{X})
+=
+\mathcal{C}(\mathbf{X}_c).
+$$
+
+Polynomial least squares using the original explanatory variable solves
+
+$$
+\min_{\boldsymbol{\beta}}
+\|
+\mathbf{y}-\mathbf{X}\boldsymbol{\beta}
+\|^2,
+$$
+
+while polynomial least squares using the centered explanatory variable solves
+
+$$
+\min_{\boldsymbol{\alpha}}
+\|
+\mathbf{y}-\mathbf{X}_c\boldsymbol{\alpha}
+\|^2.
+$$
+
+Since
+
+$$
+\mathcal{C}(\mathbf{X})
+=
+\mathcal{C}(\mathbf{X}_c),
+$$
+
+both optimization problems minimize the distance from $\mathbf{y}$ to exactly the same subspace. Therefore, they have the same projection of $\mathbf{y}$ and hence the same fitted values,
+
+$$
+\hat{\mathbf{y}}
+=
+\hat{\mathbf{y}}^c.
+$$
+
+Thus, centering changes the numerical values and interpretation of the coefficients, but it does not change the polynomial function being fitted or the resulting fitted values.
+```
+
+</details>
+
+Therefore, centering the explanatory variable changes the parameterization of a polynomial regression model, but does not change the class of polynomial functions being fitted.
+
+Consequently, when the same observations and polynomial degree are used, polynomial regression based on $x$ and polynomial regression based on $x^c=x-c$ produce the same fitted values.
+
+### Why Center at the Sample Mean?
+
+A particularly convenient choice is
+
+$$
+c=\bar{x}.
+$$
+
+There are several reasons for using the sample mean as the center.
+
+1. **The center lies naturally within the observed explanatory values.**
+   The sample mean provides a convenient reference point representing the center of the observed $x$ values. In fact, $\bar{x}$ minimizes
+
+   $$
+   \sum_{i=1}^n(x_i-c)^2
+   $$
+
+   over all possible choices of $c$.
+
+   This is an algebraic reason for using $\bar{x}$ as a center; it should not be interpreted as saying that polynomial regression itself is a Taylor approximation around $\bar{x}$.
+
+2. **Interpretability of the intercept.**
+   If
+
+   $$
+   x_i^c=x_i-\bar{x},
+   $$
+
+   then $x_i^c=0$ corresponds to $x_i=\bar{x}$. Therefore, the intercept of the centered polynomial represents the fitted response at the average observed value of the explanatory variable.
+
+3. **Potential improvement in numerical conditioning.**
+   Powers such as $x$, $x^2$, and $x^3$ can be strongly correlated and can differ substantially in magnitude. Centering often reduces some of these dependencies and can improve the numerical conditioning of the design matrix.
+
+   However, this improvement is not guaranteed in every dataset. Centering does not eliminate all dependence among polynomial terms, nor does it make the polynomial basis orthogonal.
+
+4. **Simpler algebra.**
+   When the explanatory variable is centered at $\bar{x}$,
+
+   $$
+   \sum_{i=1}^n(x_i-\bar{x})=0.
+   $$
+
+   This can simplify calculations and separate the interpretation of the intercept from some of the higher-order polynomial terms. Importantly, this change in parameterization does not alter the fitted polynomial curve.
 
 ---
 
 ### Examples
 
-We use our `Burger Data` set, to see an example of using polynomial regression
-to approximate a non-linear relationship. We will use a second degree polynomial
-to fit the data.
+We use our `Burger Data` set to illustrate polynomial regression as an approximation to a nonlinear relationship. We first fit a second-degree polynomial to the complete dataset.
 
 ```{r poly-reg-burger}
 dat <- read.csv("Burger Data.csv")
@@ -104,15 +522,28 @@ curve(expr = outRegPol$coefficients[1] + outRegPol$coefficients[2] * x + outRegP
       lwd  = 2)
 ```
 
-The second-degree polynomial approximation provides a reasonably good fit to the data. The red line represents the true nonlinear relationship, while the blue line shows the polynomial approximation. However, if we restrict the dataset to prices below $10, the fit noticeably worsens. This demonstrates a limitation of the polynomial model: while it might fit well within certain ranges, it can lead to unrealistic predictions outside those bounds. For instance, the model might predict that burger sales will eventually rise again as prices increase, which contradicts typical market expectations.
+The second-degree polynomial provides a reasonable approximation to the nonlinear relationship over the observed range of prices. The red curve represents the nonlinear relationship
+
+$$
+100-30\log(x),
+$$
+
+while the blue curve represents the fitted quadratic polynomial.
+
+The polynomial should be interpreted primarily over the region supported by the observed data. Because the quadratic model is only an approximation to the nonlinear relationship, extrapolating far beyond the observed range may produce behavior that does not resemble the relationship being approximated.
+
+---
+
+We can now compare the polynomial fit obtained with the original explanatory variable to the fit obtained after centering the explanatory variable at its sample mean.
 
 ```{r poly-reg-burger-centered}
 dat <- read.csv("Burger Data.csv")
 
-x   <- dat$Price
-y   <- dat$Burgers
-xc  <- x - mean(x)
-xc2 <- xc^2
+x    <- dat$Price
+y    <- dat$Burgers
+xbar <- mean(x)
+xc   <- x - xbar
+xc2  <- xc^2
 
 # Check Correlation
 print(paste0("Non centered correlation: ", round(cor(x, x^2), 4)))
@@ -161,7 +592,7 @@ curve(expr = outRegPol$coefficients[1] + outRegPol$coefficients[2] * x + outRegP
       lwd  = 2)
 par(new = TRUE)
 # Plots approximated polynomial centered relationship
-curve(expr = outRegPolCen$coefficients[1] + outRegPolCen$coefficients[2] * (x - mean(x)) + outRegPolCen$coefficients[3] * (x - mean(x))^2,
+curve(expr = outRegPolCen$coefficients[1] + outRegPolCen$coefficients[2] * (x - xbar) + outRegPolCen$coefficients[3] * (x - xbar)^2,
       from = xmin,
       to   = xmax,
       ylim = c(ymin, ymax),
@@ -172,6 +603,23 @@ curve(expr = outRegPolCen$coefficients[1] + outRegPolCen$coefficients[2] * (x - 
       lwd  = 2)
 ```
 
+The reported correlations illustrate that centering can change the relationships among the polynomial terms in the design matrix.
+
+However, the blue and green fitted curves should theoretically coincide. Both fits use the same observations and the same quadratic function space. Centering changes the coefficients used to represent the polynomial, but it does not change the fitted values.
+
+Thus, any visible difference between the blue and green curves should be attributable only to numerical computation or graphical precision, not to a difference between the underlying fitted models.
+
+This illustrates an important distinction:
+
+$$
+\text{different coefficients}
+\qquad\not\Rightarrow\qquad
+\text{different fitted polynomial}.
+$$
+
+---
+
+Finally, consider what happens when the quadratic model is estimated using only observations for which the price is below $10$.
 
 ```{r poly-reg-burger-restricted}
 dat <- read.csv("Burger Data.csv")
@@ -220,14 +668,487 @@ curve(expr = outRegPolRes$coefficients[1] + outRegPolRes$coefficients[2] * x + o
       ylab = "",
       col  = 'blue',
       lwd  = 2)
+abline(v = 10, lwd = 2)
 ```
-We can also check the $R^2$ of the restricted fit.
+
+In this case, only observations with prices below $10$ are used to estimate the polynomial coefficients, although the fitted polynomial is displayed over the complete price range.
+
+The model may fit the restricted training data very well while providing poor predictions outside that range. This does not mean that the polynomial fit is poor where it was estimated. Rather, it demonstrates the distinction between **interpolation** within the region of the observed explanatory values and **extrapolation** beyond that region.
+
+We can check the $R^2$ of the restricted fit.
 
 ```{r poly-reg-burger-restricted-r2}
 summary(outRegPolRes)
 ```
-And notice that, the $R^2$ with the restricted data is pretty good, however we 
-see that outside the restricted range the fit is pretty bad.
 
+The $R^2$ for the restricted data can be quite high because it measures how well the quadratic model fits the observations used to estimate it. Nevertheless, the graph shows that the fitted polynomial can depart substantially from the nonlinear relationship once it is extrapolated beyond the restricted price range.
 
-Although polynomial regression is technically a form of multivariate linear regression—since it involves multiple polynomial terms of a single independent variable—it can still be analyzed using the tools discussed in the next chapter. Despite having multiple polynomial terms, the model has only one original independent variable that has been transformed. Consequently, the relationship between the transformed variable and the dependent variable can be effectively visualized using a scatter plot.
+Thus, a strong in-sample fit does not by itself guarantee reliable predictions outside the region represented by the observed explanatory variable.
+
+---
+
+Polynomial regression is a special case of **multiple linear regression**. Although there is only one original explanatory variable, the transformations
+
+$$
+x,\;x^2,\;\ldots,\;x^k
+$$
+
+appear as separate columns of the design matrix.
+
+This makes polynomial regression a natural bridge between simple and multiple linear regression. The model retains the visualization advantages of a single original explanatory variable while introducing the algebraic structure of a regression model with several predictors.
+
+## Exercises
+
+The following exercises reinforce the interpretation of polynomial regression as a linear least-squares problem, the relationship between centered and uncentered polynomial representations, and the distinction between interpolation and extrapolation. Some exercises focus on mathematical derivations, while others use R to investigate the properties developed in this section.
+
+### Exercise 1 — Linear in the Coefficients
+
+Consider the model
+
+$$
+y
+=
+\beta_0
++
+\beta_1x
++
+\beta_2x^2
++
+\beta_3x^3
++
+e.
+$$
+
+1. Explain why this model is nonlinear as a function of $x$.
+2. Explain why it is nevertheless a linear regression model.
+3. Identify the explanatory variables that appear in the corresponding linear model.
+4. Write the model in the form
+
+$$
+y
+=
+\beta_0
++
+\beta_1z_1
++
+\beta_2z_2
++
+\beta_3z_3
++
+e,
+$$
+
+by defining appropriate values of $z_1,z_2,z_3$.
+
+---
+
+### Exercise 2 — Constructing the Polynomial Design Matrix
+
+Suppose the observed explanatory values are
+
+$$
+x_1=-2,
+\qquad
+x_2=-1,
+\qquad
+x_3=0,
+\qquad
+x_4=2.
+$$
+
+A cubic polynomial model is fitted to these observations.
+
+1. Construct the design matrix $\mathbf{X}$.
+2. Write the coefficient vector $\boldsymbol{\beta}$.
+3. Write the model in matrix form
+
+$$
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{e}.
+$$
+
+4. Write the least-squares optimization problem using the Euclidean norm.
+
+---
+
+### Exercise 3 — Quadratic Least Squares
+
+Consider the observations
+
+$$
+\begin{array}{c|cccc}
+x_i & -1 & 0 & 1 & 2\\
+\hline
+y_i & 3 & 1 & 2 & 6
+\end{array}
+$$
+
+and the quadratic model
+
+$$
+y_i
+=
+\beta_0+\beta_1x_i+\beta_2x_i^2+e_i.
+$$
+
+1. Construct the design matrix $\mathbf{X}$.
+2. Compute $\mathbf{X}'\mathbf{X}$.
+3. Compute $\mathbf{X}'\mathbf{y}$.
+4. Write the normal equations.
+5. Solve for $\hat{\boldsymbol{\beta}}$.
+6. Compute the fitted values $\hat{\mathbf{y}}$.
+7. Compute the residual vector $\hat{\mathbf{e}}$.
+
+---
+
+### Exercise 4 — From a Centered Quadratic to an Uncentered Quadratic
+
+Consider the centered quadratic polynomial
+
+$$
+p(x)
+=
+\alpha_0
++
+\alpha_1(x-c)
++
+\alpha_2(x-c)^2.
+$$
+
+1. Expand the polynomial as a function of $x$.
+2. Show that it can be written as
+
+$$
+p(x)
+=
+\beta_0+\beta_1x+\beta_2x^2.
+$$
+
+3. Express $\beta_0,\beta_1,\beta_2$ in terms of $\alpha_0,\alpha_1,\alpha_2$, and $c$.
+4. Explain why this shows that centering does not create a different class of quadratic functions.
+
+---
+
+### Exercise 5 — From an Uncentered Quadratic to a Centered Quadratic
+
+Consider
+
+$$
+p(x)
+=
+\beta_0+\beta_1x+\beta_2x^2
+$$
+
+and let
+
+$$
+x^c=x-c.
+$$
+
+Show that
+
+$$
+p(x)
+=
+\alpha_0+\alpha_1x^c+\alpha_2(x^c)^2,
+$$
+
+where
+
+$$
+\alpha_0
+=
+\beta_0+c\beta_1+c^2\beta_2,
+$$
+
+$$
+\alpha_1
+=
+\beta_1+2c\beta_2,
+$$
+
+and
+
+$$
+\alpha_2
+=
+\beta_2.
+$$
+
+Use your result to explain which coefficient remains unchanged when a quadratic polynomial is centered.
+
+---
+
+### Exercise 6 — Numerical Reparameterization
+
+Suppose
+
+$$
+p(x)
+=
+5-3x+2x^2.
+$$
+
+Center the explanatory variable at $c=4$, so that
+
+$$
+x^c=x-4.
+$$
+
+1. Rewrite $p(x)$ in terms of $x^c$.
+2. Find $\alpha_0,\alpha_1,\alpha_2$ such that
+
+$$
+p(x)
+=
+\alpha_0+\alpha_1x^c+\alpha_2(x^c)^2.
+$$
+
+3. Evaluate both representations at $x=2$, $x=4$, and $x=6$.
+4. Verify that both parameterizations give the same values.
+5. Interpret $\alpha_0$.
+
+---
+
+### Exercise 7 — Column Spaces and Centering
+
+Consider a quadratic polynomial regression.
+
+The uncentered design matrix contains the columns
+
+$$
+\mathbf{1},
+\qquad
+\mathbf{x},
+\qquad
+\mathbf{x}^2,
+$$
+
+while the design matrix centered at $c$ contains
+
+$$
+\mathbf{1},
+\qquad
+\mathbf{x}-c\mathbf{1},
+\qquad
+(\mathbf{x}-c\mathbf{1})^2.
+$$
+
+1. Show that $\mathbf{x}-c\mathbf{1}$ belongs to
+
+$$
+\mathcal{C}(\mathbf{X}).
+$$
+
+2. Show that
+
+$$
+(\mathbf{x}-c\mathbf{1})^2
+=
+\mathbf{x}^2
+-
+2c\mathbf{x}
++
+c^2\mathbf{1}.
+$$
+
+3. Conclude that every column of the centered design matrix belongs to the column space of the uncentered design matrix.
+4. Reverse the argument and conclude that the two design matrices have the same column space.
+5. Explain why the two least-squares fits must therefore have the same fitted values.
+
+---
+
+### Exercise 8 — Why Center at the Mean?
+
+Let
+
+$$
+g(c)
+=
+\sum_{i=1}^n(x_i-c)^2.
+$$
+
+1. Differentiate $g(c)$ with respect to $c$.
+2. Find its critical point.
+3. Compute the second derivative.
+4. Show that
+
+$$
+c=\bar{x}
+$$
+
+is the unique minimizer of $g(c)$.
+5. Explain what this result says about the use of $\bar{x}$ as a centering value.
+6. Explain why this result does **not** imply that polynomial regression is a Taylor expansion around $\bar{x}$.
+
+---
+
+### Exercise 9 — Interpretation of the Centered Intercept
+
+Consider the quadratic model centered at $\bar{x}$,
+
+$$
+\hat{y}
+=
+\hat{\alpha}_0
++
+\hat{\alpha}_1(x-\bar{x})
++
+\hat{\alpha}_2(x-\bar{x})^2.
+$$
+
+1. Evaluate the fitted polynomial at $x=\bar{x}$.
+2. Interpret $\hat{\alpha}_0$.
+3. Compare this interpretation with the intercept $\hat{\beta}_0$ in
+
+$$
+\hat{y}
+=
+\hat{\beta}_0
++
+\hat{\beta}_1x
++
+\hat{\beta}_2x^2.
+$$
+
+4. Under what condition would $\hat{\beta}_0$ have a useful interpretation in terms of an observed value of the explanatory variable?
+
+---
+
+### Exercise 10 — Taylor Approximation versus Polynomial Regression
+
+Suppose the underlying relationship is
+
+$$
+f(x)=\log(x).
+$$
+
+1. Write the second-degree Taylor polynomial of $f(x)$ around $x_0=1$.
+2. Explain how the coefficients of this polynomial are determined.
+3. Suppose instead that observations $(x_i,y_i)$ are available and the model
+
+$$
+y_i
+=
+\beta_0+\beta_1x_i+\beta_2x_i^2+e_i
+$$
+
+is fitted by least squares. Explain how $\beta_0,\beta_1,\beta_2$ are determined.
+4. Explain two mathematical differences between the Taylor polynomial and the fitted polynomial regression.
+5. Explain why Taylor approximation nevertheless provides motivation for using polynomial functions to approximate smooth relationships.
+
+---
+
+### Exercise 11 — Centering in R
+
+Using the `Burger Data.csv` data from this section, write R code to perform the following operations.
+
+1. Define
+
+```r
+x <- dat$Price
+```
+
+and compute $\bar{x}$.
+2. Construct
+
+```r
+xc <- x - xbar
+```
+
+and
+
+```r
+xc2 <- xc^2
+```
+
+3. Fit the two models
+
+```r
+Burgers ~ Price + I(Price^2)
+```
+
+and
+
+```r
+y ~ xc + xc2
+```
+
+4. Compare the estimated coefficients from the two models.
+5. Compare their fitted values using
+
+```r
+max(abs(fitted(model1) - fitted(model2)))
+```
+
+6. Explain why the coefficients differ even though the fitted values should agree up to numerical precision.
+
+---
+
+### Exercise 12 — Correlation Between Polynomial Terms
+
+Using the `Burger Data.csv` data, write R code to calculate
+
+$$
+\operatorname{cor}(x,x^2)
+$$
+
+and
+
+$$
+\operatorname{cor}(x-\bar{x},(x-\bar{x})^2).
+$$
+
+Then:
+
+1. Compare the two correlations.
+2. Determine whether centering reduced the correlation for this dataset.
+3. Explain why one example where the correlation decreases does not prove that centering will always eliminate dependence among polynomial terms.
+4. Explain why centered polynomial terms are not necessarily orthogonal.
+
+---
+
+### Exercise 13 — Interpolation and Extrapolation
+
+Using `Burger Data.csv`, fit a quadratic polynomial using only observations satisfying
+
+$$
+\text{Price}<10.
+$$
+
+1. Write R code to select the restricted observations.
+2. Fit the quadratic model to the restricted dataset.
+3. Plot the fitted polynomial over the complete observed price range.
+4. Add a vertical line at $x=10$.
+5. Identify which part of the plotted polynomial represents interpolation and which part represents extrapolation.
+6. Obtain the $R^2$ of the restricted model.
+7. Explain how the model can have a high $R^2$ while producing poor predictions for prices larger than $10$.
+8. Explain why $R^2$ calculated from the training observations cannot by itself evaluate extrapolation performance.
+
+---
+
+### Exercise 14 — Polynomial Degree and Model Flexibility
+
+Using `Burger Data.csv`, fit polynomial regression models of degrees
+
+$$
+1,\;2,\;3,\;4.
+$$
+
+For example, the cubic model can be fitted using
+
+```r
+lm(Burgers ~ Price + I(Price^2) + I(Price^3), data = dat)
+```
+
+1. Fit all four models.
+2. Plot the fitted curves over the observed range of `Price`.
+3. Compare how the flexibility of the fitted function changes as the degree increases.
+4. Extend the curves slightly beyond the observed range.
+5. Compare the behavior of the four models during extrapolation.
+6. Based only on the material developed in this chapter, explain why increasing polynomial degree should not automatically be interpreted as producing a better predictive model.
+7. Explain how this exercise illustrates the distinction between fitting the observed data and predicting outside the observed region.
+
