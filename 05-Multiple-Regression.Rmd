@@ -2,79 +2,238 @@
 
 ## Introduction
 
-Multiple linear regression is one of the central tools in statistical modeling, serving as the foundation for much of modern data analysis. It extends the simple linear regression framework by allowing the outcome variable to depend on **several predictors simultaneously**, capturing more complex relationships and improving both explanatory and predictive power.
+Multiple linear regression extends the simple linear regression framework by allowing the response variable to depend on **several explanatory variables simultaneously**. This provides a flexible framework for describing more complex relationships and for constructing predictions using several sources of information.
 
-In many real-world situations, outcomes are rarely determined by a single factor. Economic growth, for instance, may depend not only on investment but also on inflation, interest rates, and exports; a student’s academic performance may be influenced by study habits, socioeconomic status, and prior preparation. Multiple linear regression provides a systematic way to model these multivariate relationships within a coherent mathematical framework.
+In many applications, variation in a response cannot be adequately represented using a single explanatory variable. Economic growth, for example, may be related to investment, inflation, interest rates, and exports; academic performance may be related to study habits, socioeconomic characteristics, and prior preparation. Multiple linear regression provides a systematic way to represent these relationships within the same least-squares framework developed previously.
+
+Importantly, the fundamental optimization problem does not change. Simple linear regression, polynomial regression, and multiple linear regression all use the same mathematical machinery. The main difference is the structure of the design matrix.
 
 ---
 
 ### The General Model
 
-The multiple linear regression model can be written as
+For observation $i$, the multiple linear regression model is
 
 $$
-y_i = \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \ldots + \beta_p x_{p,i} + e_i, \quad i = 1, \ldots, n,
+y_i
+=
+\beta_0
++
+\beta_1x_{1,i}
++
+\beta_2x_{2,i}
++
+\cdots
++
+\beta_px_{p,i}
++
+e_i,
+\qquad
+i=1,\ldots,n,
 $$
 
 where:
 
-* $y_i$ is the **dependent (or response) variable** for the $i$th observation,
-* $\beta_0$ is the **intercept**, representing the expected value of $y$ when all predictors are zero,
-* $\beta_1, \beta_2, \ldots, \beta_p$ are the **regression coefficients** that quantify the change in $y$ associated with a one-unit change in each predictor, holding the others constant,
-* $x_{1,i}, x_{2,i}, \ldots, x_{p,i}$ are the **independent (or explanatory) variables**, and
-* $e_i$ is the **random error term**, capturing unobserved variability or model imperfections.
+* $y_i$ is the $i$th observation of the **response variable**,
+* $\beta_0$ is the **intercept**,
+* $\beta_1,\ldots,\beta_p$ are the coefficients associated with the explanatory variables,
+* $x_{1,i},\ldots,x_{p,i}$ are the values of the **explanatory variables** for observation $i$, and
+* $e_i$ is the discrepancy between the observed response and the linear component of the model.
 
-This formulation is typically expressed more compactly in **matrix notation** as
+At this stage, no probabilistic assumptions are imposed on the errors. The model is treated as a deterministic representation of the observed response using a linear combination of the explanatory variables.
+
+To establish notation that will be used throughout the chapter, define the matrix containing only the explanatory variables as
 
 $$
-\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{e},
+\mathbf{X}_*
+=
+\begin{bmatrix}
+\mathbf{x}_1 & \cdots & \mathbf{x}_p
+\end{bmatrix}
+\in\mathbb{R}^{n\times p},
 $$
 
-where $\mathbf{y}$ is the $n \times 1$ vector of responses, $\mathbf{X}$ is the $n \times (p+1)$ design matrix including a column of ones for the intercept, $\boldsymbol{\beta}$ is the $(p+1) \times 1$ vector of unknown coefficients, and $\mathbf{e}$ is the vector of errors.
+where
+
+$$
+\mathbf{x}_j
+=
+\begin{bmatrix}
+x_{j,1}\\
+\vdots\\
+x_{j,n}
+\end{bmatrix}
+\in\mathbb{R}^n,
+\qquad
+j=1,\ldots,p.
+$$
+
+The complete design matrix, including the column associated with the intercept, is
+
+$$
+\mathbf{X}
+=
+\begin{bmatrix}
+\mathbf{1} & \mathbf{X}_*
+\end{bmatrix}
+\in\mathbb{R}^{n\times(p+1)}.
+$$
+
+Similarly, define
+
+$$
+\mathbf{y}
+=
+\begin{bmatrix}
+y_1\\
+\vdots\\
+y_n
+\end{bmatrix},
+\qquad
+\boldsymbol{\beta}
+=
+\begin{bmatrix}
+\beta_0\\
+\beta_1\\
+\vdots\\
+\beta_p
+\end{bmatrix},
+\qquad
+\mathbf{e}
+=
+\begin{bmatrix}
+e_1\\
+\vdots\\
+e_n
+\end{bmatrix}.
+$$
+
+Then the model can be written compactly as
+
+$$
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{e}.
+$$
+
+This is exactly the same matrix representation introduced previously for simple linear regression. The difference is that $\mathbf{X}$ now contains several explanatory-variable columns rather than only one.
 
 ---
 
 ### Interpretation and Objectives
 
-Multiple linear regression serves two broad purposes:
+Multiple linear regression has two important objectives in the present part of the course.
 
-1. **Explanation** – to understand how several predictors jointly influence the outcome and to quantify their individual effects after controlling for the others.
-2. **Prediction** – to use the estimated relationship to forecast new outcomes based on known predictor values.
+1. **Description** — to describe how the response varies with several explanatory variables considered simultaneously.
 
-In practice, both objectives are often pursued simultaneously. The coefficients $\beta_j$ represent *partial effects*: each one measures the change in the expected value of $y$ when $x_j$ changes by one unit, while keeping all other predictors fixed. This “ceteris paribus” interpretation is what allows multiple regression to disentangle correlated effects among variables.
+2. **Prediction** — to use several explanatory variables jointly to construct predictions of the response.
+
+The coefficient $\beta_j$ describes how the linear component of the model changes with $x_j$ when the other explanatory variables are held fixed. In particular,
+
+$$
+\beta_0+\beta_1x_1+\cdots+\beta_jx_j+\cdots+\beta_px_p
+$$
+
+changes by $\beta_j$ when $x_j$ increases by one unit while the remaining explanatory variables remain unchanged.
+
+This is often called a **partial** or **conditional interpretation** of the coefficient.
+
+However, this interpretation is algebraic rather than automatically causal. Holding the remaining explanatory variables fixed allows us to isolate the contribution of one variable within the fitted linear model, but additional assumptions would be required to interpret that change as the causal effect of modifying the explanatory variable.
+
+Thus, multiple regression allows us to separate the roles played by different columns of the design matrix without requiring a causal interpretation.
 
 ---
 
 ### Applications and Context
 
-This framework is widely used in fields such as **econometrics**, **psychology**, **biostatistics**, and **machine learning**. In economics, for example, GDP growth can be modeled as a function of inflation rate, unemployment, interest rate, government expenditure, and exports. By accounting for these variables simultaneously, we can separate their unique contributions and obtain a more accurate and interpretable model of economic performance.
+Multiple linear regression is useful whenever several quantities may help describe or predict a response.
 
-However, this generalization introduces new challenges beyond those encountered in simple regression. Among them:
+For example, economic performance may be represented using explanatory variables such as inflation, unemployment, interest rates, government expenditure, and exports. Rather than fitting a separate regression for each explanatory variable, multiple regression allows all of them to enter the same linear model.
 
-* **Multicollinearity:** predictors may be correlated, making it difficult to distinguish their individual effects.
-* **Model selection:** determining which variables should be included requires careful judgment and statistical testing.
+This generalization introduces several mathematical and computational issues that do not arise as clearly in simple regression.
+
+One important issue is **dependence among the explanatory variables**. If two or more columns of $\mathbf{X}_*$ contain very similar information, it may become difficult to distinguish their individual contributions to the fitted model. In extreme cases, exact linear relationships among the columns can cause $\mathbf{X}$ to lose full column rank, so the usual least-squares solution is no longer unique.
+
+Even when the columns are not exactly linearly dependent, strong relationships among them can affect the numerical stability and interpretation of the estimated coefficients. These issues will be studied through the linear algebra of the design matrix.
+
+At this stage, our focus remains on the **least-squares optimization problem**: how the design matrix determines the fitted values, residuals, and coefficient estimates. Statistical inference and the probabilistic interpretation of these quantities will be introduced later.
 
 ---
 
 ### Connection to Polynomial Regression
 
-We have already encountered a special case of multiple regression in the context of **polynomial regression**, where powers or transformations of a single predictor were treated as separate explanatory variables. In that case, the predictors were related by construction (e.g., $x$, $x^2$, $x^3$, …), while here we consider the **general case** in which each explanatory variable represents a distinct quantity of interest.
+We have already encountered a special case of multiple linear regression in **polynomial regression**.
 
-Thus, multiple linear regression can be viewed as both a **conceptual generalization** and a **practical extension** of polynomial regression—moving from modeling curvature in one dimension to explaining multivariate variation in higher dimensions.
+For example, the quadratic model
 
----
+$$
+y_i
+=
+\beta_0
++
+\beta_1x_i
++
+\beta_2x_i^2
++
+e_i
+$$
+
+can be written using the design matrix
+
+$$
+\mathbf{X}
+=
+\begin{bmatrix}
+1 & x_1 & x_1^2\\
+1 & x_2 & x_2^2\\
+\vdots & \vdots & \vdots\\
+1 & x_n & x_n^2
+\end{bmatrix}.
+$$
+
+From the perspective of least squares, the columns containing $x$ and $x^2$ are treated in exactly the same way as two different explanatory-variable columns.
+
+Polynomial regression therefore introduced the essential algebraic structure of multiple regression:
+
+$$
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{e}.
+$$
+
+The difference is conceptual. In polynomial regression, the columns of $\mathbf{X}_*$ are transformations of a single original explanatory variable,
+
+$$
+x,\;x^2,\;\ldots,\;x^k,
+$$
+
+whereas in general multiple linear regression the columns
+
+$$
+\mathbf{x}_1,\ldots,\mathbf{x}_p
+$$
+
+may represent distinct explanatory variables.
+
+Thus, multiple linear regression is the natural generalization of the framework already developed for polynomial regression. The least-squares machinery remains the same; what changes is the number and interpretation of the columns in the design matrix.
 
 ## Example: Modeling GDP
 
-As an applied example, consider the problem of explaining a country’s Gross Domestic Product (GDP) using several economic indicators. In this case, we include:  
+As an applied example, consider the problem of describing and predicting a country’s Gross Domestic Product (GDP) using several economic indicators. We use the following explanatory variables:
 
-- Inflation rate,  
-- Unemployment rate,  
-- Reference interest rate,  
-- Government spending (as a percentage of GDP), and  
-- Exports (as a percentage of GDP).  
+* Inflation rate,
+* Unemployment rate,
+* Reference interest rate,
+* Government spending as a percentage of GDP, and
+* Exports as a percentage of GDP.
 
-With multiple predictors, visualization becomes more challenging than in simple regression. Still, we can explore the pairwise relationships among variables using scatterplots:
+Unlike simple linear regression, where the relationship between the response and explanatory variable can be displayed in a single scatterplot, multiple regression involves several explanatory variables simultaneously. We therefore begin by examining the variables **pairwise**.
+
+The following code reads the data and produces a scatterplot matrix containing a scatterplot for every pair of variables.
 
 ```{r paris-plot-gdp}
 # Reads Data
@@ -84,22 +243,40 @@ dat <- read.csv(file = "Gdp Data.csv")
 pairs(dat)
 ```
 
-The scatterplot matrix shows that some predictors are strongly related to GDP, while others are correlated with each other. This initial exploration provides useful insight before fitting regression models.
+The scatterplot matrix provides an initial visual description of the dataset. In particular, it allows us to examine two types of relationships:
 
-We can also examine the correlation structure numerically:
+1. the pairwise relationship between GDP and each explanatory variable, and
+2. the relationships among the explanatory variables themselves.
+
+The second point becomes especially important in multiple regression. If two explanatory variables are strongly related to each other, then they may contain overlapping information about GDP. Consequently, their coefficients in a multiple regression may behave differently from the coefficients obtained when each variable is considered separately.
+
+The same pairwise relationships can be summarized numerically using correlations.
 
 ```{r gdp-cor}
 # Computes the correlation between variables
 cor(dat)
 ```
 
+The correlation matrix complements the scatterplot matrix by quantifying the strength and direction of the linear relationships between pairs of variables. Large positive or negative correlations between GDP and an explanatory variable suggest a strong pairwise linear relationship. Large correlations among explanatory variables indicate that some columns of the design matrix may contain similar information.
+
+At this point, these quantities are used only as descriptive tools. The multiple-regression fit will determine how the explanatory variables behave when they are included in the model simultaneously.
+
 ---
 
 ### Simple Regressions
 
-Before fitting the full multiple regression, it is instructive to look at the simple linear regressions of GDP on each predictor individually.
+Before fitting the full multiple regression model, it is useful to fit a separate simple linear regression of GDP on each explanatory variable.
 
-**Inflation Rate**
+These models answer a different question from the multiple regression. A simple regression describes the relationship between GDP and one explanatory variable **without accounting for the remaining variables**.
+
+For each explanatory variable, the code displays two plots:
+
+* the scatterplot of GDP against the explanatory variable together with its fitted regression line, and
+* the residuals from that simple regression.
+
+The first plot helps us visualize the pairwise relationship. The second shows what remains unexplained after fitting that particular straight line.
+
+#### Inflation Rate
 
 ```{r gdp-inf-fit}
 # Fits with Inflation
@@ -127,7 +304,11 @@ abline(h   = 0,
        lwd = 2)
 ```
 
-**Unemployment Rate**
+The fitted slope describes the pairwise linear relationship between inflation and GDP. It answers how the fitted value of GDP changes with inflation when inflation is the **only explanatory variable included in the model**.
+
+The residual plot shows the differences between the observed GDP values and those predicted using inflation alone. Any remaining structure in the residuals indicates variation in GDP that this simple regression does not represent.
+
+#### Unemployment Rate
 
 ```{r gdp-unp-fit}
 # Fits with Unemployment
@@ -155,7 +336,11 @@ abline(h   = 0,
        lwd = 2)
 ```
 
-**Interest Rate**
+This regression describes the relationship between unemployment and GDP when unemployment is considered by itself.
+
+As before, the fitted line summarizes the pairwise linear trend, while the residuals represent the component of GDP that is not captured by that one-variable linear fit.
+
+#### Interest Rate
 
 ```{r gdp-int-fit}
 # Fits with Interest Rate
@@ -183,7 +368,11 @@ abline(h   = 0,
        lwd = 2)
 ```
 
-**Government Spending**
+The estimated slope now describes the pairwise relationship between the reference interest rate and GDP.
+
+Importantly, this coefficient reflects both the relationship of the interest rate with GDP and any information that the interest rate shares with the other economic variables that have not yet been included in the model.
+
+#### Government Spending
 
 ```{r gdp-gov-fit}
 # Fits with Government Spending
@@ -211,7 +400,11 @@ abline(h   = 0,
        lwd = 2)
 ```
 
-**Exports**
+This fit examines GDP using government spending as the only explanatory variable.
+
+As with the previous models, the estimated coefficient should be interpreted as a **simple-regression coefficient**. It does not yet describe the relationship between government spending and GDP after accounting for inflation, unemployment, interest rates, or exports.
+
+#### Exports
 
 ```{r gdp-exp-fit}
 # Fits with Exports
@@ -239,13 +432,43 @@ abline(h   = 0,
        lwd = 2)
 ```
 
+The exports model provides the final pairwise regression. Its slope summarizes how the fitted GDP changes with exports when exports are considered alone.
+
+Taken together, the five simple regressions provide useful benchmarks. They show what each explanatory variable appears to contribute when examined individually. We can now compare these results with a model in which all five explanatory variables are included simultaneously.
+
 ---
 
 ### Multiple Regression
 
-Each variable individually shows some relationship with GDP, but the key advantage of multiple regression is that it considers all predictors simultaneously. This allows us to estimate the *unique contribution* of each factor while controlling for the others.
+The simple regressions answer questions of the form
 
-We fit the full model including all predictors:
+$$
+\text{How is GDP related to } x_j \text{ when } x_j \text{ is used by itself?}
+$$
+
+Multiple regression answers a different question. It fits GDP using all explanatory variables simultaneously:
+
+$$
+\text{GDP}
+=
+\beta_0
++
+\beta_1\text{Inflation}
++
+\beta_2\text{Unemployment}
++
+\beta_3\text{Interest}
++
+\beta_4\text{Government Spending}
++
+\beta_5\text{Exports}
++
+e.
+$$
+
+Each coefficient now describes the change in the fitted linear component associated with one explanatory variable **while the values of the other explanatory variables are held fixed**.
+
+We fit the full model and compare its coefficient estimates with those obtained from the corresponding simple regressions.
 
 ```{r gdp-all-ind-com}
 outRegAll <- lm(gdp ~ inf + une + int + gov + exp, data = dat)
@@ -276,22 +499,60 @@ rownames(tab) <- c("Inflation", "Unemployment", "Interest Rate", "Government Exp
 knitr::kable(tab)
 ```
 
-Comparing the simple regressions with the multiple regression highlights an important point: coefficient estimates can change when predictors are analyzed jointly. In some cases, a variable may even change sign once other variables are included, which suggests potential multicollinearity or overlapping explanatory power. Such cases warrant further investigation.
+The final table places the multiple-regression coefficients next to the corresponding simple-regression coefficients. These coefficients need not be equal because they describe different fitted relationships.
 
----
+For example, the simple-regression coefficient for inflation is obtained from a model containing only inflation,
+
+$$
+\text{GDP}
+=
+\beta_0+\beta_1\text{Inflation}+e,
+$$
+
+whereas the inflation coefficient in the multiple regression is obtained from a model in which unemployment, interest rates, government spending, and exports are also included.
+
+Therefore, a change in the coefficient after additional explanatory variables are included is not itself surprising. It indicates that the explanatory variables contain overlapping information about the response.
+
+A coefficient may become smaller, larger, or even change sign after the other explanatory variables are included. Such behavior motivates an important question that will be developed mathematically in this chapter:
+
+> How does the relationship among the columns of the design matrix affect the estimated regression coefficients?
+
+This is one of the central differences between simple and multiple regression. In simple regression, there is only one nonconstant explanatory-variable column. In multiple regression, the geometry of the entire collection
+
+$$
+\mathbf{x}_1,\ldots,\mathbf{x}_p
+$$
+
+matters.
+
+The comparison therefore provides a first illustration of why multiple regression cannot be understood simply as several simple regressions performed at the same time. The coefficients are estimated **jointly**, and their values depend on the relationships among all columns of the design matrix.
+
+***
 
 ### Summary
 
-This example illustrates the key steps in multiple regression analysis:
+This introduction highlights the main ideas that distinguish multiple linear regression from simple linear regression:
 
-1. Explore relationships through scatterplots and correlations.
-2. Fit simple regressions to understand individual effects.
-3. Fit the full multiple regression to assess joint contributions.
-4. Compare results to detect changes in coefficient estimates.
+1. **Explore the variables jointly.**
+   Scatterplot matrices and correlations help identify pairwise relationships between the response and explanatory variables, as well as relationships among the explanatory variables themselves.
 
-Multiple regression provides a richer, more realistic picture of how multiple factors influence an outcome, but it also requires careful interpretation and diagnostic checks.
+2. **Use simple regressions as benchmarks.**
+   Fitting GDP separately on each explanatory variable shows how each variable behaves when considered alone.
 
----
+3. **Fit all explanatory variables simultaneously.**
+   Multiple regression estimates the coefficients jointly, so each coefficient describes the role of one explanatory variable while the others are held fixed within the linear model.
+
+4. **Compare simple and multiple regression coefficients.**
+   The coefficients can change substantially because the explanatory variables may contain overlapping information. Their values therefore depend on the relationships among all columns of the design matrix.
+
+The central lesson is that multiple regression is **not simply a collection of simple regressions**. It is a single least-squares problem involving several explanatory variables at once.
+
+This makes the structure of the design matrix particularly important. In the following sections, we study how the geometry and algebra of $\mathbf{X}$ determine the coefficient estimates, fitted values, residuals, and behavior of the multiple linear regression model.
+
+***
+
+
+
 
 ## Least Squares Estimation
 

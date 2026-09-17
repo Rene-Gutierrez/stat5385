@@ -36,7 +36,7 @@ prp:prp-lse-matrix-solution-equal
 prp:prp-weighted-least-squares-estimators-matrix
 prp:prp-polynomial-centering-reparameterization
 def:quantiles
-stat-53856385-fall-2025
+stat-53856385-fall-2026
 calendar
 important-dates
 class-schedule
@@ -303,6 +303,11 @@ applications-and-context
 connection-to-polynomial-regression
 example-modeling-gdp
 simple-regressions
+inflation-rate
+unemployment-rate
+interest-rate
+government-spending
+exports
 multiple-regression
 summary-3
 least-squares-estimation-2

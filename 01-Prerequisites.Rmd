@@ -266,7 +266,7 @@ $$
 The inverse of $\bA$ (if $|\bA|=\det(\bA) \neq 0$) is:
 
 $$
-A^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}
+\mathbf{A}^{-1} = \frac{1}{ad - bc} \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}
 $$
 
 where $ad - bc$ is the **determinant** of the matrix $\bA$.
