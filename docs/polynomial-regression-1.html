@@ -335,6 +335,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.4.12" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#exercise-12-correlation-between-polynomial-terms"><i class="fa fa-check"></i><b>5.4.12</b> Exercise 12 — Correlation Between Polynomial Terms</a></li>
 <li class="chapter" data-level="5.4.13" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#exercise-13-interpolation-and-extrapolation"><i class="fa fa-check"></i><b>5.4.13</b> Exercise 13 — Interpolation and Extrapolation</a></li>
 <li class="chapter" data-level="5.4.14" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#exercise-14-polynomial-degree-and-model-flexibility"><i class="fa fa-check"></i><b>5.4.14</b> Exercise 14 — Polynomial Degree and Model Flexibility</a></li>
+<li class="chapter" data-level="5.4.15" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#exercise-15-centering-without-an-intercept"><i class="fa fa-check"></i><b>5.4.15</b> Exercise 15: Centering Without an Intercept</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
@@ -1602,6 +1603,81 @@ y_i
 <li>Based only on the material developed in this chapter, explain why increasing polynomial degree should not automatically be interpreted as producing a better predictive model.</li>
 <li>Explain how this exercise illustrates the distinction between fitting the observed data and predicting outside the observed region.</li>
 </ol>
+</div>
+<div id="exercise-15-centering-without-an-intercept" class="section level3 hasAnchor" number="5.4.15">
+<h3><span class="header-section-number">5.4.15</span> Exercise 15: Centering Without an Intercept<a href="polynomial-regression-1.html#exercise-15-centering-without-an-intercept" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider the quadratic regression model <strong>without an intercept</strong></p>
+<p><span class="math display">\[
+y_i
+=
+\beta_1x_i+\beta_2x_i^2+e_i.
+\]</span></p>
+<p>Let</p>
+<p><span class="math display">\[
+x_i^c=x_i-c,
+\]</span></p>
+<p>where <span class="math inline">\(c\neq0\)</span>, and consider the centered quadratic model, also without an intercept,</p>
+<p><span class="math display">\[
+y_i
+=
+\gamma_1x_i^c+\gamma_2(x_i^c)^2+e_i.
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Show that the original model uses the function space</li>
+</ol>
+<p><span class="math display">\[
+\mathcal{V}
+=
+\operatorname{span}\{x,x^2\},
+\]</span></p>
+<p>while the centered model uses</p>
+<p><span class="math display">\[
+\mathcal{V}_c
+=
+\operatorname{span}\{x-c,(x-c)^2\}.
+\]</span></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Expand</li>
+</ol>
+<p><span class="math display">\[
+\gamma_1(x-c)+\gamma_2(x-c)^2
+\]</span></p>
+<p>as a polynomial in <span class="math inline">\(x\)</span>, and show that it can be written as</p>
+<p><span class="math display">\[
+\gamma_2x^2
++
+(\gamma_1-2c\gamma_2)x
++
+(c^2\gamma_2-c\gamma_1).
+\]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Explain why the appearance of the constant term</li>
+</ol>
+<p><span class="math display">\[
+c^2\gamma_2-c\gamma_1
+\]</span></p>
+<p>shows that, in general,</p>
+<p><span class="math display">\[
+\mathcal{V}_c
+\neq
+\mathcal{V}.
+\]</span></p>
+<ol start="4" style="list-style-type: decimal">
+<li>More specifically, prove that when <span class="math inline">\(c\neq0\)</span>,</li>
+</ol>
+<p><span class="math display">\[
+x\notin\mathcal{V}_c.
+\]</span></p>
+<p>Conclude that centering the explanatory variable in a polynomial regression <strong>without including an intercept is not merely a reparameterization of the original model</strong>.</p>
+<ol start="5" style="list-style-type: decimal">
+<li>Finally, show that if the intercept is included, then</li>
+</ol>
+<p><span class="math display">\[
+\operatorname{span}\{1,x,x^2\}
+=
+\operatorname{span}\{1,x-c,(x-c)^2\}.
+\]</span></p>
+<p>Explain why this means that centering is a reparameterization when the intercept is retained, but generally changes the model when the intercept is removed.</p>
 
 </div>
 </div>

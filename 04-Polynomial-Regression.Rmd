@@ -1293,3 +1293,90 @@ lm(Burgers ~ Price + I(Price^2) + I(Price^3), data = dat)
 6. Based only on the material developed in this chapter, explain why increasing polynomial degree should not automatically be interpreted as producing a better predictive model.
 7. Explain how this exercise illustrates the distinction between fitting the observed data and predicting outside the observed region.
 
+### Exercise 15: Centering Without an Intercept
+
+Consider the quadratic regression model **without an intercept**
+
+$$
+y_i
+=
+\beta_1x_i+\beta_2x_i^2+e_i.
+$$
+
+Let
+
+$$
+x_i^c=x_i-c,
+$$
+
+where $c\neq0$, and consider the centered quadratic model, also without an intercept,
+
+$$
+y_i
+=
+\gamma_1x_i^c+\gamma_2(x_i^c)^2+e_i.
+$$
+
+1. Show that the original model uses the function space
+
+$$
+\mathcal{V}
+=
+\operatorname{span}\{x,x^2\},
+$$
+
+while the centered model uses
+
+$$
+\mathcal{V}_c
+=
+\operatorname{span}\{x-c,(x-c)^2\}.
+$$
+
+2. Expand
+
+$$
+\gamma_1(x-c)+\gamma_2(x-c)^2
+$$
+
+as a polynomial in $x$, and show that it can be written as
+
+$$
+\gamma_2x^2
++
+(\gamma_1-2c\gamma_2)x
++
+(c^2\gamma_2-c\gamma_1).
+$$
+
+3. Explain why the appearance of the constant term
+
+$$
+c^2\gamma_2-c\gamma_1
+$$
+
+shows that, in general,
+
+$$
+\mathcal{V}_c
+\neq
+\mathcal{V}.
+$$
+
+4. More specifically, prove that when $c\neq0$,
+
+$$
+x\notin\mathcal{V}_c.
+$$
+
+Conclude that centering the explanatory variable in a polynomial regression **without including an intercept is not merely a reparameterization of the original model**.
+
+5. Finally, show that if the intercept is included, then
+
+$$
+\operatorname{span}\{1,x,x^2\}
+=
+\operatorname{span}\{1,x-c,(x-c)^2\}.
+$$
+
+Explain why this means that centering is a reparameterization when the intercept is retained, but generally changes the model when the intercept is removed.

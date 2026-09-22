@@ -221,6 +221,24 @@ may represent distinct explanatory variables.
 
 Thus, multiple linear regression is the natural generalization of the framework already developed for polynomial regression. The least-squares machinery remains the same; what changes is the number and interpretation of the columns in the design matrix.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Example: Modeling GDP
 
 As an applied example, consider the problem of describing and predicting a country’s Gross Domestic Product (GDP) using several economic indicators. We use the following explanatory variables:
@@ -287,7 +305,7 @@ varNam    <- "Inflation Rate"
 # Plots Regression Line and Scatterplot and residuals plot
 par(mfrow = c(1, 2))
 plot(x    = varVal,
-     y    = dat$gd,
+     y    = dat$gdp,
      xlab = varNam,
      ylab = "GDP",
      pch  = 16)
@@ -319,7 +337,7 @@ varNam    <- "Unemployment Rate"
 # Plots Regression Line and Scatterplot and residuals plot
 par(mfrow = c(1, 2))
 plot(x    = varVal,
-     y    = dat$gd,
+     y    = dat$gdp,
      xlab = varNam,
      ylab = "GDP",
      pch  = 16)
@@ -351,7 +369,7 @@ varNam    <- "Interest Rate"
 # Plots Regression Line and Scatterplot and residuals plot
 par(mfrow = c(1, 2))
 plot(x    = varVal,
-     y    = dat$gd,
+     y    = dat$gdp,
      xlab = varNam,
      ylab = "GDP",
      pch  = 16)
@@ -383,7 +401,7 @@ varNam    <- "Government Spending"
 # Plots Regression Line and Scatterplot and residuals plot
 par(mfrow = c(1, 2))
 plot(x    = varVal,
-     y    = dat$gd,
+     y    = dat$gdp,
      xlab = varNam,
      ylab = "GDP",
      pch  = 16)
@@ -415,7 +433,7 @@ varNam    <- "Exports"
 # Plots Regression Line and Scatterplot and residuals plot
 par(mfrow = c(1, 2))
 plot(x    = varVal,
-     y    = dat$gd,
+     y    = dat$gdp,
      xlab = varNam,
      ylab = "GDP",
      pch  = 16)
@@ -436,7 +454,30 @@ The exports model provides the final pairwise regression. Its slope summarizes h
 
 Taken together, the five simple regressions provide useful benchmarks. They show what each explanatory variable appears to contribute when examined individually. We can now compare these results with a model in which all five explanatory variables are included simultaneously.
 
----
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Multiple Regression
 
@@ -554,175 +595,540 @@ This makes the structure of the design matrix particularly important. In the fol
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Least Squares Estimation
 
-For least squares estimation, we need to solve the problem:
+For least squares estimation, we solve the optimization problem
 
 $$
-\min_\bgb Q(\bgb) = \sum_{i=1}^n (y_i - \hy(\bgb))^2 = (\by - \hat{\by})'(\by - \hat{\by}) = (\by - \bX\bgb)'(\by - \bX\bgb) 
+Q(\bgb)
+=
+\sum_{i=1}^n
+\left(
+y_i-\beta_0-\sum_{j=1}^p\beta_jx_{j,i}
+\right)^2
+=
+(\by-\bX\bgb)'(\by-\bX\bgb).
 $$
-The representation in matrix notation of the problem, allows us to use the same
-expression to solve this problem as with simple linear regression. The solution
-is obtained in the exact same way, and is given by:
+
+The least-squares estimator is therefore defined as
 
 $$
-\hat{\bgb} = (\bX' \bX)^{-1}\bX'\by
+\hat{\bgb}
+=
+\underset{\bgb}{\operatorname{argmin}}
+\;Q(\bgb).
 $$
-however in this case:
+
+Because the problem has exactly the same matrix form as in simple linear regression, the solution is obtained in the same way.
+
+Suppose that the full design matrix $\bX$ has full column rank,
 
 $$
-\hat{\bgb} = \left(\hat{\beta}_0, \hat{\beta}_1, \hat{\beta}_2,\ldots,\hat{\beta}_p\right)'
+\operatorname{rank}(\bX)=p+1.
 $$
-this is the reason, working in matrix form is very useful.
+
+Then $\bX'\bX$ is invertible, and the unique least-squares solution is
+
+$$
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by.
+$$
+
+The formula is therefore unchanged from the matrix formulation of simple linear regression. The difference is only the dimension of the coefficient vector. In multiple linear regression,
+
+$$
+\bgb
+=
+\left(
+\beta_0,
+\beta_1,
+\beta_2,
+\ldots,
+\beta_p
+\right)',
+$$
+
+and consequently,
+
+$$
+\hat{\bgb}
+=
+\left(
+\hat{\beta}_0,
+\hat{\beta}_1,
+\hat{\beta}_2,
+\ldots,
+\hat{\beta}_p
+\right)'.
+$$
+
+Thus,
+
+$$
+\boxed{
+\text{same least-squares optimization}
+\quad\Longrightarrow\quad
+\text{same matrix solution}
+}
+$$
+
+with more explanatory variables. This is why working in matrix form is particularly useful.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Properties of the Estimates
 
-As with simple linear regression, we can consider several estimates:
+As with simple linear regression, we distinguish between the **fitted values** and the **residuals**.
 
-* $\hat{\by} = \bX \bgb$ the estimates of the observations,
-* $\hat{\be} = \by - \hat{\by} = \by - \bX \hat{\bgb}$ the estimates of the errors.
-
-We also note that:
+Given the least-squares estimator
 
 $$
-\hat{\by} = \bX (\bX'\bX)^{-1}\bX' \by = \bH y
-$$
-where $\bH$ is called the hat matrix, because it transforms $\by$ into $\hat{\by}$,
-or the projection matrix.
-
-We will see that:
-
-* $\hat{\bgb}$ is a linear combination of $y$.
-* The sum of the estimated errors is equal to zero, $\sum_{i=1}^n \hat{e_i} = 0$.
-* $\hat{\be}$ and $\hat{\bx_j}$ are orthogonal for $j=\{1,\ldots,p\}$.
-* $\hat{\be}$ and $\hat{\by}$ are orthogonal.
-* $\bar{y} = \hat{\bar{y}}$.
-
-To see that $\hat{\bgb}$ is a linear combination of $y$, we need to express $\hat{\bgb}$
-as follows:
-
-$$
-\hat{\bgb} = \bA \by
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by,
 $$
 
-for some matrix $\bA$. This is very easy to do, we just let $\bA = (\bX'\bX)^{-1}\bX'$, so:
+the fitted values are
 
 $$
-\hat{\bgb} = (\bX'\bX)^{-1}\bX'\by = \bA \by
-$$
-Now to see that the sum of the estimated errors is equal to zero, $\sum_{i=1}^n \hat{e_i} = 0$, we
-notice that we need to show that:
-
-$$
-\hat{\be}' \bones = 0
+\hat{\by}
+=
+\bX\hat{\bgb},
 $$
 
-To do so we notice that:
+and the residuals are
+
+$$
+\hat{\be}
+=
+\by-\hat{\by}
+=
+\by-\bX\hat{\bgb}.
+$$
+
+We can also express the fitted values as
+
+$$
+\hat{\by}
+=
+\bX(\bX'\bX)^{-1}\bX'\by
+=
+\bH\by,
+$$
+
+where
+
+$$
+\bH
+=
+\bX(\bX'\bX)^{-1}\bX'
+$$
+
+is called the **hat matrix**, because it transforms $\by$ into $\hat{\by}$. It is also called the **projection matrix**, since it projects $\by$ onto the column space of $\bX$.
+
+The properties of the least-squares solution follow primarily from one important consequence of the normal equations:
+
+$$
+\boxed{
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by
+\quad\Longrightarrow\quad
+\bX'\hat{\be}=\bzero.
+}
+$$
+
+When the design matrix includes an intercept, this identity implies that the residuals sum to zero, are orthogonal to every explanatory-variable vector and to the fitted values, and that the mean of the fitted values equals the mean of the observed responses.
+
+```{proposition, prp-mlr-properties-estimates, name="Properties of the Least-Squares Estimates"}
+Suppose that the design matrix $\bX$ has full column rank and includes a column of ones for the intercept. Then the least-squares solution satisfies the following properties:
+
+1. Each component of $\hat{\bgb}$ is a linear combination of the entries of $\by$.
+
+2. The sum of the residuals is equal to zero,
+
+   $$
+   \sum_{i=1}^n\hat e_i=0.
+   $$
+
+3. The residual vector is orthogonal to every explanatory-variable vector,
+
+   $$
+   \hat{\be}\perp\bx_j,
+   \qquad j=1,\ldots,p.
+   $$
+
+4. The residual vector is orthogonal to the fitted-value vector,
+
+   $$
+   \hat{\be}\perp\hat{\by}.
+   $$
+
+5. The mean of the fitted values equals the mean of the observed responses,
+
+   $$
+   \bar y=\overline{\hat y},
+   $$
+
+   where
+
+   $$
+   \overline{\hat y}
+   =
+   \frac{1}{n}\sum_{i=1}^n\hat y_i.
+   $$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-properties-estimates}
+
+**1. Linearity of the coefficient estimates**
+
+To show that each component of $\hat{\bgb}$ is a linear combination of the entries of $\by$, we need to express the estimator as
+
+$$
+\hat{\bgb}=\bA\by
+$$
+
+for some matrix $\bA$ that does not depend on $\by$.
+
+Let
+
+$$
+\bA
+=
+(\bX'\bX)^{-1}\bX'.
+$$
+
+Then,
+
+$$
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by
+=
+\bA\by.
+$$
+
+When the design matrix $\bX$ is held fixed, $\bA$ is also fixed. Therefore, each component of $\hat{\bgb}$ is a linear combination of the entries of $\by$.
+
+**2. The normal equations and the sum of the residuals**
+
+The remaining properties follow from the normal equations.
+
+Starting with the least-squares solution,
 
 \begin{align*}
-\hat{\bgb} = (\bX'\bX)^{-1}\bX'\by 
-  &\implies (\bX'\bX)\hat{\bgb} = \bX'\by          \\
-  &\implies \bX'\by - \bX'\bX \hat{\bgb} = \bzero \\
-  &\implies \bX'\left(\by - \hat{\by}\right) = \bzero \\
-  &\implies \bX'\hat{\be} = \bzero 
+\hat{\bgb}
+  &= (\bX'\bX)^{-1}\bX'\by
+    & \text{least-squares solution} \\
+\bX'\bX\hat{\bgb}
+  &= \bX'\by
+    & \text{multiply by } \bX'\bX \\
+\bX'\by-\bX'\bX\hat{\bgb}
+  &= \bzero
+    & \text{rearrange} \\
+\bX'(\by-\bX\hat{\bgb})
+  &= \bzero
+    & \text{factor } \bX' \\
+\bX'\hat{\be}
+  &= \bzero
+    & \text{def. residuals}.
 \end{align*}
 
-Now focusing on the product $\bX'\hat{\be}$ we have that:
+This is the central identity from which the remaining properties follow.
+
+Recall that the design matrix includes the column of ones,
 
 $$
-\bX'\hat{\be} =
-  \left[\begin{matrix}
-    \bones' \\
-    \bx_1   \\
-    \bx_2   \\
-    \vdots  \\
-    \bx_p
-  \end{matrix}\right] \hat{\be} =
-  \left[\begin{matrix}
-    \bones' \hat{\be} \\
-    \bx_1   \hat{\be} \\
-    \bx_2   \hat{\be} \\
-    \vdots            \\
-    \bx_p   \hat{\be}
-  \end{matrix}\right]
-$$
-So we have that:
-
-$$
-\left[\begin{matrix}
-    \bones' \hat{\be} \\
-    \bx_1   \hat{\be} \\
-    \bx_2   \hat{\be} \\
-    \vdots            \\
-    \bx_p   \hat{\be}
-  \end{matrix}\right] = 
-  \left[\begin{matrix}
-    0 \\
-    0 \\
-    0 \\
-    \vdots            \\
-    0
-  \end{matrix}\right]
-$$
-So from the first line of this result, we have that:
-
-$$
-\bones' \hat{\be} = 0
-$$
-which is the result we wanted to proof.
-
-Now, to show that $\hat{\be}$ and $\hat{\bx_j}$ are orthogonal for $j=\{1,\ldots,p\}$,
-we use again on:
-
-$$
-\left[\begin{matrix}
-    \bones' \hat{\be} \\
-    \bx_1   \hat{\be} \\
-    \bx_2   \hat{\be} \\
-    \vdots            \\
-    \bx_p   \hat{\be}
-  \end{matrix}\right] = 
-  \left[\begin{matrix}
-    0 \\
-    0 \\
-    0 \\
-    \vdots            \\
-    0
-  \end{matrix}\right]
+\bX
+=
+\begin{bmatrix}
+\bones & \bx_1 & \cdots & \bx_p
+\end{bmatrix}.
 $$
 
-And notice that lines 2 to $p+1$ proof this results, that is
+Consequently,
 
 $$
-\bx_i ' \hat{\be} = 0 \quad i=\{1,\ldots,p\}
+\bX'
+=
+\begin{bmatrix}
+\bones'\\
+\bx_1'\\
+\vdots\\
+\bx_p'
+\end{bmatrix}.
 $$
-Now to show that $\hat{\be}$ and $\hat{\by}$ are orthogonal, we show that:
+
+Expanding the product $\bX'\hat{\be}$, we obtain
 
 $$
-\hat{\be}'\hat{\by} = 0
+\bX'\hat{\be}
+=
+\begin{bmatrix}
+\bones'\hat{\be}\\
+\bx_1'\hat{\be}\\
+\vdots\\
+\bx_p'\hat{\be}
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+0\\
+\vdots\\
+0
+\end{bmatrix}.
 $$
-Now
+
+The first component of this equality gives
+
+$$
+\bones'\hat{\be}=0.
+$$
+
+Since $\bones$ is the vector of ones,
+
+$$
+\bones'\hat{\be}
+=
+\sum_{i=1}^n\hat e_i.
+$$
+
+Therefore,
+
+$$
+\boxed{
+\sum_{i=1}^n\hat e_i=0.
+}
+$$
+
+This establishes the second property.
+
+**3. Orthogonality of the residuals to the explanatory variables**
+
+Using the same expansion of the normal equations,
+
+$$
+\bX'\hat{\be}
+=
+\begin{bmatrix}
+\bones'\hat{\be}\\
+\bx_1'\hat{\be}\\
+\vdots\\
+\bx_p'\hat{\be}
+\end{bmatrix}
+=
+\bzero,
+$$
+
+we see that its remaining components give
+
+$$
+\bx_j'\hat{\be}=0,
+\qquad j=1,\ldots,p.
+$$
+
+Recall that two vectors are orthogonal when their inner product is zero. Therefore,
+
+$$
+\boxed{
+\hat{\be}\perp\bx_j,
+\qquad j=1,\ldots,p.
+}
+$$
+
+This establishes the third property.
+
+**4. Orthogonality of the residuals to the fitted values**
+
+To show that the residuals are orthogonal to the fitted values, we need to establish that
+
+$$
+\hat{\be}'\hat{\by}=0.
+$$
+
+Recall that
+
+$$
+\hat{\by}
+=
+\bX\hat{\bgb}.
+$$
+
+Therefore,
 
 \begin{align*}
-\hat{\be}'\hat{\by} 
-  &= (\by - \hat{\by})'\hat{\by} \\
-  &= \left(\by - \bX \hat{\bgb}\right)'\bX \hat{\bgb} \\
-  &= \left(\by - \bX (\bX'\bX)^{-1}\bX'\by \right)'\bX (\bX'\bX)^{-1}\bX'\by \\
-  &= \by' \bX (\bX'\bX)^{-1}\bX'\by - \by' \bX (\bX'\bX)^{-1}\bX' \bX (\bX'\bX)^{-1}\bX' \by \\
-  &= \by' \bX (\bX'\bX)^{-1}\bX'\by - \by' \bX (\bX'\bX)^{-1}\bX' \by \\
-  &= 0
+\hat{\be}'\hat{\by}
+  &= \hat{\be}'\bX\hat{\bgb}
+    & \text{def. fitted values} \\
+  &= (\bX'\hat{\be})'\hat{\bgb}
+    & \text{transpose rule} \\
+  &= \bzero'\hat{\bgb}
+    & \text{normal equations} \\
+  &= 0.
 \end{align*}
 
-Finally, to show that $\bar{y} = \hat{\bar{y}}$, we use:
+Consequently,
 
 $$
-\hat{\be}'\bones = (\by - \hat{\by})'\bones = \by'\bones - \hat{\by}'\bones = \sum_{i=1}^ny_i - \sum_{i=1}^n\hat{y}_i = n\bar{y} - n\hat{\bar{y}} 
+\boxed{
+\hat{\be}\perp\hat{\by}.
+}
 $$
-since $\hat{\be}'\bones = 0$, then we have that
+
+This establishes the fourth property.
+
+Notice that the fitted values are linear combinations of the columns of $\bX$. Since the residuals are orthogonal to every column of $\bX$, they must also be orthogonal to the fitted-value vector.
+
+**5. Equality of the means**
+
+Finally, we show that
 
 $$
-n\bar{y} - n\hat{\bar{y}} = 0 \implies n\bar{y} = n\hat{\bar{y}} \implies \bar{y} = \hat{\bar{y}}  
+\bar y=\overline{\hat y}.
 $$
+
+Recall from the second property that
+
+$$
+\bones'\hat{\be}=0.
+$$
+
+Using the definition of the residuals,
+
+\begin{align*}
+\bones'\hat{\be}
+  &= \bones'(\by-\hat{\by})
+    & \text{def. residuals} \\
+  &= \bones'\by-\bones'\hat{\by}
+    & \text{distributivity} \\
+  &= \sum_{i=1}^n y_i-\sum_{i=1}^n\hat y_i
+    & \text{def. } \bones \\
+  &= n\bar y-n\overline{\hat y}
+    & \text{def. means}.
+\end{align*}
+
+Since $\bones'\hat{\be}=0$, we obtain
+
+\begin{align*}
+n\bar y-n\overline{\hat y}
+  &=0\\
+n\bar y
+  &=n\overline{\hat y}\\
+\bar y
+  &=\overline{\hat y}.
+\end{align*}
+
+Therefore,
+
+$$
+\boxed{
+\bar y=\overline{\hat y}.
+}
+$$
+
+This establishes the fifth property.
+
+Notice that the second and fifth properties depend on the presence of the intercept in the model. Including the intercept ensures that $\bones$ is a column of $\bX$, and therefore the normal equations imply
+
+$$
+\bones'\hat{\be}=0.
+$$
+
+Without an intercept, the residuals are still orthogonal to the columns of $\bX$, but they are not necessarily orthogonal to $\bones$. Consequently, their sum need not equal zero, and the mean of the fitted values need not equal the mean of the observed responses.
+```
+
+</details>
+
+The main result of this subsection is therefore the hierarchy
+
+$$
+\boxed{
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by
+\quad\Longrightarrow\quad
+\bX'\hat{\be}=\bzero.
+}
+$$
+
+Since the design matrix includes the intercept and all explanatory-variable vectors, the normal equations imply
+
+$$
+\boxed{
+\bX'\hat{\be}=\bzero
+\quad\Longrightarrow\quad
+\begin{cases}
+\displaystyle\sum_{i=1}^n\hat e_i=0,\\[6pt]
+\hat{\be}\perp\bx_j,\quad j=1,\ldots,p,\\[4pt]
+\hat{\be}\perp\hat{\by},\\[4pt]
+\bar y=\overline{\hat y}.
+\end{cases}
+}
+$$
+
+Thus, the properties of the residuals and fitted values are direct consequences of a single matrix identity.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Multiple $R^2$

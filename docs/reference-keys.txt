@@ -35,6 +35,7 @@ prp:prp-lse-matrix-solution
 prp:prp-lse-matrix-solution-equal
 prp:prp-weighted-least-squares-estimators-matrix
 prp:prp-polynomial-centering-reparameterization
+prp:prp-mlr-properties-estimates
 def:quantiles
 stat-53856385-fall-2026
 calendar
@@ -296,6 +297,7 @@ exercise-11-centering-in-r
 exercise-12-correlation-between-polynomial-terms
 exercise-13-interpolation-and-extrapolation
 exercise-14-polynomial-degree-and-model-flexibility
+exercise-15-centering-without-an-intercept
 multiple-linear-regression-1
 introduction-1
 the-general-model
