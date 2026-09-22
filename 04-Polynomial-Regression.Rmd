@@ -475,7 +475,7 @@ There are several reasons for using the sample mean as the center.
 
 ---
 
-### Examples
+### Example
 
 We use our `Burger Data` set to illustrate polynomial regression as an approximation to a nonlinear relationship. We first fit a second-degree polynomial to the complete dataset.
 
@@ -685,7 +685,148 @@ The $R^2$ for the restricted data can be quite high because it measures how well
 
 Thus, a strong in-sample fit does not by itself guarantee reliable predictions outside the region represented by the observed explanatory variable.
 
----
+### Polynomial Cross-Validation Example
+
+Polynomial regression introduces an important practical question: **how should we choose the degree of the polynomial?**
+
+A polynomial of higher degree is more flexible and will generally be able to fit the observed data at least as well as a polynomial of lower degree. However, a better fit to the data used to estimate the model does not necessarily imply better predictions for new observations. Increasing the polynomial degree can eventually lead to a model that adapts too closely to the particular observations in the training data.
+
+To compare polynomial models from a predictive perspective, we can use **cross-validation**.
+
+In this example, we use the Burger Data and compare three candidate models:
+
+$$
+\text{Degree 1:}
+\qquad
+y
+=
+\beta_0+\beta_1x+e,
+$$
+
+$$
+\text{Degree 2:}
+\qquad
+y
+=
+\beta_0+\beta_1x+\beta_2x^2+e,
+$$
+
+and
+
+$$
+\text{Degree 3:}
+\qquad
+y
+=
+\beta_0+\beta_1x+\beta_2x^2+\beta_3x^3+e.
+$$
+
+The objective is not to determine which model fits the complete dataset best. Instead, we want to compare how accurately each model predicts observations that were **not used to estimate its coefficients**.
+
+We use $10$-fold cross-validation. The observations are randomly assigned to one of $10$ folds. For each fold, we:
+
+1. remove the observations belonging to that fold,
+2. fit the three polynomial models using the remaining observations,
+3. predict the responses for the observations in the omitted fold, and
+4. record the corresponding prediction errors.
+
+After repeating this procedure for all folds, every observation has been predicted by a model that was fitted **without using that observation**.
+
+The seed is fixed so that the same random fold assignment can be reproduced.
+
+```{r cro-val-pol-reg-deg-sel}
+set.seed(2026)
+
+# Read Data
+dat <- read.csv(file = "Burger Data.csv")
+n   <- nrow(dat)
+
+################################################################################
+# Folds Creation
+
+# Number of Folds
+numFol <- 10
+# Fold Creation (Not Same Size)
+folLis <- list()
+folInd <- ceiling(runif(n = n) * numFol)
+i <- 1
+for(i in 1:numFol){
+  folLis[[i]] <- (1:n)[folInd == i]
+}
+
+################################################################################
+# Model Fit and Error
+
+
+err <- matrix(data = NA, nrow = n, 3)
+for(i in 1:numFol){
+  # Indeces of Fold
+  sel <- folLis[[i]]
+  # Model Fit without Fold
+  outPol1 <- lm(Burgers ~ Price, data = dat[-sel,])
+  outPol2 <- lm(Burgers ~ Price + I(Price^2), data = dat[-sel,])
+  outPol3 <- lm(Burgers ~ Price + I(Price^2) + I(Price^3), data = dat[-sel,])
+  # Predictions
+  pre1 <- predict.lm(outPol1, newdata = dat[sel,])
+  pre2 <- predict.lm(outPol2, newdata = dat[sel,])
+  pre3 <- predict.lm(outPol3, newdata = dat[sel,])
+  # Error
+  err[sel, 1] <- pre1 - dat[sel, 1]
+  err[sel, 2] <- pre2 - dat[sel, 1]
+  err[sel, 3] <- pre3 - dat[sel, 1]
+}
+
+
+################################################################################
+# Models Performance
+boxplot(err^2)
+boxplot(abs(err))
+boxplot(err^2, outline =FALSE)
+```
+
+The matrix `err` contains one cross-validation prediction error for every observation and every candidate model. Its columns correspond to the degree-$1$, degree-$2$, and degree-$3$ polynomial fits.
+
+Thus, for observation $i$ and model $j$,
+
+$$
+e_{i,j}^{CV}
+=
+\hat y_{i,j}^{(-f(i))}
+-
+y_i,
+$$
+
+where $\hat y_{i,j}^{(-f(i))}$ denotes the prediction obtained from model $j$ after fitting it without the fold containing observation $i$.
+
+The final boxplots compare the distributions of the prediction errors produced by the three models. The first and third plots use squared prediction errors,
+
+$$
+\left(e_{i,j}^{CV}\right)^2,
+$$
+
+while the second uses absolute prediction errors,
+
+$$
+\left|e_{i,j}^{CV}\right|.
+$$
+
+Smaller values indicate better predictive performance. The plots therefore allow us to compare both the typical size and the variability of the out-of-sample errors across polynomial degrees.
+
+The important distinction is that these errors are different from the residuals obtained after fitting a model to the complete dataset. A residual compares an observation with a fitted value from a model that was estimated **using that same observation**. A cross-validation error compares an observation with a prediction from a model that was estimated **without that observation's fold**.
+
+Therefore,
+
+$$
+\text{training residuals}
+\qquad\neq\qquad
+\text{cross-validation prediction errors}.
+$$
+
+This distinction is essential when choosing polynomial degree. A more flexible polynomial may reduce the training error simply because it has more coefficients available to adapt to the observed data. Cross-validation instead evaluates whether that additional flexibility improves predictions for observations that were left out during estimation.
+
+The preferred polynomial degree is therefore the one that provides the most favorable out-of-sample performance according to the prediction-error criterion being considered. This illustrates how cross-validation can be used to choose among models of different complexity without relying only on how well they fit the training data.
+
+***
 
 Polynomial regression is a special case of **multiple linear regression**. Although there is only one original explanatory variable, the transformations
 

@@ -316,7 +316,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.3" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#centering-and-reparameterization"><i class="fa fa-check"></i><b>5.3</b> Centering and Reparameterization</a>
 <ul>
 <li class="chapter" data-level="5.3.1" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#why-center-at-the-sample-mean"><i class="fa fa-check"></i><b>5.3.1</b> Why Center at the Sample Mean?</a></li>
-<li class="chapter" data-level="5.3.2" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#examples-2"><i class="fa fa-check"></i><b>5.3.2</b> Examples</a></li>
+<li class="chapter" data-level="5.3.2" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#example-9"><i class="fa fa-check"></i><b>5.3.2</b> Example</a></li>
+<li class="chapter" data-level="5.3.3" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#polynomial-cross-validation-example"><i class="fa fa-check"></i><b>5.3.3</b> Polynomial Cross-Validation Example</a></li>
 </ul></li>
 <li class="chapter" data-level="5.4" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#exercises-2"><i class="fa fa-check"></i><b>5.4</b> Exercises</a>
 <ul>
@@ -694,11 +695,11 @@ x,\;x^2,\;\ldots,\;x^k,
 </ul>
 <p>Unlike simple linear regression, where the relationship between the response and explanatory variable can be displayed in a single scatterplot, multiple regression involves several explanatory variables simultaneously. We therefore begin by examining the variables <strong>pairwise</strong>.</p>
 <p>The following code reads the data and produces a scatterplot matrix containing a scatterplot for every pair of variables.</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="multiple-linear-regression-1.html#cb93-1" tabindex="-1"></a><span class="co"># Reads Data</span></span>
-<span id="cb93-2"><a href="multiple-linear-regression-1.html#cb93-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Gdp Data.csv&quot;</span>)</span>
-<span id="cb93-3"><a href="multiple-linear-regression-1.html#cb93-3" tabindex="-1"></a></span>
-<span id="cb93-4"><a href="multiple-linear-regression-1.html#cb93-4" tabindex="-1"></a><span class="co"># Plot the scatterplots for each pair of variables</span></span>
-<span id="cb93-5"><a href="multiple-linear-regression-1.html#cb93-5" tabindex="-1"></a><span class="fu">pairs</span>(dat)</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="multiple-linear-regression-1.html#cb96-1" tabindex="-1"></a><span class="co"># Reads Data</span></span>
+<span id="cb96-2"><a href="multiple-linear-regression-1.html#cb96-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Gdp Data.csv&quot;</span>)</span>
+<span id="cb96-3"><a href="multiple-linear-regression-1.html#cb96-3" tabindex="-1"></a></span>
+<span id="cb96-4"><a href="multiple-linear-regression-1.html#cb96-4" tabindex="-1"></a><span class="co"># Plot the scatterplots for each pair of variables</span></span>
+<span id="cb96-5"><a href="multiple-linear-regression-1.html#cb96-5" tabindex="-1"></a><span class="fu">pairs</span>(dat)</span></code></pre></div>
 <p><img src="_main_files/figure-html/paris-plot-gdp-1.png" width="672" /></p>
 <p>The scatterplot matrix provides an initial visual description of the dataset. In particular, it allows us to examine two types of relationships:</p>
 <ol style="list-style-type: decimal">
@@ -707,8 +708,8 @@ x,\;x^2,\;\ldots,\;x^k,
 </ol>
 <p>The second point becomes especially important in multiple regression. If two explanatory variables are strongly related to each other, then they may contain overlapping information about GDP. Consequently, their coefficients in a multiple regression may behave differently from the coefficients obtained when each variable is considered separately.</p>
 <p>The same pairwise relationships can be summarized numerically using correlations.</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="multiple-linear-regression-1.html#cb94-1" tabindex="-1"></a><span class="co"># Computes the correlation between variables</span></span>
-<span id="cb94-2"><a href="multiple-linear-regression-1.html#cb94-2" tabindex="-1"></a><span class="fu">cor</span>(dat)</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="multiple-linear-regression-1.html#cb97-1" tabindex="-1"></a><span class="co"># Computes the correlation between variables</span></span>
+<span id="cb97-2"><a href="multiple-linear-regression-1.html#cb97-2" tabindex="-1"></a><span class="fu">cor</span>(dat)</span></code></pre></div>
 <pre><code>##            gdp          inf         une        int         gov         exp
 ## gdp  1.0000000  0.875131082 -0.74874795  0.6964256  0.22172279 0.173602651
 ## inf  0.8751311  1.000000000 -0.78173033  0.8292061  0.31103644 0.005685918
@@ -731,98 +732,11 @@ x,\;x^2,\;\ldots,\;x^k,
 <p>The first plot helps us visualize the pairwise relationship. The second shows what remains unexplained after fitting that particular straight line.</p>
 <div id="inflation-rate" class="section level4 hasAnchor" number="6.2.1.1">
 <h4><span class="header-section-number">6.2.1.1</span> Inflation Rate<a href="multiple-linear-regression-1.html#inflation-rate" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="multiple-linear-regression-1.html#cb96-1" tabindex="-1"></a><span class="co"># Fits with Inflation</span></span>
-<span id="cb96-2"><a href="multiple-linear-regression-1.html#cb96-2" tabindex="-1"></a>outRegInf <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> inf, <span class="at">data =</span> dat)</span>
-<span id="cb96-3"><a href="multiple-linear-regression-1.html#cb96-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>inf</span>
-<span id="cb96-4"><a href="multiple-linear-regression-1.html#cb96-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegInf</span>
-<span id="cb96-5"><a href="multiple-linear-regression-1.html#cb96-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Inflation Rate&quot;</span></span>
-<span id="cb96-6"><a href="multiple-linear-regression-1.html#cb96-6" tabindex="-1"></a><span class="co"># Plots Regression Line and Scatterplot and residuals plot</span></span>
-<span id="cb96-7"><a href="multiple-linear-regression-1.html#cb96-7" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb96-8"><a href="multiple-linear-regression-1.html#cb96-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb96-9"><a href="multiple-linear-regression-1.html#cb96-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
-<span id="cb96-10"><a href="multiple-linear-regression-1.html#cb96-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb96-11"><a href="multiple-linear-regression-1.html#cb96-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
-<span id="cb96-12"><a href="multiple-linear-regression-1.html#cb96-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
-<span id="cb96-13"><a href="multiple-linear-regression-1.html#cb96-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb96-14"><a href="multiple-linear-regression-1.html#cb96-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb96-15"><a href="multiple-linear-regression-1.html#cb96-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb96-16"><a href="multiple-linear-regression-1.html#cb96-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb96-17"><a href="multiple-linear-regression-1.html#cb96-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb96-18"><a href="multiple-linear-regression-1.html#cb96-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
-<span id="cb96-19"><a href="multiple-linear-regression-1.html#cb96-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb96-20"><a href="multiple-linear-regression-1.html#cb96-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
-<span id="cb96-21"><a href="multiple-linear-regression-1.html#cb96-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
-<span id="cb96-22"><a href="multiple-linear-regression-1.html#cb96-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb96-23"><a href="multiple-linear-regression-1.html#cb96-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-inf-fit-1.png" width="672" /></p>
-<p>The fitted slope describes the pairwise linear relationship between inflation and GDP. It answers how the fitted value of GDP changes with inflation when inflation is the <strong>only explanatory variable included in the model</strong>.</p>
-<p>The residual plot shows the differences between the observed GDP values and those predicted using inflation alone. Any remaining structure in the residuals indicates variation in GDP that this simple regression does not represent.</p>
-</div>
-<div id="unemployment-rate" class="section level4 hasAnchor" number="6.2.1.2">
-<h4><span class="header-section-number">6.2.1.2</span> Unemployment Rate<a href="multiple-linear-regression-1.html#unemployment-rate" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="multiple-linear-regression-1.html#cb97-1" tabindex="-1"></a><span class="co"># Fits with Unemployment</span></span>
-<span id="cb97-2"><a href="multiple-linear-regression-1.html#cb97-2" tabindex="-1"></a>outRegUne <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> une, <span class="at">data =</span> dat)</span>
-<span id="cb97-3"><a href="multiple-linear-regression-1.html#cb97-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>une</span>
-<span id="cb97-4"><a href="multiple-linear-regression-1.html#cb97-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegUne</span>
-<span id="cb97-5"><a href="multiple-linear-regression-1.html#cb97-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Unemployment Rate&quot;</span></span>
-<span id="cb97-6"><a href="multiple-linear-regression-1.html#cb97-6" tabindex="-1"></a><span class="co"># Plots Regression Line and Scatterplot and residuals plot</span></span>
-<span id="cb97-7"><a href="multiple-linear-regression-1.html#cb97-7" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb97-8"><a href="multiple-linear-regression-1.html#cb97-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb97-9"><a href="multiple-linear-regression-1.html#cb97-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
-<span id="cb97-10"><a href="multiple-linear-regression-1.html#cb97-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb97-11"><a href="multiple-linear-regression-1.html#cb97-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
-<span id="cb97-12"><a href="multiple-linear-regression-1.html#cb97-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
-<span id="cb97-13"><a href="multiple-linear-regression-1.html#cb97-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb97-14"><a href="multiple-linear-regression-1.html#cb97-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb97-15"><a href="multiple-linear-regression-1.html#cb97-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb97-16"><a href="multiple-linear-regression-1.html#cb97-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb97-17"><a href="multiple-linear-regression-1.html#cb97-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb97-18"><a href="multiple-linear-regression-1.html#cb97-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
-<span id="cb97-19"><a href="multiple-linear-regression-1.html#cb97-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb97-20"><a href="multiple-linear-regression-1.html#cb97-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
-<span id="cb97-21"><a href="multiple-linear-regression-1.html#cb97-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
-<span id="cb97-22"><a href="multiple-linear-regression-1.html#cb97-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb97-23"><a href="multiple-linear-regression-1.html#cb97-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-unp-fit-1.png" width="672" /></p>
-<p>This regression describes the relationship between unemployment and GDP when unemployment is considered by itself.</p>
-<p>As before, the fitted line summarizes the pairwise linear trend, while the residuals represent the component of GDP that is not captured by that one-variable linear fit.</p>
-</div>
-<div id="interest-rate" class="section level4 hasAnchor" number="6.2.1.3">
-<h4><span class="header-section-number">6.2.1.3</span> Interest Rate<a href="multiple-linear-regression-1.html#interest-rate" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="multiple-linear-regression-1.html#cb98-1" tabindex="-1"></a><span class="co"># Fits with Interest Rate</span></span>
-<span id="cb98-2"><a href="multiple-linear-regression-1.html#cb98-2" tabindex="-1"></a>outRegInt <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> int, <span class="at">data =</span> dat)</span>
-<span id="cb98-3"><a href="multiple-linear-regression-1.html#cb98-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>int</span>
-<span id="cb98-4"><a href="multiple-linear-regression-1.html#cb98-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegInt</span>
-<span id="cb98-5"><a href="multiple-linear-regression-1.html#cb98-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Interest Rate&quot;</span></span>
-<span id="cb98-6"><a href="multiple-linear-regression-1.html#cb98-6" tabindex="-1"></a><span class="co"># Plots Regression Line and Scatterplot and residuals plot</span></span>
-<span id="cb98-7"><a href="multiple-linear-regression-1.html#cb98-7" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb98-8"><a href="multiple-linear-regression-1.html#cb98-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb98-9"><a href="multiple-linear-regression-1.html#cb98-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
-<span id="cb98-10"><a href="multiple-linear-regression-1.html#cb98-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb98-11"><a href="multiple-linear-regression-1.html#cb98-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
-<span id="cb98-12"><a href="multiple-linear-regression-1.html#cb98-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
-<span id="cb98-13"><a href="multiple-linear-regression-1.html#cb98-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
-<span id="cb98-14"><a href="multiple-linear-regression-1.html#cb98-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb98-15"><a href="multiple-linear-regression-1.html#cb98-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
-<span id="cb98-16"><a href="multiple-linear-regression-1.html#cb98-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb98-17"><a href="multiple-linear-regression-1.html#cb98-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
-<span id="cb98-18"><a href="multiple-linear-regression-1.html#cb98-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
-<span id="cb98-19"><a href="multiple-linear-regression-1.html#cb98-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
-<span id="cb98-20"><a href="multiple-linear-regression-1.html#cb98-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
-<span id="cb98-21"><a href="multiple-linear-regression-1.html#cb98-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
-<span id="cb98-22"><a href="multiple-linear-regression-1.html#cb98-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
-<span id="cb98-23"><a href="multiple-linear-regression-1.html#cb98-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-int-fit-1.png" width="672" /></p>
-<p>The estimated slope now describes the pairwise relationship between the reference interest rate and GDP.</p>
-<p>Importantly, this coefficient reflects both the relationship of the interest rate with GDP and any information that the interest rate shares with the other economic variables that have not yet been included in the model.</p>
-</div>
-<div id="government-spending" class="section level4 hasAnchor" number="6.2.1.4">
-<h4><span class="header-section-number">6.2.1.4</span> Government Spending<a href="multiple-linear-regression-1.html#government-spending" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="multiple-linear-regression-1.html#cb99-1" tabindex="-1"></a><span class="co"># Fits with Government Spending</span></span>
-<span id="cb99-2"><a href="multiple-linear-regression-1.html#cb99-2" tabindex="-1"></a>outRegGov <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> gov, <span class="at">data =</span> dat)</span>
-<span id="cb99-3"><a href="multiple-linear-regression-1.html#cb99-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>gov</span>
-<span id="cb99-4"><a href="multiple-linear-regression-1.html#cb99-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegGov</span>
-<span id="cb99-5"><a href="multiple-linear-regression-1.html#cb99-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Government Spending&quot;</span></span>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="multiple-linear-regression-1.html#cb99-1" tabindex="-1"></a><span class="co"># Fits with Inflation</span></span>
+<span id="cb99-2"><a href="multiple-linear-regression-1.html#cb99-2" tabindex="-1"></a>outRegInf <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> inf, <span class="at">data =</span> dat)</span>
+<span id="cb99-3"><a href="multiple-linear-regression-1.html#cb99-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>inf</span>
+<span id="cb99-4"><a href="multiple-linear-regression-1.html#cb99-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegInf</span>
+<span id="cb99-5"><a href="multiple-linear-regression-1.html#cb99-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Inflation Rate&quot;</span></span>
 <span id="cb99-6"><a href="multiple-linear-regression-1.html#cb99-6" tabindex="-1"></a><span class="co"># Plots Regression Line and Scatterplot and residuals plot</span></span>
 <span id="cb99-7"><a href="multiple-linear-regression-1.html#cb99-7" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb99-8"><a href="multiple-linear-regression-1.html#cb99-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
@@ -841,17 +755,17 @@ x,\;x^2,\;\ldots,\;x^k,
 <span id="cb99-21"><a href="multiple-linear-regression-1.html#cb99-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
 <span id="cb99-22"><a href="multiple-linear-regression-1.html#cb99-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
 <span id="cb99-23"><a href="multiple-linear-regression-1.html#cb99-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-gov-fit-1.png" width="672" /></p>
-<p>This fit examines GDP using government spending as the only explanatory variable.</p>
-<p>As with the previous models, the estimated coefficient should be interpreted as a <strong>simple-regression coefficient</strong>. It does not yet describe the relationship between government spending and GDP after accounting for inflation, unemployment, interest rates, or exports.</p>
+<p><img src="_main_files/figure-html/gdp-inf-fit-1.png" width="672" /></p>
+<p>The fitted slope describes the pairwise linear relationship between inflation and GDP. It answers how the fitted value of GDP changes with inflation when inflation is the <strong>only explanatory variable included in the model</strong>.</p>
+<p>The residual plot shows the differences between the observed GDP values and those predicted using inflation alone. Any remaining structure in the residuals indicates variation in GDP that this simple regression does not represent.</p>
 </div>
-<div id="exports" class="section level4 hasAnchor" number="6.2.1.5">
-<h4><span class="header-section-number">6.2.1.5</span> Exports<a href="multiple-linear-regression-1.html#exports" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="multiple-linear-regression-1.html#cb100-1" tabindex="-1"></a><span class="co"># Fits with Exports</span></span>
-<span id="cb100-2"><a href="multiple-linear-regression-1.html#cb100-2" tabindex="-1"></a>outRegExp <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> exp, <span class="at">data =</span> dat)</span>
-<span id="cb100-3"><a href="multiple-linear-regression-1.html#cb100-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>exp</span>
-<span id="cb100-4"><a href="multiple-linear-regression-1.html#cb100-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegExp</span>
-<span id="cb100-5"><a href="multiple-linear-regression-1.html#cb100-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Exports&quot;</span></span>
+<div id="unemployment-rate" class="section level4 hasAnchor" number="6.2.1.2">
+<h4><span class="header-section-number">6.2.1.2</span> Unemployment Rate<a href="multiple-linear-regression-1.html#unemployment-rate" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="multiple-linear-regression-1.html#cb100-1" tabindex="-1"></a><span class="co"># Fits with Unemployment</span></span>
+<span id="cb100-2"><a href="multiple-linear-regression-1.html#cb100-2" tabindex="-1"></a>outRegUne <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> une, <span class="at">data =</span> dat)</span>
+<span id="cb100-3"><a href="multiple-linear-regression-1.html#cb100-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>une</span>
+<span id="cb100-4"><a href="multiple-linear-regression-1.html#cb100-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegUne</span>
+<span id="cb100-5"><a href="multiple-linear-regression-1.html#cb100-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Unemployment Rate&quot;</span></span>
 <span id="cb100-6"><a href="multiple-linear-regression-1.html#cb100-6" tabindex="-1"></a><span class="co"># Plots Regression Line and Scatterplot and residuals plot</span></span>
 <span id="cb100-7"><a href="multiple-linear-regression-1.html#cb100-7" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb100-8"><a href="multiple-linear-regression-1.html#cb100-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
@@ -870,6 +784,93 @@ x,\;x^2,\;\ldots,\;x^k,
 <span id="cb100-21"><a href="multiple-linear-regression-1.html#cb100-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
 <span id="cb100-22"><a href="multiple-linear-regression-1.html#cb100-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
 <span id="cb100-23"><a href="multiple-linear-regression-1.html#cb100-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/gdp-unp-fit-1.png" width="672" /></p>
+<p>This regression describes the relationship between unemployment and GDP when unemployment is considered by itself.</p>
+<p>As before, the fitted line summarizes the pairwise linear trend, while the residuals represent the component of GDP that is not captured by that one-variable linear fit.</p>
+</div>
+<div id="interest-rate" class="section level4 hasAnchor" number="6.2.1.3">
+<h4><span class="header-section-number">6.2.1.3</span> Interest Rate<a href="multiple-linear-regression-1.html#interest-rate" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="multiple-linear-regression-1.html#cb101-1" tabindex="-1"></a><span class="co"># Fits with Interest Rate</span></span>
+<span id="cb101-2"><a href="multiple-linear-regression-1.html#cb101-2" tabindex="-1"></a>outRegInt <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> int, <span class="at">data =</span> dat)</span>
+<span id="cb101-3"><a href="multiple-linear-regression-1.html#cb101-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>int</span>
+<span id="cb101-4"><a href="multiple-linear-regression-1.html#cb101-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegInt</span>
+<span id="cb101-5"><a href="multiple-linear-regression-1.html#cb101-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Interest Rate&quot;</span></span>
+<span id="cb101-6"><a href="multiple-linear-regression-1.html#cb101-6" tabindex="-1"></a><span class="co"># Plots Regression Line and Scatterplot and residuals plot</span></span>
+<span id="cb101-7"><a href="multiple-linear-regression-1.html#cb101-7" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb101-8"><a href="multiple-linear-regression-1.html#cb101-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb101-9"><a href="multiple-linear-regression-1.html#cb101-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
+<span id="cb101-10"><a href="multiple-linear-regression-1.html#cb101-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb101-11"><a href="multiple-linear-regression-1.html#cb101-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
+<span id="cb101-12"><a href="multiple-linear-regression-1.html#cb101-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb101-13"><a href="multiple-linear-regression-1.html#cb101-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb101-14"><a href="multiple-linear-regression-1.html#cb101-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb101-15"><a href="multiple-linear-regression-1.html#cb101-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb101-16"><a href="multiple-linear-regression-1.html#cb101-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb101-17"><a href="multiple-linear-regression-1.html#cb101-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb101-18"><a href="multiple-linear-regression-1.html#cb101-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
+<span id="cb101-19"><a href="multiple-linear-regression-1.html#cb101-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb101-20"><a href="multiple-linear-regression-1.html#cb101-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb101-21"><a href="multiple-linear-regression-1.html#cb101-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb101-22"><a href="multiple-linear-regression-1.html#cb101-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb101-23"><a href="multiple-linear-regression-1.html#cb101-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/gdp-int-fit-1.png" width="672" /></p>
+<p>The estimated slope now describes the pairwise relationship between the reference interest rate and GDP.</p>
+<p>Importantly, this coefficient reflects both the relationship of the interest rate with GDP and any information that the interest rate shares with the other economic variables that have not yet been included in the model.</p>
+</div>
+<div id="government-spending" class="section level4 hasAnchor" number="6.2.1.4">
+<h4><span class="header-section-number">6.2.1.4</span> Government Spending<a href="multiple-linear-regression-1.html#government-spending" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="multiple-linear-regression-1.html#cb102-1" tabindex="-1"></a><span class="co"># Fits with Government Spending</span></span>
+<span id="cb102-2"><a href="multiple-linear-regression-1.html#cb102-2" tabindex="-1"></a>outRegGov <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> gov, <span class="at">data =</span> dat)</span>
+<span id="cb102-3"><a href="multiple-linear-regression-1.html#cb102-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>gov</span>
+<span id="cb102-4"><a href="multiple-linear-regression-1.html#cb102-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegGov</span>
+<span id="cb102-5"><a href="multiple-linear-regression-1.html#cb102-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Government Spending&quot;</span></span>
+<span id="cb102-6"><a href="multiple-linear-regression-1.html#cb102-6" tabindex="-1"></a><span class="co"># Plots Regression Line and Scatterplot and residuals plot</span></span>
+<span id="cb102-7"><a href="multiple-linear-regression-1.html#cb102-7" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb102-8"><a href="multiple-linear-regression-1.html#cb102-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb102-9"><a href="multiple-linear-regression-1.html#cb102-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
+<span id="cb102-10"><a href="multiple-linear-regression-1.html#cb102-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb102-11"><a href="multiple-linear-regression-1.html#cb102-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
+<span id="cb102-12"><a href="multiple-linear-regression-1.html#cb102-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb102-13"><a href="multiple-linear-regression-1.html#cb102-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb102-14"><a href="multiple-linear-regression-1.html#cb102-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb102-15"><a href="multiple-linear-regression-1.html#cb102-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb102-16"><a href="multiple-linear-regression-1.html#cb102-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb102-17"><a href="multiple-linear-regression-1.html#cb102-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb102-18"><a href="multiple-linear-regression-1.html#cb102-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
+<span id="cb102-19"><a href="multiple-linear-regression-1.html#cb102-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb102-20"><a href="multiple-linear-regression-1.html#cb102-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb102-21"><a href="multiple-linear-regression-1.html#cb102-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb102-22"><a href="multiple-linear-regression-1.html#cb102-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb102-23"><a href="multiple-linear-regression-1.html#cb102-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/gdp-gov-fit-1.png" width="672" /></p>
+<p>This fit examines GDP using government spending as the only explanatory variable.</p>
+<p>As with the previous models, the estimated coefficient should be interpreted as a <strong>simple-regression coefficient</strong>. It does not yet describe the relationship between government spending and GDP after accounting for inflation, unemployment, interest rates, or exports.</p>
+</div>
+<div id="exports" class="section level4 hasAnchor" number="6.2.1.5">
+<h4><span class="header-section-number">6.2.1.5</span> Exports<a href="multiple-linear-regression-1.html#exports" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="multiple-linear-regression-1.html#cb103-1" tabindex="-1"></a><span class="co"># Fits with Exports</span></span>
+<span id="cb103-2"><a href="multiple-linear-regression-1.html#cb103-2" tabindex="-1"></a>outRegExp <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> exp, <span class="at">data =</span> dat)</span>
+<span id="cb103-3"><a href="multiple-linear-regression-1.html#cb103-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>exp</span>
+<span id="cb103-4"><a href="multiple-linear-regression-1.html#cb103-4" tabindex="-1"></a>out       <span class="ot">&lt;-</span> outRegExp</span>
+<span id="cb103-5"><a href="multiple-linear-regression-1.html#cb103-5" tabindex="-1"></a>varNam    <span class="ot">&lt;-</span> <span class="st">&quot;Exports&quot;</span></span>
+<span id="cb103-6"><a href="multiple-linear-regression-1.html#cb103-6" tabindex="-1"></a><span class="co"># Plots Regression Line and Scatterplot and residuals plot</span></span>
+<span id="cb103-7"><a href="multiple-linear-regression-1.html#cb103-7" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb103-8"><a href="multiple-linear-regression-1.html#cb103-8" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb103-9"><a href="multiple-linear-regression-1.html#cb103-9" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>gd,</span>
+<span id="cb103-10"><a href="multiple-linear-regression-1.html#cb103-10" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb103-11"><a href="multiple-linear-regression-1.html#cb103-11" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;GDP&quot;</span>,</span>
+<span id="cb103-12"><a href="multiple-linear-regression-1.html#cb103-12" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb103-13"><a href="multiple-linear-regression-1.html#cb103-13" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a   =</span> out<span class="sc">$</span>coefficients[<span class="dv">1</span>],</span>
+<span id="cb103-14"><a href="multiple-linear-regression-1.html#cb103-14" tabindex="-1"></a>       <span class="at">b   =</span> out<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb103-15"><a href="multiple-linear-regression-1.html#cb103-15" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb103-16"><a href="multiple-linear-regression-1.html#cb103-16" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb103-17"><a href="multiple-linear-regression-1.html#cb103-17" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x    =</span> varVal,</span>
+<span id="cb103-18"><a href="multiple-linear-regression-1.html#cb103-18" tabindex="-1"></a>     <span class="at">y    =</span> out<span class="sc">$</span>residuals,</span>
+<span id="cb103-19"><a href="multiple-linear-regression-1.html#cb103-19" tabindex="-1"></a>     <span class="at">xlab =</span> varNam,</span>
+<span id="cb103-20"><a href="multiple-linear-regression-1.html#cb103-20" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb103-21"><a href="multiple-linear-regression-1.html#cb103-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
+<span id="cb103-22"><a href="multiple-linear-regression-1.html#cb103-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
+<span id="cb103-23"><a href="multiple-linear-regression-1.html#cb103-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="_main_files/figure-html/gdp-exp-fit-1.png" width="672" /></p>
 <p>The exports model provides the final pairwise regression. Its slope summarizes how the fitted GDP changes with exports when exports are considered alone.</p>
 <p>Taken together, the five simple regressions provide useful benchmarks. They show what each explanatory variable appears to contribute when examined individually. We can now compare these results with a model in which all five explanatory variables are included simultaneously.</p>
@@ -902,12 +903,12 @@ e.
 \]</span></p>
 <p>Each coefficient now describes the change in the fitted linear component associated with one explanatory variable <strong>while the values of the other explanatory variables are held fixed</strong>.</p>
 <p>We fit the full model and compare its coefficient estimates with those obtained from the corresponding simple regressions.</p>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="multiple-linear-regression-1.html#cb101-1" tabindex="-1"></a>outRegAll <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> inf <span class="sc">+</span> une <span class="sc">+</span> int <span class="sc">+</span> gov <span class="sc">+</span> exp, <span class="at">data =</span> dat)</span>
-<span id="cb101-2"><a href="multiple-linear-regression-1.html#cb101-2" tabindex="-1"></a></span>
-<span id="cb101-3"><a href="multiple-linear-regression-1.html#cb101-3" tabindex="-1"></a><span class="co"># Summary All</span></span>
-<span id="cb101-4"><a href="multiple-linear-regression-1.html#cb101-4" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;All Independent Variables&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="multiple-linear-regression-1.html#cb104-1" tabindex="-1"></a>outRegAll <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> inf <span class="sc">+</span> une <span class="sc">+</span> int <span class="sc">+</span> gov <span class="sc">+</span> exp, <span class="at">data =</span> dat)</span>
+<span id="cb104-2"><a href="multiple-linear-regression-1.html#cb104-2" tabindex="-1"></a></span>
+<span id="cb104-3"><a href="multiple-linear-regression-1.html#cb104-3" tabindex="-1"></a><span class="co"># Summary All</span></span>
+<span id="cb104-4"><a href="multiple-linear-regression-1.html#cb104-4" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;All Independent Variables&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;All Independent Variables&quot;</code></pre>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="multiple-linear-regression-1.html#cb103-1" tabindex="-1"></a><span class="fu">summary</span>(outRegAll)</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="multiple-linear-regression-1.html#cb106-1" tabindex="-1"></a><span class="fu">summary</span>(outRegAll)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = gdp ~ inf + une + int + gov + exp, data = dat)
@@ -930,9 +931,9 @@ e.
 ## Residual standard error: 0.5024 on 190 degrees of freedom
 ## Multiple R-squared:  0.8096, Adjusted R-squared:  0.8046 
 ## F-statistic: 161.6 on 5 and 190 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="multiple-linear-regression-1.html#cb105-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Only Inflation Rate&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="multiple-linear-regression-1.html#cb108-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Only Inflation Rate&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Only Inflation Rate&quot;</code></pre>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="multiple-linear-regression-1.html#cb107-1" tabindex="-1"></a><span class="fu">summary</span>(outRegInf)</span></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="multiple-linear-regression-1.html#cb110-1" tabindex="-1"></a><span class="fu">summary</span>(outRegInf)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = gdp ~ inf, data = dat)
@@ -951,9 +952,9 @@ e.
 ## Residual standard error: 0.5514 on 194 degrees of freedom
 ## Multiple R-squared:  0.7659, Adjusted R-squared:  0.7646 
 ## F-statistic: 634.5 on 1 and 194 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="multiple-linear-regression-1.html#cb109-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Only Unemployment Rate&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="multiple-linear-regression-1.html#cb112-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Only Unemployment Rate&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Only Unemployment Rate&quot;</code></pre>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="multiple-linear-regression-1.html#cb111-1" tabindex="-1"></a><span class="fu">summary</span>(outRegUne)</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="multiple-linear-regression-1.html#cb114-1" tabindex="-1"></a><span class="fu">summary</span>(outRegUne)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = gdp ~ une, data = dat)
@@ -972,9 +973,9 @@ e.
 ## Residual standard error: 0.7554 on 194 degrees of freedom
 ## Multiple R-squared:  0.5606, Adjusted R-squared:  0.5584 
 ## F-statistic: 247.5 on 1 and 194 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="multiple-linear-regression-1.html#cb113-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Only Interest Rate&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="multiple-linear-regression-1.html#cb116-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Only Interest Rate&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Only Interest Rate&quot;</code></pre>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="multiple-linear-regression-1.html#cb115-1" tabindex="-1"></a><span class="fu">summary</span>(outRegInt)</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="multiple-linear-regression-1.html#cb118-1" tabindex="-1"></a><span class="fu">summary</span>(outRegInt)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = gdp ~ int, data = dat)
@@ -993,9 +994,9 @@ e.
 ## Residual standard error: 0.8178 on 194 degrees of freedom
 ## Multiple R-squared:  0.485,  Adjusted R-squared:  0.4824 
 ## F-statistic: 182.7 on 1 and 194 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="multiple-linear-regression-1.html#cb117-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Only Government Spending&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="multiple-linear-regression-1.html#cb120-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Only Government Spending&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Only Government Spending&quot;</code></pre>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="multiple-linear-regression-1.html#cb119-1" tabindex="-1"></a><span class="fu">summary</span>(outRegGov)</span></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="multiple-linear-regression-1.html#cb122-1" tabindex="-1"></a><span class="fu">summary</span>(outRegGov)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = gdp ~ gov, data = dat)
@@ -1014,9 +1015,9 @@ e.
 ## Residual standard error: 1.111 on 194 degrees of freedom
 ## Multiple R-squared:  0.04916,    Adjusted R-squared:  0.04426 
 ## F-statistic: 10.03 on 1 and 194 DF,  p-value: 0.001789</code></pre>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="multiple-linear-regression-1.html#cb121-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Only Exports&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="multiple-linear-regression-1.html#cb124-1" tabindex="-1"></a><span class="fu">print</span>(<span class="st">&quot;Only Exports&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Only Exports&quot;</code></pre>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="multiple-linear-regression-1.html#cb123-1" tabindex="-1"></a><span class="fu">summary</span>(outRegExp)</span></code></pre></div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="multiple-linear-regression-1.html#cb126-1" tabindex="-1"></a><span class="fu">summary</span>(outRegExp)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = gdp ~ exp, data = dat)
@@ -1035,15 +1036,15 @@ e.
 ## Residual standard error: 1.122 on 194 degrees of freedom
 ## Multiple R-squared:  0.03014,    Adjusted R-squared:  0.02514 
 ## F-statistic: 6.028 on 1 and 194 DF,  p-value: 0.01496</code></pre>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="multiple-linear-regression-1.html#cb125-1" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
-<span id="cb125-2"><a href="multiple-linear-regression-1.html#cb125-2" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(outRegAll<span class="sc">$</span>coefficients[<span class="sc">-</span><span class="dv">1</span>], <span class="fu">c</span>(outRegInf<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb125-3"><a href="multiple-linear-regression-1.html#cb125-3" tabindex="-1"></a>                                                     outRegUne<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb125-4"><a href="multiple-linear-regression-1.html#cb125-4" tabindex="-1"></a>                                                     outRegInt<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb125-5"><a href="multiple-linear-regression-1.html#cb125-5" tabindex="-1"></a>                                                     outRegGov<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
-<span id="cb125-6"><a href="multiple-linear-regression-1.html#cb125-6" tabindex="-1"></a>                                                     outRegExp<span class="sc">$</span>coefficients[<span class="dv">2</span>]))</span>
-<span id="cb125-7"><a href="multiple-linear-regression-1.html#cb125-7" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;All&quot;</span>, <span class="st">&quot;Individual&quot;</span>)</span>
-<span id="cb125-8"><a href="multiple-linear-regression-1.html#cb125-8" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Inflation&quot;</span>, <span class="st">&quot;Unemployment&quot;</span>, <span class="st">&quot;Interest Rate&quot;</span>, <span class="st">&quot;Government Expenditure&quot;</span>, <span class="st">&quot;Exports&quot;</span>)</span>
-<span id="cb125-9"><a href="multiple-linear-regression-1.html#cb125-9" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="multiple-linear-regression-1.html#cb128-1" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
+<span id="cb128-2"><a href="multiple-linear-regression-1.html#cb128-2" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(outRegAll<span class="sc">$</span>coefficients[<span class="sc">-</span><span class="dv">1</span>], <span class="fu">c</span>(outRegInf<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb128-3"><a href="multiple-linear-regression-1.html#cb128-3" tabindex="-1"></a>                                                     outRegUne<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb128-4"><a href="multiple-linear-regression-1.html#cb128-4" tabindex="-1"></a>                                                     outRegInt<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb128-5"><a href="multiple-linear-regression-1.html#cb128-5" tabindex="-1"></a>                                                     outRegGov<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb128-6"><a href="multiple-linear-regression-1.html#cb128-6" tabindex="-1"></a>                                                     outRegExp<span class="sc">$</span>coefficients[<span class="dv">2</span>]))</span>
+<span id="cb128-7"><a href="multiple-linear-regression-1.html#cb128-7" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;All&quot;</span>, <span class="st">&quot;Individual&quot;</span>)</span>
+<span id="cb128-8"><a href="multiple-linear-regression-1.html#cb128-8" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Inflation&quot;</span>, <span class="st">&quot;Unemployment&quot;</span>, <span class="st">&quot;Interest Rate&quot;</span>, <span class="st">&quot;Government Expenditure&quot;</span>, <span class="st">&quot;Exports&quot;</span>)</span>
+<span id="cb128-9"><a href="multiple-linear-regression-1.html#cb128-9" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -1713,50 +1714,50 @@ dependent variables <span class="math inline">\(r_{Xy}\)</span>.</p>
 <p>Working with standardized variables is useful, since standardized variables are unit-less,
 so the estimated coefficients magnitudes are comparable.</p>
 <p>We can see these results in practice with our GDP data:</p>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="multiple-linear-regression-1.html#cb126-1" tabindex="-1"></a><span class="co"># Read Data</span></span>
-<span id="cb126-2"><a href="multiple-linear-regression-1.html#cb126-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Gdp data.csv&quot;</span>)</span>
-<span id="cb126-3"><a href="multiple-linear-regression-1.html#cb126-3" tabindex="-1"></a></span>
-<span id="cb126-4"><a href="multiple-linear-regression-1.html#cb126-4" tabindex="-1"></a><span class="co"># Design Matrix Independent Variables</span></span>
-<span id="cb126-5"><a href="multiple-linear-regression-1.html#cb126-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb126-6"><a href="multiple-linear-regression-1.html#cb126-6" tabindex="-1"></a><span class="co"># Dependent Variable</span></span>
-<span id="cb126-7"><a href="multiple-linear-regression-1.html#cb126-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> dat<span class="sc">$</span>gdp</span>
-<span id="cb126-8"><a href="multiple-linear-regression-1.html#cb126-8" tabindex="-1"></a><span class="co"># Number of Observations</span></span>
-<span id="cb126-9"><a href="multiple-linear-regression-1.html#cb126-9" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
-<span id="cb126-10"><a href="multiple-linear-regression-1.html#cb126-10" tabindex="-1"></a><span class="co"># Design Matrix with the column of Ones</span></span>
-<span id="cb126-11"><a href="multiple-linear-regression-1.html#cb126-11" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), X)</span>
-<span id="cb126-12"><a href="multiple-linear-regression-1.html#cb126-12" tabindex="-1"></a></span>
-<span id="cb126-13"><a href="multiple-linear-regression-1.html#cb126-13" tabindex="-1"></a><span class="co"># Centering</span></span>
-<span id="cb126-14"><a href="multiple-linear-regression-1.html#cb126-14" tabindex="-1"></a><span class="co"># Vector of Ones</span></span>
-<span id="cb126-15"><a href="multiple-linear-regression-1.html#cb126-15" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, n)</span>
-<span id="cb126-16"><a href="multiple-linear-regression-1.html#cb126-16" tabindex="-1"></a><span class="co"># Centering Matrix</span></span>
-<span id="cb126-17"><a href="multiple-linear-regression-1.html#cb126-17" tabindex="-1"></a>C  <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>n) <span class="sc">*</span> v1 <span class="sc">%*%</span> <span class="fu">t</span>(v1)</span>
-<span id="cb126-18"><a href="multiple-linear-regression-1.html#cb126-18" tabindex="-1"></a><span class="co"># Independent Variables Centered</span></span>
-<span id="cb126-19"><a href="multiple-linear-regression-1.html#cb126-19" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
-<span id="cb126-20"><a href="multiple-linear-regression-1.html#cb126-20" tabindex="-1"></a><span class="co"># Dependent Variable Centered</span></span>
-<span id="cb126-21"><a href="multiple-linear-regression-1.html#cb126-21" tabindex="-1"></a>yc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> y</span>
-<span id="cb126-22"><a href="multiple-linear-regression-1.html#cb126-22" tabindex="-1"></a><span class="co"># Design Matrix with Independent Variables Centered</span></span>
-<span id="cb126-23"><a href="multiple-linear-regression-1.html#cb126-23" tabindex="-1"></a>Zc <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), Xc)</span>
-<span id="cb126-24"><a href="multiple-linear-regression-1.html#cb126-24" tabindex="-1"></a></span>
-<span id="cb126-25"><a href="multiple-linear-regression-1.html#cb126-25" tabindex="-1"></a><span class="co"># Checks that the Variables are actually centered</span></span>
-<span id="cb126-26"><a href="multiple-linear-regression-1.html#cb126-26" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">colMeans</span>(Xc), <span class="dv">8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="multiple-linear-regression-1.html#cb129-1" tabindex="-1"></a><span class="co"># Read Data</span></span>
+<span id="cb129-2"><a href="multiple-linear-regression-1.html#cb129-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Gdp data.csv&quot;</span>)</span>
+<span id="cb129-3"><a href="multiple-linear-regression-1.html#cb129-3" tabindex="-1"></a></span>
+<span id="cb129-4"><a href="multiple-linear-regression-1.html#cb129-4" tabindex="-1"></a><span class="co"># Design Matrix Independent Variables</span></span>
+<span id="cb129-5"><a href="multiple-linear-regression-1.html#cb129-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb129-6"><a href="multiple-linear-regression-1.html#cb129-6" tabindex="-1"></a><span class="co"># Dependent Variable</span></span>
+<span id="cb129-7"><a href="multiple-linear-regression-1.html#cb129-7" tabindex="-1"></a>y <span class="ot">&lt;-</span> dat<span class="sc">$</span>gdp</span>
+<span id="cb129-8"><a href="multiple-linear-regression-1.html#cb129-8" tabindex="-1"></a><span class="co"># Number of Observations</span></span>
+<span id="cb129-9"><a href="multiple-linear-regression-1.html#cb129-9" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
+<span id="cb129-10"><a href="multiple-linear-regression-1.html#cb129-10" tabindex="-1"></a><span class="co"># Design Matrix with the column of Ones</span></span>
+<span id="cb129-11"><a href="multiple-linear-regression-1.html#cb129-11" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), X)</span>
+<span id="cb129-12"><a href="multiple-linear-regression-1.html#cb129-12" tabindex="-1"></a></span>
+<span id="cb129-13"><a href="multiple-linear-regression-1.html#cb129-13" tabindex="-1"></a><span class="co"># Centering</span></span>
+<span id="cb129-14"><a href="multiple-linear-regression-1.html#cb129-14" tabindex="-1"></a><span class="co"># Vector of Ones</span></span>
+<span id="cb129-15"><a href="multiple-linear-regression-1.html#cb129-15" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, n)</span>
+<span id="cb129-16"><a href="multiple-linear-regression-1.html#cb129-16" tabindex="-1"></a><span class="co"># Centering Matrix</span></span>
+<span id="cb129-17"><a href="multiple-linear-regression-1.html#cb129-17" tabindex="-1"></a>C  <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>n) <span class="sc">*</span> v1 <span class="sc">%*%</span> <span class="fu">t</span>(v1)</span>
+<span id="cb129-18"><a href="multiple-linear-regression-1.html#cb129-18" tabindex="-1"></a><span class="co"># Independent Variables Centered</span></span>
+<span id="cb129-19"><a href="multiple-linear-regression-1.html#cb129-19" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
+<span id="cb129-20"><a href="multiple-linear-regression-1.html#cb129-20" tabindex="-1"></a><span class="co"># Dependent Variable Centered</span></span>
+<span id="cb129-21"><a href="multiple-linear-regression-1.html#cb129-21" tabindex="-1"></a>yc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> y</span>
+<span id="cb129-22"><a href="multiple-linear-regression-1.html#cb129-22" tabindex="-1"></a><span class="co"># Design Matrix with Independent Variables Centered</span></span>
+<span id="cb129-23"><a href="multiple-linear-regression-1.html#cb129-23" tabindex="-1"></a>Zc <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), Xc)</span>
+<span id="cb129-24"><a href="multiple-linear-regression-1.html#cb129-24" tabindex="-1"></a></span>
+<span id="cb129-25"><a href="multiple-linear-regression-1.html#cb129-25" tabindex="-1"></a><span class="co"># Checks that the Variables are actually centered</span></span>
+<span id="cb129-26"><a href="multiple-linear-regression-1.html#cb129-26" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">colMeans</span>(Xc), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>## inf une int gov exp 
 ##   0   0   0   0   0</code></pre>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="multiple-linear-regression-1.html#cb128-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">mean</span>(yc), <span class="dv">8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="multiple-linear-regression-1.html#cb131-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">mean</span>(yc), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
-<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="multiple-linear-regression-1.html#cb130-1" tabindex="-1"></a><span class="co"># Shows the Mean of y</span></span>
-<span id="cb130-2"><a href="multiple-linear-regression-1.html#cb130-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">mean</span>(y), <span class="dv">8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="multiple-linear-regression-1.html#cb133-1" tabindex="-1"></a><span class="co"># Shows the Mean of y</span></span>
+<span id="cb133-2"><a href="multiple-linear-regression-1.html#cb133-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">mean</span>(y), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>## [1] 2.981131</code></pre>
-<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="multiple-linear-regression-1.html#cb132-1" tabindex="-1"></a><span class="co"># Compute the Estimates of the Coefficients with Original Variables</span></span>
-<span id="cb132-2"><a href="multiple-linear-regression-1.html#cb132-2" tabindex="-1"></a>b   <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Z) <span class="sc">%*%</span> Z, <span class="fu">t</span>(Z) <span class="sc">%*%</span> y)</span>
-<span id="cb132-3"><a href="multiple-linear-regression-1.html#cb132-3" tabindex="-1"></a><span class="co"># Compute the Estimates of the Coefficients with Centered Independent Variables Only</span></span>
-<span id="cb132-4"><a href="multiple-linear-regression-1.html#cb132-4" tabindex="-1"></a>bs1 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Zc) <span class="sc">%*%</span> Zc, <span class="fu">t</span>(Zc) <span class="sc">%*%</span> y)</span>
-<span id="cb132-5"><a href="multiple-linear-regression-1.html#cb132-5" tabindex="-1"></a><span class="co"># Compute the Estimates of the Coefficients with All Variables Centered</span></span>
-<span id="cb132-6"><a href="multiple-linear-regression-1.html#cb132-6" tabindex="-1"></a>bs2 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Zc) <span class="sc">%*%</span> Zc, <span class="fu">t</span>(Zc) <span class="sc">%*%</span> yc)</span>
-<span id="cb132-7"><a href="multiple-linear-regression-1.html#cb132-7" tabindex="-1"></a><span class="co"># Compute the Estimates of the Coefficients with All variables Centered and no column of ones</span></span>
-<span id="cb132-8"><a href="multiple-linear-regression-1.html#cb132-8" tabindex="-1"></a>bs3 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Xc) <span class="sc">%*%</span> Xc, <span class="fu">t</span>(Xc) <span class="sc">%*%</span> yc)</span>
-<span id="cb132-9"><a href="multiple-linear-regression-1.html#cb132-9" tabindex="-1"></a></span>
-<span id="cb132-10"><a href="multiple-linear-regression-1.html#cb132-10" tabindex="-1"></a><span class="co"># Shows the Estimated Coefficients Side-by-Side</span></span>
-<span id="cb132-11"><a href="multiple-linear-regression-1.html#cb132-11" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">cbind</span>(b, bs1, bs2, <span class="fu">c</span>(<span class="dv">0</span>, bs3)), <span class="dv">8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="multiple-linear-regression-1.html#cb135-1" tabindex="-1"></a><span class="co"># Compute the Estimates of the Coefficients with Original Variables</span></span>
+<span id="cb135-2"><a href="multiple-linear-regression-1.html#cb135-2" tabindex="-1"></a>b   <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Z) <span class="sc">%*%</span> Z, <span class="fu">t</span>(Z) <span class="sc">%*%</span> y)</span>
+<span id="cb135-3"><a href="multiple-linear-regression-1.html#cb135-3" tabindex="-1"></a><span class="co"># Compute the Estimates of the Coefficients with Centered Independent Variables Only</span></span>
+<span id="cb135-4"><a href="multiple-linear-regression-1.html#cb135-4" tabindex="-1"></a>bs1 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Zc) <span class="sc">%*%</span> Zc, <span class="fu">t</span>(Zc) <span class="sc">%*%</span> y)</span>
+<span id="cb135-5"><a href="multiple-linear-regression-1.html#cb135-5" tabindex="-1"></a><span class="co"># Compute the Estimates of the Coefficients with All Variables Centered</span></span>
+<span id="cb135-6"><a href="multiple-linear-regression-1.html#cb135-6" tabindex="-1"></a>bs2 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Zc) <span class="sc">%*%</span> Zc, <span class="fu">t</span>(Zc) <span class="sc">%*%</span> yc)</span>
+<span id="cb135-7"><a href="multiple-linear-regression-1.html#cb135-7" tabindex="-1"></a><span class="co"># Compute the Estimates of the Coefficients with All variables Centered and no column of ones</span></span>
+<span id="cb135-8"><a href="multiple-linear-regression-1.html#cb135-8" tabindex="-1"></a>bs3 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Xc) <span class="sc">%*%</span> Xc, <span class="fu">t</span>(Xc) <span class="sc">%*%</span> yc)</span>
+<span id="cb135-9"><a href="multiple-linear-regression-1.html#cb135-9" tabindex="-1"></a></span>
+<span id="cb135-10"><a href="multiple-linear-regression-1.html#cb135-10" tabindex="-1"></a><span class="co"># Shows the Estimated Coefficients Side-by-Side</span></span>
+<span id="cb135-11"><a href="multiple-linear-regression-1.html#cb135-11" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">cbind</span>(b, bs1, bs2, <span class="fu">c</span>(<span class="dv">0</span>, bs3)), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>##            [,1]        [,2]        [,3]        [,4]
 ##      1.55530096  2.98113131  0.00000000  0.00000000
 ## inf  0.31221813  0.31221813  0.31221813  0.31221813
@@ -1770,35 +1771,35 @@ independent variables are centered or the dependent variable is centered of both
 this are the that we had using the <code>lm</code> function of <code>R</code>.</p>
 <p>We can also check that computing the sample covariance matrix using our formula
 results in the same quantities that using the <code>cov</code> function in <code>R</code>.</p>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="multiple-linear-regression-1.html#cb134-1" tabindex="-1"></a><span class="co"># Sample Covariance of X</span></span>
-<span id="cb134-2"><a href="multiple-linear-regression-1.html#cb134-2" tabindex="-1"></a>SXX <span class="ot">&lt;-</span> <span class="fu">t</span>(Xc) <span class="sc">%*%</span> Xc <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
-<span id="cb134-3"><a href="multiple-linear-regression-1.html#cb134-3" tabindex="-1"></a><span class="co"># Sample Covariance between X and y</span></span>
-<span id="cb134-4"><a href="multiple-linear-regression-1.html#cb134-4" tabindex="-1"></a>SXy <span class="ot">&lt;-</span> <span class="fu">t</span>(Xc) <span class="sc">%*%</span> yc <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
-<span id="cb134-5"><a href="multiple-linear-regression-1.html#cb134-5" tabindex="-1"></a></span>
-<span id="cb134-6"><a href="multiple-linear-regression-1.html#cb134-6" tabindex="-1"></a><span class="co"># Shows the comparison in covariance matrices</span></span>
-<span id="cb134-7"><a href="multiple-linear-regression-1.html#cb134-7" tabindex="-1"></a><span class="fu">print</span>(SXX)</span></code></pre></div>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="multiple-linear-regression-1.html#cb137-1" tabindex="-1"></a><span class="co"># Sample Covariance of X</span></span>
+<span id="cb137-2"><a href="multiple-linear-regression-1.html#cb137-2" tabindex="-1"></a>SXX <span class="ot">&lt;-</span> <span class="fu">t</span>(Xc) <span class="sc">%*%</span> Xc <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
+<span id="cb137-3"><a href="multiple-linear-regression-1.html#cb137-3" tabindex="-1"></a><span class="co"># Sample Covariance between X and y</span></span>
+<span id="cb137-4"><a href="multiple-linear-regression-1.html#cb137-4" tabindex="-1"></a>SXy <span class="ot">&lt;-</span> <span class="fu">t</span>(Xc) <span class="sc">%*%</span> yc <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
+<span id="cb137-5"><a href="multiple-linear-regression-1.html#cb137-5" tabindex="-1"></a></span>
+<span id="cb137-6"><a href="multiple-linear-regression-1.html#cb137-6" tabindex="-1"></a><span class="co"># Shows the comparison in covariance matrices</span></span>
+<span id="cb137-7"><a href="multiple-linear-regression-1.html#cb137-7" tabindex="-1"></a><span class="fu">print</span>(SXX)</span></code></pre></div>
 <pre><code>##             inf         une         int        gov        exp
 ## inf  4.03991957 -1.28576595  1.52551017  2.4374124 0.03447976
 ## une -1.28576595  0.66963355 -0.27282160 -0.5319862 0.02605596
 ## int  1.52551017 -0.27282160  0.83778484  0.7633037 0.04335484
 ## gov  2.43741235 -0.53198621  0.76330368 15.2006711 0.21732195
 ## exp  0.03447976  0.02605596  0.04335484  0.2173220 9.10237220</code></pre>
-<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="multiple-linear-regression-1.html#cb136-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">cov</span>(X))</span></code></pre></div>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="multiple-linear-regression-1.html#cb139-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">cov</span>(X))</span></code></pre></div>
 <pre><code>##             inf         une         int        gov        exp
 ## inf  4.03991957 -1.28576595  1.52551017  2.4374124 0.03447976
 ## une -1.28576595  0.66963355 -0.27282160 -0.5319862 0.02605596
 ## int  1.52551017 -0.27282160  0.83778484  0.7633037 0.04335484
 ## gov  2.43741235 -0.53198621  0.76330368 15.2006711 0.21732195
 ## exp  0.03447976  0.02605596  0.04335484  0.2173220 9.10237220</code></pre>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="multiple-linear-regression-1.html#cb138-1" tabindex="-1"></a><span class="co"># Shows the comparison in covariance vectors</span></span>
-<span id="cb138-2"><a href="multiple-linear-regression-1.html#cb138-2" tabindex="-1"></a><span class="fu">print</span>(SXy)</span></code></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="multiple-linear-regression-1.html#cb141-1" tabindex="-1"></a><span class="co"># Shows the comparison in covariance vectors</span></span>
+<span id="cb141-2"><a href="multiple-linear-regression-1.html#cb141-2" tabindex="-1"></a><span class="fu">print</span>(SXy)</span></code></pre></div>
 <pre><code>##           [,1]
 ## inf  1.9993285
 ## une -0.6964324
 ## int  0.7245455
 ## gov  0.9825766
 ## exp  0.5953308</code></pre>
-<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="multiple-linear-regression-1.html#cb140-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">cov</span>(X, y))</span></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="multiple-linear-regression-1.html#cb143-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">cov</span>(X, y))</span></code></pre></div>
 <pre><code>##           [,1]
 ## inf  1.9993285
 ## une -0.6964324
@@ -1806,12 +1807,12 @@ results in the same quantities that using the <code>cov</code> function in <code
 ## gov  0.9825766
 ## exp  0.5953308</code></pre>
 <p>Finally, we can test our new formulas for the estimates:</p>
-<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="multiple-linear-regression-1.html#cb142-1" tabindex="-1"></a><span class="co"># Computes the estimates of the coefficients using the covariance matrices</span></span>
-<span id="cb142-2"><a href="multiple-linear-regression-1.html#cb142-2" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="fu">solve</span>(SXX, SXy)</span>
-<span id="cb142-3"><a href="multiple-linear-regression-1.html#cb142-3" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="fu">mean</span>(y) <span class="sc">-</span> <span class="fu">t</span>(<span class="fu">colMeans</span>(X)) <span class="sc">%*%</span> b1</span>
-<span id="cb142-4"><a href="multiple-linear-regression-1.html#cb142-4" tabindex="-1"></a></span>
-<span id="cb142-5"><a href="multiple-linear-regression-1.html#cb142-5" tabindex="-1"></a><span class="co"># Shows the Estimates Side by Side</span></span>
-<span id="cb142-6"><a href="multiple-linear-regression-1.html#cb142-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">cbind</span>(b, <span class="fu">c</span>(b0, b1)), <span class="dv">8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="multiple-linear-regression-1.html#cb145-1" tabindex="-1"></a><span class="co"># Computes the estimates of the coefficients using the covariance matrices</span></span>
+<span id="cb145-2"><a href="multiple-linear-regression-1.html#cb145-2" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="fu">solve</span>(SXX, SXy)</span>
+<span id="cb145-3"><a href="multiple-linear-regression-1.html#cb145-3" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="fu">mean</span>(y) <span class="sc">-</span> <span class="fu">t</span>(<span class="fu">colMeans</span>(X)) <span class="sc">%*%</span> b1</span>
+<span id="cb145-4"><a href="multiple-linear-regression-1.html#cb145-4" tabindex="-1"></a></span>
+<span id="cb145-5"><a href="multiple-linear-regression-1.html#cb145-5" tabindex="-1"></a><span class="co"># Shows the Estimates Side by Side</span></span>
+<span id="cb145-6"><a href="multiple-linear-regression-1.html#cb145-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">cbind</span>(b, <span class="fu">c</span>(b0, b1)), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>##            [,1]        [,2]
 ##      1.55530096  1.55530096
 ## inf  0.31221813  0.31221813
@@ -1820,51 +1821,51 @@ results in the same quantities that using the <code>cov</code> function in <code
 ## gov -0.00848329 -0.00848329
 ## exp  0.06465692  0.06465692</code></pre>
 <p>In the same way, we can work with the sample correlations</p>
-<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="multiple-linear-regression-1.html#cb144-1" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
-<span id="cb144-2"><a href="multiple-linear-regression-1.html#cb144-2" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
-<span id="cb144-3"><a href="multiple-linear-regression-1.html#cb144-3" tabindex="-1"></a><span class="co"># Standardize X</span></span>
-<span id="cb144-4"><a href="multiple-linear-regression-1.html#cb144-4" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
-<span id="cb144-5"><a href="multiple-linear-regression-1.html#cb144-5" tabindex="-1"></a><span class="co"># Shows that Xs is indeed standardize</span></span>
-<span id="cb144-6"><a href="multiple-linear-regression-1.html#cb144-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">colMeans</span>(Xs), <span class="dv">8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="multiple-linear-regression-1.html#cb147-1" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
+<span id="cb147-2"><a href="multiple-linear-regression-1.html#cb147-2" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
+<span id="cb147-3"><a href="multiple-linear-regression-1.html#cb147-3" tabindex="-1"></a><span class="co"># Standardize X</span></span>
+<span id="cb147-4"><a href="multiple-linear-regression-1.html#cb147-4" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
+<span id="cb147-5"><a href="multiple-linear-regression-1.html#cb147-5" tabindex="-1"></a><span class="co"># Shows that Xs is indeed standardize</span></span>
+<span id="cb147-6"><a href="multiple-linear-regression-1.html#cb147-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">colMeans</span>(Xs), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>## [1] 0 0 0 0 0</code></pre>
-<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="multiple-linear-regression-1.html#cb146-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">apply</span>(<span class="at">X =</span> Xs, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> sd))</span></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="multiple-linear-regression-1.html#cb149-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">apply</span>(<span class="at">X =</span> Xs, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> sd))</span></code></pre></div>
 <pre><code>## [1] 1 1 1 1 1</code></pre>
-<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="multiple-linear-regression-1.html#cb148-1" tabindex="-1"></a><span class="co"># Standardizes y</span></span>
-<span id="cb148-2"><a href="multiple-linear-regression-1.html#cb148-2" tabindex="-1"></a>ys <span class="ot">&lt;-</span> yc <span class="sc">/</span> <span class="fu">sd</span>(y)</span>
-<span id="cb148-3"><a href="multiple-linear-regression-1.html#cb148-3" tabindex="-1"></a><span class="co"># Shows that ys is standardized</span></span>
-<span id="cb148-4"><a href="multiple-linear-regression-1.html#cb148-4" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">mean</span>(ys), <span class="dv">8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="multiple-linear-regression-1.html#cb151-1" tabindex="-1"></a><span class="co"># Standardizes y</span></span>
+<span id="cb151-2"><a href="multiple-linear-regression-1.html#cb151-2" tabindex="-1"></a>ys <span class="ot">&lt;-</span> yc <span class="sc">/</span> <span class="fu">sd</span>(y)</span>
+<span id="cb151-3"><a href="multiple-linear-regression-1.html#cb151-3" tabindex="-1"></a><span class="co"># Shows that ys is standardized</span></span>
+<span id="cb151-4"><a href="multiple-linear-regression-1.html#cb151-4" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">mean</span>(ys), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
-<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="multiple-linear-regression-1.html#cb150-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">sd</span>(ys), <span class="dv">8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="multiple-linear-regression-1.html#cb153-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">sd</span>(ys), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>## [1] 1</code></pre>
-<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="multiple-linear-regression-1.html#cb152-1" tabindex="-1"></a><span class="co"># Sample Correlation of X</span></span>
-<span id="cb152-2"><a href="multiple-linear-regression-1.html#cb152-2" tabindex="-1"></a>rXX <span class="ot">&lt;-</span> <span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
-<span id="cb152-3"><a href="multiple-linear-regression-1.html#cb152-3" tabindex="-1"></a><span class="co"># Sample Correlation between X and y</span></span>
-<span id="cb152-4"><a href="multiple-linear-regression-1.html#cb152-4" tabindex="-1"></a>rXy <span class="ot">&lt;-</span> <span class="fu">t</span>(Xs) <span class="sc">%*%</span> ys <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
-<span id="cb152-5"><a href="multiple-linear-regression-1.html#cb152-5" tabindex="-1"></a></span>
-<span id="cb152-6"><a href="multiple-linear-regression-1.html#cb152-6" tabindex="-1"></a><span class="co"># Shows the comparison in correlation matrices</span></span>
-<span id="cb152-7"><a href="multiple-linear-regression-1.html#cb152-7" tabindex="-1"></a><span class="fu">print</span>(rXX)</span></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="multiple-linear-regression-1.html#cb155-1" tabindex="-1"></a><span class="co"># Sample Correlation of X</span></span>
+<span id="cb155-2"><a href="multiple-linear-regression-1.html#cb155-2" tabindex="-1"></a>rXX <span class="ot">&lt;-</span> <span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
+<span id="cb155-3"><a href="multiple-linear-regression-1.html#cb155-3" tabindex="-1"></a><span class="co"># Sample Correlation between X and y</span></span>
+<span id="cb155-4"><a href="multiple-linear-regression-1.html#cb155-4" tabindex="-1"></a>rXy <span class="ot">&lt;-</span> <span class="fu">t</span>(Xs) <span class="sc">%*%</span> ys <span class="sc">/</span> (n<span class="dv">-1</span>)</span>
+<span id="cb155-5"><a href="multiple-linear-regression-1.html#cb155-5" tabindex="-1"></a></span>
+<span id="cb155-6"><a href="multiple-linear-regression-1.html#cb155-6" tabindex="-1"></a><span class="co"># Shows the comparison in correlation matrices</span></span>
+<span id="cb155-7"><a href="multiple-linear-regression-1.html#cb155-7" tabindex="-1"></a><span class="fu">print</span>(rXX)</span></code></pre></div>
 <pre><code>##              [,1]        [,2]       [,3]        [,4]        [,5]
 ## [1,]  1.000000000 -0.78173033  0.8292061  0.31103644 0.005685918
 ## [2,] -0.781730327  1.00000000 -0.3642453 -0.16674407 0.010553855
 ## [3,]  0.829206121 -0.36424525  1.0000000  0.21389456 0.015699798
 ## [4,]  0.311036436 -0.16674407  0.2138946  1.00000000 0.018475446
 ## [5,]  0.005685918  0.01055386  0.0156998  0.01847545 1.000000000</code></pre>
-<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="multiple-linear-regression-1.html#cb154-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">cor</span>(X))</span></code></pre></div>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="multiple-linear-regression-1.html#cb157-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">cor</span>(X))</span></code></pre></div>
 <pre><code>##              inf         une        int         gov         exp
 ## inf  1.000000000 -0.78173033  0.8292061  0.31103644 0.005685918
 ## une -0.781730327  1.00000000 -0.3642453 -0.16674407 0.010553855
 ## int  0.829206121 -0.36424525  1.0000000  0.21389456 0.015699798
 ## gov  0.311036436 -0.16674407  0.2138946  1.00000000 0.018475446
 ## exp  0.005685918  0.01055386  0.0156998  0.01847545 1.000000000</code></pre>
-<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="multiple-linear-regression-1.html#cb156-1" tabindex="-1"></a><span class="co"># Shows the comparison in correlation vectors</span></span>
-<span id="cb156-2"><a href="multiple-linear-regression-1.html#cb156-2" tabindex="-1"></a><span class="fu">print</span>(rXy)</span></code></pre></div>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="multiple-linear-regression-1.html#cb159-1" tabindex="-1"></a><span class="co"># Shows the comparison in correlation vectors</span></span>
+<span id="cb159-2"><a href="multiple-linear-regression-1.html#cb159-2" tabindex="-1"></a><span class="fu">print</span>(rXy)</span></code></pre></div>
 <pre><code>##            [,1]
 ## [1,]  0.8751311
 ## [2,] -0.7487479
 ## [3,]  0.6964256
 ## [4,]  0.2217228
 ## [5,]  0.1736027</code></pre>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="multiple-linear-regression-1.html#cb158-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">cor</span>(X, y))</span></code></pre></div>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="multiple-linear-regression-1.html#cb161-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">cor</span>(X, y))</span></code></pre></div>
 <pre><code>##           [,1]
 ## inf  0.8751311
 ## une -0.7487479
@@ -1873,12 +1874,12 @@ results in the same quantities that using the <code>cov</code> function in <code
 ## exp  0.1736027</code></pre>
 <p>and can test that:</p>
 <p><span class="math display">\[\hat{\boldsymbol{\beta}_s} = r_{XX}^{-1}r_{Xy}\]</span></p>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="multiple-linear-regression-1.html#cb160-1" tabindex="-1"></a><span class="co"># Computes the estimates of the coefficients using the covariance matrices</span></span>
-<span id="cb160-2"><a href="multiple-linear-regression-1.html#cb160-2" tabindex="-1"></a>bs1 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs, <span class="fu">t</span>(Xs) <span class="sc">%*%</span> ys)</span>
-<span id="cb160-3"><a href="multiple-linear-regression-1.html#cb160-3" tabindex="-1"></a>bs2 <span class="ot">&lt;-</span> <span class="fu">solve</span>(rXX, rXy)</span>
-<span id="cb160-4"><a href="multiple-linear-regression-1.html#cb160-4" tabindex="-1"></a></span>
-<span id="cb160-5"><a href="multiple-linear-regression-1.html#cb160-5" tabindex="-1"></a><span class="co"># Shows the Estimates Side by Side</span></span>
-<span id="cb160-6"><a href="multiple-linear-regression-1.html#cb160-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">cbind</span>(bs1, bs2), <span class="dv">8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="multiple-linear-regression-1.html#cb163-1" tabindex="-1"></a><span class="co"># Computes the estimates of the coefficients using the covariance matrices</span></span>
+<span id="cb163-2"><a href="multiple-linear-regression-1.html#cb163-2" tabindex="-1"></a>bs1 <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs, <span class="fu">t</span>(Xs) <span class="sc">%*%</span> ys)</span>
+<span id="cb163-3"><a href="multiple-linear-regression-1.html#cb163-3" tabindex="-1"></a>bs2 <span class="ot">&lt;-</span> <span class="fu">solve</span>(rXX, rXy)</span>
+<span id="cb163-4"><a href="multiple-linear-regression-1.html#cb163-4" tabindex="-1"></a></span>
+<span id="cb163-5"><a href="multiple-linear-regression-1.html#cb163-5" tabindex="-1"></a><span class="co"># Shows the Estimates Side by Side</span></span>
+<span id="cb163-6"><a href="multiple-linear-regression-1.html#cb163-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">cbind</span>(bs1, bs2), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>##             [,1]        [,2]
 ## [1,]  0.55210259  0.55210259
 ## [2,] -0.27165637 -0.27165637
@@ -1886,12 +1887,12 @@ results in the same quantities that using the <code>cov</code> function in <code
 ## [4,] -0.02909852 -0.02909852
 ## [5,]  0.17161988  0.17161988</code></pre>
 <p>We can also contrast the effects of the standarization on the coefficients</p>
-<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="multiple-linear-regression-1.html#cb162-1" tabindex="-1"></a><span class="co"># Computes the estimates of the coefficients using the covariance matrices</span></span>
-<span id="cb162-2"><a href="multiple-linear-regression-1.html#cb162-2" tabindex="-1"></a>bs1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X)<span class="sc">$</span>coefficients</span>
-<span id="cb162-3"><a href="multiple-linear-regression-1.html#cb162-3" tabindex="-1"></a>bs2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(ys <span class="sc">~</span> Xs)<span class="sc">$</span>coefficients</span>
-<span id="cb162-4"><a href="multiple-linear-regression-1.html#cb162-4" tabindex="-1"></a></span>
-<span id="cb162-5"><a href="multiple-linear-regression-1.html#cb162-5" tabindex="-1"></a><span class="co"># Shows the Estimates Side by Side</span></span>
-<span id="cb162-6"><a href="multiple-linear-regression-1.html#cb162-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">cbind</span>(bs1, bs2), <span class="dv">8</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="multiple-linear-regression-1.html#cb165-1" tabindex="-1"></a><span class="co"># Computes the estimates of the coefficients using the covariance matrices</span></span>
+<span id="cb165-2"><a href="multiple-linear-regression-1.html#cb165-2" tabindex="-1"></a>bs1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X)<span class="sc">$</span>coefficients</span>
+<span id="cb165-3"><a href="multiple-linear-regression-1.html#cb165-3" tabindex="-1"></a>bs2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(ys <span class="sc">~</span> Xs)<span class="sc">$</span>coefficients</span>
+<span id="cb165-4"><a href="multiple-linear-regression-1.html#cb165-4" tabindex="-1"></a></span>
+<span id="cb165-5"><a href="multiple-linear-regression-1.html#cb165-5" tabindex="-1"></a><span class="co"># Shows the Estimates Side by Side</span></span>
+<span id="cb165-6"><a href="multiple-linear-regression-1.html#cb165-6" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(<span class="fu">cbind</span>(bs1, bs2), <span class="dv">8</span>))</span></code></pre></div>
 <pre><code>##                     bs1         bs2
 ## (Intercept)  1.55530096  0.00000000
 ## Xinf         0.31221813  0.55210259
@@ -2117,47 +2118,47 @@ coefficient</p>
 <h4><span class="header-section-number">6.8.1.1</span> Single Variable Cross-effects example<a href="multiple-linear-regression-1.html#single-variable-cross-effects-example" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <p>We can see the effects the other variables have in changing the coefficients in
 our GDP data set, by computing <span class="math inline">\(R^2_k\)</span> for each variable.</p>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="multiple-linear-regression-1.html#cb164-1" tabindex="-1"></a><span class="co"># Re-names Standardized Variables</span></span>
-<span id="cb164-2"><a href="multiple-linear-regression-1.html#cb164-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> ys</span>
-<span id="cb164-3"><a href="multiple-linear-regression-1.html#cb164-3" tabindex="-1"></a>X <span class="ot">&lt;-</span> Xs</span>
-<span id="cb164-4"><a href="multiple-linear-regression-1.html#cb164-4" tabindex="-1"></a></span>
-<span id="cb164-5"><a href="multiple-linear-regression-1.html#cb164-5" tabindex="-1"></a><span class="co"># Coefficients for the Full Model</span></span>
-<span id="cb164-6"><a href="multiple-linear-regression-1.html#cb164-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X <span class="sc">-</span><span class="dv">1</span>)<span class="sc">$</span>coefficients</span>
-<span id="cb164-7"><a href="multiple-linear-regression-1.html#cb164-7" tabindex="-1"></a></span>
-<span id="cb164-8"><a href="multiple-linear-regression-1.html#cb164-8" tabindex="-1"></a><span class="co"># Individual Coefficients</span></span>
-<span id="cb164-9"><a href="multiple-linear-regression-1.html#cb164-9" tabindex="-1"></a><span class="co"># Number of Variables</span></span>
-<span id="cb164-10"><a href="multiple-linear-regression-1.html#cb164-10" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
-<span id="cb164-11"><a href="multiple-linear-regression-1.html#cb164-11" tabindex="-1"></a><span class="co"># Vector to Save Individual Coefficients</span></span>
-<span id="cb164-12"><a href="multiple-linear-regression-1.html#cb164-12" tabindex="-1"></a>bi <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
-<span id="cb164-13"><a href="multiple-linear-regression-1.html#cb164-13" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
-<span id="cb164-14"><a href="multiple-linear-regression-1.html#cb164-14" tabindex="-1"></a>  bi[k] <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X[, k] <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">$</span>coefficients</span>
-<span id="cb164-15"><a href="multiple-linear-regression-1.html#cb164-15" tabindex="-1"></a>}</span>
-<span id="cb164-16"><a href="multiple-linear-regression-1.html#cb164-16" tabindex="-1"></a></span>
-<span id="cb164-17"><a href="multiple-linear-regression-1.html#cb164-17" tabindex="-1"></a><span class="co"># Coefficients without variable k</span></span>
-<span id="cb164-18"><a href="multiple-linear-regression-1.html#cb164-18" tabindex="-1"></a>bt <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> P<span class="dv">-1</span>, <span class="at">ncol =</span> P)</span>
-<span id="cb164-19"><a href="multiple-linear-regression-1.html#cb164-19" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
-<span id="cb164-20"><a href="multiple-linear-regression-1.html#cb164-20" tabindex="-1"></a>  bt[, k] <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X[, <span class="sc">-</span>k] <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">$</span>coefficients</span>
-<span id="cb164-21"><a href="multiple-linear-regression-1.html#cb164-21" tabindex="-1"></a>}</span>
-<span id="cb164-22"><a href="multiple-linear-regression-1.html#cb164-22" tabindex="-1"></a></span>
-<span id="cb164-23"><a href="multiple-linear-regression-1.html#cb164-23" tabindex="-1"></a><span class="co"># Coefficient of Determination of X_k ~ X_{-k} models and coefficients</span></span>
-<span id="cb164-24"><a href="multiple-linear-regression-1.html#cb164-24" tabindex="-1"></a>R2k <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
-<span id="cb164-25"><a href="multiple-linear-regression-1.html#cb164-25" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
-<span id="cb164-26"><a href="multiple-linear-regression-1.html#cb164-26" tabindex="-1"></a>  outReg <span class="ot">&lt;-</span> <span class="fu">lm</span>(X[, k] <span class="sc">~</span> X[, <span class="sc">-</span>k] <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb164-27"><a href="multiple-linear-regression-1.html#cb164-27" tabindex="-1"></a>  R2k[k] <span class="ot">&lt;-</span> <span class="fu">summary</span>(outReg)<span class="sc">$</span>r.squared</span>
-<span id="cb164-28"><a href="multiple-linear-regression-1.html#cb164-28" tabindex="-1"></a>}</span>
-<span id="cb164-29"><a href="multiple-linear-regression-1.html#cb164-29" tabindex="-1"></a></span>
-<span id="cb164-30"><a href="multiple-linear-regression-1.html#cb164-30" tabindex="-1"></a><span class="co"># Cross product of correlation and coefficients</span></span>
-<span id="cb164-31"><a href="multiple-linear-regression-1.html#cb164-31" tabindex="-1"></a>rbt <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
-<span id="cb164-32"><a href="multiple-linear-regression-1.html#cb164-32" tabindex="-1"></a>rXX <span class="ot">&lt;-</span> <span class="fu">cor</span>(X)</span>
-<span id="cb164-33"><a href="multiple-linear-regression-1.html#cb164-33" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
-<span id="cb164-34"><a href="multiple-linear-regression-1.html#cb164-34" tabindex="-1"></a>  rbt[k] <span class="ot">&lt;-</span> rXX[k, <span class="sc">-</span>k] <span class="sc">%*%</span> bt[, k]</span>
-<span id="cb164-35"><a href="multiple-linear-regression-1.html#cb164-35" tabindex="-1"></a>}</span>
-<span id="cb164-36"><a href="multiple-linear-regression-1.html#cb164-36" tabindex="-1"></a></span>
-<span id="cb164-37"><a href="multiple-linear-regression-1.html#cb164-37" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
-<span id="cb164-38"><a href="multiple-linear-regression-1.html#cb164-38" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(b, bi, R2k, <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>R2k), rbt)</span>
-<span id="cb164-39"><a href="multiple-linear-regression-1.html#cb164-39" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;b_full&quot;</span>, <span class="st">&quot;b_ind&quot;</span>, <span class="st">&quot;R2k&quot;</span>, <span class="st">&quot;VIF&quot;</span>, <span class="st">&quot;rb_ind&quot;</span>)</span>
-<span id="cb164-40"><a href="multiple-linear-regression-1.html#cb164-40" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(dat)[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>]</span>
-<span id="cb164-41"><a href="multiple-linear-regression-1.html#cb164-41" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="multiple-linear-regression-1.html#cb167-1" tabindex="-1"></a><span class="co"># Re-names Standardized Variables</span></span>
+<span id="cb167-2"><a href="multiple-linear-regression-1.html#cb167-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> ys</span>
+<span id="cb167-3"><a href="multiple-linear-regression-1.html#cb167-3" tabindex="-1"></a>X <span class="ot">&lt;-</span> Xs</span>
+<span id="cb167-4"><a href="multiple-linear-regression-1.html#cb167-4" tabindex="-1"></a></span>
+<span id="cb167-5"><a href="multiple-linear-regression-1.html#cb167-5" tabindex="-1"></a><span class="co"># Coefficients for the Full Model</span></span>
+<span id="cb167-6"><a href="multiple-linear-regression-1.html#cb167-6" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X <span class="sc">-</span><span class="dv">1</span>)<span class="sc">$</span>coefficients</span>
+<span id="cb167-7"><a href="multiple-linear-regression-1.html#cb167-7" tabindex="-1"></a></span>
+<span id="cb167-8"><a href="multiple-linear-regression-1.html#cb167-8" tabindex="-1"></a><span class="co"># Individual Coefficients</span></span>
+<span id="cb167-9"><a href="multiple-linear-regression-1.html#cb167-9" tabindex="-1"></a><span class="co"># Number of Variables</span></span>
+<span id="cb167-10"><a href="multiple-linear-regression-1.html#cb167-10" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb167-11"><a href="multiple-linear-regression-1.html#cb167-11" tabindex="-1"></a><span class="co"># Vector to Save Individual Coefficients</span></span>
+<span id="cb167-12"><a href="multiple-linear-regression-1.html#cb167-12" tabindex="-1"></a>bi <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
+<span id="cb167-13"><a href="multiple-linear-regression-1.html#cb167-13" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
+<span id="cb167-14"><a href="multiple-linear-regression-1.html#cb167-14" tabindex="-1"></a>  bi[k] <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X[, k] <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">$</span>coefficients</span>
+<span id="cb167-15"><a href="multiple-linear-regression-1.html#cb167-15" tabindex="-1"></a>}</span>
+<span id="cb167-16"><a href="multiple-linear-regression-1.html#cb167-16" tabindex="-1"></a></span>
+<span id="cb167-17"><a href="multiple-linear-regression-1.html#cb167-17" tabindex="-1"></a><span class="co"># Coefficients without variable k</span></span>
+<span id="cb167-18"><a href="multiple-linear-regression-1.html#cb167-18" tabindex="-1"></a>bt <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> P<span class="dv">-1</span>, <span class="at">ncol =</span> P)</span>
+<span id="cb167-19"><a href="multiple-linear-regression-1.html#cb167-19" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
+<span id="cb167-20"><a href="multiple-linear-regression-1.html#cb167-20" tabindex="-1"></a>  bt[, k] <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> X[, <span class="sc">-</span>k] <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">$</span>coefficients</span>
+<span id="cb167-21"><a href="multiple-linear-regression-1.html#cb167-21" tabindex="-1"></a>}</span>
+<span id="cb167-22"><a href="multiple-linear-regression-1.html#cb167-22" tabindex="-1"></a></span>
+<span id="cb167-23"><a href="multiple-linear-regression-1.html#cb167-23" tabindex="-1"></a><span class="co"># Coefficient of Determination of X_k ~ X_{-k} models and coefficients</span></span>
+<span id="cb167-24"><a href="multiple-linear-regression-1.html#cb167-24" tabindex="-1"></a>R2k <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
+<span id="cb167-25"><a href="multiple-linear-regression-1.html#cb167-25" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
+<span id="cb167-26"><a href="multiple-linear-regression-1.html#cb167-26" tabindex="-1"></a>  outReg <span class="ot">&lt;-</span> <span class="fu">lm</span>(X[, k] <span class="sc">~</span> X[, <span class="sc">-</span>k] <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb167-27"><a href="multiple-linear-regression-1.html#cb167-27" tabindex="-1"></a>  R2k[k] <span class="ot">&lt;-</span> <span class="fu">summary</span>(outReg)<span class="sc">$</span>r.squared</span>
+<span id="cb167-28"><a href="multiple-linear-regression-1.html#cb167-28" tabindex="-1"></a>}</span>
+<span id="cb167-29"><a href="multiple-linear-regression-1.html#cb167-29" tabindex="-1"></a></span>
+<span id="cb167-30"><a href="multiple-linear-regression-1.html#cb167-30" tabindex="-1"></a><span class="co"># Cross product of correlation and coefficients</span></span>
+<span id="cb167-31"><a href="multiple-linear-regression-1.html#cb167-31" tabindex="-1"></a>rbt <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
+<span id="cb167-32"><a href="multiple-linear-regression-1.html#cb167-32" tabindex="-1"></a>rXX <span class="ot">&lt;-</span> <span class="fu">cor</span>(X)</span>
+<span id="cb167-33"><a href="multiple-linear-regression-1.html#cb167-33" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
+<span id="cb167-34"><a href="multiple-linear-regression-1.html#cb167-34" tabindex="-1"></a>  rbt[k] <span class="ot">&lt;-</span> rXX[k, <span class="sc">-</span>k] <span class="sc">%*%</span> bt[, k]</span>
+<span id="cb167-35"><a href="multiple-linear-regression-1.html#cb167-35" tabindex="-1"></a>}</span>
+<span id="cb167-36"><a href="multiple-linear-regression-1.html#cb167-36" tabindex="-1"></a></span>
+<span id="cb167-37"><a href="multiple-linear-regression-1.html#cb167-37" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
+<span id="cb167-38"><a href="multiple-linear-regression-1.html#cb167-38" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(b, bi, R2k, <span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>R2k), rbt)</span>
+<span id="cb167-39"><a href="multiple-linear-regression-1.html#cb167-39" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;b_full&quot;</span>, <span class="st">&quot;b_ind&quot;</span>, <span class="st">&quot;R2k&quot;</span>, <span class="st">&quot;VIF&quot;</span>, <span class="st">&quot;rb_ind&quot;</span>)</span>
+<span id="cb167-40"><a href="multiple-linear-regression-1.html#cb167-40" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(dat)[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb167-41"><a href="multiple-linear-regression-1.html#cb167-41" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2471,115 +2472,115 @@ Then</p>
 That is the change in the predictions is the result of a function of the leverages
 and a function of the error of observation <span class="math inline">\(i\)</span>.</p>
 <p>We can see this with our GDP dataset. We generate new observations, in which</p>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="multiple-linear-regression-1.html#cb165-1" tabindex="-1"></a><span class="co"># Reads Data</span></span>
-<span id="cb165-2"><a href="multiple-linear-regression-1.html#cb165-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Gdp data.csv&quot;</span>)</span>
-<span id="cb165-3"><a href="multiple-linear-regression-1.html#cb165-3" tabindex="-1"></a></span>
-<span id="cb165-4"><a href="multiple-linear-regression-1.html#cb165-4" tabindex="-1"></a><span class="co"># Extracts the Data</span></span>
-<span id="cb165-5"><a href="multiple-linear-regression-1.html#cb165-5" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(dat[,  <span class="dv">1</span>])</span>
-<span id="cb165-6"><a href="multiple-linear-regression-1.html#cb165-6" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb165-7"><a href="multiple-linear-regression-1.html#cb165-7" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
-<span id="cb165-8"><a href="multiple-linear-regression-1.html#cb165-8" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), X)</span>
-<span id="cb165-9"><a href="multiple-linear-regression-1.html#cb165-9" tabindex="-1"></a></span>
-<span id="cb165-10"><a href="multiple-linear-regression-1.html#cb165-10" tabindex="-1"></a><span class="co"># Obtains the Estimates</span></span>
-<span id="cb165-11"><a href="multiple-linear-regression-1.html#cb165-11" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X) <span class="sc">%*%</span> y)</span>
-<span id="cb165-12"><a href="multiple-linear-regression-1.html#cb165-12" tabindex="-1"></a></span>
-<span id="cb165-13"><a href="multiple-linear-regression-1.html#cb165-13" tabindex="-1"></a><span class="co"># Predicted Values</span></span>
-<span id="cb165-14"><a href="multiple-linear-regression-1.html#cb165-14" tabindex="-1"></a>yh <span class="ot">&lt;-</span> X <span class="sc">%*%</span> b</span>
-<span id="cb165-15"><a href="multiple-linear-regression-1.html#cb165-15" tabindex="-1"></a></span>
-<span id="cb165-16"><a href="multiple-linear-regression-1.html#cb165-16" tabindex="-1"></a><span class="co"># Errors</span></span>
-<span id="cb165-17"><a href="multiple-linear-regression-1.html#cb165-17" tabindex="-1"></a>eh <span class="ot">&lt;-</span> <span class="fu">abs</span>(y <span class="sc">-</span> yh)</span>
-<span id="cb165-18"><a href="multiple-linear-regression-1.html#cb165-18" tabindex="-1"></a></span>
-<span id="cb165-19"><a href="multiple-linear-regression-1.html#cb165-19" tabindex="-1"></a><span class="co"># Obtains the Minimum, Median and Maximum Errors</span></span>
-<span id="cb165-20"><a href="multiple-linear-regression-1.html#cb165-20" tabindex="-1"></a>err <span class="ot">&lt;-</span> <span class="fu">quantile</span>(eh, <span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>))</span>
-<span id="cb165-21"><a href="multiple-linear-regression-1.html#cb165-21" tabindex="-1"></a></span>
-<span id="cb165-22"><a href="multiple-linear-regression-1.html#cb165-22" tabindex="-1"></a><span class="co"># Generates New Observations</span></span>
-<span id="cb165-23"><a href="multiple-linear-regression-1.html#cb165-23" tabindex="-1"></a><span class="co"># An observation at one extreme of the Observed Independent Variables</span></span>
-<span id="cb165-24"><a href="multiple-linear-regression-1.html#cb165-24" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> X, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> max)</span>
-<span id="cb165-25"><a href="multiple-linear-regression-1.html#cb165-25" tabindex="-1"></a><span class="co"># An observation at the center of the Observed Independent Variables</span></span>
-<span id="cb165-26"><a href="multiple-linear-regression-1.html#cb165-26" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> X, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> mean)</span>
-<span id="cb165-27"><a href="multiple-linear-regression-1.html#cb165-27" tabindex="-1"></a><span class="co"># Dependent Variables with different Error levels</span></span>
-<span id="cb165-28"><a href="multiple-linear-regression-1.html#cb165-28" tabindex="-1"></a>y1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">t</span>(X1) <span class="sc">%*%</span> b) <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">0</span>, err, err[<span class="dv">3</span>] <span class="sc">*</span> <span class="dv">2</span>)</span>
-<span id="cb165-29"><a href="multiple-linear-regression-1.html#cb165-29" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">t</span>(X2) <span class="sc">%*%</span> b) <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">0</span>, err, err[<span class="dv">3</span>] <span class="sc">*</span> <span class="dv">2</span>)</span>
-<span id="cb165-30"><a href="multiple-linear-regression-1.html#cb165-30" tabindex="-1"></a></span>
-<span id="cb165-31"><a href="multiple-linear-regression-1.html#cb165-31" tabindex="-1"></a><span class="co"># Outlier Level</span></span>
-<span id="cb165-32"><a href="multiple-linear-regression-1.html#cb165-32" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">length</span>(y1)</span>
-<span id="cb165-33"><a href="multiple-linear-regression-1.html#cb165-33" tabindex="-1"></a></span>
-<span id="cb165-34"><a href="multiple-linear-regression-1.html#cb165-34" tabindex="-1"></a><span class="co"># Predictions without the Observations</span></span>
-<span id="cb165-35"><a href="multiple-linear-regression-1.html#cb165-35" tabindex="-1"></a>yhi <span class="ot">&lt;-</span> yh</span>
-<span id="cb165-36"><a href="multiple-linear-regression-1.html#cb165-36" tabindex="-1"></a>bi  <span class="ot">&lt;-</span> b</span>
-<span id="cb165-37"><a href="multiple-linear-regression-1.html#cb165-37" tabindex="-1"></a>yi  <span class="ot">&lt;-</span> y</span>
-<span id="cb165-38"><a href="multiple-linear-regression-1.html#cb165-38" tabindex="-1"></a>Xi  <span class="ot">&lt;-</span> X</span>
-<span id="cb165-39"><a href="multiple-linear-regression-1.html#cb165-39" tabindex="-1"></a></span>
-<span id="cb165-40"><a href="multiple-linear-regression-1.html#cb165-40" tabindex="-1"></a><span class="co"># Table with Changes</span></span>
-<span id="cb165-41"><a href="multiple-linear-regression-1.html#cb165-41" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> <span class="dv">0</span>, <span class="at">ncol =</span> <span class="dv">4</span>)</span>
-<span id="cb165-42"><a href="multiple-linear-regression-1.html#cb165-42" tabindex="-1"></a></span>
-<span id="cb165-43"><a href="multiple-linear-regression-1.html#cb165-43" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
-<span id="cb165-44"><a href="multiple-linear-regression-1.html#cb165-44" tabindex="-1"></a>  <span class="co"># Complete Data Set</span></span>
-<span id="cb165-45"><a href="multiple-linear-regression-1.html#cb165-45" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xi, X2)</span>
-<span id="cb165-46"><a href="multiple-linear-regression-1.html#cb165-46" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">c</span>(yi, y2[i])</span>
-<span id="cb165-47"><a href="multiple-linear-regression-1.html#cb165-47" tabindex="-1"></a>  </span>
-<span id="cb165-48"><a href="multiple-linear-regression-1.html#cb165-48" tabindex="-1"></a>  <span class="co"># Coefficients</span></span>
-<span id="cb165-49"><a href="multiple-linear-regression-1.html#cb165-49" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X) <span class="sc">%*%</span> y)</span>
-<span id="cb165-50"><a href="multiple-linear-regression-1.html#cb165-50" tabindex="-1"></a>  </span>
-<span id="cb165-51"><a href="multiple-linear-regression-1.html#cb165-51" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
-<span id="cb165-52"><a href="multiple-linear-regression-1.html#cb165-52" tabindex="-1"></a>  yh  <span class="ot">&lt;-</span> <span class="fu">c</span>(X <span class="sc">%*%</span> b)</span>
-<span id="cb165-53"><a href="multiple-linear-regression-1.html#cb165-53" tabindex="-1"></a>  yhi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rbind</span>(Xi, X2) <span class="sc">%*%</span> bi)</span>
-<span id="cb165-54"><a href="multiple-linear-regression-1.html#cb165-54" tabindex="-1"></a>  </span>
-<span id="cb165-55"><a href="multiple-linear-regression-1.html#cb165-55" tabindex="-1"></a>  <span class="co"># Hat matrix</span></span>
-<span id="cb165-56"><a href="multiple-linear-regression-1.html#cb165-56" tabindex="-1"></a>  H <span class="ot">&lt;-</span> X <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X))</span>
-<span id="cb165-57"><a href="multiple-linear-regression-1.html#cb165-57" tabindex="-1"></a>  </span>
-<span id="cb165-58"><a href="multiple-linear-regression-1.html#cb165-58" tabindex="-1"></a>  <span class="co"># Leverage New Observation</span></span>
-<span id="cb165-59"><a href="multiple-linear-regression-1.html#cb165-59" tabindex="-1"></a>  h <span class="ot">&lt;-</span> H[n<span class="sc">+</span><span class="dv">1</span>, n<span class="sc">+</span><span class="dv">1</span>]</span>
-<span id="cb165-60"><a href="multiple-linear-regression-1.html#cb165-60" tabindex="-1"></a>  </span>
-<span id="cb165-61"><a href="multiple-linear-regression-1.html#cb165-61" tabindex="-1"></a>  <span class="co"># Change in Predictions</span></span>
-<span id="cb165-62"><a href="multiple-linear-regression-1.html#cb165-62" tabindex="-1"></a>  preCha <span class="ot">&lt;-</span> <span class="fu">sum</span>((yh <span class="sc">-</span> yhi)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb165-63"><a href="multiple-linear-regression-1.html#cb165-63" tabindex="-1"></a>  </span>
-<span id="cb165-64"><a href="multiple-linear-regression-1.html#cb165-64" tabindex="-1"></a>  <span class="co"># Leverage Component</span></span>
-<span id="cb165-65"><a href="multiple-linear-regression-1.html#cb165-65" tabindex="-1"></a>  levCom <span class="ot">&lt;-</span> h <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> h)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb165-66"><a href="multiple-linear-regression-1.html#cb165-66" tabindex="-1"></a>  </span>
-<span id="cb165-67"><a href="multiple-linear-regression-1.html#cb165-67" tabindex="-1"></a>  <span class="co"># Error Component</span></span>
-<span id="cb165-68"><a href="multiple-linear-regression-1.html#cb165-68" tabindex="-1"></a>  errCom <span class="ot">&lt;-</span> (y[n<span class="sc">+</span><span class="dv">1</span>] <span class="sc">-</span> yh[n<span class="sc">+</span><span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb165-69"><a href="multiple-linear-regression-1.html#cb165-69" tabindex="-1"></a>  </span>
-<span id="cb165-70"><a href="multiple-linear-regression-1.html#cb165-70" tabindex="-1"></a>  <span class="co"># Saves Values</span></span>
-<span id="cb165-71"><a href="multiple-linear-regression-1.html#cb165-71" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tab, <span class="fu">c</span>(preCha, levCom, errCom, levCom <span class="sc">*</span> errCom))</span>
-<span id="cb165-72"><a href="multiple-linear-regression-1.html#cb165-72" tabindex="-1"></a>}</span>
-<span id="cb165-73"><a href="multiple-linear-regression-1.html#cb165-73" tabindex="-1"></a></span>
-<span id="cb165-74"><a href="multiple-linear-regression-1.html#cb165-74" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
-<span id="cb165-75"><a href="multiple-linear-regression-1.html#cb165-75" tabindex="-1"></a>  <span class="co"># Complete Data Set</span></span>
-<span id="cb165-76"><a href="multiple-linear-regression-1.html#cb165-76" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xi, X1)</span>
-<span id="cb165-77"><a href="multiple-linear-regression-1.html#cb165-77" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">c</span>(yi, y1[i])</span>
-<span id="cb165-78"><a href="multiple-linear-regression-1.html#cb165-78" tabindex="-1"></a>  </span>
-<span id="cb165-79"><a href="multiple-linear-regression-1.html#cb165-79" tabindex="-1"></a>  <span class="co"># Coefficients</span></span>
-<span id="cb165-80"><a href="multiple-linear-regression-1.html#cb165-80" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X) <span class="sc">%*%</span> y)</span>
-<span id="cb165-81"><a href="multiple-linear-regression-1.html#cb165-81" tabindex="-1"></a>  </span>
-<span id="cb165-82"><a href="multiple-linear-regression-1.html#cb165-82" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
-<span id="cb165-83"><a href="multiple-linear-regression-1.html#cb165-83" tabindex="-1"></a>  yh  <span class="ot">&lt;-</span> <span class="fu">c</span>(X <span class="sc">%*%</span> b)</span>
-<span id="cb165-84"><a href="multiple-linear-regression-1.html#cb165-84" tabindex="-1"></a>  yhi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rbind</span>(Xi, X1) <span class="sc">%*%</span> bi)</span>
-<span id="cb165-85"><a href="multiple-linear-regression-1.html#cb165-85" tabindex="-1"></a>  </span>
-<span id="cb165-86"><a href="multiple-linear-regression-1.html#cb165-86" tabindex="-1"></a>  <span class="co"># Hat matrix</span></span>
-<span id="cb165-87"><a href="multiple-linear-regression-1.html#cb165-87" tabindex="-1"></a>  H <span class="ot">&lt;-</span> X <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X))</span>
-<span id="cb165-88"><a href="multiple-linear-regression-1.html#cb165-88" tabindex="-1"></a>  </span>
-<span id="cb165-89"><a href="multiple-linear-regression-1.html#cb165-89" tabindex="-1"></a>  <span class="co"># Leverage New Observation</span></span>
-<span id="cb165-90"><a href="multiple-linear-regression-1.html#cb165-90" tabindex="-1"></a>  h <span class="ot">&lt;-</span> H[n<span class="sc">+</span><span class="dv">1</span>, n<span class="sc">+</span><span class="dv">1</span>]</span>
-<span id="cb165-91"><a href="multiple-linear-regression-1.html#cb165-91" tabindex="-1"></a>  </span>
-<span id="cb165-92"><a href="multiple-linear-regression-1.html#cb165-92" tabindex="-1"></a>  <span class="co"># Change in Predictions</span></span>
-<span id="cb165-93"><a href="multiple-linear-regression-1.html#cb165-93" tabindex="-1"></a>  preCha <span class="ot">&lt;-</span> <span class="fu">sum</span>((yh <span class="sc">-</span> yhi)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb165-94"><a href="multiple-linear-regression-1.html#cb165-94" tabindex="-1"></a>  </span>
-<span id="cb165-95"><a href="multiple-linear-regression-1.html#cb165-95" tabindex="-1"></a>  <span class="co"># Leverage Component</span></span>
-<span id="cb165-96"><a href="multiple-linear-regression-1.html#cb165-96" tabindex="-1"></a>  levCom <span class="ot">&lt;-</span> h <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> h)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb165-97"><a href="multiple-linear-regression-1.html#cb165-97" tabindex="-1"></a>  </span>
-<span id="cb165-98"><a href="multiple-linear-regression-1.html#cb165-98" tabindex="-1"></a>  <span class="co"># Error Component</span></span>
-<span id="cb165-99"><a href="multiple-linear-regression-1.html#cb165-99" tabindex="-1"></a>  errCom <span class="ot">&lt;-</span> (y[n<span class="sc">+</span><span class="dv">1</span>] <span class="sc">-</span> yh[n<span class="sc">+</span><span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb165-100"><a href="multiple-linear-regression-1.html#cb165-100" tabindex="-1"></a>  </span>
-<span id="cb165-101"><a href="multiple-linear-regression-1.html#cb165-101" tabindex="-1"></a>  <span class="co"># Saves Values</span></span>
-<span id="cb165-102"><a href="multiple-linear-regression-1.html#cb165-102" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tab, <span class="fu">c</span>(preCha, levCom, errCom, levCom <span class="sc">*</span> errCom))</span>
-<span id="cb165-103"><a href="multiple-linear-regression-1.html#cb165-103" tabindex="-1"></a>}</span>
-<span id="cb165-104"><a href="multiple-linear-regression-1.html#cb165-104" tabindex="-1"></a></span>
-<span id="cb165-105"><a href="multiple-linear-regression-1.html#cb165-105" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(tab)</span>
-<span id="cb165-106"><a href="multiple-linear-regression-1.html#cb165-106" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Low&quot;</span>, <span class="dv">5</span>), <span class="fu">rep</span>(<span class="st">&quot;High&quot;</span>, <span class="dv">5</span>)), tab)</span>
-<span id="cb165-107"><a href="multiple-linear-regression-1.html#cb165-107" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Minimum&quot;</span>, <span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;High&quot;</span>, <span class="st">&quot;Very High&quot;</span>), <span class="dv">2</span>), tab)</span>
-<span id="cb165-108"><a href="multiple-linear-regression-1.html#cb165-108" tabindex="-1"></a>  <span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Error Level&quot;</span>, <span class="st">&quot;Leverage Level&quot;</span>, <span class="st">&quot;Sum of Sq. Diff.&quot;</span>, <span class="st">&quot;Lev. Comp.&quot;</span>, <span class="st">&quot;Err. Comp.&quot;</span>, <span class="st">&quot;Using Formula&quot;</span>)</span>
-<span id="cb165-109"><a href="multiple-linear-regression-1.html#cb165-109" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tab, <span class="at">digits =</span> <span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="multiple-linear-regression-1.html#cb168-1" tabindex="-1"></a><span class="co"># Reads Data</span></span>
+<span id="cb168-2"><a href="multiple-linear-regression-1.html#cb168-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Gdp data.csv&quot;</span>)</span>
+<span id="cb168-3"><a href="multiple-linear-regression-1.html#cb168-3" tabindex="-1"></a></span>
+<span id="cb168-4"><a href="multiple-linear-regression-1.html#cb168-4" tabindex="-1"></a><span class="co"># Extracts the Data</span></span>
+<span id="cb168-5"><a href="multiple-linear-regression-1.html#cb168-5" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(dat[,  <span class="dv">1</span>])</span>
+<span id="cb168-6"><a href="multiple-linear-regression-1.html#cb168-6" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb168-7"><a href="multiple-linear-regression-1.html#cb168-7" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
+<span id="cb168-8"><a href="multiple-linear-regression-1.html#cb168-8" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), X)</span>
+<span id="cb168-9"><a href="multiple-linear-regression-1.html#cb168-9" tabindex="-1"></a></span>
+<span id="cb168-10"><a href="multiple-linear-regression-1.html#cb168-10" tabindex="-1"></a><span class="co"># Obtains the Estimates</span></span>
+<span id="cb168-11"><a href="multiple-linear-regression-1.html#cb168-11" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X) <span class="sc">%*%</span> y)</span>
+<span id="cb168-12"><a href="multiple-linear-regression-1.html#cb168-12" tabindex="-1"></a></span>
+<span id="cb168-13"><a href="multiple-linear-regression-1.html#cb168-13" tabindex="-1"></a><span class="co"># Predicted Values</span></span>
+<span id="cb168-14"><a href="multiple-linear-regression-1.html#cb168-14" tabindex="-1"></a>yh <span class="ot">&lt;-</span> X <span class="sc">%*%</span> b</span>
+<span id="cb168-15"><a href="multiple-linear-regression-1.html#cb168-15" tabindex="-1"></a></span>
+<span id="cb168-16"><a href="multiple-linear-regression-1.html#cb168-16" tabindex="-1"></a><span class="co"># Errors</span></span>
+<span id="cb168-17"><a href="multiple-linear-regression-1.html#cb168-17" tabindex="-1"></a>eh <span class="ot">&lt;-</span> <span class="fu">abs</span>(y <span class="sc">-</span> yh)</span>
+<span id="cb168-18"><a href="multiple-linear-regression-1.html#cb168-18" tabindex="-1"></a></span>
+<span id="cb168-19"><a href="multiple-linear-regression-1.html#cb168-19" tabindex="-1"></a><span class="co"># Obtains the Minimum, Median and Maximum Errors</span></span>
+<span id="cb168-20"><a href="multiple-linear-regression-1.html#cb168-20" tabindex="-1"></a>err <span class="ot">&lt;-</span> <span class="fu">quantile</span>(eh, <span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>))</span>
+<span id="cb168-21"><a href="multiple-linear-regression-1.html#cb168-21" tabindex="-1"></a></span>
+<span id="cb168-22"><a href="multiple-linear-regression-1.html#cb168-22" tabindex="-1"></a><span class="co"># Generates New Observations</span></span>
+<span id="cb168-23"><a href="multiple-linear-regression-1.html#cb168-23" tabindex="-1"></a><span class="co"># An observation at one extreme of the Observed Independent Variables</span></span>
+<span id="cb168-24"><a href="multiple-linear-regression-1.html#cb168-24" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> X, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> max)</span>
+<span id="cb168-25"><a href="multiple-linear-regression-1.html#cb168-25" tabindex="-1"></a><span class="co"># An observation at the center of the Observed Independent Variables</span></span>
+<span id="cb168-26"><a href="multiple-linear-regression-1.html#cb168-26" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="at">X =</span> X, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">FUN =</span> mean)</span>
+<span id="cb168-27"><a href="multiple-linear-regression-1.html#cb168-27" tabindex="-1"></a><span class="co"># Dependent Variables with different Error levels</span></span>
+<span id="cb168-28"><a href="multiple-linear-regression-1.html#cb168-28" tabindex="-1"></a>y1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">t</span>(X1) <span class="sc">%*%</span> b) <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">0</span>, err, err[<span class="dv">3</span>] <span class="sc">*</span> <span class="dv">2</span>)</span>
+<span id="cb168-29"><a href="multiple-linear-regression-1.html#cb168-29" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">t</span>(X2) <span class="sc">%*%</span> b) <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">0</span>, err, err[<span class="dv">3</span>] <span class="sc">*</span> <span class="dv">2</span>)</span>
+<span id="cb168-30"><a href="multiple-linear-regression-1.html#cb168-30" tabindex="-1"></a></span>
+<span id="cb168-31"><a href="multiple-linear-regression-1.html#cb168-31" tabindex="-1"></a><span class="co"># Outlier Level</span></span>
+<span id="cb168-32"><a href="multiple-linear-regression-1.html#cb168-32" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">length</span>(y1)</span>
+<span id="cb168-33"><a href="multiple-linear-regression-1.html#cb168-33" tabindex="-1"></a></span>
+<span id="cb168-34"><a href="multiple-linear-regression-1.html#cb168-34" tabindex="-1"></a><span class="co"># Predictions without the Observations</span></span>
+<span id="cb168-35"><a href="multiple-linear-regression-1.html#cb168-35" tabindex="-1"></a>yhi <span class="ot">&lt;-</span> yh</span>
+<span id="cb168-36"><a href="multiple-linear-regression-1.html#cb168-36" tabindex="-1"></a>bi  <span class="ot">&lt;-</span> b</span>
+<span id="cb168-37"><a href="multiple-linear-regression-1.html#cb168-37" tabindex="-1"></a>yi  <span class="ot">&lt;-</span> y</span>
+<span id="cb168-38"><a href="multiple-linear-regression-1.html#cb168-38" tabindex="-1"></a>Xi  <span class="ot">&lt;-</span> X</span>
+<span id="cb168-39"><a href="multiple-linear-regression-1.html#cb168-39" tabindex="-1"></a></span>
+<span id="cb168-40"><a href="multiple-linear-regression-1.html#cb168-40" tabindex="-1"></a><span class="co"># Table with Changes</span></span>
+<span id="cb168-41"><a href="multiple-linear-regression-1.html#cb168-41" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> <span class="dv">0</span>, <span class="at">ncol =</span> <span class="dv">4</span>)</span>
+<span id="cb168-42"><a href="multiple-linear-regression-1.html#cb168-42" tabindex="-1"></a></span>
+<span id="cb168-43"><a href="multiple-linear-regression-1.html#cb168-43" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
+<span id="cb168-44"><a href="multiple-linear-regression-1.html#cb168-44" tabindex="-1"></a>  <span class="co"># Complete Data Set</span></span>
+<span id="cb168-45"><a href="multiple-linear-regression-1.html#cb168-45" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xi, X2)</span>
+<span id="cb168-46"><a href="multiple-linear-regression-1.html#cb168-46" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">c</span>(yi, y2[i])</span>
+<span id="cb168-47"><a href="multiple-linear-regression-1.html#cb168-47" tabindex="-1"></a>  </span>
+<span id="cb168-48"><a href="multiple-linear-regression-1.html#cb168-48" tabindex="-1"></a>  <span class="co"># Coefficients</span></span>
+<span id="cb168-49"><a href="multiple-linear-regression-1.html#cb168-49" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X) <span class="sc">%*%</span> y)</span>
+<span id="cb168-50"><a href="multiple-linear-regression-1.html#cb168-50" tabindex="-1"></a>  </span>
+<span id="cb168-51"><a href="multiple-linear-regression-1.html#cb168-51" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
+<span id="cb168-52"><a href="multiple-linear-regression-1.html#cb168-52" tabindex="-1"></a>  yh  <span class="ot">&lt;-</span> <span class="fu">c</span>(X <span class="sc">%*%</span> b)</span>
+<span id="cb168-53"><a href="multiple-linear-regression-1.html#cb168-53" tabindex="-1"></a>  yhi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rbind</span>(Xi, X2) <span class="sc">%*%</span> bi)</span>
+<span id="cb168-54"><a href="multiple-linear-regression-1.html#cb168-54" tabindex="-1"></a>  </span>
+<span id="cb168-55"><a href="multiple-linear-regression-1.html#cb168-55" tabindex="-1"></a>  <span class="co"># Hat matrix</span></span>
+<span id="cb168-56"><a href="multiple-linear-regression-1.html#cb168-56" tabindex="-1"></a>  H <span class="ot">&lt;-</span> X <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X))</span>
+<span id="cb168-57"><a href="multiple-linear-regression-1.html#cb168-57" tabindex="-1"></a>  </span>
+<span id="cb168-58"><a href="multiple-linear-regression-1.html#cb168-58" tabindex="-1"></a>  <span class="co"># Leverage New Observation</span></span>
+<span id="cb168-59"><a href="multiple-linear-regression-1.html#cb168-59" tabindex="-1"></a>  h <span class="ot">&lt;-</span> H[n<span class="sc">+</span><span class="dv">1</span>, n<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb168-60"><a href="multiple-linear-regression-1.html#cb168-60" tabindex="-1"></a>  </span>
+<span id="cb168-61"><a href="multiple-linear-regression-1.html#cb168-61" tabindex="-1"></a>  <span class="co"># Change in Predictions</span></span>
+<span id="cb168-62"><a href="multiple-linear-regression-1.html#cb168-62" tabindex="-1"></a>  preCha <span class="ot">&lt;-</span> <span class="fu">sum</span>((yh <span class="sc">-</span> yhi)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb168-63"><a href="multiple-linear-regression-1.html#cb168-63" tabindex="-1"></a>  </span>
+<span id="cb168-64"><a href="multiple-linear-regression-1.html#cb168-64" tabindex="-1"></a>  <span class="co"># Leverage Component</span></span>
+<span id="cb168-65"><a href="multiple-linear-regression-1.html#cb168-65" tabindex="-1"></a>  levCom <span class="ot">&lt;-</span> h <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> h)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb168-66"><a href="multiple-linear-regression-1.html#cb168-66" tabindex="-1"></a>  </span>
+<span id="cb168-67"><a href="multiple-linear-regression-1.html#cb168-67" tabindex="-1"></a>  <span class="co"># Error Component</span></span>
+<span id="cb168-68"><a href="multiple-linear-regression-1.html#cb168-68" tabindex="-1"></a>  errCom <span class="ot">&lt;-</span> (y[n<span class="sc">+</span><span class="dv">1</span>] <span class="sc">-</span> yh[n<span class="sc">+</span><span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb168-69"><a href="multiple-linear-regression-1.html#cb168-69" tabindex="-1"></a>  </span>
+<span id="cb168-70"><a href="multiple-linear-regression-1.html#cb168-70" tabindex="-1"></a>  <span class="co"># Saves Values</span></span>
+<span id="cb168-71"><a href="multiple-linear-regression-1.html#cb168-71" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tab, <span class="fu">c</span>(preCha, levCom, errCom, levCom <span class="sc">*</span> errCom))</span>
+<span id="cb168-72"><a href="multiple-linear-regression-1.html#cb168-72" tabindex="-1"></a>}</span>
+<span id="cb168-73"><a href="multiple-linear-regression-1.html#cb168-73" tabindex="-1"></a></span>
+<span id="cb168-74"><a href="multiple-linear-regression-1.html#cb168-74" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
+<span id="cb168-75"><a href="multiple-linear-regression-1.html#cb168-75" tabindex="-1"></a>  <span class="co"># Complete Data Set</span></span>
+<span id="cb168-76"><a href="multiple-linear-regression-1.html#cb168-76" tabindex="-1"></a>  X <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xi, X1)</span>
+<span id="cb168-77"><a href="multiple-linear-regression-1.html#cb168-77" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">c</span>(yi, y1[i])</span>
+<span id="cb168-78"><a href="multiple-linear-regression-1.html#cb168-78" tabindex="-1"></a>  </span>
+<span id="cb168-79"><a href="multiple-linear-regression-1.html#cb168-79" tabindex="-1"></a>  <span class="co"># Coefficients</span></span>
+<span id="cb168-80"><a href="multiple-linear-regression-1.html#cb168-80" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X) <span class="sc">%*%</span> y)</span>
+<span id="cb168-81"><a href="multiple-linear-regression-1.html#cb168-81" tabindex="-1"></a>  </span>
+<span id="cb168-82"><a href="multiple-linear-regression-1.html#cb168-82" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
+<span id="cb168-83"><a href="multiple-linear-regression-1.html#cb168-83" tabindex="-1"></a>  yh  <span class="ot">&lt;-</span> <span class="fu">c</span>(X <span class="sc">%*%</span> b)</span>
+<span id="cb168-84"><a href="multiple-linear-regression-1.html#cb168-84" tabindex="-1"></a>  yhi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rbind</span>(Xi, X1) <span class="sc">%*%</span> bi)</span>
+<span id="cb168-85"><a href="multiple-linear-regression-1.html#cb168-85" tabindex="-1"></a>  </span>
+<span id="cb168-86"><a href="multiple-linear-regression-1.html#cb168-86" tabindex="-1"></a>  <span class="co"># Hat matrix</span></span>
+<span id="cb168-87"><a href="multiple-linear-regression-1.html#cb168-87" tabindex="-1"></a>  H <span class="ot">&lt;-</span> X <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X, <span class="fu">t</span>(X))</span>
+<span id="cb168-88"><a href="multiple-linear-regression-1.html#cb168-88" tabindex="-1"></a>  </span>
+<span id="cb168-89"><a href="multiple-linear-regression-1.html#cb168-89" tabindex="-1"></a>  <span class="co"># Leverage New Observation</span></span>
+<span id="cb168-90"><a href="multiple-linear-regression-1.html#cb168-90" tabindex="-1"></a>  h <span class="ot">&lt;-</span> H[n<span class="sc">+</span><span class="dv">1</span>, n<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb168-91"><a href="multiple-linear-regression-1.html#cb168-91" tabindex="-1"></a>  </span>
+<span id="cb168-92"><a href="multiple-linear-regression-1.html#cb168-92" tabindex="-1"></a>  <span class="co"># Change in Predictions</span></span>
+<span id="cb168-93"><a href="multiple-linear-regression-1.html#cb168-93" tabindex="-1"></a>  preCha <span class="ot">&lt;-</span> <span class="fu">sum</span>((yh <span class="sc">-</span> yhi)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb168-94"><a href="multiple-linear-regression-1.html#cb168-94" tabindex="-1"></a>  </span>
+<span id="cb168-95"><a href="multiple-linear-regression-1.html#cb168-95" tabindex="-1"></a>  <span class="co"># Leverage Component</span></span>
+<span id="cb168-96"><a href="multiple-linear-regression-1.html#cb168-96" tabindex="-1"></a>  levCom <span class="ot">&lt;-</span> h <span class="sc">/</span> ((<span class="dv">1</span> <span class="sc">-</span> h)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb168-97"><a href="multiple-linear-regression-1.html#cb168-97" tabindex="-1"></a>  </span>
+<span id="cb168-98"><a href="multiple-linear-regression-1.html#cb168-98" tabindex="-1"></a>  <span class="co"># Error Component</span></span>
+<span id="cb168-99"><a href="multiple-linear-regression-1.html#cb168-99" tabindex="-1"></a>  errCom <span class="ot">&lt;-</span> (y[n<span class="sc">+</span><span class="dv">1</span>] <span class="sc">-</span> yh[n<span class="sc">+</span><span class="dv">1</span>])<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb168-100"><a href="multiple-linear-regression-1.html#cb168-100" tabindex="-1"></a>  </span>
+<span id="cb168-101"><a href="multiple-linear-regression-1.html#cb168-101" tabindex="-1"></a>  <span class="co"># Saves Values</span></span>
+<span id="cb168-102"><a href="multiple-linear-regression-1.html#cb168-102" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">rbind</span>(tab, <span class="fu">c</span>(preCha, levCom, errCom, levCom <span class="sc">*</span> errCom))</span>
+<span id="cb168-103"><a href="multiple-linear-regression-1.html#cb168-103" tabindex="-1"></a>}</span>
+<span id="cb168-104"><a href="multiple-linear-regression-1.html#cb168-104" tabindex="-1"></a></span>
+<span id="cb168-105"><a href="multiple-linear-regression-1.html#cb168-105" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(tab)</span>
+<span id="cb168-106"><a href="multiple-linear-regression-1.html#cb168-106" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Low&quot;</span>, <span class="dv">5</span>), <span class="fu">rep</span>(<span class="st">&quot;High&quot;</span>, <span class="dv">5</span>)), tab)</span>
+<span id="cb168-107"><a href="multiple-linear-regression-1.html#cb168-107" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;Minimum&quot;</span>, <span class="st">&quot;Low&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;High&quot;</span>, <span class="st">&quot;Very High&quot;</span>), <span class="dv">2</span>), tab)</span>
+<span id="cb168-108"><a href="multiple-linear-regression-1.html#cb168-108" tabindex="-1"></a>  <span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Error Level&quot;</span>, <span class="st">&quot;Leverage Level&quot;</span>, <span class="st">&quot;Sum of Sq. Diff.&quot;</span>, <span class="st">&quot;Lev. Comp.&quot;</span>, <span class="st">&quot;Err. Comp.&quot;</span>, <span class="st">&quot;Using Formula&quot;</span>)</span>
+<span id="cb168-109"><a href="multiple-linear-regression-1.html#cb168-109" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(tab, <span class="at">digits =</span> <span class="dv">5</span>)</span></code></pre></div>
 <table>
 <colgroup>
 <col width="15%" />
@@ -2760,51 +2761,51 @@ Again, using <a href="prerequisites.html#properties-of-the-determinant">properti
   =\det(\mathbf{X}&#39;\mathbf{X}&#39;)(1 - h_{ii}) \\\]</span></p>
 <p>So, the determinant deteriorates the more leverage observation <span class="math inline">\(i\)</span> has.</p>
 <p>We can see examples of the previous operations with our GDP data.</p>
-<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="multiple-linear-regression-1.html#cb166-1" tabindex="-1"></a><span class="co"># Read Data</span></span>
-<span id="cb166-2"><a href="multiple-linear-regression-1.html#cb166-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Gdp data.csv&quot;</span>)</span>
-<span id="cb166-3"><a href="multiple-linear-regression-1.html#cb166-3" tabindex="-1"></a></span>
-<span id="cb166-4"><a href="multiple-linear-regression-1.html#cb166-4" tabindex="-1"></a><span class="co"># Design Matrix Independent Variables</span></span>
-<span id="cb166-5"><a href="multiple-linear-regression-1.html#cb166-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb166-6"><a href="multiple-linear-regression-1.html#cb166-6" tabindex="-1"></a></span>
-<span id="cb166-7"><a href="multiple-linear-regression-1.html#cb166-7" tabindex="-1"></a><span class="co"># Centering</span></span>
-<span id="cb166-8"><a href="multiple-linear-regression-1.html#cb166-8" tabindex="-1"></a><span class="co"># Vector of Ones</span></span>
-<span id="cb166-9"><a href="multiple-linear-regression-1.html#cb166-9" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, n)</span>
-<span id="cb166-10"><a href="multiple-linear-regression-1.html#cb166-10" tabindex="-1"></a><span class="co"># Centering Matrix</span></span>
-<span id="cb166-11"><a href="multiple-linear-regression-1.html#cb166-11" tabindex="-1"></a>C  <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>n) <span class="sc">*</span> v1 <span class="sc">%*%</span> <span class="fu">t</span>(v1)</span>
-<span id="cb166-12"><a href="multiple-linear-regression-1.html#cb166-12" tabindex="-1"></a><span class="co"># Independent Variables Centered</span></span>
-<span id="cb166-13"><a href="multiple-linear-regression-1.html#cb166-13" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
-<span id="cb166-14"><a href="multiple-linear-regression-1.html#cb166-14" tabindex="-1"></a></span>
-<span id="cb166-15"><a href="multiple-linear-regression-1.html#cb166-15" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
-<span id="cb166-16"><a href="multiple-linear-regression-1.html#cb166-16" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
-<span id="cb166-17"><a href="multiple-linear-regression-1.html#cb166-17" tabindex="-1"></a><span class="co"># Standardize X</span></span>
-<span id="cb166-18"><a href="multiple-linear-regression-1.html#cb166-18" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
-<span id="cb166-19"><a href="multiple-linear-regression-1.html#cb166-19" tabindex="-1"></a></span>
-<span id="cb166-20"><a href="multiple-linear-regression-1.html#cb166-20" tabindex="-1"></a><span class="co"># Condition numbers</span></span>
-<span id="cb166-21"><a href="multiple-linear-regression-1.html#cb166-21" tabindex="-1"></a></span>
-<span id="cb166-22"><a href="multiple-linear-regression-1.html#cb166-22" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of X&#39;X = &quot;</span>,   <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X), <span class="dv">2</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="multiple-linear-regression-1.html#cb169-1" tabindex="-1"></a><span class="co"># Read Data</span></span>
+<span id="cb169-2"><a href="multiple-linear-regression-1.html#cb169-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Gdp data.csv&quot;</span>)</span>
+<span id="cb169-3"><a href="multiple-linear-regression-1.html#cb169-3" tabindex="-1"></a></span>
+<span id="cb169-4"><a href="multiple-linear-regression-1.html#cb169-4" tabindex="-1"></a><span class="co"># Design Matrix Independent Variables</span></span>
+<span id="cb169-5"><a href="multiple-linear-regression-1.html#cb169-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb169-6"><a href="multiple-linear-regression-1.html#cb169-6" tabindex="-1"></a></span>
+<span id="cb169-7"><a href="multiple-linear-regression-1.html#cb169-7" tabindex="-1"></a><span class="co"># Centering</span></span>
+<span id="cb169-8"><a href="multiple-linear-regression-1.html#cb169-8" tabindex="-1"></a><span class="co"># Vector of Ones</span></span>
+<span id="cb169-9"><a href="multiple-linear-regression-1.html#cb169-9" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, n)</span>
+<span id="cb169-10"><a href="multiple-linear-regression-1.html#cb169-10" tabindex="-1"></a><span class="co"># Centering Matrix</span></span>
+<span id="cb169-11"><a href="multiple-linear-regression-1.html#cb169-11" tabindex="-1"></a>C  <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>n) <span class="sc">*</span> v1 <span class="sc">%*%</span> <span class="fu">t</span>(v1)</span>
+<span id="cb169-12"><a href="multiple-linear-regression-1.html#cb169-12" tabindex="-1"></a><span class="co"># Independent Variables Centered</span></span>
+<span id="cb169-13"><a href="multiple-linear-regression-1.html#cb169-13" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
+<span id="cb169-14"><a href="multiple-linear-regression-1.html#cb169-14" tabindex="-1"></a></span>
+<span id="cb169-15"><a href="multiple-linear-regression-1.html#cb169-15" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
+<span id="cb169-16"><a href="multiple-linear-regression-1.html#cb169-16" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
+<span id="cb169-17"><a href="multiple-linear-regression-1.html#cb169-17" tabindex="-1"></a><span class="co"># Standardize X</span></span>
+<span id="cb169-18"><a href="multiple-linear-regression-1.html#cb169-18" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
+<span id="cb169-19"><a href="multiple-linear-regression-1.html#cb169-19" tabindex="-1"></a></span>
+<span id="cb169-20"><a href="multiple-linear-regression-1.html#cb169-20" tabindex="-1"></a><span class="co"># Condition numbers</span></span>
+<span id="cb169-21"><a href="multiple-linear-regression-1.html#cb169-21" tabindex="-1"></a></span>
+<span id="cb169-22"><a href="multiple-linear-regression-1.html#cb169-22" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of X&#39;X = &quot;</span>,   <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X), <span class="dv">2</span>)))</span></code></pre></div>
 <pre><code>## [1] &quot;Condition number of X&#39;X = 28072.42&quot;</code></pre>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="multiple-linear-regression-1.html#cb168-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of Xc&#39;Xc = &quot;</span>, <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(Xc) <span class="sc">%*%</span> Xc), <span class="dv">2</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="multiple-linear-regression-1.html#cb171-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of Xc&#39;Xc = &quot;</span>, <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(Xc) <span class="sc">%*%</span> Xc), <span class="dv">2</span>)))</span></code></pre></div>
 <pre><code>## [1] &quot;Condition number of Xc&#39;Xc = 1186.14&quot;</code></pre>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="multiple-linear-regression-1.html#cb170-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of Xs&#39;Xs = &quot;</span>, <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs), <span class="dv">2</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="multiple-linear-regression-1.html#cb173-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of Xs&#39;Xs = &quot;</span>, <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs), <span class="dv">2</span>)))</span></code></pre></div>
 <pre><code>## [1] &quot;Condition number of Xs&#39;Xs = 105.68&quot;</code></pre>
 <p>as we can see the condition number improves as with the centering and the standardization.
 However, this is not necessarily so.</p>
 <p>Now we evaluate the effect of each variable on the determinant.</p>
-<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="multiple-linear-regression-1.html#cb172-1" tabindex="-1"></a>P      <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
-<span id="cb172-2"><a href="multiple-linear-regression-1.html#cb172-2" tabindex="-1"></a>vecDet <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
-<span id="cb172-3"><a href="multiple-linear-regression-1.html#cb172-3" tabindex="-1"></a>vecR2  <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
-<span id="cb172-4"><a href="multiple-linear-regression-1.html#cb172-4" tabindex="-1"></a></span>
-<span id="cb172-5"><a href="multiple-linear-regression-1.html#cb172-5" tabindex="-1"></a><span class="co"># Computes</span></span>
-<span id="cb172-6"><a href="multiple-linear-regression-1.html#cb172-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
-<span id="cb172-7"><a href="multiple-linear-regression-1.html#cb172-7" tabindex="-1"></a>  vecDet[i] <span class="ot">&lt;-</span> <span class="fu">det</span>(<span class="fu">cor</span>(X[, <span class="sc">-</span>i]))</span>
-<span id="cb172-8"><a href="multiple-linear-regression-1.html#cb172-8" tabindex="-1"></a>  vecR2[i]  <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(Xs[, i] <span class="sc">~</span> Xs[, <span class="sc">-</span>i] <span class="sc">-</span> <span class="dv">1</span>))<span class="sc">$</span>r.squared</span>
-<span id="cb172-9"><a href="multiple-linear-regression-1.html#cb172-9" tabindex="-1"></a>}</span>
-<span id="cb172-10"><a href="multiple-linear-regression-1.html#cb172-10" tabindex="-1"></a></span>
-<span id="cb172-11"><a href="multiple-linear-regression-1.html#cb172-11" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
-<span id="cb172-12"><a href="multiple-linear-regression-1.html#cb172-12" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="fu">det</span>(<span class="fu">cor</span>(X)), P), vecDet, vecR2)</span>
-<span id="cb172-13"><a href="multiple-linear-regression-1.html#cb172-13" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;r_{X&#39;X}&quot;</span>, <span class="st">&quot;r_{X_(i)&#39;X_(i)}&quot;</span>, <span class="st">&quot;R2&quot;</span>)</span>
-<span id="cb172-14"><a href="multiple-linear-regression-1.html#cb172-14" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(dat)[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>]</span>
-<span id="cb172-15"><a href="multiple-linear-regression-1.html#cb172-15" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="multiple-linear-regression-1.html#cb175-1" tabindex="-1"></a>P      <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb175-2"><a href="multiple-linear-regression-1.html#cb175-2" tabindex="-1"></a>vecDet <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
+<span id="cb175-3"><a href="multiple-linear-regression-1.html#cb175-3" tabindex="-1"></a>vecR2  <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
+<span id="cb175-4"><a href="multiple-linear-regression-1.html#cb175-4" tabindex="-1"></a></span>
+<span id="cb175-5"><a href="multiple-linear-regression-1.html#cb175-5" tabindex="-1"></a><span class="co"># Computes</span></span>
+<span id="cb175-6"><a href="multiple-linear-regression-1.html#cb175-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
+<span id="cb175-7"><a href="multiple-linear-regression-1.html#cb175-7" tabindex="-1"></a>  vecDet[i] <span class="ot">&lt;-</span> <span class="fu">det</span>(<span class="fu">cor</span>(X[, <span class="sc">-</span>i]))</span>
+<span id="cb175-8"><a href="multiple-linear-regression-1.html#cb175-8" tabindex="-1"></a>  vecR2[i]  <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(Xs[, i] <span class="sc">~</span> Xs[, <span class="sc">-</span>i] <span class="sc">-</span> <span class="dv">1</span>))<span class="sc">$</span>r.squared</span>
+<span id="cb175-9"><a href="multiple-linear-regression-1.html#cb175-9" tabindex="-1"></a>}</span>
+<span id="cb175-10"><a href="multiple-linear-regression-1.html#cb175-10" tabindex="-1"></a></span>
+<span id="cb175-11"><a href="multiple-linear-regression-1.html#cb175-11" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
+<span id="cb175-12"><a href="multiple-linear-regression-1.html#cb175-12" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="fu">det</span>(<span class="fu">cor</span>(X)), P), vecDet, vecR2)</span>
+<span id="cb175-13"><a href="multiple-linear-regression-1.html#cb175-13" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;r_{X&#39;X}&quot;</span>, <span class="st">&quot;r_{X_(i)&#39;X_(i)}&quot;</span>, <span class="st">&quot;R2&quot;</span>)</span>
+<span id="cb175-14"><a href="multiple-linear-regression-1.html#cb175-14" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(dat)[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb175-15"><a href="multiple-linear-regression-1.html#cb175-15" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -2848,52 +2849,52 @@ However, this is not necessarily so.</p>
 </tbody>
 </table>
 <p>Finally we can evaluate the effects of a new observations depending on the leverage:</p>
-<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="multiple-linear-regression-1.html#cb173-1" tabindex="-1"></a><span class="co"># Read Data</span></span>
-<span id="cb173-2"><a href="multiple-linear-regression-1.html#cb173-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Gdp data.csv&quot;</span>)</span>
-<span id="cb173-3"><a href="multiple-linear-regression-1.html#cb173-3" tabindex="-1"></a></span>
-<span id="cb173-4"><a href="multiple-linear-regression-1.html#cb173-4" tabindex="-1"></a><span class="co"># Design Matrix Independent Variables</span></span>
-<span id="cb173-5"><a href="multiple-linear-regression-1.html#cb173-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb173-6"><a href="multiple-linear-regression-1.html#cb173-6" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
-<span id="cb173-7"><a href="multiple-linear-regression-1.html#cb173-7" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
-<span id="cb173-8"><a href="multiple-linear-regression-1.html#cb173-8" tabindex="-1"></a></span>
-<span id="cb173-9"><a href="multiple-linear-regression-1.html#cb173-9" tabindex="-1"></a><span class="co"># Centering</span></span>
-<span id="cb173-10"><a href="multiple-linear-regression-1.html#cb173-10" tabindex="-1"></a><span class="co"># Vector of Ones</span></span>
-<span id="cb173-11"><a href="multiple-linear-regression-1.html#cb173-11" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, n)</span>
-<span id="cb173-12"><a href="multiple-linear-regression-1.html#cb173-12" tabindex="-1"></a><span class="co"># Centering Matrix</span></span>
-<span id="cb173-13"><a href="multiple-linear-regression-1.html#cb173-13" tabindex="-1"></a>C  <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>n) <span class="sc">*</span> v1 <span class="sc">%*%</span> <span class="fu">t</span>(v1)</span>
-<span id="cb173-14"><a href="multiple-linear-regression-1.html#cb173-14" tabindex="-1"></a><span class="co"># Independent Variables Centered</span></span>
-<span id="cb173-15"><a href="multiple-linear-regression-1.html#cb173-15" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
-<span id="cb173-16"><a href="multiple-linear-regression-1.html#cb173-16" tabindex="-1"></a></span>
-<span id="cb173-17"><a href="multiple-linear-regression-1.html#cb173-17" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
-<span id="cb173-18"><a href="multiple-linear-regression-1.html#cb173-18" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
-<span id="cb173-19"><a href="multiple-linear-regression-1.html#cb173-19" tabindex="-1"></a><span class="co"># Standardize X</span></span>
-<span id="cb173-20"><a href="multiple-linear-regression-1.html#cb173-20" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
-<span id="cb173-21"><a href="multiple-linear-regression-1.html#cb173-21" tabindex="-1"></a></span>
-<span id="cb173-22"><a href="multiple-linear-regression-1.html#cb173-22" tabindex="-1"></a><span class="co"># New Observations</span></span>
-<span id="cb173-23"><a href="multiple-linear-regression-1.html#cb173-23" tabindex="-1"></a><span class="co"># Very Leveraged Observation</span></span>
-<span id="cb173-24"><a href="multiple-linear-regression-1.html#cb173-24" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">3</span>, P))</span>
-<span id="cb173-25"><a href="multiple-linear-regression-1.html#cb173-25" tabindex="-1"></a><span class="co"># Mildly Leveraged Observation</span></span>
-<span id="cb173-26"><a href="multiple-linear-regression-1.html#cb173-26" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xn, <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">1</span>, P)))</span>
-<span id="cb173-27"><a href="multiple-linear-regression-1.html#cb173-27" tabindex="-1"></a><span class="co"># No Leverage</span></span>
-<span id="cb173-28"><a href="multiple-linear-regression-1.html#cb173-28" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xn, <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">0</span>, P)))</span>
-<span id="cb173-29"><a href="multiple-linear-regression-1.html#cb173-29" tabindex="-1"></a></span>
-<span id="cb173-30"><a href="multiple-linear-regression-1.html#cb173-30" tabindex="-1"></a><span class="co"># Number of New Observations</span></span>
-<span id="cb173-31"><a href="multiple-linear-regression-1.html#cb173-31" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">nrow</span>(Xn)</span>
-<span id="cb173-32"><a href="multiple-linear-regression-1.html#cb173-32" tabindex="-1"></a></span>
-<span id="cb173-33"><a href="multiple-linear-regression-1.html#cb173-33" tabindex="-1"></a><span class="co"># Computes the Effects of the New Observation</span></span>
-<span id="cb173-34"><a href="multiple-linear-regression-1.html#cb173-34" tabindex="-1"></a>vecDet <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> m)</span>
-<span id="cb173-35"><a href="multiple-linear-regression-1.html#cb173-35" tabindex="-1"></a>vecLev <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> m)</span>
-<span id="cb173-36"><a href="multiple-linear-regression-1.html#cb173-36" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
-<span id="cb173-37"><a href="multiple-linear-regression-1.html#cb173-37" tabindex="-1"></a>  Z         <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xs, Xn[i, ])</span>
-<span id="cb173-38"><a href="multiple-linear-regression-1.html#cb173-38" tabindex="-1"></a>  vecDet[i] <span class="ot">&lt;-</span> <span class="fu">det</span>(<span class="fu">t</span>(Z) <span class="sc">%*%</span> Z)</span>
-<span id="cb173-39"><a href="multiple-linear-regression-1.html#cb173-39" tabindex="-1"></a>  vecLev[i] <span class="ot">&lt;-</span> <span class="fu">t</span>(Xn[i, ]) <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(Z) <span class="sc">%*%</span> Z, Xn[i, ])</span>
-<span id="cb173-40"><a href="multiple-linear-regression-1.html#cb173-40" tabindex="-1"></a>}</span>
-<span id="cb173-41"><a href="multiple-linear-regression-1.html#cb173-41" tabindex="-1"></a></span>
-<span id="cb173-42"><a href="multiple-linear-regression-1.html#cb173-42" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
-<span id="cb173-43"><a href="multiple-linear-regression-1.html#cb173-43" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="fu">det</span>(<span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs), <span class="dv">3</span>), vecDet, vecLev, vecLev <span class="sc">*</span> n <span class="sc">/</span> P)</span>
-<span id="cb173-44"><a href="multiple-linear-regression-1.html#cb173-44" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;det(Xs_(i)&#39;Xs_(i))&quot;</span>,<span class="st">&quot;det(Xs&#39;Xs)&quot;</span>, <span class="st">&quot;Leverage&quot;</span>, <span class="st">&quot;Obs. Equivalent&quot;</span>)</span>
-<span id="cb173-45"><a href="multiple-linear-regression-1.html#cb173-45" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Big Leverage&quot;</span>, <span class="st">&quot;Medium Leverage&quot;</span>, <span class="st">&quot;No Leverage&quot;</span>)</span>
-<span id="cb173-46"><a href="multiple-linear-regression-1.html#cb173-46" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="multiple-linear-regression-1.html#cb176-1" tabindex="-1"></a><span class="co"># Read Data</span></span>
+<span id="cb176-2"><a href="multiple-linear-regression-1.html#cb176-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Gdp data.csv&quot;</span>)</span>
+<span id="cb176-3"><a href="multiple-linear-regression-1.html#cb176-3" tabindex="-1"></a></span>
+<span id="cb176-4"><a href="multiple-linear-regression-1.html#cb176-4" tabindex="-1"></a><span class="co"># Design Matrix Independent Variables</span></span>
+<span id="cb176-5"><a href="multiple-linear-regression-1.html#cb176-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
+<span id="cb176-6"><a href="multiple-linear-regression-1.html#cb176-6" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb176-7"><a href="multiple-linear-regression-1.html#cb176-7" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
+<span id="cb176-8"><a href="multiple-linear-regression-1.html#cb176-8" tabindex="-1"></a></span>
+<span id="cb176-9"><a href="multiple-linear-regression-1.html#cb176-9" tabindex="-1"></a><span class="co"># Centering</span></span>
+<span id="cb176-10"><a href="multiple-linear-regression-1.html#cb176-10" tabindex="-1"></a><span class="co"># Vector of Ones</span></span>
+<span id="cb176-11"><a href="multiple-linear-regression-1.html#cb176-11" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, n)</span>
+<span id="cb176-12"><a href="multiple-linear-regression-1.html#cb176-12" tabindex="-1"></a><span class="co"># Centering Matrix</span></span>
+<span id="cb176-13"><a href="multiple-linear-regression-1.html#cb176-13" tabindex="-1"></a>C  <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>n) <span class="sc">*</span> v1 <span class="sc">%*%</span> <span class="fu">t</span>(v1)</span>
+<span id="cb176-14"><a href="multiple-linear-regression-1.html#cb176-14" tabindex="-1"></a><span class="co"># Independent Variables Centered</span></span>
+<span id="cb176-15"><a href="multiple-linear-regression-1.html#cb176-15" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
+<span id="cb176-16"><a href="multiple-linear-regression-1.html#cb176-16" tabindex="-1"></a></span>
+<span id="cb176-17"><a href="multiple-linear-regression-1.html#cb176-17" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
+<span id="cb176-18"><a href="multiple-linear-regression-1.html#cb176-18" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
+<span id="cb176-19"><a href="multiple-linear-regression-1.html#cb176-19" tabindex="-1"></a><span class="co"># Standardize X</span></span>
+<span id="cb176-20"><a href="multiple-linear-regression-1.html#cb176-20" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
+<span id="cb176-21"><a href="multiple-linear-regression-1.html#cb176-21" tabindex="-1"></a></span>
+<span id="cb176-22"><a href="multiple-linear-regression-1.html#cb176-22" tabindex="-1"></a><span class="co"># New Observations</span></span>
+<span id="cb176-23"><a href="multiple-linear-regression-1.html#cb176-23" tabindex="-1"></a><span class="co"># Very Leveraged Observation</span></span>
+<span id="cb176-24"><a href="multiple-linear-regression-1.html#cb176-24" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">3</span>, P))</span>
+<span id="cb176-25"><a href="multiple-linear-regression-1.html#cb176-25" tabindex="-1"></a><span class="co"># Mildly Leveraged Observation</span></span>
+<span id="cb176-26"><a href="multiple-linear-regression-1.html#cb176-26" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xn, <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">1</span>, P)))</span>
+<span id="cb176-27"><a href="multiple-linear-regression-1.html#cb176-27" tabindex="-1"></a><span class="co"># No Leverage</span></span>
+<span id="cb176-28"><a href="multiple-linear-regression-1.html#cb176-28" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xn, <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">0</span>, P)))</span>
+<span id="cb176-29"><a href="multiple-linear-regression-1.html#cb176-29" tabindex="-1"></a></span>
+<span id="cb176-30"><a href="multiple-linear-regression-1.html#cb176-30" tabindex="-1"></a><span class="co"># Number of New Observations</span></span>
+<span id="cb176-31"><a href="multiple-linear-regression-1.html#cb176-31" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">nrow</span>(Xn)</span>
+<span id="cb176-32"><a href="multiple-linear-regression-1.html#cb176-32" tabindex="-1"></a></span>
+<span id="cb176-33"><a href="multiple-linear-regression-1.html#cb176-33" tabindex="-1"></a><span class="co"># Computes the Effects of the New Observation</span></span>
+<span id="cb176-34"><a href="multiple-linear-regression-1.html#cb176-34" tabindex="-1"></a>vecDet <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> m)</span>
+<span id="cb176-35"><a href="multiple-linear-regression-1.html#cb176-35" tabindex="-1"></a>vecLev <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> m)</span>
+<span id="cb176-36"><a href="multiple-linear-regression-1.html#cb176-36" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
+<span id="cb176-37"><a href="multiple-linear-regression-1.html#cb176-37" tabindex="-1"></a>  Z         <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xs, Xn[i, ])</span>
+<span id="cb176-38"><a href="multiple-linear-regression-1.html#cb176-38" tabindex="-1"></a>  vecDet[i] <span class="ot">&lt;-</span> <span class="fu">det</span>(<span class="fu">t</span>(Z) <span class="sc">%*%</span> Z)</span>
+<span id="cb176-39"><a href="multiple-linear-regression-1.html#cb176-39" tabindex="-1"></a>  vecLev[i] <span class="ot">&lt;-</span> <span class="fu">t</span>(Xn[i, ]) <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(Z) <span class="sc">%*%</span> Z, Xn[i, ])</span>
+<span id="cb176-40"><a href="multiple-linear-regression-1.html#cb176-40" tabindex="-1"></a>}</span>
+<span id="cb176-41"><a href="multiple-linear-regression-1.html#cb176-41" tabindex="-1"></a></span>
+<span id="cb176-42"><a href="multiple-linear-regression-1.html#cb176-42" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
+<span id="cb176-43"><a href="multiple-linear-regression-1.html#cb176-43" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="fu">det</span>(<span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs), <span class="dv">3</span>), vecDet, vecLev, vecLev <span class="sc">*</span> n <span class="sc">/</span> P)</span>
+<span id="cb176-44"><a href="multiple-linear-regression-1.html#cb176-44" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;det(Xs_(i)&#39;Xs_(i))&quot;</span>,<span class="st">&quot;det(Xs&#39;Xs)&quot;</span>, <span class="st">&quot;Leverage&quot;</span>, <span class="st">&quot;Obs. Equivalent&quot;</span>)</span>
+<span id="cb176-45"><a href="multiple-linear-regression-1.html#cb176-45" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Big Leverage&quot;</span>, <span class="st">&quot;Medium Leverage&quot;</span>, <span class="st">&quot;No Leverage&quot;</span>)</span>
+<span id="cb176-46"><a href="multiple-linear-regression-1.html#cb176-46" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
 <table style="width:100%;">
 <colgroup>
 <col width="21%" />

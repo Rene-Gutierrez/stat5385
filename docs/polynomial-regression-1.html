@@ -316,7 +316,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.3" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#centering-and-reparameterization"><i class="fa fa-check"></i><b>5.3</b> Centering and Reparameterization</a>
 <ul>
 <li class="chapter" data-level="5.3.1" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#why-center-at-the-sample-mean"><i class="fa fa-check"></i><b>5.3.1</b> Why Center at the Sample Mean?</a></li>
-<li class="chapter" data-level="5.3.2" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#examples-2"><i class="fa fa-check"></i><b>5.3.2</b> Examples</a></li>
+<li class="chapter" data-level="5.3.2" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#example-9"><i class="fa fa-check"></i><b>5.3.2</b> Example</a></li>
+<li class="chapter" data-level="5.3.3" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#polynomial-cross-validation-example"><i class="fa fa-check"></i><b>5.3.3</b> Polynomial Cross-Validation Example</a></li>
 </ul></li>
 <li class="chapter" data-level="5.4" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#exercises-2"><i class="fa fa-check"></i><b>5.4</b> Exercises</a>
 <ul>
@@ -882,8 +883,8 @@ When the explanatory variable is centered at <span class="math inline">\(\bar{x}
 </ol>
 <hr />
 </div>
-<div id="examples-2" class="section level3 hasAnchor" number="5.3.2">
-<h3><span class="header-section-number">5.3.2</span> Examples<a href="polynomial-regression-1.html#examples-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="example-9" class="section level3 hasAnchor" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Example<a href="polynomial-regression-1.html#example-9" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We use our <code>Burger Data</code> set to illustrate polynomial regression as an approximation to a nonlinear relationship. We first fit a second-degree polynomial to the complete dataset.</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="polynomial-regression-1.html#cb77-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Burger Data.csv&quot;</span>)</span>
 <span id="cb77-2"><a href="polynomial-regression-1.html#cb77-2" tabindex="-1"></a></span>
@@ -1084,6 +1085,123 @@ When the explanatory variable is centered at <span class="math inline">\(\bar{x}
 ## F-statistic: 331.2 on 2 and 63 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The <span class="math inline">\(R^2\)</span> for the restricted data can be quite high because it measures how well the quadratic model fits the observations used to estimate it. Nevertheless, the graph shows that the fitted polynomial can depart substantially from the nonlinear relationship once it is extrapolated beyond the restricted price range.</p>
 <p>Thus, a strong in-sample fit does not by itself guarantee reliable predictions outside the region represented by the observed explanatory variable.</p>
+</div>
+<div id="polynomial-cross-validation-example" class="section level3 hasAnchor" number="5.3.3">
+<h3><span class="header-section-number">5.3.3</span> Polynomial Cross-Validation Example<a href="polynomial-regression-1.html#polynomial-cross-validation-example" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Polynomial regression introduces an important practical question: <strong>how should we choose the degree of the polynomial?</strong></p>
+<p>A polynomial of higher degree is more flexible and will generally be able to fit the observed data at least as well as a polynomial of lower degree. However, a better fit to the data used to estimate the model does not necessarily imply better predictions for new observations. Increasing the polynomial degree can eventually lead to a model that adapts too closely to the particular observations in the training data.</p>
+<p>To compare polynomial models from a predictive perspective, we can use <strong>cross-validation</strong>.</p>
+<p>In this example, we use the Burger Data and compare three candidate models:</p>
+<p><span class="math display">\[
+\text{Degree 1:}
+\qquad
+y
+=
+\beta_0+\beta_1x+e,
+\]</span></p>
+<p><span class="math display">\[
+\text{Degree 2:}
+\qquad
+y
+=
+\beta_0+\beta_1x+\beta_2x^2+e,
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\text{Degree 3:}
+\qquad
+y
+=
+\beta_0+\beta_1x+\beta_2x^2+\beta_3x^3+e.
+\]</span></p>
+<p>The objective is not to determine which model fits the complete dataset best. Instead, we want to compare how accurately each model predicts observations that were <strong>not used to estimate its coefficients</strong>.</p>
+<p>We use <span class="math inline">\(10\)</span>-fold cross-validation. The observations are randomly assigned to one of <span class="math inline">\(10\)</span> folds. For each fold, we:</p>
+<ol style="list-style-type: decimal">
+<li>remove the observations belonging to that fold,</li>
+<li>fit the three polynomial models using the remaining observations,</li>
+<li>predict the responses for the observations in the omitted fold, and</li>
+<li>record the corresponding prediction errors.</li>
+</ol>
+<p>After repeating this procedure for all folds, every observation has been predicted by a model that was fitted <strong>without using that observation</strong>.</p>
+<p>The seed is fixed so that the same random fold assignment can be reproduced.</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="polynomial-regression-1.html#cb86-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb86-2"><a href="polynomial-regression-1.html#cb86-2" tabindex="-1"></a></span>
+<span id="cb86-3"><a href="polynomial-regression-1.html#cb86-3" tabindex="-1"></a><span class="co"># Read Data</span></span>
+<span id="cb86-4"><a href="polynomial-regression-1.html#cb86-4" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Burger Data.csv&quot;</span>)</span>
+<span id="cb86-5"><a href="polynomial-regression-1.html#cb86-5" tabindex="-1"></a>n   <span class="ot">&lt;-</span> <span class="fu">nrow</span>(dat)</span>
+<span id="cb86-6"><a href="polynomial-regression-1.html#cb86-6" tabindex="-1"></a></span>
+<span id="cb86-7"><a href="polynomial-regression-1.html#cb86-7" tabindex="-1"></a><span class="do">################################################################################</span></span>
+<span id="cb86-8"><a href="polynomial-regression-1.html#cb86-8" tabindex="-1"></a><span class="co"># Folds Creation</span></span>
+<span id="cb86-9"><a href="polynomial-regression-1.html#cb86-9" tabindex="-1"></a></span>
+<span id="cb86-10"><a href="polynomial-regression-1.html#cb86-10" tabindex="-1"></a><span class="co"># Number of Folds</span></span>
+<span id="cb86-11"><a href="polynomial-regression-1.html#cb86-11" tabindex="-1"></a>numFol <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb86-12"><a href="polynomial-regression-1.html#cb86-12" tabindex="-1"></a><span class="co"># Fold Creation (Not Same Size)</span></span>
+<span id="cb86-13"><a href="polynomial-regression-1.html#cb86-13" tabindex="-1"></a>folLis <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb86-14"><a href="polynomial-regression-1.html#cb86-14" tabindex="-1"></a>folInd <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(<span class="fu">runif</span>(<span class="at">n =</span> n) <span class="sc">*</span> numFol)</span>
+<span id="cb86-15"><a href="polynomial-regression-1.html#cb86-15" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb86-16"><a href="polynomial-regression-1.html#cb86-16" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numFol){</span>
+<span id="cb86-17"><a href="polynomial-regression-1.html#cb86-17" tabindex="-1"></a>  folLis[[i]] <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)[folInd <span class="sc">==</span> i]</span>
+<span id="cb86-18"><a href="polynomial-regression-1.html#cb86-18" tabindex="-1"></a>}</span>
+<span id="cb86-19"><a href="polynomial-regression-1.html#cb86-19" tabindex="-1"></a></span>
+<span id="cb86-20"><a href="polynomial-regression-1.html#cb86-20" tabindex="-1"></a><span class="do">################################################################################</span></span>
+<span id="cb86-21"><a href="polynomial-regression-1.html#cb86-21" tabindex="-1"></a><span class="co"># Model Fit and Error</span></span>
+<span id="cb86-22"><a href="polynomial-regression-1.html#cb86-22" tabindex="-1"></a></span>
+<span id="cb86-23"><a href="polynomial-regression-1.html#cb86-23" tabindex="-1"></a></span>
+<span id="cb86-24"><a href="polynomial-regression-1.html#cb86-24" tabindex="-1"></a>err <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> n, <span class="dv">3</span>)</span>
+<span id="cb86-25"><a href="polynomial-regression-1.html#cb86-25" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numFol){</span>
+<span id="cb86-26"><a href="polynomial-regression-1.html#cb86-26" tabindex="-1"></a>  <span class="co"># Indeces of Fold</span></span>
+<span id="cb86-27"><a href="polynomial-regression-1.html#cb86-27" tabindex="-1"></a>  sel <span class="ot">&lt;-</span> folLis[[i]]</span>
+<span id="cb86-28"><a href="polynomial-regression-1.html#cb86-28" tabindex="-1"></a>  <span class="co"># Model Fit without Fold</span></span>
+<span id="cb86-29"><a href="polynomial-regression-1.html#cb86-29" tabindex="-1"></a>  outPol1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price, <span class="at">data =</span> dat[<span class="sc">-</span>sel,])</span>
+<span id="cb86-30"><a href="polynomial-regression-1.html#cb86-30" tabindex="-1"></a>  outPol2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> dat[<span class="sc">-</span>sel,])</span>
+<span id="cb86-31"><a href="polynomial-regression-1.html#cb86-31" tabindex="-1"></a>  outPol3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">3</span>), <span class="at">data =</span> dat[<span class="sc">-</span>sel,])</span>
+<span id="cb86-32"><a href="polynomial-regression-1.html#cb86-32" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
+<span id="cb86-33"><a href="polynomial-regression-1.html#cb86-33" tabindex="-1"></a>  pre1 <span class="ot">&lt;-</span> <span class="fu">predict.lm</span>(outPol1, <span class="at">newdata =</span> dat[sel,])</span>
+<span id="cb86-34"><a href="polynomial-regression-1.html#cb86-34" tabindex="-1"></a>  pre2 <span class="ot">&lt;-</span> <span class="fu">predict.lm</span>(outPol2, <span class="at">newdata =</span> dat[sel,])</span>
+<span id="cb86-35"><a href="polynomial-regression-1.html#cb86-35" tabindex="-1"></a>  pre3 <span class="ot">&lt;-</span> <span class="fu">predict.lm</span>(outPol3, <span class="at">newdata =</span> dat[sel,])</span>
+<span id="cb86-36"><a href="polynomial-regression-1.html#cb86-36" tabindex="-1"></a>  <span class="co"># Error</span></span>
+<span id="cb86-37"><a href="polynomial-regression-1.html#cb86-37" tabindex="-1"></a>  err[sel, <span class="dv">1</span>] <span class="ot">&lt;-</span> pre1 <span class="sc">-</span> dat[sel, <span class="dv">1</span>]</span>
+<span id="cb86-38"><a href="polynomial-regression-1.html#cb86-38" tabindex="-1"></a>  err[sel, <span class="dv">2</span>] <span class="ot">&lt;-</span> pre2 <span class="sc">-</span> dat[sel, <span class="dv">1</span>]</span>
+<span id="cb86-39"><a href="polynomial-regression-1.html#cb86-39" tabindex="-1"></a>  err[sel, <span class="dv">3</span>] <span class="ot">&lt;-</span> pre3 <span class="sc">-</span> dat[sel, <span class="dv">1</span>]</span>
+<span id="cb86-40"><a href="polynomial-regression-1.html#cb86-40" tabindex="-1"></a>}</span>
+<span id="cb86-41"><a href="polynomial-regression-1.html#cb86-41" tabindex="-1"></a></span>
+<span id="cb86-42"><a href="polynomial-regression-1.html#cb86-42" tabindex="-1"></a></span>
+<span id="cb86-43"><a href="polynomial-regression-1.html#cb86-43" tabindex="-1"></a><span class="do">################################################################################</span></span>
+<span id="cb86-44"><a href="polynomial-regression-1.html#cb86-44" tabindex="-1"></a><span class="co"># Models Performance</span></span>
+<span id="cb86-45"><a href="polynomial-regression-1.html#cb86-45" tabindex="-1"></a><span class="fu">boxplot</span>(err<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-1.png" width="672" /></p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="polynomial-regression-1.html#cb87-1" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">abs</span>(err))</span></code></pre></div>
+<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-2.png" width="672" /></p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="polynomial-regression-1.html#cb88-1" tabindex="-1"></a><span class="fu">boxplot</span>(err<span class="sc">^</span><span class="dv">2</span>, <span class="at">outline =</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-3.png" width="672" /></p>
+<p>The matrix <code>err</code> contains one cross-validation prediction error for every observation and every candidate model. Its columns correspond to the degree-<span class="math inline">\(1\)</span>, degree-<span class="math inline">\(2\)</span>, and degree-<span class="math inline">\(3\)</span> polynomial fits.</p>
+<p>Thus, for observation <span class="math inline">\(i\)</span> and model <span class="math inline">\(j\)</span>,</p>
+<p><span class="math display">\[
+e_{i,j}^{CV}
+=
+\hat y_{i,j}^{(-f(i))}
+-
+y_i,
+\]</span></p>
+<p>where <span class="math inline">\(\hat y_{i,j}^{(-f(i))}\)</span> denotes the prediction obtained from model <span class="math inline">\(j\)</span> after fitting it without the fold containing observation <span class="math inline">\(i\)</span>.</p>
+<p>The final boxplots compare the distributions of the prediction errors produced by the three models. The first and third plots use squared prediction errors,</p>
+<p><span class="math display">\[
+\left(e_{i,j}^{CV}\right)^2,
+\]</span></p>
+<p>while the second uses absolute prediction errors,</p>
+<p><span class="math display">\[
+\left|e_{i,j}^{CV}\right|.
+\]</span></p>
+<p>Smaller values indicate better predictive performance. The plots therefore allow us to compare both the typical size and the variability of the out-of-sample errors across polynomial degrees.</p>
+<p>The important distinction is that these errors are different from the residuals obtained after fitting a model to the complete dataset. A residual compares an observation with a fitted value from a model that was estimated <strong>using that same observation</strong>. A cross-validation error compares an observation with a prediction from a model that was estimated <strong>without that observation’s fold</strong>.</p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\text{training residuals}
+\qquad\neq\qquad
+\text{cross-validation prediction errors}.
+\]</span></p>
+<p>This distinction is essential when choosing polynomial degree. A more flexible polynomial may reduce the training error simply because it has more coefficients available to adapt to the observed data. Cross-validation instead evaluates whether that additional flexibility improves predictions for observations that were left out during estimation.</p>
+<p>The preferred polynomial degree is therefore the one that provides the most favorable out-of-sample performance according to the prediction-error criterion being considered. This illustrates how cross-validation can be used to choose among models of different complexity without relying only on how well they fit the training data.</p>
 <hr />
 <p>Polynomial regression is a special case of <strong>multiple linear regression</strong>. Although there is only one original explanatory variable, the transformations</p>
 <p><span class="math display">\[
@@ -1408,23 +1526,23 @@ y_i
 <ol style="list-style-type: decimal">
 <li>Define</li>
 </ol>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="polynomial-regression-1.html#cb86-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price</span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="polynomial-regression-1.html#cb89-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price</span></code></pre></div>
 <p>and compute <span class="math inline">\(\bar{x}\)</span>.
 2. Construct</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="polynomial-regression-1.html#cb87-1" tabindex="-1"></a>xc <span class="ot">&lt;-</span> x <span class="sc">-</span> xbar</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="polynomial-regression-1.html#cb90-1" tabindex="-1"></a>xc <span class="ot">&lt;-</span> x <span class="sc">-</span> xbar</span></code></pre></div>
 <p>and</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="polynomial-regression-1.html#cb88-1" tabindex="-1"></a>xc2 <span class="ot">&lt;-</span> xc<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="polynomial-regression-1.html#cb91-1" tabindex="-1"></a>xc2 <span class="ot">&lt;-</span> xc<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>Fit the two models</li>
 </ol>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="polynomial-regression-1.html#cb89-1" tabindex="-1"></a>Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="polynomial-regression-1.html#cb92-1" tabindex="-1"></a>Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
 <p>and</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="polynomial-regression-1.html#cb90-1" tabindex="-1"></a>y <span class="sc">~</span> xc <span class="sc">+</span> xc2</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="polynomial-regression-1.html#cb93-1" tabindex="-1"></a>y <span class="sc">~</span> xc <span class="sc">+</span> xc2</span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
 <li>Compare the estimated coefficients from the two models.</li>
 <li>Compare their fitted values using</li>
 </ol>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="polynomial-regression-1.html#cb91-1" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">abs</span>(<span class="fu">fitted</span>(model1) <span class="sc">-</span> <span class="fu">fitted</span>(model2)))</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="polynomial-regression-1.html#cb94-1" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">abs</span>(<span class="fu">fitted</span>(model1) <span class="sc">-</span> <span class="fu">fitted</span>(model2)))</span></code></pre></div>
 <ol start="6" style="list-style-type: decimal">
 <li>Explain why the coefficients differ even though the fitted values should agree up to numerical precision.</li>
 </ol>
@@ -1474,7 +1592,7 @@ y_i
 1,\;2,\;3,\;4.
 \]</span></p>
 <p>For example, the cubic model can be fitted using</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="polynomial-regression-1.html#cb92-1" tabindex="-1"></a><span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">3</span>), <span class="at">data =</span> dat)</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="polynomial-regression-1.html#cb95-1" tabindex="-1"></a><span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">3</span>), <span class="at">data =</span> dat)</span></code></pre></div>
 <ol style="list-style-type: decimal">
 <li>Fit all four models.</li>
 <li>Plot the fitted curves over the observed range of <code>Price</code>.</li>

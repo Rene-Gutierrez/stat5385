@@ -316,7 +316,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.3" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#centering-and-reparameterization"><i class="fa fa-check"></i><b>5.3</b> Centering and Reparameterization</a>
 <ul>
 <li class="chapter" data-level="5.3.1" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#why-center-at-the-sample-mean"><i class="fa fa-check"></i><b>5.3.1</b> Why Center at the Sample Mean?</a></li>
-<li class="chapter" data-level="5.3.2" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#examples-2"><i class="fa fa-check"></i><b>5.3.2</b> Examples</a></li>
+<li class="chapter" data-level="5.3.2" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#example-9"><i class="fa fa-check"></i><b>5.3.2</b> Example</a></li>
+<li class="chapter" data-level="5.3.3" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#polynomial-cross-validation-example"><i class="fa fa-check"></i><b>5.3.3</b> Polynomial Cross-Validation Example</a></li>
 </ul></li>
 <li class="chapter" data-level="5.4" data-path="polynomial-regression-1.html"><a href="polynomial-regression-1.html#exercises-2"><i class="fa fa-check"></i><b>5.4</b> Exercises</a>
 <ul>
@@ -537,9 +538,9 @@ H_0:\ \mu_1=\mu_2 \quad\Longleftrightarrow\quad H_0:\ \beta_1=0
 </div>
 <div id="r-example-one-way-anova-difference-in-means" class="section level4 hasAnchor" number="10.1.1.3">
 <h4><span class="header-section-number">10.1.1.3</span> R example — one-way ANOVA / difference in means<a href="applications-4.html#r-example-one-way-anova-difference-in-means" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="applications-4.html#cb184-1" tabindex="-1"></a><span class="co"># Example: the built-in &#39;sleep&#39; dataset (two groups).</span></span>
-<span id="cb184-2"><a href="applications-4.html#cb184-2" tabindex="-1"></a><span class="fu">data</span>(sleep)   <span class="co"># R&#39;s sleep dataset: extra sleep for two groups</span></span>
-<span id="cb184-3"><a href="applications-4.html#cb184-3" tabindex="-1"></a><span class="fu">head</span>(sleep)</span></code></pre></div>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="applications-4.html#cb187-1" tabindex="-1"></a><span class="co"># Example: the built-in &#39;sleep&#39; dataset (two groups).</span></span>
+<span id="cb187-2"><a href="applications-4.html#cb187-2" tabindex="-1"></a><span class="fu">data</span>(sleep)   <span class="co"># R&#39;s sleep dataset: extra sleep for two groups</span></span>
+<span id="cb187-3"><a href="applications-4.html#cb187-3" tabindex="-1"></a><span class="fu">head</span>(sleep)</span></code></pre></div>
 <pre><code>##   extra group ID
 ## 1   0.7     1  1
 ## 2  -1.6     1  2
@@ -547,17 +548,17 @@ H_0:\ \mu_1=\mu_2 \quad\Longleftrightarrow\quad H_0:\ \beta_1=0
 ## 4  -1.2     1  4
 ## 5  -0.1     1  5
 ## 6   3.4     1  6</code></pre>
-<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="applications-4.html#cb186-1" tabindex="-1"></a><span class="co"># Fit one-way ANOVA using aov (equivalent to lm with factor)</span></span>
-<span id="cb186-2"><a href="applications-4.html#cb186-2" tabindex="-1"></a>fit_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(extra <span class="sc">~</span> group, <span class="at">data =</span> sleep)</span>
-<span id="cb186-3"><a href="applications-4.html#cb186-3" tabindex="-1"></a><span class="fu">summary</span>(fit_aov)</span></code></pre></div>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="applications-4.html#cb189-1" tabindex="-1"></a><span class="co"># Fit one-way ANOVA using aov (equivalent to lm with factor)</span></span>
+<span id="cb189-2"><a href="applications-4.html#cb189-2" tabindex="-1"></a>fit_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(extra <span class="sc">~</span> group, <span class="at">data =</span> sleep)</span>
+<span id="cb189-3"><a href="applications-4.html#cb189-3" tabindex="-1"></a><span class="fu">summary</span>(fit_aov)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
 ## group        1  12.48  12.482   3.463 0.0792 .
 ## Residuals   18  64.89   3.605                 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="applications-4.html#cb188-1" tabindex="-1"></a><span class="co"># Fit the equivalent linear model with a dummy</span></span>
-<span id="cb188-2"><a href="applications-4.html#cb188-2" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(extra <span class="sc">~</span> <span class="fu">factor</span>(group), <span class="at">data =</span> sleep)</span>
-<span id="cb188-3"><a href="applications-4.html#cb188-3" tabindex="-1"></a><span class="fu">summary</span>(fit_lm)</span></code></pre></div>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="applications-4.html#cb191-1" tabindex="-1"></a><span class="co"># Fit the equivalent linear model with a dummy</span></span>
+<span id="cb191-2"><a href="applications-4.html#cb191-2" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(extra <span class="sc">~</span> <span class="fu">factor</span>(group), <span class="at">data =</span> sleep)</span>
+<span id="cb191-3"><a href="applications-4.html#cb191-3" tabindex="-1"></a><span class="fu">summary</span>(fit_lm)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = extra ~ factor(group), data = sleep)
@@ -630,16 +631,16 @@ F = \frac{(\text{SSR}*{\text{red}}-\text{SSR}*{\text{full}})/k}{\text{SSR}*{\tex
 <div id="r-example-ancova-with-mtcars" class="section level3 hasAnchor" number="10.2.3">
 <h3><span class="header-section-number">10.2.3</span> R example — ANCOVA with <code>mtcars</code><a href="applications-4.html#r-example-ancova-with-mtcars" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>We analyze whether the number of cylinders (<code>cyl</code>) affects <code>mpg</code> after controlling for weight (<code>wt</code>) and horsepower (<code>hp</code>).</p>
-<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="applications-4.html#cb190-1" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
-<span id="cb190-2"><a href="applications-4.html#cb190-2" tabindex="-1"></a></span>
-<span id="cb190-3"><a href="applications-4.html#cb190-3" tabindex="-1"></a><span class="co"># Fit reduced model: controls only</span></span>
-<span id="cb190-4"><a href="applications-4.html#cb190-4" tabindex="-1"></a>fit_red <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> mtcars)</span>
-<span id="cb190-5"><a href="applications-4.html#cb190-5" tabindex="-1"></a></span>
-<span id="cb190-6"><a href="applications-4.html#cb190-6" tabindex="-1"></a><span class="co"># Fit full model: controls + group indicator (cyl as factor)</span></span>
-<span id="cb190-7"><a href="applications-4.html#cb190-7" tabindex="-1"></a>fit_full <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="fu">factor</span>(cyl) <span class="sc">+</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> mtcars)</span>
-<span id="cb190-8"><a href="applications-4.html#cb190-8" tabindex="-1"></a></span>
-<span id="cb190-9"><a href="applications-4.html#cb190-9" tabindex="-1"></a><span class="co"># Partial F-test</span></span>
-<span id="cb190-10"><a href="applications-4.html#cb190-10" tabindex="-1"></a><span class="fu">anova</span>(fit_red, fit_full)</span></code></pre></div>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="applications-4.html#cb193-1" tabindex="-1"></a><span class="fu">data</span>(mtcars)</span>
+<span id="cb193-2"><a href="applications-4.html#cb193-2" tabindex="-1"></a></span>
+<span id="cb193-3"><a href="applications-4.html#cb193-3" tabindex="-1"></a><span class="co"># Fit reduced model: controls only</span></span>
+<span id="cb193-4"><a href="applications-4.html#cb193-4" tabindex="-1"></a>fit_red <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> mtcars)</span>
+<span id="cb193-5"><a href="applications-4.html#cb193-5" tabindex="-1"></a></span>
+<span id="cb193-6"><a href="applications-4.html#cb193-6" tabindex="-1"></a><span class="co"># Fit full model: controls + group indicator (cyl as factor)</span></span>
+<span id="cb193-7"><a href="applications-4.html#cb193-7" tabindex="-1"></a>fit_full <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> <span class="fu">factor</span>(cyl) <span class="sc">+</span> wt <span class="sc">+</span> hp, <span class="at">data =</span> mtcars)</span>
+<span id="cb193-8"><a href="applications-4.html#cb193-8" tabindex="-1"></a></span>
+<span id="cb193-9"><a href="applications-4.html#cb193-9" tabindex="-1"></a><span class="co"># Partial F-test</span></span>
+<span id="cb193-10"><a href="applications-4.html#cb193-10" tabindex="-1"></a><span class="fu">anova</span>(fit_red, fit_full)</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: mpg ~ wt + hp
@@ -649,8 +650,8 @@ F = \frac{(\text{SSR}*{\text{red}}-\text{SSR}*{\text{full}})/k}{\text{SSR}*{\tex
 ## 2     27 160.78  2     34.27 2.8776 0.07364 .
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="applications-4.html#cb192-1" tabindex="-1"></a><span class="co"># Summaries</span></span>
-<span id="cb192-2"><a href="applications-4.html#cb192-2" tabindex="-1"></a><span class="fu">summary</span>(fit_full)</span></code></pre></div>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="applications-4.html#cb195-1" tabindex="-1"></a><span class="co"># Summaries</span></span>
+<span id="cb195-2"><a href="applications-4.html#cb195-2" tabindex="-1"></a><span class="fu">summary</span>(fit_full)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = mpg ~ factor(cyl) + wt + hp, data = mtcars)
@@ -718,23 +719,23 @@ F = \frac{(\text{SSR}*{\text{red}}-\text{SSR}*{\text{full}})/k}{\text{SSR}*{\tex
 </div>
 <div id="simulation-example-randomized-vs-non-randomized-brief" class="section level3 hasAnchor" number="10.3.3">
 <h3><span class="header-section-number">10.3.3</span> Simulation example: randomized vs non-randomized (brief)<a href="applications-4.html#simulation-example-randomized-vs-non-randomized-brief" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="applications-4.html#cb194-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb194-2"><a href="applications-4.html#cb194-2" tabindex="-1"></a></span>
-<span id="cb194-3"><a href="applications-4.html#cb194-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
-<span id="cb194-4"><a href="applications-4.html#cb194-4" tabindex="-1"></a><span class="co"># Covariate strongly predictive of y</span></span>
-<span id="cb194-5"><a href="applications-4.html#cb194-5" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb194-6"><a href="applications-4.html#cb194-6" tabindex="-1"></a></span>
-<span id="cb194-7"><a href="applications-4.html#cb194-7" tabindex="-1"></a><span class="co"># Scenario A: randomized treatment</span></span>
-<span id="cb194-8"><a href="applications-4.html#cb194-8" tabindex="-1"></a>t_rand <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)  <span class="co"># random 0/1 assignment</span></span>
-<span id="cb194-9"><a href="applications-4.html#cb194-9" tabindex="-1"></a>y_rand <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">*</span> t_rand <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> z <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb194-10"><a href="applications-4.html#cb194-10" tabindex="-1"></a></span>
-<span id="cb194-11"><a href="applications-4.html#cb194-11" tabindex="-1"></a><span class="co"># Scenario B: observational treatment correlated with z</span></span>
-<span id="cb194-12"><a href="applications-4.html#cb194-12" tabindex="-1"></a>p_obs <span class="ot">&lt;-</span> <span class="fu">plogis</span>(<span class="fl">0.5</span> <span class="sc">*</span> z)     <span class="co"># higher z -&gt; more likely treated</span></span>
-<span id="cb194-13"><a href="applications-4.html#cb194-13" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, p_obs)</span>
-<span id="cb194-14"><a href="applications-4.html#cb194-14" tabindex="-1"></a>y_obs <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">*</span> t_obs <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> z <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb194-15"><a href="applications-4.html#cb194-15" tabindex="-1"></a></span>
-<span id="cb194-16"><a href="applications-4.html#cb194-16" tabindex="-1"></a><span class="co"># Estimate treatment effect without and with control</span></span>
-<span id="cb194-17"><a href="applications-4.html#cb194-17" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_rand <span class="sc">~</span> t_rand))</span></code></pre></div>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="applications-4.html#cb197-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb197-2"><a href="applications-4.html#cb197-2" tabindex="-1"></a></span>
+<span id="cb197-3"><a href="applications-4.html#cb197-3" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">200</span></span>
+<span id="cb197-4"><a href="applications-4.html#cb197-4" tabindex="-1"></a><span class="co"># Covariate strongly predictive of y</span></span>
+<span id="cb197-5"><a href="applications-4.html#cb197-5" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb197-6"><a href="applications-4.html#cb197-6" tabindex="-1"></a></span>
+<span id="cb197-7"><a href="applications-4.html#cb197-7" tabindex="-1"></a><span class="co"># Scenario A: randomized treatment</span></span>
+<span id="cb197-8"><a href="applications-4.html#cb197-8" tabindex="-1"></a>t_rand <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>)  <span class="co"># random 0/1 assignment</span></span>
+<span id="cb197-9"><a href="applications-4.html#cb197-9" tabindex="-1"></a>y_rand <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">*</span> t_rand <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> z <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb197-10"><a href="applications-4.html#cb197-10" tabindex="-1"></a></span>
+<span id="cb197-11"><a href="applications-4.html#cb197-11" tabindex="-1"></a><span class="co"># Scenario B: observational treatment correlated with z</span></span>
+<span id="cb197-12"><a href="applications-4.html#cb197-12" tabindex="-1"></a>p_obs <span class="ot">&lt;-</span> <span class="fu">plogis</span>(<span class="fl">0.5</span> <span class="sc">*</span> z)     <span class="co"># higher z -&gt; more likely treated</span></span>
+<span id="cb197-13"><a href="applications-4.html#cb197-13" tabindex="-1"></a>t_obs <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, p_obs)</span>
+<span id="cb197-14"><a href="applications-4.html#cb197-14" tabindex="-1"></a>y_obs <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">*</span> t_obs <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> z <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb197-15"><a href="applications-4.html#cb197-15" tabindex="-1"></a></span>
+<span id="cb197-16"><a href="applications-4.html#cb197-16" tabindex="-1"></a><span class="co"># Estimate treatment effect without and with control</span></span>
+<span id="cb197-17"><a href="applications-4.html#cb197-17" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_rand <span class="sc">~</span> t_rand))</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y_rand ~ t_rand)
@@ -753,7 +754,7 @@ F = \frac{(\text{SSR}*{\text{red}}-\text{SSR}*{\text{full}})/k}{\text{SSR}*{\tex
 ## Residual standard error: 2.058 on 198 degrees of freedom
 ## Multiple R-squared:  0.08836,    Adjusted R-squared:  0.08375 
 ## F-statistic: 19.19 on 1 and 198 DF,  p-value: 1.916e-05</code></pre>
-<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="applications-4.html#cb196-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_rand <span class="sc">~</span> t_rand <span class="sc">+</span> z))</span></code></pre></div>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="applications-4.html#cb199-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_rand <span class="sc">~</span> t_rand <span class="sc">+</span> z))</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y_rand ~ t_rand + z)
@@ -773,7 +774,7 @@ F = \frac{(\text{SSR}*{\text{red}}-\text{SSR}*{\text{full}})/k}{\text{SSR}*{\tex
 ## Residual standard error: 1.014 on 197 degrees of freedom
 ## Multiple R-squared:   0.78,  Adjusted R-squared:  0.7778 
 ## F-statistic: 349.3 on 2 and 197 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="applications-4.html#cb198-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_obs <span class="sc">~</span> t_obs))</span></code></pre></div>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="applications-4.html#cb201-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_obs <span class="sc">~</span> t_obs))</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y_obs ~ t_obs)
@@ -792,7 +793,7 @@ F = \frac{(\text{SSR}*{\text{red}}-\text{SSR}*{\text{full}})/k}{\text{SSR}*{\tex
 ## Residual standard error: 2.012 on 198 degrees of freedom
 ## Multiple R-squared:  0.323,  Adjusted R-squared:  0.3195 
 ## F-statistic: 94.45 on 1 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="applications-4.html#cb200-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_obs <span class="sc">~</span> t_obs <span class="sc">+</span> z))</span></code></pre></div>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="applications-4.html#cb203-1" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y_obs <span class="sc">~</span> t_obs <span class="sc">+</span> z))</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y_obs ~ t_obs + z)

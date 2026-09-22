@@ -279,7 +279,8 @@ taylor-polynomials-and-polynomial-regression
 polynomial-regression-as-a-linear-model
 centering-and-reparameterization
 why-center-at-the-sample-mean
-examples-2
+example-9
+polynomial-cross-validation-example
 exercises-2
 exercise-1-linear-in-the-coefficients
 exercise-2-constructing-the-polynomial-design-matrix
