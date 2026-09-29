@@ -1131,180 +1131,1336 @@ Thus, the properties of the residuals and fitted values are direct consequences 
 
 
 
+
 ## Multiple $R^2$
 
-As with simple linear regression we can explain the total variability, by decomposing the
-variability in two parts, the regression variability and the error variability.
+As with simple linear regression, we can evaluate the fit of a multiple linear regression model by decomposing the total variability of the response into two components: the variability accounted for by the fitted model and the variability remaining in the residuals.
 
-First, we define this concepts:
+Throughout this section, we assume that the full design matrix $\mathbf{X}$ includes a column of ones for the intercept and has full column rank.
 
-1. **Total Sum of Squares $SS_{tot}$**:  
-   The total sum of squares measures the total variability in $\mathbf{y}$:
-   
-   $$
-   SS_{tot} = (\mathbf{y} - \bar{y} \mathbf{1})' (\mathbf{y} - \bar{y} \mathbf{1})
-   $$
+We begin by defining three sums of squares.
 
-2. **Residual Sum of Squares $SS_{res}$**:  
-   The residual sum of squares measures the unexplained variability in the regression model:
-   
-   $$
-   SS_{res} = (\mathbf{y} - \hat{\mathbf{y}})' (\mathbf{y} - \hat{\mathbf{y}})
-   $$
-
-3. **Explained Sum of Squares $SS_{reg}$**
-
-The explained sum of squares measures how much of the total variability is explained by the regression model. It is the difference between the predicted values and the mean of $\mathbf{y}$:
+```{definition, def-mlr-total-sum-of-squares, name="Total Sum of Squares"}
+The **Total Sum of Squares**, $SS_{tot}$, measures the total variability of the observed responses around their sample mean:
 
 $$
-SS_{reg} = (\hat{\mathbf{y}} - \bar{y} \mathbf{1})' (\hat{\mathbf{y}} - \bar{y} \mathbf{1})
+SS_{tot}
+=
+(\mathbf{y}-\bar y\mathbf{1})'
+(\mathbf{y}-\bar y\mathbf{1})
+=
+\sum_{i=1}^n(y_i-\bar y)^2.
 $$
-As with simple linear regression, it can be shown that:
+```
+
+```{definition, def-mlr-residual-sum-of-squares, name="Residual Sum of Squares"}
+The **Residual Sum of Squares**, $SS_{res}$, measures the variability remaining after fitting the regression model:
 
 $$
-SS_{tot} = SS_{reg} + SS_{res}
+SS_{res}
+=
+(\mathbf{y}-\hat{\mathbf{y}})'
+(\mathbf{y}-\hat{\mathbf{y}})
+=
+\sum_{i=1}^n(y_i-\hat y_i)^2.
 $$
-To see this, we start form $SS_{tot}$, and do the adding and subtracting trick:
+```
+
+```{definition, def-mlr-explained-sum-of-squares, name="Explained Sum of Squares"}
+The **Explained Sum of Squares**, $SS_{reg}$, measures the variability of the fitted values around the mean of the observed responses:
+
+$$
+SS_{reg}
+=
+(\hat{\mathbf{y}}-\bar y\mathbf{1})'
+(\hat{\mathbf{y}}-\bar y\mathbf{1})
+=
+\sum_{i=1}^n(\hat y_i-\bar y)^2.
+$$
+```
+
+The properties of the least-squares estimates established in the previous section allow us to decompose the total sum of squares into the explained and residual sums of squares.
+
+```{proposition, prp-mlr-sum-of-squares, name="Sum-of-Squares Decomposition"}
+Suppose that the multiple linear regression model includes an intercept. Then the least-squares fitted values satisfy
+
+$$
+SS_{tot}=SS_{reg}+SS_{res}.
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-sum-of-squares}
+We begin with the definition of the total sum of squares. Adding and subtracting the fitted-value vector gives
 
 \begin{align*}
-SS_{tot} 
-  &= (\mathbf{y} - \bar{y} \mathbf{1})' (\mathbf{y} - \bar{y} \mathbf{1}) \\
-  &= (\mathbf{y} - \hat{\by} + \hat{\by} - \bar{y} \mathbf{1})' (\mathbf{y} - \hat{\by} + \hat{\by} - \bar{y} \mathbf{1}) \\
-  &= (\mathbf{y} - \hat{\by})' (\mathbf{y} - \hat{\by}) + (\mathbf{y} - \hat{\by})' (\hat{\by} - \bar{y} \mathbf{1}) + (\hat{\by} - \bar{y} \mathbf{1})' (\mathbf{y} - \hat{\by}\mathbf{1}) + (\hat{\by} - \bar{y} \mathbf{1})' (\hat{\by} - \bar{y} \mathbf{1})
+SS_{tot}
+  &=
+  (\mathbf{y}-\bar y\mathbf{1})'
+  (\mathbf{y}-\bar y\mathbf{1})
+  \\
+  &=
+  (\mathbf{y}-\hat{\mathbf{y}}
+  +\hat{\mathbf{y}}-\bar y\mathbf{1})'
+  (\mathbf{y}-\hat{\mathbf{y}}
+  +\hat{\mathbf{y}}-\bar y\mathbf{1})
+  \\
+  &=
+  (\mathbf{y}-\hat{\mathbf{y}})'
+  (\mathbf{y}-\hat{\mathbf{y}})
+  \\
+  &\quad+
+  (\mathbf{y}-\hat{\mathbf{y}})'
+  (\hat{\mathbf{y}}-\bar y\mathbf{1})
+  \\
+  &\quad+
+  (\hat{\mathbf{y}}-\bar y\mathbf{1})'
+  (\mathbf{y}-\hat{\mathbf{y}})
+  \\
+  &\quad+
+  (\hat{\mathbf{y}}-\bar y\mathbf{1})'
+  (\hat{\mathbf{y}}-\bar y\mathbf{1}).
 \end{align*}
 
-Now, notice that:
+Recall from the properties of the least-squares estimates that
 
 $$
-(\mathbf{y} - \hat{\by})' (\hat{\by} - \bar{y} \mathbf{1}) = \hat{\be}' (\hat{\by} - \bar{y} \mathbf{1}) = \hat{\be}'\hat{\by} - \bar{y}\hat{\be}' \mathbf{1} = 0 - \bar{y}0 = 0
-$$
-And similarly for $(\hat{\by} - \bar{y} \mathbf{1})' (\mathbf{y} - \hat{\by}\mathbf{1}) = 0$, then:
-
-$$
-SS_{tot} = (\mathbf{y} - \hat{\by})' (\mathbf{y} - \hat{\by}) + (\hat{\by} - \bar{y} \mathbf{1})' (\hat{\by} - \bar{y} \mathbf{1}) = SS_{reg} + SS_{res}
-$$
-The multiple $R^2$ is the variability explained by the regression with respect to the total variability
-and can be expressed as:
-
-$$
-R^2 = \frac{SS_{reg}}{SS_{tot}}
-$$
-or using the previous expression
-
-$$
-1 = \frac{SS_{tot}}{SS_{tot}} = \frac{SS_{reg}}{SS_{tot}} + \frac{SS_{res}}{SS_{tot}} = R^2 + \frac{SS_{res}}{SS_{tot}} \implies R^2 = 1 - \frac{SS_{res}}{SS_{tot}}  
+\hat{\mathbf{e}}'\hat{\mathbf{y}}=0
 $$
 
-Finally, we work on the expressions of $SS_{res}$ and $SS_{tot}$, to express them
-in terms of projection matrices.
-
-
-First note that:
+and, because the model includes an intercept,
 
 $$
-\by - \hat{\by} = \by - \bX\hat{\bgb} = \by - \bH \by = (\bI - \bH)\by
+\hat{\mathbf{e}}'\mathbf{1}=0.
 $$
-and also notice that $(\bI - \bH)$ is symmetric and:
+
+Therefore, the first cross-product is
+
+\begin{align*}
+(\mathbf{y}-\hat{\mathbf{y}})'
+(\hat{\mathbf{y}}-\bar y\mathbf{1})
+  &=
+  \hat{\mathbf{e}}'
+  (\hat{\mathbf{y}}-\bar y\mathbf{1})
+  \\
+  &=
+  \hat{\mathbf{e}}'\hat{\mathbf{y}}
+  -
+  \bar y\hat{\mathbf{e}}'\mathbf{1}
+  \\
+  &=
+  0.
+\end{align*}
+
+The other cross-product is its transpose and is also zero. Consequently,
+
+\begin{align*}
+SS_{tot}
+  &=
+  (\mathbf{y}-\hat{\mathbf{y}})'
+  (\mathbf{y}-\hat{\mathbf{y}})
+  \\
+  &\quad+
+  (\hat{\mathbf{y}}-\bar y\mathbf{1})'
+  (\hat{\mathbf{y}}-\bar y\mathbf{1})
+  \\
+  &=
+  SS_{res}+SS_{reg}.
+\end{align*}
+
+Thus,
 
 $$
-(\bI - \bH)(\bI - \bH) = \bI -\bH - \bH + \bH \bH
+\boxed{
+SS_{tot}=SS_{reg}+SS_{res}.
+}
 $$
+```
+
+</details>
+
+
+This decomposition allows us to define the coefficient of determination for multiple linear regression.
+
+
+```{definition, def-mlr-multiple-r-squared, name="Multiple Coefficient of Determination"}
+Suppose that the multiple linear regression model includes an intercept and that $SS_{tot}>0$.
+
+The **Multiple Coefficient of Determination**, $R^2$, is defined as the proportion of the total variability of the observed responses accounted for by the fitted regression model:
+
+$$
+R^2
+=
+\frac{SS_{reg}}{SS_{tot}}.
+$$
+
+Using the sum-of-squares decomposition,
+
+$$
+SS_{tot}=SS_{reg}+SS_{res},
+$$
+
+we obtain the equivalent expression
+
+$$
+R^2
+=
+1-\frac{SS_{res}}{SS_{tot}}.
+$$
+```
+
+The multiple $R^2$ is an in-sample measure of fit. It describes the reduction in squared error achieved by the full regression model relative to the intercept-only model. It does not, by itself, establish predictive performance on new observations.
+
+Using the sum-of-squares decomposition, we also obtain
+
+\begin{align*}
+1
+  &=
+  \frac{SS_{reg}+SS_{res}}{SS_{tot}}
+  \\
+  &=
+  R^2+\frac{SS_{res}}{SS_{tot}}.
+\end{align*}
+
+Therefore,
+
+$$
+\boxed{
+R^2
+=
+1-\frac{SS_{res}}{SS_{tot}}.
+}
+$$
+
+The multiple $R^2$ describes the proportion of the observed variability around $\bar y$ accounted for by the fitted linear model. It is an in-sample measure of fit and does not, by itself, establish causal relationships or predictive performance on new observations.
+
+***
+
+### The Intercept-Only Model
+
+Before expressing $R^2$ using projection matrices, it is useful to introduce a reference model.
+
+Consider a regression model containing only an intercept,
+
+$$
+y_i=\beta_0+e_i,
+\qquad i=1,\ldots,n.
+$$
+
+Its design matrix is
+
+$$
+\mathbf{X}_0=\mathbf{1},
+$$
+
+and its least-squares problem is
+
+$$
+\min_{\beta_0}
+(\mathbf{y}-\mathbf{1}\beta_0)'
+(\mathbf{y}-\mathbf{1}\beta_0).
+$$
+
+The least-squares solution is
+
+$$
+\hat\beta_0
+=
+(\mathbf{1}'\mathbf{1})^{-1}
+\mathbf{1}'\mathbf{y}
+=
+\bar y.
+$$
+
+Consequently, the fitted values from the intercept-only model are
+
+$$
+\hat{\mathbf{y}}_0
+=
+\bar y\mathbf{1}.
+$$
+
+This model assigns the same predicted response, $\bar y$, to every observation. Its residual sum of squares is precisely
+
+$$
+SS_{tot}
+=
+(\mathbf{y}-\bar y\mathbf{1})'
+(\mathbf{y}-\bar y\mathbf{1}).
+$$
+
+Thus, the total sum of squares can be interpreted as the minimum squared error obtained when we predict the response using only a constant.
+
+Adding explanatory variables enlarges the set of possible fitted-value vectors. This observation will allow us to establish both the range of $R^2$ and its behavior when additional variables are included.
+
+***
+
+### Sums of Squares in Matrix Form
+
+Recall that the hat matrix for the full multiple linear regression model is
+
+$$
+\mathbf{H}
+=
+\mathbf{X}
+(\mathbf{X}'\mathbf{X})^{-1}
+\mathbf{X}',
+$$
+
+so that
+
+$$
+\hat{\mathbf{y}}=\mathbf{H}\mathbf{y}.
+$$
+
+Similarly, the hat matrix for the intercept-only model is
+
+$$
+\mathbf{H}_0
+=
+\mathbf{1}
+(\mathbf{1}'\mathbf{1})^{-1}
+\mathbf{1}'
+=
+\frac{1}{n}\mathbf{1}\mathbf{1}'.
+$$
+
+It follows that
+
+$$
+\mathbf{H}_0\mathbf{y}
+=
+\bar y\mathbf{1}.
+$$
+
+The matrices $\mathbf{H}$ and $\mathbf{H}_0$ project the response vector onto the column spaces of the full and intercept-only design matrices, respectively.
+
+We can now express all three sums of squares using these projection matrices.
+
+```{proposition, prp-mlr-projection-sums-of-squares, name="Sums of Squares Using Projection Matrices"}
+Let
+
+$$
+\mathbf{H}
+=
+\mathbf{X}
+(\mathbf{X}'\mathbf{X})^{-1}
+\mathbf{X}'
+$$
+
+be the hat matrix of the full multiple linear regression model, where $\mathbf{X}$ has full column rank and includes an intercept.
+
+Let
+
+$$
+\mathbf{H}_0
+=
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+$$
+
+be the hat matrix of the intercept-only model.
+
+Then the three sums of squares can be written as
+
+$$
+\boxed{
+SS_{tot}
+=
+\mathbf{y}'
+(\mathbf{I}-\mathbf{H}_0)
+\mathbf{y},
+}
+$$
+
+$$
+\boxed{
+SS_{res}
+=
+\mathbf{y}'
+(\mathbf{I}-\mathbf{H})
+\mathbf{y},
+}
+$$
+
 and
 
 $$
-\bH \bH = \bX (\bX'\bX)^{-1}\bX' \bX (\bX'\bX)^{-1}\bX' = \bX (\bX'\bX)^{-1}\bX' = \bH
+\boxed{
+SS_{reg}
+=
+\mathbf{y}'
+(\mathbf{H}-\mathbf{H}_0)
+\mathbf{y}.
+}
 $$
-this means $\bH$ is idempotent. In fact, all projection matrices are idempotent.
+```
 
-Then, we have that:
+<details><summary><span style="color:green">Proof</span></summary>
 
-$$
-(\bI - \bH)(\bI - \bH) = \bI -\bH - \bH + \bH = \bI -\bH - \bH
-$$
-which makes $\bI - \bH$ also idempotent. Therefore:
+```{proof, pro-mlr-projection-sums-of-squares}
+We first establish the necessary properties of the projection matrices.
 
-$$
-SS_{res} = (\by - \hat{\by})'(\by - \hat{\by}) = ((\bI - \bH)\by)'((\bI - \bH)\by) = \by'(\bI - \bH)'(\bI - \bH)\by = \by'(\bI - \bH)\by 
-$$
-And we can do a similar trick for the $SS_{tot}$ by writing $\bar{y} \bones$ as a result
-of projecting $\by$ with a design matrix $\bones$:
-
-$$
-\bar{y} \bones = \bones \bar{y} = \bones \frac{1}{n} \sum_{i=1}^n y_i = \bones \frac{1}{n}\bones' \by = \bones (\bones'\bones)^{-1}\bones' \by  
-$$
-where we use the fact that $\bones'\bones = n$.
-
-We call $\bH_0 = \bones (\bones'\bones)^{-1}\bones'$, since $\bones (\bones'\bones)^{-1}\bones'$
-is a projection matrix. And since it is a projection matrix it is idempotent (it is also not difficult to check this manually)
-and $\bI - \bH_0$ is also idempotent.
-
-So we can do:
+Recall that
 
 $$
-\by - \hat{y}\bones = \by - \bH_0 \by = (\bI-\bH_0)\by
+\mathbf{H}
+=
+\mathbf{X}
+(\mathbf{X}'\mathbf{X})^{-1}
+\mathbf{X}'.
 $$
 
-$$
-SS_{tot} = (\by - \bar{y}\bones)'(\by - \bar{y}\bones) = ((\bI - \bH_0)\by)'((\bI - \bH_0)\by) = \by'(\bI - \bH_0)'(\bI - \bH_0)\by = \by'(\bI - \bH_0)\by 
-$$
-
-so the $R^2$ can be expressed as follows:
+Since $\mathbf{X}'\mathbf{X}$ is symmetric and invertible, its inverse is also symmetric. Therefore,
 
 $$
-R^2 = 1 - \frac{\by'(\bI - \bH)\by}{\by'(\bI - \bH_0)\by}
-$$
-When written like this, it is easy to see that:
-
-$$
-\by'(\bI - \bH)\by = \min_\bgb (\by - \bX \bgb)'(\by - \bX \bgb)
-$$
-the solution to this minimization problem, since we are using the optimal value
-$\hat{\bgb}$. And
-
-$$
-\by'(\bI - \bH_0)\by = \min_{\beta_0} (\by - \bX_0 \beta_0)'(\by - \bX_0 \beta_0)
+\mathbf{H}'=\mathbf{H}.
 $$
 
-where $\bX_0$ is just a matrix with one column $\bones$.
+Furthermore,
 
-Now, we also have that:
+\begin{align*}
+\mathbf{H}^2
+  &=
+  \mathbf{X}
+  (\mathbf{X}'\mathbf{X})^{-1}
+  \mathbf{X}'
+  \mathbf{X}
+  (\mathbf{X}'\mathbf{X})^{-1}
+  \mathbf{X}'
+  \\
+  &=
+  \mathbf{X}
+  (\mathbf{X}'\mathbf{X})^{-1}
+  (\mathbf{X}'\mathbf{X})
+  (\mathbf{X}'\mathbf{X})^{-1}
+  \mathbf{X}'
+  \\
+  &=
+  \mathbf{X}
+  (\mathbf{X}'\mathbf{X})^{-1}
+  \mathbf{X}'
+  \\
+  &=
+  \mathbf{H}.
+\end{align*}
+
+Thus, $\mathbf{H}$ is symmetric and idempotent.
+
+Consequently, $\mathbf{I}-\mathbf{H}$ is also symmetric, and
+
+\begin{align*}
+(\mathbf{I}-\mathbf{H})^2
+  &=
+  \mathbf{I}-2\mathbf{H}+\mathbf{H}^2
+  \\
+  &=
+  \mathbf{I}-\mathbf{H}.
+\end{align*}
+
+Therefore, $\mathbf{I}-\mathbf{H}$ is idempotent.
+
+**Residual Sum of Squares**
+
+The residual vector can be written as
+
+\begin{align*}
+\hat{\mathbf{e}}
+  &=
+  \mathbf{y}-\hat{\mathbf{y}}
+  \\
+  &=
+  \mathbf{y}-\mathbf{H}\mathbf{y}
+  \\
+  &=
+  (\mathbf{I}-\mathbf{H})\mathbf{y}.
+\end{align*}
+
+Hence,
+
+\begin{align*}
+SS_{res}
+  &=
+  \hat{\mathbf{e}}'\hat{\mathbf{e}}
+  \\
+  &=
+  \bigl[(\mathbf{I}-\mathbf{H})\mathbf{y}\bigr]'
+  \bigl[(\mathbf{I}-\mathbf{H})\mathbf{y}\bigr]
+  \\
+  &=
+  \mathbf{y}'
+  (\mathbf{I}-\mathbf{H})'
+  (\mathbf{I}-\mathbf{H})
+  \mathbf{y}
+  \\
+  &=
+  \mathbf{y}'
+  (\mathbf{I}-\mathbf{H})^2
+  \mathbf{y}
+  \\
+  &=
+  \mathbf{y}'
+  (\mathbf{I}-\mathbf{H})
+  \mathbf{y}.
+\end{align*}
+
+Therefore,
 
 $$
-\min_\bgb (\by - \bX \bgb)'(\by - \bX \bgb) \leq \min_{\beta_0} (\by - \bX_0 \beta_0)'(\by - \bX_0 \beta_0)
+\boxed{
+SS_{res}
+=
+\mathbf{y}'
+(\mathbf{I}-\mathbf{H})
+\mathbf{y}.
+}
 $$
 
-therefore
+**Total Sum of Squares**
+
+For the intercept-only model, we have
 
 $$
-\by'(\bI - \bH)\by \leq \by'(\bI - \bH_0)\by
+\mathbf{H}_0
+=
+\frac{1}{n}\mathbf{1}\mathbf{1}'.
 $$
-and since both of them are quadratic forms, we have that:
 
-$\by'(\bI - \bH_0)\by, \by'(\bI - \bH)\by \geq 0$
+This matrix is symmetric. It is also idempotent, since
 
-then:
+\begin{align*}
+\mathbf{H}_0^2
+  &=
+  \frac{1}{n^2}
+  \mathbf{1}\mathbf{1}'
+  \mathbf{1}\mathbf{1}'
+  \\
+  &=
+  \frac{1}{n^2}
+  \mathbf{1}
+  (\mathbf{1}'\mathbf{1})
+  \mathbf{1}'
+  \\
+  &=
+  \frac{1}{n}
+  \mathbf{1}\mathbf{1}'
+  \\
+  &=
+  \mathbf{H}_0.
+\end{align*}
 
-$$0 \leq \frac{\by'(\bI - \bH)\by}{\by'(\bI - \bH_0)\by} \leq 0$$
-then:
-
-$$0 \leq R^2 \leq 0$$.
-
-Where we use the fact that all symmetric idempotent matrices are symmetric positive semi-definite.
-
-Another interpretation of $R^2$ is the percentage of the variability explained 
-by multiple regression of a "*poor man's regression*" in which you don't have
-independent variables (that is you are independent variable poor). In this way,
-we can define
+Consequently, $\mathbf{I}-\mathbf{H}_0$ is symmetric and idempotent:
 
 $$
-\bar{y} \bones = \hat{\by}_0
+(\mathbf{I}-\mathbf{H}_0)^2
+=
+\mathbf{I}-2\mathbf{H}_0+\mathbf{H}_0^2
+=
+\mathbf{I}-\mathbf{H}_0.
 $$
-the "*poor man's prediction*", of which $\bH_0$ is it's projection matrix (or hat matrix).
+
+Recall that
+
+$$
+\mathbf{H}_0\mathbf{y}
+=
+\bar y\mathbf{1}.
+$$
+
+Therefore,
+
+\begin{align*}
+SS_{tot}
+  &=
+  (\mathbf{y}-\bar y\mathbf{1})'
+  (\mathbf{y}-\bar y\mathbf{1})
+  \\
+  &=
+  \bigl[(\mathbf{I}-\mathbf{H}_0)\mathbf{y}\bigr]'
+  \bigl[(\mathbf{I}-\mathbf{H}_0)\mathbf{y}\bigr]
+  \\
+  &=
+  \mathbf{y}'
+  (\mathbf{I}-\mathbf{H}_0)'
+  (\mathbf{I}-\mathbf{H}_0)
+  \mathbf{y}
+  \\
+  &=
+  \mathbf{y}'
+  (\mathbf{I}-\mathbf{H}_0)
+  \mathbf{y}.
+\end{align*}
+
+Thus,
+
+$$
+\boxed{
+SS_{tot}
+=
+\mathbf{y}'
+(\mathbf{I}-\mathbf{H}_0)
+\mathbf{y}.
+}
+$$
+
+**Explained Sum of Squares**
+
+Finally, using the sum-of-squares decomposition,
+
+\begin{align*}
+SS_{reg}
+  &=
+  SS_{tot}-SS_{res}
+  \\
+  &=
+  \mathbf{y}'
+  (\mathbf{I}-\mathbf{H}_0)
+  \mathbf{y}
+  -
+  \mathbf{y}'
+  (\mathbf{I}-\mathbf{H})
+  \mathbf{y}
+  \\
+  &=
+  \mathbf{y}'
+  \bigl[
+    (\mathbf{I}-\mathbf{H}_0)
+    -
+    (\mathbf{I}-\mathbf{H})
+  \bigr]
+  \mathbf{y}
+  \\
+  &=
+  \mathbf{y}'
+  (\mathbf{H}-\mathbf{H}_0)
+  \mathbf{y}.
+\end{align*}
+
+Therefore,
+
+$$
+\boxed{
+SS_{reg}
+=
+\mathbf{y}'
+(\mathbf{H}-\mathbf{H}_0)
+\mathbf{y}.
+}
+$$
+```
+
+</details>
+
+The three sums of squares therefore have a unified matrix representation:
+
+| Sum of squares | Matrix expression |
+|---|---|
+| Total | $SS_{tot}=\mathbf{y}'(\mathbf{I}-\mathbf{H}_0)\mathbf{y}$ |
+| Residual | $SS_{res}=\mathbf{y}'(\mathbf{I}-\mathbf{H})\mathbf{y}$ |
+| Explained | $SS_{reg}=\mathbf{y}'(\mathbf{H}-\mathbf{H}_0)\mathbf{y}$ |
+
+Using these identities, the multiple $R^2$ can be written as
+
+$$
+\boxed{
+R^2
+=
+1-
+\frac{
+\mathbf{y}'(\mathbf{I}-\mathbf{H})\mathbf{y}
+}{
+\mathbf{y}'(\mathbf{I}-\mathbf{H}_0)\mathbf{y}
+}.
+}
+$$
+
+This expression compares the squared error from the full regression model with the squared error from the intercept-only model.
+
+***
+
+### Range of Multiple $R^2$
+
+The optimization interpretation of the two models allows us to establish the possible values of $R^2$.
+
+```{proposition, prp-mlr-r2-range, name="Range of Multiple R-Squared"}
+Suppose that the multiple linear regression model includes an intercept and that
+
+$$
+SS_{tot}>0.
+$$
+
+Then the coefficient of determination satisfies
+
+$$
+\boxed{
+0\leq R^2\leq 1.
+}
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-r2-range}
+The residual sum of squares from the full regression model is the minimum value of its least-squares objective:
+
+$$
+SS_{res}
+=
+\min_{\boldsymbol{\beta}}
+(\mathbf{y}-\mathbf{X}\boldsymbol{\beta})'
+(\mathbf{y}-\mathbf{X}\boldsymbol{\beta}).
+$$
+
+Similarly, the total sum of squares is the minimum squared error from the intercept-only model:
+
+$$
+SS_{tot}
+=
+\min_{\beta_0}
+(\mathbf{y}-\mathbf{1}\beta_0)'
+(\mathbf{y}-\mathbf{1}\beta_0).
+$$
+
+Because the full model includes an intercept, every fitted-value vector available to the intercept-only model is also available to the full model.
+
+In particular, the full model can reproduce any constant fit by setting all the explanatory-variable coefficients equal to zero.
+
+Therefore, minimizing over the larger set of possible fitted values cannot produce a larger minimum:
+
+$$
+SS_{res}\leq SS_{tot}.
+$$
+
+Both sums of squares are nonnegative, so
+
+$$
+0\leq SS_{res}\leq SS_{tot}.
+$$
+
+Since $SS_{tot}>0$, dividing by $SS_{tot}$ gives
+
+$$
+0
+\leq
+\frac{SS_{res}}{SS_{tot}}
+\leq
+1.
+$$
+
+Recall that
+
+$$
+R^2
+=
+1-\frac{SS_{res}}{SS_{tot}}.
+$$
+
+Consequently,
+
+$$
+\boxed{
+0\leq R^2\leq 1.
+}
+$$
+```
+
+</details>
+
+The condition $SS_{tot}>0$ means that the observed responses are not all identical. When all responses are equal, the usual definition of $R^2$ has a zero denominator and does not apply.
+
+The extreme values have simple interpretations. If $R^2=0$, the full model does not reduce the residual sum of squares relative to the intercept-only model. If $R^2=1$, the full model fits every observed response exactly, so $SS_{res}=0$.
+
+***
+
+### Adding an Explanatory Variable
+
+One consequence of the least-squares formulation is that adding an explanatory variable cannot increase the minimum residual sum of squares when both models are fitted to the same observations.
+
+The additional variable expands the set of possible fitted-value vectors. At worst, the expanded model can reproduce the original fit by assigning a coefficient of zero to the new variable.
+
+```{proposition, prp-mlr-additional-variable-r2, name="Effect of Adding an Explanatory Variable on R-Squared"}
+Consider a multiple linear regression model with an intercept and design matrix $\mathbf{X}$. Let its residual sum of squares and coefficient of determination be $SS_{res}$ and $R^2$, respectively.
+
+Now consider an expanded model obtained by adding another explanatory-variable vector $\mathbf{z}$:
+
+$$
+\mathbf{X}_+
+=
+\begin{bmatrix}
+\mathbf{X} & \mathbf{z}
+\end{bmatrix}.
+$$
+
+Let $SS_{res,+}$ and $R_+^2$ denote the corresponding quantities for the expanded model, fitted using the same observations.
+
+Then
+
+$$
+\boxed{
+SS_{res,+}\leq SS_{res}.
+}
+$$
+
+Furthermore, if $SS_{tot}>0$, then
+
+$$
+\boxed{
+R_+^2\geq R^2.
+}
+$$
+
+Thus, adding an explanatory variable cannot decrease the ordinary in-sample $R^2$.
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-additional-variable-r2}
+For the original regression model, the residual sum of squares is
+
+$$
+SS_{res}
+=
+\min_{\boldsymbol{\beta}}
+\left\|
+\mathbf{y}-\mathbf{X}\boldsymbol{\beta}
+\right\|^2.
+$$
+
+For the expanded model, introduce the coefficient $\gamma$ associated with the additional explanatory variable $\mathbf{z}$.
+
+Its residual sum of squares is
+
+$$
+SS_{res,+}
+=
+\min_{\boldsymbol{\beta},\gamma}
+\left\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+-
+\gamma\mathbf{z}
+\right\|^2.
+$$
+
+Notice that the expanded optimization problem includes every candidate fitted-value vector from the original problem. We can always recover the original model by choosing
+
+$$
+\gamma=0.
+$$
+
+Therefore,
+
+\begin{align*}
+SS_{res,+}
+  &=
+  \min_{\boldsymbol{\beta},\gamma}
+  \left\|
+  \mathbf{y}
+  -
+  \mathbf{X}\boldsymbol{\beta}
+  -
+  \gamma\mathbf{z}
+  \right\|^2
+  \\
+  &\leq
+  \min_{\boldsymbol{\beta}}
+  \left\|
+  \mathbf{y}
+  -
+  \mathbf{X}\boldsymbol{\beta}
+  -
+  0\mathbf{z}
+  \right\|^2
+  \\
+  &=
+  \min_{\boldsymbol{\beta}}
+  \left\|
+  \mathbf{y}
+  -
+  \mathbf{X}\boldsymbol{\beta}
+  \right\|^2
+  \\
+  &=
+  SS_{res}.
+\end{align*}
+
+Thus,
+
+$$
+\boxed{
+SS_{res,+}\leq SS_{res}.
+}
+$$
+
+Since both regressions use the same response observations, their total sum of squares is the same.
+
+Provided that $SS_{tot}>0$,
+
+\begin{align*}
+R_+^2
+  &=
+  1-\frac{SS_{res,+}}{SS_{tot}}
+  \\
+  &\geq
+  1-\frac{SS_{res}}{SS_{tot}}
+  \\
+  &=
+  R^2.
+\end{align*}
+
+Therefore,
+
+$$
+\boxed{
+R_+^2\geq R^2.
+}
+$$
+```
+
+</details>
+
+
+The inequality need not be strict. For example, if the new explanatory-variable vector is already a linear combination of the columns of $\mathbf{X}$, the expanded model has exactly the same set of possible fitted-value vectors. In this case, adding the variable does not change the residual sum of squares or $R^2$, although the expanded design matrix no longer has full column rank if the original matrix was already full rank.
+
+More generally, equality occurs whenever the additional variable fails to reduce the minimum residual sum of squares.
+
+This result reveals an important limitation of ordinary $R^2$ as a model-comparison criterion. **Adding explanatory variables can never decrease the in-sample $R^2$**, even when the additional variables do not improve predictions for new observations.
+
+Consequently, a larger $R^2$ does not necessarily imply better predictive performance.
+
+***
+
+### Connection to the Geometric Interpretation
+
+The two derivations in this section express the same decomposition from different perspectives.
+
+The first uses the orthogonality of the residual vector to the fitted values and the intercept column. The second uses the projection matrices associated with the full and intercept-only models.
+
+Because the column space of the intercept-only model is contained in the column space of the full model, the matrices also satisfy
+
+$$
+\mathbf{H}\mathbf{H}_0
+=
+\mathbf{H}_0\mathbf{H}
+=
+\mathbf{H}_0.
+$$
+
+Consequently,
+
+$$
+(\mathbf{H}-\mathbf{H}_0)^2
+=
+\mathbf{H}-\mathbf{H}_0.
+$$
+
+Thus, $\mathbf{H}-\mathbf{H}_0$ is itself a symmetric, idempotent matrix. In particular,
+
+$$
+\hat{\mathbf{y}}-\bar y\mathbf{1}
+=
+(\mathbf{H}-\mathbf{H}_0)\mathbf{y}.
+$$
+
+The decomposition
+
+$$
+\mathbf{y}-\bar y\mathbf{1}
+=
+(\hat{\mathbf{y}}-\bar y\mathbf{1})
++
+\hat{\mathbf{e}}
+$$
+
+therefore separates the total centered response vector into two orthogonal components.
+
+Their squared lengths are $SS_{reg}$ and $SS_{res}$, and the squared length of their sum is $SS_{tot}$.
+
+This provides the connection to the geometric interpretation of multiple regression developed in the following section.
+
+
+### Uncentered $R^2$: Regression Without an Intercept
+
+The usual definition of $R^2$ compares the residual sum of squares of a regression model with that of the intercept-only model,
+
+$$
+y_i=\beta_0+e_i.
+$$
+
+When the full model includes an intercept, the intercept-only model is a special case: we can recover it by setting all explanatory-variable coefficients equal to zero. Consequently, the full model cannot have a larger minimum residual sum of squares.
+
+However, consider a regression model **without an intercept**,
+
+$$
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}+\mathbf{e},
+$$
+
+where $\mathbf{X}$ contains only explanatory-variable columns. The intercept-only model is no longer necessarily a special case of this model, since $\mathbf{1}$ need not belong to $\mathcal{C}(\mathbf{X})$.
+
+Therefore, the residual sum of squares of the regression model may exceed $SS_{tot}$, and the usual centered $R^2$ may be negative.
+
+Instead, we can compare the regression model with the simplest possible prediction: predicting zero for every observation. This reference model has no parameters to estimate, so its optimization problem is trivial:
+
+$$
+\min_{\mathbf{v}\in\{\mathbf{0}\}}
+\|\mathbf{y}-\mathbf{v}\|^2
+=
+\|\mathbf{y}\|^2
+=
+\sum_{i=1}^n y_i^2.
+$$
+
+Unlike the intercept-only model, the zero prediction is always available to a regression model without an intercept by setting $\boldsymbol{\beta}=\mathbf{0}$.
+
+```{definition, def-mlr-uncentered-r-squared, name="Uncentered Coefficient of Determination"}
+Suppose that the regression model does not include an intercept and that $\mathbf{y}'\mathbf{y}>0$.
+
+The **Uncentered Coefficient of Determination** is defined as
+
+$$
+R_{\mathrm{unc}}^2
+=
+1-
+\frac{SS_{res}}{\mathbf{y}'\mathbf{y}},
+$$
+
+where
+
+$$
+SS_{res}
+=
+\min_{\boldsymbol{\beta}}
+\|\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\|^2.
+$$
+
+Thus, uncentered $R^2$ measures the proportional reduction in squared error relative to predicting zero for every observation.
+```
+
+The use of the zero prediction as a reference allows us to establish the range of uncentered $R^2$ without requiring an intercept.
+
+```{proposition, prp-mlr-uncentered-r-squared-range, name="Range of Uncentered R-Squared"}
+Suppose that $\mathbf{y}'\mathbf{y}>0$. Then the uncentered coefficient of determination satisfies
+
+$$
+\boxed{
+0\leq R_{\mathrm{unc}}^2\leq 1.
+}
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-uncentered-r-squared-range}
+The residual sum of squares is the minimum value of the least-squares objective,
+
+$$
+SS_{res}
+=
+\min_{\boldsymbol{\beta}}
+\|\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\|^2.
+$$
+
+Notice that $\boldsymbol{\beta}=\mathbf{0}$ is always a feasible choice, which produces the zero prediction. Therefore,
+
+\begin{align*}
+SS_{res}
+  &=
+  \min_{\boldsymbol{\beta}}
+  \|\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\|^2
+  \\
+  &\leq
+  \|\mathbf{y}-\mathbf{X}\mathbf{0}\|^2
+  \\
+  &=
+  \mathbf{y}'\mathbf{y}.
+\end{align*}
+
+Since squared norms are nonnegative,
+
+$$
+0\leq SS_{res}\leq\mathbf{y}'\mathbf{y}.
+$$
+
+Dividing by $\mathbf{y}'\mathbf{y}>0$, we obtain
+
+$$
+0
+\leq
+\frac{SS_{res}}{\mathbf{y}'\mathbf{y}}
+\leq
+1.
+$$
+
+Consequently,
+
+$$
+\boxed{
+0\leq R_{\mathrm{unc}}^2\leq 1.
+}
+$$
+```
+
+</details>
+
+
+**Geometric interpretation.** The least-squares residuals remain orthogonal to the fitted values even without an intercept. Therefore, the Pythagorean theorem gives
+
+$$
+\|\mathbf{y}\|^2
+=
+\|\hat{\mathbf{y}}\|^2
++
+\|\hat{\mathbf{e}}\|^2.
+$$
+
+Hence, the uncentered coefficient of determination can also be expressed as
+
+$$
+\boxed{
+R_{\mathrm{unc}}^2
+=
+\frac{\hat{\mathbf{y}}'\hat{\mathbf{y}}}
+{\mathbf{y}'\mathbf{y}}.
+}
+$$
+
+This differs from centered $R^2$, which measures improvement relative to predicting the sample mean. Consequently, centered and uncentered $R^2$ should not be compared directly when evaluating different models.
+
+As with ordinary $R^2$, adding explanatory variables cannot decrease uncentered $R^2$ when the same observations are used, since the additional variables enlarge the set of possible fitted values. This does not guarantee better predictions for new observations.
+
+***
+
+### Adjusted $R^2$
+
+We established that adding an explanatory variable cannot increase the residual sum of squares. Consequently, ordinary $R^2$ cannot decrease when explanatory variables are added, even if the additional variables provide very little improvement in fit.
+
+This motivates a modification of $R^2$ that accounts for the number of coefficients in the regression model.
+
+Consider a multiple linear regression model with $p$ explanatory variables and an intercept. Assume that its design matrix $\mathbf{X}$ has full column rank and that $n>p+1$.
+
+The column space of $\mathbf{X}$ has dimension $p+1$. Consequently, the residuals belong to its orthogonal complement, which has dimension
+
+$$
+n-(p+1)=n-p-1.
+$$
+
+The residual sum of squares therefore has $n-p-1$ **residual degrees of freedom**. Similarly, the total sum of squares is based on deviations from the sample mean and has $n-1$ degrees of freedom.
+
+Instead of comparing the original sums of squares, we can compare them after dividing by their respective degrees of freedom.
+
+```{definition, def-mlr-adjusted-r-squared, name="Adjusted Coefficient of Determination"}
+Suppose that a multiple linear regression model includes an intercept, has $p$ explanatory variables, and satisfies $n>p+1$ and $SS_{tot}>0$.
+
+The **Adjusted Coefficient of Determination** is defined as
+
+$$
+\boxed{
+R_{\mathrm{adj}}^2
+=
+1-
+\frac{SS_{res}/(n-p-1)}
+{SS_{tot}/(n-1)}.
+}
+$$
+
+Equivalently, using the ordinary coefficient of determination,
+
+$$
+\boxed{
+R_{\mathrm{adj}}^2
+=
+1-
+\frac{n-1}{n-p-1}(1-R^2).
+}
+$$
+```
+
+Unlike ordinary $R^2$, adjusted $R^2$ accounts for the number of explanatory variables through the residual degrees of freedom. A new variable must provide a sufficient reduction in residual sum of squares to offset the loss of one degree of freedom.
+
+Since
+
+$$
+\frac{n-1}{n-p-1}\geq 1,
+$$
+
+we also have
+
+$$
+R_{\mathrm{adj}}^2\leq R^2\leq 1.
+$$
+
+Adjusted $R^2$ can be negative, particularly when the model provides little improvement over the intercept-only model relative to the number of explanatory variables included.
+
+***
+
+#### Adding an Explanatory Variable
+
+We can establish precisely when adding another explanatory variable improves adjusted $R^2$.
+
+```{proposition, prp-mlr-additional-variable-adjusted-r2, name="Effect of Adding an Explanatory Variable on Adjusted R-Squared"}
+Consider a regression model with an intercept, $p$ explanatory variables, and residual sum of squares $SS_{res}$.
+
+Suppose that adding one explanatory variable produces a full-column-rank model with residual sum of squares $SS_{res,+}$. Assume that both models use the same observations, $SS_{tot}>0$, and $n>p+2$.
+
+Then adjusted $R^2$ increases if and only if
+
+$$
+\boxed{
+SS_{res}-SS_{res,+}
+>
+\frac{SS_{res}}{n-p-1}.
+}
+$$
+
+Thus, the reduction in residual sum of squares must exceed the original residual sum of squares divided by its degrees of freedom.
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-additional-variable-adjusted-r2}
+The original model has $n-p-1$ residual degrees of freedom, while the expanded model has $n-p-2$.
+
+Because both models use the same response observations, their total sum of squares is identical. Therefore,
+
+\begin{align*}
+R_{\mathrm{adj},+}^2>R_{\mathrm{adj}}^2
+&\iff
+1-\frac{SS_{res,+}/(n-p-2)}{SS_{tot}/(n-1)}
+>
+1-\frac{SS_{res}/(n-p-1)}{SS_{tot}/(n-1)}
+\\
+&\iff
+\frac{SS_{res,+}}{n-p-2}
+<
+\frac{SS_{res}}{n-p-1}
+\\
+&\iff
+(n-p-1)SS_{res,+}
+<
+(n-p-2)SS_{res}
+\\
+&\iff
+SS_{res}-SS_{res,+}
+>
+\frac{SS_{res}}{n-p-1}.
+\end{align*}
+
+This establishes the result.
+```
+
+</details>
+
+Ordinary $R^2$ increases whenever an additional variable reduces the residual sum of squares. Adjusted $R^2$, in contrast, increases only when that reduction exceeds the threshold established above.
+
+**Adjusted $R^2$ is therefore useful for comparing models with different numbers of explanatory variables**, provided they are fitted to the same response observations. However, it remains an in-sample measure of fit. A higher adjusted $R^2$ does not guarantee better predictions on new observations; cross-validation provides a more direct way to evaluate predictive performance.
+
+
+***
+
+
+### Summary
+
+The coefficient of determination, $R^2$, measures the reduction in squared error achieved by a regression model relative to a reference prediction. The appropriate reference depends on whether the model includes an intercept.
+
+**1. Regression with an intercept**
+
+The reference is the intercept-only model, which predicts $\bar y$ for every observation. The sum-of-squares decomposition gives
+
+$$
+SS_{tot}=SS_{reg}+SS_{res}.
+$$
+
+Consequently, the multiple coefficient of determination is
+
+$$
+\boxed{
+R^2
+=
+\frac{SS_{reg}}{SS_{tot}}
+=
+1-\frac{SS_{res}}{SS_{tot}}.
+}
+$$
+
+Provided that $SS_{tot}>0$, we have
+
+$$
+0\leq R^2\leq 1.
+$$
+
+**2. Regression without an intercept**
+
+The intercept-only model is no longer necessarily contained in the regression model. Instead, uncentered $R^2$ uses the zero prediction as its reference:
+
+$$
+\boxed{
+R_{\mathrm{unc}}^2
+=
+1-
+\frac{SS_{res}}{\mathbf{y}'\mathbf{y}}.
+}
+$$
+
+Since the zero prediction is always available by setting all coefficients equal to zero, we have
+
+$$
+0\leq R_{\mathrm{unc}}^2\leq 1,
+$$
+
+provided that $\mathbf{y}'\mathbf{y}>0$.
+
+The usual centered expression, $1-SS_{res}/SS_{tot}$, can be negative for a model without an intercept because its residual sum of squares may exceed that of the intercept-only model.
+
+**3. Interpretation and model comparison**
+
+Both definitions compare the fitted regression model against a reference prediction, but they use different references. Consequently, centered and uncentered $R^2$ should not be compared directly.
+
+An important property of least squares is that adding explanatory variables cannot increase the minimum residual sum of squares. Therefore, when the same observations and reference prediction are used, adding explanatory variables cannot decrease $R^2$.
+
+However, **a higher $R^2$ does not necessarily imply better predictive performance**. It measures improvement in fit to the observations used to estimate the model. To evaluate predictions for new observations, we can instead use methods such as cross-validation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Geometric Interpretation of Multiple Linear Regression
 
-Multiple linear regression can be thought as projecting $\by$ in the column 
-space of the design matrix $\bX$. The following diagram pictures multiple linear regression.
+Multiple linear regression can be interpreted geometrically as projecting the response vector $\mathbf{y}$ onto the column space of the design matrix $\mathbf{X}$.
+
+The fitted-value vector $\hat{\mathbf{y}}$ is the orthogonal projection of $\mathbf{y}$ onto $\mathcal{C}(\mathbf{X})$, while the residual vector $\hat{\mathbf{e}}=\mathbf{y}-\hat{\mathbf{y}}$ is orthogonal to this column space.
+
+The following diagram illustrates this interpretation and its connection to the sum-of-squares decomposition.
 
 ```{r geo-int, echo=FALSE}
 par(mar = c(0,0,0,0))
@@ -1413,380 +2569,1251 @@ text(x = 90,
      labels = expression(bold(R)^n))
 ```
 
-Here we can see several components:
+The diagram represents the following vectors and subspaces:
 
-* $\by$ is the vector of observations. Is a vector in $\mathbb{R}^n$.
-* The grey hyper-plane is the column space generated by $\bX$, a sub-space of $\mathbb{R}^n$.
-* The multiple regression prediction $\hat{\by}$ of $\by$ is the projection of $\by$
-  on the space generated by the column of $\bX$.
-* The poor man's prediction $\hat{\by}_0$, in the column space of $\bX$ (since,
-one of the columns is $\bones$), but in most cases it is different to $\hat{\by}$ (the closest vector in
-the column space of $\bX$ to $\by$).
-* We notice that the differences:
-  - $\by - \hat{\by}$.
-  - $\by - \hat{\by}_0$
-  - $\hat{\by} - \hat{\by}_0$
-  
-  form a right triangle, then it must be that:
-  $$
-  ||\by - \hat{\by}_0||^2 = ||\by - \hat{\by}||^2 + ||\hat{\by} - \hat{\by}_0||^2
-  $$
-  which is the same as
-  $$
-  (\by - \hat{\by})'(\by - \hat{\by}_0) = (\by - \hat{\by})'(\by - \hat{\by}) + (\hat{\by} - \hat{\by}_0)'(\hat{\by} - \hat{\by}_0)
-  $$
-  that can be expressed as:
-  $$
-  SS_{tot} = SS_{res} + SS_{reg}
-  $$
+- $\mathbf{y}$ is the observed response vector in $\mathbb{R}^n$.
+- The gray plane represents the column space $\mathcal{C}(\mathbf{X})$, a subspace of $\mathbb{R}^n$.
+- $\hat{\mathbf{y}}$ is the orthogonal projection of $\mathbf{y}$ onto $\mathcal{C}(\mathbf{X})$.
+- $\hat{\mathbf{y}}_0=\bar y\mathbf{1}$ is the fitted-value vector from the intercept-only model. Since $\mathbf{X}$ includes an intercept, $\hat{\mathbf{y}}_0$ also belongs to $\mathcal{C}(\mathbf{X})$.
 
-## Centered and Standarized Variables
+The three vectors
+
+$$
+\mathbf{y}-\hat{\mathbf{y}},
+\qquad
+\hat{\mathbf{y}}-\hat{\mathbf{y}}_0,
+\qquad
+\mathbf{y}-\hat{\mathbf{y}}_0
+$$
+
+form a right triangle.
+
+To see why, notice that both $\hat{\mathbf{y}}$ and $\hat{\mathbf{y}}_0$ belong to $\mathcal{C}(\mathbf{X})$. Therefore,
+
+$$
+\hat{\mathbf{y}}-\hat{\mathbf{y}}_0
+\in
+\mathcal{C}(\mathbf{X}).
+$$
+
+From the properties of least squares, we know that the residual vector is orthogonal to every vector in this column space. Consequently,
+
+$$
+\underbrace{
+(\mathbf{y}-\hat{\mathbf{y}})
+}_{\hat{\mathbf{e}}}'
+\underbrace{
+(\hat{\mathbf{y}}-\hat{\mathbf{y}}_0)
+}_{\in\mathcal{C}(\mathbf{X})}
+=
+0.
+$$
+
+Thus, the residual vector and the difference between the two fitted-value vectors are perpendicular. Applying the Pythagorean theorem gives
+
+$$
+\left\|
+\mathbf{y}-\hat{\mathbf{y}}_0
+\right\|^2
+=
+\left\|
+\mathbf{y}-\hat{\mathbf{y}}
+\right\|^2
++
+\left\|
+\hat{\mathbf{y}}-\hat{\mathbf{y}}_0
+\right\|^2.
+$$
+
+Equivalently,
+
+$$
+\begin{aligned}
+(\mathbf{y}-\hat{\mathbf{y}}_0)'
+(\mathbf{y}-\hat{\mathbf{y}}_0)
+&=
+(\mathbf{y}-\hat{\mathbf{y}})'
+(\mathbf{y}-\hat{\mathbf{y}})
+\\
+&\quad+
+(\hat{\mathbf{y}}-\hat{\mathbf{y}}_0)'
+(\hat{\mathbf{y}}-\hat{\mathbf{y}}_0).
+\end{aligned}
+$$
+
+Since $\hat{\mathbf{y}}_0=\bar y\mathbf{1}$, this is precisely the sum-of-squares decomposition established in the previous section:
+
+$$
+\boxed{
+SS_{tot}=SS_{res}+SS_{reg}.
+}
+$$
+
+The geometric interpretation therefore shows that the decomposition is a direct consequence of orthogonal projection, regardless of the number of explanatory variables in the model, provided that an intercept is included.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Centered and Standardized Variables
+
+Centering and standardization extend naturally from simple linear regression to multiple linear regression. They are particularly useful because they provide alternative expressions for the least-squares coefficients in terms of sample covariances and correlations.
+
+Throughout this section, we use the notation
+
+$$
+\mathbf{X}_*
+=
+\begin{bmatrix}
+\mathbf{x}_1 & \mathbf{x}_2 & \cdots & \mathbf{x}_p
+\end{bmatrix}
+\in\mathbb{R}^{n\times p}
+$$
+
+for the matrix containing only the explanatory variables. The complete design matrix is
+
+$$
+\mathbf{X}
+=
+\begin{bmatrix}
+\mathbf{1} & \mathbf{X}_*
+\end{bmatrix}
+\in\mathbb{R}^{n\times(p+1)}.
+$$
+
+This distinction is useful because the intercept column should not be centered or standardized.
+
+***
 
 ### Centered Variables
 
-Like with simple linear regression we can center and standardize our variables.
+Let
 
-For this section, let us use the notation:
-
-$$\bX = \left[\bx_1, \bx_2, \ldots \bx_p \right]$$
-a matrix with $p$ variables in which each column is a variable $\bx_i$. In the 
-context of linear regression you can this is similar to the design matrix except
-that it doesn't have the column of ones. In this way, we will rename the design 
-matrix as
-
-$$\bX_{*} = \left[\bones \bX \right] $$
-we introduce this notation, since we don't want to center or standardize the 
-column of ones.
-
-To center matrix $\bX$ we need to remove the mean of every column. Notice that the
-vector of means is given by:
-
-$$\bar{\bx} = 
-  \left[\begin{matrix}
-    \bar{\bx}_1 \\
-    \bar{\bx}_2 \\
-    \vdots      \\
-    \bar{\bx}_p
-  \end{matrix}\right] =
-  \left[\begin{matrix}
-    \frac{1}{n} \bx_1'\bones \\
-    \frac{1}{n} \bx_2'\bones \\
-    \vdots                   \\
-    \frac{1}{n} \bx_p'\bones
-  \end{matrix}\right] = \frac{1}{n}
-  \left[\begin{matrix}
-    \bx_1'\bones \\
-    \bx_2'\bones \\
-    \vdots                   \\
-    \bx_p'\bones
-  \end{matrix}\right] = \frac{1}{n} \bX' \bones $$
-  
-then the centered data $\bX_c$ is given by:
-
-$$\bX_c = \bX - \left[\begin{matrix}
-    \bar{\bx}_1 & \bar{\bx}_2 & \dots  & \bar{\bx}_p\\
-    \bar{\bx}_1 & \bar{\bx}_2 & \dots  & \bar{\bx}_p\\
-    \vdots      & \vdots      & \ddots & \vdots     \\
-    \bar{\bx}_1 & \bar{\bx}_2 & \dots  & \bar{\bx}_p
-  \end{matrix}\right] = \bX - \bones \bar{\bx}' = \bX - \bones \left(\frac{1}{n} \bX' \bones\right)' = \bX - \frac{1}{n}\bones \bones' \bX = \left(\bI - \frac{1}{n}\bones \bones' \right)\bX $$
-
-We call $$\bC =  \left(\bI - \frac{1}{n}\bones \bones' \right) = \bI - \bH_0 $$ the centering
-matrix, since it centers the variables of matrix $\bX$. Note also, that $\bC$ also
-centers any matrix with $n$ rows, in particular a vector of size $n$ is also centered
-by $\bC$. So we can center $y$ the dependent variable, the same way:
-
-$$\by_c = \bC \by $$
-
-### Sample Covariance
-
-Having defined, the centered matrix $\bX_c$ we can define the sample covariance
-of $\bX$, $\bS_{XX} \in \mathbb{R}^{p \times p}$ as follows:
-
-$$ \bS_{XX} = \frac{1}{n-1} \left(\bX - \bones \bar{\bx}'\right)'\left(\bX - \bones \bar{\bx}'\right) = \frac{1}{n-1} \bX_c'\bX_c = \frac{1}{n-1} \bX'\bC' \bC \bX $$
-Now, since $\bC = \bI - \bH_0$ is idempotent and symmetric we have that:
-
-$$ \bS_{XX} = \frac{1}{n-1} \bX'\bC' \bC \bX = \frac{1}{n-1} \bX' \bC \bX = \frac{1}{n-1} \bX_c'\bX = \frac{1}{n-1} \bX'\bX_c $$
-So the sample covariance, is the same for the original variables and the centered variables.
-
-We can also define the covariance vector between variables $\bx_1, \bx_2, \ldots \bx_p$ and variable $\by$, 
-$\bS_{Xy} \in \dR^{p \times 1}$, as follows:
-
-$$ \bS_{Xy} = \frac{1}{n-1} \left(\bX - \bones \bar{\bx}'\right)'\left(\by - \bones \bar{y}\right) = \frac{1}{n-1} \bX_c'\by_c = \frac{1}{n-1} \bX'\bC' \bC \by$$
-
-and, in the same way than before, we have that:
-
-$$\bS_{Xy} = \frac{1}{n-1} \bX' \bC' \bC \by = \frac{1}{n-1} \bX' \bC \by = \frac{1}{n-1} \bX_c'\by = \frac{1}{n-1} \bX'\by_c$$
-
-so, you don't need to center both variables. As long as you center one of them
-the result will be the same.
-
-With this measures, we can focus on splitting the vector of estimated coefficients $\hat{\bgb}$, into the estimate for
-the intercept and the estimates for the independent variables, as follows:
-
-$$\hat{\bgb} = 
-  \left[\begin{matrix}
-    \hat{\beta}_0 \\
-    \hat{\bgb}_{-0} 
-  \end{matrix}\right]$$
-  
-with $\hat{\beta}_0$ the estimate of the intercept and $\hat{\bgb}_{-0}$ the coefficients
-for all independent variables. That is:
-
-$$\hat{\bgb}_{-0} = 
-  \left[\begin{matrix}
-    \hat{\beta}_1 \\
-    \hat{\beta}_2 \\
-    \vdots        \\
-    \hat{\beta}_p  
-  \end{matrix}\right] \in \dR^{p \times 1}$$
-  
-Under the new notation, $\bX_{*}$ for the design matrix, we have that:
-
-$$ \hat{\bgb} = \left(\bX_{*}'\bX_{*}\right)^{-1}\bX_{*}'\by $$
-so:
-
-$$ \hat{\bgb} = \left[\begin{matrix}
-    \hat{\beta}_0 \\
-    \hat{\bgb}_{-0} 
-  \end{matrix}\right] = 
-  \left( \left[\bones \bX \right]' \left[\bones \bX \right] \right)^{-1} \left[\bones \bX \right]' \by $$
-
-so we need to compute $\left( \left[\bones \bX \right]' \left[\bones \bX \right] \right)^{-1}$.
-
-We start by computing:
-
-$$\left[\bones \bX \right]' \left[\bones \bX \right] = 
-  \left[\begin{matrix}
-    \bones' \\
-    \bX'  
-  \end{matrix}\right] \left[\bones \bX \right] =
-  \left[\begin{matrix}
-    \bones' \bones & \bones' \bX \\
-    \bX'\bones     & \bX' \bX'  
-  \end{matrix}\right] =
-  \left[\begin{matrix}
-    n          & n\bar{\bx}' \\
-    n\bar{\bx} & \bX' \bX'  
-  \end{matrix}\right]
 $$
-Now, we need to invert a 2 by 2 block matrix (luckily there is a formula for this).
-The formula is in the prerequisites section, however note that in this case
-one of the blocks is of height 1, since the first value we are looking for $\hat{\beta}_0$
-is a scalar. After applying the formula, we have:
+\bar{\mathbf{x}}
+=
+\begin{bmatrix}
+\bar x_1\\
+\bar x_2\\
+\vdots\\
+\bar x_p
+\end{bmatrix}
+$$
+
+denote the vector containing the sample mean of each explanatory variable. Since
+
+$$
+\bar x_j
+=
+\frac{1}{n}\mathbf{1}'\mathbf{x}_j,
+$$
+
+we can write
 
 \begin{align*}
-\left( \left[\bones \bX \right]' \left[\bones \bX \right] \right)^{-1} 
-  &= \left[\begin{matrix}
-    n^{-1} + n^{-1} n\bar{\bx}' \left(\bX' \bX' -  n\bar{\bx} n^{-1} n\bar{\bx}' \right)^{-1}n\bar{\bx} n^{-1} & -n^{-1} n\bar{\bx}' \left(\bX' \bX' -  n\bar{\bx} n^{-1} n\bar{\bx}'     \right)^{-1} \\
-    -\left(\bX' \bX' -  n\bar{\bx} n^{-1} n\bar{\bx}' \right)^{-1}n\bar{\bx} n^{-1} & \left(\bX' \bX' -  n\bar{\bx} n^{-1} n\bar{\bx}' \right)^{-1}  
-  \end{matrix}\right] \\
-  &= \left[\begin{matrix}
-    n^{-1} + \bar{\bx}' \left(\bX' \bX -  n\bar{\bx}\bar{\bx}' \right)^{-1}\bar{\bx} & \bar{\bx}' \left(\bX' \bX -  n\bar{\bx} \bar{\bx}' \right)^{-1} \\
-    -\left(\bX' \bX -  n\bar{\bx} \bar{\bx}' \right)^{-1}\bar{\bx}                   & \left(\bX' \bX -  n\bar{\bx} \bar{\bx}' \right)^{-1}  
-  \end{matrix}\right]  
+\bar{\mathbf{x}}
+&=
+\frac{1}{n}
+\begin{bmatrix}
+\mathbf{x}_1'\mathbf{1}\\
+\mathbf{x}_2'\mathbf{1}\\
+\vdots\\
+\mathbf{x}_p'\mathbf{1}
+\end{bmatrix}
+\\
+&=
+\frac{1}{n}\mathbf{X}_*'\mathbf{1}.
 \end{align*}
 
-Now, notice that:
+The centered explanatory-variable matrix is obtained by subtracting the corresponding column mean from every observation:
 
 \begin{align*}
-\bX' \bX -  n\bar{\bx} \bar{\bx}' 
-  &= \bX' \bX -  n\left(\frac{\bX'\bones}{n}\right)\left(\frac{\bX'\bones}{n}\right)' \\
-  &= \bX' \bX -  \frac{1}{n}\bX'\bones \bones' \bX                                    \\
-  &= \bX'\left(\bI - \frac{1}{n}\bones \bones'\right) \bX                             \\
-  &= \bX'\bC\bX                                                                       \\
-  &= (n-1)\bS_{XX}
+\mathbf{X}_{*,c}
+&=
+\mathbf{X}_*-\mathbf{1}\bar{\mathbf{x}}'
+\\
+&=
+\mathbf{X}_*
+-
+\mathbf{1}
+\left(
+\frac{1}{n}\mathbf{X}_*'\mathbf{1}
+\right)'
+\\
+&=
+\mathbf{X}_*
+-
+\frac{1}{n}
+\mathbf{1}\mathbf{1}'\mathbf{X}_*
+\\
+&=
+\left(
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+\right)\mathbf{X}_*.
 \end{align*}
 
-then:
+This motivates the centering matrix.
 
-\begin{align*}
-\left( \left[\bones \bX \right]' \left[\bones \bX \right] \right)^{-1}  
-  &= 
-  \left[\begin{matrix}
-    n^{-1} + \bar{\bx}' \left((n-1)\bS_{XX} \right)^{-1}\bar{\bx} & -\bar{\bx}' \left((n-1)\bS_{XX} \right)^{-1} \\
-    -\left((n-1)\bS_{XX} \right)^{-1}\bar{\bx}                    & \left((n-1)\bS_{XX} \right)^{-1}   
-  \end{matrix}\right] \\
-  &=
-  \left[\begin{matrix}
-    n^{-1} + \frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1} \bar{\bx} & -\frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1} \\
-    -\frac{1}{n-1}\bS_{XX}^{-1} \bar{\bx}                    & \frac{1}{n-1}\bS_{XX}^{-1}   
-  \end{matrix}\right]
-\end{align*}
+```{proposition, prp-mlr-centering-matrix, name="Centering Matrix"}
+Define
 
-
-In a similar way we can easily compute:
-
-$$\left[\bones \bX \right]' \by = 
-  \left[\begin{matrix}
-    \bones' \by\\
-    \bX'\by  
-  \end{matrix}\right] =
-  \left[\begin{matrix}
-    n\bar{y} \\
-    \bX'\by  
-  \end{matrix}\right]$$
-
-Then, we have that:
-
-\begin{align*}
-\hat{\bgb} 
-  &= \left[\begin{matrix} \\
-    \hat{\beta}_0 \\
-    \hat{\bgb}_{-0} 
-  \end{matrix}\right] \\
-  &=
-  \left[\begin{matrix}
-    n^{-1} + \frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1} \bar{\bx} & -\frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1} \\
-    -\frac{1}{n-1}\bS_{XX}^{-1} \bar{\bx}                    & \frac{1}{n-1}\bS_{XX}^{-1}   
-  \end{matrix}\right]
-  \left[\begin{matrix}
-    n\bar{y} \\
-    \bX'\by  
-  \end{matrix}\right] \\ 
-  &= 
-  \left[\begin{matrix}
-    n^{-1}n\bar{y} + \frac{n\bar{y}}{n-1}\bar{\bx}' \bS_{XX}^{-1} \bar{\bx} - \frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1}\bX'\by \\
-    -\frac{n\bar{y}}{n-1}\bS_{XX}^{-1} \bar{\bx} + \frac{1}{n-1}\bS_{XX}^{-1}\bX'\by  
-  \end{matrix}\right]
-\end{align*}
-
-Then, working first with the second row-block:
-
-\begin{align*}
-\hat{\bgb}_{-0} 
-  &=  -\frac{n\bar{y}}{n-1}\bS_{XX}^{-1} \bar{\bx} + \frac{1}{n-1}\bS_{XX}^{-1}\bX'y \\
-  &= \frac{1}{n-1}\bS_{XX}^{-1}\bX'y -\frac{1}{n-1}\bS_{XX}^{-1} \bar{\bx}n\bar{y}   \\
-  &= \frac{1}{n-1}\bS_{XX}^{-1}\left(\bX'y - n\bar{\bx}\bar{y}\right)
-\end{align*}
-
-Now, we note that:
-
-\begin{align*}
-\bX'\by - n\bar{\bx}\bar{y} 
-  &= \bX'\by - n\bar{\bx}\bar{y}                                                   \\
-  &= \bX'\by - n\left(\frac{\bX'\bones}{n}\right)\left(\frac{\bones'\by}{n}\right) \\
-  &= \bX'\by - \frac{1}{n}\bX'\bones \bones'\by                                    \\
-  &= \bX' \left(\bI - \frac{1}{n} \bones \bones' \right) \by                       \\
-  &= \bX' \bC \by                                                                  \\
-  &= (n-1)\bS_{Xy}
-\end{align*}
-
-Then, we have that:
-
-$$\hat{\bgb}_{-0} = \frac{1}{n-1}\bS_{XX}^{-1}(n-1)\bS_{Xy} = \bS_{XX}^{-1}\bS_{Xy}$$
-An equivalent result to that of simple linear regression, both using the covariance
-matrix of the independent variables and the covariance vector of the independent
-variables and the dependent variable.
-
-This way of writing the coefficients shows the influence of each component:
-
-* $\bS_{XX}^{-1}$: The relationship between the independent variables.
-* $\bS_{Xy}$: The relationship between the independent variables and the dependent variables.
-
-Also notice that, since centralizing doesn't change the values of $\bS_{X_cX_c}^{-1}$ and $\bS_{X_cy_c}$, centralizing
-the independent variables or the dependent variable (or both), doesn't change the 
-value of the coefficients of the independent variables.
-
-Now, we can work more easily with the intercept estimate:
-
-\begin{align*}
-\hat{\beta}_0 
-  &= n^{-1}n\bar{y} + \frac{n\bar{y}}{n-1}\bar{\bx}' \bS_{XX}^{-1} \bar{\bx} - \frac{1}{n-1}\bar{\bx}' \bS_{XX}^{-1}\bX'\by \\
-  &= \bar{y} + \frac{1}{n-1}\bar{\bx}'\bS_{XX}^{-1} n\bar{\bx}\bar{y} - \frac{1}{n-1}\bar{\bx}'\bS_{XX}^{-1}\bX'\by         \\
-  &= \bar{y} + \frac{1}{n-1}\bar{\bx}'\bS_{XX}^{-1} \left(n\bar{\bx}\bar{y}  - \bX'\by \right)                              \\
-  &= \bar{y} - \frac{1}{n-1}\bar{\bx}'\bS_{XX}^{-1} \left(\bX'\by - n\bar{\bx}\bar{y} \right)                               \\
-  &= \bar{y} - \frac{1}{n-1}\bar{\bx}'\bS_{XX}^{-1} (n-1)\bS_{Xy}                                                           \\
-  &= \bar{y} - \bar{\bx}'\bS_{XX}^{-1} \bS_{Xy}                                                                             \\
-  &= \bar{y} - \bar{\bx}' \hat{\bgb}_{-0}
-\end{align*}
-
-Again, an equivalent result to that of simple linear regression. Like in simple
-linear regression, centering the independent variables does affect the intercept
-estimate, since $\bar{\bx}=\bzero$, we have that the coefficient after centering
-the independent variables is $\bar{y}$ the mean of the dependent variable. And
-if we also center the dependent variable, then $\bar{y}=0$ so the estimate of the
-intercept is $0$ also. Therefore, if you are centering all variables, it is not
-necessary to add the column of ones in the design matrix, since the estimate of the
-intercept is $0$.
-
-### Satandard Variables
-
-In the same way we worked with centered variables, we can work with standard variables
-to define the sample correlations.
-
-The standardization of $\bX$, $\bX_s$, is given by:
-
-\begin{align*}
-\bX_s 
-  &=
-  \left[\begin{matrix}
-    \frac{x_{11} - \bar{\bx}_1}{S_{x_1x_1}^{1/2}} & \frac{x_{12} - \bar{\bx}_2}{S_{x_2x_2}^{1/2}} & \dots  & \frac{x_{1p} - \bar{\bx}_p}{S_{x_px_p}^{1/2}} \\
-    \frac{x_{21} - \bar{\bx}_1}{S_{x_1x_1}^{1/2}} & \frac{x_{22} - \bar{\bx}_2}{S_{x_2x_2}^{1/2}} & \dots  & \frac{x_{2p} - \bar{\bx}_p}{S_{x_px_p}^{1/2}} \\
-    \vdots                                        & \vdots                                        & \ddots & \vdots                                        \\
-    \frac{x_{n1} - \bar{\bx}_1}{S_{x_1x_1}^{1/2}} & \frac{x_{n2} - \bar{\bx}_2}{S_{x_2x_2}^{1/2}} & \dots  & \frac{x_{np} - \bar{\bx}_p}{S_{x_px_p}^{1/2}}
-  \end{matrix}\right] \\
-  &=
-  \left[\begin{matrix}
-    x_{11} - \bar{\bx}_1 & x_{12} - \bar{\bx}_2 & \dots  & x_{1p} - \bar{\bx}_p \\
-    x_{21} - \bar{\bx}_1 & x_{22} - \bar{\bx}_2 & \dots  & x_{2p} - \bar{\bx}_p \\
-    \vdots               & \vdots               & \ddots & \vdots               \\
-    x_{n1} - \bar{\bx}_1 & x_{n2} - \bar{\bx}_2 & \dots  & x_{np} - \bar{\bx}_p
-  \end{matrix}\right]
-  \left[\begin{matrix}
-    \frac{1}{S_{x_1x_1}^{1/2}} & 0                                             & \dots  & 0 \\
-    0                          & \frac{x_{22} - \bar{\bx}_2}{S_{x_2x_2}^{1/2}} & \dots  & 0 \\
-    \vdots                     & \vdots                                        & \ddots & \vdots                                        \\
-    0                          & 0                                             & \dots  & \frac{x_{np} - \bar{\bx}_p}{S_{x_px_p}^{1/2}}
-  \end{matrix}\right]
-  &= \bX_c \bD_X
-  &= \bC \bX \bD_X
-\end{align*}
+$$
+\mathbf{C}
+=
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+=
+\mathbf{I}-\mathbf{H}_0,
+$$
 
 where
 
-$$ \bD_X =  \left[\begin{matrix}
-    \frac{1}{S_{x_1x_1}^{1/2}} & 0                                             & \dots  & 0 \\
-    0                          & \frac{x_{22} - \bar{\bx}_2}{S_{x_2x_2}^{1/2}} & \dots  & 0 \\
-    \vdots                     & \vdots                                        & \ddots & \vdots                                        \\
-    0                          & 0                                             & \dots  & \frac{x_{np} - \bar{\bx}_p}{S_{x_px_p}^{1/2}}
-  \end{matrix}\right]$$
+$$
+\mathbf{H}_0
+=
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+$$
 
-is the matrix that standardizes $\bX$. Notice that unlike $\bC$, that centers
-any matrix with the appropriate number of rows, $\bD_X$ only standardizes $\bX$.
+is the projection matrix associated with the intercept-only model.
+
+Then:
+
+1. $\mathbf{C}$ is symmetric,
+2. $\mathbf{C}$ is idempotent,
+3. $\mathbf{C}\mathbf{1}=\mathbf{0}$, and
+4. for any matrix $\mathbf{A}$ with $n$ rows, $\mathbf{C}\mathbf{A}$ subtracts the column mean from every column of $\mathbf{A}$.
+
+In particular,
+
+$$
+\boxed{
+\mathbf{X}_{*,c}
+=
+\mathbf{C}\mathbf{X}_*
+}
+$$
+
+and
+
+$$
+\boxed{
+\mathbf{y}_c
+=
+\mathbf{C}\mathbf{y}
+=
+\mathbf{y}-\bar y\mathbf{1}.
+}
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-centering-matrix}
+First,
+
+$$
+\mathbf{C}'
+=
+\left(
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+\right)'
+=
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+=
+\mathbf{C},
+$$
+
+so $\mathbf{C}$ is symmetric.
+
+Also,
+
+\begin{align*}
+\mathbf{C}^2
+&=
+\left(
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+\right)^2
+\\
+&=
+\mathbf{I}
+-
+\frac{2}{n}\mathbf{1}\mathbf{1}'
++
+\frac{1}{n^2}
+\mathbf{1}\mathbf{1}'\mathbf{1}\mathbf{1}'
+\\
+&=
+\mathbf{I}
+-
+\frac{2}{n}\mathbf{1}\mathbf{1}'
++
+\frac{1}{n}
+\mathbf{1}\mathbf{1}'
+\\
+&=
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+\\
+&=
+\mathbf{C},
+\end{align*}
+
+where we used $\mathbf{1}'\mathbf{1}=n$. Thus, $\mathbf{C}$ is idempotent.
+
+Similarly,
+
+\begin{align*}
+\mathbf{C}\mathbf{1}
+&=
+\left(
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+\right)\mathbf{1}
+\\
+&=
+\mathbf{1}
+-
+\frac{1}{n}\mathbf{1}
+(\mathbf{1}'\mathbf{1})
+\\
+&=
+\mathbf{1}-\mathbf{1}
+\\
+&=
+\mathbf{0}.
+\end{align*}
+
+Finally, if $\mathbf{A}$ has $n$ rows, then
+
+$$
+\frac{1}{n}\mathbf{1}'\mathbf{A}
+$$
+
+contains the means of its columns. Therefore,
+
+$$
+\mathbf{C}\mathbf{A}
+=
+\mathbf{A}
+-
+\mathbf{1}
+\left(
+\frac{1}{n}\mathbf{1}'\mathbf{A}
+\right)
+$$
+
+subtracts the corresponding mean from each column.
+```
+
+</details>
+
+***
+
+### Sample Covariance
+
+Using the centered explanatory variables, define the sample covariance matrix
+
+$$
+\mathbf{S}_{XX}
+\in
+\mathbb{R}^{p\times p}
+$$
+
+by
+
+$$
+\mathbf{S}_{XX}
+=
+\frac{1}{n-1}
+\mathbf{X}_{*,c}'\mathbf{X}_{*,c}.
+$$
+
+Its $(j,k)$ entry is the sample covariance between explanatory variables $\mathbf{x}_j$ and $\mathbf{x}_k$.
+
+Similarly, define the covariance vector between the explanatory variables and the response as
+
+$$
+\mathbf{S}_{Xy}
+=
+\frac{1}{n-1}
+\mathbf{X}_{*,c}'\mathbf{y}_c
+\in
+\mathbb{R}^{p}.
+$$
+
+The centering matrix gives several useful equivalent expressions.
+
+```{proposition, prp-mlr-covariance-identities, name="Covariance Identities"}
+The sample covariance matrix satisfies
+
+$$
+\boxed{
+\mathbf{S}_{XX}
+=
+\frac{1}{n-1}
+\mathbf{X}_*'\mathbf{C}\mathbf{X}_*
+=
+\frac{1}{n-1}
+\mathbf{X}_{*,c}'\mathbf{X}_*
+=
+\frac{1}{n-1}
+\mathbf{X}_*'\mathbf{X}_{*,c}.
+}
+$$
+
+Similarly,
+
+$$
+\boxed{
+\mathbf{S}_{Xy}
+=
+\frac{1}{n-1}
+\mathbf{X}_*'\mathbf{C}\mathbf{y}
+=
+\frac{1}{n-1}
+\mathbf{X}_{*,c}'\mathbf{y}
+=
+\frac{1}{n-1}
+\mathbf{X}_*'\mathbf{y}_c.
+}
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-covariance-identities}
+Since
+
+$$
+\mathbf{X}_{*,c}
+=
+\mathbf{C}\mathbf{X}_*,
+$$
+
+we have
+
+\begin{align*}
+\mathbf{S}_{XX}
+&=
+\frac{1}{n-1}
+\mathbf{X}_{*,c}'\mathbf{X}_{*,c}
+\\
+&=
+\frac{1}{n-1}
+\mathbf{X}_*'\mathbf{C}'\mathbf{C}\mathbf{X}_*
+\\
+&=
+\frac{1}{n-1}
+\mathbf{X}_*'\mathbf{C}\mathbf{X}_*,
+\end{align*}
+
+because $\mathbf{C}$ is symmetric and idempotent.
+
+Also,
+
+$$
+\mathbf{X}_*'\mathbf{C}\mathbf{X}_*
+=
+\mathbf{X}_{*,c}'\mathbf{X}_*
+=
+\mathbf{X}_*'\mathbf{X}_{*,c}.
+$$
+
+The covariance vector follows in the same way:
+
+\begin{align*}
+\mathbf{S}_{Xy}
+&=
+\frac{1}{n-1}
+\mathbf{X}_{*,c}'\mathbf{y}_c
+\\
+&=
+\frac{1}{n-1}
+\mathbf{X}_*'\mathbf{C}'\mathbf{C}\mathbf{y}
+\\
+&=
+\frac{1}{n-1}
+\mathbf{X}_*'\mathbf{C}\mathbf{y}.
+\end{align*}
+
+Therefore,
+
+$$
+\mathbf{S}_{Xy}
+=
+\frac{1}{n-1}\mathbf{X}_{*,c}'\mathbf{y}
+=
+\frac{1}{n-1}\mathbf{X}_*'\mathbf{y}_c.
+$$
+```
+
+</details>
+
+Thus, for the covariance calculation, centering either side is sufficient because multiplication by the centering matrix removes the corresponding mean automatically.
+
+***
+
+### Least-Squares Coefficients in Covariance Form
+
+We now use the covariance quantities to obtain an alternative expression for the multiple regression coefficients.
+
+Write the coefficient vector as
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+\begin{bmatrix}
+\hat\beta_0\\
+\hat{\boldsymbol{\beta}}_{-0}
+\end{bmatrix},
+$$
+
+where
+
+$$
+\hat{\boldsymbol{\beta}}_{-0}
+=
+\begin{bmatrix}
+\hat\beta_1\\
+\vdots\\
+\hat\beta_p
+\end{bmatrix}
+$$
+
+contains the coefficients associated with the explanatory variables.
+
+Since the complete design matrix is
+
+$$
+\mathbf{X}
+=
+\begin{bmatrix}
+\mathbf{1} & \mathbf{X}_*
+\end{bmatrix},
+$$
+
+the usual least-squares solution is
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}'\mathbf{X})^{-1}
+\mathbf{X}'\mathbf{y}.
+$$
+
+The covariance representation follows by explicitly evaluating this expression.
+
+```{proposition, prp-mlr-coefficients-covariance, name="Regression Coefficients in Covariance Form"}
+Suppose that the design matrix
+
+$$
+\mathbf{X}
+=
+\begin{bmatrix}
+\mathbf{1} & \mathbf{X}_*
+\end{bmatrix}
+$$
+
+has full column rank.
+
+Then the estimated coefficients associated with the explanatory variables satisfy
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_{-0}
+=
+\mathbf{S}_{XX}^{-1}
+\mathbf{S}_{Xy}.
+}
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-coefficients-covariance}
+We begin from
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}'\mathbf{X})^{-1}
+\mathbf{X}'\mathbf{y}.
+$$
+
+Since
+
+$$
+\mathbf{X}
+=
+\begin{bmatrix}
+\mathbf{1} & \mathbf{X}_*
+\end{bmatrix},
+$$
+
+we have
+
+\begin{align*}
+\mathbf{X}'\mathbf{X}
+&=
+\begin{bmatrix}
+\mathbf{1}'\\
+\mathbf{X}_*'
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{1} & \mathbf{X}_*
+\end{bmatrix}
+\\
+&=
+\begin{bmatrix}
+\mathbf{1}'\mathbf{1}
+&
+\mathbf{1}'\mathbf{X}_*
+\\
+\mathbf{X}_*'\mathbf{1}
+&
+\mathbf{X}_*'\mathbf{X}_*
+\end{bmatrix}.
+\end{align*}
+
+Because
+
+$$
+\mathbf{1}'\mathbf{1}=n
+$$
+
+and
+
+$$
+\bar{\mathbf{x}}
+=
+\frac{1}{n}\mathbf{X}_*'\mathbf{1},
+$$
+
+we obtain
+
+$$
+\mathbf{X}'\mathbf{X}
+=
+\begin{bmatrix}
+n
+&
+n\bar{\mathbf{x}}'
+\\
+n\bar{\mathbf{x}}
+&
+\mathbf{X}_*'\mathbf{X}_*
+\end{bmatrix}.
+$$
+
+To invert this matrix, use the block-matrix inverse with upper-left block $n$. The corresponding Schur complement is
+
+\begin{align*}
+\mathbf{X}_*'\mathbf{X}_*
+-
+(n\bar{\mathbf{x}})
+n^{-1}
+(n\bar{\mathbf{x}}')
+&=
+\mathbf{X}_*'\mathbf{X}_*
+-
+n\bar{\mathbf{x}}\bar{\mathbf{x}}'
+\\
+&=
+\mathbf{X}_*'\mathbf{X}_*
+-
+\frac{1}{n}
+\mathbf{X}_*'\mathbf{1}\mathbf{1}'\mathbf{X}_*
+\\
+&=
+\mathbf{X}_*'
+\left(
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+\right)
+\mathbf{X}_*
+\\
+&=
+\mathbf{X}_*'\mathbf{C}\mathbf{X}_*
+\\
+&=
+(n-1)\mathbf{S}_{XX}.
+\end{align*}
+
+Therefore,
+
+\begin{align*}
+(\mathbf{X}'\mathbf{X})^{-1}
+&=
+\begin{bmatrix}
+\displaystyle
+\frac{1}{n}
++
+\bar{\mathbf{x}}'
+\bigl((n-1)\mathbf{S}_{XX}\bigr)^{-1}
+\bar{\mathbf{x}}
+&
+\displaystyle
+-\bar{\mathbf{x}}'
+\bigl((n-1)\mathbf{S}_{XX}\bigr)^{-1}
+\\[8pt]
+\displaystyle
+-\bigl((n-1)\mathbf{S}_{XX}\bigr)^{-1}
+\bar{\mathbf{x}}
+&
+\displaystyle
+\bigl((n-1)\mathbf{S}_{XX}\bigr)^{-1}
+\end{bmatrix}
+\\
+&=
+\begin{bmatrix}
+\displaystyle
+\frac{1}{n}
++
+\frac{1}{n-1}
+\bar{\mathbf{x}}'
+\mathbf{S}_{XX}^{-1}
+\bar{\mathbf{x}}
+&
+\displaystyle
+-\frac{1}{n-1}
+\bar{\mathbf{x}}'
+\mathbf{S}_{XX}^{-1}
+\\[8pt]
+\displaystyle
+-\frac{1}{n-1}
+\mathbf{S}_{XX}^{-1}
+\bar{\mathbf{x}}
+&
+\displaystyle
+\frac{1}{n-1}
+\mathbf{S}_{XX}^{-1}
+\end{bmatrix}.
+\end{align*}
+
+Also,
+
+\begin{align*}
+\mathbf{X}'\mathbf{y}
+&=
+\begin{bmatrix}
+\mathbf{1}'\mathbf{y}\\
+\mathbf{X}_*'\mathbf{y}
+\end{bmatrix}
+\\
+&=
+\begin{bmatrix}
+n\bar y\\
+\mathbf{X}_*'\mathbf{y}
+\end{bmatrix}.
+\end{align*}
+
+Multiplying the second row-block gives
+
+\begin{align*}
+\hat{\boldsymbol{\beta}}_{-0}
+&=
+-\frac{n\bar y}{n-1}
+\mathbf{S}_{XX}^{-1}\bar{\mathbf{x}}
++
+\frac{1}{n-1}
+\mathbf{S}_{XX}^{-1}\mathbf{X}_*'\mathbf{y}
+\\
+&=
+\frac{1}{n-1}
+\mathbf{S}_{XX}^{-1}
+\left(
+\mathbf{X}_*'\mathbf{y}
+-
+n\bar{\mathbf{x}}\bar y
+\right).
+\end{align*}
+
+Now,
+
+\begin{align*}
+\mathbf{X}_*'\mathbf{y}
+-
+n\bar{\mathbf{x}}\bar y
+&=
+\mathbf{X}_*'\mathbf{y}
+-
+\frac{1}{n}
+\mathbf{X}_*'\mathbf{1}\mathbf{1}'\mathbf{y}
+\\
+&=
+\mathbf{X}_*'
+\left(
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+\right)
+\mathbf{y}
+\\
+&=
+\mathbf{X}_*'\mathbf{C}\mathbf{y}
+\\
+&=
+(n-1)\mathbf{S}_{Xy}.
+\end{align*}
+
+Therefore,
+
+\begin{align*}
+\hat{\boldsymbol{\beta}}_{-0}
+&=
+\frac{1}{n-1}
+\mathbf{S}_{XX}^{-1}
+(n-1)\mathbf{S}_{Xy}
+\\
+&=
+\mathbf{S}_{XX}^{-1}\mathbf{S}_{Xy}.
+\end{align*}
+
+Hence,
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_{-0}
+=
+\mathbf{S}_{XX}^{-1}\mathbf{S}_{Xy}.
+}
+$$
+```
+
+</details>
+
+This expression separates two components of the multiple-regression problem:
+
+- $\mathbf{S}_{XX}^{-1}$ incorporates the relationships among the explanatory variables.
+- $\mathbf{S}_{Xy}$ incorporates the relationships between the explanatory variables and the response.
+
+Thus, unlike simple linear regression, each coefficient depends not only on the relationship between one explanatory variable and the response, but also on how the explanatory variables relate to one another.
+
+***
+
+### The Intercept and the Effect of Centering
+
+The corresponding intercept estimate also has a convenient covariance-form expression.
+
+```{proposition, prp-mlr-intercept-covariance, name="Intercept Estimate"}
+Under the assumptions of the previous proposition,
+
+$$
+\boxed{
+\hat\beta_0
+=
+\bar y
+-
+\bar{\mathbf{x}}'
+\hat{\boldsymbol{\beta}}_{-0}.
+}
+$$
+
+Equivalently,
+
+$$
+\boxed{
+\hat\beta_0
+=
+\bar y
+-
+\bar{\mathbf{x}}'
+\mathbf{S}_{XX}^{-1}
+\mathbf{S}_{Xy}.
+}
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-intercept-covariance}
+Using the first row-block of the block-matrix expression,
+
+\begin{align*}
+\hat\beta_0
+&=
+\bar y
++
+\frac{n\bar y}{n-1}
+\bar{\mathbf{x}}'
+\mathbf{S}_{XX}^{-1}
+\bar{\mathbf{x}}
+-
+\frac{1}{n-1}
+\bar{\mathbf{x}}'
+\mathbf{S}_{XX}^{-1}
+\mathbf{X}_*'\mathbf{y}
+\\
+&=
+\bar y
+-
+\frac{1}{n-1}
+\bar{\mathbf{x}}'
+\mathbf{S}_{XX}^{-1}
+\left(
+\mathbf{X}_*'\mathbf{y}
+-
+n\bar{\mathbf{x}}\bar y
+\right).
+\end{align*}
+
+From the previous proof,
+
+$$
+\mathbf{X}_*'\mathbf{y}
+-
+n\bar{\mathbf{x}}\bar y
+=
+(n-1)\mathbf{S}_{Xy}.
+$$
+
+Therefore,
+
+\begin{align*}
+\hat\beta_0
+&=
+\bar y
+-
+\bar{\mathbf{x}}'
+\mathbf{S}_{XX}^{-1}\mathbf{S}_{Xy}
+\\
+&=
+\bar y
+-
+\bar{\mathbf{x}}'
+\hat{\boldsymbol{\beta}}_{-0}.
+\end{align*}
+```
+
+</details>
+
+These results also clarify what happens when variables are centered.
+
+```{proposition, prp-mlr-centering-coefficients, name="Effect of Centering on the Regression Coefficients"}
+Suppose the regression model includes an intercept.
+
+1. Centering the explanatory variables does not change their estimated coefficients.
+
+2. If only the explanatory variables are centered, the estimated intercept becomes
+
+$$
+\boxed{
+\hat\beta_{0,c}=\bar y.
+}
+$$
+
+3. If both the explanatory variables and the response are centered, the estimated intercept becomes
+
+$$
+\boxed{
+\hat\beta_{0,c}=0.
+}
+$$
+
+In the third case, fitting the centered variables without an intercept produces the same slope estimates and fitted centered values as fitting them with an intercept.
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-centering-coefficients}
+Centering does not change the covariance matrix or covariance vector:
+
+$$
+\mathbf{S}_{X_cX_c}
+=
+\mathbf{S}_{XX},
+\qquad
+\mathbf{S}_{X_cy}
+=
+\mathbf{S}_{Xy}.
+$$
+
+Therefore,
+
+$$
+\hat{\boldsymbol{\beta}}_{-0,c}
+=
+\mathbf{S}_{X_cX_c}^{-1}
+\mathbf{S}_{X_cy}
+=
+\mathbf{S}_{XX}^{-1}
+\mathbf{S}_{Xy}
+=
+\hat{\boldsymbol{\beta}}_{-0}.
+$$
+
+If the explanatory variables are centered, their mean vector is $\mathbf{0}$. Hence,
+
+$$
+\hat\beta_{0,c}
+=
+\bar y
+-
+\mathbf{0}'
+\hat{\boldsymbol{\beta}}_{-0}
+=
+\bar y.
+$$
+
+If the response is also centered, then $\bar y_c=0$, and therefore
+
+$$
+\hat\beta_{0,c}
+=
+0.
+$$
+
+Thus, when both the response and explanatory variables are centered, the intercept estimated by a model that includes one is exactly zero. Removing the intercept in this centered problem therefore leaves the slope estimates unchanged.
+```
+
+</details>
+
+The last statement applies specifically to the regression of the **centered response on the centered explanatory variables**. It does not imply that an intercept can generally be omitted from a regression on the original, uncentered variables.
+
+***
+
+### Standardized Variables
+
+Centering removes location. Standardization additionally rescales each variable by its sample standard deviation.
+
+Assume that every explanatory variable has positive sample variance. Define
+
+$$
+\mathbf{D}_X
+=
+\begin{bmatrix}
+S_{x_1x_1}^{-1/2} & 0 & \cdots & 0\\
+0 & S_{x_2x_2}^{-1/2} & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & S_{x_px_p}^{-1/2}
+\end{bmatrix}.
+$$
+
+The standardized explanatory-variable matrix is
+
+$$
+\boxed{
+\mathbf{X}_s
+=
+\mathbf{X}_{*,c}\mathbf{D}_X
+=
+\mathbf{C}\mathbf{X}_*\mathbf{D}_X.
+}
+$$
+
+Thus, the $j$th column of $\mathbf{X}_s$ is
+
+$$
+\frac{\mathbf{x}_j-\bar x_j\mathbf{1}}
+{\sqrt{S_{x_jx_j}}}.
+$$
+
+The matrix $\mathbf{C}$ acts on the rows and can center any matrix with $n$ rows. In contrast, $\mathbf{D}_X$ acts on the columns and is specific to the standard deviations of the explanatory variables in $\mathbf{X}_*$.
+
+Similarly, if $S_{yy}>0$, the standardized response is
+
+$$
+\mathbf{y}_s
+=
+\frac{\mathbf{y}-\bar y\mathbf{1}}
+{\sqrt{S_{yy}}}.
+$$
+
+Because standardized variables are centered, their sample means are zero.
+
+***
 
 ### Sample Correlation Matrix
 
-We define the sample correlation matrix as:
+The sample correlation matrix of the explanatory variables is defined by
 
-$$ r_{XX} = \frac{\bX_s'\bX_s}{n-1} $$
-where we break a little our notation convention of using bold capital letters for 
-matrices. Entry at row $i$ and column $j$ of $r_{XX}$ is given by:
+$$
+\mathbf{r}_{XX}
+=
+\frac{1}{n-1}
+\mathbf{X}_s'\mathbf{X}_s.
+$$
 
-$$ \left[r_{XX}\right]_{ij} = \frac{S_{x_i x_j}}{S_{x_ix_i}^{1/2}S_{x_jx_j}^{1/2}} $$
+Its $(j,k)$ entry is
 
-We can also define the sample correlation between $\bX$ and $\by$ as follows:
+$$
+[\mathbf{r}_{XX}]_{jk}
+=
+\frac{S_{x_jx_k}}
+{\sqrt{S_{x_jx_j}S_{x_kx_k}}},
+$$
 
-$$r_{Xy} = \frac{\bX_s' \by_s}{n-1} $$
+the sample correlation between explanatory variables $\mathbf{x}_j$ and $\mathbf{x}_k$.
 
-where $\by_s$ is the standardization of $\by$.
+Similarly, define the sample correlation vector between the explanatory variables and the response as
 
-With this definitions in hand, we can see how the coefficients look like with 
-standardized variables. Since, standardized variables are also centered, it is not
-necessary to include the column of ones in the design matrix, as the intercept
-estimate is always 0. Then the estimate of the coefficients of the independent 
-variables is given by:
+$$
+\mathbf{r}_{Xy}
+=
+\frac{1}{n-1}
+\mathbf{X}_s'\mathbf{y}_s.
+$$
 
-$$\hat{\bgb_s} = \left(\bX_s' \bX_s \right)^{-1} \bX_s' \by_s = \frac{1}{n-1}r_{XX}^{-1}(n-1)r_{Xy}=r_{XX}^{-1}r_{Xy}$$
-Notice that the coefficients estimates do change for standardized variables, since
-in general $r_{XX}\neq\bS_{XX}$ and $r_{Xy}\neq\bS_{Xy}$. In the case of standardized
-variables the coefficient estimates depend in part from the correlation between
-independent variables $r_{XX}$ and the correlations between independent and
-dependent variables $r_{Xy}$. 
+Equivalently,
 
-Working with standardized variables is useful, since standardized variables are unit-less, 
-so the estimated coefficients magnitudes are comparable.
+$$
+\mathbf{r}_{XX}
+=
+\mathbf{D}_X
+\mathbf{S}_{XX}
+\mathbf{D}_X,
+$$
 
-We can see these results in practice with our GDP data:
+and
+
+$$
+\mathbf{r}_{Xy}
+=
+\frac{1}{\sqrt{S_{yy}}}
+\mathbf{D}_X
+\mathbf{S}_{Xy}.
+$$
+
+***
+
+### Regression with Standardized Variables
+
+Since both $\mathbf{X}_s$ and $\mathbf{y}_s$ are centered, fitting the standardized regression with an intercept produces an estimated intercept of zero. Consequently, the same slope estimates can be obtained by fitting
+
+$$
+\mathbf{y}_s
+=
+\mathbf{X}_s\boldsymbol{\beta}_s
++
+\mathbf{e}_s
+$$
+
+without explicitly including an intercept.
+
+```{proposition, prp-mlr-standardized-coefficients, name="Regression Coefficients for Standardized Variables"}
+Suppose that $\mathbf{r}_{XX}$ is invertible. The least-squares coefficients from the regression of the standardized response on the standardized explanatory variables satisfy
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_s
+=
+\mathbf{r}_{XX}^{-1}
+\mathbf{r}_{Xy}.
+}
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-standardized-coefficients}
+The least-squares solution is
+
+$$
+\hat{\boldsymbol{\beta}}_s
+=
+(\mathbf{X}_s'\mathbf{X}_s)^{-1}
+\mathbf{X}_s'\mathbf{y}_s.
+$$
+
+From the definitions of the sample correlation matrix and correlation vector,
+
+$$
+\mathbf{X}_s'\mathbf{X}_s
+=
+(n-1)\mathbf{r}_{XX}
+$$
+
+and
+
+$$
+\mathbf{X}_s'\mathbf{y}_s
+=
+(n-1)\mathbf{r}_{Xy}.
+$$
+
+Therefore,
+
+\begin{align*}
+\hat{\boldsymbol{\beta}}_s
+&=
+\left(
+(n-1)\mathbf{r}_{XX}
+\right)^{-1}
+(n-1)\mathbf{r}_{Xy}
+\\
+&=
+\mathbf{r}_{XX}^{-1}
+\mathbf{r}_{Xy}.
+\end{align*}
+```
+
+</details>
+
+This result is the standardized analogue of
+
+$$
+\hat{\boldsymbol{\beta}}_{-0}
+=
+\mathbf{S}_{XX}^{-1}\mathbf{S}_{Xy}.
+$$
+
+For the original variables, the slope coefficients depend on the covariance structure. For standardized variables, they depend on the corresponding correlation structure.
+
+Because standardized variables are unitless and each has sample standard deviation one, the magnitudes of their coefficients are more directly comparable than coefficients measured on different physical scales. However, coefficient magnitude should not by itself be interpreted as a measure of variable importance. The coefficients still depend on the relationships among all explanatory variables through $\mathbf{r}_{XX}^{-1}$.
+
+***
+
+### Example: GDP Data
+
+We can verify these results using the GDP data introduced earlier.
+
+The notation used in the R code differs slightly from the mathematical notation above:
+
+- `X` corresponds to the explanatory-variable matrix $\mathbf{X}_*$.
+- `Z` corresponds to the complete design matrix $\mathbf{X}$.
+- `Xc` and `yc` correspond to $\mathbf{X}_{*,c}$ and $\mathbf{y}_c$.
+
+The first code block constructs the centering matrix and compares coefficient estimates under several centering choices.
 
 ```{r gdp-centering}
 # Read Data
@@ -1832,13 +3859,15 @@ bs3 <- solve(t(Xc) %*% Xc, t(Xc) %*% yc)
 # Shows the Estimated Coefficients Side-by-Side
 print(round(cbind(b, bs1, bs2, c(0, bs3)), 8))
 ```
-Here we can appreciate that the estimated coefficients for the independent variables
-do not change, however the estimate for the intercept changes depending on if the
-independent variables are centered or the dependent variable is centered of both. Also, notice that
-this are the that we had using the `lm` function of `R`.
 
-We can also check that computing the sample covariance matrix using our formula
-results in the same quantities that using the `cov` function in `R`.
+The output illustrates the theoretical results:
+
+- Centering the explanatory variables does not change their slope estimates.
+- When only the explanatory variables are centered, the intercept becomes $\bar y$.
+- When both the response and explanatory variables are centered, the intercept becomes zero.
+- Fitting the centered response on the centered explanatory variables without an intercept produces the same slope estimates.
+
+We can next verify the covariance formulas directly. The following code computes $\mathbf{S}_{XX}$ and $\mathbf{S}_{Xy}$ from the centered variables and compares them with the corresponding built-in R calculations.
 
 ```{r gdp-sample-covariance}
 # Sample Covariance of X
@@ -1855,7 +3884,26 @@ print(SXy)
 print(cov(X, y))
 ```
 
-Finally, we can test our new formulas for the estimates:
+The two calculations should agree, up to numerical precision.
+
+We can also compute the regression coefficients directly from the covariance identities,
+
+$$
+\hat{\boldsymbol{\beta}}_{-0}
+=
+\mathbf{S}_{XX}^{-1}\mathbf{S}_{Xy}
+$$
+
+and
+
+$$
+\hat\beta_0
+=
+\bar y
+-
+\bar{\mathbf{x}}'
+\hat{\boldsymbol{\beta}}_{-0}.
+$$
 
 ```{r gdp-sample-covariance-estimation}
 # Computes the estimates of the coefficients using the covariance matrices
@@ -1866,7 +3914,9 @@ b0 <- mean(y) - t(colMeans(X)) %*% b1
 print(round(cbind(b, c(b0, b1)), 8))
 ```
 
-In the same way, we can work with the sample correlations
+The resulting estimates agree with those obtained from the ordinary least-squares calculation.
+
+We now standardize the explanatory variables and response. In the code, `DX` corresponds to $\mathbf{D}_X$, `Xs` to $\mathbf{X}_s$, and `ys` to $\mathbf{y}_s$.
 
 ```{r gdp-sample-correlation}
 # Standardizing matrix of X
@@ -1896,9 +3946,17 @@ print(cor(X))
 print(rXy)
 print(cor(X, y))
 ```
-and can test that:
 
-$$\hat{\bgb_s} = r_{XX}^{-1}r_{Xy}$$
+The standardized explanatory variables have sample mean zero and sample standard deviation one. The quantities computed from their cross-products agree with the sample correlations produced by `cor`.
+
+Finally, we verify
+
+$$
+\hat{\boldsymbol{\beta}}_s
+=
+\mathbf{r}_{XX}^{-1}
+\mathbf{r}_{Xy}.
+$$
 
 ```{r gdp-sample-correlation-estimation}
 # Computes the estimates of the coefficients using the covariance matrices
@@ -1909,7 +3967,9 @@ bs2 <- solve(rXX, rXy)
 print(round(cbind(bs1, bs2), 8))
 ```
 
-We can also contrast the effects of the standarization on the coefficients
+Both calculations produce the same standardized slope estimates.
+
+We can also compare the coefficients obtained on the original and standardized scales.
 
 ```{r gdp-sample-standardization-comparisson}
 # Computes the estimates of the coefficients using the covariance matrices
@@ -1920,10 +3980,37 @@ bs2 <- lm(ys ~ Xs)$coefficients
 print(round(cbind(bs1, bs2), 8))
 ```
 
-First, we can observe the 0 intercept estimate on the standardize values, so it
-is not necessary to estimate it, we could have done so by using `lm(ys ~ Xs - 1)` 
-instead of `lm(ys ~ Xs)`. Next we observe, the change in magnitudes for the 
-estimated coefficients of the independent variables.
+Since `ys` and every column of `Xs` are centered, the intercept estimated by `lm(ys ~ Xs)` is zero up to numerical precision. We could therefore obtain the same standardized slope estimates using `lm(ys ~ Xs - 1)`.
+
+The remaining coefficients generally change in magnitude because each variable is now measured in standard-deviation units rather than its original units. This removes differences caused purely by measurement scale, while the relationships among the explanatory variables continue to affect the coefficient estimates.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Variable Cross-Effects
 
