@@ -54,6 +54,12 @@ prp:prp-mlr-coefficients-covariance
 prp:prp-mlr-intercept-covariance
 prp:prp-mlr-centering-coefficients
 prp:prp-mlr-standardized-coefficients
+prp:prp-mlr-block-correlation-estimates
+prp:prp-mlr-group-cross-effects
+prp:prp-mlr-uncorrelated-groups
+prp:prp-mlr-schur-r2
+def:def-mlr-vif
+prp:prp-mlr-single-variable-cross-effect
 def:quantiles
 stat-53856385-fall-2026
 calendar
@@ -354,7 +360,12 @@ sample-correlation-matrix
 regression-with-standardized-variables
 example-gdp-data
 variable-cross-effects
+block-correlation-representation
+coefficients-for-one-group-after-accounting-for-the-other
+full-model-versus-group-only-models
 single-variable-cross-effects
+single-variable-coefficient-formula
+generalization-to-any-explanatory-variable
 single-variable-cross-effects-example
 outliers-and-leverage
 leverage

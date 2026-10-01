@@ -3857,7 +3857,9 @@ bs2 <- solve(t(Zc) %*% Zc, t(Zc) %*% yc)
 bs3 <- solve(t(Xc) %*% Xc, t(Xc) %*% yc)
 
 # Shows the Estimated Coefficients Side-by-Side
-print(round(cbind(b, bs1, bs2, c(0, bs3)), 8))
+tab <- cbind(b, bs1, bs2, c(0, bs3))
+colnames(tab) <- c("Original", "Center Exp", "Both Centered", "No Intercept")
+print(round(tab, 8))
 ```
 
 The output illustrates the theoretical results:
@@ -3911,6 +3913,8 @@ b1 <- solve(SXX, SXy)
 b0 <- mean(y) - t(colMeans(X)) %*% b1
 
 # Shows the Estimates Side by Side
+tab <- cbind(b, c(b0, b1))
+colnames(tab) <- c("Regular", "Split")
 print(round(cbind(b, c(b0, b1)), 8))
 ```
 
@@ -4014,262 +4018,920 @@ The remaining coefficients generally change in magnitude because each variable i
 
 ## Variable Cross-Effects
 
-For this sub-section we will work with standardized values so there is no need to 
-estimate the intercept. Since all variables are standardized, we will not use
-the $\bX_s$ notation, but instead only $\bX$, to make notation less confusing.
+In the previous section, we expressed the regression coefficients for standardized variables in terms of the sample correlation matrix. We now use this representation to study how relationships among the explanatory variables affect their estimated coefficients.
 
-The same goes with $\hat{\bgb}_s$, it will be only $\hat{\bgb}$.
+Because all variables in this section are standardized, they are centered. Therefore, the intercept estimate is zero, and we can work with the standardized explanatory variables without explicitly including a column of ones.
 
-The idea is to analyze the estimated coefficients when you divide the independent 
-variables in to groups $1$ and $2$. So we can divide the design matrix in two:
+Let the standardized explanatory-variable matrix be partitioned into two groups,
 
-$$\bX = [\bX_1 \bX_2]$$
-Then, we can compute the coefficient estimates:
+$$
+\mathbf{X}_s
+=
+\begin{bmatrix}
+\mathbf{X}_1^s & \mathbf{X}_2^s
+\end{bmatrix},
+$$
 
-$$\hat{\bgb} = 
-  \left[\begin{matrix}
-    \hat{\bgb}_1 \\
-    \hat{\bgb}_2  
-  \end{matrix}\right] =
-  \left([\bX_1 \bX_2]'[\bX_1 \bX_2]\right)^{-1}[\bX_1 \bX_2]' \by$$
+and partition the corresponding coefficient vector as
 
-So, we can work with these computations in the same way we did before:
+$$
+\hat{\boldsymbol{\beta}}_s
+=
+\begin{bmatrix}
+\hat{\boldsymbol{\beta}}_1^s\\
+\hat{\boldsymbol{\beta}}_2^s
+\end{bmatrix}.
+$$
+
+The objective is to understand how the variables in $\mathbf{X}_2^s$ affect the coefficients associated with $\mathbf{X}_1^s$, and vice versa.
+
+***
+
+### Block Correlation Representation
+
+Define the correlation blocks
+
+$$
+\mathbf{R}_{11}
+=
+\frac{1}{n-1}
+(\mathbf{X}_1^s)'\mathbf{X}_1^s,
+$$
+
+$$
+\mathbf{R}_{12}
+=
+\frac{1}{n-1}
+(\mathbf{X}_1^s)'\mathbf{X}_2^s,
+$$
+
+$$
+\mathbf{R}_{21}
+=
+\frac{1}{n-1}
+(\mathbf{X}_2^s)'\mathbf{X}_1^s,
+$$
+
+and
+
+$$
+\mathbf{R}_{22}
+=
+\frac{1}{n-1}
+(\mathbf{X}_2^s)'\mathbf{X}_2^s.
+$$
+
+Since these are sample correlations,
+
+$$
+\mathbf{R}_{21}
+=
+\mathbf{R}_{12}'.
+$$
+
+Similarly, define the correlation vectors with the standardized response $\mathbf{y}_s$ as
+
+$$
+\mathbf{r}_{1y}
+=
+\frac{1}{n-1}
+(\mathbf{X}_1^s)'\mathbf{y}_s
+$$
+
+and
+
+$$
+\mathbf{r}_{2y}
+=
+\frac{1}{n-1}
+(\mathbf{X}_2^s)'\mathbf{y}_s.
+$$
+
+```{proposition, prp-mlr-block-correlation-estimates, name="Block Correlation Representation of the Coefficient Estimates"}
+The least-squares estimates based on the standardized variables satisfy
+
+$$
+\boxed{
+\begin{bmatrix}
+\hat{\boldsymbol{\beta}}_1^s\\
+\hat{\boldsymbol{\beta}}_2^s
+\end{bmatrix}
+=
+\begin{bmatrix}
+\mathbf{R}_{11} & \mathbf{R}_{12}\\
+\mathbf{R}_{21} & \mathbf{R}_{22}
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+\mathbf{r}_{1y}\\
+\mathbf{r}_{2y}
+\end{bmatrix}.
+}
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-block-correlation-estimates}
+The least-squares solution for the standardized variables is
+
+$$
+\hat{\boldsymbol{\beta}}_s
+=
+(\mathbf{X}_s'\mathbf{X}_s)^{-1}
+\mathbf{X}_s'\mathbf{y}_s.
+$$
+
+Using the partition
+
+$$
+\mathbf{X}_s
+=
+\begin{bmatrix}
+\mathbf{X}_1^s & \mathbf{X}_2^s
+\end{bmatrix},
+$$
+
+we have
 
 \begin{align*}
-[\bX_1 \bX_2]'[\bX_1 \bX_2] 
-  &= 
-  \left[\begin{matrix}
-    \bX_1' \\
-    \bX_2'  
-  \end{matrix}\right] [\bX_1 \bX_2] \\
-  &= 
-  \left[\begin{matrix}
-    \bX_1'\bX_1 & \bX_1'\bX_2 \\
-    \bX_2'\bX_1 & \bX_2'\bX_2  
-  \end{matrix}\right] \\
-  &= (n-1) 
-  \left[\begin{matrix}
-    \frac{\bX_1'\bX_1}{n-1} & \frac{\bX_1'\bX_2}{n-1} \\
-    \frac{\bX_2'\bX_1}{n-1} & \frac{\bX_2'\bX_2}{n-1}  
-  \end{matrix}\right] \\
-  &= (n-1)
-  \left[\begin{matrix}
-    r_{X_1X_1} & r_{X_1X_2} \\
-    r_{X_2X_1} & r_{X_2X_2}  
-  \end{matrix}\right]
+\mathbf{X}_s'\mathbf{X}_s
+&=
+\begin{bmatrix}
+(\mathbf{X}_1^s)'\\
+(\mathbf{X}_2^s)'
+\end{bmatrix}
+\begin{bmatrix}
+\mathbf{X}_1^s & \mathbf{X}_2^s
+\end{bmatrix}
+\\
+&=
+\begin{bmatrix}
+(\mathbf{X}_1^s)'\mathbf{X}_1^s
+&
+(\mathbf{X}_1^s)'\mathbf{X}_2^s
+\\
+(\mathbf{X}_2^s)'\mathbf{X}_1^s
+&
+(\mathbf{X}_2^s)'\mathbf{X}_2^s
+\end{bmatrix}
+\\
+&=
+(n-1)
+\begin{bmatrix}
+\mathbf{R}_{11} & \mathbf{R}_{12}\\
+\mathbf{R}_{21} & \mathbf{R}_{22}
+\end{bmatrix}.
 \end{align*}
 
-In the same way, we have that:
+Similarly,
 
 \begin{align*}
-[\bX_1 \bX_2]'\by 
-  &= 
-  \left[\begin{matrix}
-    \bX_1' \\
-    \bX_2'  
-  \end{matrix}\right] \by \\
-  &= 
-  \left[\begin{matrix}
-    \bX_1'\by \\
-    \bX_2'\by  
-  \end{matrix}\right] \\
-  &= (n-1) 
-  \left[\begin{matrix}
-    \frac{\bX_1'\by}{n-1} \\
-    \frac{\bX_2'\by}{n-1}   
-  \end{matrix}\right] \\
-  &= (n-1) 
-  \left[\begin{matrix}
-    r_{X_1y} \\
-    r_{X_2y}  
-  \end{matrix}\right]
+\mathbf{X}_s'\mathbf{y}_s
+&=
+\begin{bmatrix}
+(\mathbf{X}_1^s)'\mathbf{y}_s\\
+(\mathbf{X}_2^s)'\mathbf{y}_s
+\end{bmatrix}
+\\
+&=
+(n-1)
+\begin{bmatrix}
+\mathbf{r}_{1y}\\
+\mathbf{r}_{2y}
+\end{bmatrix}.
 \end{align*}
 
-Then we have that:
-
-$$
-\hat{\bgb} = 
-  \left[\begin{matrix}
-    \hat{\bgb}_1 \\
-    \hat{\bgb}_2  
-  \end{matrix}\right] =
-  \left((n-1) 
-  \left[\begin{matrix}
-    r_{X_1X_1} & r_{X_1X_2} \\
-    r_{X_2X_1} & r_{X_2X_2}  
-  \end{matrix}\right]\right)^{-1} (n-1) 
-  \left[\begin{matrix}
-    r_{Xy,1} \\
-    r_{Xy,2}  
-  \end{matrix}\right] =
-  \left[\begin{matrix}
-    r_{X_1X_1} & r_{X_1X_2} \\
-    r_{X_2X_1} & r_{X_2X_2}  
-  \end{matrix}\right]^{-1}  
-  \left[\begin{matrix}
-    r_{X_1y} \\
-    r_{X_2y}  
-  \end{matrix}\right]
-$$
-
-Now we can compute the inverse of the 2 by 2 block matrix as before with, but 
-first we define:
-
-$$r_{X_1|X_2} = r_{X_1X_1} - r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2X_1}$$
-this is also, the Schur component. This can also be seen as the sample correlation
-matrix of $X_1$ after accounting by the relationships with $X_2$.
-
-$$
-\left[\begin{matrix}
-    r_{XX,11} & r_{XX,12} \\
-    r_{XX,12} & r_{XX,22}  
-  \end{matrix}\right]^{-1} =
-\left[\begin{matrix}
-                              r_{X_1|X_2}^{-1} &                         -r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1} \\
-    -r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1} & r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1}  \end{matrix}\right]
-$$
-Then, we have that:
+Therefore,
 
 \begin{align*}
-\hat{\bgb} 
-  &= 
-  \left[\begin{matrix}
-    \hat{\bgb}_1 \\
-    \hat{\bgb}_2  
-  \end{matrix}\right] \\
-  &=
-  \left[\begin{matrix}
-                              r_{X_1|X_2}^{-1} &                         -r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1} \\
-    -r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1} & r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1}
-  \end{matrix}\right] 
-  \left[\begin{matrix}
-    r_{X_1y} \\
-    r_{X_2y}  
-  \end{matrix}\right] \\
-  &= 
-  \left[\begin{matrix}
-    r_{X_1|X_2}^{-1}r_{X_1y} -r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2y} \\
-    -r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1}r_{X_1y} + r_{X_2X_2}^{-1}r_{X_2X_1}r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2y}
-  \end{matrix}\right]
+\hat{\boldsymbol{\beta}}_s
+&=
+\left(
+(n-1)
+\begin{bmatrix}
+\mathbf{R}_{11} & \mathbf{R}_{12}\\
+\mathbf{R}_{21} & \mathbf{R}_{22}
+\end{bmatrix}
+\right)^{-1}
+(n-1)
+\begin{bmatrix}
+\mathbf{r}_{1y}\\
+\mathbf{r}_{2y}
+\end{bmatrix}
+\\
+&=
+\begin{bmatrix}
+\mathbf{R}_{11} & \mathbf{R}_{12}\\
+\mathbf{R}_{21} & \mathbf{R}_{22}
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+\mathbf{r}_{1y}\\
+\mathbf{r}_{2y}
+\end{bmatrix}.
+\end{align*}
+```
+
+</details>
+
+The coefficient estimates therefore depend jointly on the correlations between the response and each group and on the correlations between the two groups of explanatory variables.
+
+***
+
+### Coefficients for One Group After Accounting for the Other
+
+To study the coefficient estimates for group 1, define
+
+$$
+\boxed{
+\mathbf{R}_{1\mid2}
+=
+\mathbf{R}_{11}
+-
+\mathbf{R}_{12}
+\mathbf{R}_{22}^{-1}
+\mathbf{R}_{21}.
+}
+$$
+
+This matrix is the **Schur complement** of $\mathbf{R}_{22}$ in the full correlation matrix.
+
+We assume that $\mathbf{R}_{22}$ is invertible and that $\mathbf{R}_{1\mid2}$ is invertible. These conditions hold, in particular, when the complete standardized design matrix has full column rank.
+
+The matrix $\mathbf{R}_{1\mid2}$ describes the remaining variation and relationships within group 1 after its linear relationships with group 2 have been removed.
+
+```{proposition, prp-mlr-group-cross-effects, name="Coefficient Estimates After Accounting for Another Group"}
+Under the invertibility conditions above,
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_1^s
+=
+\mathbf{R}_{1\mid2}^{-1}
+\left(
+\mathbf{r}_{1y}
+-
+\mathbf{R}_{12}
+\mathbf{R}_{22}^{-1}
+\mathbf{r}_{2y}
+\right).
+}
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-group-cross-effects}
+Consider the block correlation matrix
+
+$$
+\mathbf{R}
+=
+\begin{bmatrix}
+\mathbf{R}_{11} & \mathbf{R}_{12}\\
+\mathbf{R}_{21} & \mathbf{R}_{22}
+\end{bmatrix}.
+$$
+
+Using the block-matrix inverse with $\mathbf{R}_{22}$ as the invertible block and
+
+$$
+\mathbf{R}_{1\mid2}
+=
+\mathbf{R}_{11}
+-
+\mathbf{R}_{12}
+\mathbf{R}_{22}^{-1}
+\mathbf{R}_{21},
+$$
+
+we obtain
+
+$$
+\mathbf{R}^{-1}
+=
+\begin{bmatrix}
+\mathbf{R}_{1\mid2}^{-1}
+&
+-\mathbf{R}_{1\mid2}^{-1}
+\mathbf{R}_{12}
+\mathbf{R}_{22}^{-1}
+\\[6pt]
+-\mathbf{R}_{22}^{-1}
+\mathbf{R}_{21}
+\mathbf{R}_{1\mid2}^{-1}
+&
+\mathbf{R}_{22}^{-1}
++
+\mathbf{R}_{22}^{-1}
+\mathbf{R}_{21}
+\mathbf{R}_{1\mid2}^{-1}
+\mathbf{R}_{12}
+\mathbf{R}_{22}^{-1}
+\end{bmatrix}.
+$$
+
+Therefore,
+
+\begin{align*}
+\begin{bmatrix}
+\hat{\boldsymbol{\beta}}_1^s\\
+\hat{\boldsymbol{\beta}}_2^s
+\end{bmatrix}
+&=
+\mathbf{R}^{-1}
+\begin{bmatrix}
+\mathbf{r}_{1y}\\
+\mathbf{r}_{2y}
+\end{bmatrix}.
 \end{align*}
 
-Since the variables in the groupings 1 and 2 can be switched and have no special 
-characteristics, we only need to analyze the structure of $\hat{\bgb}_1$ in relation
-to the variables of group 2, the results would be analogous for $\hat{\bgb}_1$.  
-  
-Then we have that:
+The first row-block gives
+
+\begin{align*}
+\hat{\boldsymbol{\beta}}_1^s
+&=
+\mathbf{R}_{1\mid2}^{-1}\mathbf{r}_{1y}
+-
+\mathbf{R}_{1\mid2}^{-1}
+\mathbf{R}_{12}
+\mathbf{R}_{22}^{-1}
+\mathbf{r}_{2y}
+\\
+&=
+\mathbf{R}_{1\mid2}^{-1}
+\left(
+\mathbf{r}_{1y}
+-
+\mathbf{R}_{12}
+\mathbf{R}_{22}^{-1}
+\mathbf{r}_{2y}
+\right).
+\end{align*}
+
+Thus,
 
 $$
-\hat{\bgb}_1 
-  = r_{X_1|X_2}^{-1}r_{X_1y} -r_{X_1|X_2}^{-1}r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2y}
-  = r_{X_1|X_2}^{-1}\left(r_{X_1y} -r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2y}\right)
+\boxed{
+\hat{\boldsymbol{\beta}}_1^s
+=
+\mathbf{R}_{1\mid2}^{-1}
+\left(
+\mathbf{r}_{1y}
+-
+\mathbf{R}_{12}
+\mathbf{R}_{22}^{-1}
+\mathbf{r}_{2y}
+\right).
+}
 $$
-Now, suppose that we want to fit the following linear models:
+```
 
-$$\by = \bX_1 \bgb_1 + \be \quad \text{and} \quad \by = \bX_2 \bgb_2 + \be$$
-that is a linear model of $\by$ using only the variables in group 1 for one model
-and only variables from the group 2 in the second model. Then, 
-the coefficient estimates will be:
+</details>
 
-$$\tilde{\bgb}_1 = r_{X_1X_1}^{-1}r_{X_1y} \quad \text{and} \quad \tilde{\bgb}_2 = r_{X_2X_2}^{-1}r_{X_2y}$$
-Note that, in general, this estimates will be different to the estimates using
-all the variables, that is:
+Because the two groups play symmetric roles, an analogous expression can be obtained for $\hat{\boldsymbol{\beta}}_2^s$ by reversing the groups.
 
-$$\tilde{\bgb}_1 \neq \hat{\bgb}_1 \quad \text{and} \quad \tilde{\bgb}_2 \neq \hat{\bgb}_2$$
-Then, we can re-write, our coefficient estimate for $\bgb_1$ as follows:
+***
 
-$$
-\hat{\bgb}_1 
-  = r_{X_1|X_2}^{-1}\left(r_{X_1y} -r_{X_1X_2}\tilde{\bgb}_2\right)
-$$
-Now, if $r_{X_1X_2} = \bzero$, that is the variables in group 1 and group 2 are 
-uncorrelated, then
+### Full Model Versus Group-Only Models
 
-$$r_{X_1|X_2} = r_{X_1X_1} - r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2X_1} = r_{X_1X_1}$$
-so:
-$$\hat{\bgb}_1 
-  = r_{X_1|X_2}^{-1}\left(r_{X_1y} -r_{X_1X_2}\tilde{\bgb}_2\right)
-  = r_{X_1X_1}^{-1}r_{X_1y}
-  = \tilde{\bgb}_1$$
-So, when the variables in 1 group are uncorrelated with the other the coefficient
-estimates are the same for the full and partial model.
+Suppose instead that we fit two separate regressions: one using only the variables in group 1 and another using only those in group 2.
 
-We can also deduce that even when the sample correlation between
-$X_1$ and $y$ is $\bzero$, that is $r_{X_1y} = \bzero$, the estimated coefficients
-will not be $\bzero$ in general. In fact, we have that:
+The resulting coefficient estimates are
 
 $$
-\hat{\bgb}_1 
-  = -r_{X_1|X_2}^{-1}r_{X_1X_2}\tilde{\bgb}_2
+\tilde{\boldsymbol{\beta}}_1^s
+=
+\mathbf{R}_{11}^{-1}\mathbf{r}_{1y}
 $$
+
+and
+
+$$
+\tilde{\boldsymbol{\beta}}_2^s
+=
+\mathbf{R}_{22}^{-1}\mathbf{r}_{2y}.
+$$
+
+These coefficients generally differ from those obtained when both groups are included simultaneously.
+
+Using the group-2-only estimate, the coefficient formula can be written as
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_1^s
+=
+\mathbf{R}_{1\mid2}^{-1}
+\left(
+\mathbf{r}_{1y}
+-
+\mathbf{R}_{12}
+\tilde{\boldsymbol{\beta}}_2^s
+\right).
+}
+$$
+
+This expression shows two ways in which group 2 affects the coefficients of group 1:
+
+1. through the Schur complement $\mathbf{R}_{1\mid2}$, which depends on the relationships between the two groups, and
+2. through the term $\mathbf{R}_{12}\tilde{\boldsymbol{\beta}}_2^s$, which adjusts the correlation between group 1 and the response by the contribution associated with group 2.
+
+```{proposition, prp-mlr-uncorrelated-groups, name="Uncorrelated Groups"}
+Suppose that the two groups of explanatory variables are uncorrelated, so that
+
+$$
+\mathbf{R}_{12}=\mathbf{0}.
+$$
+
+Then
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_1^s
+=
+\tilde{\boldsymbol{\beta}}_1^s
+}
+$$
+
+and, analogously,
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_2^s
+=
+\tilde{\boldsymbol{\beta}}_2^s.
+}
+$$
+
+Thus, when the two groups are uncorrelated, including one group does not change the estimated coefficients of the other.
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-uncorrelated-groups}
+If
+
+$$
+\mathbf{R}_{12}
+=
+\mathbf{0},
+$$
+
+then, by symmetry,
+
+$$
+\mathbf{R}_{21}
+=
+\mathbf{0}.
+$$
+
+Therefore,
+
+\begin{align*}
+\mathbf{R}_{1\mid2}
+&=
+\mathbf{R}_{11}
+-
+\mathbf{R}_{12}
+\mathbf{R}_{22}^{-1}
+\mathbf{R}_{21}
+\\
+&=
+\mathbf{R}_{11}.
+\end{align*}
+
+The full-model coefficient becomes
+
+\begin{align*}
+\hat{\boldsymbol{\beta}}_1^s
+&=
+\mathbf{R}_{1\mid2}^{-1}
+\left(
+\mathbf{r}_{1y}
+-
+\mathbf{R}_{12}
+\tilde{\boldsymbol{\beta}}_2^s
+\right)
+\\
+&=
+\mathbf{R}_{11}^{-1}\mathbf{r}_{1y}
+\\
+&=
+\tilde{\boldsymbol{\beta}}_1^s.
+\end{align*}
+
+The argument for group 2 is identical.
+```
+
+</details>
+
+Another important consequence is that zero pairwise correlation with the response does not necessarily imply a zero multiple-regression coefficient. If
+
+$$
+\mathbf{r}_{1y}=\mathbf{0},
+$$
+
+then
+
+$$
+\hat{\boldsymbol{\beta}}_1^s
+=
+-
+\mathbf{R}_{1\mid2}^{-1}
+\mathbf{R}_{12}
+\tilde{\boldsymbol{\beta}}_2^s,
+$$
+
+which is not necessarily zero.
+
+Thus, the relationship of one group with the response cannot generally be understood independently of its relationships with the other explanatory variables.
+
+***
 
 ### Single Variable Cross-Effects
 
-In the special case where group 1 consists of only 1 variable, we have that:
+Consider the special case in which group 1 consists of a single standardized explanatory variable $\mathbf{x}_1^s$, while $\mathbf{X}_2^s$ contains all remaining explanatory variables.
 
-$\hat{\beta}_1, \quad r_{X_1X_1} = r_{x_1x_1}=1, \quad r_{X_1|X_2}=r_{x_1|X_2}, \quad r_{X_1y}=r_{x_1y}=\tilde{\beta}_1$
+Since $\mathbf{x}_1^s$ is standardized,
 
-are scalars, while
-
-$$r_{X_1X_2} = r_{x_1X_2}=r_{X_2X_1}' = r_{X_2x_1}', \quad r_{X_2y}, \quad \tilde{\bgb}_2$$
-are vectors of size $p-1$.
-
-Now, consider the following linear model:
-
-$$\bx_1 = \bX_2 \bga_2 + \be$$
-
-that is, fitting the single variable in group 1, as the dependent variable, and
-the variables in group 2, as the independent variables. Then we have that the
-estimated coefficients are:
-
-$$ \hat{\bga}_2 = r_{X_2X_2}^{-1}r_{X_2x_1}$$
-then, we notice the following
-
-$$r_{x_1|X_2} 
-  = r_{X_1X_1} - r_{X_1X_2}r_{X_2X_2}^{-1}r_{X_2X_1} 
-  = r_{x_1X_1} - r_{x_1X_2}r_{X_2X_2}^{-1}r_{X_2x_1}
-  = 1 - r_{x_1X_2}\hat{\bga}_2
-  = 1 - r_{x_1X_2}r_{X_2X_2}^{-1}r_{X_2X_2}\hat{\bga}_2
-  = 1 - \hat{\bga}_2'r_{X_2X_2}\hat{\bga}_2
-  = 1 - R^2_1
+$$
+R_{11}=1.
 $$
 
-where, $R^2_1$ is the multiple coefficient of determination for model:
+The Schur complement is therefore the scalar
 
-$$\bx_1 = \bX_2 \bga_2 + \be$$
+$$
+R_{1\mid2}
+=
+1
+-
+\mathbf{r}_{1,2}
+\mathbf{R}_{22}^{-1}
+\mathbf{r}_{2,1},
+$$
 
-that is, how much of $\bx_1$ is explained by $\bX_2$.
+where
 
-Then, we have that:
+$$
+\mathbf{r}_{1,2}
+=
+\frac{1}{n-1}
+(\mathbf{x}_1^s)'\mathbf{X}_2^s
+$$
 
-$$\hat{\beta}_1 = r_{1_1|X_2}^{-1}\left(r_{x_1y} -r_{x_1X_2}\tilde{\bgb}_2\right) = \frac{1}{1-R^2_1} \left(\tilde{\beta}_1 -r_{x_1X_2}\tilde{\bgb}_2\right)$$
-We name $\frac{1}{1 - R^2_1}$ as:
+and
 
-$$VIF_1 = \frac{1}{1 - R^2_1} $$
-the bigger, the more distorted is the value of $\hat{\beta}_1$. This number increases
-as $R^2_1$ in creases.
+$$
+\mathbf{r}_{2,1}
+=
+\mathbf{r}_{1,2}'.
+$$
 
-If $R^2_1 = 0$, that is $\bX_2$ explains nothing of $\bx_1$, then
+To understand this quantity, consider the auxiliary regression
 
-$$ VIF_1 = 1 $$
-that represents no distortion. If $R^2_1 \to 1$, then:
+$$
+\mathbf{x}_1^s
+=
+\mathbf{X}_2^s\boldsymbol{\gamma}_2
++
+\mathbf{e}.
+$$
 
-$$ VIF_1 \to 1 $$
-which represents infinite distortion.
+Its least-squares coefficient estimate is
 
-The name $VIF$ stands for variance inflation factor. We will see that later, how
-it relates to the variance of the estimate $\hat{\beta}_1$.
+$$
+\hat{\boldsymbol{\gamma}}_2
+=
+\mathbf{R}_{22}^{-1}
+\mathbf{r}_{2,1}.
+$$
 
-Of course, variable 1, didn't have any particular property, so we can generalize
-this to any variable $k$.
+Let $R_1^2$ denote the coefficient of determination from this regression. It measures how much of the variability in $\mathbf{x}_1^s$ can be accounted for by the remaining explanatory variables.
 
-On the other hand, we also have an effect $r_{x_1X_2}\tilde{\bgb}_2$ on the
-coefficient
+```{proposition, prp-mlr-schur-r2, name="Schur Complement and the Auxiliary R-Squared"}
+For the auxiliary regression of $\mathbf{x}_1^s$ on $\mathbf{X}_2^s$,
 
-#### Single Variable Cross-effects example
+$$
+\boxed{
+R_{1\mid2}
+=
+1-R_1^2.
+}
+$$
+```
 
-We can see the effects the other variables have in changing the coefficients in
-our GDP data set, by computing $R^2_k$ for each variable.
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-schur-r2}
+Since $\mathbf{x}_1^s$ is standardized,
+
+$$
+\frac{1}{n-1}
+(\mathbf{x}_1^s)'\mathbf{x}_1^s
+=
+1.
+$$
+
+The fitted values from the auxiliary regression are
+
+$$
+\hat{\mathbf{x}}_1^s
+=
+\mathbf{X}_2^s
+\hat{\boldsymbol{\gamma}}_2.
+$$
+
+Therefore,
+
+\begin{align*}
+R_1^2
+&=
+\frac{
+(\hat{\mathbf{x}}_1^s)'
+\hat{\mathbf{x}}_1^s
+}{
+(\mathbf{x}_1^s)'
+\mathbf{x}_1^s
+}
+\\
+&=
+\frac{
+\hat{\boldsymbol{\gamma}}_2'
+(\mathbf{X}_2^s)'
+\mathbf{X}_2^s
+\hat{\boldsymbol{\gamma}}_2
+}{
+n-1
+}
+\\
+&=
+\hat{\boldsymbol{\gamma}}_2'
+\mathbf{R}_{22}
+\hat{\boldsymbol{\gamma}}_2.
+\end{align*}
+
+Using
+
+$$
+\hat{\boldsymbol{\gamma}}_2
+=
+\mathbf{R}_{22}^{-1}
+\mathbf{r}_{2,1},
+$$
+
+we obtain
+
+\begin{align*}
+R_1^2
+&=
+\mathbf{r}_{1,2}
+\mathbf{R}_{22}^{-1}
+\mathbf{R}_{22}
+\mathbf{R}_{22}^{-1}
+\mathbf{r}_{2,1}
+\\
+&=
+\mathbf{r}_{1,2}
+\mathbf{R}_{22}^{-1}
+\mathbf{r}_{2,1}.
+\end{align*}
+
+Consequently,
+
+\begin{align*}
+R_{1\mid2}
+&=
+1-
+\mathbf{r}_{1,2}
+\mathbf{R}_{22}^{-1}
+\mathbf{r}_{2,1}
+\\
+&=
+1-R_1^2.
+\end{align*}
+```
+
+</details>
+
+This quantity leads naturally to the Variance Inflation Factor.
+
+```{definition, def-mlr-vif, name="Variance Inflation Factor"}
+For explanatory variable $\mathbf{x}_1^s$, define
+
+$$
+\boxed{
+VIF_1
+=
+\frac{1}{1-R_1^2},
+}
+$$
+
+where $R_1^2$ is obtained by regressing $\mathbf{x}_1^s$ on all the remaining explanatory variables.
+```
+
+The name **Variance Inflation Factor** will become important when we study the variance of the estimated regression coefficients. At this stage, we interpret $VIF_1$ algebraically as a measure of how strongly $\mathbf{x}_1^s$ can be linearly represented by the remaining explanatory variables.
+
+If
+
+$$
+R_1^2=0,
+$$
+
+then
+
+$$
+VIF_1=1.
+$$
+
+The other explanatory variables do not linearly explain $\mathbf{x}_1^s$.
+
+As
+
+$$
+R_1^2\rightarrow1,
+$$
+
+we have
+
+$$
+\boxed{
+VIF_1\rightarrow\infty.
+}
+$$
+
+Thus, a large VIF indicates that little variation in $\mathbf{x}_1^s$ remains after accounting for the other explanatory variables. In the limiting case $R_1^2=1$, $\mathbf{x}_1^s$ is an exact linear combination of the remaining explanatory variables, the complete design matrix loses full column rank, and the usual unique least-squares coefficient vector no longer exists.
+
+***
+
+### Single Variable Coefficient Formula
+
+For the single-variable case, the coefficient formula becomes particularly informative.
+
+Since the coefficient from the simple regression of standardized $\mathbf{y}_s$ on standardized $\mathbf{x}_1^s$ is their sample correlation,
+
+$$
+\tilde\beta_1^s
+=
+r_{1y},
+$$
+
+we obtain the following result.
+
+```{proposition, prp-mlr-single-variable-cross-effect, name="Single Variable Cross-Effect Formula"}
+The coefficient of $\mathbf{x}_1^s$ in the full multiple regression satisfies
+
+$$
+\boxed{
+\hat\beta_1^s
+=
+VIF_1
+\left(
+\tilde\beta_1^s
+-
+\mathbf{r}_{1,2}
+\tilde{\boldsymbol{\beta}}_2^s
+\right).
+}
+$$
+
+Equivalently,
+
+$$
+\boxed{
+\hat\beta_1^s
+=
+\frac{
+r_{1y}
+-
+\mathbf{r}_{1,2}
+\tilde{\boldsymbol{\beta}}_2^s
+}{
+1-R_1^2
+}.
+}
+$$
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, pro-mlr-single-variable-cross-effect}
+From the group coefficient formula,
+
+$$
+\hat\beta_1^s
+=
+R_{1\mid2}^{-1}
+\left(
+r_{1y}
+-
+\mathbf{r}_{1,2}
+\tilde{\boldsymbol{\beta}}_2^s
+\right).
+$$
+
+From the previous proposition,
+
+$$
+R_{1\mid2}
+=
+1-R_1^2.
+$$
+
+Therefore,
+
+\begin{align*}
+\hat\beta_1^s
+&=
+\frac{1}{1-R_1^2}
+\left(
+r_{1y}
+-
+\mathbf{r}_{1,2}
+\tilde{\boldsymbol{\beta}}_2^s
+\right)
+\\
+&=
+VIF_1
+\left(
+\tilde\beta_1^s
+-
+\mathbf{r}_{1,2}
+\tilde{\boldsymbol{\beta}}_2^s
+\right).
+\end{align*}
+```
+
+</details>
+
+The formula separates two different effects created by the remaining explanatory variables:
+
+$$
+\hat\beta_1^s
+=
+\underbrace{VIF_1}_{\text{relationship of }x_1\text{ with the other predictors}}
+\left(
+\underbrace{\tilde\beta_1^s}_{\text{individual relationship with }y}
+-
+\underbrace{
+\mathbf{r}_{1,2}
+\tilde{\boldsymbol{\beta}}_2^s
+}_{\text{cross-effect from the other predictors}}
+\right).
+$$
+
+A large $VIF_1$ alone does not determine whether $\hat\beta_1^s$ will be large or small, because the term inside parentheses also depends on the correlations with the other explanatory variables and their relationships with the response.
+
+***
+
+### Generalization to Any Explanatory Variable
+
+Variable $1$ has no special role. The same construction can be applied to any explanatory variable $\mathbf{x}_k^s$.
+
+Let $\mathbf{X}_{-k}^s$ denote the matrix containing all explanatory variables except $\mathbf{x}_k^s$, and let $R_k^2$ be the coefficient of determination from the auxiliary regression
+
+$$
+\mathbf{x}_k^s
+=
+\mathbf{X}_{-k}^s
+\boldsymbol{\gamma}_{-k}
++
+\mathbf{e}.
+$$
+
+Then
+
+$$
+\boxed{
+VIF_k
+=
+\frac{1}{1-R_k^2}.
+}
+$$
+
+If $\tilde{\boldsymbol{\beta}}_{-k}^s$ denotes the coefficients obtained by regressing $\mathbf{y}_s$ on $\mathbf{X}_{-k}^s$, then
+
+$$
+\boxed{
+\hat\beta_k^s
+=
+VIF_k
+\left(
+r_{ky}
+-
+\mathbf{r}_{k,-k}
+\tilde{\boldsymbol{\beta}}_{-k}^s
+\right).
+}
+$$
+
+Thus, the coefficient of any explanatory variable in a multiple regression depends not only on its individual relationship with the response, but also on how that explanatory variable relates to all the other variables in the model.
+
+***
+
+#### Single Variable Cross-Effects Example
+
+We can illustrate these quantities using the standardized GDP data from the previous section.
+
+The theoretical notation uses $\mathbf{X}_s$ and $\mathbf{y}_s$. In the code below, these objects are temporarily renamed `X` and `y` only to simplify the R commands.
 
 ```{r gdp-cross-effects}
 # Re-names Standardized Variables
@@ -4314,6 +4976,103 @@ colnames(tab) <- c("b_full", "b_ind", "R2k", "VIF", "rb_ind")
 rownames(tab) <- colnames(dat)[2:6]
 knitr::kable(tab)
 ```
+
+The columns of the resulting table correspond directly to the quantities developed above:
+
+- `b_full` is $\hat\beta_k^s$, the coefficient from the full multiple regression.
+- `b_ind` is $\tilde\beta_k^s=r_{ky}$, the coefficient from the individual simple regression.
+- `R2k` is $R_k^2$, obtained by regressing explanatory variable $k$ on all the remaining explanatory variables.
+- `VIF` is
+
+  $$
+  \frac{1}{1-R_k^2}.
+  $$
+
+- `rb_ind` is the cross-effect
+
+  $$
+  \mathbf{r}_{k,-k}
+  \tilde{\boldsymbol{\beta}}_{-k}^s.
+  $$
+
+Together, these quantities illustrate the identity
+
+$$
+\hat\beta_k^s
+=
+VIF_k
+\left(
+\tilde\beta_k^s
+-
+\mathbf{r}_{k,-k}
+\tilde{\boldsymbol{\beta}}_{-k}^s
+\right).
+$$
+
+The example therefore shows explicitly why an explanatory variable can have a substantially different coefficient in a multiple regression than in a simple regression. The difference depends on both its relationships with the other explanatory variables and the relationships of those variables with the response.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Outliers and Leverage
 
