@@ -387,10 +387,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.8.5" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#single-variable-coefficient-formula"><i class="fa fa-check"></i><b>6.8.5</b> Single Variable Coefficient Formula</a></li>
 <li class="chapter" data-level="6.8.6" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#generalization-to-any-explanatory-variable"><i class="fa fa-check"></i><b>6.8.6</b> Generalization to Any Explanatory Variable</a></li>
 </ul></li>
-<li class="chapter" data-level="6.9" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#outliers-and-leverage"><i class="fa fa-check"></i><b>6.9</b> Outliers and Leverage</a>
+<li class="chapter" data-level="6.9" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#outliers-leverage-and-influential-observations"><i class="fa fa-check"></i><b>6.9</b> Outliers, Leverage, and Influential Observations</a>
 <ul>
 <li class="chapter" data-level="6.9.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#leverage"><i class="fa fa-check"></i><b>6.9.1</b> Leverage</a></li>
-<li class="chapter" data-level="6.9.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#influential-observations"><i class="fa fa-check"></i><b>6.9.2</b> Influential Observations</a></li>
+<li class="chapter" data-level="6.9.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#entries-of-the-hat-matrix"><i class="fa fa-check"></i><b>6.9.2</b> Entries of the Hat Matrix</a></li>
+<li class="chapter" data-level="6.9.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#influential-observations"><i class="fa fa-check"></i><b>6.9.3</b> Influential Observations</a></li>
+<li class="chapter" data-level="6.9.4" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#deleting-one-observation"><i class="fa fa-check"></i><b>6.9.4</b> Deleting One Observation</a></li>
+<li class="chapter" data-level="6.9.5" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#change-in-the-fitted-values"><i class="fa fa-check"></i><b>6.9.5</b> Change in the Fitted Values</a></li>
+<li class="chapter" data-level="6.9.6" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#leverage-residuals-and-influence"><i class="fa fa-check"></i><b>6.9.6</b> Leverage, Residuals, and Influence</a></li>
 </ul></li>
 <li class="chapter" data-level="6.10" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#stability-of-the-solution"><i class="fa fa-check"></i><b>6.10</b> Stability of the Solution</a></li>
 <li class="chapter" data-level="6.11" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#other-approaches-to-regression"><i class="fa fa-check"></i><b>6.11</b> Other Approaches to Regression</a>
@@ -4714,262 +4718,1282 @@ VIF_k
 </div>
 </div>
 </div>
-<div id="outliers-and-leverage" class="section level2 hasAnchor" number="6.9">
-<h2><span class="header-section-number">6.9</span> Outliers and Leverage<a href="multiple-linear-regression-1.html#outliers-and-leverage" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>It is harder to identify outliers visually in multiple linear regression, specially
-if the number of variables is big. The effect of an observation <span class="math inline">\(i\)</span> on the
-linear regression fit will depend on 2 things:</p>
+<div id="outliers-leverage-and-influential-observations" class="section level2 hasAnchor" number="6.9">
+<h2><span class="header-section-number">6.9</span> Outliers, Leverage, and Influential Observations<a href="multiple-linear-regression-1.html#outliers-leverage-and-influential-observations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In simple linear regression, unusual observations can often be identified visually from a scatterplot. In multiple linear regression this becomes more difficult because each observation contains values for several explanatory variables.</p>
+<p>It is useful to distinguish three related but different concepts:</p>
 <ul>
-<li>The size of the residual for observation <span class="math inline">\(i\)</span>, that is <span class="math inline">\(\hat{e}_i^2\)</span>.</li>
-<li>How “close” is observation <span class="math inline">\(i\)</span> to other observations.</li>
+<li>An <strong>outlier</strong> is an observation whose response is unusual relative to the fitted model. It is typically associated with a large residual <span class="math inline">\(\hat e_i\)</span>.</li>
+<li>A <strong>high-leverage observation</strong> has an unusual combination of explanatory-variable values. Leverage depends only on the design matrix <span class="math inline">\(\mathbf{X}\)</span>.</li>
+<li>An <strong>influential observation</strong> is one whose inclusion or removal substantially changes the fitted regression model.</li>
 </ul>
-<p><strong>Note</strong>: For this section, we are going to use <span class="math inline">\(X_i\in\mathbb{R}^{1 \times p}\)</span> as the <span class="math inline">\(i-th\)</span> row of the
-design matrix. That is the <span class="math inline">\(i\)</span>-th observation of the independent varaibles.</p>
+<p>An observation can have high leverage without being influential if its response lies close to the fitted model. Similarly, an observation with a large residual may have limited influence if its explanatory-variable values are not unusual. Influence depends on the combination of these two characteristics.</p>
+<p>Throughout this section, suppose that the model contains <span class="math inline">\(p\)</span> explanatory variables and an intercept, so that</p>
+<p><span class="math display">\[
+\mathbf{X}
+\in
+\mathbb{R}^{n\times(p+1)}.
+\]</span></p>
+<p>For this section, we make one exception to our usual notation convention. We let</p>
+<p><span class="math display">\[
+X_i
+\in
+\mathbb{R}^{1\times(p+1)}
+\]</span></p>
+<p>denote the <span class="math inline">\(i\)</span>th <strong>row</strong> of <span class="math inline">\(\mathbf{X}\)</span>. Thus,</p>
+<p><span class="math display">\[
+\mathbf{X}
+=
+\begin{bmatrix}
+X_1\\
+X_2\\
+\vdots\\
+X_n
+\end{bmatrix},
+\]</span></p>
+<p>and <span class="math inline">\(X_i&#39;\)</span> is a column vector in <span class="math inline">\(\mathbb{R}^{p+1}\)</span>.</p>
+<p>This notation is useful because it clearly distinguishes the rows of the design matrix, which represent observations, from the columns of <span class="math inline">\(\mathbf{X}\)</span>, which represent explanatory variables.</p>
+<hr />
 <div id="leverage" class="section level3 hasAnchor" number="6.9.1">
 <h3><span class="header-section-number">6.9.1</span> Leverage<a href="multiple-linear-regression-1.html#leverage" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>In multiple linear regression, <strong>leverage</strong> refers to the influence that a
-particular data point has on the estimation of the regression model.
-Specifically, it measures how far an observation’s values for the independent
-variables deviate from the mean of those variables. Leverage identifies data
-points that could potentially have a significant effect on the regression line,
-particularly those that are outliers in terms of the input variables.</p>
-<p>Leverage values are calculated from the <strong>hat matrix</strong> <span class="math inline">\(\mathbf{H}\)</span>, which is derived
-from the design matrix <span class="math inline">\(\mathbf{X}\)</span> used in the regression. The diagonal elements of
-the hat matrix, <span class="math inline">\(h_{ii}\)</span>, represent the leverage of each data point.
-These values range from 0 to 1, where:</p>
-<ul>
-<li>A leverage value close to 0 indicates that the point is not influential in
-determining the regression line.</li>
-<li>A leverage value closer to 1 suggests that the point has a higher influence on
-the fitted model.</li>
-</ul>
-<p>High-leverage points are those whose independent variable values are far from
-the average, and they may disproportionately affect the slope and intercept of
-the regression line. These points can distort the regression model, leading to
-biased estimates if not handled properly.</p>
-<p>A high-leverage point may not necessarily be an outlier in the response variable
-(dependent variable), but it could have a significant impact on the overall
-model fit, making leverage a critical diagnostic in regression analysis.</p>
-<div id="properties-of-leverages" class="section level4 hasAnchor" number="6.9.1.1">
-<h4><span class="header-section-number">6.9.1.1</span> Properties of Leverages<a href="multiple-linear-regression-1.html#properties-of-leverages" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Lets analyze the structure of the hat matrix.</p>
-<p>First, let us see that <span class="math inline">\(\mathbf{H}\)</span> is symmetric semi-positive definite. Pick <span class="math inline">\(z \in \mathbb{R}^n\)</span>.
-Recall, that <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span> is positive definite, then <span class="math display">\[(\mathbf{X}&#39;\mathbf{X})^{-1}\]</span> is positive
-definite. Then</p>
-<p><span class="math display">\[\begin{align*}
-z&#39;Hz
-   &amp;= \mathbf{z}&#39;\mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;z \\
-   &amp;= (\mathbf{X}&#39;\mathbf{z})&#39;(\mathbf{X}&#39;\mathbf{X})^{-1}(\mathbf{X}&#39;\mathbf{z}) \\
-   &amp;= \mathbf{w}&#39; (\mathbf{X}&#39;\mathbf{X})^{-1} \mathbf{w}&amp; \mathbf{w}= \mathbf{X}&#39;\mathbf{z}\\
-   &amp;\geq 0
-\end{align*}\]</span></p>
-<p>Therefore, <span class="math inline">\(\mathbf{H}\)</span> is semi-positive definite. This implies that all the eigenvalues
-of <span class="math inline">\(\mathbf{H}\)</span> are non-negative, that is positive or <span class="math inline">\(0\)</span>.</p>
-<p>Next, let us see that the diagonal elements are between 0 and 1.</p>
-<p>To see this, consider leverage <span class="math inline">\(i\)</span> (<span class="math inline">\(h_{ii}\)</span>), and the basis vectors <span class="math inline">\(v_j \in \mathbb{R}^n\)</span> such
-that are full of zeros except for entry <span class="math inline">\(j\)</span>. Then:</p>
-<p><span class="math display">\[h_{ij} = v_i &#39;\mathbf{H}v_j\]</span>
-in particular, leverage <span class="math inline">\(i\)</span> is given by:</p>
-<p><span class="math display">\[h_{ii} = v_i &#39;\mathbf{H}v_i\]</span>
-Now, consider <span class="math inline">\(\mathbf{H}v_i\)</span> and notice that:</p>
-<p><span class="math display">\[\begin{align*}
-||v_i - \mathbf{H}v_i||_2^2
-  &amp;= (v_i - \mathbf{H}v_i)&#39;(v_i - \mathbf{H}v_i) \\
-  &amp;= v_i&#39;v_i - v_i&#39;\mathbf{H}v_i - v_i&#39;\mathbf{H}v_i + v_i&#39; \mathbf{H}\mathbf{H}v_i \\
-  &amp;= v_i&#39;v_i - v_i&#39;\mathbf{H}\mathbf{H}v_i - v_i&#39;\mathbf{H}\mathbf{H}v_i + v_i&#39; \mathbf{H}\mathbf{H}v_i \\
-  &amp;= v_i&#39;v_i - v_i&#39;\mathbf{H}\mathbf{H}v_i \\
-  &amp;= ||v_i||_2^2 - ||\mathbf{H}v_i||_2^2 \\
-  &amp;= 1 - ||\mathbf{H}v_i||_2^2
-\end{align*}\]</span></p>
-<p>Then</p>
-<p><span class="math display">\[\begin{align*}
-||v_i - \mathbf{H}v_i||_2^2 = 1 - ||\mathbf{H}v_i||_2^2
-  &amp; \implies ||v_i - \mathbf{H}v_i||_2^2 + ||\mathbf{H}v_i||_2^2 = 1 \\
-  &amp; \implies ||\mathbf{H}v_i||_2^2 \leq 1 \\
-  &amp; \implies v_i&#39; \mathbf{H}\mathbf{H}v_i  \leq 1 \\
-  &amp; \implies v_i&#39; \mathbf{H}v_i  \leq 1 \\
-  &amp; \implies h_{ii}  \leq 1 \\
-\end{align*}\]</span></p>
-<p>Since <span class="math inline">\(h_{ii}=||\mathbf{H}v_i||_2^2\)</span> is a norm then <span class="math inline">\(h_{ii} \geq 0\)</span>, then:</p>
-<p><span class="math display">\[ 0 \leq h_{ii} \leq 1 \]</span>
-So, leverages are bounded.</p>
-<p>Furthermore, we have that:</p>
-<p><span class="math display">\[ \sum_{i=1}^p h_{ii} = p \]</span></p>
-<p>To see this, we will need the following properties:</p>
-<ol style="list-style-type: decimal">
-<li><span class="math inline">\(\text{rank}(\mathbf{H}) = p.\)</span></li>
-<li>All the eigenvalues of <span class="math inline">\(\mathbf{H}\)</span> are either 0 or 1.</li>
-</ol>
-<p>As usual, we assume that <span class="math inline">\(\text{rank}(\mathbf{X}) = p\)</span> and <span class="math inline">\(n&gt;p\)</span>, that is there are more observations
-than independent variables. Then</p>
-<p><span class="math display">\[\begin{align*}
-\text{rank}(\mathbf{X}) = p
-  &amp;\implies \text{rank}(\mathbf{X}&#39;\mathbf{X}) = p \\
-  &amp;\implies \text{rank}\left((\mathbf{X}&#39;\mathbf{X})^{-1}\right) = p \\
-  &amp;\implies \text{rank}\left(\mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\right) = p \\
-  &amp;\implies \text{rank}\left(\mathbf{H}\right) = p \\
-\end{align*}\]</span></p>
-<p>Now, let <span class="math inline">\(\lambda\)</span> be an eigenvalue of <span class="math inline">\(\mathbf{H}\)</span>, with respective <span class="math inline">\(\mathbf{v}\)</span> as eigenvector.
-Then:</p>
-<p><span class="math display">\[\begin{align*}
-\mathbf{H}\mathbf{v}= \lambda \mathbf{v}\\
-  &amp;\implies \mathbf{H}\mathbf{H}\mathbf{v}= \mathbf{H}\lambda \mathbf{v}= \lambda \mathbf{H}\mathbf{v}\\
-  &amp;\implies \mathbf{H}\mathbf{v}= \lambda \lambda \mathbf{v}= \lambda^2 \mathbf{v}\\
-  &amp;\implies \lambda = 1 \land \lambda = 0
-\end{align*}\]</span></p>
-<p>Now since, <span class="math inline">\(\mathbf{H}\)</span> is of rank <span class="math inline">\(p\)</span>, then it must have <span class="math inline">\(p\)</span> non-zero eigenvalues. And,
-since all non-zero eigenvalues are 1, then we have that:</p>
-<p><span class="math inline">\(\sum_{i=1}^n \lambda_i = p\)</span></p>
-<p>that is the sum of the eigenvalues is <span class="math inline">\(p\)</span>. We also know that for any square
-matrix, the sum of the eigenvalues is equal to the trace of the matrix. Then:</p>
-<p><span class="math display">\[ \text{trace}(\mathbf{H}) = p \implies \sum_{i=1}^n h_{ii} = p\]</span>
-This is telling us important information about the leverages. You can compute a
-proportional leverage as:</p>
-<p><span class="math display">\[ \frac{h_{ii}}{p}\]</span>
-the proportion of the leverage <span class="math inline">\(i\)</span> out of “all” the leverage. Or in terms of
-“observations”, you can compute:</p>
-<p><span class="math display">\[\frac{n h_{ii}}{p}\]</span>
-if this number is several times bigger than <span class="math inline">\(1\)</span>, it will be an observation with
-considerable leverage.</p>
-<p>Another way to characterize the leverages can be found as follows:</p>
-<p>Recall that the hat matrix is given by:</p>
-<p><span class="math display">\[\mathbf{H}= \mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39; \]</span>
-and we can express the design matrix as follows:</p>
-<p><span class="math display">\[ \mathbf{X}= \left[\begin{matrix}
-    X_1    \\
-    X_2    \\
-    \vdots \\
-    X_n
-  \end{matrix}\right] \]</span></p>
-<p>and</p>
-<p><span class="math display">\[ \mathbf{X}&#39; = [X_1&#39; X_2&#39; \ldots X_n&#39;] \]</span></p>
-<p>Then, the hat matrix is given by:</p>
-<p><span class="math display">\[\begin{align*}
-\mathbf{H}
-  &amp;= \mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;                                                                 \\
-  &amp;= \mathbf{X}(\mathbf{X}&#39;\mathbf{X})^{-1} [X_1&#39; X_2&#39; \ldots X_n&#39;]                                             \\
-  &amp;= \mathbf{X}[(\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39; (\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39; \ldots (\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;]                 \\
-  &amp;= \left[\begin{matrix}
-      X_1    \\
-      X_2    \\
-      \vdots \\
-      X_n
-     \end{matrix}\right] [(\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39; (\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39; \ldots (\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;] \\
-  &amp;= \left[\begin{matrix}
-      X_1 (\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39; &amp; X_1 (\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39; &amp; \ldots &amp; X_1 (\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;    \\
-      X_2 (\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39; &amp; X_2 (\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39; &amp; \ldots &amp; X_2 (\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;    \\
-      \vdots                 &amp; \vdots                 &amp; \vdots                             \\
-      X_n (\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39; &amp; X_n (\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39; &amp; \ldots &amp; X_n (\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;    \\
-     \end{matrix}\right]
-\end{align*}\]</span></p>
-<p>we are going to use this expression latter, but we can also notice that:</p>
-<p><span class="math display">\[h_{ij} = X_i (\mathbf{X}&#39;\mathbf{X})^{-1}X_j&#39;\]</span>
-So we can characterize the leverages as:</p>
-<p><span class="math display">\[h_{ij} = X_i (\mathbf{X}&#39;\mathbf{X})^{-1}X_j&#39;\]</span></p>
-</div>
-</div>
-<div id="influential-observations" class="section level3 hasAnchor" number="6.9.2">
-<h3><span class="header-section-number">6.9.2</span> Influential Observations<a href="multiple-linear-regression-1.html#influential-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Identifying outliers in multiple regression is hard. One way to measure the influence
-of an observation is to see how different are the predicted values if an observation
-is removed. We will call:</p>
-<ul>
-<li><span class="math inline">\(\mathbf{X}_{(i)}\)</span> the design matrix, when the <span class="math inline">\(i\)</span>-th observation is removed.</li>
-<li><span class="math inline">\(\mathbf{y}_{(i)}\)</span> the dependent variables without the observation <span class="math inline">\(i\)</span>.</li>
-<li><span class="math inline">\(\hat{\mathbf{y}}_{(i)}\)</span> the predicted values when the <span class="math inline">\(i\)</span>-th observation is removed.</li>
-<li><span class="math inline">\(\mathbf{H}_{(i)}\)</span> the hat matrix when the <span class="math inline">\(i\)</span>-th observation is removed.</li>
-</ul>
-<p>Then a measure of influence can be:</p>
-<p><span class="math display">\[||\mathbf{y}- \hat{\mathbf{y}}_{(i)}||^2_2 = (\mathbf{y}- \hat{\mathbf{y}}_{(i)})&#39;(\mathbf{y}- \hat{\mathbf{y}}_{(i)}) = \sum_{j=1}^n (\mathbf{y}_j - \hat{\mathbf{y}}_{(i),j})^2\]</span>
-Notice that:</p>
-<p><span class="math display">\[\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}\]</span>
-and, similarly</p>
-<p><span class="math display">\[\hat{\mathbf{y}}_{(i)} = \mathbf{H}_{(i)} \mathbf{y}_{(i)}\]</span></p>
-<p>Now, let us compute:</p>
-<p><span class="math display">\[\begin{align*}
-\hat{\mathbf{y}}
-  &amp;= \mathbf{H}\mathbf{y}\\
-  &amp;= \left[\begin{matrix}
-      X_1 (\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39; &amp; X_1 (\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39; &amp; \ldots &amp; X_1 (\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;    \\
-      X_2 (\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39; &amp; X_2 (\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39; &amp; \ldots &amp; X_2 (\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;    \\
-      \vdots                 &amp; \vdots                 &amp; \vdots                             \\
-      X_n (\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39; &amp; X_n (\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39; &amp; \ldots &amp; X_n (\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;    \\
-     \end{matrix}\right] \left[\begin{matrix}
-      y_1    \\
-      y_2    \\
-      \vdots \\
-      y_n
-      \end{matrix}\right] \\
-  &amp;=
-      \left[\begin{matrix}
-        \sum_{k=1}^n X_1 (\mathbf{X}&#39;\mathbf{X})^{-1}X_k&#39;y_k  \\
-        \sum_{k=1}^n X_2 (\mathbf{X}&#39;\mathbf{X})^{-1}X_k&#39;y_k    \\
-        \vdots \\
-        \sum_{k=1}^n X_n (\mathbf{X}&#39;\mathbf{X})^{-1}X_k&#39;y_k
-      \end{matrix}\right]
-\end{align*}\]</span></p>
+<p>Recall that the fitted values can be written as</p>
 <p><span class="math display">\[
+\hat{\mathbf{y}}
+=
+\mathbf{H}\mathbf{y},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\mathbf{H}
+=
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\]</span></p>
+<p>is the hat matrix.</p>
+<p>The <span class="math inline">\(i\)</span>th fitted value is</p>
+<p><span class="math display">\[
+\hat y_i
+=
+\sum_{j=1}^n h_{ij}y_j.
+\]</span></p>
+<p>The diagonal element</p>
+<p><span class="math display">\[
+h_{ii}
+\]</span></p>
+<p>is called the <strong>leverage</strong> of observation <span class="math inline">\(i\)</span>.</p>
+<p>Leverage measures how unusual the explanatory-variable configuration <span class="math inline">\(X_i\)</span> is relative to the other observations. It depends only on the design matrix <span class="math inline">\(\mathbf{X}\)</span> and not on the response values.</p>
+<p>A high-leverage observation has the potential to affect the fitted regression substantially, but high leverage alone does not imply high influence.</p>
+<hr />
+<div id="properties-of-leverage" class="section level4 hasAnchor" number="6.9.1.1">
+<h4><span class="header-section-number">6.9.1.1</span> Properties of Leverage<a href="multiple-linear-regression-1.html#properties-of-leverage" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We first study some important properties of the hat matrix and its diagonal elements.</p>
+<div class="proposition">
+<p><span id="prp:prp-mlr-leverage-properties" class="proposition"><strong>Proposition 6.19  (Properties of Leverage) </strong></span>Suppose that <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{n\times(p+1)}\)</span> has full column rank. Then:</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(\mathbf{H}\)</span> is symmetric, positive semidefinite, and idempotent.</p></li>
+<li><p>Every leverage satisfies</p></li>
+</ol>
+<p><span class="math display">\[
+\boxed{
+0\leq h_{ii}\leq1.
+}
+\]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li>The total leverage is</li>
+</ol>
+<p><span class="math display">\[
+\boxed{
+\sum_{i=1}^n h_{ii}
+=
+p+1.
+}
+\]</span></p>
+<p>Consequently, the average leverage is</p>
+<p><span class="math display">\[
+\boxed{
+\frac{p+1}{n}.
+}
+\]</span></p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-37" class="proof"><em>Proof</em>. </span>Recall that</p>
+<p><span class="math display">\[
+\mathbf{H}
+=
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;.
+\]</span></p>
+<p>We establish the properties of <span class="math inline">\(\mathbf{H}\)</span> first.</p>
+<p><strong>1. Symmetry</strong></p>
+<p>Since <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> is symmetric, its inverse is also symmetric. Therefore,</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{H}&#39;
+&amp;=
+\left[
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\right]&#39;
+\\
+&amp;=
+\mathbf{X}
+\left[
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\right]&#39;
+\mathbf{X}&#39;
+&amp; \text{transpose rule}
+\\
+&amp;=
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+&amp; \text{symmetry}
+\\
+&amp;=
+\mathbf{H}.
+\end{align*}\]</span></p>
+<p>Thus, <span class="math inline">\(\mathbf{H}\)</span> is symmetric.</p>
+<p><strong>2. Positive semidefiniteness</strong></p>
+<p>Take any vector <span class="math inline">\(\mathbf{z}\in\mathbb{R}^n\)</span>. Then</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{z}&#39;\mathbf{H}\mathbf{z}
+&amp;=
+\mathbf{z}&#39;
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\mathbf{z}
+\\
+&amp;=
+(\mathbf{X}&#39;\mathbf{z})&#39;
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+(\mathbf{X}&#39;\mathbf{z})
+&amp; \text{rearrange}
+\\
+&amp;=
+\mathbf{w}&#39;
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{w},
+\qquad
+\mathbf{w}=\mathbf{X}&#39;\mathbf{z}
+\\
+&amp;\geq0
+&amp; \text{positive definiteness}.
+\end{align*}\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{X}\)</span> has full column rank, <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> is positive definite, and therefore <span class="math inline">\((\mathbf{X}&#39;\mathbf{X})^{-1}\)</span> is also positive definite.</p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\mathbf{z}&#39;\mathbf{H}\mathbf{z}\geq0
+\]</span></p>
+<p>for every <span class="math inline">\(\mathbf{z}\in\mathbb{R}^n\)</span>, so <span class="math inline">\(\mathbf{H}\)</span> is positive semidefinite.</p>
+<p><strong>3. Idempotence</strong></p>
+<p>Next,</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{H}^2
+&amp;=
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\\
+&amp;=
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+(\mathbf{X}&#39;\mathbf{X})
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\\
+&amp;=
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\\
+&amp;=
+\mathbf{H}.
+\end{align*}\]</span></p>
+<p>Therefore, <span class="math inline">\(\mathbf{H}\)</span> is idempotent.</p>
+<p><strong>4. Bounds on the leverages</strong></p>
+<p>Let <span class="math inline">\(\mathbf{v}_i\in\mathbb{R}^n\)</span> be the <span class="math inline">\(i\)</span>th standard basis vector, so that all entries are zero except for entry <span class="math inline">\(i\)</span>, which is equal to one.</p>
+<p>The <span class="math inline">\((i,j)\)</span> entry of <span class="math inline">\(\mathbf{H}\)</span> can be written as</p>
+<p><span class="math display">\[
+h_{ij}
+=
+\mathbf{v}_i&#39;\mathbf{H}\mathbf{v}_j.
+\]</span></p>
+<p>In particular,</p>
+<p><span class="math display">\[
+h_{ii}
+=
+\mathbf{v}_i&#39;\mathbf{H}\mathbf{v}_i.
+\]</span></p>
+<p>Since <span class="math inline">\(\mathbf{H}\)</span> is positive semidefinite,</p>
+<p><span class="math display">\[
+h_{ii}\geq0.
+\]</span></p>
+<p>We now establish the upper bound.</p>
+<p>Consider</p>
+<p><span class="math display">\[
+\|\mathbf{v}_i-\mathbf{H}\mathbf{v}_i\|_2^2.
 \]</span></p>
 <p>Then</p>
-<p><span class="math display">\[\hat{y}_j = \sum_{k=1}^n X_j (\mathbf{X}&#39;\mathbf{X})^{-1}X_k&#39;y_k = X_j (\mathbf{X}&#39;\mathbf{X})^{-1} \sum_{k=1}^n X_k&#39;y_k\]</span>
-in a similar way, observation :</p>
-<p><span class="math display">\[\hat{y}_{(i)j} = \sum_{k=1}^n X_j (\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)})^{-1}X_k&#39;y_k = X_j (\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)})^{-1} \sum_{k=1}^n X_k&#39;y_k\]</span>
-Notice that it is not necessary to use the subscript <span class="math inline">\((i)\)</span> when we are dealing
-with single observations.</p>
-<p>Now, we will relate <span class="math inline">\((\mathbf{X}&#39;\mathbf{X})^{-1}\)</span> to <span class="math inline">\((\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)})^{-1}\)</span> using the
-<a href="prerequisites.html#sherman-morrison-formula">Sherman–Morrison formula</a>. First notice that:</p>
-<p><span class="math display">\[\mathbf{X}&#39; \mathbf{X}= \mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)} + X_i&#39;X_i\]</span></p>
-<p>then</p>
-<p><span class="math display">\[\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)} = \mathbf{X}&#39; \mathbf{X}- X_i&#39;X_i\]</span></p>
-<p>Now we apply the <a href="prerequisites.html#sherman-morrison-formula">Sherman–Morrison formula</a>.</p>
 <p><span class="math display">\[\begin{align*}
-\left(\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)}\right)^{-1} = \left(\mathbf{X}&#39; \mathbf{X}- X_i&#39;X_i\right)^{-1}
-  &amp;= \left(\mathbf{X}&#39; \mathbf{X}+ (-X_i)&#39;X_i\right)^{-1} \\
-  &amp;= \left(\mathbf{X}&#39; \mathbf{X}\right)^{-1} - \frac{\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}(-X_i)&#39;X_i\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}}{1 + (-X_i)&#39;\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}X_i} \\
-  &amp;= \left(\mathbf{X}&#39; \mathbf{X}\right)^{-1} + \frac{\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}X_i&#39;X_i\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}}{1 - X_i&#39;\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}X_i} \\
-  &amp;= \left(\mathbf{X}&#39; \mathbf{X}\right)^{-1} + \frac{\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}X_i&#39;X_i\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}}{1 - h_{ii}}
+\|\mathbf{v}_i-\mathbf{H}\mathbf{v}_i\|_2^2
+&amp;=
+(\mathbf{v}_i-\mathbf{H}\mathbf{v}_i)&#39;
+(\mathbf{v}_i-\mathbf{H}\mathbf{v}_i)
+\\
+&amp;=
+\mathbf{v}_i&#39;\mathbf{v}_i
+-
+\mathbf{v}_i&#39;\mathbf{H}\mathbf{v}_i
+-
+\mathbf{v}_i&#39;\mathbf{H}&#39;\mathbf{v}_i
++
+\mathbf{v}_i&#39;\mathbf{H}&#39;\mathbf{H}\mathbf{v}_i
+\\
+&amp;=
+\mathbf{v}_i&#39;\mathbf{v}_i
+-
+2\mathbf{v}_i&#39;\mathbf{H}\mathbf{v}_i
++
+\mathbf{v}_i&#39;\mathbf{H}^2\mathbf{v}_i
+&amp; \text{symmetry}
+\\
+&amp;=
+\mathbf{v}_i&#39;\mathbf{v}_i
+-
+2\mathbf{v}_i&#39;\mathbf{H}\mathbf{v}_i
++
+\mathbf{v}_i&#39;\mathbf{H}\mathbf{v}_i
+&amp; \text{idempotence}
+\\
+&amp;=
+\mathbf{v}_i&#39;\mathbf{v}_i
+-
+\mathbf{v}_i&#39;\mathbf{H}\mathbf{v}_i
+\\
+&amp;=
+1-h_{ii}.
 \end{align*}\]</span></p>
+<p>Since a squared norm is nonnegative,</p>
+<p><span class="math display">\[
+1-h_{ii}\geq0,
+\]</span></p>
+<p>which implies</p>
+<p><span class="math display">\[
+h_{ii}\leq1.
+\]</span></p>
+<p>Combining the two inequalities gives</p>
+<p><span class="math display">\[
+\boxed{
+0\leq h_{ii}\leq1.
+}
+\]</span></p>
+<p><strong>5. Total leverage</strong></p>
+<p>Finally,</p>
+<p><span class="math display">\[
+\sum_{i=1}^n h_{ii}
+=
+\operatorname{tr}(\mathbf{H}).
+\]</span></p>
+<p>Using the definition of the hat matrix,</p>
+<p><span class="math display">\[\begin{align*}
+\operatorname{tr}(\mathbf{H})
+&amp;=
+\operatorname{tr}
+\left(
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\right)
+\\
+&amp;=
+\operatorname{tr}
+\left(
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\mathbf{X}
+\right)
+&amp; \text{cyclic property of trace}
+\\
+&amp;=
+\operatorname{tr}
+\left(
+\mathbf{I}_{p+1}
+\right)
+\\
+&amp;=
+p+1.
+\end{align*}\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\boxed{
+\sum_{i=1}^n h_{ii}=p+1.
+}
+\]</span></p>
+<p>Dividing by <span class="math inline">\(n\)</span>, the average leverage is</p>
+<p><span class="math display">\[
+\boxed{
+\frac{p+1}{n}.
+}
+\]</span></p>
+</div>
+</details>
+<p>The average leverage provides a natural reference value. For example,</p>
+<p><span class="math display">\[
+\frac{h_{ii}}{(p+1)/n}
+=
+\frac{nh_{ii}}{p+1}
+\]</span></p>
+<p>compares the leverage of observation <span class="math inline">\(i\)</span> with the average leverage.</p>
+<p>A value substantially greater than <span class="math inline">\(1\)</span> indicates that observation <span class="math inline">\(i\)</span> has leverage substantially above the average. This is a descriptive comparison rather than a universal cutoff.</p>
+<hr />
+</div>
+</div>
+<div id="entries-of-the-hat-matrix" class="section level3 hasAnchor" number="6.9.2">
+<h3><span class="header-section-number">6.9.2</span> Entries of the Hat Matrix<a href="multiple-linear-regression-1.html#entries-of-the-hat-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The diagonal elements of <span class="math inline">\(\mathbf{H}\)</span> are the leverages, but the off-diagonal elements will also be useful when studying influential observations.</p>
+<p>Using our row notation,</p>
+<p><span class="math display">\[
+\mathbf{X}
+=
+\begin{bmatrix}
+X_1\\
+X_2\\
+\vdots\\
+X_n
+\end{bmatrix},
+\]</span></p>
+<p>and consequently,</p>
+<p><span class="math display">\[
+\mathbf{X}&#39;
+=
+\begin{bmatrix}
+X_1&#39; &amp; X_2&#39; &amp; \cdots &amp; X_n&#39;
+\end{bmatrix}.
+\]</span></p>
+<div class="proposition">
+<p><span id="prp:prp-mlr-hat-matrix-entries" class="proposition"><strong>Proposition 6.20  (Entries of the Hat Matrix) </strong></span>The <span class="math inline">\((i,j)\)</span> entry of the hat matrix is</p>
+<p><span class="math display">\[
+\boxed{
+h_{ij}
+=
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_j&#39;.
+}
+\]</span></p>
+<p>In particular, the leverage of observation <span class="math inline">\(i\)</span> is</p>
+<p><span class="math display">\[
+\boxed{
+h_{ii}
+=
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;.
+}
+\]</span></p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-38" class="proof"><em>Proof</em>. </span>Starting from</p>
+<p><span class="math display">\[
+\mathbf{H}
+=
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;,
+\]</span></p>
+<p>we substitute the row representation of <span class="math inline">\(\mathbf{X}\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{H}
+&amp;=
+\begin{bmatrix}
+X_1\\
+X_2\\
+\vdots\\
+X_n
+\end{bmatrix}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\begin{bmatrix}
+X_1&#39; &amp; X_2&#39; &amp; \cdots &amp; X_n&#39;
+\end{bmatrix}
+\\
+&amp;=
+\begin{bmatrix}
+X_1(\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39;
+&amp;
+X_1(\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39;
+&amp;
+\cdots
+&amp;
+X_1(\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;
+\\
+X_2(\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39;
+&amp;
+X_2(\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39;
+&amp;
+\cdots
+&amp;
+X_2(\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;
+\\
+\vdots
+&amp;
+\vdots
+&amp;
+\ddots
+&amp;
+\vdots
+\\
+X_n(\mathbf{X}&#39;\mathbf{X})^{-1}X_1&#39;
+&amp;
+X_n(\mathbf{X}&#39;\mathbf{X})^{-1}X_2&#39;
+&amp;
+\cdots
+&amp;
+X_n(\mathbf{X}&#39;\mathbf{X})^{-1}X_n&#39;
+\end{bmatrix}.
+\end{align*}\]</span></p>
+<p>Therefore, the entry in row <span class="math inline">\(i\)</span> and column <span class="math inline">\(j\)</span> is</p>
+<p><span class="math display">\[
+h_{ij}
+=
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_j&#39;.
+\]</span></p>
+<p>Setting <span class="math inline">\(j=i\)</span> gives</p>
+<p><span class="math display">\[
+h_{ii}
+=
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;.
+\]</span></p>
+</div>
+</details>
+<p>Only the diagonal quantity <span class="math inline">\(h_{ii}\)</span> is called the leverage of observation <span class="math inline">\(i\)</span>. The quantities <span class="math inline">\(h_{ij}\)</span> for <span class="math inline">\(i\neq j\)</span> are <strong>off-diagonal entries of the hat matrix</strong>, not leverages.</p>
+<p>From</p>
+<p><span class="math display">\[
+\hat y_i
+=
+\sum_{j=1}^n h_{ij}y_j,
+\]</span></p>
+<p>we can interpret <span class="math inline">\(h_{ij}\)</span> as describing how response <span class="math inline">\(y_j\)</span> contributes to the fitted value of observation <span class="math inline">\(i\)</span>. These terms will also appear when we study what happens after deleting an observation.</p>
+<hr />
+</div>
+<div id="influential-observations" class="section level3 hasAnchor" number="6.9.3">
+<h3><span class="header-section-number">6.9.3</span> Influential Observations<a href="multiple-linear-regression-1.html#influential-observations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Leverage describes the position of an observation in the explanatory-variable space. Influence instead describes how much the fitted regression changes because an observation is included in the data.</p>
+<p>A natural way to measure influence is therefore to compare the fitted values obtained with and without observation <span class="math inline">\(i\)</span>.</p>
+<p>Let:</p>
+<ul>
+<li><span class="math inline">\(\mathbf{X}_{(i)}\)</span> denote the design matrix after removing row <span class="math inline">\(i\)</span>;</li>
+<li><span class="math inline">\(\mathbf{y}_{(i)}\)</span> denote the response vector after removing observation <span class="math inline">\(i\)</span>.</li>
+</ul>
+<p>The coefficient estimate obtained after deleting observation <span class="math inline">\(i\)</span> is</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}_{(i)}
+=
+\left(
+\mathbf{X}_{(i)}&#39;
+\mathbf{X}_{(i)}
+\right)^{-1}
+\mathbf{X}_{(i)}&#39;
+\mathbf{y}_{(i)}.
+\]</span></p>
+<p>Notice that <span class="math inline">\(\mathbf{X}_{(i)}\)</span> has only <span class="math inline">\(n-1\)</span> rows. Therefore, the fitted values for the observations used to fit the deleted model would also have only <span class="math inline">\(n-1\)</span> entries.</p>
+<p>However, to compare the original and deleted regression fits, we want predictions at the <strong>same <span class="math inline">\(n\)</span> explanatory-variable configurations</strong>. We therefore define</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\mathbf{y}}_{(i)}
+=
+\mathbf{X}
+\hat{\boldsymbol{\beta}}_{(i)}
+\in\mathbb{R}^n.
+}
+\]</span></p>
+<p>Thus, <span class="math inline">\(\hat{\mathbf{y}}_{(i)}\)</span> is obtained by fitting the model without observation <span class="math inline">\(i\)</span>, but evaluating the resulting regression at all of the original rows of <span class="math inline">\(\mathbf{X}\)</span>, including <span class="math inline">\(X_i\)</span>.</p>
+<p>This makes</p>
+<p><span class="math display">\[
+\hat{\mathbf{y}}
+\qquad\text{and}\qquad
+\hat{\mathbf{y}}_{(i)}
+\]</span></p>
+<p>directly comparable.</p>
+<p>We use</p>
+<p><span class="math display">\[
+\boxed{
+\Delta_i
+=
+\|
+\hat{\mathbf{y}}_{(i)}
+-
+\hat{\mathbf{y}}
+\|_2^2
+}
+\]</span></p>
+<p>as an unscaled measure of how much observation <span class="math inline">\(i\)</span> changes the fitted regression.</p>
+<hr />
+</div>
+<div id="deleting-one-observation" class="section level3 hasAnchor" number="6.9.4">
+<h3><span class="header-section-number">6.9.4</span> Deleting One Observation<a href="multiple-linear-regression-1.html#deleting-one-observation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We first relate the quantities computed with observation <span class="math inline">\(i\)</span> removed to those from the complete dataset.</p>
+<p>Using the row notation,</p>
+<p><span class="math display">\[
+\mathbf{X}&#39;\mathbf{X}
+=
+\sum_{k=1}^n X_k&#39;X_k.
+\]</span></p>
+<p>After deleting observation <span class="math inline">\(i\)</span>,</p>
+<p><span class="math display">\[
+\mathbf{X}_{(i)}&#39;
+\mathbf{X}_{(i)}
+=
+\sum_{k\neq i}X_k&#39;X_k.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{X}&#39;\mathbf{X}
+&amp;=
+\mathbf{X}_{(i)}&#39;
+\mathbf{X}_{(i)}
++
+X_i&#39;X_i,
+\end{align*}\]</span></p>
+<p>and consequently,</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf{X}_{(i)}&#39;
+\mathbf{X}_{(i)}
+=
+\mathbf{X}&#39;\mathbf{X}
+-
+X_i&#39;X_i.
+}
+\]</span></p>
+<p>Similarly,</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{X}_{(i)}&#39;
+\mathbf{y}_{(i)}
+&amp;=
+\sum_{k\neq i}X_k&#39;y_k
+\\
+&amp;=
+\sum_{k=1}^nX_k&#39;y_k-X_i&#39;y_i
+\\
+&amp;=
+\mathbf{X}&#39;\mathbf{y}
+-
+X_i&#39;y_i.
+\end{align*}\]</span></p>
+<p>Thus,</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf{X}_{(i)}&#39;
+\mathbf{y}_{(i)}
+=
+\mathbf{X}&#39;\mathbf{y}
+-
+X_i&#39;y_i.
+}
+\]</span></p>
+<p>We can now use the Sherman–Morrison formula to obtain the deleted-observation coefficient estimate.</p>
+<div class="proposition">
+<p><span id="prp:prp-mlr-deleted-coefficients" class="proposition"><strong>Proposition 6.21  (Deleted-Observation Coefficient Estimate) </strong></span>Suppose that <span class="math inline">\(h_{ii}&lt;1\)</span>. Then</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\boldsymbol{\beta}}_{(i)}
+=
+\hat{\boldsymbol{\beta}}
+-
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+\hat e_i
+}{
+1-h_{ii}
+}.
+}
+\]</span></p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-39" class="proof"><em>Proof</em>. </span>We begin with</p>
+<p><span class="math display">\[
+\mathbf{X}_{(i)}&#39;
+\mathbf{X}_{(i)}
+=
+\mathbf{X}&#39;\mathbf{X}
+-
+X_i&#39;X_i.
+\]</span></p>
+<p>Let</p>
+<p><span class="math display">\[
+\mathbf{A}
+=
+\mathbf{X}&#39;\mathbf{X}.
+\]</span></p>
 <p>Then,</p>
-<p><span class="math display">\[\hat{y}_{(i)j} = X_j \left(\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)}\right)^{-1} \sum_{k \neq i}X_k&#39;y_k = X_j\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\sum_{k \neq i}X_k&#39;y_k + \frac{X_j\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}X_i&#39;X_i\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\sum_{k \neq i}X_k&#39;y_k}{1 - h_{ii}}\]</span>
-Now</p>
+<p><span class="math display">\[
+\mathbf{X}_{(i)}&#39;
+\mathbf{X}_{(i)}
+=
+\mathbf{A}
+-
+X_i&#39;X_i.
+\]</span></p>
+<p>To apply the Sherman–Morrison formula, write</p>
+<p><span class="math display">\[
+\mathbf{A}-X_i&#39;X_i
+=
+\mathbf{A}
++
+(-X_i&#39;)X_i.
+\]</span></p>
+<p>Using</p>
+<p><span class="math display">\[
+(\mathbf{A}+\mathbf{u}\mathbf{v}&#39;)^{-1}
+=
+\mathbf{A}^{-1}
+-
+\frac{
+\mathbf{A}^{-1}
+\mathbf{u}\mathbf{v}&#39;
+\mathbf{A}^{-1}
+}{
+1+\mathbf{v}&#39;\mathbf{A}^{-1}\mathbf{u}
+},
+\]</span></p>
+<p>with</p>
+<p><span class="math display">\[
+\mathbf{u}=-X_i&#39;,
+\qquad
+\mathbf{v}&#39;=X_i,
+\]</span></p>
+<p>we obtain</p>
 <p><span class="math display">\[\begin{align*}
-X_j\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\sum_{k \neq i}X_k&#39;y_k
-  &amp;= X_j\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\left(\sum_{k \neq i}X_k&#39;y_k + X_i&#39;y_i - X_i&#39;y_i\right) \\
-  &amp;= X_j\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\left(\sum_{k = 1}^nX_k&#39;y_k - X_i&#39;y_i\right) \\
-  &amp;= X_j\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\sum_{k = 1}^nX_k&#39;y_k - X_j\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}X_i&#39;y_i \\
-  &amp;= \hat{y}_j - h_{ij}y_i
+\left(
+\mathbf{X}_{(i)}&#39;
+\mathbf{X}_{(i)}
+\right)^{-1}
+&amp;=
+\left(
+\mathbf{X}&#39;\mathbf{X}
+-
+X_i&#39;X_i
+\right)^{-1}
+\\
+&amp;=
+\left(
+\mathbf{X}&#39;\mathbf{X}
++
+(-X_i&#39;)X_i
+\right)^{-1}
+\\
+&amp;=
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+-
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+(-X_i&#39;)
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+}{
+1+
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+(-X_i&#39;)
+}
+\\
+&amp;=
+(\mathbf{X}&#39;\mathbf{X})^{-1}
++
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+}{
+1-
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+}.
 \end{align*}\]</span></p>
-<p>and</p>
+<p>Recall that</p>
+<p><span class="math display">\[
+h_{ii}
+=
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\boxed{
+\left(
+\mathbf{X}_{(i)}&#39;
+\mathbf{X}_{(i)}
+\right)^{-1}
+=
+(\mathbf{X}&#39;\mathbf{X})^{-1}
++
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+}{
+1-h_{ii}
+}.
+}
+\]</span></p>
+<p>Now,</p>
 <p><span class="math display">\[\begin{align*}
-X_j\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}X_i&#39;X_i\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\sum_{k \neq i}X_k&#39;y_k
-  &amp;= h_{ij}X_i\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}\sum_{k \neq i}X_k&#39;y_k \\
-  &amp;= h_{ij}\sum_{k \neq i}X_i\left(\mathbf{X}&#39; \mathbf{X}\right)^{-1}X_k&#39;y_k \\
-  &amp;= h_{ij}\sum_{k \neq i}h_{ik}y_k
+\hat{\boldsymbol{\beta}}_{(i)}
+&amp;=
+\left(
+\mathbf{X}_{(i)}&#39;
+\mathbf{X}_{(i)}
+\right)^{-1}
+\mathbf{X}_{(i)}&#39;
+\mathbf{y}_{(i)}
+\\
+&amp;=
+\left[
+(\mathbf{X}&#39;\mathbf{X})^{-1}
++
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+}{
+1-h_{ii}
+}
+\right]
+\left(
+\mathbf{X}&#39;\mathbf{y}
+-
+X_i&#39;y_i
+\right).
 \end{align*}\]</span></p>
-<p>Then</p>
+<p>Expanding,</p>
 <p><span class="math display">\[\begin{align*}
-\hat{y}_{(i)j} = \hat{y}_j - h_{ij}y_i + \frac{h_{ij}\sum_{k \neq i}h_{ik}y_k}{1 - h_{ii}}
-  &amp;= \hat{y}_j - h_{ij}\left(y_i  - \frac{\sum_{k \neq i}h_{ik}y_k}{1 - h_{ii}} \right) \\
-  &amp;= \hat{y}_j - h_{ij}\left(\frac{y_i - y_ih_{ii}}{1 - h_{ii}} - \frac{\sum_{k \neq i}h_{ik}y_k}{1 - h_{ii}} \right) \\
-  &amp;= \hat{y}_j - h_{ij}\left(\frac{y_i - y_ih_{ii} - \sum_{k \neq i}h_{ik}y_k}{1 - h_{ii}} \right) \\
-  &amp;= \hat{y}_j - h_{ij}\left(\frac{y_i - \sum_{k=1}^n h_{ik}y_k}{1 - h_{ii}} \right) \\
-  &amp;= \hat{y}_j - h_{ij}\left(\frac{y_i - \hat{y}_i}{1 - h_{ii}} \right) \\
-  &amp;= \hat{y}_j - h_{ij}\left(\frac{\hat{e}_i}{1 - h_{ii}} \right)
+\hat{\boldsymbol{\beta}}_{(i)}
+&amp;=
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;\mathbf{y}
+-
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;y_i
+\\
+&amp;\quad+
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;\mathbf{y}
+}{
+1-h_{ii}
+}
+\\
+&amp;\quad-
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;y_i
+}{
+1-h_{ii}}.
 \end{align*}\]</span></p>
-<p>Then</p>
+<p>Recall that</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;\mathbf{y},
+\]</span></p>
+<p>so</p>
+<p><span class="math display">\[
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;\mathbf{y}
+=
+X_i\hat{\boldsymbol{\beta}}
+=
+\hat y_i.
+\]</span></p>
+<p>Also,</p>
+<p><span class="math display">\[
+X_i
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+=
+h_{ii}.
+\]</span></p>
+<p>Therefore,</p>
 <p><span class="math display">\[\begin{align*}
-\hat{y}_{(i)j} - \hat{y}_j = - h_{ij}\left(\frac{\hat{e}_i}{1 - h_{ii}} \right)
-  &amp;\implies \left(\hat{y}_{(i)j} - \hat{y}_j \right)^2= \left(h_{ij}\left(\frac{\hat{e}_i}{1 - h_{ii}} \right) \right)^2 = \frac{\hat{e}_i^2}{(1 - h_{ii})^2}h_{ij}^2 \\
-  &amp;\implies \left(\hat{\mathbf{y}}_{(i)} - \hat{\mathbf{y}} \right)&#39;\left(\hat{\mathbf{y}}_{(i)} - \hat{\mathbf{y}} \right) = \sum_{j=1}^n \frac{\hat{e}_i^2}{(1 - h_{ii})^2}h_{ij}^2 \\
-  &amp;\implies ||\hat{\mathbf{y}}_{(i)} - \hat{\mathbf{y}}||_2^2 = \frac{\hat{e}_i^2}{(1 - h_{ii})^2} \sum_{j=1}^n h_{ij}^2
+\hat{\boldsymbol{\beta}}_{(i)}
+&amp;=
+\hat{\boldsymbol{\beta}}
+-
+(\mathbf{X}&#39;\mathbf{X})^{-1}X_i&#39;y_i
+\\
+&amp;\quad+
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;\hat y_i
+}{
+1-h_{ii}
+}
+-
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;h_{ii}y_i
+}{
+1-h_{ii}
+}.
 \end{align*}\]</span></p>
-<p>Now for any symmetric and idempotent matrix <span class="math inline">\(\mathbf{M}\in \mathbb{R}^{n \times n}\)</span> we have that:</p>
-<p><span class="math display">\[m_{ii} = \sum_{j = 1}^n m_{ij}^2\]</span>
-Then</p>
-<p><span class="math display">\[||\hat{\mathbf{y}}_{(i)} - \hat{\mathbf{y}}||_2^2 = \frac{\hat{e}_i^2}{(1 - h_{ii})^2} h_{ii}^2 = \frac{h_{ii}}{(1 - h_{ii})^2}\hat{e}_i^2 \]</span>
-That is the change in the predictions is the result of a function of the leverages
-and a function of the error of observation <span class="math inline">\(i\)</span>.</p>
-<p>We can see this with our GDP dataset. We generate new observations, in which</p>
+<p>Factor <span class="math inline">\((\mathbf{X}&#39;\mathbf{X})^{-1}X_i&#39;\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+\hat{\boldsymbol{\beta}}_{(i)}
+&amp;=
+\hat{\boldsymbol{\beta}}
++
+(\mathbf{X}&#39;\mathbf{X})^{-1}X_i&#39;
+\left[
+-y_i
++
+\frac{\hat y_i-h_{ii}y_i}{1-h_{ii}}
+\right]
+\\
+&amp;=
+\hat{\boldsymbol{\beta}}
++
+(\mathbf{X}&#39;\mathbf{X})^{-1}X_i&#39;
+\left[
+\frac{
+-y_i(1-h_{ii})
++\hat y_i
+-h_{ii}y_i
+}{
+1-h_{ii}
+}
+\right]
+\\
+&amp;=
+\hat{\boldsymbol{\beta}}
++
+(\mathbf{X}&#39;\mathbf{X})^{-1}X_i&#39;
+\left[
+\frac{\hat y_i-y_i}{1-h_{ii}}
+\right]
+\\
+&amp;=
+\hat{\boldsymbol{\beta}}
+-
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+(y_i-\hat y_i)
+}{
+1-h_{ii}
+}.
+\end{align*}\]</span></p>
+<p>Since</p>
+<p><span class="math display">\[
+\hat e_i
+=
+y_i-\hat y_i,
+\]</span></p>
+<p>we finally obtain</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\boldsymbol{\beta}}_{(i)}
+=
+\hat{\boldsymbol{\beta}}
+-
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+\hat e_i
+}{
+1-h_{ii}
+}.
+}
+\]</span></p>
+</div>
+</details>
+<p>The deletion identity already shows that the change in the estimated coefficients depends on two characteristics of observation <span class="math inline">\(i\)</span>:</p>
+<ul>
+<li>its residual <span class="math inline">\(\hat e_i\)</span>;</li>
+<li>its explanatory-variable position through <span class="math inline">\(X_i\)</span> and <span class="math inline">\(h_{ii}\)</span>.</li>
+</ul>
+<p>We can make this relationship even clearer by considering the fitted values.</p>
+<hr />
+</div>
+<div id="change-in-the-fitted-values" class="section level3 hasAnchor" number="6.9.5">
+<h3><span class="header-section-number">6.9.5</span> Change in the Fitted Values<a href="multiple-linear-regression-1.html#change-in-the-fitted-values" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Recall that</p>
+<p><span class="math display">\[
+\hat{\mathbf{y}}_{(i)}
+=
+\mathbf{X}
+\hat{\boldsymbol{\beta}}_{(i)}.
+\]</span></p>
+<p>Therefore, for observation <span class="math inline">\(j\)</span>,</p>
+<p><span class="math display">\[
+\hat y_{(i),j}
+=
+X_j\hat{\boldsymbol{\beta}}_{(i)}.
+\]</span></p>
+<div class="proposition">
+<p><span id="prp:prp-mlr-deleted-fitted-values" class="proposition"><strong>Proposition 6.22  (Deleted-Observation Fitted Values) </strong></span>For any observation <span class="math inline">\(j\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+\hat y_{(i),j}
+=
+\hat y_j
+-
+h_{ji}
+\frac{\hat e_i}{1-h_{ii}}.
+}
+\]</span></p>
+<p>Equivalently,</p>
+<p><span class="math display">\[
+\boxed{
+\hat y_{(i),j}
+-
+\hat y_j
+=
+-
+h_{ji}
+\frac{\hat e_i}{1-h_{ii}}.
+}
+\]</span></p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-40" class="proof"><em>Proof</em>. </span>Starting from the definition,</p>
+<p><span class="math display">\[\begin{align*}
+\hat y_{(i),j}
+&amp;=
+X_j
+\hat{\boldsymbol{\beta}}_{(i)}
+\\
+&amp;=
+X_j
+\left[
+\hat{\boldsymbol{\beta}}
+-
+\frac{
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+\hat e_i
+}{
+1-h_{ii}
+}
+\right]
+&amp; \text{deleted coefficient result}
+\\
+&amp;=
+X_j\hat{\boldsymbol{\beta}}
+-
+\frac{
+X_j
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+\hat e_i
+}{
+1-h_{ii}}
+\\
+&amp;=
+\hat y_j
+-
+\frac{
+X_j
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;
+\hat e_i
+}{
+1-h_{ii}}
+&amp; \text{def. fitted value}.
+\end{align*}\]</span></p>
+<p>From the expression for the entries of the hat matrix,</p>
+<p><span class="math display">\[
+h_{ji}
+=
+X_j
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+X_i&#39;.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\boxed{
+\hat y_{(i),j}
+=
+\hat y_j
+-
+h_{ji}
+\frac{\hat e_i}{1-h_{ii}}.
+}
+\]</span></p>
+<p>Subtracting <span class="math inline">\(\hat y_j\)</span> from both sides gives</p>
+<p><span class="math display">\[
+\boxed{
+\hat y_{(i),j}
+-
+\hat y_j
+=
+-
+h_{ji}
+\frac{\hat e_i}{1-h_{ii}}.
+}
+\]</span></p>
+</div>
+</details>
+<p>Notice that the fitted-value change at observation <span class="math inline">\(j\)</span> depends on <span class="math inline">\(h_{ji}\)</span>. Therefore, deleting observation <span class="math inline">\(i\)</span> can modify predictions at all the observed explanatory-variable configurations.</p>
+<p>An especially useful case occurs when <span class="math inline">\(j=i\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+\hat y_{(i),i}
+&amp;=
+\hat y_i
+-
+h_{ii}
+\frac{\hat e_i}{1-h_{ii}}.
+\end{align*}\]</span></p>
+<p>The residual obtained when observation <span class="math inline">\(i\)</span> is predicted from the model fitted without observation <span class="math inline">\(i\)</span> is therefore</p>
+<p><span class="math display">\[\begin{align*}
+y_i-\hat y_{(i),i}
+&amp;=
+y_i-\hat y_i
++
+h_{ii}
+\frac{\hat e_i}{1-h_{ii}}
+\\
+&amp;=
+\hat e_i
++
+h_{ii}
+\frac{\hat e_i}{1-h_{ii}}
+\\
+&amp;=
+\hat e_i
+\left(
+1+\frac{h_{ii}}{1-h_{ii}}
+\right)
+\\
+&amp;=
+\boxed{
+\frac{\hat e_i}{1-h_{ii}}
+}.
+\end{align*}\]</span></p>
+<p>Thus, the deleted residual can be computed directly from the ordinary residual and the leverage without refitting the regression model.</p>
+<hr />
+</div>
+<div id="leverage-residuals-and-influence" class="section level3 hasAnchor" number="6.9.6">
+<h3><span class="header-section-number">6.9.6</span> Leverage, Residuals, and Influence<a href="multiple-linear-regression-1.html#leverage-residuals-and-influence" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can now measure the total change in the predictions produced by deleting observation <span class="math inline">\(i\)</span>.</p>
+<div class="proposition">
+<p><span id="prp:prp-mlr-influence-decomposition" class="proposition"><strong>Proposition 6.23  (Change in Predictions After Deleting an Observation) </strong></span>The squared change in fitted values produced by deleting observation <span class="math inline">\(i\)</span> is</p>
+<p><span class="math display">\[
+\boxed{
+\|
+\hat{\mathbf{y}}_{(i)}
+-
+\hat{\mathbf{y}}
+\|_2^2
+=
+\frac{h_{ii}}{(1-h_{ii})^2}
+\hat e_i^2.
+}
+\]</span></p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-41" class="proof"><em>Proof</em>. </span>From the previous proposition,</p>
+<p><span class="math display">\[
+\hat y_{(i),j}
+-
+\hat y_j
+=
+-
+h_{ji}
+\frac{\hat e_i}{1-h_{ii}}.
+\]</span></p>
+<p>Squaring both sides,</p>
+<p><span class="math display">\[\begin{align*}
+\left(
+\hat y_{(i),j}
+-
+\hat y_j
+\right)^2
+&amp;=
+h_{ji}^2
+\frac{\hat e_i^2}{(1-h_{ii})^2}.
+\end{align*}\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[\begin{align*}
+\|
+\hat{\mathbf{y}}_{(i)}
+-
+\hat{\mathbf{y}}
+\|_2^2
+&amp;=
+\sum_{j=1}^n
+\left(
+\hat y_{(i),j}
+-
+\hat y_j
+\right)^2
+&amp; \text{def. squared norm}
+\\
+&amp;=
+\sum_{j=1}^n
+h_{ji}^2
+\frac{\hat e_i^2}{(1-h_{ii})^2}
+\\
+&amp;=
+\frac{\hat e_i^2}{(1-h_{ii})^2}
+\sum_{j=1}^n h_{ji}^2.
+\end{align*}\]</span></p>
+<p>We now simplify the final sum.</p>
+<p>Since <span class="math inline">\(\mathbf{H}\)</span> is symmetric,</p>
+<p><span class="math display">\[
+\mathbf{H}&#39;=\mathbf{H},
+\]</span></p>
+<p>and since it is idempotent,</p>
+<p><span class="math display">\[
+\mathbf{H}^2=\mathbf{H}.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\mathbf{H}&#39;\mathbf{H}
+=
+\mathbf{H}^2
+=
+\mathbf{H}.
+\]</span></p>
+<p>Consider the <span class="math inline">\((i,i)\)</span> entry of this equality. On the left,</p>
+<p><span class="math display">\[\begin{align*}
+[\mathbf{H}&#39;\mathbf{H}]_{ii}
+&amp;=
+\sum_{j=1}^n
+[\mathbf{H}&#39;]_{ij}
+[\mathbf{H}]_{ji}
+\\
+&amp;=
+\sum_{j=1}^n
+h_{ji}h_{ji}
+\\
+&amp;=
+\sum_{j=1}^n h_{ji}^2.
+\end{align*}\]</span></p>
+<p>On the right,</p>
+<p><span class="math display">\[
+[\mathbf{H}]_{ii}
+=
+h_{ii}.
+\]</span></p>
+<p>Consequently,</p>
+<p><span class="math display">\[
+\sum_{j=1}^n h_{ji}^2
+=
+h_{ii}.
+\]</span></p>
+<p>Substituting this result,</p>
+<p><span class="math display">\[\begin{align*}
+\|
+\hat{\mathbf{y}}_{(i)}
+-
+\hat{\mathbf{y}}
+\|_2^2
+&amp;=
+\frac{\hat e_i^2}{(1-h_{ii})^2}
+h_{ii}
+\\
+&amp;=
+\boxed{
+\frac{h_{ii}}{(1-h_{ii})^2}
+\hat e_i^2
+}.
+\end{align*}\]</span></p>
+</div>
+</details>
+<p>This result separates the effect of observation <span class="math inline">\(i\)</span> into two components:</p>
+<p><span class="math display">\[
+\boxed{
+\Delta_i
+=
+\underbrace{
+\frac{h_{ii}}{(1-h_{ii})^2}
+}_{\text{leverage component}}
+\;
+\underbrace{
+\hat e_i^2
+}_{\text{residual component}}.
+}
+\]</span></p>
+<p>This provides a precise distinction among the concepts introduced at the beginning of the section:</p>
+<ul>
+<li>A large <span class="math inline">\(\hat e_i^2\)</span> indicates that the observation is unusual in its response relative to the fitted model.</li>
+<li>A large <span class="math inline">\(h_{ii}\)</span> indicates that the observation has an unusual explanatory-variable configuration.</li>
+<li>An observation becomes highly influential when these characteristics combine to produce a large change in the fitted regression.</li>
+</ul>
+<p>Thus, neither a large residual nor high leverage alone necessarily implies high influence.</p>
+<p>The following diagram illustrates the relationship.</p>
+<p><img src="_main_files/figure-html/leverage-residual-influence-1.png" width="672" /></p>
+<p>Each contour represents a constant value of</p>
+<p><span class="math display">\[
+\Delta_i
+=
+\frac{h_{ii}}{(1-h_{ii})^2}\hat e_i^2.
+\]</span></p>
+<p>Moving upward increases the residual component, while moving to the right increases the leverage component. The largest changes in the fitted regression therefore occur when an observation combines a relatively large residual with relatively high leverage.</p>
+<p>This quantity provides the basic structure for commonly used influence diagnostics. Later, after introducing the probabilistic assumptions of the regression model, we will scale this type of change appropriately to obtain diagnostics such as Cook’s distance.</p>
+<hr />
+<div id="example-leverage-and-influence-in-the-gdp-data" class="section level4 hasAnchor" number="6.9.6.1">
+<h4><span class="header-section-number">6.9.6.1</span> Example: Leverage and Influence in the GDP Data<a href="multiple-linear-regression-1.html#example-leverage-and-influence-in-the-gdp-data" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>We can illustrate these results using the GDP data.</p>
+<p>The code begins by fitting the original regression model. It then constructs two types of artificial observations:</p>
+<ul>
+<li><code>X2</code> is located near the center of the observed explanatory variables and therefore has relatively low leverage.</li>
+<li><code>X1</code> is located at an extreme of the observed explanatory variables and therefore has relatively high leverage.</li>
+</ul>
+<p>For each of these explanatory-variable configurations, several response values are generated to create different residual magnitudes.</p>
+<p>The new observation is then added to the original dataset. The code compares:</p>
+<ol style="list-style-type: decimal">
+<li>the fitted values from the model including the new observation, and</li>
+<li>the fitted values obtained from the original model, which is equivalent to deleting the newly added observation.</li>
+</ol>
+<p>This allows us to compare the actual change in predictions with</p>
+<p><span class="math display">\[
+\frac{h_{ii}}{(1-h_{ii})^2}\hat e_i^2.
+\]</span></p>
 <div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="multiple-linear-regression-1.html#cb168-1" tabindex="-1"></a><span class="co"># Reads Data</span></span>
 <span id="cb168-2"><a href="multiple-linear-regression-1.html#cb168-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Gdp data.csv&quot;</span>)</span>
 <span id="cb168-3"><a href="multiple-linear-regression-1.html#cb168-3" tabindex="-1"></a></span>
@@ -5181,6 +6205,22 @@ and a function of the error of observation <span class="math inline">\(i\)</span
 </tr>
 </tbody>
 </table>
+<p>The column <code>Sum of Sq. Diff.</code> computes the actual change in predictions,</p>
+<p><span class="math display">\[
+\|
+\hat{\mathbf{y}}_{(i)}
+-
+\hat{\mathbf{y}}
+\|_2^2,
+\]</span></p>
+<p>while <code>Using Formula</code> computes</p>
+<p><span class="math display">\[
+\frac{h_{ii}}{(1-h_{ii})^2}\hat e_i^2.
+\]</span></p>
+<p>The two quantities agree numerically.</p>
+<p>The table also illustrates the distinction among outliers, leverage, and influence. Increasing the response discrepancy increases the residual component, while moving the explanatory-variable configuration toward an extreme increases the leverage component. The effect on the fitted regression is determined by the combination of both.</p>
+<hr />
+</div>
 </div>
 </div>
 <div id="stability-of-the-solution" class="section level2 hasAnchor" number="6.10">
