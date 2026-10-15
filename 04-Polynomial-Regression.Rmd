@@ -1,4 +1,4 @@
-# Polynomial Regression
+# Polynomial Regression {#polynomial-regression}
 
 Polynomial regression extends linear regression by allowing the relationship between the explanatory variable and the response to be nonlinear. Although the resulting fitted relationship is nonlinear in $x$, the model remains **linear in its coefficients**.
 

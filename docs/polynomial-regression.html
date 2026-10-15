@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 Polynomial Regression | _main.knit</title>
+  <meta name="description" content="" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5 Polynomial Regression | _main.knit" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5 Polynomial Regression | _main.knit" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="simple-linear-regression-1.html"/>
+<link rel="next" href="multiple-linear-regression.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Stat 5385/6385 Fall 2026</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#calendar"><i class="fa fa-check"></i><b>1.1</b> Calendar</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#important-dates"><i class="fa fa-check"></i><b>1.1.1</b> Important Dates</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#class-schedule"><i class="fa fa-check"></i><b>1.1.2</b> Class Schedule</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#course-overview"><i class="fa fa-check"></i><b>1.2</b> Course Overview</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#part-i-linear-regression-for-prediction"><i class="fa fa-check"></i><b>1.3</b> Part I — Linear Regression for Prediction</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#mathematical-prerequisites"><i class="fa fa-check"></i><b>1.3.1</b> Mathematical Prerequisites</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#introduction-to-linear-regression"><i class="fa fa-check"></i><b>1.3.2</b> Introduction to Linear Regression</a></li>
+<li class="chapter" data-level="1.3.3" data-path="index.html"><a href="index.html#simple-linear-regression"><i class="fa fa-check"></i><b>1.3.3</b> Simple Linear Regression</a></li>
+<li class="chapter" data-level="1.3.4" data-path="index.html"><a href="index.html#polynomial-regression"><i class="fa fa-check"></i><b>1.3.4</b> Polynomial Regression</a></li>
+<li class="chapter" data-level="1.3.5" data-path="index.html"><a href="index.html#multiple-linear-regression"><i class="fa fa-check"></i><b>1.3.5</b> Multiple Linear Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#part-ii-linear-regression-as-a-statistical-model"><i class="fa fa-check"></i><b>1.4</b> Part II — Linear Regression as a Statistical Model</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#bootstrapping-and-the-introduction-of-uncertainty"><i class="fa fa-check"></i><b>1.4.1</b> Bootstrapping and the Introduction of Uncertainty</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#mean-and-variance-assumptions"><i class="fa fa-check"></i><b>1.4.2</b> Mean and Variance Assumptions</a></li>
+<li class="chapter" data-level="1.4.3" data-path="index.html"><a href="index.html#the-normality-assumption-and-statistical-inference"><i class="fa fa-check"></i><b>1.4.3</b> The Normality Assumption and Statistical Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#part-iii-applications-of-the-linear-regression-framework"><i class="fa fa-check"></i><b>1.5</b> Part III — Applications of the Linear Regression Framework</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#analysis-of-variance-and-analysis-of-covariance"><i class="fa fa-check"></i><b>1.5.1</b> Analysis of Variance and Analysis of Covariance</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#experimental-design"><i class="fa fa-check"></i><b>1.5.2</b> Experimental Design</a></li>
+<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#instrumental-variables"><i class="fa fa-check"></i><b>1.5.3</b> Instrumental Variables</a></li>
+<li class="chapter" data-level="1.5.4" data-path="index.html"><a href="index.html#a-unified-view-of-applications"><i class="fa fa-check"></i><b>1.5.4</b> A Unified View of Applications</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>2</b> Prerequisites</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="prerequisites.html"><a href="prerequisites.html#general-math"><i class="fa fa-check"></i><b>2.1</b> General Math</a></li>
+<li class="chapter" data-level="2.2" data-path="prerequisites.html"><a href="prerequisites.html#linear-algebra"><i class="fa fa-check"></i><b>2.2</b> Linear Algebra</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="prerequisites.html"><a href="prerequisites.html#zero-matrix"><i class="fa fa-check"></i><b>2.2.1</b> Zero Matrix</a></li>
+<li class="chapter" data-level="2.2.2" data-path="prerequisites.html"><a href="prerequisites.html#linear-independence"><i class="fa fa-check"></i><b>2.2.2</b> Linear Independence</a></li>
+<li class="chapter" data-level="2.2.3" data-path="prerequisites.html"><a href="prerequisites.html#column-space-of-a-matrix"><i class="fa fa-check"></i><b>2.2.3</b> Column Space of a Matrix</a></li>
+<li class="chapter" data-level="2.2.4" data-path="prerequisites.html"><a href="prerequisites.html#rank-of-a-matrix"><i class="fa fa-check"></i><b>2.2.4</b> Rank of a Matrix</a></li>
+<li class="chapter" data-level="2.2.5" data-path="prerequisites.html"><a href="prerequisites.html#full-rank-matrix"><i class="fa fa-check"></i><b>2.2.5</b> Full Rank Matrix</a></li>
+<li class="chapter" data-level="2.2.6" data-path="prerequisites.html"><a href="prerequisites.html#inverse-matrix"><i class="fa fa-check"></i><b>2.2.6</b> Inverse Matrix</a></li>
+<li class="chapter" data-level="2.2.7" data-path="prerequisites.html"><a href="prerequisites.html#positive-definite-matrix"><i class="fa fa-check"></i><b>2.2.7</b> Positive Definite Matrix</a></li>
+<li class="chapter" data-level="2.2.8" data-path="prerequisites.html"><a href="prerequisites.html#singular-value-decomposition"><i class="fa fa-check"></i><b>2.2.8</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="2.2.9" data-path="prerequisites.html"><a href="prerequisites.html#eigendecomposition"><i class="fa fa-check"></i><b>2.2.9</b> Eigendecomposition</a></li>
+<li class="chapter" data-level="2.2.10" data-path="prerequisites.html"><a href="prerequisites.html#idempotent-matrix"><i class="fa fa-check"></i><b>2.2.10</b> Idempotent Matrix</a></li>
+<li class="chapter" data-level="2.2.11" data-path="prerequisites.html"><a href="prerequisites.html#determinant-of-a-matrix"><i class="fa fa-check"></i><b>2.2.11</b> Determinant of a Matrix</a></li>
+<li class="chapter" data-level="2.2.12" data-path="prerequisites.html"><a href="prerequisites.html#trace-of-a-matrix"><i class="fa fa-check"></i><b>2.2.12</b> Trace of a Matrix</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#calculus"><i class="fa fa-check"></i><b>2.3</b> Calculus</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="prerequisites.html"><a href="prerequisites.html#gradient"><i class="fa fa-check"></i><b>2.3.1</b> Gradient</a></li>
+<li class="chapter" data-level="2.3.2" data-path="prerequisites.html"><a href="prerequisites.html#hessian-matrix"><i class="fa fa-check"></i><b>2.3.2</b> Hessian Matrix</a></li>
+<li class="chapter" data-level="2.3.3" data-path="prerequisites.html"><a href="prerequisites.html#applications-1"><i class="fa fa-check"></i><b>2.3.3</b> Applications:</a></li>
+<li class="chapter" data-level="2.3.4" data-path="prerequisites.html"><a href="prerequisites.html#matrix-calculus"><i class="fa fa-check"></i><b>2.3.4</b> Matrix Calculus</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.4</b> Probability</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="prerequisites.html"><a href="prerequisites.html#expected-value"><i class="fa fa-check"></i><b>2.4.1</b> Expected Value</a></li>
+<li class="chapter" data-level="2.4.2" data-path="prerequisites.html"><a href="prerequisites.html#variance"><i class="fa fa-check"></i><b>2.4.2</b> Variance</a></li>
+<li class="chapter" data-level="2.4.3" data-path="prerequisites.html"><a href="prerequisites.html#cross-covariance-matrix"><i class="fa fa-check"></i><b>2.4.3</b> Cross-Covariance Matrix</a></li>
+<li class="chapter" data-level="2.4.4" data-path="prerequisites.html"><a href="prerequisites.html#multivariate-normal-distribution"><i class="fa fa-check"></i><b>2.4.4</b> Multivariate Normal Distribution</a></li>
+<li class="chapter" data-level="2.4.5" data-path="prerequisites.html"><a href="prerequisites.html#t-distribution"><i class="fa fa-check"></i><b>2.4.5</b> <span class="math inline">\(t\)</span> Distribution</a></li>
+<li class="chapter" data-level="2.4.6" data-path="prerequisites.html"><a href="prerequisites.html#chi2-distribution"><i class="fa fa-check"></i><b>2.4.6</b> <span class="math inline">\(\chi^2\)</span> Distribution</a></li>
+<li class="chapter" data-level="2.4.7" data-path="prerequisites.html"><a href="prerequisites.html#f-distribution"><i class="fa fa-check"></i><b>2.4.7</b> <span class="math inline">\(F\)</span> Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.5</b> Statistics</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="prerequisites.html"><a href="prerequisites.html#bias-of-an-estimator"><i class="fa fa-check"></i><b>2.5.1</b> Bias of an Estimator</a></li>
+<li class="chapter" data-level="2.5.2" data-path="prerequisites.html"><a href="prerequisites.html#unbiased-estimator"><i class="fa fa-check"></i><b>2.5.2</b> Unbiased Estimator</a></li>
+<li class="chapter" data-level="2.5.3" data-path="prerequisites.html"><a href="prerequisites.html#mean-square-error-of-an-estimator"><i class="fa fa-check"></i><b>2.5.3</b> Mean Square Error of an Estimator</a></li>
+<li class="chapter" data-level="2.5.4" data-path="prerequisites.html"><a href="prerequisites.html#interval-estimation"><i class="fa fa-check"></i><b>2.5.4</b> Interval Estimation</a></li>
+<li class="chapter" data-level="2.5.5" data-path="prerequisites.html"><a href="prerequisites.html#hypothesis-testing"><i class="fa fa-check"></i><b>2.5.5</b> Hypothesis Testing</a></li>
+<li class="chapter" data-level="2.5.6" data-path="prerequisites.html"><a href="prerequisites.html#power-analysis"><i class="fa fa-check"></i><b>2.5.6</b> Power Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="introduction.html"><a href="introduction.html#objectives-of-linear-regression"><i class="fa fa-check"></i><b>3.1</b> Objectives of Linear Regression</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction.html"><a href="introduction.html#examples-1"><i class="fa fa-check"></i><b>3.2</b> Examples</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="introduction.html"><a href="introduction.html#ad-spending"><i class="fa fa-check"></i><b>3.2.1</b> Ad Spending</a></li>
+<li class="chapter" data-level="3.2.2" data-path="introduction.html"><a href="introduction.html#wine-example"><i class="fa fa-check"></i><b>3.2.2</b> Wine and Life Expectancy</a></li>
+<li class="chapter" data-level="3.2.3" data-path="introduction.html"><a href="introduction.html#burger-demand"><i class="fa fa-check"></i><b>3.2.3</b> Burger Demand</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="introduction.html"><a href="introduction.html#intro-to-slr"><i class="fa fa-check"></i><b>3.3</b> Intro to SLR</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="introduction.html"><a href="introduction.html#a-path-not-taken"><i class="fa fa-check"></i><b>3.3.1</b> A Path Not Taken</a></li>
+<li class="chapter" data-level="3.3.2" data-path="introduction.html"><a href="introduction.html#slr-model"><i class="fa fa-check"></i><b>3.3.2</b> SLR Model</a></li>
+<li class="chapter" data-level="3.3.3" data-path="introduction.html"><a href="introduction.html#possible-optimization-problems"><i class="fa fa-check"></i><b>3.3.3</b> Possible Optimization Problems</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="introduction.html"><a href="introduction.html#exercises"><i class="fa fa-check"></i><b>3.4</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="introduction.html"><a href="introduction.html#exercise-1-changing-the-intercept"><i class="fa fa-check"></i><b>3.4.1</b> Exercise 1: Changing the Intercept</a></li>
+<li class="chapter" data-level="3.4.2" data-path="introduction.html"><a href="introduction.html#exercise-2-changing-the-slope"><i class="fa fa-check"></i><b>3.4.2</b> Exercise 2: Changing the Slope</a></li>
+<li class="chapter" data-level="3.4.3" data-path="introduction.html"><a href="introduction.html#exercise-3-different-intercepts-and-slopes"><i class="fa fa-check"></i><b>3.4.3</b> Exercise 3: Different Intercepts and Slopes</a></li>
+<li class="chapter" data-level="3.4.4" data-path="introduction.html"><a href="introduction.html#exercise-4-increasing-the-amount-of-noise"><i class="fa fa-check"></i><b>3.4.4</b> Exercise 4: Increasing the Amount of Noise</a></li>
+<li class="chapter" data-level="3.4.5" data-path="introduction.html"><a href="introduction.html#exercise-5-no-relationship"><i class="fa fa-check"></i><b>3.4.5</b> Exercise 5: No Relationship</a></li>
+<li class="chapter" data-level="3.4.6" data-path="introduction.html"><a href="introduction.html#exercise-6-a-quadratic-relationship"><i class="fa fa-check"></i><b>3.4.6</b> Exercise 6: A Quadratic Relationship</a></li>
+<li class="chapter" data-level="3.4.7" data-path="introduction.html"><a href="introduction.html#exercise-7-diminishing-returns"><i class="fa fa-check"></i><b>3.4.7</b> Exercise 7: Diminishing Returns</a></li>
+<li class="chapter" data-level="3.4.8" data-path="introduction.html"><a href="introduction.html#exercise-8-a-relationship-that-changes"><i class="fa fa-check"></i><b>3.4.8</b> Exercise 8: A Relationship That Changes</a></li>
+<li class="chapter" data-level="3.4.9" data-path="introduction.html"><a href="introduction.html#exercise-9-saturation"><i class="fa fa-check"></i><b>3.4.9</b> Exercise 9: Saturation</a></li>
+<li class="chapter" data-level="3.4.10" data-path="introduction.html"><a href="introduction.html#exercise-10-the-effect-of-an-outlier"><i class="fa fa-check"></i><b>3.4.10</b> Exercise 10: The Effect of an Outlier</a></li>
+<li class="chapter" data-level="3.4.11" data-path="introduction.html"><a href="introduction.html#exercise-11-restricted-range"><i class="fa fa-check"></i><b>3.4.11</b> Exercise 11: Restricted Range</a></li>
+<li class="chapter" data-level="3.4.12" data-path="introduction.html"><a href="introduction.html#exercise-12-extrapolation"><i class="fa fa-check"></i><b>3.4.12</b> Exercise 12: Extrapolation</a></li>
+<li class="chapter" data-level="3.4.13" data-path="introduction.html"><a href="introduction.html#exercise-13-positive-responses-and-impossible-predictions"><i class="fa fa-check"></i><b>3.4.13</b> Exercise 13: Positive Responses and Impossible Predictions</a></li>
+<li class="chapter" data-level="3.4.14" data-path="introduction.html"><a href="introduction.html#exercise-14-two-different-groups"><i class="fa fa-check"></i><b>3.4.14</b> Exercise 14: Two Different Groups</a></li>
+<li class="chapter" data-level="3.4.15" data-path="introduction.html"><a href="introduction.html#exercise-15-collecting-your-own-data"><i class="fa fa-check"></i><b>3.4.15</b> Exercise 15: Collecting Your Own Data</a></li>
+<li class="chapter" data-level="3.4.16" data-path="introduction.html"><a href="introduction.html#exercise-16-control-versus-description"><i class="fa fa-check"></i><b>3.4.16</b> Exercise 16: Control Versus Description</a></li>
+<li class="chapter" data-level="3.4.17" data-path="introduction.html"><a href="introduction.html#exercise-17-same-linear-model-different-data"><i class="fa fa-check"></i><b>3.4.17</b> Exercise 17: Same Linear Model, Different Data</a></li>
+<li class="chapter" data-level="3.4.18" data-path="introduction.html"><a href="introduction.html#exercise-18-build-a-dataset-where-a-line-is-misleading"><i class="fa fa-check"></i><b>3.4.18</b> Exercise 18: Build a Dataset Where a Line Is Misleading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html"><i class="fa fa-check"></i><b>4</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#least-squares-estimation"><i class="fa fa-check"></i><b>4.1</b> Least Squares Estimation</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#computational-properties-of-least-squares"><i class="fa fa-check"></i><b>4.1.1</b> Computational Properties of Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#fitted-values-and-residuals"><i class="fa fa-check"></i><b>4.2</b> Fitted Values and Residuals</a></li>
+<li class="chapter" data-level="4.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#properties-of-the-estimates"><i class="fa fa-check"></i><b>4.3</b> Properties of the Estimates</a></li>
+<li class="chapter" data-level="4.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#centering-and-standardizing-the-data"><i class="fa fa-check"></i><b>4.4</b> Centering and Standardizing the Data</a></li>
+<li class="chapter" data-level="4.5" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#centering-and-standarizing-in-slr"><i class="fa fa-check"></i><b>4.5</b> Centering and Standarizing in SLR</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#centered-explanatory-variable"><i class="fa fa-check"></i><b>4.5.1</b> Centered Explanatory Variable</a></li>
+<li class="chapter" data-level="4.5.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#both-variables-centered"><i class="fa fa-check"></i><b>4.5.2</b> Both Variables Centered</a></li>
+<li class="chapter" data-level="4.5.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#both-variables-standardized"><i class="fa fa-check"></i><b>4.5.3</b> Both variables Standardized</a></li>
+<li class="chapter" data-level="4.5.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#summary-of-centering-and-standarizing-in-slr"><i class="fa fa-check"></i><b>4.5.4</b> Summary of Centering and Standarizing in SLR</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#coefficient-of-determination"><i class="fa fa-check"></i><b>4.6</b> Coefficient of Determination</a></li>
+<li class="chapter" data-level="4.7" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#residual-analysis"><i class="fa fa-check"></i><b>4.7</b> Residual Analysis</a>
+<ul>
+<li class="chapter" data-level="4.7.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#non-linear-regression-function"><i class="fa fa-check"></i><b>4.7.1</b> Non-linear regression function</a></li>
+<li class="chapter" data-level="4.7.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#changing-residual-spread"><i class="fa fa-check"></i><b>4.7.2</b> Changing Residual Spread</a></li>
+<li class="chapter" data-level="4.7.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#outliers"><i class="fa fa-check"></i><b>4.7.3</b> Outliers</a></li>
+<li class="chapter" data-level="4.7.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#variables-ommitted"><i class="fa fa-check"></i><b>4.7.4</b> Variables Ommitted</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#cross-validation"><i class="fa fa-check"></i><b>4.8</b> Cross-Validation</a>
+<ul>
+<li class="chapter" data-level="4.8.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#validation-error"><i class="fa fa-check"></i><b>4.8.1</b> Validation Error</a></li>
+<li class="chapter" data-level="4.8.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#holdout-validation"><i class="fa fa-check"></i><b>4.8.2</b> Holdout Validation</a></li>
+<li class="chapter" data-level="4.8.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>4.8.3</b> K-Fold Cross-Validation</a></li>
+<li class="chapter" data-level="4.8.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#other-cross-validation-procedures"><i class="fa fa-check"></i><b>4.8.4</b> Other Cross-Validation Procedures</a></li>
+<li class="chapter" data-level="4.8.5" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#cross-validation-example"><i class="fa fa-check"></i><b>4.8.5</b> Cross Validation Example</a></li>
+<li class="chapter" data-level="4.8.6" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#summary-2"><i class="fa fa-check"></i><b>4.8.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4.9" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#weighted-least-squares"><i class="fa fa-check"></i><b>4.9</b> Weighted Least Squares</a>
+<ul>
+<li class="chapter" data-level="4.9.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#weighted-quantities"><i class="fa fa-check"></i><b>4.9.1</b> Weighted Quantities</a></li>
+<li class="chapter" data-level="4.9.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#solution-to-wls"><i class="fa fa-check"></i><b>4.9.2</b> Solution to WLS</a></li>
+<li class="chapter" data-level="4.9.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#weighted-normal-equations"><i class="fa fa-check"></i><b>4.9.3</b> Weighted Normal Equations</a></li>
+<li class="chapter" data-level="4.9.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#choice-of-weights"><i class="fa fa-check"></i><b>4.9.4</b> Choice of Weights</a></li>
+<li class="chapter" data-level="4.9.5" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#role-of-weighted-least-squares"><i class="fa fa-check"></i><b>4.9.5</b> Role of Weighted Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="4.10" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#model-in-matrix-form"><i class="fa fa-check"></i><b>4.10</b> Model in Matrix Form</a>
+<ul>
+<li class="chapter" data-level="4.10.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#weighted-least-squares-in-matrix-form"><i class="fa fa-check"></i><b>4.10.1</b> Weighted Least Squares in Matrix Form</a></li>
+</ul></li>
+<li class="chapter" data-level="4.11" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#exercises-1"><i class="fa fa-check"></i><b>4.11</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="4.11.1" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#least-squares-estimation-1"><i class="fa fa-check"></i><b>4.11.1</b> Least Squares Estimation</a></li>
+<li class="chapter" data-level="4.11.2" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#fitted-values-and-residuals-1"><i class="fa fa-check"></i><b>4.11.2</b> Fitted Values and Residuals</a></li>
+<li class="chapter" data-level="4.11.3" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#centering-and-standardizing"><i class="fa fa-check"></i><b>4.11.3</b> Centering and Standardizing</a></li>
+<li class="chapter" data-level="4.11.4" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#coefficient-of-determination-1"><i class="fa fa-check"></i><b>4.11.4</b> Coefficient of Determination</a></li>
+<li class="chapter" data-level="4.11.5" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#residual-analysis-1"><i class="fa fa-check"></i><b>4.11.5</b> Residual Analysis</a></li>
+<li class="chapter" data-level="4.11.6" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#cross-validation-1"><i class="fa fa-check"></i><b>4.11.6</b> Cross-Validation</a></li>
+<li class="chapter" data-level="4.11.7" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#weighted-least-squares-1"><i class="fa fa-check"></i><b>4.11.7</b> Weighted Least Squares</a></li>
+<li class="chapter" data-level="4.11.8" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#matrix-form"><i class="fa fa-check"></i><b>4.11.8</b> Matrix Form</a></li>
+<li class="chapter" data-level="4.11.9" data-path="simple-linear-regression-1.html"><a href="simple-linear-regression-1.html#comprehensive-exercise"><i class="fa fa-check"></i><b>4.11.9</b> Comprehensive Exercise</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="index.html"><a href="index.html#polynomial-regression"><i class="fa fa-check"></i><b>5</b> Polynomial Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html"><i class="fa fa-check"></i><b>5.1</b> Motivation</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#taylor-polynomials-and-polynomial-regression"><i class="fa fa-check"></i><b>5.1.1</b> Taylor Polynomials and Polynomial Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="polynomial-regression.html"><a href="polynomial-regression.html#polynomial-regression-as-a-linear-model"><i class="fa fa-check"></i><b>5.2</b> Polynomial Regression as a Linear Model</a></li>
+<li class="chapter" data-level="5.3" data-path="polynomial-regression.html"><a href="polynomial-regression.html#centering-and-reparameterization"><i class="fa fa-check"></i><b>5.3</b> Centering and Reparameterization</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#why-center-at-the-sample-mean"><i class="fa fa-check"></i><b>5.3.1</b> Why Center at the Sample Mean?</a></li>
+<li class="chapter" data-level="5.3.2" data-path="polynomial-regression.html"><a href="polynomial-regression.html#example-9"><i class="fa fa-check"></i><b>5.3.2</b> Example</a></li>
+<li class="chapter" data-level="5.3.3" data-path="polynomial-regression.html"><a href="polynomial-regression.html#polynomial-cross-validation-example"><i class="fa fa-check"></i><b>5.3.3</b> Polynomial Cross-Validation Example</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercises-2"><i class="fa fa-check"></i><b>5.4</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-1-linear-in-the-coefficients"><i class="fa fa-check"></i><b>5.4.1</b> Exercise 1 — Linear in the Coefficients</a></li>
+<li class="chapter" data-level="5.4.2" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-2-constructing-the-polynomial-design-matrix"><i class="fa fa-check"></i><b>5.4.2</b> Exercise 2 — Constructing the Polynomial Design Matrix</a></li>
+<li class="chapter" data-level="5.4.3" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-3-quadratic-least-squares"><i class="fa fa-check"></i><b>5.4.3</b> Exercise 3 — Quadratic Least Squares</a></li>
+<li class="chapter" data-level="5.4.4" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-4-from-a-centered-quadratic-to-an-uncentered-quadratic"><i class="fa fa-check"></i><b>5.4.4</b> Exercise 4 — From a Centered Quadratic to an Uncentered Quadratic</a></li>
+<li class="chapter" data-level="5.4.5" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-5-from-an-uncentered-quadratic-to-a-centered-quadratic"><i class="fa fa-check"></i><b>5.4.5</b> Exercise 5 — From an Uncentered Quadratic to a Centered Quadratic</a></li>
+<li class="chapter" data-level="5.4.6" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-6-numerical-reparameterization"><i class="fa fa-check"></i><b>5.4.6</b> Exercise 6 — Numerical Reparameterization</a></li>
+<li class="chapter" data-level="5.4.7" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-7-column-spaces-and-centering"><i class="fa fa-check"></i><b>5.4.7</b> Exercise 7 — Column Spaces and Centering</a></li>
+<li class="chapter" data-level="5.4.8" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-8-why-center-at-the-mean"><i class="fa fa-check"></i><b>5.4.8</b> Exercise 8 — Why Center at the Mean?</a></li>
+<li class="chapter" data-level="5.4.9" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-9-interpretation-of-the-centered-intercept"><i class="fa fa-check"></i><b>5.4.9</b> Exercise 9 — Interpretation of the Centered Intercept</a></li>
+<li class="chapter" data-level="5.4.10" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-10-taylor-approximation-versus-polynomial-regression"><i class="fa fa-check"></i><b>5.4.10</b> Exercise 10 — Taylor Approximation versus Polynomial Regression</a></li>
+<li class="chapter" data-level="5.4.11" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-11-centering-in-r"><i class="fa fa-check"></i><b>5.4.11</b> Exercise 11 — Centering in R</a></li>
+<li class="chapter" data-level="5.4.12" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-12-correlation-between-polynomial-terms"><i class="fa fa-check"></i><b>5.4.12</b> Exercise 12 — Correlation Between Polynomial Terms</a></li>
+<li class="chapter" data-level="5.4.13" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-13-interpolation-and-extrapolation"><i class="fa fa-check"></i><b>5.4.13</b> Exercise 13 — Interpolation and Extrapolation</a></li>
+<li class="chapter" data-level="5.4.14" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-14-polynomial-degree-and-model-flexibility"><i class="fa fa-check"></i><b>5.4.14</b> Exercise 14 — Polynomial Degree and Model Flexibility</a></li>
+<li class="chapter" data-level="5.4.15" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-15-centering-without-an-intercept"><i class="fa fa-check"></i><b>5.4.15</b> Exercise 15: Centering Without an Intercept</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="index.html"><a href="index.html#multiple-linear-regression"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#the-general-model"><i class="fa fa-check"></i><b>6.1.1</b> The General Model</a></li>
+<li class="chapter" data-level="6.1.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interpretation-and-objectives"><i class="fa fa-check"></i><b>6.1.2</b> Interpretation and Objectives</a></li>
+<li class="chapter" data-level="6.1.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#applications-and-context"><i class="fa fa-check"></i><b>6.1.3</b> Applications and Context</a></li>
+<li class="chapter" data-level="6.1.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#connection-to-polynomial-regression"><i class="fa fa-check"></i><b>6.1.4</b> Connection to Polynomial Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#example-modeling-gdp"><i class="fa fa-check"></i><b>6.2</b> Example: Modeling GDP</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#simple-regressions"><i class="fa fa-check"></i><b>6.2.1</b> Simple Regressions</a></li>
+<li class="chapter" data-level="6.2.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#multiple-regression"><i class="fa fa-check"></i><b>6.2.2</b> Multiple Regression</a></li>
+<li class="chapter" data-level="6.2.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#summary-3"><i class="fa fa-check"></i><b>6.2.3</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#least-squares-estimation-2"><i class="fa fa-check"></i><b>6.3</b> Least Squares Estimation</a></li>
+<li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#properties-of-the-estimates-1"><i class="fa fa-check"></i><b>6.4</b> Properties of the Estimates</a></li>
+<li class="chapter" data-level="6.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#multiple-r2"><i class="fa fa-check"></i><b>6.5</b> Multiple <span class="math inline">\(R^2\)</span></a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#the-intercept-only-model"><i class="fa fa-check"></i><b>6.5.1</b> The Intercept-Only Model</a></li>
+<li class="chapter" data-level="6.5.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#sums-of-squares-in-matrix-form"><i class="fa fa-check"></i><b>6.5.2</b> Sums of Squares in Matrix Form</a></li>
+<li class="chapter" data-level="6.5.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#range-of-multiple-r2"><i class="fa fa-check"></i><b>6.5.3</b> Range of Multiple <span class="math inline">\(R^2\)</span></a></li>
+<li class="chapter" data-level="6.5.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#adding-an-explanatory-variable"><i class="fa fa-check"></i><b>6.5.4</b> Adding an Explanatory Variable</a></li>
+<li class="chapter" data-level="6.5.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#connection-to-the-geometric-interpretation"><i class="fa fa-check"></i><b>6.5.5</b> Connection to the Geometric Interpretation</a></li>
+<li class="chapter" data-level="6.5.6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#uncentered-r2-regression-without-an-intercept"><i class="fa fa-check"></i><b>6.5.6</b> Uncentered <span class="math inline">\(R^2\)</span>: Regression Without an Intercept</a></li>
+<li class="chapter" data-level="6.5.7" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#adjusted-r2"><i class="fa fa-check"></i><b>6.5.7</b> Adjusted <span class="math inline">\(R^2\)</span></a></li>
+<li class="chapter" data-level="6.5.8" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#summary-4"><i class="fa fa-check"></i><b>6.5.8</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#geometric-interpretation-of-multiple-linear-regression"><i class="fa fa-check"></i><b>6.6</b> Geometric Interpretation of Multiple Linear Regression</a></li>
+<li class="chapter" data-level="6.7" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#centered-and-standardized-variables"><i class="fa fa-check"></i><b>6.7</b> Centered and Standardized Variables</a>
+<ul>
+<li class="chapter" data-level="6.7.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#centered-variables"><i class="fa fa-check"></i><b>6.7.1</b> Centered Variables</a></li>
+<li class="chapter" data-level="6.7.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#sample-covariance"><i class="fa fa-check"></i><b>6.7.2</b> Sample Covariance</a></li>
+<li class="chapter" data-level="6.7.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#least-squares-coefficients-in-covariance-form"><i class="fa fa-check"></i><b>6.7.3</b> Least-Squares Coefficients in Covariance Form</a></li>
+<li class="chapter" data-level="6.7.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#the-intercept-and-the-effect-of-centering"><i class="fa fa-check"></i><b>6.7.4</b> The Intercept and the Effect of Centering</a></li>
+<li class="chapter" data-level="6.7.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#standardized-variables"><i class="fa fa-check"></i><b>6.7.5</b> Standardized Variables</a></li>
+<li class="chapter" data-level="6.7.6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#sample-correlation-matrix"><i class="fa fa-check"></i><b>6.7.6</b> Sample Correlation Matrix</a></li>
+<li class="chapter" data-level="6.7.7" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#regression-with-standardized-variables"><i class="fa fa-check"></i><b>6.7.7</b> Regression with Standardized Variables</a></li>
+<li class="chapter" data-level="6.7.8" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#example-gdp-data"><i class="fa fa-check"></i><b>6.7.8</b> Example: GDP Data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.8" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#variable-cross-effects"><i class="fa fa-check"></i><b>6.8</b> Variable Cross-Effects</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#block-correlation-representation"><i class="fa fa-check"></i><b>6.8.1</b> Block Correlation Representation</a></li>
+<li class="chapter" data-level="6.8.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#coefficients-for-one-group-after-accounting-for-the-other"><i class="fa fa-check"></i><b>6.8.2</b> Coefficients for One Group After Accounting for the Other</a></li>
+<li class="chapter" data-level="6.8.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#full-model-versus-group-only-models"><i class="fa fa-check"></i><b>6.8.3</b> Full Model Versus Group-Only Models</a></li>
+<li class="chapter" data-level="6.8.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#single-variable-cross-effects"><i class="fa fa-check"></i><b>6.8.4</b> Single Variable Cross-Effects</a></li>
+<li class="chapter" data-level="6.8.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#single-variable-coefficient-formula"><i class="fa fa-check"></i><b>6.8.5</b> Single Variable Coefficient Formula</a></li>
+<li class="chapter" data-level="6.8.6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#generalization-to-any-explanatory-variable"><i class="fa fa-check"></i><b>6.8.6</b> Generalization to Any Explanatory Variable</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#outliers-leverage-and-influential-observations"><i class="fa fa-check"></i><b>6.9</b> Outliers, Leverage, and Influential Observations</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#leverage"><i class="fa fa-check"></i><b>6.9.1</b> Leverage</a></li>
+<li class="chapter" data-level="6.9.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#entries-of-the-hat-matrix"><i class="fa fa-check"></i><b>6.9.2</b> Entries of the Hat Matrix</a></li>
+<li class="chapter" data-level="6.9.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#influential-observations"><i class="fa fa-check"></i><b>6.9.3</b> Influential Observations</a></li>
+<li class="chapter" data-level="6.9.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#deleting-one-observation"><i class="fa fa-check"></i><b>6.9.4</b> Deleting One Observation</a></li>
+<li class="chapter" data-level="6.9.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#change-in-the-fitted-values"><i class="fa fa-check"></i><b>6.9.5</b> Change in the Fitted Values</a></li>
+<li class="chapter" data-level="6.9.6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#leverage-residuals-and-influence"><i class="fa fa-check"></i><b>6.9.6</b> Leverage, Residuals, and Influence</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#numerical-considerations"><i class="fa fa-check"></i><b>6.10</b> Numerical Considerations</a></li>
+<li class="chapter" data-level="6.11" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#other-approaches-to-regression"><i class="fa fa-check"></i><b>6.11</b> Other Approaches to Regression</a>
+<ul>
+<li class="chapter" data-level="6.11.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#least-absolute-deviations-regression"><i class="fa fa-check"></i><b>6.11.1</b> Least Absolute Deviations Regression</a></li>
+<li class="chapter" data-level="6.11.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#ridge-regression"><i class="fa fa-check"></i><b>6.11.2</b> Ridge Regression</a></li>
+<li class="chapter" data-level="6.11.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#lasso-regression"><i class="fa fa-check"></i><b>6.11.3</b> Lasso Regression</a></li>
+<li class="chapter" data-level="6.11.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#comparison-of-regression-criteria"><i class="fa fa-check"></i><b>6.11.4</b> Comparison of Regression Criteria</a></li>
+</ul></li>
+<li class="chapter" data-level="6.12" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#chapter-synthesis"><i class="fa fa-check"></i><b>6.12</b> Chapter Synthesis</a></li>
+<li class="chapter" data-level="6.13" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#exercises-3"><i class="fa fa-check"></i><b>6.13</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html"><i class="fa fa-check"></i><b>7</b> Mean and Varaince Assumptions</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mean-assumptions"><i class="fa fa-check"></i><b>7.1</b> Mean Assumptions</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#expectation-of-mathbfy"><i class="fa fa-check"></i><b>7.1.1</b> Expectation of <span class="math inline">\(\mathbf{y}\)</span>:</a></li>
+<li class="chapter" data-level="7.1.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#expectation-of-hatboldsymbolbeta"><i class="fa fa-check"></i><b>7.1.2</b> Expectation of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span></a></li>
+<li class="chapter" data-level="7.1.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#expectation-of-hatmathbfy"><i class="fa fa-check"></i><b>7.1.3</b> Expectation of <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
+<li class="chapter" data-level="7.1.4" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#expectation-of-hatmathbfe"><i class="fa fa-check"></i><b>7.1.4</b> Expectation of <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-assumptions"><i class="fa fa-check"></i><b>7.2</b> Variance Assumptions</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-mathbfy"><i class="fa fa-check"></i><b>7.2.1</b> Variance of <span class="math inline">\(\mathbf{y}\)</span></a></li>
+<li class="chapter" data-level="7.2.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-hatboldsymbolbeta"><i class="fa fa-check"></i><b>7.2.2</b> Variance of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span></a></li>
+<li class="chapter" data-level="7.2.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-hatmathbfy"><i class="fa fa-check"></i><b>7.2.3</b> Variance of <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
+<li class="chapter" data-level="7.2.4" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#variance-of-hatmathbfe"><i class="fa fa-check"></i><b>7.2.4</b> Variance of <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#cross-covariances"><i class="fa fa-check"></i><b>7.3</b> Cross-Covariances</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#cross-covaraince-of-haty-and-hate"><i class="fa fa-check"></i><b>7.3.1</b> Cross-covaraince of <span class="math inline">\(\hat{y}\)</span> and <span class="math inline">\(\hat{e}\)</span></a></li>
+<li class="chapter" data-level="7.3.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#cross-covaraince-of-haty-and-hatboldsymbolbeta"><i class="fa fa-check"></i><b>7.3.2</b> Cross-covaraince of <span class="math inline">\(\hat{y}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#gauss-markov-theorem"><i class="fa fa-check"></i><b>7.4</b> Gauss-Markov Theorem</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#assumptions"><i class="fa fa-check"></i><b>7.4.1</b> Assumptions</a></li>
+<li class="chapter" data-level="7.4.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#statement"><i class="fa fa-check"></i><b>7.4.2</b> Statement</a></li>
+<li class="chapter" data-level="7.4.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#proof"><i class="fa fa-check"></i><b>7.4.3</b> Proof</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#estimate-of-sigma2"><i class="fa fa-check"></i><b>7.5</b> Estimate of <span class="math inline">\(\sigma^2\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="normality-assumption.html"><a href="normality-assumption.html"><i class="fa fa-check"></i><b>8</b> Normality Assumption</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="normality-assumption.html"><a href="normality-assumption.html#introduction-2"><i class="fa fa-check"></i><b>8.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.2" data-path="normality-assumption.html"><a href="normality-assumption.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>8.2</b> Maximum Likelihood Estimation</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="normality-assumption.html"><a href="normality-assumption.html#decomposition-of-the-quadratic-form"><i class="fa fa-check"></i><b>8.2.1</b> Decomposition of the Quadratic Form</a></li>
+<li class="chapter" data-level="8.2.2" data-path="normality-assumption.html"><a href="normality-assumption.html#estimation-of-sigma2"><i class="fa fa-check"></i><b>8.2.2</b> Estimation of <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="8.2.3" data-path="normality-assumption.html"><a href="normality-assumption.html#remarks-on-bias-and-practical-use"><i class="fa fa-check"></i><b>8.2.3</b> Remarks on Bias and Practical Use</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-the-estimates"><i class="fa fa-check"></i><b>8.3</b> Distribution of the Estimates</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatboldsymbolbeta-hatmathbfy-and-hatmathbfe"><i class="fa fa-check"></i><b>8.3.1</b> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span>, and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+<li class="chapter" data-level="8.3.2" data-path="normality-assumption.html"><a href="normality-assumption.html#distribution-of-hatsigma2"><i class="fa fa-check"></i><b>8.3.2</b> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a></li>
+<li class="chapter" data-level="8.3.3" data-path="normality-assumption.html"><a href="normality-assumption.html#independence-of-hatmathbfe-and-hatmathbfy"><i class="fa fa-check"></i><b>8.3.3</b> Independence of <span class="math inline">\(\hat{\mathbf{e}}\)</span> and <span class="math inline">\(\hat{\mathbf{y}}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="normality-assumption.html"><a href="normality-assumption.html#interval-estimation-1"><i class="fa fa-check"></i><b>8.4</b> Interval Estimation</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="normality-assumption.html"><a href="normality-assumption.html#quantile-notation"><i class="fa fa-check"></i><b>8.4.1</b> Quantile notation</a></li>
+<li class="chapter" data-level="8.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-coefficients"><i class="fa fa-check"></i><b>8.4.2</b> Confidence Intervals for the Coefficients</a></li>
+<li class="chapter" data-level="8.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-the-expected-mean-of-a-new-observation-mathbfx_new"><i class="fa fa-check"></i><b>8.4.3</b> Confidence Intervals for the Expected Mean of a New Observation <span class="math inline">\(\mathbf{x}_{new}\)</span></a></li>
+<li class="chapter" data-level="8.4.4" data-path="normality-assumption.html"><a href="normality-assumption.html#confidence-intervals-for-linear-combinations-of-boldsymbolbeta"><i class="fa fa-check"></i><b>8.4.4</b> Confidence Intervals for Linear Combinations of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="normality-assumption.html"><a href="normality-assumption.html#hypothesis-testing-1"><i class="fa fa-check"></i><b>8.5</b> Hypothesis Testing</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-for-the-overall-regression"><i class="fa fa-check"></i><b>8.5.1</b> Testing for the Overall Regression</a></li>
+<li class="chapter" data-level="8.5.2" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-if-one-variable-is-not-relevant"><i class="fa fa-check"></i><b>8.5.2</b> Testing if one variable is not relevant</a></li>
+<li class="chapter" data-level="8.5.3" data-path="normality-assumption.html"><a href="normality-assumption.html#testing-if-a-subgroup-of-the-variables-is-relevant"><i class="fa fa-check"></i><b>8.5.3</b> Testing if a Subgroup of the Variables is Relevant</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="normality-assumption.html"><a href="normality-assumption.html#power-analysis-1"><i class="fa fa-check"></i><b>8.6</b> Power Analysis</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="normality-assumption.html"><a href="normality-assumption.html#power-for-testing-a-single-coefficient"><i class="fa fa-check"></i><b>8.6.1</b> Power for Testing a Single Coefficient</a></li>
+<li class="chapter" data-level="8.6.2" data-path="normality-assumption.html"><a href="normality-assumption.html#power-for-testing-multiple-coefficients-partial-f-tests"><i class="fa fa-check"></i><b>8.6.2</b> Power for Testing Multiple Coefficients (Partial F-Tests)</a></li>
+<li class="chapter" data-level="8.6.3" data-path="normality-assumption.html"><a href="normality-assumption.html#the-role-of-the-design-matrix"><i class="fa fa-check"></i><b>8.6.3</b> The Role of the Design Matrix</a></li>
+<li class="chapter" data-level="8.6.4" data-path="normality-assumption.html"><a href="normality-assumption.html#practical-applications"><i class="fa fa-check"></i><b>8.6.4</b> Practical Applications</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="prerequisites.html"><a href="prerequisites.html#applications"><i class="fa fa-check"></i><b>9</b> Applications</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="applications.html"><a href="applications.html"><i class="fa fa-check"></i><b>9.1</b> ANOVA</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="applications.html"><a href="applications.html#one-way-anova-a-single-covariate-differences-in-means"><i class="fa fa-check"></i><b>9.1.1</b> One-way ANOVA: a single covariate (differences in means)</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="applications.html"><a href="applications.html#ancova"><i class="fa fa-check"></i><b>9.2</b> ANCOVA</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="applications.html"><a href="applications.html#how-controls-act-as-partialling-out"><i class="fa fa-check"></i><b>9.2.1</b> How controls act as “partialling out”</a></li>
+<li class="chapter" data-level="9.2.2" data-path="applications.html"><a href="applications.html#partial-f-test-in-ancova"><i class="fa fa-check"></i><b>9.2.2</b> Partial F-test in ANCOVA</a></li>
+<li class="chapter" data-level="9.2.3" data-path="applications.html"><a href="applications.html#r-example-ancova-with-mtcars"><i class="fa fa-check"></i><b>9.2.3</b> R example — ANCOVA with <code>mtcars</code></a></li>
+<li class="chapter" data-level="9.2.4" data-path="applications.html"><a href="applications.html#why-controlling-improves-the-analysis"><i class="fa fa-check"></i><b>9.2.4</b> Why controlling improves the analysis?</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="applications.html"><a href="applications.html#effect-of-randomization-in-the-covariate-of-interest"><i class="fa fa-check"></i><b>9.3</b> Effect of randomization in the covariate of interest</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="applications.html"><a href="applications.html#key-consequences-of-randomization"><i class="fa fa-check"></i><b>9.3.1</b> Key consequences of randomization</a></li>
+<li class="chapter" data-level="9.3.2" data-path="applications.html"><a href="applications.html#randomized-vs-observational-assignments"><i class="fa fa-check"></i><b>9.3.2</b> Randomized vs observational assignments</a></li>
+<li class="chapter" data-level="9.3.3" data-path="applications.html"><a href="applications.html#simulation-example-randomized-vs-non-randomized-brief"><i class="fa fa-check"></i><b>9.3.3</b> Simulation example: randomized vs non-randomized (brief)</a></li>
+<li class="chapter" data-level="9.3.4" data-path="applications.html"><a href="applications.html#practical-guidance-and-summary"><i class="fa fa-check"></i><b>9.3.4</b> Practical guidance and summary</a></li>
+<li class="chapter" data-level="9.3.5" data-path="applications.html"><a href="applications.html#anova-sums-of-squares-as-projection-matrix-decomposition"><i class="fa fa-check"></i><b>9.3.5</b> ANOVA sums-of-squares as projection (matrix) decomposition</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="applications.html"><a href="applications.html#variance-decomposition"><i class="fa fa-check"></i><b>9.4</b> Variance decomposition</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="applications.html"><a href="applications.html#notation-common-to-both-derivations"><i class="fa fa-check"></i><b>9.4.1</b> Notation (common to both derivations)</a></li>
+<li class="chapter" data-level="9.4.2" data-path="applications.html"><a href="applications.html#scalar-elementwise-derivation"><i class="fa fa-check"></i><b>9.4.2</b> 1 — Scalar (elementwise) derivation</a></li>
+<li class="chapter" data-level="9.4.3" data-path="applications.html"><a href="applications.html#matrix-projection-derivation"><i class="fa fa-check"></i><b>9.4.3</b> 2 — Matrix / projection derivation</a></li>
+<li class="chapter" data-level="9.4.4" data-path="applications.html"><a href="applications.html#concluding-remarks"><i class="fa fa-check"></i><b>9.4.4</b> Concluding remarks</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="polynomial-regression" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">5</span> Polynomial Regression<a href="index.html#polynomial-regression" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Polynomial regression extends linear regression by allowing the relationship between the explanatory variable and the response to be nonlinear. Although the resulting fitted relationship is nonlinear in <span class="math inline">\(x\)</span>, the model remains <strong>linear in its coefficients</strong>.</p>
+<p>A polynomial regression model of degree <span class="math inline">\(k\)</span> has the form</p>
+<p><span class="math display">\[
+y
+=
+\beta_0
++
+\beta_1x
++
+\beta_2x^2
++
+\cdots
++
+\beta_kx^k
++
+e,
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(y\)</span> is the response variable,</li>
+<li><span class="math inline">\(x\)</span> is the explanatory variable,</li>
+<li><span class="math inline">\(\beta_0,\beta_1,\ldots,\beta_k\)</span> are coefficients,</li>
+<li><span class="math inline">\(e\)</span> is the error term.</li>
+</ul>
+<p>Thus, polynomial regression does not require a new estimation principle. It remains a least-squares problem, but with transformed versions of the original explanatory variable included as additional predictors.</p>
+<hr />
+<div id="motivation" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Motivation<a href="polynomial-regression.html#motivation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Polynomial regression is useful when the relationship between the response and explanatory variable displays curvature that cannot be represented adequately by a straight line.</p>
+<p>There are two main motivations for considering a polynomial model:</p>
+<ol style="list-style-type: decimal">
+<li>The underlying relationship may itself have a polynomial structure.</li>
+<li>A polynomial may provide a useful approximation to a more complicated nonlinear relationship over the region of interest.</li>
+</ol>
+<p>The degree of the polynomial controls the flexibility of the fitted relationship. Higher-degree polynomials can represent more complicated shapes, but increasing the degree unnecessarily can produce unstable fits and poor predictions, particularly outside the observed range of the explanatory variable.</p>
+<div id="taylor-polynomials-and-polynomial-regression" class="section level3 hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Taylor Polynomials and Polynomial Regression<a href="polynomial-regression.html#taylor-polynomials-and-polynomial-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One mathematical motivation for polynomial regression comes from <strong>Taylor approximation</strong>.</p>
+<p>If a sufficiently smooth function <span class="math inline">\(f(x)\)</span> is known, its Taylor polynomial of degree <span class="math inline">\(k\)</span> around a point <span class="math inline">\(x_0\)</span> is</p>
+<p><span class="math display">\[
+f(x)
+\approx
+f(x_0)
++
+f&#39;(x_0)(x-x_0)
++
+\frac{f&#39;&#39;(x_0)}{2!}(x-x_0)^2
++
+\cdots
++
+\frac{f^{(k)}(x_0)}{k!}(x-x_0)^k.
+\]</span></p>
+<p>This shows that a smooth nonlinear function can often be approximated by a polynomial over a sufficiently limited region.</p>
+<p>However, a <strong>Taylor polynomial and a polynomial regression model are not the same object</strong>.</p>
+<p>In a Taylor approximation, the coefficients are determined by derivatives of a known function at a particular expansion point <span class="math inline">\(x_0\)</span>. In polynomial regression, the underlying relationship is generally unknown, and the coefficients are instead estimated from observed data by minimizing a least-squares criterion.</p>
+<p>Thus, Taylor polynomials motivate the use of polynomial functions as approximations to smooth nonlinear relationships, but polynomial regression does not require the fitted coefficients to correspond to derivatives at an expansion point.</p>
+<p>In particular, polynomial regression is ordinarily fitted over the observed data as a whole. The choice of a point used to center the explanatory variable changes the <strong>parameterization</strong> of the polynomial, but it does not change the class of polynomial functions being fitted.</p>
+<hr />
+</div>
+</div>
+<div id="polynomial-regression-as-a-linear-model" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Polynomial Regression as a Linear Model<a href="polynomial-regression.html#polynomial-regression-as-a-linear-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Although polynomial regression represents a nonlinear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, it remains linear in the coefficients.</p>
+<p>For a polynomial of degree <span class="math inline">\(k\)</span>, define</p>
+<p><span class="math display">\[
+\boldsymbol{\beta}
+=
+\begin{pmatrix}
+\beta_0\\
+\beta_1\\
+\vdots\\
+\beta_k
+\end{pmatrix}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\mathbf{X}
+=
+\begin{pmatrix}
+1 &amp; x_1 &amp; x_1^2 &amp; \cdots &amp; x_1^k\\
+1 &amp; x_2 &amp; x_2^2 &amp; \cdots &amp; x_2^k\\
+\vdots &amp; \vdots &amp; \vdots &amp; &amp; \vdots\\
+1 &amp; x_n &amp; x_n^2 &amp; \cdots &amp; x_n^k
+\end{pmatrix}.
+\]</span></p>
+<p>Then the polynomial model can be written as</p>
+<p><span class="math display">\[
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{e}.
+\]</span></p>
+<p>Consequently, the least-squares problem is</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}}
+\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+\|^2.
+\]</span></p>
+<p>Therefore, polynomial regression uses exactly the same least-squares principle developed previously. The only difference is that the columns of the design matrix now contain powers of the same explanatory variable.</p>
+<p>For example, a quadratic model</p>
+<p><span class="math display">\[
+y_i
+=
+\beta_0
++
+\beta_1x_i
++
+\beta_2x_i^2
++
+e_i
+\]</span></p>
+<p>uses the design matrix</p>
+<p><span class="math display">\[
+\mathbf{X}
+=
+\begin{pmatrix}
+1 &amp; x_1 &amp; x_1^2\\
+1 &amp; x_2 &amp; x_2^2\\
+\vdots &amp; \vdots &amp; \vdots\\
+1 &amp; x_n &amp; x_n^2
+\end{pmatrix}.
+\]</span></p>
+<p>The important distinction is therefore between being <strong>linear in the explanatory variable</strong> and being <strong>linear in the coefficients</strong>. Polynomial regression is nonlinear in <span class="math inline">\(x\)</span>, but linear in <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
+<hr />
+</div>
+<div id="centering-and-reparameterization" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Centering and Reparameterization<a href="polynomial-regression.html#centering-and-reparameterization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Polynomial models can be written using powers of <span class="math inline">\(x\)</span> directly, or using powers of a centered explanatory variable.</p>
+<div class="proposition">
+<p><span id="prp:prp-polynomial-centering-reparameterization" class="proposition"><strong>Proposition 5.1  (Centering as a Reparameterization of Polynomial Regression) </strong></span>Let <span class="math inline">\(c\in\mathbb{R}\)</span> be any fixed constant and define the centered explanatory variable</p>
+<p><span class="math display">\[
+x^c=x-c.
+\]</span></p>
+<p>Then the class of polynomial functions of degree at most <span class="math inline">\(k\)</span> generated by</p>
+<p><span class="math display">\[
+1,x,x^2,\ldots,x^k
+\]</span></p>
+<p>is the same as the class generated by</p>
+<p><span class="math display">\[
+1,x^c,(x^c)^2,\ldots,(x^c)^k.
+\]</span></p>
+</div>
+<details>
+<summary>
+<span style="color:green">Proof</span>
+</summary>
+<div class="proof">
+<p><span id="unlabeled-div-18" class="proof"><em>Proof</em>. </span>First, consider a polynomial of degree at most <span class="math inline">\(k\)</span> written in terms of the original explanatory variable,</p>
+<p><span class="math display">\[
+p(x)
+=
+\sum_{j=0}^k\beta_jx^j.
+\]</span></p>
+<p>Since</p>
+<p><span class="math display">\[
+x=x^c+c,
+\]</span></p>
+<p>we can substitute <span class="math inline">\(x^c+c\)</span> for <span class="math inline">\(x\)</span>. Then,</p>
+<p><span class="math display">\[\begin{align*}
+p(x)
+  &amp;= \sum_{j=0}^k \beta_jx^j
+    &amp; \text{def. } p(x) \\
+  &amp;= \sum_{j=0}^k \beta_j(x^c+c)^j
+    &amp; \text{sub. } x=x^c+c \\
+  &amp;= \sum_{j=0}^k
+     \beta_j
+     \sum_{r=0}^j
+     {j\choose r}
+     (x^c)^r c^{j-r}
+    &amp; \text{binomial theorem} \\
+  &amp;= \sum_{r=0}^k
+     \left[
+       \sum_{j=r}^k
+       \beta_j
+       {j\choose r}
+       c^{j-r}
+     \right]
+     (x^c)^r
+    &amp; \text{rearrange sums}.
+\end{align*}\]</span></p>
+<p>Define</p>
+<p><span class="math display">\[
+\alpha_r
+=
+\sum_{j=r}^k
+\beta_j
+{j\choose r}
+c^{j-r},
+\qquad
+r=0,\ldots,k.
+\]</span></p>
+<p>Then,</p>
+<p><span class="math display">\[
+p(x)
+=
+\sum_{r=0}^k
+\alpha_r(x^c)^r.
+\]</span></p>
+<p>Therefore, every polynomial of degree at most <span class="math inline">\(k\)</span> written in terms of</p>
+<p><span class="math display">\[
+1,x,x^2,\ldots,x^k
+\]</span></p>
+<p>can also be written in terms of</p>
+<p><span class="math display">\[
+1,x^c,(x^c)^2,\ldots,(x^c)^k.
+\]</span></p>
+<p>Now we show the converse. Since</p>
+<p><span class="math display">\[
+x^c=x-c,
+\]</span></p>
+<p>consider a polynomial written in terms of the centered explanatory variable,</p>
+<p><span class="math display">\[
+q(x^c)
+=
+\sum_{j=0}^k\alpha_j(x^c)^j.
+\]</span></p>
+<p>Then,</p>
+<p><span class="math display">\[\begin{align*}
+q(x^c)
+  &amp;= \sum_{j=0}^k\alpha_j(x^c)^j
+    &amp; \text{def. } q(x^c) \\
+  &amp;= \sum_{j=0}^k\alpha_j(x-c)^j
+    &amp; \text{sub. } x^c=x-c \\
+  &amp;= \sum_{j=0}^k
+     \alpha_j
+     \sum_{r=0}^j
+     {j\choose r}
+     x^r(-c)^{j-r}
+    &amp; \text{binomial theorem} \\
+  &amp;= \sum_{r=0}^k
+     \left[
+       \sum_{j=r}^k
+       \alpha_j
+       {j\choose r}
+       (-c)^{j-r}
+     \right]
+     x^r
+    &amp; \text{rearrange sums}.
+\end{align*}\]</span></p>
+<p>Define</p>
+<p><span class="math display">\[
+\beta_r
+=
+\sum_{j=r}^k
+\alpha_j
+{j\choose r}
+(-c)^{j-r},
+\qquad
+r=0,\ldots,k.
+\]</span></p>
+<p>Then,</p>
+<p><span class="math display">\[
+q(x^c)
+=
+\sum_{r=0}^k\beta_rx^r.
+\]</span></p>
+<p>Therefore, every polynomial of degree at most <span class="math inline">\(k\)</span> written in terms of the centered explanatory variable can also be written in terms of the original explanatory variable.</p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\operatorname{span}
+\left\{
+1,x,x^2,\ldots,x^k
+\right\}
+=
+\operatorname{span}
+\left\{
+1,x^c,(x^c)^2,\ldots,(x^c)^k
+\right\}.
+\]</span></p>
+<p>Thus, centering does not change the class of polynomial functions. It only changes the coefficients used to represent a particular polynomial.</p>
+<p>Now consider the observed explanatory values <span class="math inline">\(x_1,\ldots,x_n\)</span>. The uncentered polynomial design matrix is</p>
+<p><span class="math display">\[
+\mathbf{X}
+=
+\begin{pmatrix}
+1 &amp; x_1 &amp; x_1^2 &amp; \cdots &amp; x_1^k\\
+1 &amp; x_2 &amp; x_2^2 &amp; \cdots &amp; x_2^k\\
+\vdots &amp; \vdots &amp; \vdots &amp; &amp; \vdots\\
+1 &amp; x_n &amp; x_n^2 &amp; \cdots &amp; x_n^k
+\end{pmatrix},
+\]</span></p>
+<p>while the centered polynomial design matrix is</p>
+<p><span class="math display">\[
+\mathbf{X}_c
+=
+\begin{pmatrix}
+1 &amp; x_1^c &amp; (x_1^c)^2 &amp; \cdots &amp; (x_1^c)^k\\
+1 &amp; x_2^c &amp; (x_2^c)^2 &amp; \cdots &amp; (x_2^c)^k\\
+\vdots &amp; \vdots &amp; \vdots &amp; &amp; \vdots\\
+1 &amp; x_n^c &amp; (x_n^c)^2 &amp; \cdots &amp; (x_n^c)^k
+\end{pmatrix}.
+\]</span></p>
+<p>From the identities established above, every column of <span class="math inline">\(\mathbf{X}\)</span> is a linear combination of the columns of <span class="math inline">\(\mathbf{X}_c\)</span>. Therefore,</p>
+<p><span class="math display">\[
+\mathcal{C}(\mathbf{X})
+\subseteq
+\mathcal{C}(\mathbf{X}_c).
+\]</span></p>
+<p>Similarly, every column of <span class="math inline">\(\mathbf{X}_c\)</span> is a linear combination of the columns of <span class="math inline">\(\mathbf{X}\)</span>. Therefore,</p>
+<p><span class="math display">\[
+\mathcal{C}(\mathbf{X}_c)
+\subseteq
+\mathcal{C}(\mathbf{X}).
+\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\mathcal{C}(\mathbf{X})
+=
+\mathcal{C}(\mathbf{X}_c).
+\]</span></p>
+<p>Polynomial least squares using the original explanatory variable solves</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}}
+\|
+\mathbf{y}-\mathbf{X}\boldsymbol{\beta}
+\|^2,
+\]</span></p>
+<p>while polynomial least squares using the centered explanatory variable solves</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\alpha}}
+\|
+\mathbf{y}-\mathbf{X}_c\boldsymbol{\alpha}
+\|^2.
+\]</span></p>
+<p>Since</p>
+<p><span class="math display">\[
+\mathcal{C}(\mathbf{X})
+=
+\mathcal{C}(\mathbf{X}_c),
+\]</span></p>
+<p>both optimization problems minimize the distance from <span class="math inline">\(\mathbf{y}\)</span> to exactly the same subspace. Therefore, they have the same projection of <span class="math inline">\(\mathbf{y}\)</span> and hence the same fitted values,</p>
+<p><span class="math display">\[
+\hat{\mathbf{y}}
+=
+\hat{\mathbf{y}}^c.
+\]</span></p>
+<p>Thus, centering changes the numerical values and interpretation of the coefficients, but it does not change the polynomial function being fitted or the resulting fitted values.</p>
+</div>
+</details>
+<p>Therefore, centering the explanatory variable changes the parameterization of a polynomial regression model, but does not change the class of polynomial functions being fitted.</p>
+<p>Consequently, when the same observations and polynomial degree are used, polynomial regression based on <span class="math inline">\(x\)</span> and polynomial regression based on <span class="math inline">\(x^c=x-c\)</span> produce the same fitted values.</p>
+<div id="why-center-at-the-sample-mean" class="section level3 hasAnchor" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Why Center at the Sample Mean?<a href="polynomial-regression.html#why-center-at-the-sample-mean" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A particularly convenient choice is</p>
+<p><span class="math display">\[
+c=\bar{x}.
+\]</span></p>
+<p>There are several reasons for using the sample mean as the center.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>The center lies naturally within the observed explanatory values.</strong>
+The sample mean provides a convenient reference point representing the center of the observed <span class="math inline">\(x\)</span> values. In fact, <span class="math inline">\(\bar{x}\)</span> minimizes</p>
+<p><span class="math display">\[
+\sum_{i=1}^n(x_i-c)^2
+\]</span></p>
+<p>over all possible choices of <span class="math inline">\(c\)</span>.</p>
+<p>This is an algebraic reason for using <span class="math inline">\(\bar{x}\)</span> as a center; it should not be interpreted as saying that polynomial regression itself is a Taylor approximation around <span class="math inline">\(\bar{x}\)</span>.</p></li>
+<li><p><strong>Interpretability of the intercept.</strong>
+If</p>
+<p><span class="math display">\[
+x_i^c=x_i-\bar{x},
+\]</span></p>
+<p>then <span class="math inline">\(x_i^c=0\)</span> corresponds to <span class="math inline">\(x_i=\bar{x}\)</span>. Therefore, the intercept of the centered polynomial represents the fitted response at the average observed value of the explanatory variable.</p></li>
+<li><p><strong>Potential improvement in numerical conditioning.</strong>
+Powers such as <span class="math inline">\(x\)</span>, <span class="math inline">\(x^2\)</span>, and <span class="math inline">\(x^3\)</span> can be strongly correlated and can differ substantially in magnitude. Centering often reduces some of these dependencies and can improve the numerical conditioning of the design matrix.</p>
+<p>However, this improvement is not guaranteed in every dataset. Centering does not eliminate all dependence among polynomial terms, nor does it make the polynomial basis orthogonal.</p></li>
+<li><p><strong>Simpler algebra.</strong>
+When the explanatory variable is centered at <span class="math inline">\(\bar{x}\)</span>,</p>
+<p><span class="math display">\[
+\sum_{i=1}^n(x_i-\bar{x})=0.
+\]</span></p>
+<p>This can simplify calculations and separate the interpretation of the intercept from some of the higher-order polynomial terms. Importantly, this change in parameterization does not alter the fitted polynomial curve.</p></li>
+</ol>
+<hr />
+</div>
+<div id="example-9" class="section level3 hasAnchor" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Example<a href="polynomial-regression.html#example-9" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We use our <code>Burger Data</code> set to illustrate polynomial regression as an approximation to a nonlinear relationship. We first fit a second-degree polynomial to the complete dataset.</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="polynomial-regression.html#cb77-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Burger Data.csv&quot;</span>)</span>
+<span id="cb77-2"><a href="polynomial-regression.html#cb77-2" tabindex="-1"></a></span>
+<span id="cb77-3"><a href="polynomial-regression.html#cb77-3" tabindex="-1"></a><span class="co"># Polynomial Regression Fit</span></span>
+<span id="cb77-4"><a href="polynomial-regression.html#cb77-4" tabindex="-1"></a>outRegPol <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> dat)</span>
+<span id="cb77-5"><a href="polynomial-regression.html#cb77-5" tabindex="-1"></a></span>
+<span id="cb77-6"><a href="polynomial-regression.html#cb77-6" tabindex="-1"></a><span class="co"># Data Limits</span></span>
+<span id="cb77-7"><a href="polynomial-regression.html#cb77-7" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb77-8"><a href="polynomial-regression.html#cb77-8" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb77-9"><a href="polynomial-regression.html#cb77-9" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb77-10"><a href="polynomial-regression.html#cb77-10" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb77-11"><a href="polynomial-regression.html#cb77-11" tabindex="-1"></a></span>
+<span id="cb77-12"><a href="polynomial-regression.html#cb77-12" tabindex="-1"></a><span class="co"># Scatter plot</span></span>
+<span id="cb77-13"><a href="polynomial-regression.html#cb77-13" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Price,</span>
+<span id="cb77-14"><a href="polynomial-regression.html#cb77-14" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Burgers,</span>
+<span id="cb77-15"><a href="polynomial-regression.html#cb77-15" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb77-16"><a href="polynomial-regression.html#cb77-16" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb77-17"><a href="polynomial-regression.html#cb77-17" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
+<span id="cb77-18"><a href="polynomial-regression.html#cb77-18" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Burgers Sold&quot;</span>)</span>
+<span id="cb77-19"><a href="polynomial-regression.html#cb77-19" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb77-20"><a href="polynomial-regression.html#cb77-20" tabindex="-1"></a><span class="co"># Plots real non-linear relationship</span></span>
+<span id="cb77-21"><a href="polynomial-regression.html#cb77-21" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> <span class="dv">100</span> <span class="sc">-</span> <span class="dv">30</span> <span class="sc">*</span> <span class="fu">log</span>(x),</span>
+<span id="cb77-22"><a href="polynomial-regression.html#cb77-22" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb77-23"><a href="polynomial-regression.html#cb77-23" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb77-24"><a href="polynomial-regression.html#cb77-24" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb77-25"><a href="polynomial-regression.html#cb77-25" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb77-26"><a href="polynomial-regression.html#cb77-26" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb77-27"><a href="polynomial-regression.html#cb77-27" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb77-28"><a href="polynomial-regression.html#cb77-28" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb77-29"><a href="polynomial-regression.html#cb77-29" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
+<span id="cb77-30"><a href="polynomial-regression.html#cb77-30" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb77-31"><a href="polynomial-regression.html#cb77-31" tabindex="-1"></a><span class="co"># Plots approximated polynomial relationship</span></span>
+<span id="cb77-32"><a href="polynomial-regression.html#cb77-32" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> x<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb77-33"><a href="polynomial-regression.html#cb77-33" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb77-34"><a href="polynomial-regression.html#cb77-34" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb77-35"><a href="polynomial-regression.html#cb77-35" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb77-36"><a href="polynomial-regression.html#cb77-36" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb77-37"><a href="polynomial-regression.html#cb77-37" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb77-38"><a href="polynomial-regression.html#cb77-38" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb77-39"><a href="polynomial-regression.html#cb77-39" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;blue&#39;</span>,</span>
+<span id="cb77-40"><a href="polynomial-regression.html#cb77-40" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/poly-reg-burger-1.png" width="672" /></p>
+<p>The second-degree polynomial provides a reasonable approximation to the nonlinear relationship over the observed range of prices. The red curve represents the nonlinear relationship</p>
+<p><span class="math display">\[
+100-30\log(x),
+\]</span></p>
+<p>while the blue curve represents the fitted quadratic polynomial.</p>
+<p>The polynomial should be interpreted primarily over the region supported by the observed data. Because the quadratic model is only an approximation to the nonlinear relationship, extrapolating far beyond the observed range may produce behavior that does not resemble the relationship being approximated.</p>
+<hr />
+<p>We can now compare the polynomial fit obtained with the original explanatory variable to the fit obtained after centering the explanatory variable at its sample mean.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="polynomial-regression.html#cb78-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Burger Data.csv&quot;</span>)</span>
+<span id="cb78-2"><a href="polynomial-regression.html#cb78-2" tabindex="-1"></a></span>
+<span id="cb78-3"><a href="polynomial-regression.html#cb78-3" tabindex="-1"></a>x    <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price</span>
+<span id="cb78-4"><a href="polynomial-regression.html#cb78-4" tabindex="-1"></a>y    <span class="ot">&lt;-</span> dat<span class="sc">$</span>Burgers</span>
+<span id="cb78-5"><a href="polynomial-regression.html#cb78-5" tabindex="-1"></a>xbar <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb78-6"><a href="polynomial-regression.html#cb78-6" tabindex="-1"></a>xc   <span class="ot">&lt;-</span> x <span class="sc">-</span> xbar</span>
+<span id="cb78-7"><a href="polynomial-regression.html#cb78-7" tabindex="-1"></a>xc2  <span class="ot">&lt;-</span> xc<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb78-8"><a href="polynomial-regression.html#cb78-8" tabindex="-1"></a></span>
+<span id="cb78-9"><a href="polynomial-regression.html#cb78-9" tabindex="-1"></a><span class="co"># Check Correlation</span></span>
+<span id="cb78-10"><a href="polynomial-regression.html#cb78-10" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Non centered correlation: &quot;</span>, <span class="fu">round</span>(<span class="fu">cor</span>(x, x<span class="sc">^</span><span class="dv">2</span>), <span class="dv">4</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;Non centered correlation: 0.971&quot;</code></pre>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="polynomial-regression.html#cb80-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Centered correlation: &quot;</span>,     <span class="fu">round</span>(<span class="fu">cor</span>(xc, xc<span class="sc">^</span><span class="dv">2</span>), <span class="dv">4</span>)))</span></code></pre></div>
+<pre><code>## [1] &quot;Centered correlation: 0.2083&quot;</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="polynomial-regression.html#cb82-1" tabindex="-1"></a><span class="co"># Polynomial Regression Fit</span></span>
+<span id="cb82-2"><a href="polynomial-regression.html#cb82-2" tabindex="-1"></a>outRegPol <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> dat)</span>
+<span id="cb82-3"><a href="polynomial-regression.html#cb82-3" tabindex="-1"></a></span>
+<span id="cb82-4"><a href="polynomial-regression.html#cb82-4" tabindex="-1"></a><span class="co"># Polynomial Regression Centered Fit</span></span>
+<span id="cb82-5"><a href="polynomial-regression.html#cb82-5" tabindex="-1"></a>outRegPolCen <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> xc <span class="sc">+</span> xc2)</span>
+<span id="cb82-6"><a href="polynomial-regression.html#cb82-6" tabindex="-1"></a></span>
+<span id="cb82-7"><a href="polynomial-regression.html#cb82-7" tabindex="-1"></a><span class="co"># Data Limits</span></span>
+<span id="cb82-8"><a href="polynomial-regression.html#cb82-8" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb82-9"><a href="polynomial-regression.html#cb82-9" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb82-10"><a href="polynomial-regression.html#cb82-10" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb82-11"><a href="polynomial-regression.html#cb82-11" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb82-12"><a href="polynomial-regression.html#cb82-12" tabindex="-1"></a></span>
+<span id="cb82-13"><a href="polynomial-regression.html#cb82-13" tabindex="-1"></a><span class="co"># Scatter plot</span></span>
+<span id="cb82-14"><a href="polynomial-regression.html#cb82-14" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Price,</span>
+<span id="cb82-15"><a href="polynomial-regression.html#cb82-15" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Burgers,</span>
+<span id="cb82-16"><a href="polynomial-regression.html#cb82-16" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb82-17"><a href="polynomial-regression.html#cb82-17" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb82-18"><a href="polynomial-regression.html#cb82-18" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
+<span id="cb82-19"><a href="polynomial-regression.html#cb82-19" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Burgers Sold&quot;</span>)</span>
+<span id="cb82-20"><a href="polynomial-regression.html#cb82-20" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb82-21"><a href="polynomial-regression.html#cb82-21" tabindex="-1"></a><span class="co"># Plots real non-linear relationship</span></span>
+<span id="cb82-22"><a href="polynomial-regression.html#cb82-22" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> <span class="dv">100</span> <span class="sc">-</span> <span class="dv">30</span> <span class="sc">*</span> <span class="fu">log</span>(x),</span>
+<span id="cb82-23"><a href="polynomial-regression.html#cb82-23" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb82-24"><a href="polynomial-regression.html#cb82-24" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb82-25"><a href="polynomial-regression.html#cb82-25" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb82-26"><a href="polynomial-regression.html#cb82-26" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb82-27"><a href="polynomial-regression.html#cb82-27" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb82-28"><a href="polynomial-regression.html#cb82-28" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb82-29"><a href="polynomial-regression.html#cb82-29" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb82-30"><a href="polynomial-regression.html#cb82-30" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
+<span id="cb82-31"><a href="polynomial-regression.html#cb82-31" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb82-32"><a href="polynomial-regression.html#cb82-32" tabindex="-1"></a><span class="co"># Plots approximated polynomial relationship</span></span>
+<span id="cb82-33"><a href="polynomial-regression.html#cb82-33" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> outRegPol<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> x<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb82-34"><a href="polynomial-regression.html#cb82-34" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb82-35"><a href="polynomial-regression.html#cb82-35" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb82-36"><a href="polynomial-regression.html#cb82-36" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb82-37"><a href="polynomial-regression.html#cb82-37" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb82-38"><a href="polynomial-regression.html#cb82-38" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb82-39"><a href="polynomial-regression.html#cb82-39" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb82-40"><a href="polynomial-regression.html#cb82-40" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;blue&#39;</span>,</span>
+<span id="cb82-41"><a href="polynomial-regression.html#cb82-41" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
+<span id="cb82-42"><a href="polynomial-regression.html#cb82-42" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb82-43"><a href="polynomial-regression.html#cb82-43" tabindex="-1"></a><span class="co"># Plots approximated polynomial centered relationship</span></span>
+<span id="cb82-44"><a href="polynomial-regression.html#cb82-44" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> outRegPolCen<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outRegPolCen<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> (x <span class="sc">-</span> xbar) <span class="sc">+</span> outRegPolCen<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> (x <span class="sc">-</span> xbar)<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb82-45"><a href="polynomial-regression.html#cb82-45" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb82-46"><a href="polynomial-regression.html#cb82-46" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb82-47"><a href="polynomial-regression.html#cb82-47" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb82-48"><a href="polynomial-regression.html#cb82-48" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb82-49"><a href="polynomial-regression.html#cb82-49" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb82-50"><a href="polynomial-regression.html#cb82-50" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb82-51"><a href="polynomial-regression.html#cb82-51" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;green&#39;</span>,</span>
+<span id="cb82-52"><a href="polynomial-regression.html#cb82-52" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/poly-reg-burger-centered-1.png" width="672" /></p>
+<p>The reported correlations illustrate that centering can change the relationships among the polynomial terms in the design matrix.</p>
+<p>However, the blue and green fitted curves should theoretically coincide. Both fits use the same observations and the same quadratic function space. Centering changes the coefficients used to represent the polynomial, but it does not change the fitted values.</p>
+<p>Thus, any visible difference between the blue and green curves should be attributable only to numerical computation or graphical precision, not to a difference between the underlying fitted models.</p>
+<p>This illustrates an important distinction:</p>
+<p><span class="math display">\[
+\text{different coefficients}
+\qquad\not\Rightarrow\qquad
+\text{different fitted polynomial}.
+\]</span></p>
+<hr />
+<p>Finally, consider what happens when the quadratic model is estimated using only observations for which the price is below <span class="math inline">\(10\)</span>.</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="polynomial-regression.html#cb83-1" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Burger Data.csv&quot;</span>)</span>
+<span id="cb83-2"><a href="polynomial-regression.html#cb83-2" tabindex="-1"></a></span>
+<span id="cb83-3"><a href="polynomial-regression.html#cb83-3" tabindex="-1"></a><span class="co"># Select only Prices bellow 10 dollars</span></span>
+<span id="cb83-4"><a href="polynomial-regression.html#cb83-4" tabindex="-1"></a>sel <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price <span class="sc">&lt;</span> <span class="dv">10</span></span>
+<span id="cb83-5"><a href="polynomial-regression.html#cb83-5" tabindex="-1"></a></span>
+<span id="cb83-6"><a href="polynomial-regression.html#cb83-6" tabindex="-1"></a>datRes <span class="ot">&lt;-</span> dat[sel, ]</span>
+<span id="cb83-7"><a href="polynomial-regression.html#cb83-7" tabindex="-1"></a></span>
+<span id="cb83-8"><a href="polynomial-regression.html#cb83-8" tabindex="-1"></a><span class="co"># Polynomial Regression Fit</span></span>
+<span id="cb83-9"><a href="polynomial-regression.html#cb83-9" tabindex="-1"></a>outRegPolRes <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> datRes)</span>
+<span id="cb83-10"><a href="polynomial-regression.html#cb83-10" tabindex="-1"></a></span>
+<span id="cb83-11"><a href="polynomial-regression.html#cb83-11" tabindex="-1"></a><span class="co"># Data Limits</span></span>
+<span id="cb83-12"><a href="polynomial-regression.html#cb83-12" tabindex="-1"></a>xmin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb83-13"><a href="polynomial-regression.html#cb83-13" tabindex="-1"></a>xmax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Price)</span>
+<span id="cb83-14"><a href="polynomial-regression.html#cb83-14" tabindex="-1"></a>ymin <span class="ot">&lt;-</span> <span class="fu">min</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb83-15"><a href="polynomial-regression.html#cb83-15" tabindex="-1"></a>ymax <span class="ot">&lt;-</span> <span class="fu">max</span>(dat<span class="sc">$</span>Burgers)</span>
+<span id="cb83-16"><a href="polynomial-regression.html#cb83-16" tabindex="-1"></a></span>
+<span id="cb83-17"><a href="polynomial-regression.html#cb83-17" tabindex="-1"></a><span class="co"># Scatter plot</span></span>
+<span id="cb83-18"><a href="polynomial-regression.html#cb83-18" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Price,</span>
+<span id="cb83-19"><a href="polynomial-regression.html#cb83-19" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Burgers,</span>
+<span id="cb83-20"><a href="polynomial-regression.html#cb83-20" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb83-21"><a href="polynomial-regression.html#cb83-21" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb83-22"><a href="polynomial-regression.html#cb83-22" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
+<span id="cb83-23"><a href="polynomial-regression.html#cb83-23" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Burgers Sold&quot;</span>,</span>
+<span id="cb83-24"><a href="polynomial-regression.html#cb83-24" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Polynomial fit with Restricted data (Price &lt; 10)&quot;</span>)</span>
+<span id="cb83-25"><a href="polynomial-regression.html#cb83-25" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb83-26"><a href="polynomial-regression.html#cb83-26" tabindex="-1"></a><span class="co"># Plots real non-linear relationship</span></span>
+<span id="cb83-27"><a href="polynomial-regression.html#cb83-27" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> <span class="dv">100</span> <span class="sc">-</span> <span class="dv">30</span> <span class="sc">*</span> <span class="fu">log</span>(x),</span>
+<span id="cb83-28"><a href="polynomial-regression.html#cb83-28" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb83-29"><a href="polynomial-regression.html#cb83-29" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb83-30"><a href="polynomial-regression.html#cb83-30" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb83-31"><a href="polynomial-regression.html#cb83-31" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb83-32"><a href="polynomial-regression.html#cb83-32" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb83-33"><a href="polynomial-regression.html#cb83-33" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb83-34"><a href="polynomial-regression.html#cb83-34" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;red&#39;</span>,</span>
+<span id="cb83-35"><a href="polynomial-regression.html#cb83-35" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
+<span id="cb83-36"><a href="polynomial-regression.html#cb83-36" tabindex="-1"></a><span class="fu">par</span>(<span class="at">new =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb83-37"><a href="polynomial-regression.html#cb83-37" tabindex="-1"></a><span class="co"># Plots approximated polynomial relationship</span></span>
+<span id="cb83-38"><a href="polynomial-regression.html#cb83-38" tabindex="-1"></a><span class="fu">curve</span>(<span class="at">expr =</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">1</span>] <span class="sc">+</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> outRegPolRes<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> x<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb83-39"><a href="polynomial-regression.html#cb83-39" tabindex="-1"></a>      <span class="at">from =</span> xmin,</span>
+<span id="cb83-40"><a href="polynomial-regression.html#cb83-40" tabindex="-1"></a>      <span class="at">to   =</span> xmax,</span>
+<span id="cb83-41"><a href="polynomial-regression.html#cb83-41" tabindex="-1"></a>      <span class="at">ylim =</span> <span class="fu">c</span>(ymin, ymax),</span>
+<span id="cb83-42"><a href="polynomial-regression.html#cb83-42" tabindex="-1"></a>      <span class="at">xlim =</span> <span class="fu">c</span>(xmin, xmax),</span>
+<span id="cb83-43"><a href="polynomial-regression.html#cb83-43" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb83-44"><a href="polynomial-regression.html#cb83-44" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb83-45"><a href="polynomial-regression.html#cb83-45" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;blue&#39;</span>,</span>
+<span id="cb83-46"><a href="polynomial-regression.html#cb83-46" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
+<span id="cb83-47"><a href="polynomial-regression.html#cb83-47" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">10</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/poly-reg-burger-restricted-1.png" width="672" /></p>
+<p>In this case, only observations with prices below <span class="math inline">\(10\)</span> are used to estimate the polynomial coefficients, although the fitted polynomial is displayed over the complete price range.</p>
+<p>The model may fit the restricted training data very well while providing poor predictions outside that range. This does not mean that the polynomial fit is poor where it was estimated. Rather, it demonstrates the distinction between <strong>interpolation</strong> within the region of the observed explanatory values and <strong>extrapolation</strong> beyond that region.</p>
+<p>We can check the <span class="math inline">\(R^2\)</span> of the restricted fit.</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="polynomial-regression.html#cb84-1" tabindex="-1"></a><span class="fu">summary</span>(outRegPolRes)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Burgers ~ Price + I(Price^2), data = datRes)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -11.0809  -3.5462  -0.0635   3.0957  13.8374 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 116.0882     3.2929  35.254  &lt; 2e-16 ***
+## Price       -18.3910     1.2519 -14.691  &lt; 2e-16 ***
+## I(Price^2)    1.0709     0.1105   9.695 4.13e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.062 on 63 degrees of freedom
+## Multiple R-squared:  0.9131, Adjusted R-squared:  0.9104 
+## F-statistic: 331.2 on 2 and 63 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The <span class="math inline">\(R^2\)</span> for the restricted data can be quite high because it measures how well the quadratic model fits the observations used to estimate it. Nevertheless, the graph shows that the fitted polynomial can depart substantially from the nonlinear relationship once it is extrapolated beyond the restricted price range.</p>
+<p>Thus, a strong in-sample fit does not by itself guarantee reliable predictions outside the region represented by the observed explanatory variable.</p>
+</div>
+<div id="polynomial-cross-validation-example" class="section level3 hasAnchor" number="5.3.3">
+<h3><span class="header-section-number">5.3.3</span> Polynomial Cross-Validation Example<a href="polynomial-regression.html#polynomial-cross-validation-example" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Polynomial regression introduces an important practical question: <strong>how should we choose the degree of the polynomial?</strong></p>
+<p>A polynomial of higher degree is more flexible and will generally be able to fit the observed data at least as well as a polynomial of lower degree. However, a better fit to the data used to estimate the model does not necessarily imply better predictions for new observations. Increasing the polynomial degree can eventually lead to a model that adapts too closely to the particular observations in the training data.</p>
+<p>To compare polynomial models from a predictive perspective, we can use <strong>cross-validation</strong>.</p>
+<p>In this example, we use the Burger Data and compare three candidate models:</p>
+<p><span class="math display">\[
+\text{Degree 1:}
+\qquad
+y
+=
+\beta_0+\beta_1x+e,
+\]</span></p>
+<p><span class="math display">\[
+\text{Degree 2:}
+\qquad
+y
+=
+\beta_0+\beta_1x+\beta_2x^2+e,
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\text{Degree 3:}
+\qquad
+y
+=
+\beta_0+\beta_1x+\beta_2x^2+\beta_3x^3+e.
+\]</span></p>
+<p>The objective is not to determine which model fits the complete dataset best. Instead, we want to compare how accurately each model predicts observations that were <strong>not used to estimate its coefficients</strong>.</p>
+<p>We use <span class="math inline">\(10\)</span>-fold cross-validation. The observations are randomly assigned to one of <span class="math inline">\(10\)</span> folds. For each fold, we:</p>
+<ol style="list-style-type: decimal">
+<li>remove the observations belonging to that fold,</li>
+<li>fit the three polynomial models using the remaining observations,</li>
+<li>predict the responses for the observations in the omitted fold, and</li>
+<li>record the corresponding prediction errors.</li>
+</ol>
+<p>After repeating this procedure for all folds, every observation has been predicted by a model that was fitted <strong>without using that observation</strong>.</p>
+<p>The seed is fixed so that the same random fold assignment can be reproduced.</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="polynomial-regression.html#cb86-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb86-2"><a href="polynomial-regression.html#cb86-2" tabindex="-1"></a></span>
+<span id="cb86-3"><a href="polynomial-regression.html#cb86-3" tabindex="-1"></a><span class="co"># Read Data</span></span>
+<span id="cb86-4"><a href="polynomial-regression.html#cb86-4" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">&quot;Burger Data.csv&quot;</span>)</span>
+<span id="cb86-5"><a href="polynomial-regression.html#cb86-5" tabindex="-1"></a>n   <span class="ot">&lt;-</span> <span class="fu">nrow</span>(dat)</span>
+<span id="cb86-6"><a href="polynomial-regression.html#cb86-6" tabindex="-1"></a></span>
+<span id="cb86-7"><a href="polynomial-regression.html#cb86-7" tabindex="-1"></a><span class="do">################################################################################</span></span>
+<span id="cb86-8"><a href="polynomial-regression.html#cb86-8" tabindex="-1"></a><span class="co"># Folds Creation</span></span>
+<span id="cb86-9"><a href="polynomial-regression.html#cb86-9" tabindex="-1"></a></span>
+<span id="cb86-10"><a href="polynomial-regression.html#cb86-10" tabindex="-1"></a><span class="co"># Number of Folds</span></span>
+<span id="cb86-11"><a href="polynomial-regression.html#cb86-11" tabindex="-1"></a>numFol <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb86-12"><a href="polynomial-regression.html#cb86-12" tabindex="-1"></a><span class="co"># Fold Creation (Not Same Size)</span></span>
+<span id="cb86-13"><a href="polynomial-regression.html#cb86-13" tabindex="-1"></a>folLis <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb86-14"><a href="polynomial-regression.html#cb86-14" tabindex="-1"></a>folInd <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(<span class="fu">runif</span>(<span class="at">n =</span> n) <span class="sc">*</span> numFol)</span>
+<span id="cb86-15"><a href="polynomial-regression.html#cb86-15" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb86-16"><a href="polynomial-regression.html#cb86-16" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numFol){</span>
+<span id="cb86-17"><a href="polynomial-regression.html#cb86-17" tabindex="-1"></a>  folLis[[i]] <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)[folInd <span class="sc">==</span> i]</span>
+<span id="cb86-18"><a href="polynomial-regression.html#cb86-18" tabindex="-1"></a>}</span>
+<span id="cb86-19"><a href="polynomial-regression.html#cb86-19" tabindex="-1"></a></span>
+<span id="cb86-20"><a href="polynomial-regression.html#cb86-20" tabindex="-1"></a><span class="do">################################################################################</span></span>
+<span id="cb86-21"><a href="polynomial-regression.html#cb86-21" tabindex="-1"></a><span class="co"># Model Fit and Error</span></span>
+<span id="cb86-22"><a href="polynomial-regression.html#cb86-22" tabindex="-1"></a></span>
+<span id="cb86-23"><a href="polynomial-regression.html#cb86-23" tabindex="-1"></a></span>
+<span id="cb86-24"><a href="polynomial-regression.html#cb86-24" tabindex="-1"></a>err <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="cn">NA</span>, <span class="at">nrow =</span> n, <span class="dv">3</span>)</span>
+<span id="cb86-25"><a href="polynomial-regression.html#cb86-25" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>numFol){</span>
+<span id="cb86-26"><a href="polynomial-regression.html#cb86-26" tabindex="-1"></a>  <span class="co"># Indeces of Fold</span></span>
+<span id="cb86-27"><a href="polynomial-regression.html#cb86-27" tabindex="-1"></a>  sel <span class="ot">&lt;-</span> folLis[[i]]</span>
+<span id="cb86-28"><a href="polynomial-regression.html#cb86-28" tabindex="-1"></a>  <span class="co"># Model Fit without Fold</span></span>
+<span id="cb86-29"><a href="polynomial-regression.html#cb86-29" tabindex="-1"></a>  outPol1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price, <span class="at">data =</span> dat[<span class="sc">-</span>sel,])</span>
+<span id="cb86-30"><a href="polynomial-regression.html#cb86-30" tabindex="-1"></a>  outPol2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> dat[<span class="sc">-</span>sel,])</span>
+<span id="cb86-31"><a href="polynomial-regression.html#cb86-31" tabindex="-1"></a>  outPol3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">3</span>), <span class="at">data =</span> dat[<span class="sc">-</span>sel,])</span>
+<span id="cb86-32"><a href="polynomial-regression.html#cb86-32" tabindex="-1"></a>  <span class="co"># Predictions</span></span>
+<span id="cb86-33"><a href="polynomial-regression.html#cb86-33" tabindex="-1"></a>  pre1 <span class="ot">&lt;-</span> <span class="fu">predict.lm</span>(outPol1, <span class="at">newdata =</span> dat[sel,])</span>
+<span id="cb86-34"><a href="polynomial-regression.html#cb86-34" tabindex="-1"></a>  pre2 <span class="ot">&lt;-</span> <span class="fu">predict.lm</span>(outPol2, <span class="at">newdata =</span> dat[sel,])</span>
+<span id="cb86-35"><a href="polynomial-regression.html#cb86-35" tabindex="-1"></a>  pre3 <span class="ot">&lt;-</span> <span class="fu">predict.lm</span>(outPol3, <span class="at">newdata =</span> dat[sel,])</span>
+<span id="cb86-36"><a href="polynomial-regression.html#cb86-36" tabindex="-1"></a>  <span class="co"># Error</span></span>
+<span id="cb86-37"><a href="polynomial-regression.html#cb86-37" tabindex="-1"></a>  err[sel, <span class="dv">1</span>] <span class="ot">&lt;-</span> pre1 <span class="sc">-</span> dat[sel, <span class="dv">1</span>]</span>
+<span id="cb86-38"><a href="polynomial-regression.html#cb86-38" tabindex="-1"></a>  err[sel, <span class="dv">2</span>] <span class="ot">&lt;-</span> pre2 <span class="sc">-</span> dat[sel, <span class="dv">1</span>]</span>
+<span id="cb86-39"><a href="polynomial-regression.html#cb86-39" tabindex="-1"></a>  err[sel, <span class="dv">3</span>] <span class="ot">&lt;-</span> pre3 <span class="sc">-</span> dat[sel, <span class="dv">1</span>]</span>
+<span id="cb86-40"><a href="polynomial-regression.html#cb86-40" tabindex="-1"></a>}</span>
+<span id="cb86-41"><a href="polynomial-regression.html#cb86-41" tabindex="-1"></a></span>
+<span id="cb86-42"><a href="polynomial-regression.html#cb86-42" tabindex="-1"></a></span>
+<span id="cb86-43"><a href="polynomial-regression.html#cb86-43" tabindex="-1"></a><span class="do">################################################################################</span></span>
+<span id="cb86-44"><a href="polynomial-regression.html#cb86-44" tabindex="-1"></a><span class="co"># Models Performance</span></span>
+<span id="cb86-45"><a href="polynomial-regression.html#cb86-45" tabindex="-1"></a><span class="fu">boxplot</span>(err<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-1.png" width="672" /></p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="polynomial-regression.html#cb87-1" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">abs</span>(err))</span></code></pre></div>
+<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-2.png" width="672" /></p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="polynomial-regression.html#cb88-1" tabindex="-1"></a><span class="fu">boxplot</span>(err<span class="sc">^</span><span class="dv">2</span>, <span class="at">outline =</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-3.png" width="672" /></p>
+<p>The matrix <code>err</code> contains one cross-validation prediction error for every observation and every candidate model. Its columns correspond to the degree-<span class="math inline">\(1\)</span>, degree-<span class="math inline">\(2\)</span>, and degree-<span class="math inline">\(3\)</span> polynomial fits.</p>
+<p>Thus, for observation <span class="math inline">\(i\)</span> and model <span class="math inline">\(j\)</span>,</p>
+<p><span class="math display">\[
+e_{i,j}^{CV}
+=
+\hat y_{i,j}^{(-f(i))}
+-
+y_i,
+\]</span></p>
+<p>where <span class="math inline">\(\hat y_{i,j}^{(-f(i))}\)</span> denotes the prediction obtained from model <span class="math inline">\(j\)</span> after fitting it without the fold containing observation <span class="math inline">\(i\)</span>.</p>
+<p>The final boxplots compare the distributions of the prediction errors produced by the three models. The first and third plots use squared prediction errors,</p>
+<p><span class="math display">\[
+\left(e_{i,j}^{CV}\right)^2,
+\]</span></p>
+<p>while the second uses absolute prediction errors,</p>
+<p><span class="math display">\[
+\left|e_{i,j}^{CV}\right|.
+\]</span></p>
+<p>Smaller values indicate better predictive performance. The plots therefore allow us to compare both the typical size and the variability of the out-of-sample errors across polynomial degrees.</p>
+<p>The important distinction is that these errors are different from the residuals obtained after fitting a model to the complete dataset. A residual compares an observation with a fitted value from a model that was estimated <strong>using that same observation</strong>. A cross-validation error compares an observation with a prediction from a model that was estimated <strong>without that observation’s fold</strong>.</p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\text{training residuals}
+\qquad\neq\qquad
+\text{cross-validation prediction errors}.
+\]</span></p>
+<p>This distinction is essential when choosing polynomial degree. A more flexible polynomial may reduce the training error simply because it has more coefficients available to adapt to the observed data. Cross-validation instead evaluates whether that additional flexibility improves predictions for observations that were left out during estimation.</p>
+<p>The preferred polynomial degree is therefore the one that provides the most favorable out-of-sample performance according to the prediction-error criterion being considered. This illustrates how cross-validation can be used to choose among models of different complexity without relying only on how well they fit the training data.</p>
+<hr />
+<p>Polynomial regression is a special case of <strong>multiple linear regression</strong>. Although there is only one original explanatory variable, the transformations</p>
+<p><span class="math display">\[
+x,\;x^2,\;\ldots,\;x^k
+\]</span></p>
+<p>appear as separate columns of the design matrix.</p>
+<p>This makes polynomial regression a natural bridge between simple and multiple linear regression. The model retains the visualization advantages of a single original explanatory variable while introducing the algebraic structure of a regression model with several predictors.</p>
+</div>
+</div>
+<div id="exercises-2" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Exercises<a href="polynomial-regression.html#exercises-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The following exercises reinforce the interpretation of polynomial regression as a linear least-squares problem, the relationship between centered and uncentered polynomial representations, and the distinction between interpolation and extrapolation. Some exercises focus on mathematical derivations, while others use R to investigate the properties developed in this section.</p>
+<div id="exercise-1-linear-in-the-coefficients" class="section level3 hasAnchor" number="5.4.1">
+<h3><span class="header-section-number">5.4.1</span> Exercise 1 — Linear in the Coefficients<a href="polynomial-regression.html#exercise-1-linear-in-the-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider the model</p>
+<p><span class="math display">\[
+y
+=
+\beta_0
++
+\beta_1x
++
+\beta_2x^2
++
+\beta_3x^3
++
+e.
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Explain why this model is nonlinear as a function of <span class="math inline">\(x\)</span>.</li>
+<li>Explain why it is nevertheless a linear regression model.</li>
+<li>Identify the explanatory variables that appear in the corresponding linear model.</li>
+<li>Write the model in the form</li>
+</ol>
+<p><span class="math display">\[
+y
+=
+\beta_0
++
+\beta_1z_1
++
+\beta_2z_2
++
+\beta_3z_3
++
+e,
+\]</span></p>
+<p>by defining appropriate values of <span class="math inline">\(z_1,z_2,z_3\)</span>.</p>
+<hr />
+</div>
+<div id="exercise-2-constructing-the-polynomial-design-matrix" class="section level3 hasAnchor" number="5.4.2">
+<h3><span class="header-section-number">5.4.2</span> Exercise 2 — Constructing the Polynomial Design Matrix<a href="polynomial-regression.html#exercise-2-constructing-the-polynomial-design-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Suppose the observed explanatory values are</p>
+<p><span class="math display">\[
+x_1=-2,
+\qquad
+x_2=-1,
+\qquad
+x_3=0,
+\qquad
+x_4=2.
+\]</span></p>
+<p>A cubic polynomial model is fitted to these observations.</p>
+<ol style="list-style-type: decimal">
+<li>Construct the design matrix <span class="math inline">\(\mathbf{X}\)</span>.</li>
+<li>Write the coefficient vector <span class="math inline">\(\boldsymbol{\beta}\)</span>.</li>
+<li>Write the model in matrix form</li>
+</ol>
+<p><span class="math display">\[
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{e}.
+\]</span></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Write the least-squares optimization problem using the Euclidean norm.</li>
+</ol>
+<hr />
+</div>
+<div id="exercise-3-quadratic-least-squares" class="section level3 hasAnchor" number="5.4.3">
+<h3><span class="header-section-number">5.4.3</span> Exercise 3 — Quadratic Least Squares<a href="polynomial-regression.html#exercise-3-quadratic-least-squares" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider the observations</p>
+<p><span class="math display">\[
+\begin{array}{c|cccc}
+x_i &amp; -1 &amp; 0 &amp; 1 &amp; 2\\
+\hline
+y_i &amp; 3 &amp; 1 &amp; 2 &amp; 6
+\end{array}
+\]</span></p>
+<p>and the quadratic model</p>
+<p><span class="math display">\[
+y_i
+=
+\beta_0+\beta_1x_i+\beta_2x_i^2+e_i.
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Construct the design matrix <span class="math inline">\(\mathbf{X}\)</span>.</li>
+<li>Compute <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span>.</li>
+<li>Compute <span class="math inline">\(\mathbf{X}&#39;\mathbf{y}\)</span>.</li>
+<li>Write the normal equations.</li>
+<li>Solve for <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>.</li>
+<li>Compute the fitted values <span class="math inline">\(\hat{\mathbf{y}}\)</span>.</li>
+<li>Compute the residual vector <span class="math inline">\(\hat{\mathbf{e}}\)</span>.</li>
+</ol>
+<hr />
+</div>
+<div id="exercise-4-from-a-centered-quadratic-to-an-uncentered-quadratic" class="section level3 hasAnchor" number="5.4.4">
+<h3><span class="header-section-number">5.4.4</span> Exercise 4 — From a Centered Quadratic to an Uncentered Quadratic<a href="polynomial-regression.html#exercise-4-from-a-centered-quadratic-to-an-uncentered-quadratic" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider the centered quadratic polynomial</p>
+<p><span class="math display">\[
+p(x)
+=
+\alpha_0
++
+\alpha_1(x-c)
++
+\alpha_2(x-c)^2.
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Expand the polynomial as a function of <span class="math inline">\(x\)</span>.</li>
+<li>Show that it can be written as</li>
+</ol>
+<p><span class="math display">\[
+p(x)
+=
+\beta_0+\beta_1x+\beta_2x^2.
+\]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Express <span class="math inline">\(\beta_0,\beta_1,\beta_2\)</span> in terms of <span class="math inline">\(\alpha_0,\alpha_1,\alpha_2\)</span>, and <span class="math inline">\(c\)</span>.</li>
+<li>Explain why this shows that centering does not create a different class of quadratic functions.</li>
+</ol>
+<hr />
+</div>
+<div id="exercise-5-from-an-uncentered-quadratic-to-a-centered-quadratic" class="section level3 hasAnchor" number="5.4.5">
+<h3><span class="header-section-number">5.4.5</span> Exercise 5 — From an Uncentered Quadratic to a Centered Quadratic<a href="polynomial-regression.html#exercise-5-from-an-uncentered-quadratic-to-a-centered-quadratic" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider</p>
+<p><span class="math display">\[
+p(x)
+=
+\beta_0+\beta_1x+\beta_2x^2
+\]</span></p>
+<p>and let</p>
+<p><span class="math display">\[
+x^c=x-c.
+\]</span></p>
+<p>Show that</p>
+<p><span class="math display">\[
+p(x)
+=
+\alpha_0+\alpha_1x^c+\alpha_2(x^c)^2,
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\alpha_0
+=
+\beta_0+c\beta_1+c^2\beta_2,
+\]</span></p>
+<p><span class="math display">\[
+\alpha_1
+=
+\beta_1+2c\beta_2,
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\alpha_2
+=
+\beta_2.
+\]</span></p>
+<p>Use your result to explain which coefficient remains unchanged when a quadratic polynomial is centered.</p>
+<hr />
+</div>
+<div id="exercise-6-numerical-reparameterization" class="section level3 hasAnchor" number="5.4.6">
+<h3><span class="header-section-number">5.4.6</span> Exercise 6 — Numerical Reparameterization<a href="polynomial-regression.html#exercise-6-numerical-reparameterization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Suppose</p>
+<p><span class="math display">\[
+p(x)
+=
+5-3x+2x^2.
+\]</span></p>
+<p>Center the explanatory variable at <span class="math inline">\(c=4\)</span>, so that</p>
+<p><span class="math display">\[
+x^c=x-4.
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Rewrite <span class="math inline">\(p(x)\)</span> in terms of <span class="math inline">\(x^c\)</span>.</li>
+<li>Find <span class="math inline">\(\alpha_0,\alpha_1,\alpha_2\)</span> such that</li>
+</ol>
+<p><span class="math display">\[
+p(x)
+=
+\alpha_0+\alpha_1x^c+\alpha_2(x^c)^2.
+\]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Evaluate both representations at <span class="math inline">\(x=2\)</span>, <span class="math inline">\(x=4\)</span>, and <span class="math inline">\(x=6\)</span>.</li>
+<li>Verify that both parameterizations give the same values.</li>
+<li>Interpret <span class="math inline">\(\alpha_0\)</span>.</li>
+</ol>
+<hr />
+</div>
+<div id="exercise-7-column-spaces-and-centering" class="section level3 hasAnchor" number="5.4.7">
+<h3><span class="header-section-number">5.4.7</span> Exercise 7 — Column Spaces and Centering<a href="polynomial-regression.html#exercise-7-column-spaces-and-centering" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider a quadratic polynomial regression.</p>
+<p>The uncentered design matrix contains the columns</p>
+<p><span class="math display">\[
+\mathbf{1},
+\qquad
+\mathbf{x},
+\qquad
+\mathbf{x}^2,
+\]</span></p>
+<p>while the design matrix centered at <span class="math inline">\(c\)</span> contains</p>
+<p><span class="math display">\[
+\mathbf{1},
+\qquad
+\mathbf{x}-c\mathbf{1},
+\qquad
+(\mathbf{x}-c\mathbf{1})^2.
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Show that <span class="math inline">\(\mathbf{x}-c\mathbf{1}\)</span> belongs to</li>
+</ol>
+<p><span class="math display">\[
+\mathcal{C}(\mathbf{X}).
+\]</span></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Show that</li>
+</ol>
+<p><span class="math display">\[
+(\mathbf{x}-c\mathbf{1})^2
+=
+\mathbf{x}^2
+-
+2c\mathbf{x}
++
+c^2\mathbf{1}.
+\]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Conclude that every column of the centered design matrix belongs to the column space of the uncentered design matrix.</li>
+<li>Reverse the argument and conclude that the two design matrices have the same column space.</li>
+<li>Explain why the two least-squares fits must therefore have the same fitted values.</li>
+</ol>
+<hr />
+</div>
+<div id="exercise-8-why-center-at-the-mean" class="section level3 hasAnchor" number="5.4.8">
+<h3><span class="header-section-number">5.4.8</span> Exercise 8 — Why Center at the Mean?<a href="polynomial-regression.html#exercise-8-why-center-at-the-mean" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let</p>
+<p><span class="math display">\[
+g(c)
+=
+\sum_{i=1}^n(x_i-c)^2.
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Differentiate <span class="math inline">\(g(c)\)</span> with respect to <span class="math inline">\(c\)</span>.</li>
+<li>Find its critical point.</li>
+<li>Compute the second derivative.</li>
+<li>Show that</li>
+</ol>
+<p><span class="math display">\[
+c=\bar{x}
+\]</span></p>
+<p>is the unique minimizer of <span class="math inline">\(g(c)\)</span>.
+5. Explain what this result says about the use of <span class="math inline">\(\bar{x}\)</span> as a centering value.
+6. Explain why this result does <strong>not</strong> imply that polynomial regression is a Taylor expansion around <span class="math inline">\(\bar{x}\)</span>.</p>
+<hr />
+</div>
+<div id="exercise-9-interpretation-of-the-centered-intercept" class="section level3 hasAnchor" number="5.4.9">
+<h3><span class="header-section-number">5.4.9</span> Exercise 9 — Interpretation of the Centered Intercept<a href="polynomial-regression.html#exercise-9-interpretation-of-the-centered-intercept" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider the quadratic model centered at <span class="math inline">\(\bar{x}\)</span>,</p>
+<p><span class="math display">\[
+\hat{y}
+=
+\hat{\alpha}_0
++
+\hat{\alpha}_1(x-\bar{x})
++
+\hat{\alpha}_2(x-\bar{x})^2.
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Evaluate the fitted polynomial at <span class="math inline">\(x=\bar{x}\)</span>.</li>
+<li>Interpret <span class="math inline">\(\hat{\alpha}_0\)</span>.</li>
+<li>Compare this interpretation with the intercept <span class="math inline">\(\hat{\beta}_0\)</span> in</li>
+</ol>
+<p><span class="math display">\[
+\hat{y}
+=
+\hat{\beta}_0
++
+\hat{\beta}_1x
++
+\hat{\beta}_2x^2.
+\]</span></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Under what condition would <span class="math inline">\(\hat{\beta}_0\)</span> have a useful interpretation in terms of an observed value of the explanatory variable?</li>
+</ol>
+<hr />
+</div>
+<div id="exercise-10-taylor-approximation-versus-polynomial-regression" class="section level3 hasAnchor" number="5.4.10">
+<h3><span class="header-section-number">5.4.10</span> Exercise 10 — Taylor Approximation versus Polynomial Regression<a href="polynomial-regression.html#exercise-10-taylor-approximation-versus-polynomial-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Suppose the underlying relationship is</p>
+<p><span class="math display">\[
+f(x)=\log(x).
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Write the second-degree Taylor polynomial of <span class="math inline">\(f(x)\)</span> around <span class="math inline">\(x_0=1\)</span>.</li>
+<li>Explain how the coefficients of this polynomial are determined.</li>
+<li>Suppose instead that observations <span class="math inline">\((x_i,y_i)\)</span> are available and the model</li>
+</ol>
+<p><span class="math display">\[
+y_i
+=
+\beta_0+\beta_1x_i+\beta_2x_i^2+e_i
+\]</span></p>
+<p>is fitted by least squares. Explain how <span class="math inline">\(\beta_0,\beta_1,\beta_2\)</span> are determined.
+4. Explain two mathematical differences between the Taylor polynomial and the fitted polynomial regression.
+5. Explain why Taylor approximation nevertheless provides motivation for using polynomial functions to approximate smooth relationships.</p>
+<hr />
+</div>
+<div id="exercise-11-centering-in-r" class="section level3 hasAnchor" number="5.4.11">
+<h3><span class="header-section-number">5.4.11</span> Exercise 11 — Centering in R<a href="polynomial-regression.html#exercise-11-centering-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Using the <code>Burger Data.csv</code> data from this section, write R code to perform the following operations.</p>
+<ol style="list-style-type: decimal">
+<li>Define</li>
+</ol>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="polynomial-regression.html#cb89-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> dat<span class="sc">$</span>Price</span></code></pre></div>
+<p>and compute <span class="math inline">\(\bar{x}\)</span>.
+2. Construct</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="polynomial-regression.html#cb90-1" tabindex="-1"></a>xc <span class="ot">&lt;-</span> x <span class="sc">-</span> xbar</span></code></pre></div>
+<p>and</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="polynomial-regression.html#cb91-1" tabindex="-1"></a>xc2 <span class="ot">&lt;-</span> xc<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Fit the two models</li>
+</ol>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="polynomial-regression.html#cb92-1" tabindex="-1"></a>Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<p>and</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="polynomial-regression.html#cb93-1" tabindex="-1"></a>y <span class="sc">~</span> xc <span class="sc">+</span> xc2</span></code></pre></div>
+<ol start="4" style="list-style-type: decimal">
+<li>Compare the estimated coefficients from the two models.</li>
+<li>Compare their fitted values using</li>
+</ol>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="polynomial-regression.html#cb94-1" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">abs</span>(<span class="fu">fitted</span>(model1) <span class="sc">-</span> <span class="fu">fitted</span>(model2)))</span></code></pre></div>
+<ol start="6" style="list-style-type: decimal">
+<li>Explain why the coefficients differ even though the fitted values should agree up to numerical precision.</li>
+</ol>
+<hr />
+</div>
+<div id="exercise-12-correlation-between-polynomial-terms" class="section level3 hasAnchor" number="5.4.12">
+<h3><span class="header-section-number">5.4.12</span> Exercise 12 — Correlation Between Polynomial Terms<a href="polynomial-regression.html#exercise-12-correlation-between-polynomial-terms" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Using the <code>Burger Data.csv</code> data, write R code to calculate</p>
+<p><span class="math display">\[
+\operatorname{cor}(x,x^2)
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\operatorname{cor}(x-\bar{x},(x-\bar{x})^2).
+\]</span></p>
+<p>Then:</p>
+<ol style="list-style-type: decimal">
+<li>Compare the two correlations.</li>
+<li>Determine whether centering reduced the correlation for this dataset.</li>
+<li>Explain why one example where the correlation decreases does not prove that centering will always eliminate dependence among polynomial terms.</li>
+<li>Explain why centered polynomial terms are not necessarily orthogonal.</li>
+</ol>
+<hr />
+</div>
+<div id="exercise-13-interpolation-and-extrapolation" class="section level3 hasAnchor" number="5.4.13">
+<h3><span class="header-section-number">5.4.13</span> Exercise 13 — Interpolation and Extrapolation<a href="polynomial-regression.html#exercise-13-interpolation-and-extrapolation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Using <code>Burger Data.csv</code>, fit a quadratic polynomial using only observations satisfying</p>
+<p><span class="math display">\[
+\text{Price}&lt;10.
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Write R code to select the restricted observations.</li>
+<li>Fit the quadratic model to the restricted dataset.</li>
+<li>Plot the fitted polynomial over the complete observed price range.</li>
+<li>Add a vertical line at <span class="math inline">\(x=10\)</span>.</li>
+<li>Identify which part of the plotted polynomial represents interpolation and which part represents extrapolation.</li>
+<li>Obtain the <span class="math inline">\(R^2\)</span> of the restricted model.</li>
+<li>Explain how the model can have a high <span class="math inline">\(R^2\)</span> while producing poor predictions for prices larger than <span class="math inline">\(10\)</span>.</li>
+<li>Explain why <span class="math inline">\(R^2\)</span> calculated from the training observations cannot by itself evaluate extrapolation performance.</li>
+</ol>
+<hr />
+</div>
+<div id="exercise-14-polynomial-degree-and-model-flexibility" class="section level3 hasAnchor" number="5.4.14">
+<h3><span class="header-section-number">5.4.14</span> Exercise 14 — Polynomial Degree and Model Flexibility<a href="polynomial-regression.html#exercise-14-polynomial-degree-and-model-flexibility" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Using <code>Burger Data.csv</code>, fit polynomial regression models of degrees</p>
+<p><span class="math display">\[
+1,\;2,\;3,\;4.
+\]</span></p>
+<p>For example, the cubic model can be fitted using</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="polynomial-regression.html#cb95-1" tabindex="-1"></a><span class="fu">lm</span>(Burgers <span class="sc">~</span> Price <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">I</span>(Price<span class="sc">^</span><span class="dv">3</span>), <span class="at">data =</span> dat)</span></code></pre></div>
+<ol style="list-style-type: decimal">
+<li>Fit all four models.</li>
+<li>Plot the fitted curves over the observed range of <code>Price</code>.</li>
+<li>Compare how the flexibility of the fitted function changes as the degree increases.</li>
+<li>Extend the curves slightly beyond the observed range.</li>
+<li>Compare the behavior of the four models during extrapolation.</li>
+<li>Based only on the material developed in this chapter, explain why increasing polynomial degree should not automatically be interpreted as producing a better predictive model.</li>
+<li>Explain how this exercise illustrates the distinction between fitting the observed data and predicting outside the observed region.</li>
+</ol>
+</div>
+<div id="exercise-15-centering-without-an-intercept" class="section level3 hasAnchor" number="5.4.15">
+<h3><span class="header-section-number">5.4.15</span> Exercise 15: Centering Without an Intercept<a href="polynomial-regression.html#exercise-15-centering-without-an-intercept" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Consider the quadratic regression model <strong>without an intercept</strong></p>
+<p><span class="math display">\[
+y_i
+=
+\beta_1x_i+\beta_2x_i^2+e_i.
+\]</span></p>
+<p>Let</p>
+<p><span class="math display">\[
+x_i^c=x_i-c,
+\]</span></p>
+<p>where <span class="math inline">\(c\neq0\)</span>, and consider the centered quadratic model, also without an intercept,</p>
+<p><span class="math display">\[
+y_i
+=
+\gamma_1x_i^c+\gamma_2(x_i^c)^2+e_i.
+\]</span></p>
+<ol style="list-style-type: decimal">
+<li>Show that the original model uses the function space</li>
+</ol>
+<p><span class="math display">\[
+\mathcal{V}
+=
+\operatorname{span}\{x,x^2\},
+\]</span></p>
+<p>while the centered model uses</p>
+<p><span class="math display">\[
+\mathcal{V}_c
+=
+\operatorname{span}\{x-c,(x-c)^2\}.
+\]</span></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Expand</li>
+</ol>
+<p><span class="math display">\[
+\gamma_1(x-c)+\gamma_2(x-c)^2
+\]</span></p>
+<p>as a polynomial in <span class="math inline">\(x\)</span>, and show that it can be written as</p>
+<p><span class="math display">\[
+\gamma_2x^2
++
+(\gamma_1-2c\gamma_2)x
++
+(c^2\gamma_2-c\gamma_1).
+\]</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Explain why the appearance of the constant term</li>
+</ol>
+<p><span class="math display">\[
+c^2\gamma_2-c\gamma_1
+\]</span></p>
+<p>shows that, in general,</p>
+<p><span class="math display">\[
+\mathcal{V}_c
+\neq
+\mathcal{V}.
+\]</span></p>
+<ol start="4" style="list-style-type: decimal">
+<li>More specifically, prove that when <span class="math inline">\(c\neq0\)</span>,</li>
+</ol>
+<p><span class="math display">\[
+x\notin\mathcal{V}_c.
+\]</span></p>
+<p>Conclude that centering the explanatory variable in a polynomial regression <strong>without including an intercept is not merely a reparameterization of the original model</strong>.</p>
+<ol start="5" style="list-style-type: decimal">
+<li>Finally, show that if the intercept is included, then</li>
+</ol>
+<p><span class="math display">\[
+\operatorname{span}\{1,x,x^2\}
+=
+\operatorname{span}\{1,x-c,(x-c)^2\}.
+\]</span></p>
+<p>Explain why this means that centering is a reparameterization when the intercept is retained, but generally changes the model when the intercept is removed.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="simple-linear-regression-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="multiple-linear-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

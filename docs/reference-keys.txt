@@ -303,7 +303,6 @@ exercise-28
 exercise-29
 comprehensive-exercise
 exercise-30
-polynomial-regression-1
 motivation
 taylor-polynomials-and-polynomial-regression
 polynomial-regression-as-a-linear-model
@@ -327,7 +326,6 @@ exercise-12-correlation-between-polynomial-terms
 exercise-13-interpolation-and-extrapolation
 exercise-14-polynomial-degree-and-model-flexibility
 exercise-15-centering-without-an-intercept
-multiple-linear-regression-1
 introduction-1
 the-general-model
 interpretation-and-objectives
@@ -389,12 +387,6 @@ lasso-regression
 comparison-of-regression-criteria
 chapter-synthesis
 exercises-3
-bootstrapping
-introduction-2
-key-points-6
-bootstrapping-example
-bootstrapping-predictions
-adding-prediction-intervals
 mean-and-varaince-assumptions
 mean-assumptions
 expectation-of-mathbfy
@@ -415,7 +407,7 @@ statement
 proof
 estimate-of-sigma2
 normality-assumption
-introduction-3
+introduction-2
 maximum-likelihood-estimation
 decomposition-of-the-quadratic-form
 estimation-of-sigma2
@@ -441,7 +433,6 @@ power-for-testing-a-single-coefficient
 power-for-testing-multiple-coefficients-partial-f-tests
 the-role-of-the-design-matrix
 practical-applications
-applications-4
 anova
 one-way-anova-a-single-covariate-differences-in-means
 conceptual-statement
