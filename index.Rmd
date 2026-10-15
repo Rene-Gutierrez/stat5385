@@ -96,7 +96,7 @@ The emphasis is initially on the structure of the prediction problem: identifyin
 
 This establishes the modeling perspective that motivates the mathematical developments that follow.
 
-### Simple Linear Regression
+### Simple Linear Regression {#ind-simple-linear-regression}
 
 Simple linear regression introduces least squares using a single explanatory variable.
 
@@ -104,13 +104,13 @@ The least squares estimator is derived as the solution to an optimization proble
 
 This setting introduces many of the central ideas of the course, including fitted values, residuals, orthogonality, centering and standardization, the coefficient of determination, and residual analysis.
 
-### Polynomial Regression
+### Polynomial Regression {#ind-polynomial-regression}
 
 Polynomial regression extends the prediction framework to nonlinear relationships while preserving linearity in the unknown coefficients.
 
 It provides a natural bridge between simple and multiple regression: transformations of a single explanatory variable generate multiple predictors and demonstrate that apparently nonlinear prediction problems can still be treated using the linear regression machinery.
 
-### Multiple Linear Regression
+### Multiple Linear Regression {#ind-multiple-linear-regression}
 
 Multiple linear regression develops the general matrix formulation of least squares.
 

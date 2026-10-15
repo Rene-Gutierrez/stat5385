@@ -739,7 +739,8 @@ $$
 
 This shows that the gradient points outward from the origin, and its magnitude increases as $x$ and $y$ increase.
 
-#### Applications:
+#### Applications: {#pre-cal-gra-applications}
+
 - In **optimization**, the gradient is used to find the minimum or maximum of a function (e.g., in gradient descent, a common optimization algorithm).
 - In **vector calculus**, the gradient is used to describe the slope or rate of change of scalar fields (such as temperature, pressure, or altitude in physical applications).
 
@@ -781,7 +782,7 @@ $$
 \end{bmatrix}
 $$
 
-### Applications:
+### Applications: {#pre-cal-hes-applications}
 - In **optimization**, the Hessian is used to assess the convexity or concavity of a function, which helps in identifying the nature of critical points.
 - In **machine learning**, it is used to optimize loss functions and can be part of second-order optimization methods like Newton's method.
 - In **economics** and **engineering**, the Hessian helps in analyzing systems involving multiple variables and understanding how they interact with each other.
@@ -1214,7 +1215,7 @@ $$
    - Variance: $\mathbb{V}[T] = \frac{k}{k-2}$ for $k > 2$
    - Higher moments exist only for $k > m$, where $m$ is the order of the moment.
 
-#### Applications
+#### Applications {#pre-pro-dis-tdi-applications}
 The t-distribution is widely used in:
 1. **t-tests** for hypothesis testing, such as testing means of small samples.
 2. Constructing **confidence intervals** for a population mean when the population standard deviation is unknown.
@@ -1291,7 +1292,7 @@ $$
 6. **Special Cases:** 
    - When $k_1 = 1$, the F-distribution is equivalent to the square of a t-distribution with $k_2$ degrees of freedom: $F(1, k_2) = t_{k_2}^2$.
 
-#### Applications
+#### Applications {#pre-pro-dis-fdi-applications}
 
 1. **ANOVA (Analysis of Variance):** The F-statistic is used to test whether multiple groups have the same variance or means.
 2. **Model Comparison:** In regression, the F-distribution is used to compare nested models, assessing whether additional predictors improve the fit of the model.

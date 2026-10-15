@@ -74,9 +74,9 @@ course-overview
 part-i-linear-regression-for-prediction
 mathematical-prerequisites
 introduction-to-linear-regression
-simple-linear-regression
-polynomial-regression
-multiple-linear-regression
+ind-simple-linear-regression
+ind-polynomial-regression
+ind-multiple-linear-regression
 part-ii-linear-regression-as-a-statistical-model
 bootstrapping-and-the-introduction-of-uncertainty
 mean-and-variance-assumptions
@@ -157,11 +157,11 @@ calculus
 gradient
 key-points-3
 example-6
-applications
+pre-cal-gra-applications
 hessian-matrix
 key-properties-2
 example-7
-applications-1
+pre-cal-hes-applications
 matrix-calculus
 probability
 expected-value
@@ -179,13 +179,13 @@ key-properties-4
 t-distribution
 definition-11
 key-properties-of-the-t-distribution
-applications-2
+pre-pro-dis-tdi-applications
 chi2-distribution
 key-properties-of-the-chi-squared-distribution
 f-distribution
 definition-12
 key-properties-of-the-f-distribution
-applications-3
+pre-pro-dis-fdi-applications
 statistics
 bias-of-an-estimator
 key-points-4
@@ -231,7 +231,7 @@ exercise-15-collecting-your-own-data
 exercise-16-control-versus-description
 exercise-17-same-linear-model-different-data
 exercise-18-build-a-dataset-where-a-line-is-misleading
-simple-linear-regression-1
+simple-linear-regression
 least-squares-estimation
 computational-properties-of-least-squares
 fitted-values-and-residuals
@@ -303,6 +303,7 @@ exercise-28
 exercise-29
 comprehensive-exercise
 exercise-30
+polynomial-regression
 motivation
 taylor-polynomials-and-polynomial-regression
 polynomial-regression-as-a-linear-model
@@ -326,6 +327,7 @@ exercise-12-correlation-between-polynomial-terms
 exercise-13-interpolation-and-extrapolation
 exercise-14-polynomial-degree-and-model-flexibility
 exercise-15-centering-without-an-intercept
+multiple-linear-regression
 introduction-1
 the-general-model
 interpretation-and-objectives
@@ -433,6 +435,7 @@ power-for-testing-a-single-coefficient
 power-for-testing-multiple-coefficients-partial-f-tests
 the-role-of-the-design-matrix
 practical-applications
+applications
 anova
 one-way-anova-a-single-covariate-differences-in-means
 conceptual-statement
