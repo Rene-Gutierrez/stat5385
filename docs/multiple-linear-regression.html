@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6 Multiple Linear Regression | _main.knit</title>
-  <meta name="description" content="" />
+  <title>6 Multiple Linear Regression | Stat 5385/6385</title>
+  <meta name="description" content="6 Multiple Linear Regression | Stat 5385/6385" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6 Multiple Linear Regression | _main.knit" />
+  <meta property="og:title" content="6 Multiple Linear Regression | Stat 5385/6385" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 Multiple Linear Regression | _main.knit" />
+  <meta name="twitter:title" content="6 Multiple Linear Regression | Stat 5385/6385" />
   
   
   
@@ -510,7 +510,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Stat 5385/6385</a>
           </h1>
         </div>
 
@@ -715,7 +715,7 @@ x,\;x^2,\;\ldots,\;x^k,
 <span id="cb96-3"><a href="multiple-linear-regression.html#cb96-3" tabindex="-1"></a></span>
 <span id="cb96-4"><a href="multiple-linear-regression.html#cb96-4" tabindex="-1"></a><span class="co"># Plot the scatterplots for each pair of variables</span></span>
 <span id="cb96-5"><a href="multiple-linear-regression.html#cb96-5" tabindex="-1"></a><span class="fu">pairs</span>(dat)</span></code></pre></div>
-<p><img src="_main_files/figure-html/paris-plot-gdp-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/paris-plot-gdp-1.png" alt="" width="672" /></p>
 <p>The scatterplot matrix provides an initial visual description of the dataset. In particular, it allows us to examine two types of relationships:</p>
 <ol style="list-style-type: decimal">
 <li>the pairwise relationship between GDP and each explanatory variable, and</li>
@@ -770,7 +770,7 @@ x,\;x^2,\;\ldots,\;x^k,
 <span id="cb99-21"><a href="multiple-linear-regression.html#cb99-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
 <span id="cb99-22"><a href="multiple-linear-regression.html#cb99-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
 <span id="cb99-23"><a href="multiple-linear-regression.html#cb99-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-inf-fit-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/gdp-inf-fit-1.png" alt="" width="672" /></p>
 <p>The fitted slope describes the pairwise linear relationship between inflation and GDP. It answers how the fitted value of GDP changes with inflation when inflation is the <strong>only explanatory variable included in the model</strong>.</p>
 <p>The residual plot shows the differences between the observed GDP values and those predicted using inflation alone. Any remaining structure in the residuals indicates variation in GDP that this simple regression does not represent.</p>
 </div>
@@ -799,7 +799,7 @@ x,\;x^2,\;\ldots,\;x^k,
 <span id="cb100-21"><a href="multiple-linear-regression.html#cb100-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
 <span id="cb100-22"><a href="multiple-linear-regression.html#cb100-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
 <span id="cb100-23"><a href="multiple-linear-regression.html#cb100-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-unp-fit-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/gdp-unp-fit-1.png" alt="" width="672" /></p>
 <p>This regression describes the relationship between unemployment and GDP when unemployment is considered by itself.</p>
 <p>As before, the fitted line summarizes the pairwise linear trend, while the residuals represent the component of GDP that is not captured by that one-variable linear fit.</p>
 </div>
@@ -828,7 +828,7 @@ x,\;x^2,\;\ldots,\;x^k,
 <span id="cb101-21"><a href="multiple-linear-regression.html#cb101-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
 <span id="cb101-22"><a href="multiple-linear-regression.html#cb101-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
 <span id="cb101-23"><a href="multiple-linear-regression.html#cb101-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-int-fit-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/gdp-int-fit-1.png" alt="" width="672" /></p>
 <p>The estimated slope now describes the pairwise relationship between the reference interest rate and GDP.</p>
 <p>Importantly, this coefficient reflects both the relationship of the interest rate with GDP and any information that the interest rate shares with the other economic variables that have not yet been included in the model.</p>
 </div>
@@ -857,12 +857,12 @@ x,\;x^2,\;\ldots,\;x^k,
 <span id="cb102-21"><a href="multiple-linear-regression.html#cb102-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
 <span id="cb102-22"><a href="multiple-linear-regression.html#cb102-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
 <span id="cb102-23"><a href="multiple-linear-regression.html#cb102-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-gov-fit-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/gdp-gov-fit-1.png" alt="" width="672" /></p>
 <p>This fit examines GDP using government spending as the only explanatory variable.</p>
 <p>As with the previous models, the estimated coefficient should be interpreted as a <strong>simple-regression coefficient</strong>. It does not yet describe the relationship between government spending and GDP after accounting for inflation, unemployment, interest rates, or exports.</p>
 </div>
-<div id="exports" class="section level4 hasAnchor" number="6.2.1.5">
-<h4><span class="header-section-number">6.2.1.5</span> Exports<a href="multiple-linear-regression.html#exports" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div id="gdp-exports" class="section level4 hasAnchor" number="6.2.1.5">
+<h4><span class="header-section-number">6.2.1.5</span> Exports<a href="multiple-linear-regression.html#gdp-exports" class="anchor-section" aria-label="Anchor link to header"></a></h4>
 <div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="multiple-linear-regression.html#cb103-1" tabindex="-1"></a><span class="co"># Fits with Exports</span></span>
 <span id="cb103-2"><a href="multiple-linear-regression.html#cb103-2" tabindex="-1"></a>outRegExp <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp <span class="sc">~</span> exp, <span class="at">data =</span> dat)</span>
 <span id="cb103-3"><a href="multiple-linear-regression.html#cb103-3" tabindex="-1"></a>varVal    <span class="ot">&lt;-</span> dat<span class="sc">$</span>exp</span>
@@ -886,7 +886,7 @@ x,\;x^2,\;\ldots,\;x^k,
 <span id="cb103-21"><a href="multiple-linear-regression.html#cb103-21" tabindex="-1"></a>     <span class="at">pch  =</span> <span class="dv">16</span>)</span>
 <span id="cb103-22"><a href="multiple-linear-regression.html#cb103-22" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h   =</span> <span class="dv">0</span>,</span>
 <span id="cb103-23"><a href="multiple-linear-regression.html#cb103-23" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/gdp-exp-fit-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/gdp-exp-fit-1.png" alt="" width="672" /></p>
 <p>The exports model provides the final pairwise regression. Its slope summarizes how the fitted GDP changes with exports when exports are considered alone.</p>
 <p>Taken together, the five simple regressions provide useful benchmarks. They show what each explanatory variable appears to contribute when examined individually. We can now compare these results with a model in which all five explanatory variables are included simultaneously.</p>
 <hr />
@@ -2556,7 +2556,7 @@ R_{\mathrm{unc}}^2
 <p>Multiple linear regression can be interpreted geometrically as projecting the response vector <span class="math inline">\(\mathbf{y}\)</span> onto the column space of the design matrix <span class="math inline">\(\mathbf{X}\)</span>.</p>
 <p>The fitted-value vector <span class="math inline">\(\hat{\mathbf{y}}\)</span> is the orthogonal projection of <span class="math inline">\(\mathbf{y}\)</span> onto <span class="math inline">\(\mathcal{C}(\mathbf{X})\)</span>, while the residual vector <span class="math inline">\(\hat{\mathbf{e}}=\mathbf{y}-\hat{\mathbf{y}}\)</span> is orthogonal to this column space.</p>
 <p>The following diagram illustrates this interpretation and its connection to the sum-of-squares decomposition.</p>
-<p><img src="_main_files/figure-html/geo-int-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/geo-int-1.png" alt="" width="672" /></p>
 <p>The diagram represents the following vectors and subspaces:</p>
 <ul>
 <li><span class="math inline">\(\mathbf{y}\)</span> is the observed response vector in <span class="math inline">\(\mathbb{R}^n\)</span>.</li>
@@ -5957,7 +5957,7 @@ h_{ii}
 </ul>
 <p>Thus, neither a large residual nor high leverage alone necessarily implies high influence.</p>
 <p>The following diagram illustrates the relationship.</p>
-<p><img src="_main_files/figure-html/leverage-residual-influence-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/leverage-residual-influence-1.png" alt="" width="672" /></p>
 <p>Each contour represents a constant value of</p>
 <p><span class="math display">\[
 \Delta_i
@@ -7920,42 +7920,42 @@ SS_{tot}=20,
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>

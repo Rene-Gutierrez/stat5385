@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>5 Polynomial Regression | _main.knit</title>
-  <meta name="description" content="" />
+  <title>5 Polynomial Regression | Stat 5385/6385</title>
+  <meta name="description" content="5 Polynomial Regression | Stat 5385/6385" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="5 Polynomial Regression | _main.knit" />
+  <meta property="og:title" content="5 Polynomial Regression | Stat 5385/6385" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5 Polynomial Regression | _main.knit" />
+  <meta name="twitter:title" content="5 Polynomial Regression | Stat 5385/6385" />
   
   
   
@@ -510,7 +510,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Stat 5385/6385</a>
           </h1>
         </div>
 
@@ -941,7 +941,7 @@ When the explanatory variable is centered at <span class="math inline">\(\bar{x}
 <span id="cb77-38"><a href="polynomial-regression.html#cb77-38" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
 <span id="cb77-39"><a href="polynomial-regression.html#cb77-39" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;blue&#39;</span>,</span>
 <span id="cb77-40"><a href="polynomial-regression.html#cb77-40" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/poly-reg-burger-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/poly-reg-burger-1.png" alt="" width="672" /></p>
 <p>The second-degree polynomial provides a reasonable approximation to the nonlinear relationship over the observed range of prices. The red curve represents the nonlinear relationship</p>
 <p><span class="math display">\[
 100-30\log(x),
@@ -1015,7 +1015,7 @@ When the explanatory variable is centered at <span class="math inline">\(\bar{x}
 <span id="cb82-50"><a href="polynomial-regression.html#cb82-50" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>,</span>
 <span id="cb82-51"><a href="polynomial-regression.html#cb82-51" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;green&#39;</span>,</span>
 <span id="cb82-52"><a href="polynomial-regression.html#cb82-52" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/poly-reg-burger-centered-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/poly-reg-burger-centered-1.png" alt="" width="672" /></p>
 <p>The reported correlations illustrate that centering can change the relationships among the polynomial terms in the design matrix.</p>
 <p>However, the blue and green fitted curves should theoretically coincide. Both fits use the same observations and the same quadratic function space. Centering changes the coefficients used to represent the polynomial, but it does not change the fitted values.</p>
 <p>Thus, any visible difference between the blue and green curves should be attributable only to numerical computation or graphical precision, not to a difference between the underlying fitted models.</p>
@@ -1074,7 +1074,7 @@ When the explanatory variable is centered at <span class="math inline">\(\bar{x}
 <span id="cb83-45"><a href="polynomial-regression.html#cb83-45" tabindex="-1"></a>      <span class="at">col  =</span> <span class="st">&#39;blue&#39;</span>,</span>
 <span id="cb83-46"><a href="polynomial-regression.html#cb83-46" tabindex="-1"></a>      <span class="at">lwd  =</span> <span class="dv">2</span>)</span>
 <span id="cb83-47"><a href="polynomial-regression.html#cb83-47" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">10</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/poly-reg-burger-restricted-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/poly-reg-burger-restricted-1.png" alt="" width="672" /></p>
 <p>In this case, only observations with prices below <span class="math inline">\(10\)</span> are used to estimate the polynomial coefficients, although the fitted polynomial is displayed over the complete price range.</p>
 <p>The model may fit the restricted training data very well while providing poor predictions outside that range. This does not mean that the polynomial fit is poor where it was estimated. Rather, it demonstrates the distinction between <strong>interpolation</strong> within the region of the observed explanatory values and <strong>extrapolation</strong> beyond that region.</p>
 <p>We can check the <span class="math inline">\(R^2\)</span> of the restricted fit.</p>
@@ -1184,11 +1184,11 @@ y
 <span id="cb86-43"><a href="polynomial-regression.html#cb86-43" tabindex="-1"></a><span class="do">################################################################################</span></span>
 <span id="cb86-44"><a href="polynomial-regression.html#cb86-44" tabindex="-1"></a><span class="co"># Models Performance</span></span>
 <span id="cb86-45"><a href="polynomial-regression.html#cb86-45" tabindex="-1"></a><span class="fu">boxplot</span>(err<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-1.png" alt="" width="672" /></p>
 <div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="polynomial-regression.html#cb87-1" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">abs</span>(err))</span></code></pre></div>
-<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-2.png" width="672" /></p>
+<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-2.png" alt="" width="672" /></p>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="polynomial-regression.html#cb88-1" tabindex="-1"></a><span class="fu">boxplot</span>(err<span class="sc">^</span><span class="dv">2</span>, <span class="at">outline =</span><span class="cn">FALSE</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-3.png" width="672" /></p>
+<p><img src="_main_files/figure-html/cro-val-pol-reg-deg-sel-3.png" alt="" width="672" /></p>
 <p>The matrix <code>err</code> contains one cross-validation prediction error for every observation and every candidate model. Its columns correspond to the degree-<span class="math inline">\(1\)</span>, degree-<span class="math inline">\(2\)</span>, and degree-<span class="math inline">\(3\)</span> polynomial fits.</p>
 <p>Thus, for observation <span class="math inline">\(i\)</span> and model <span class="math inline">\(j\)</span>,</p>
 <p><span class="math display">\[
@@ -1716,42 +1716,42 @@ x\notin\mathcal{V}_c.
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>

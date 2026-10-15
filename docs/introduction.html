@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3 Introduction | _main.knit</title>
-  <meta name="description" content="" />
+  <title>3 Introduction | Stat 5385/6385</title>
+  <meta name="description" content="3 Introduction | Stat 5385/6385" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 Introduction | _main.knit" />
+  <meta property="og:title" content="3 Introduction | Stat 5385/6385" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Introduction | _main.knit" />
+  <meta name="twitter:title" content="3 Introduction | Stat 5385/6385" />
   
   
   
@@ -510,7 +510,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Stat 5385/6385</a>
           </h1>
         </div>
 
@@ -566,7 +566,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb3-3"><a href="introduction.html#cb3-3" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Revenue,</span>
 <span id="cb3-4"><a href="introduction.html#cb3-4" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Ad Spending ($)&quot;</span>,</span>
 <span id="cb3-5"><a href="introduction.html#cb3-5" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Revenue ($)&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/ad-plot-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/ad-plot-1.png" alt="" width="672" /></p>
 <p>Next, you can perform a linear regression analysis:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="introduction.html#cb4-1" tabindex="-1"></a>outReg <span class="ot">&lt;-</span> <span class="fu">lm</span>(Revenue <span class="sc">~</span> Ad.Spending, <span class="at">data =</span> dat)</span></code></pre></div>
 <p>The most important results from the regression analysis can be summarized as follows:</p>
@@ -599,7 +599,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-6"><a href="introduction.html#cb7-6" tabindex="-1"></a>       <span class="at">b   =</span> outReg<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
 <span id="cb7-7"><a href="introduction.html#cb7-7" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
 <span id="cb7-8"><a href="introduction.html#cb7-8" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/linear-regression-vizualization-ad-spending-example-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/linear-regression-vizualization-ad-spending-example-1.png" alt="" width="672" /></p>
 <p>The red regression line represents the “best fit” for these variables. In this context, “best fit” means the line that minimizes the sum of the squared vertical differences from each point to the line. For comparison, here are examples of other lines that do not fit as well:</p>
 <p>Different <strong>slope</strong> (coefficient for the Ad.Spending variable):</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="introduction.html#cb8-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Ad.Spending,</span>
@@ -614,7 +614,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-10"><a href="introduction.html#cb8-10" tabindex="-1"></a>       <span class="at">b   =</span> <span class="dv">6</span>,</span>
 <span id="cb8-11"><a href="introduction.html#cb8-11" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;blue&#39;</span>,</span>
 <span id="cb8-12"><a href="introduction.html#cb8-12" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/linear-regression-slope-change-ad-spending-example-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/linear-regression-slope-change-ad-spending-example-1.png" alt="" width="672" /></p>
 <p>Different <strong>intercept</strong>:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="introduction.html#cb9-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Ad.Spending,</span>
 <span id="cb9-2"><a href="introduction.html#cb9-2" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Revenue,</span>
@@ -628,7 +628,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-10"><a href="introduction.html#cb9-10" tabindex="-1"></a>       <span class="at">b   =</span> outReg<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
 <span id="cb9-11"><a href="introduction.html#cb9-11" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;blue&#39;</span>,</span>
 <span id="cb9-12"><a href="introduction.html#cb9-12" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/linear-regression-intercept-change-ad-spending-example-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/linear-regression-intercept-change-ad-spending-example-1.png" alt="" width="672" /></p>
 <p>We can expand the range for ad spending and revenue on the plot, as follows:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="introduction.html#cb10-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="at">x =</span> dat<span class="sc">$</span>Ad.Spending,</span>
 <span id="cb10-2"><a href="introduction.html#cb10-2" tabindex="-1"></a>     <span class="at">y =</span> dat<span class="sc">$</span>Revenue,</span>
@@ -642,7 +642,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-10"><a href="introduction.html#cb10-10" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span>
 <span id="cb10-11"><a href="introduction.html#cb10-11" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>,</span>
 <span id="cb10-12"><a href="introduction.html#cb10-12" tabindex="-1"></a>       <span class="at">v =</span> <span class="dv">0</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/linear-regression-range-change-ad-spending-example-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/linear-regression-range-change-ad-spending-example-1.png" alt="" width="672" /></p>
 <p>Within the range of observed ad spending values 25 to 123, the data provide direct information about the relationship between ad spending and revenue. However, what happens when we consider values outside this range?</p>
 <p>While we can predict and control revenue to some extent by adjusting ad spending within the observed range, this confidence may not extend to values beyond it. For instance, it’s plausible that after reaching a certain level of ad spending, the market could become saturated, resulting in diminishing or even no additional revenue despite increased ad spending. Therefore, we should be cautious when extrapolating beyond the observed data, as the relationship may not hold under different conditions.</p>
 <hr />
@@ -677,7 +677,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb12-6"><a href="introduction.html#cb12-6" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>Years,</span>
 <span id="cb12-7"><a href="introduction.html#cb12-7" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Avg. Glasses of Wine per Week&quot;</span>,</span>
 <span id="cb12-8"><a href="introduction.html#cb12-8" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Life Expectancy (Years)&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/wine-plot-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/wine-plot-1.png" alt="" width="672" /></p>
 <p>Once again, we can perform a linear regression to examine the relationship between the variables and visualize it with a regression line:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="introduction.html#cb13-1" tabindex="-1"></a><span class="co"># Performs Linear Regression</span></span>
 <span id="cb13-2"><a href="introduction.html#cb13-2" tabindex="-1"></a>outReg <span class="ot">&lt;-</span> <span class="fu">lm</span>(Years <span class="sc">~</span> Glasses, <span class="at">data =</span> dat)</span>
@@ -691,7 +691,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb13-10"><a href="introduction.html#cb13-10" tabindex="-1"></a>       <span class="at">b   =</span> outReg<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
 <span id="cb13-11"><a href="introduction.html#cb13-11" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
 <span id="cb13-12"><a href="introduction.html#cb13-12" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/regression-wine-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/regression-wine-1.png" alt="" width="672" /></p>
 <p>Given the regression line, can we confidently conclude that increasing wine consumption leads to a longer life expectancy?</p>
 <p>The simulation is designed to generate a positive association between the variables. The fact that we used <span class="math inline">\(x\)</span> to generate <span class="math inline">\(y\)</span> computationally should not be interpreted as evidence that an analogous observed association in real data would be causal.</p>
 <hr />
@@ -707,7 +707,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb14-6"><a href="introduction.html#cb14-6" tabindex="-1"></a>     <span class="at">y    =</span> dat<span class="sc">$</span>Burgers,</span>
 <span id="cb14-7"><a href="introduction.html#cb14-7" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Price ($)&quot;</span>,</span>
 <span id="cb14-8"><a href="introduction.html#cb14-8" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Burgers Sold&quot;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/burger-plot-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/burger-plot-1.png" alt="" width="672" /></p>
 <p>Is this dataset a good candidate for linear regression? While it’s true that we can always fit a line to any dataset, the real question is whether that line meaningfully represents the relationship between the variables. Here’s what happens when we apply linear regression to this data:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="introduction.html#cb15-1" tabindex="-1"></a><span class="co"># Performs Linear Regression</span></span>
 <span id="cb15-2"><a href="introduction.html#cb15-2" tabindex="-1"></a>outReg <span class="ot">&lt;-</span> <span class="fu">lm</span>(Burgers <span class="sc">~</span> Price, <span class="at">data =</span> dat)</span>
@@ -721,7 +721,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb15-10"><a href="introduction.html#cb15-10" tabindex="-1"></a>       <span class="at">b   =</span> outReg<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
 <span id="cb15-11"><a href="introduction.html#cb15-11" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">&#39;red&#39;</span>,</span>
 <span id="cb15-12"><a href="introduction.html#cb15-12" tabindex="-1"></a>       <span class="at">lwd =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/regression-burgers-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/regression-burgers-1.png" alt="" width="672" /></p>
 <p>Do you think this is a good fit for the data? The regression line appears to be inadequate for both low and high price points. Since the number of burgers sold cannot be negative, the linear model becomes unreasonable over ranges of prices for which it predicts zero or negative demand.</p>
 </div>
 </div>
@@ -783,7 +783,7 @@ Also, note that we are not making any assumptions about the error terms.</p>
 <span id="cb16-17"><a href="introduction.html#cb16-17" tabindex="-1"></a>         <span class="at">y1 =</span> <span class="fu">c</span>(<span class="dv">78</span>, <span class="fl">79.5</span>),</span>
 <span id="cb16-18"><a href="introduction.html#cb16-18" tabindex="-1"></a>         <span class="at">lwd =</span> <span class="dv">2</span>,</span>
 <span id="cb16-19"><a href="introduction.html#cb16-19" tabindex="-1"></a>         <span class="at">col =</span> <span class="st">&#39;blue&#39;</span>)</span></code></pre></div>
-<p><img src="_main_files/figure-html/slr-parts-1.png" width="672" /></p>
+<p><img src="_main_files/figure-html/slr-parts-1.png" alt="" width="672" /></p>
 <p>In this case, the intercept <span class="math inline">\(\beta_0\)</span> is meaningful, as it represents the value predicted by the linear component of the model for a person who drinks no wine.. However, depending on the data, the intercept may or may not have a meaningful interpretation. The slope <span class="math inline">\(\beta_1\)</span> indicates that for each additional glass of wine consumed per week, our model predicts an increase of 1.5 years in life expectancy.</p>
 <p>In practice, we rarely know the true regression line. Instead, it must be estimated from the data. The goal is to find the “best” line that fits the data, where “best” means the line that minimizes the sum of squared errors (SSE) between the observed values and the values predicted by the model.</p>
 <hr />
@@ -1225,42 +1225,42 @@ y = 500 + 5x + e,
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
 });
 });
 </script>

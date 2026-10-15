@@ -422,7 +422,7 @@ This fit examines GDP using government spending as the only explanatory variable
 
 As with the previous models, the estimated coefficient should be interpreted as a **simple-regression coefficient**. It does not yet describe the relationship between government spending and GDP after accounting for inflation, unemployment, interest rates, or exports.
 
-#### Exports
+#### Exports {#gdp-exports}
 
 ```{r gdp-exp-fit}
 # Fits with Exports

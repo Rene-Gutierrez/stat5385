@@ -339,7 +339,7 @@ inflation-rate
 unemployment-rate
 interest-rate
 government-spending
-exports
+gdp-exports
 multiple-regression
 summary-3
 least-squares-estimation-2

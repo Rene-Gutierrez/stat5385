@@ -1,3 +1,10 @@
+---
+title: "Stat 5385/6385"
+output:
+  bookdown::gitbook: default
+---
+
+
 # Stat 5385/6385 Fall 2026
 
 This is the website for STAT5385/6385. It will contain the relevant information for
