@@ -396,13 +396,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.9.5" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#change-in-the-fitted-values"><i class="fa fa-check"></i><b>6.9.5</b> Change in the Fitted Values</a></li>
 <li class="chapter" data-level="6.9.6" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#leverage-residuals-and-influence"><i class="fa fa-check"></i><b>6.9.6</b> Leverage, Residuals, and Influence</a></li>
 </ul></li>
-<li class="chapter" data-level="6.10" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#stability-of-the-solution"><i class="fa fa-check"></i><b>6.10</b> Stability of the Solution</a></li>
+<li class="chapter" data-level="6.10" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#numerical-considerations"><i class="fa fa-check"></i><b>6.10</b> Numerical Considerations</a></li>
 <li class="chapter" data-level="6.11" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#other-approaches-to-regression"><i class="fa fa-check"></i><b>6.11</b> Other Approaches to Regression</a>
 <ul>
-<li class="chapter" data-level="6.11.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#least-absolute-error-regression"><i class="fa fa-check"></i><b>6.11.1</b> Least Absolute Error Regression</a></li>
+<li class="chapter" data-level="6.11.1" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#least-absolute-deviations-regression"><i class="fa fa-check"></i><b>6.11.1</b> Least Absolute Deviations Regression</a></li>
 <li class="chapter" data-level="6.11.2" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#ridge-regression"><i class="fa fa-check"></i><b>6.11.2</b> Ridge Regression</a></li>
 <li class="chapter" data-level="6.11.3" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#lasso-regression"><i class="fa fa-check"></i><b>6.11.3</b> Lasso Regression</a></li>
+<li class="chapter" data-level="6.11.4" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#comparison-of-regression-criteria"><i class="fa fa-check"></i><b>6.11.4</b> Comparison of Regression Criteria</a></li>
 </ul></li>
+<li class="chapter" data-level="6.12" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#chapter-synthesis"><i class="fa fa-check"></i><b>6.12</b> Chapter Synthesis</a></li>
+<li class="chapter" data-level="6.13" data-path="multiple-linear-regression-1.html"><a href="multiple-linear-regression-1.html#exercises-3"><i class="fa fa-check"></i><b>6.13</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="bootstrapping.html"><a href="bootstrapping.html"><i class="fa fa-check"></i><b>7</b> Bootstrapping</a>
 <ul>
@@ -6223,313 +6226,1690 @@ h_{ii}
 </div>
 </div>
 </div>
-<div id="stability-of-the-solution" class="section level2 hasAnchor" number="6.10">
-<h2><span class="header-section-number">6.10</span> Stability of the Solution<a href="multiple-linear-regression-1.html#stability-of-the-solution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The results of the regression can be subject to numerical problems or the impact
-of changes in the data. In general, the results would depend on the stability
-of <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span>. One way to measure the worst case scenario is the condition number
-of the matrix <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span>, denoted <span class="math inline">\(\kappa(\mathbf{X}&#39; \mathbf{X})\)</span>, and is equal to:</p>
-<p><span class="math display">\[ \kappa(\mathbf{X}&#39; \mathbf{X}) = \frac{\lambda_{max}}{\lambda_{min}} \]</span>
-where, <span class="math inline">\(\lambda_{max}\)</span> and <span class="math inline">\(\lambda_{min}\)</span> are the maximum and minimum eigenvalues
-of <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span>.</p>
-<p>There are some considerations, about the condition number:</p>
-<ul>
-<li>The condition number is a measure of the worst case scenario, a bigger condition
-number of a matrix, does not necessarily will be more unstable than a matrix with
-a lower condition number.</li>
-<li><span class="math inline">\(\lambda_{max} = \max_i \sigma_i^2\)</span> and <span class="math inline">\(\lambda_{max} = \min_i \sigma_i^2\)</span>, where
-<span class="math inline">\(\sigma_i\)</span> are the singular values of <span class="math inline">\(\mathbf{X}\)</span>.</li>
-</ul>
-<p>The condition number will be affected by:</p>
+<div id="numerical-considerations" class="section level2 hasAnchor" number="6.10">
+<h2><span class="header-section-number">6.10</span> Numerical Considerations<a href="multiple-linear-regression-1.html#numerical-considerations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The least squares estimate is given by</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbf{y}.
+\]</span></p>
+<p>Consequently, the numerical stability of the computation depends in part on the properties of <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span>. If <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> is close to being singular, small numerical changes in the data or computations may produce comparatively large changes in the estimated coefficients.</p>
+<p>One way to measure this sensitivity is through the <strong>condition number</strong>. For the symmetric positive definite matrix <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span>,</p>
+<p><span class="math display">\[
+\kappa(\mathbf{X}&#39;\mathbf{X})
+=
+\frac{\lambda_{\max}}{\lambda_{\min}},
+\]</span></p>
+<p>where <span class="math inline">\(\lambda_{\max}\)</span> and <span class="math inline">\(\lambda_{\min}\)</span> are the largest and smallest eigenvalues of <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span>.</p>
+<p>Since the eigenvalues of <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> are the squared singular values of <span class="math inline">\(\mathbf{X}\)</span>,</p>
+<p><span class="math display">\[
+\lambda_{\max}
+=
+\sigma_{\max}^2,
+\qquad
+\lambda_{\min}
+=
+\sigma_{\min}^2,
+\]</span></p>
+<p>and therefore</p>
+<p><span class="math display">\[
+\kappa(\mathbf{X}&#39;\mathbf{X})
+=
+\left(
+\frac{\sigma_{\max}}{\sigma_{\min}}
+\right)^2
+=
+\kappa(\mathbf{X})^2.
+\]</span></p>
+<p>A large condition number indicates that the least squares computation can be sensitive to perturbations. It is a worst-case measure of sensitivity, so a larger condition number does not necessarily imply that a particular computation will exhibit a larger numerical error.</p>
+<p>Two important factors can produce a large condition number:</p>
 <ol style="list-style-type: decimal">
-<li>Disparities in the magnitude of the variables.</li>
-<li>The level of multicoliniarity.</li>
-<li>Influential observations.</li>
+<li><strong>Differences in scale:</strong> explanatory variables may have very different magnitudes.</li>
+<li><strong>Near linear dependence:</strong> one or more explanatory variables may be approximately represented as linear combinations of the others.</li>
 </ol>
-<p>Since, the condition number is affected by the magnitude of the variables, it is common
-to work with centered and standardized variables when inspecting this issues.</p>
-<p>Another approach is to check the determinant of a matrix. A matrix would be in general
-more unstable the close is it’s determinant closer to 0. Indeed if the determinant is
-0, then <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> will not be invertible and the solution
-<span class="math display">\[ \hat{\boldsymbol{\beta}} = \left(\mathbf{X}&#39;\mathbf{X}\right)^{-1}\mathbf{X}&#39; \mathbf{y}\]</span>
-is not applicable. However, just by looking at the determinant is hard to know
-what is close to 0. Consider for example the determinant of a multiple of the identity,
-then:</p>
-<p><span class="math inline">\(\det(c\mathbf{I}_n) = c^n \mathbf{I}\)</span></p>
-<p>if <span class="math inline">\(c&lt;1\)</span> this will make the determinant closer to zero. However the matrix <span class="math inline">\(c \mathbf{I}\)</span>
-has condition number of <span class="math inline">\(1\)</span>.</p>
-<p>It is better to evaluate the change in the determinant after some normalization
-to avoid this scenarios.</p>
-<p>Consider, for a moment, the standardized case, with estimated coefficients:</p>
-<p><span class="math display">\[ \hat{\boldsymbol{\beta}}=r_{XX}^{-1}r_{Xy}\]</span>
-then we can see how the determinant the correlation matrix, changes when we remove
-a variable. Without loss of generality, we can assume we remove variable 1. Then,
-the correlation matrix will be given by:</p>
-<p><span class="math display">\[r_{XX} = \left[ \begin{matrix}
-r_{X_2X_2} &amp; r_{X_2x_{1}} \\
-r_{x_{1}X} &amp; r_{x_{1}x_{1}} \\
-\end{matrix} \right]\]</span></p>
-<p>Then, using the <a href="prerequisites.html#properties-of-the-determinant">properties of the determinant</a>
-of a block matrix, and the results of the
-<a href="multiple-linear-regression-1.html#single-variable-cross-effects">Single Variable Cross-Effects</a> subsection,
-we have that:</p>
-<p><span class="math display">\[\begin{align*}
-\det(r_{XX})
-  &amp;= \det \left(
-    \left[ \begin{matrix}
-    r_{X_2X_2} &amp; r_{X_2x_{1}} \\
-    r_{x_{1}X} &amp; r_{x_{1}x_{1}} \\
-    \end{matrix} \right]\right) \\
-  &amp;= \det(r_{X_2X_2})\det(r_{x_{1}x_{1}} - r_{X_2x_{1}}r_{X_2X_2}^{-1}r_{x_{1}X_2}) \\
-  &amp;= \det(r_{X_2X_2})\det(r_{x_{1}|X_2}) \\
-  &amp;= \det(r_{X_2X_2})\det(1-R^2_{1}) \\
-  &amp;= \det(r_{X_2X_2})(1-R^2_{1})
-\end{align*}\]</span></p>
-<p>We can see that the determinant is closer to 0 the more correlated is the first
-variable to the rest of the variables, that is:</p>
-<p><span class="math display">\[R^2_1 \to 1 \implies \det(r_{XX}) \to 0\]</span></p>
-<p>In a similar way, assume that we are working with centered values, we can analyze
-what would happen if we remove an observation <span class="math inline">\(X_{i}\)</span>. Here we analyze <span class="math inline">\(\mathbf{X}&#39; \mathbf{X}\)</span>.
-Again, using <a href="prerequisites.html#properties-of-the-determinant">properties of the determinant</a>, and results of the
-<a href="#outliers-identification">Outliers Identification</a> we have that:</p>
-<p><span class="math display">\[\det(\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)}) = \det(\mathbf{X}_{(i)}&#39;\mathbf{X}_{(i)}) \\
-  =\det(\mathbf{X}&#39;\mathbf{X}&#39; - X_iX_i&#39;) \\
-  =\det(\mathbf{X}&#39;\mathbf{X}&#39;)\det(1 - X_i(\mathbf{X}&#39;\mathbf{X})^{-1}X_i&#39;) \\
-  =\det(\mathbf{X}&#39;\mathbf{X}&#39;)\det(1 - h_{ii}) \\
-  =\det(\mathbf{X}&#39;\mathbf{X}&#39;)(1 - h_{ii}) \\\]</span></p>
-<p>So, the determinant deteriorates the more leverage observation <span class="math inline">\(i\)</span> has.</p>
-<p>We can see examples of the previous operations with our GDP data.</p>
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="multiple-linear-regression-1.html#cb169-1" tabindex="-1"></a><span class="co"># Read Data</span></span>
-<span id="cb169-2"><a href="multiple-linear-regression-1.html#cb169-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Gdp data.csv&quot;</span>)</span>
-<span id="cb169-3"><a href="multiple-linear-regression-1.html#cb169-3" tabindex="-1"></a></span>
-<span id="cb169-4"><a href="multiple-linear-regression-1.html#cb169-4" tabindex="-1"></a><span class="co"># Design Matrix Independent Variables</span></span>
-<span id="cb169-5"><a href="multiple-linear-regression-1.html#cb169-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb169-6"><a href="multiple-linear-regression-1.html#cb169-6" tabindex="-1"></a></span>
-<span id="cb169-7"><a href="multiple-linear-regression-1.html#cb169-7" tabindex="-1"></a><span class="co"># Centering</span></span>
-<span id="cb169-8"><a href="multiple-linear-regression-1.html#cb169-8" tabindex="-1"></a><span class="co"># Vector of Ones</span></span>
-<span id="cb169-9"><a href="multiple-linear-regression-1.html#cb169-9" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, n)</span>
-<span id="cb169-10"><a href="multiple-linear-regression-1.html#cb169-10" tabindex="-1"></a><span class="co"># Centering Matrix</span></span>
-<span id="cb169-11"><a href="multiple-linear-regression-1.html#cb169-11" tabindex="-1"></a>C  <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>n) <span class="sc">*</span> v1 <span class="sc">%*%</span> <span class="fu">t</span>(v1)</span>
-<span id="cb169-12"><a href="multiple-linear-regression-1.html#cb169-12" tabindex="-1"></a><span class="co"># Independent Variables Centered</span></span>
-<span id="cb169-13"><a href="multiple-linear-regression-1.html#cb169-13" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
-<span id="cb169-14"><a href="multiple-linear-regression-1.html#cb169-14" tabindex="-1"></a></span>
-<span id="cb169-15"><a href="multiple-linear-regression-1.html#cb169-15" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
-<span id="cb169-16"><a href="multiple-linear-regression-1.html#cb169-16" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
-<span id="cb169-17"><a href="multiple-linear-regression-1.html#cb169-17" tabindex="-1"></a><span class="co"># Standardize X</span></span>
-<span id="cb169-18"><a href="multiple-linear-regression-1.html#cb169-18" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
-<span id="cb169-19"><a href="multiple-linear-regression-1.html#cb169-19" tabindex="-1"></a></span>
-<span id="cb169-20"><a href="multiple-linear-regression-1.html#cb169-20" tabindex="-1"></a><span class="co"># Condition numbers</span></span>
-<span id="cb169-21"><a href="multiple-linear-regression-1.html#cb169-21" tabindex="-1"></a></span>
-<span id="cb169-22"><a href="multiple-linear-regression-1.html#cb169-22" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of X&#39;X = &quot;</span>,   <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(X) <span class="sc">%*%</span> X), <span class="dv">2</span>)))</span></code></pre></div>
-<pre><code>## [1] &quot;Condition number of X&#39;X = 28072.42&quot;</code></pre>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="multiple-linear-regression-1.html#cb171-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of Xc&#39;Xc = &quot;</span>, <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(Xc) <span class="sc">%*%</span> Xc), <span class="dv">2</span>)))</span></code></pre></div>
-<pre><code>## [1] &quot;Condition number of Xc&#39;Xc = 1186.14&quot;</code></pre>
-<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="multiple-linear-regression-1.html#cb173-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Condition number of Xs&#39;Xs = &quot;</span>, <span class="fu">round</span>(<span class="fu">kappa</span>(<span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs), <span class="dv">2</span>)))</span></code></pre></div>
-<pre><code>## [1] &quot;Condition number of Xs&#39;Xs = 105.68&quot;</code></pre>
-<p>as we can see the condition number improves as with the centering and the standardization.
-However, this is not necessarily so.</p>
-<p>Now we evaluate the effect of each variable on the determinant.</p>
-<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="multiple-linear-regression-1.html#cb175-1" tabindex="-1"></a>P      <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
-<span id="cb175-2"><a href="multiple-linear-regression-1.html#cb175-2" tabindex="-1"></a>vecDet <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
-<span id="cb175-3"><a href="multiple-linear-regression-1.html#cb175-3" tabindex="-1"></a>vecR2  <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> P)</span>
-<span id="cb175-4"><a href="multiple-linear-regression-1.html#cb175-4" tabindex="-1"></a></span>
-<span id="cb175-5"><a href="multiple-linear-regression-1.html#cb175-5" tabindex="-1"></a><span class="co"># Computes</span></span>
-<span id="cb175-6"><a href="multiple-linear-regression-1.html#cb175-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>P){</span>
-<span id="cb175-7"><a href="multiple-linear-regression-1.html#cb175-7" tabindex="-1"></a>  vecDet[i] <span class="ot">&lt;-</span> <span class="fu">det</span>(<span class="fu">cor</span>(X[, <span class="sc">-</span>i]))</span>
-<span id="cb175-8"><a href="multiple-linear-regression-1.html#cb175-8" tabindex="-1"></a>  vecR2[i]  <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">lm</span>(Xs[, i] <span class="sc">~</span> Xs[, <span class="sc">-</span>i] <span class="sc">-</span> <span class="dv">1</span>))<span class="sc">$</span>r.squared</span>
-<span id="cb175-9"><a href="multiple-linear-regression-1.html#cb175-9" tabindex="-1"></a>}</span>
-<span id="cb175-10"><a href="multiple-linear-regression-1.html#cb175-10" tabindex="-1"></a></span>
-<span id="cb175-11"><a href="multiple-linear-regression-1.html#cb175-11" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
-<span id="cb175-12"><a href="multiple-linear-regression-1.html#cb175-12" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="fu">det</span>(<span class="fu">cor</span>(X)), P), vecDet, vecR2)</span>
-<span id="cb175-13"><a href="multiple-linear-regression-1.html#cb175-13" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;r_{X&#39;X}&quot;</span>, <span class="st">&quot;r_{X_(i)&#39;X_(i)}&quot;</span>, <span class="st">&quot;R2&quot;</span>)</span>
-<span id="cb175-14"><a href="multiple-linear-regression-1.html#cb175-14" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(dat)[<span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>]</span>
-<span id="cb175-15"><a href="multiple-linear-regression-1.html#cb175-15" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">r_{X’X}</th>
-<th align="right">r_{X_(i)’X_(i)}</th>
-<th align="right">R2</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">inf</td>
-<td align="right">0.0323914</td>
-<td align="right">0.8190564</td>
-<td align="right">0.9604527</td>
-</tr>
-<tr class="even">
-<td align="left">une</td>
-<td align="right">0.0323914</td>
-<td align="right">0.2800338</td>
-<td align="right">0.8843302</td>
-</tr>
-<tr class="odd">
-<td align="left">int</td>
-<td align="right">0.0323914</td>
-<td align="right">0.3451523</td>
-<td align="right">0.9061532</td>
-</tr>
-<tr class="even">
-<td align="left">gov</td>
-<td align="right">0.0323914</td>
-<td align="right">0.0408342</td>
-<td align="right">0.2067576</td>
-</tr>
-<tr class="odd">
-<td align="left">exp</td>
-<td align="right">0.0323914</td>
-<td align="right">0.0324190</td>
-<td align="right">0.0008505</td>
-</tr>
-</tbody>
-</table>
-<p>Finally we can evaluate the effects of a new observations depending on the leverage:</p>
-<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="multiple-linear-regression-1.html#cb176-1" tabindex="-1"></a><span class="co"># Read Data</span></span>
-<span id="cb176-2"><a href="multiple-linear-regression-1.html#cb176-2" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Gdp data.csv&quot;</span>)</span>
-<span id="cb176-3"><a href="multiple-linear-regression-1.html#cb176-3" tabindex="-1"></a></span>
-<span id="cb176-4"><a href="multiple-linear-regression-1.html#cb176-4" tabindex="-1"></a><span class="co"># Design Matrix Independent Variables</span></span>
-<span id="cb176-5"><a href="multiple-linear-regression-1.html#cb176-5" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dat[, <span class="sc">-</span><span class="dv">1</span>])</span>
-<span id="cb176-6"><a href="multiple-linear-regression-1.html#cb176-6" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
-<span id="cb176-7"><a href="multiple-linear-regression-1.html#cb176-7" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
-<span id="cb176-8"><a href="multiple-linear-regression-1.html#cb176-8" tabindex="-1"></a></span>
-<span id="cb176-9"><a href="multiple-linear-regression-1.html#cb176-9" tabindex="-1"></a><span class="co"># Centering</span></span>
-<span id="cb176-10"><a href="multiple-linear-regression-1.html#cb176-10" tabindex="-1"></a><span class="co"># Vector of Ones</span></span>
-<span id="cb176-11"><a href="multiple-linear-regression-1.html#cb176-11" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, n)</span>
-<span id="cb176-12"><a href="multiple-linear-regression-1.html#cb176-12" tabindex="-1"></a><span class="co"># Centering Matrix</span></span>
-<span id="cb176-13"><a href="multiple-linear-regression-1.html#cb176-13" tabindex="-1"></a>C  <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="sc">-</span> (<span class="dv">1</span><span class="sc">/</span>n) <span class="sc">*</span> v1 <span class="sc">%*%</span> <span class="fu">t</span>(v1)</span>
-<span id="cb176-14"><a href="multiple-linear-regression-1.html#cb176-14" tabindex="-1"></a><span class="co"># Independent Variables Centered</span></span>
-<span id="cb176-15"><a href="multiple-linear-regression-1.html#cb176-15" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> C <span class="sc">%*%</span> X</span>
-<span id="cb176-16"><a href="multiple-linear-regression-1.html#cb176-16" tabindex="-1"></a></span>
-<span id="cb176-17"><a href="multiple-linear-regression-1.html#cb176-17" tabindex="-1"></a><span class="co"># Standardizing matrix of X</span></span>
-<span id="cb176-18"><a href="multiple-linear-regression-1.html#cb176-18" tabindex="-1"></a>DX <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(SXX)))</span>
-<span id="cb176-19"><a href="multiple-linear-regression-1.html#cb176-19" tabindex="-1"></a><span class="co"># Standardize X</span></span>
-<span id="cb176-20"><a href="multiple-linear-regression-1.html#cb176-20" tabindex="-1"></a>Xs <span class="ot">&lt;-</span> Xc <span class="sc">%*%</span> DX</span>
-<span id="cb176-21"><a href="multiple-linear-regression-1.html#cb176-21" tabindex="-1"></a></span>
-<span id="cb176-22"><a href="multiple-linear-regression-1.html#cb176-22" tabindex="-1"></a><span class="co"># New Observations</span></span>
-<span id="cb176-23"><a href="multiple-linear-regression-1.html#cb176-23" tabindex="-1"></a><span class="co"># Very Leveraged Observation</span></span>
-<span id="cb176-24"><a href="multiple-linear-regression-1.html#cb176-24" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">3</span>, P))</span>
-<span id="cb176-25"><a href="multiple-linear-regression-1.html#cb176-25" tabindex="-1"></a><span class="co"># Mildly Leveraged Observation</span></span>
-<span id="cb176-26"><a href="multiple-linear-regression-1.html#cb176-26" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xn, <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">1</span>, P)))</span>
-<span id="cb176-27"><a href="multiple-linear-regression-1.html#cb176-27" tabindex="-1"></a><span class="co"># No Leverage</span></span>
-<span id="cb176-28"><a href="multiple-linear-regression-1.html#cb176-28" tabindex="-1"></a>Xn <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xn, <span class="fu">t</span>(<span class="fu">rep</span>(<span class="dv">0</span>, P)))</span>
-<span id="cb176-29"><a href="multiple-linear-regression-1.html#cb176-29" tabindex="-1"></a></span>
-<span id="cb176-30"><a href="multiple-linear-regression-1.html#cb176-30" tabindex="-1"></a><span class="co"># Number of New Observations</span></span>
-<span id="cb176-31"><a href="multiple-linear-regression-1.html#cb176-31" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">nrow</span>(Xn)</span>
-<span id="cb176-32"><a href="multiple-linear-regression-1.html#cb176-32" tabindex="-1"></a></span>
-<span id="cb176-33"><a href="multiple-linear-regression-1.html#cb176-33" tabindex="-1"></a><span class="co"># Computes the Effects of the New Observation</span></span>
-<span id="cb176-34"><a href="multiple-linear-regression-1.html#cb176-34" tabindex="-1"></a>vecDet <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> m)</span>
-<span id="cb176-35"><a href="multiple-linear-regression-1.html#cb176-35" tabindex="-1"></a>vecLev <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="at">length =</span> m)</span>
-<span id="cb176-36"><a href="multiple-linear-regression-1.html#cb176-36" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
-<span id="cb176-37"><a href="multiple-linear-regression-1.html#cb176-37" tabindex="-1"></a>  Z         <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Xs, Xn[i, ])</span>
-<span id="cb176-38"><a href="multiple-linear-regression-1.html#cb176-38" tabindex="-1"></a>  vecDet[i] <span class="ot">&lt;-</span> <span class="fu">det</span>(<span class="fu">t</span>(Z) <span class="sc">%*%</span> Z)</span>
-<span id="cb176-39"><a href="multiple-linear-regression-1.html#cb176-39" tabindex="-1"></a>  vecLev[i] <span class="ot">&lt;-</span> <span class="fu">t</span>(Xn[i, ]) <span class="sc">%*%</span> <span class="fu">solve</span>(<span class="fu">t</span>(Z) <span class="sc">%*%</span> Z, Xn[i, ])</span>
-<span id="cb176-40"><a href="multiple-linear-regression-1.html#cb176-40" tabindex="-1"></a>}</span>
-<span id="cb176-41"><a href="multiple-linear-regression-1.html#cb176-41" tabindex="-1"></a></span>
-<span id="cb176-42"><a href="multiple-linear-regression-1.html#cb176-42" tabindex="-1"></a><span class="co"># Formats and Show Info Table</span></span>
-<span id="cb176-43"><a href="multiple-linear-regression-1.html#cb176-43" tabindex="-1"></a>tab           <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rep</span>(<span class="fu">det</span>(<span class="fu">t</span>(Xs) <span class="sc">%*%</span> Xs), <span class="dv">3</span>), vecDet, vecLev, vecLev <span class="sc">*</span> n <span class="sc">/</span> P)</span>
-<span id="cb176-44"><a href="multiple-linear-regression-1.html#cb176-44" tabindex="-1"></a><span class="fu">colnames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;det(Xs_(i)&#39;Xs_(i))&quot;</span>,<span class="st">&quot;det(Xs&#39;Xs)&quot;</span>, <span class="st">&quot;Leverage&quot;</span>, <span class="st">&quot;Obs. Equivalent&quot;</span>)</span>
-<span id="cb176-45"><a href="multiple-linear-regression-1.html#cb176-45" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Big Leverage&quot;</span>, <span class="st">&quot;Medium Leverage&quot;</span>, <span class="st">&quot;No Leverage&quot;</span>)</span>
-<span id="cb176-46"><a href="multiple-linear-regression-1.html#cb176-46" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(tab)</span></code></pre></div>
-<table style="width:100%;">
-<colgroup>
-<col width="21%" />
-<col width="26%" />
-<col width="16%" />
-<col width="13%" />
-<col width="21%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">det(Xs_(i)’Xs_(i))</th>
-<th align="right">det(Xs’Xs)</th>
-<th align="right">Leverage</th>
-<th align="right">Obs. Equivalent</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Big Leverage</td>
-<td align="right">9132788636</td>
-<td align="right">18778457801</td>
-<td align="right">0.5136561</td>
-<td align="right">20.135319</td>
-</tr>
-<tr class="even">
-<td align="left">Medium Leverage</td>
-<td align="right">9132788636</td>
-<td align="right">10204529654</td>
-<td align="right">0.1050260</td>
-<td align="right">4.117019</td>
-</tr>
-<tr class="odd">
-<td align="left">No Leverage</td>
-<td align="right">9132788636</td>
-<td align="right">9132788636</td>
-<td align="right">0.0000000</td>
-<td align="right">0.000000</td>
-</tr>
-</tbody>
-</table>
-<p>Here’s your subsection rewritten in a <strong>textbook style</strong> while keeping all equations and notation unchanged. The tone and structure have been refined for clarity, precision, and smooth exposition — suitable for inclusion in a formal regression analysis chapter.</p>
+<p>The second situation is closely related to the multicollinearity considered previously. If the columns of <span class="math inline">\(\mathbf{X}\)</span> become exactly linearly dependent, then</p>
+<p><span class="math display">\[
+\lambda_{\min}=0,
+\]</span></p>
+<p>so</p>
+<p><span class="math display">\[
+\kappa(\mathbf{X}&#39;\mathbf{X})=\infty,
+\]</span></p>
+<p>and <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> is not invertible.</p>
+<p>Standardizing the explanatory variables can help reduce numerical problems caused by differences in scale. However, standardization does not eliminate near linear relationships among the explanatory variables. Thus, a large condition number may remain even after the variables have been standardized.</p>
+<p>The determinant can also indicate whether a matrix is singular, since</p>
+<p><span class="math display">\[
+\det(\mathbf{X}&#39;\mathbf{X})=0
+\]</span></p>
+<p>when <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> is not invertible. However, the magnitude of the determinant is not by itself a useful measure of numerical stability because it depends strongly on the scale of the matrix. For example,</p>
+<p><span class="math display">\[
+\det(c\mathbf{I})=c^q,
+\]</span></p>
+<p>for a <span class="math inline">\(q\times q\)</span> identity matrix, while</p>
+<p><span class="math display">\[
+\kappa(c\mathbf{I})=1
+\]</span></p>
+<p>for every <span class="math inline">\(c&gt;0\)</span>. Thus, a determinant can be arbitrarily close to zero even when the matrix is perfectly conditioned.</p>
+<p>For this reason, the condition number provides a more interpretable diagnostic of numerical sensitivity than the magnitude of the determinant alone.</p>
 <hr />
 </div>
 <div id="other-approaches-to-regression" class="section level2 hasAnchor" number="6.11">
 <h2><span class="header-section-number">6.11</span> Other Approaches to Regression<a href="multiple-linear-regression-1.html#other-approaches-to-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>So far, we have focused on the <strong>Least Squares Estimation (LSE)</strong> framework for linear regression. While LSE provides an elegant analytical solution with well-understood statistical properties, it is by no means the only way to formulate a regression problem.</p>
-<p>Alternative formulations arise by changing the <strong>objective function</strong>—the criterion used to determine the “best” coefficients. Each of these approaches yields estimators with distinct properties, often differing substantially from those of the least squares estimator.</p>
-<p>In this section, we explore some of these alternatives. Throughout, we will denote by:</p>
-<ul>
-<li><span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> — the least squares estimator (LSE) of the coefficients,</li>
-<li><span class="math inline">\(\hat{\mathbf{y}}\)</span> — the LSE predictions for the observed data, and</li>
-<li><span class="math inline">\(R^2\)</span> — the coefficient of determination, a common measure of model fit.</li>
-</ul>
-<p>Each alternative approach will yield its own versions of these quantities, possessing different interpretations and statistical behaviors.</p>
-<hr />
-<div id="least-absolute-error-regression" class="section level3 hasAnchor" number="6.11.1">
-<h3><span class="header-section-number">6.11.1</span> Least Absolute Error Regression<a href="multiple-linear-regression-1.html#least-absolute-error-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Instead of minimizing the sum of squared residuals, we can minimize the <strong>sum of absolute residuals</strong>. This leads to the <strong>Least Absolute Error (LAE)</strong> or <strong>Least Absolute Deviations (LAD)</strong> regression problem:</p>
+<p>Throughout this chapter, we have defined the regression fit using <strong>least squares</strong>. Given the linear model</p>
 <p><span class="math display">\[
-\min_{\boldsymbol{\beta}} \sum_{i=1}^n |y_i - \mathbf{x}_i&#39; \boldsymbol{\beta}|
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{e},
 \]</span></p>
-<p>Unlike the least squares estimator, the LAE estimator does not have a closed-form analytical solution. Instead, it must be computed using <strong>numerical optimization methods</strong>.</p>
-<p>We denote this estimator by <span class="math inline">\(\hat{\boldsymbol{\beta}}_A\)</span>.</p>
-<p>An appealing property of LAE regression is its <strong>robustness to outliers</strong>. Because it penalizes large deviations linearly rather than quadratically, it tends to be less sensitive to extreme observations than the LSE.</p>
+<p>the least-squares estimator is obtained by solving</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}}
+\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+\|_2^2.
+\]</span></p>
+<p>However, least squares is not the only criterion that can be used to define a regression fit. Different objective functions produce different coefficient estimates and, consequently, different fitted relationships.</p>
+<p>In this section, we briefly consider three alternatives. Each modifies the least-squares problem in a different way:</p>
+<p><span class="math display">\[
+\begin{array}{c|c}
+\text{Method} &amp; \text{Modification}\\
+\hline
+\text{Least Absolute Deviations} &amp; \text{Change the loss function}\\
+\text{Ridge Regression} &amp; \text{Add an }\ell^2\text{ penalty}\\
+\text{Lasso Regression} &amp; \text{Add an }\ell^1\text{ penalty}
+\end{array}
+\]</span></p>
+<p>The purpose is not to study these methods in detail, but to illustrate that the choice of optimization criterion is an important part of defining a regression method.</p>
+<hr />
+<div id="least-absolute-deviations-regression" class="section level3 hasAnchor" number="6.11.1">
+<h3><span class="header-section-number">6.11.1</span> Least Absolute Deviations Regression<a href="multiple-linear-regression-1.html#least-absolute-deviations-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The discussion of outliers and influential observations showed that observations with large residuals can substantially affect a least-squares fit.</p>
+<p>One reason is the way least squares penalizes residuals. For observation <span class="math inline">\(i\)</span>, least squares contributes</p>
+<p><span class="math display">\[
+e_i^2
+\]</span></p>
+<p>to the objective function. Consequently, the penalty grows quadratically with the magnitude of the residual.</p>
+<p>An alternative is to penalize the <strong>absolute residual</strong>,</p>
+<p><span class="math display">\[
+|e_i|,
+\]</span></p>
+<p>instead.</p>
+<p>This gives the <strong>Least Absolute Deviations (LAD)</strong>, also called <strong>Least Absolute Error (LAE)</strong>, regression problem:</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\boldsymbol{\beta}}_A
+=
+\underset{\boldsymbol{\beta}}{\operatorname{argmin}}
+\;
+\sum_{i=1}^n
+|y_i-X_i\boldsymbol{\beta}|.
+}
+\]</span></p>
+<p>Equivalently,</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}_A
+=
+\underset{\boldsymbol{\beta}}{\operatorname{argmin}}
+\;
+\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+\|_1.
+\]</span></p>
+<p>The distinction from least squares is entirely in the loss function:</p>
+<p><span class="math display">\[
+\text{Least Squares: } e_i^2,
+\qquad
+\text{LAD: } |e_i|.
+\]</span></p>
+<p>For large <span class="math inline">\(|e_i|\)</span>,</p>
+<p><span class="math display">\[
+e_i^2
+\]</span></p>
+<p>grows much faster than</p>
+<p><span class="math display">\[
+|e_i|.
+\]</span></p>
+<p>Therefore, an observation with a very large residual receives a much larger penalty under least squares than under LAD. In this sense, LAD is less sensitive to observations with extreme residuals.</p>
+<p>Unlike ordinary least squares, LAD does not generally produce a closed-form expression analogous to</p>
+<p><span class="math display">\[
+(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbf{y}.
+\]</span></p>
+<p>Instead, the optimization problem is solved numerically.</p>
 <hr />
 </div>
 <div id="ridge-regression" class="section level3 hasAnchor" number="6.11.2">
 <h3><span class="header-section-number">6.11.2</span> Ridge Regression<a href="multiple-linear-regression-1.html#ridge-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Another important modification to the least squares criterion involves adding a <strong>penalty on the size of the coefficients</strong>. This approach, known as <strong>Ridge Regression</strong>, encourages more <strong>parsimonious</strong> (i.e., smaller and smoother) coefficient estimates. The optimization problem is:</p>
+<p>A different modification keeps the squared-error loss but adds a penalty on the magnitude of the regression coefficients.</p>
+<p>Recall that our complete design matrix is</p>
 <p><span class="math display">\[
-\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}_i&#39;\boldsymbol{\beta})^2 + \lambda \sum_{j=1}^n \beta_j^2
-= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda \boldsymbol{\beta}&#39;\boldsymbol{\beta}
+\mathbf{X}
+=
+\begin{bmatrix}
+\mathbf{1} &amp; \mathbf{X}_*
+\end{bmatrix},
 \]</span></p>
-<p>This problem admits a closed-form solution given by:</p>
+<p>and write</p>
 <p><span class="math display">\[
-\hat{\boldsymbol{\beta}}_R = \left(\mathbf{X}&#39;\mathbf{X} + \lambda \mathbf{I} \right)^{-1}\mathbf{X}&#39;\mathbf{y}
+\boldsymbol{\beta}
+=
+\begin{bmatrix}
+\beta_0\\
+\boldsymbol{\beta}_{-0}
+\end{bmatrix},
 \]</span></p>
-<p>A notable feature of ridge regression is that it <strong>always produces a unique solution</strong>, even when the design matrix <span class="math inline">\(\mathbf{X}\)</span> is not of full rank, i.e.</p>
+<p>where</p>
 <p><span class="math display">\[
-\text{rank}(\mathbf{X}) &lt; p
+\boldsymbol{\beta}_{-0}
+=
+\begin{bmatrix}
+\beta_1\\
+\vdots\\
+\beta_p
+\end{bmatrix}
 \]</span></p>
-<p>Ridge regression thus addresses issues of <strong>multicollinearity</strong> and <strong>ill-conditioning</strong> in <span class="math inline">\(\mathbf{X}\)</span>, albeit at the cost of introducing some bias (defined in the next chapters) in the estimates.</p>
+<p>contains the coefficients associated with the explanatory variables.</p>
+<p>In Ridge Regression, we solve</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\boldsymbol{\beta}}_R
+=
+\underset{\beta_0,\boldsymbol{\beta}_{-0}}
+{\operatorname{argmin}}
+\left\{
+\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+\|_2^2
++
+\lambda
+\|
+\boldsymbol{\beta}_{-0}
+\|_2^2
+\right\},
+}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\lambda\geq0
+\]</span></p>
+<p>controls the strength of the penalty.</p>
+<p>Notice that the intercept <span class="math inline">\(\beta_0\)</span> is <strong>not penalized</strong>.</p>
+<p>When <span class="math inline">\(\lambda=0\)</span>, the problem reduces to ordinary least squares. As <span class="math inline">\(\lambda\)</span> increases, larger slope coefficients receive an increasingly large penalty, so Ridge Regression tends to shrink the slope estimates toward zero.</p>
+<p>To express the problem in matrix form, define</p>
+<p><span class="math display">\[
+\mathbf{D}
+=
+\begin{bmatrix}
+0 &amp; \mathbf{0}&#39;\\
+\mathbf{0} &amp; \mathbf{I}_p
+\end{bmatrix}.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\boldsymbol{\beta}&#39;
+\mathbf{D}
+\boldsymbol{\beta}
+=
+\boldsymbol{\beta}_{-0}&#39;
+\boldsymbol{\beta}_{-0},
+\]</span></p>
+<p>and the Ridge objective becomes</p>
+<p><span class="math display">\[
+Q_R(\boldsymbol{\beta})
+=
+(\mathbf{y}-\mathbf{X}\boldsymbol{\beta})&#39;
+(\mathbf{y}-\mathbf{X}\boldsymbol{\beta})
++
+\lambda
+\boldsymbol{\beta}&#39;
+\mathbf{D}
+\boldsymbol{\beta}.
+\]</span></p>
+<p>Differentiating with respect to <span class="math inline">\(\boldsymbol{\beta}\)</span> gives</p>
+<p><span class="math display">\[\begin{align*}
+\frac{\partial Q_R(\boldsymbol{\beta})}
+{\partial\boldsymbol{\beta}}
+&amp;=
+-2\mathbf{X}&#39;\mathbf{y}
++
+2\mathbf{X}&#39;\mathbf{X}\boldsymbol{\beta}
++
+2\lambda\mathbf{D}\boldsymbol{\beta}.
+\end{align*}\]</span></p>
+<p>Setting the derivative equal to <span class="math inline">\(\mathbf{0}\)</span>,</p>
+<p><span class="math display">\[
+\left(
+\mathbf{X}&#39;\mathbf{X}
++
+\lambda\mathbf{D}
+\right)
+\hat{\boldsymbol{\beta}}_R
+=
+\mathbf{X}&#39;\mathbf{y}.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\boldsymbol{\beta}}_R
+=
+\left(
+\mathbf{X}&#39;\mathbf{X}
++
+\lambda\mathbf{D}
+\right)^{-1}
+\mathbf{X}&#39;\mathbf{y}.
+}
+\]</span></p>
+<p>For <span class="math inline">\(\lambda&gt;0\)</span>, the matrix</p>
+<p><span class="math display">\[
+\mathbf{X}&#39;\mathbf{X}
++
+\lambda\mathbf{D}
+\]</span></p>
+<p>is positive definite and therefore invertible, even when the explanatory-variable columns of <span class="math inline">\(\mathbf{X}\)</span> are linearly dependent.</p>
+<p>To see this, let</p>
+<p><span class="math display">\[
+\mathbf{a}
+=
+\begin{bmatrix}
+a_0\\
+\mathbf{a}_{-0}
+\end{bmatrix}
+\neq\mathbf{0}.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[\begin{align*}
+\mathbf{a}&#39;
+\left(
+\mathbf{X}&#39;\mathbf{X}
++
+\lambda\mathbf{D}
+\right)
+\mathbf{a}
+&amp;=
+\mathbf{a}&#39;\mathbf{X}&#39;\mathbf{X}\mathbf{a}
++
+\lambda
+\mathbf{a}&#39;\mathbf{D}\mathbf{a}
+\\
+&amp;=
+\|\mathbf{X}\mathbf{a}\|_2^2
++
+\lambda
+\|\mathbf{a}_{-0}\|_2^2.
+\end{align*}\]</span></p>
+<p>If <span class="math inline">\(\mathbf{a}_{-0}\neq\mathbf{0}\)</span>, the second term is strictly positive. If <span class="math inline">\(\mathbf{a}_{-0}=\mathbf{0}\)</span>, then <span class="math inline">\(a_0\neq0\)</span> and</p>
+<p><span class="math display">\[
+\mathbf{X}\mathbf{a}
+=
+a_0\mathbf{1}
+\neq\mathbf{0}.
+\]</span></p>
+<p>Thus,</p>
+<p><span class="math display">\[
+\mathbf{a}&#39;
+\left(
+\mathbf{X}&#39;\mathbf{X}
++
+\lambda\mathbf{D}
+\right)
+\mathbf{a}
+&gt;0
+\]</span></p>
+<p>for every <span class="math inline">\(\mathbf{a}\neq\mathbf{0}\)</span>.</p>
+<p>Therefore, Ridge Regression produces a unique coefficient estimate for every <span class="math inline">\(\lambda&gt;0\)</span>.</p>
+<p>This provides one reason Ridge Regression can be useful when explanatory variables contain strongly overlapping information.</p>
 <hr />
 </div>
 <div id="lasso-regression" class="section level3 hasAnchor" number="6.11.3">
 <h3><span class="header-section-number">6.11.3</span> Lasso Regression<a href="multiple-linear-regression-1.html#lasso-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The <strong>Lasso (Least Absolute Shrinkage and Selection Operator)</strong> combines regularization and variable selection in a single framework. It modifies the least squares criterion by penalizing the <strong>sum of the absolute values</strong> of the coefficients:</p>
+<p>Lasso Regression also retains the squared-error loss but replaces the squared-coefficient penalty with an absolute-value penalty.</p>
+<p>The <strong>Lasso</strong> optimization problem is</p>
 <p><span class="math display">\[
-\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}_i&#39;\boldsymbol{\beta})^2 + \lambda \sum_{j=1}^n |\beta_j|
-= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})&#39;(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda ||\boldsymbol{\beta}||_1
+\boxed{
+\hat{\boldsymbol{\beta}}_L
+=
+\underset{\beta_0,\boldsymbol{\beta}_{-0}}
+{\operatorname{argmin}}
+\left\{
+\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+\|_2^2
++
+\lambda
+\|
+\boldsymbol{\beta}_{-0}
+\|_1
+\right\},
+}
 \]</span></p>
-<p>where <span class="math inline">\(||\cdot||_1\)</span> denotes the <span class="math inline">\(\ell^1\)</span>-norm.</p>
-<p>Unlike Ridge Regression, this problem <strong>does not have an analytical solution</strong> and must be solved numerically, typically through iterative algorithms such as <strong>coordinate descent</strong>.</p>
-<p>The Lasso estimator, denoted <span class="math inline">\(\hat{\boldsymbol{\beta}}_L\)</span>, has the remarkable property that it can <strong>set some coefficients exactly to zero</strong>, thereby performing <strong>automatic feature selection</strong>. However, its statistical properties differ significantly from both LSE and Ridge estimators.</p>
-
+<p>where</p>
+<p><span class="math display">\[
+\|
+\boldsymbol{\beta}_{-0}
+\|_1
+=
+\sum_{j=1}^p|\beta_j|.
+\]</span></p>
+<p>As with Ridge Regression, the intercept is not penalized.</p>
+<p>The important distinction is the form of the penalty:</p>
+<p><span class="math display">\[
+\text{Ridge: }
+\lambda
+\sum_{j=1}^p\beta_j^2,
+\]</span></p>
+<p>while</p>
+<p><span class="math display">\[
+\text{Lasso: }
+\lambda
+\sum_{j=1}^p|\beta_j|.
+\]</span></p>
+<p>Both penalties encourage smaller coefficient estimates. However, the <span class="math inline">\(\ell^1\)</span> penalty used by Lasso can produce coefficient estimates that are <strong>exactly zero</strong>.</p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\boxed{
+\text{Ridge: shrinkage}
+\qquad\qquad
+\text{Lasso: shrinkage + sparsity}.
+}
+\]</span></p>
+<p>If</p>
+<p><span class="math display">\[
+\hat\beta_{L,j}=0,
+\]</span></p>
+<p>then explanatory variable <span class="math inline">\(j\)</span> does not contribute to the fitted linear predictor. Consequently, Lasso can simultaneously fit the regression and remove variables from the fitted model.</p>
+<p>Unlike Ridge Regression, the Lasso problem does not generally have a closed-form solution. It is typically solved using numerical optimization methods.</p>
+<hr />
 </div>
+<div id="comparison-of-regression-criteria" class="section level3 hasAnchor" number="6.11.4">
+<h3><span class="header-section-number">6.11.4</span> Comparison of Regression Criteria<a href="multiple-linear-regression-1.html#comparison-of-regression-criteria" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The methods introduced in this section can be summarized through their optimization problems.</p>
+<p><strong>Least Squares</strong></p>
+<p><span class="math display">\[
+\boxed{
+\min_{\boldsymbol{\beta}}
+\sum_{i=1}^n e_i^2
+}
+\]</span></p>
+<p><strong>Least Absolute Deviations</strong></p>
+<p><span class="math display">\[
+\boxed{
+\min_{\boldsymbol{\beta}}
+\sum_{i=1}^n|e_i|
+}
+\]</span></p>
+<p><strong>Ridge Regression</strong></p>
+<p><span class="math display">\[
+\boxed{
+\min_{\beta_0,\boldsymbol{\beta}_{-0}}
+\left\{
+\sum_{i=1}^n e_i^2
++
+\lambda
+\|
+\boldsymbol{\beta}_{-0}
+\|_2^2
+\right\}
+}
+\]</span></p>
+<p><strong>Lasso Regression</strong></p>
+<p><span class="math display">\[
+\boxed{
+\min_{\beta_0,\boldsymbol{\beta}_{-0}}
+\left\{
+\sum_{i=1}^n e_i^2
++
+\lambda
+\|
+\boldsymbol{\beta}_{-0}
+\|_1
+\right\}.
+}
+\]</span></p>
+<p>Each method retains the same basic idea of constructing a linear predictor,</p>
+<p><span class="math display">\[
+\mathbf{X}\boldsymbol{\beta},
+\]</span></p>
+<p>but changes the criterion used to select the coefficients.</p>
+<p>Least squares focuses entirely on minimizing squared residuals. LAD changes how residuals are penalized. Ridge and Lasso retain squared residuals but balance the fit against restrictions on the magnitude of the coefficients.</p>
+<p>The central lesson is therefore:</p>
+<p><span class="math display">\[
+\boxed{
+\text{A regression method is determined not only by its linear predictor,}
+}
+\]</span></p>
+<p><span class="math display">\[
+\boxed{
+\text{but also by the criterion used to fit it.}
+}
+\]</span></p>
+<p>This provides a natural endpoint for our deterministic study of linear regression. In the following chapters, we introduce assumptions on the error terms and study the statistical properties of the estimators and fitted models.</p>
+<hr />
+</div>
+</div>
+<div id="chapter-synthesis" class="section level2 hasAnchor" number="6.12">
+<h2><span class="header-section-number">6.12</span> Chapter Synthesis<a href="multiple-linear-regression-1.html#chapter-synthesis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The central idea of this chapter is that multiple linear regression is not fundamentally a new optimization problem. The least-squares criterion remains</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}}
+\|
+\mathbf{y}-\mathbf{X}\boldsymbol{\beta}
+\|_2^2.
+\]</span></p>
+<p>What changes from simple linear regression is the structure of the design matrix. Once several explanatory variables are included simultaneously, the relationships among the columns of <span class="math inline">\(\mathbf{X}\)</span> become an essential part of the regression problem.</p>
+<p>This observation explains much of the progression of the chapter. We began by asking how several explanatory variables can be used jointly to describe or predict a response. The GDP example immediately revealed an important phenomenon: a coefficient obtained from a simple regression can differ substantially from the corresponding coefficient in a multiple regression. A coefficient can become larger, smaller, or even change sign when other explanatory variables are added.</p>
+<p>At that point, this behavior was primarily empirical. The remainder of the chapter developed the mathematical structure needed to explain why it occurs.</p>
+<p>The least-squares solution</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbf{y}
+\]</span></p>
+<p>provided the first answer. Unlike separate simple regressions, multiple regression estimates all coefficients <strong>jointly</strong>. The matrix <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> contains information about relationships among the explanatory variables themselves, while <span class="math inline">\(\mathbf{X}&#39;\mathbf{y}\)</span> contains their relationships with the response. Thus, even at the level of the basic least-squares formula, each coefficient is determined by the entire design matrix rather than by one explanatory variable in isolation.</p>
+<p>The normal equations sharpened this observation. At the least-squares solution,</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf{X}&#39;\hat{\mathbf{e}}=\mathbf{0}.
+}
+\]</span></p>
+<p>This identity is one of the main organizing results of the chapter. It tells us that the residual vector is orthogonal to every column of the design matrix. When an intercept is included, it also implies that the residuals sum to zero and that the fitted values have the same mean as the observed responses. Since the fitted-value vector belongs to the column space of <span class="math inline">\(\mathbf{X}\)</span>, we also obtain</p>
+<p><span class="math display">\[
+\hat{\mathbf{e}}\perp\hat{\mathbf{y}}.
+\]</span></p>
+<p>These algebraic properties lead directly to the geometric interpretation of least squares. The fitted vector</p>
+<p><span class="math display">\[
+\hat{\mathbf{y}}
+=
+\mathbf{H}\mathbf{y}
+\]</span></p>
+<p>is the orthogonal projection of <span class="math inline">\(\mathbf{y}\)</span> onto</p>
+<p><span class="math display">\[
+\mathcal{C}(\mathbf{X}),
+\]</span></p>
+<p>the column space of the design matrix. Thus, multiple regression can be understood as choosing, among all vectors that can be formed from the columns of <span class="math inline">\(\mathbf{X}\)</span>, the one closest to the observed response vector.</p>
+<p>This geometric viewpoint explains several results that may initially appear unrelated.</p>
+<p>For example, the sum-of-squares decomposition</p>
+<p><span class="math display">\[
+SS_{tot}
+=
+SS_{reg}
++
+SS_{res}
+\]</span></p>
+<p>is simply the Pythagorean theorem applied to orthogonal components of the centered response. Similarly, adding an explanatory variable cannot increase the residual sum of squares because adding a column to <span class="math inline">\(\mathbf{X}\)</span> enlarges, or leaves unchanged, the space of available fitted-value vectors:</p>
+<p><span class="math display">\[
+\mathcal{C}(\mathbf{X})
+\subseteq
+\mathcal{C}
+\left(
+\begin{bmatrix}
+\mathbf{X}&amp;\mathbf{z}
+\end{bmatrix}
+\right).
+\]</span></p>
+<p>The expanded model can always reproduce the original fit by assigning coefficient zero to the additional variable. Therefore,</p>
+<p><span class="math display">\[
+SS_{res,+}\leq SS_{res},
+\]</span></p>
+<p>which immediately explains why ordinary <span class="math inline">\(R^2\)</span> cannot decrease when explanatory variables are added.</p>
+<p>This is also why adjusted <span class="math inline">\(R^2\)</span> was introduced only after ordinary <span class="math inline">\(R^2\)</span> had been understood. The limitation of ordinary <span class="math inline">\(R^2\)</span> is not an accidental property of its formula. It follows directly from the optimization problem. Adjusted <span class="math inline">\(R^2\)</span> modifies the comparison by accounting for the loss of residual degrees of freedom, so that an additional variable must produce a sufficiently large reduction in residual sum of squares before the criterion increases.</p>
+<p>The geometric interpretation also clarifies the special role of the intercept. When an intercept is included,</p>
+<p><span class="math display">\[
+\mathbf{1}\in\mathcal{C}(\mathbf{X}),
+\]</span></p>
+<p>so the intercept-only model is contained within the full regression model. This containment is what makes the usual centered <span class="math inline">\(R^2\)</span> a natural comparison. Without an intercept, that relationship no longer holds, which is why the zero vector becomes the natural reference for uncentered <span class="math inline">\(R^2\)</span>.</p>
+<hr />
+<p>A second major theme of the chapter is that the <strong>representation of the design matrix can change without changing the fundamental regression problem</strong>.</p>
+<p>Centering provides the clearest example. The centering matrix</p>
+<p><span class="math display">\[
+\mathbf{C}
+=
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}&#39;
+=
+\mathbf{I}-\mathbf{H}_0
+\]</span></p>
+<p>removes the component of a vector in the direction of the intercept. Thus, centering is itself a projection operation. This makes the connection between the geometric and covariance-based views of regression explicit.</p>
+<p>After centering, the slope estimates can be written as</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\boldsymbol{\beta}}_{-0}
+=
+\mathbf{S}_{XX}^{-1}\mathbf{S}_{Xy}.
+}
+\]</span></p>
+<p>This expression reveals the structure that was only implicit in the original least-squares formula. The vector <span class="math inline">\(\mathbf{S}_{Xy}\)</span> measures how the explanatory variables relate to the response, while <span class="math inline">\(\mathbf{S}_{XX}\)</span> describes how the explanatory variables relate to one another.</p>
+<p>This distinction is fundamental:</p>
+<p><span class="math display">\[
+\boxed{
+\text{multiple-regression coefficients}
+=
+\text{response relationships}
++
+\text{relationships among explanatory variables}.
+}
+\]</span></p>
+<p>The expression should not be interpreted as a literal additive decomposition, but as the conceptual reason that multiple-regression coefficients cannot generally be inferred from pairwise relationships alone.</p>
+<p>Standardization carries the same idea one step further. Once differences in measurement scale are removed,</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}_s
+=
+\mathbf{r}_{XX}^{-1}\mathbf{r}_{Xy}.
+\]</span></p>
+<p>The covariance structure has become a correlation structure, but the essential phenomenon remains unchanged: the coefficient of one variable depends on its relationship with the response <strong>and</strong> on its relationships with the other explanatory variables.</p>
+<p>The Variable Cross-Effects section made this dependence explicit. Partitioning the correlation matrix showed mathematically how one group of variables modifies the coefficients associated with another group. In the single-variable case,</p>
+<p><span class="math display">\[
+\hat\beta_k^s
+=
+VIF_k
+\left(
+r_{ky}
+-
+\mathbf{r}_{k,-k}
+\tilde{\boldsymbol{\beta}}_{-k}^s
+\right).
+\]</span></p>
+<p>This formula returns us to the question first raised by the comparison between the simple and multiple GDP regressions. The simple-regression relationship <span class="math inline">\(r_{ky}\)</span> is only one component of the full coefficient. The remaining explanatory variables affect the coefficient through their correlations with <span class="math inline">\(\mathbf{x}_k\)</span> and through their own relationships with the response.</p>
+<p>The quantity</p>
+<p><span class="math display">\[
+VIF_k
+=
+\frac{1}{1-R_k^2}
+\]</span></p>
+<p>provides another view of the same geometry. When <span class="math inline">\(R_k^2\)</span> is large, much of the variation in <span class="math inline">\(\mathbf{x}_k\)</span> can already be represented using the other explanatory variables. There is then relatively little independent variation in <span class="math inline">\(\mathbf{x}_k\)</span> available to distinguish its contribution from those of the other variables.</p>
+<p>In the limiting case,</p>
+<p><span class="math display">\[
+R_k^2=1,
+\]</span></p>
+<p>one explanatory-variable column is exactly represented by the others. The design matrix loses full column rank, and the usual unique least-squares coefficient vector ceases to exist.</p>
+<p>Thus, several topics in the chapter that may initially look separate—</p>
+<ul>
+<li>differences between simple and multiple coefficients,</li>
+<li>cross-effects,</li>
+<li>VIF,</li>
+<li>rank deficiency, and</li>
+<li>numerical sensitivity—</li>
+</ul>
+<p>are all consequences of the same underlying issue: <strong>the relationships among the columns of the design matrix</strong>.</p>
+<p>This connection becomes especially clear in the numerical considerations. Near linear dependence does not yet destroy uniqueness, but it makes <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> close to singular. The condition number measures the resulting sensitivity. If the smallest singular value of <span class="math inline">\(\mathbf{X}\)</span> approaches zero, then</p>
+<p><span class="math display">\[
+\kappa(\mathbf{X}&#39;\mathbf{X})
+=
+\kappa(\mathbf{X})^2
+\]</span></p>
+<p>becomes large.</p>
+<p>Standardization can reduce sensitivity caused merely by differences in measurement scale, but it cannot remove genuine near linear dependence. This distinction is important. Standardization changes the representation of the explanatory variables; it does not create new information in the design matrix.</p>
+<hr />
+<p>The design matrix also organizes another major theme of the chapter, but from the opposite direction.</p>
+<p>The previous discussion focused primarily on the <strong>columns</strong> of <span class="math inline">\(\mathbf{X}\)</span>. Columns determine the model space and describe how explanatory variables interact with one another.</p>
+<p>The study of leverage and influence instead directs attention to the <strong>rows</strong> of <span class="math inline">\(\mathbf{X}\)</span>. A row represents the explanatory-variable configuration of one observation.</p>
+<p>The hat matrix</p>
+<p><span class="math display">\[
+\mathbf{H}
+=
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\]</span></p>
+<p>connects these two perspectives. Globally, <span class="math inline">\(\mathbf{H}\)</span> is the matrix that projects <span class="math inline">\(\mathbf{y}\)</span> onto the column space of <span class="math inline">\(\mathbf{X}\)</span>. Locally, its diagonal entries</p>
+<p><span class="math display">\[
+h_{ii}
+\]</span></p>
+<p>measure how unusual individual rows of the design matrix are relative to the entire design.</p>
+<p>This leads to an important distinction:</p>
+<p><span class="math display">\[
+\boxed{
+\begin{array}{ccl}
+\text{Residual} &amp;\longrightarrow&amp; \text{unusual response relative to the fit},\\[2mm]
+\text{Leverage} &amp;\longrightarrow&amp; \text{unusual explanatory-variable configuration},\\[2mm]
+\text{Influence} &amp;\longrightarrow&amp; \text{effect of the observation on the fitted regression}.
+\end{array}
+}
+\]</span></p>
+<p>The deletion result</p>
+<p><span class="math display">\[
+\|
+\hat{\mathbf{y}}_{(i)}
+-
+\hat{\mathbf{y}}
+\|_2^2
+=
+\frac{h_{ii}}{(1-h_{ii})^2}
+\hat e_i^2
+\]</span></p>
+<p>shows how these ideas combine. An observation can be unusual in the explanatory-variable space without substantially changing the fitted regression if its residual is small. Conversely, a large residual does not necessarily imply large influence when leverage is small.</p>
+<p>This result is especially important conceptually because it shows that diagnosing a regression cannot be reduced to looking only at residuals or only at explanatory-variable values. Influence is created by the interaction between the two.</p>
+<hr />
+<p>Seen from this perspective, the progression of the chapter moves from a simple question—</p>
+<blockquote>
+<p>How do we fit a linear relationship using several explanatory variables?</p>
+</blockquote>
+<p>—to a much broader set of questions:</p>
+<blockquote>
+<p>What space of fitted values is available to the model?</p>
+</blockquote>
+<blockquote>
+<p>How does the structure of the explanatory variables determine the coefficients?</p>
+</blockquote>
+<blockquote>
+<p>How does adding or transforming variables change the fit?</p>
+</blockquote>
+<blockquote>
+<p>Which observations have the greatest potential to change that fit?</p>
+</blockquote>
+<blockquote>
+<p>When is the least-squares solution difficult to identify or compute reliably?</p>
+</blockquote>
+<p>The same objects repeatedly answer these questions:</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf{X},
+\qquad
+\mathbf{X}&#39;\mathbf{X},
+\qquad
+\mathbf{H},
+\qquad
+\hat{\mathbf{e}}.
+}
+\]</span></p>
+<p>The design matrix determines the available linear combinations. The cross-product <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> describes the geometry and dependence structure of its columns. The hat matrix converts that geometry into fitted values and leverages. The residual vector measures what remains outside the fitted regression space.</p>
+<p>This is why the chapter develops from estimation, to properties, to geometry, to covariance and correlation representations, and finally to cross-effects, influence, and numerical considerations. Each stage reveals a different consequence of the same least-squares structure.</p>
+<hr />
+<p>The final discussion of alternative regression criteria places this structure in a broader context.</p>
+<p>Least squares solves</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}}
+\sum_{i=1}^n e_i^2,
+\]</span></p>
+<p>but nothing about a linear predictor requires squared error to be the only possible criterion.</p>
+<p>Least Absolute Deviations changes the way residuals are penalized:</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}}
+\sum_{i=1}^n|e_i|.
+\]</span></p>
+<p>This connects directly to the earlier study of influential observations. Because large residuals receive a quadratic penalty under least squares but only a linear penalty under LAD, changing the loss function changes the sensitivity of the fitted relationship to large residuals.</p>
+<p>Ridge and Lasso leave the squared-error component in place but modify the objective by penalizing the slope coefficients. These methods connect instead to the earlier discussion of relationships among explanatory variables. Ridge modifies the optimization problem so that a unique coefficient vector can be obtained even when the ordinary least-squares coefficients are not uniquely determined by the design. Lasso goes further by allowing some coefficients to become exactly zero.</p>
+<p>Thus, the alternative methods are not disconnected additions at the end of the chapter. They arise naturally from limitations and phenomena that were uncovered while studying least squares itself.</p>
+<p>The chapter began by treating least squares as the method used to fit multiple linear regression. By the end, a broader perspective has emerged:</p>
+<p><span class="math display">\[
+\boxed{
+\text{linear predictor}
++
+\text{fitting criterion}
++
+\text{design structure}
+\quad\Longrightarrow\quad
+\text{regression method and its behavior}.
+}
+\]</span></p>
+<p>This is perhaps the most useful perspective to retain.</p>
+<p>On a second reading of the chapter, the individual results should therefore appear less isolated. The normal equations anticipate the geometric interpretation. The geometric interpretation explains the sum-of-squares decomposition and the behavior of <span class="math inline">\(R^2\)</span>. Centering connects the intercept-only projection with covariance representations. Standardization exposes the correlation structure. The correlation structure leads to cross-effects and VIF. Those same relationships among columns reappear as rank and numerical-stability issues. The hat matrix, first introduced to express fitted values, later becomes the basis for leverage and influence. Finally, the limitations revealed by these analyses motivate alternative optimization criteria.</p>
+<p>The chapter has therefore developed one mathematical object from several complementary directions. Multiple linear regression is not merely the formula</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbf{y}.
+\]</span></p>
+<p>It is the study of how the <strong>geometry of the design matrix</strong>, the <strong>criterion used to fit the model</strong>, and the <strong>observed response</strong> interact to determine coefficients, predictions, residuals, diagnostics, and the behavior of the fitted regression.</p>
+<p>The next stage is to add probabilistic assumptions to this deterministic framework. Those assumptions will allow us to move from describing the behavior of the fitted regression for the observed data to studying the uncertainty of the estimators, predictions, and inferential procedures. The algebra and geometry developed in this chapter will remain the foundation for that analysis.</p>
+<hr />
+</div>
+<div id="exercises-3" class="section level2 hasAnchor" number="6.13">
+<h2><span class="header-section-number">6.13</span> Exercises<a href="multiple-linear-regression-1.html#exercises-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>Consider a multiple linear regression model with full-column-rank design matrix <span class="math inline">\(\mathbf{X}\)</span> and hat matrix <span class="math inline">\(\mathbf{H}\)</span>. Let <span class="math inline">\(\mathbf{z}\)</span> be an additional explanatory-variable vector and define</p>
+<p><span class="math display">\[
+\mathbf{z}_r
+=
+(\mathbf{I}-\mathbf{H})\mathbf{z}.
+\]</span></p>
+<p>Let <span class="math inline">\(\hat{\mathbf{e}}\)</span> denote the residual vector from the original model. Prove that if <span class="math inline">\(\mathbf{z}_r\neq\mathbf{0}\)</span>, then adding <span class="math inline">\(\mathbf{z}\)</span> to the model leaves the residual sum of squares unchanged if and only if</p>
+<p><span class="math display">\[
+\mathbf{z}_r&#39;\hat{\mathbf{e}}=0.
+\]</span></p>
+<p>Determine separately what happens when <span class="math inline">\(\mathbf{z}_r=\mathbf{0}\)</span>.</p></li>
+</ol>
+<hr />
+<ol start="2" style="list-style-type: decimal">
+<li><p>Consider</p>
+<p><span class="math display">\[
+\mathbf{X}
+=
+\begin{bmatrix}
+1&amp;-1&amp;-1\\
+1&amp;-1&amp; 1\\
+1&amp; 1&amp;-1\\
+1&amp; 1&amp; 1
+\end{bmatrix},
+\qquad
+\mathbf{y}
+=
+\begin{bmatrix}
+1\\
+2\\
+3\\
+6
+\end{bmatrix}.
+\]</span></p>
+<p>Compute <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> and use it to obtain <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>. Then compute <span class="math inline">\(\hat{\mathbf{y}}\)</span>, <span class="math inline">\(\hat{\mathbf{e}}\)</span>, <span class="math inline">\(SS_{res}\)</span>, <span class="math inline">\(SS_{tot}\)</span>, and <span class="math inline">\(R^2\)</span>. Verify directly that</p>
+<p><span class="math display">\[
+\mathbf{X}&#39;\hat{\mathbf{e}}=\mathbf{0}.
+\]</span></p></li>
+</ol>
+<hr />
+<ol start="3" style="list-style-type: decimal">
+<li><p>Let <span class="math inline">\(\mathbf{X}\in\mathbb{R}^{n\times q}\)</span> have full column rank, and let <span class="math inline">\(\mathbf{A}\in\mathbb{R}^{q\times q}\)</span> be invertible. Define</p>
+<p><span class="math display">\[
+\mathbf{Z}=\mathbf{X}\mathbf{A}.
+\]</span></p>
+<p>Prove that regression using <span class="math inline">\(\mathbf{Z}\)</span> produces exactly the same fitted values and residuals as regression using <span class="math inline">\(\mathbf{X}\)</span>. Derive the relationship between the coefficient estimates obtained under the two parameterizations.</p></li>
+</ol>
+<hr />
+<ol start="4" style="list-style-type: decimal">
+<li><p>Using the design matrix and response from Exercise 2, define</p>
+<p><span class="math display">\[
+\mathbf{Z}
+=
+\begin{bmatrix}
+\mathbf{1}&amp;\mathbf{x}_1+\mathbf{x}_2&amp;2\mathbf{x}_2
+\end{bmatrix},
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{x}_1\)</span> and <span class="math inline">\(\mathbf{x}_2\)</span> are the second and third columns of <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<p>Find an invertible matrix <span class="math inline">\(\mathbf{A}\)</span> such that</p>
+<p><span class="math display">\[
+\mathbf{Z}=\mathbf{X}\mathbf{A}.
+\]</span></p>
+<p>Compute the coefficient estimates under the <span class="math inline">\(\mathbf{Z}\)</span> parameterization and verify that the fitted-value vector is unchanged.</p></li>
+</ol>
+<hr />
+<ol start="5" style="list-style-type: decimal">
+<li><p>Suppose <span class="math inline">\(\mathbf{X}\)</span> does not have full column rank. Prove that although the coefficient vector minimizing</p>
+<p><span class="math display">\[
+\|\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\|_2^2
+\]</span></p>
+<p>need not be unique, the fitted-value vector is unique. If <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is one least-squares solution, characterize all other least-squares solutions using the null space of <span class="math inline">\(\mathbf{X}\)</span>.</p></li>
+</ol>
+<hr />
+<ol start="6" style="list-style-type: decimal">
+<li><p>Consider</p>
+<p><span class="math display">\[
+\mathbf{X}
+=
+\begin{bmatrix}
+1&amp;0&amp;0\\
+1&amp;1&amp;1\\
+1&amp;2&amp;2
+\end{bmatrix},
+\qquad
+\mathbf{y}
+=
+\begin{bmatrix}
+1\\
+3\\
+5
+\end{bmatrix}.
+\]</span></p>
+<p>Determine <span class="math inline">\(\operatorname{rank}(\mathbf{X})\)</span> and find the null space of <span class="math inline">\(\mathbf{X}\)</span>. Find at least two different coefficient vectors that minimize the least-squares objective, and characterize the complete set of minimizing coefficient vectors. Compute the fitted values and residuals.</p></li>
+</ol>
+<hr />
+<ol start="7" style="list-style-type: decimal">
+<li><p>Let <span class="math inline">\(\mathbf{X}\)</span> be the design matrix of an existing regression and let</p>
+<p><span class="math display">\[
+\mathbf{z}_r
+=
+(\mathbf{I}-\mathbf{H})\mathbf{z},
+\qquad
+\mathbf{z}_r\neq\mathbf{0},
+\]</span></p>
+<p>for a proposed additional explanatory variable <span class="math inline">\(\mathbf{z}\)</span>. Prove that the reduction in residual sum of squares obtained by adding <span class="math inline">\(\mathbf{z}\)</span> is</p>
+<p><span class="math display">\[
+SS_{res}-SS_{res,+}
+=
+\frac{
+(\mathbf{z}_r&#39;\hat{\mathbf{e}})^2
+}{
+\mathbf{z}_r&#39;\mathbf{z}_r
+}.
+\]</span></p>
+<p>Use this result to characterize precisely when adding <span class="math inline">\(\mathbf{z}\)</span> produces a strict increase in <span class="math inline">\(R^2\)</span>.</p></li>
+</ol>
+<hr />
+<ol start="8" style="list-style-type: decimal">
+<li><p>Suppose that for an existing regression</p>
+<p><span class="math display">\[
+SS_{res}=10,
+\qquad
+SS_{tot}=20,
+\]</span></p>
+<p>and that the residualized version of a proposed additional explanatory variable is</p>
+<p><span class="math display">\[
+\mathbf{z}_r
+=
+\begin{bmatrix}
+1\\-1\\-1\\1
+\end{bmatrix}.
+\]</span></p>
+<p>The current residual vector is</p>
+<p><span class="math display">\[
+\hat{\mathbf{e}}
+=
+\begin{bmatrix}
+1\\-1\\2\\-2
+\end{bmatrix}.
+\]</span></p>
+<p>Compute the reduction in residual sum of squares produced by adding the variable. Compute the original and expanded <span class="math inline">\(R^2\)</span> values.</p></li>
+</ol>
+<hr />
+<ol start="9" style="list-style-type: decimal">
+<li><p>Let</p>
+<p><span class="math display">\[
+\mathbf{X}
+=
+\begin{bmatrix}
+\mathbf{1}&amp;\mathbf{X}_*
+\end{bmatrix}
+\]</span></p>
+<p>be a full-column-rank design matrix and let</p>
+<p><span class="math display">\[
+\mathbf{X}_c
+=
+\begin{bmatrix}
+\mathbf{1}&amp;\mathbf{C}\mathbf{X}_*
+\end{bmatrix}.
+\]</span></p>
+<p>Prove, using column spaces, that</p>
+<p><span class="math display">\[
+\mathcal{C}(\mathbf{X})
+=
+\mathcal{C}(\mathbf{X}_c).
+\]</span></p>
+<p>Use this result to establish which of the following quantities must remain unchanged after centering the explanatory variables: fitted values, residuals, slope coefficients, intercept, <span class="math inline">\(R^2\)</span>, and the hat matrix.</p></li>
+</ol>
+<hr />
+<ol start="10" style="list-style-type: decimal">
+<li>Consider the data</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{x}_1
+   =
+   \begin{bmatrix}
+   0\\0\\2\\2
+   \end{bmatrix},
+   \qquad
+   \mathbf{x}_2
+   =
+   \begin{bmatrix}
+   1\\3\\1\\3
+   \end{bmatrix},
+   \qquad
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   1\\2\\3\\6
+   \end{bmatrix}.
+   \]</span></p>
+<p>Fit the regression with an intercept using the original explanatory variables. Then center both explanatory variables and refit the model. Compare the two slope vectors, the two intercepts, and the two fitted-value vectors.</p>
+<hr />
+<ol start="11" style="list-style-type: decimal">
+<li>Let <span class="math inline">\(s_j=\sqrt{S_{x_jx_j}}\)</span> and <span class="math inline">\(s_y=\sqrt{S_{yy}}\)</span>, and let</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{D}_X
+   =
+   \operatorname{diag}
+   \left(
+   \frac{1}{s_1},\ldots,\frac{1}{s_p}
+   \right).
+   \]</span></p>
+<p>Derive the relationship between the original slope vector <span class="math inline">\(\hat{\boldsymbol{\beta}}_{-0}\)</span> and the standardized slope vector <span class="math inline">\(\hat{\boldsymbol{\beta}}_s\)</span>. Show that</p>
+<p><span class="math display">\[
+   \hat{\boldsymbol{\beta}}_s
+   =
+   \frac{1}{s_y}
+   \mathbf{D}_X^{-1}
+   \hat{\boldsymbol{\beta}}_{-0}.
+   \]</span></p>
+<hr />
+<ol start="12" style="list-style-type: decimal">
+<li>Suppose</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{S}_{XX}
+   =
+   \begin{bmatrix}
+   4&amp;2\\
+   2&amp;9
+   \end{bmatrix},
+   \qquad
+   \mathbf{S}_{Xy}
+   =
+   \begin{bmatrix}
+   6\\8
+   \end{bmatrix},
+   \qquad
+   S_{yy}=25.
+   \]</span></p>
+<p>Compute the original slope coefficients using</p>
+<p><span class="math display">\[
+   \hat{\boldsymbol{\beta}}_{-0}
+   =
+   \mathbf{S}_{XX}^{-1}\mathbf{S}_{Xy}.
+   \]</span></p>
+<p>Construct <span class="math inline">\(\mathbf{r}_{XX}\)</span> and <span class="math inline">\(\mathbf{r}_{Xy}\)</span>, compute the standardized coefficients, and verify numerically the relationship between the original and standardized coefficients.</p>
+<hr />
+<ol start="13" style="list-style-type: decimal">
+<li>For a standardized explanatory variable <span class="math inline">\(\mathbf{x}_k^s\)</span>, let <span class="math inline">\(R_k^2\)</span> be obtained from its regression on the remaining standardized explanatory variables, and let</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{r}_{k,-k}
+   \tilde{\boldsymbol{\beta}}_{-k}^s
+   \]</span></p>
+<p>denote the corresponding cross-effect. Derive a necessary and sufficient condition for the full multiple-regression coefficient <span class="math inline">\(\hat\beta_k^s\)</span> to equal the simple-regression coefficient</p>
+<p><span class="math display">\[
+   \tilde\beta_k^s=r_{ky}.
+   \]</span></p>
+<hr />
+<ol start="14" style="list-style-type: decimal">
+<li>Consider two standardized explanatory variables satisfying</li>
+</ol>
+<p><span class="math display">\[
+   r_{12}=0.8,
+   \qquad
+   r_{1y}=0.2,
+   \qquad
+   r_{2y}=0.7.
+   \]</span></p>
+<p>Compute the two simple-regression coefficients and the two coefficients from the multiple regression. Compute the VIF for each explanatory variable. Compare the sign and magnitude of the simple and multiple coefficients and explain the numerical differences using the relationships among the three variables.</p>
+<hr />
+<ol start="15" style="list-style-type: decimal">
+<li>Consider a regression with two standardized explanatory variables. Starting from</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{r}_{XX}
+   =
+   \begin{bmatrix}
+   1&amp;r_{12}\\
+   r_{12}&amp;1
+   \end{bmatrix},
+   \qquad
+   \mathbf{r}_{Xy}
+   =
+   \begin{bmatrix}
+   r_{1y}\\
+   r_{2y}
+   \end{bmatrix},
+   \]</span></p>
+<p>derive explicit formulas for <span class="math inline">\(\hat\beta_1^s\)</span> and <span class="math inline">\(\hat\beta_2^s\)</span>. Using your expression for <span class="math inline">\(\hat\beta_1^s\)</span>, characterize when its sign differs from the sign of <span class="math inline">\(r_{1y}\)</span>.</p>
+<hr />
+<ol start="16" style="list-style-type: decimal">
+<li>Suppose two standardized explanatory variables satisfy</li>
+</ol>
+<p><span class="math display">\[
+   r_{12}=0.5,
+   \qquad
+   r_{1y}=0,
+   \qquad
+   r_{2y}=0.6.
+   \]</span></p>
+<p>Compute the coefficients from the multiple regression of <span class="math inline">\(\mathbf{y}_s\)</span> on both explanatory variables. Compare the coefficient of <span class="math inline">\(\mathbf{x}_1^s\)</span> with the coefficient obtained from its individual simple regression.</p>
+<hr />
+<ol start="17" style="list-style-type: decimal">
+<li>For standardized explanatory variable <span class="math inline">\(\mathbf{x}_k^s\)</span>, prove the equivalence of the following statements:</li>
+</ol>
+<p><span class="math display">\[
+   R_k^2=1,
+   \]</span></p>
+<p><span class="math display">\[
+   \mathbf{x}_k^s
+   \in
+   \mathcal{C}(\mathbf{X}_{-k}^s),
+   \]</span></p>
+<p>and the complete standardized explanatory-variable matrix does not have full column rank.</p>
+<p>Explain how these equivalent statements are connected to the behavior of <span class="math inline">\(VIF_k\)</span>.</p>
+<hr />
+<ol start="18" style="list-style-type: decimal">
+<li>Consider two standardized explanatory variables with</li>
+</ol>
+<p><span class="math display">\[
+   r_{12}=0.95.
+   \]</span></p>
+<p>First suppose</p>
+<p><span class="math display">\[
+   r_{1y}=0.60,
+   \qquad
+   r_{2y}=0.50.
+   \]</span></p>
+<p>Compute the VIF, the condition number of the <span class="math inline">\(2\times2\)</span> predictor correlation matrix, and the two standardized regression coefficients.</p>
+<p>Repeat the coefficient calculation after changing only</p>
+<p><span class="math display">\[
+   r_{2y}=0.50
+   \]</span></p>
+<p>to</p>
+<p><span class="math display">\[
+   r_{2y}=0.51.
+   \]</span></p>
+<p>Compare the two sets of coefficients.</p>
+<hr />
+<ol start="19" style="list-style-type: decimal">
+<li>Let <span class="math inline">\(\mathbf{A}\)</span> be a symmetric positive definite <span class="math inline">\(q\times q\)</span> matrix and let <span class="math inline">\(c&gt;0\)</span>. Prove that</li>
+</ol>
+<p><span class="math display">\[
+   \kappa(c\mathbf{A})=\kappa(\mathbf{A}),
+   \]</span></p>
+<p>while</p>
+<p><span class="math display">\[
+   \det(c\mathbf{A})
+   =
+   c^q\det(\mathbf{A}).
+   \]</span></p>
+<p>Use these results to explain mathematically why the magnitude of the determinant is not an appropriate measure of numerical conditioning.</p>
+<hr />
+<ol start="20" style="list-style-type: decimal">
+<li>Consider</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{A}
+   =
+   \begin{bmatrix}
+   0.001&amp;0\\
+   0&amp;0.001
+   \end{bmatrix},
+   \qquad
+   \mathbf{B}
+   =
+   \begin{bmatrix}
+   1&amp;0\\
+   0&amp;100
+   \end{bmatrix}.
+   \]</span></p>
+<p>Compute the determinant and condition number of each matrix. Determine which matrix is better conditioned and compare this conclusion with what would be suggested by comparing only the magnitudes of the determinants.</p>
+<hr />
+<ol start="21" style="list-style-type: decimal">
+<li>Let <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> be two full-column-rank design matrices satisfying</li>
+</ol>
+<p><span class="math display">\[
+   \mathcal{C}(\mathbf{X})
+   =
+   \mathcal{C}(\mathbf{Z}).
+   \]</span></p>
+<p>Prove that their hat matrices are identical. Deduce that regression using <span class="math inline">\(\mathbf{X}\)</span> or <span class="math inline">\(\mathbf{Z}\)</span> must produce the same fitted values, residuals, residual sum of squares, <span class="math inline">\(R^2\)</span>, and leverages for every response vector <span class="math inline">\(\mathbf{y}\)</span>.</p>
+<hr />
+<ol start="22" style="list-style-type: decimal">
+<li>Let</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{u}_1
+   =
+   \frac{1}{\sqrt{3}}
+   \begin{bmatrix}
+   1\\1\\1
+   \end{bmatrix},
+   \qquad
+   \mathbf{u}_2
+   =
+   \frac{1}{\sqrt{2}}
+   \begin{bmatrix}
+   1\\0\\-1
+   \end{bmatrix},
+   \]</span></p>
+<p>and let</p>
+<p><span class="math display">\[
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   2\\1\\4
+   \end{bmatrix}.
+   \]</span></p>
+<p>The vectors <span class="math inline">\(\mathbf{u}_1\)</span> and <span class="math inline">\(\mathbf{u}_2\)</span> form an orthonormal basis for the column space of a regression design matrix. Compute the orthogonal projection of <span class="math inline">\(\mathbf{y}\)</span> onto this column space, the residual vector, <span class="math inline">\(SS_{res}\)</span>, <span class="math inline">\(SS_{tot}\)</span>, and <span class="math inline">\(R^2\)</span>. Verify the relevant orthogonality relationships directly.</p>
+<hr />
+<ol start="23" style="list-style-type: decimal">
+<li>For a regression without an intercept, define</li>
+</ol>
+<p><span class="math display">\[
+   R_c^2
+   =
+   1-\frac{SS_{res}}{SS_{tot}}
+   \]</span></p>
+<p>whenever <span class="math inline">\(SS_{tot}&gt;0\)</span>, and recall that</p>
+<p><span class="math display">\[
+   R_{\mathrm{unc}}^2
+   =
+   1-\frac{SS_{res}}{\mathbf{y}&#39;\mathbf{y}}.
+   \]</span></p>
+<p>Derive necessary and sufficient conditions under which</p>
+<p><span class="math display">\[
+   R_c^2=R_{\mathrm{unc}}^2.
+   \]</span></p>
+<hr />
+<ol start="24" style="list-style-type: decimal">
+<li>Fit a regression without an intercept to</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{x}
+   =
+   \begin{bmatrix}
+   1\\2\\3
+   \end{bmatrix},
+   \qquad
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   3\\4\\3
+   \end{bmatrix}.
+   \]</span></p>
+<p>Compute the least-squares coefficient, fitted values, and residual sum of squares. Then compute both</p>
+<p><span class="math display">\[
+   1-\frac{SS_{res}}{SS_{tot}}
+   \]</span></p>
+<p>and the uncentered coefficient of determination</p>
+<p><span class="math display">\[
+   R_{\mathrm{unc}}^2.
+   \]</span></p>
+<p>Compare the two values.</p>
+<hr />
+<ol start="25" style="list-style-type: decimal">
+<li>Consider a model with <span class="math inline">\(p\)</span> explanatory variables and an intercept. An expanded model adds <span class="math inline">\(q\)</span> additional explanatory variables, with both models fitted to the same <span class="math inline">\(n\)</span> observations. Assume both design matrices have full column rank and</li>
+</ol>
+<p><span class="math display">\[
+   n&gt;p+q+1.
+   \]</span></p>
+<p>Derive a necessary and sufficient condition for the expanded model to have a larger adjusted <span class="math inline">\(R^2\)</span>. Express the condition in terms of the reduction</p>
+<p><span class="math display">\[
+   SS_{res}-SS_{res,+}.
+   \]</span></p>
+<hr />
+<ol start="26" style="list-style-type: decimal">
+<li>A regression with <span class="math inline">\(n=20\)</span> observations and <span class="math inline">\(p=2\)</span> explanatory variables has</li>
+</ol>
+<p><span class="math display">\[
+   SS_{tot}=200,
+   \qquad
+   SS_{res}=100.
+   \]</span></p>
+<p>A third explanatory variable is added, reducing the residual sum of squares to</p>
+<p><span class="math display">\[
+   SS_{res,+}=96.
+   \]</span></p>
+<p>Compute <span class="math inline">\(R^2\)</span> and adjusted <span class="math inline">\(R^2\)</span> for both models. Determine which criteria increase after the additional explanatory variable is included.</p>
+<hr />
+<ol start="27" style="list-style-type: decimal">
+<li>Suppose a multiple regression contains an intercept and let</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{X}_{*,c}
+   \]</span></p>
+<p>be the centered explanatory-variable matrix. Assume <span class="math inline">\(\mathbf{X}_{*,c}\)</span> has full column rank. Show that the leverage of observation <span class="math inline">\(i\)</span> can be written as</p>
+<p><span class="math display">\[
+   \boxed{
+   h_{ii}
+   =
+   \frac{1}{n}
+   +
+   X_{i,c}
+   \left(
+   \mathbf{X}_{*,c}&#39;\mathbf{X}_{*,c}
+   \right)^{-1}
+   X_{i,c}&#39;,
+   }
+   \]</span></p>
+<p>where <span class="math inline">\(X_{i,c}\)</span> denotes row <span class="math inline">\(i\)</span> of the centered explanatory-variable matrix. Use this representation to explain how centering separates the contribution of the intercept from the contribution of the explanatory-variable configuration.</p>
+<hr />
+<ol start="28" style="list-style-type: decimal">
+<li>Consider five observations with two centered explanatory variables:</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{X}_{*,c}
+   =
+   \begin{bmatrix}
+   -1&amp;-1\\
+   -1&amp; 1\\
+    0&amp; 0\\
+    1&amp;-1\\
+    1&amp; 1
+   \end{bmatrix}.
+   \]</span></p>
+<p>The complete design matrix includes an intercept. Compute</p>
+<p><span class="math display">\[
+   \mathbf{X}_{*,c}&#39;\mathbf{X}_{*,c}
+   \]</span></p>
+<p>and use the centered leverage formula to compute all five leverages. Verify that their sum equals <span class="math inline">\(p+1\)</span>.</p>
+<hr />
+<ol start="29" style="list-style-type: decimal">
+<li>Suppose <span class="math inline">\(\mathbf{X}\)</span> has full column rank. Prove that</li>
+</ol>
+<p><span class="math display">\[
+   h_{ii}=1
+   \]</span></p>
+<p>if and only if deleting observation <span class="math inline">\(i\)</span> causes <span class="math inline">\(\mathbf{X}_{(i)}\)</span> to lose full column rank.</p>
+<p>Your argument should connect the condition <span class="math inline">\(h_{ii}=1\)</span> with whether the <span class="math inline">\(i\)</span>th standard basis vector belongs to <span class="math inline">\(\mathcal{C}(\mathbf{X})\)</span>.</p>
+<hr />
+<ol start="30" style="list-style-type: decimal">
+<li>Consider</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{X}
+   =
+   \begin{bmatrix}
+   1&amp;0\\
+   1&amp;0\\
+   1&amp;1
+   \end{bmatrix}.
+   \]</span></p>
+<p>Compute the hat matrix and all leverages. Determine what happens to the rank of the design matrix after each observation is deleted, and compare your findings with the corresponding leverage values.</p>
+<hr />
+<ol start="31" style="list-style-type: decimal">
+<li>Recall that the squared change in fitted values caused by deleting observation <span class="math inline">\(i\)</span> is</li>
+</ol>
+<p><span class="math display">\[
+   \Delta_i
+   =
+   \frac{h_{ii}}{(1-h_{ii})^2}\hat e_i^2.
+   \]</span></p>
+<p>For fixed <span class="math inline">\(|\hat e_i|&gt;0\)</span>, prove that <span class="math inline">\(\Delta_i\)</span> is strictly increasing as a function of <span class="math inline">\(h_{ii}\)</span> on</p>
+<p><span class="math display">\[
+   0\leq h_{ii}&lt;1.
+   \]</span></p>
+<p>Explain why this result does not imply that the observation with the largest leverage must be the most influential observation in a dataset.</p>
+<hr />
+<ol start="32" style="list-style-type: decimal">
+<li>For observation <span class="math inline">\(i=3\)</span>, suppose the <span class="math inline">\(i\)</span>th column of the hat matrix is</li>
+</ol>
+<p><span class="math display">\[
+   \begin{bmatrix}
+   0.25\\
+   -0.25\\
+   0.50\\
+   0.25\\
+   0.25
+   \end{bmatrix},
+   \]</span></p>
+<p>and suppose</p>
+<p><span class="math display">\[
+   \hat e_i=2.
+   \]</span></p>
+<p>Compute the change</p>
+<p><span class="math display">\[
+   \hat{\mathbf{y}}_{(i)}-\hat{\mathbf{y}}
+   \]</span></p>
+<p>produced by deleting observation <span class="math inline">\(i\)</span>, and compute its squared norm. Verify the result using</p>
+<p><span class="math display">\[
+   \Delta_i
+   =
+   \frac{h_{ii}}{(1-h_{ii})^2}\hat e_i^2.
+   \]</span></p>
+<p>A second observation has leverage <span class="math inline">\(0.8\)</span> and residual <span class="math inline">\(0.5\)</span>. Compare the influence of the two observations.</p>
+<hr />
+<ol start="33" style="list-style-type: decimal">
+<li>Let</li>
+</ol>
+<p><span class="math display">\[
+   \hat y_{(i),i}
+   \]</span></p>
+<p>denote the prediction for observation <span class="math inline">\(i\)</span> obtained from the model fitted after observation <span class="math inline">\(i\)</span> is deleted. Using the deleted-observation results from the chapter, derive</p>
+<p><span class="math display">\[
+   y_i-\hat y_{(i),i}
+   =
+   \frac{\hat e_i}{1-h_{ii}}.
+   \]</span></p>
+<p>Then show that leave-one-out cross-validation for squared prediction error can be computed without fitting <span class="math inline">\(n\)</span> separate models:</p>
+<p><span class="math display">\[
+   CV_{\mathrm{MSE}}
+   =
+   \frac{1}{n}
+   \sum_{i=1}^n
+   \left(
+   \frac{\hat e_i}{1-h_{ii}}
+   \right)^2.
+   \]</span></p>
+<hr />
+<ol start="34" style="list-style-type: decimal">
+<li>A regression with four observations has residuals</li>
+</ol>
+<p><span class="math display">\[
+   \hat{\mathbf{e}}
+   =
+   \begin{bmatrix}
+   1\\-1\\2\\-2
+   \end{bmatrix}
+   \]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+   h_{11}=h_{22}=h_{33}=h_{44}=0.5.
+   \]</span></p>
+<p>Compute the deleted residual for each observation and the leave-one-out mean squared prediction error.</p>
+<hr />
+<ol start="35" style="list-style-type: decimal">
+<li>Prove that high leverage alone does not imply high influence. In particular, consider any full-column-rank design matrix containing an observation with large leverage and choose a response vector satisfying</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{y}\in\mathcal{C}(\mathbf{X}).
+   \]</span></p>
+<p>Determine the residuals and the effect of deleting any observation with <span class="math inline">\(h_{ii}&lt;1\)</span>. Explain how this provides a general counterexample to the statement that high-leverage observations must be influential.</p>
+<hr />
+<ol start="36" style="list-style-type: decimal">
+<li>Consider the simple-regression design containing an intercept and explanatory-variable values</li>
+</ol>
+<p><span class="math display">\[
+   x=(0,1,2,10)&#39;.
+   \]</span></p>
+<p>Compute the leverage of the observation with <span class="math inline">\(x=10\)</span>. Suppose first that</p>
+<p><span class="math display">\[
+   y_i=1+2x_i
+   \]</span></p>
+<p>for every observation. Determine the influence of the observation with <span class="math inline">\(x=10\)</span>.</p>
+<p>For a second fitted problem with the same design, suppose the residual associated with the observation at <span class="math inline">\(x=10\)</span> is <span class="math inline">\(0.2\)</span>. Using its leverage, compute the corresponding value of</p>
+<p><span class="math display">\[
+   \Delta_i
+   =
+   \frac{h_{ii}}{(1-h_{ii})^2}\hat e_i^2.
+   \]</span></p>
+<hr />
+<ol start="37" style="list-style-type: decimal">
+<li>Ordinary least squares is unchanged, in terms of fitted values, when one explanatory variable is multiplied by a nonzero constant and its coefficient is reparameterized accordingly. Show that Ridge Regression does not generally have this invariance when the same value of <span class="math inline">\(\lambda\)</span> is retained. Explain the source of the difference by comparing the two optimization criteria.</li>
+</ol>
+<hr />
+<ol start="38" style="list-style-type: decimal">
+<li>Consider the centered vectors</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{x}
+   =
+   \begin{bmatrix}
+   -1\\0\\1
+   \end{bmatrix},
+   \qquad
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   -1\\0\\1
+   \end{bmatrix}.
+   \]</span></p>
+<p>Fit the regression without an intercept.</p>
+<p>First compute the ordinary least-squares coefficient. Then compute the Ridge coefficient for</p>
+<p><span class="math display">\[
+   \lambda=2.
+   \]</span></p>
+<p>Now replace <span class="math inline">\(\mathbf{x}\)</span> by</p>
+<p><span class="math display">\[
+   \mathbf{z}=2\mathbf{x}
+   \]</span></p>
+<p>and fit Ridge Regression again using the same <span class="math inline">\(\lambda=2\)</span>. Compare the two Ridge fitted-value vectors.</p>
+<hr />
+<ol start="39" style="list-style-type: decimal">
+<li>Consider an intercept-only regression with observations</li>
+</ol>
+<p><span class="math display">\[
+   -1,\quad0,\quad1,\quad M,
+   \qquad M&gt;1.
+   \]</span></p>
+<p>For least squares, determine the minimizing intercept as a function of <span class="math inline">\(M\)</span>.</p>
+<p>For Least Absolute Deviations, characterize the complete set of intercept values minimizing</p>
+<p><span class="math display">\[
+   \sum_{i=1}^4|y_i-\beta_0|.
+   \]</span></p>
+<p>Use the two results to compare how the fitted intercepts behave as <span class="math inline">\(M\rightarrow\infty\)</span>.</p>
+<hr />
+<ol start="40" style="list-style-type: decimal">
+<li>Consider the intercept-only data</li>
+</ol>
+<p><span class="math display">\[
+   y=(0,1,2,20)&#39;.
+   \]</span></p>
+<p>Determine the least-squares intercept. Then determine the complete set of intercept values minimizing the Least Absolute Deviations objective</p>
+<p><span class="math display">\[
+   \sum_{i=1}^4|y_i-\beta_0|.
+   \]</span></p>
+<p>Compute the squared-error and absolute-error objectives at their respective minimizing fits and compare the fitted intercepts.</p>
+<hr />
+<ol start="41" style="list-style-type: decimal">
+<li>Let</li>
+</ol>
+<p><span class="math display">\[
+   Q(\beta)
+   =
+   a(\beta-b)^2+\lambda|\beta|,
+   \qquad
+   a&gt;0,\quad\lambda&gt;0.
+   \]</span></p>
+<p>This is a one-dimensional version of a Lasso objective. Determine the unique minimizer of <span class="math inline">\(Q(\beta)\)</span> for each of the three cases</p>
+<p><span class="math display">\[
+   b&gt;\frac{\lambda}{2a},
+   \qquad
+   |b|\leq\frac{\lambda}{2a},
+   \qquad
+   b&lt;-\frac{\lambda}{2a}.
+   \]</span></p>
+<p>Use your result to explain mathematically how an absolute-value penalty can produce a coefficient equal to exactly zero.</p>
+<hr />
+<ol start="42" style="list-style-type: decimal">
+<li>Consider the two objectives</li>
+</ol>
+<p><span class="math display">\[
+   Q_L(\beta)
+   =
+   (\beta-b)^2+4|\beta|
+   \]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+   Q_R(\beta)
+   =
+   (\beta-b)^2+4\beta^2.
+   \]</span></p>
+<p>For each objective, determine the minimizing coefficient when</p>
+<p><span class="math display">\[
+   b=3
+   \]</span></p>
+<p>and when</p>
+<p><span class="math display">\[
+   b=1.
+   \]</span></p>
+<p>Compare the behavior of the Lasso-type and Ridge-type penalties in the two cases.</p>
+<hr />
+<ol start="43" style="list-style-type: decimal">
+<li>Consider polynomial regression of degree <span class="math inline">\(k\)</span> with design matrix</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{X}
+   =
+   \begin{bmatrix}
+   \mathbf{1}&amp;\mathbf{x}&amp;\mathbf{x}^{\,2}&amp;\cdots&amp;\mathbf{x}^{\,k}
+   \end{bmatrix}.
+   \]</span></p>
+<p>Let</p>
+<p><span class="math display">\[
+   z_i=x_i-c
+   \]</span></p>
+<p>for a fixed constant <span class="math inline">\(c\)</span>, and construct the corresponding polynomial design matrix using</p>
+<p><span class="math display">\[
+   1,z,z^2,\ldots,z^k.
+   \]</span></p>
+<p>Use the binomial expansion to prove that the two design matrices have the same column space. Deduce the consequences for fitted values, residuals, <span class="math inline">\(R^2\)</span>, and leverages.</p>
+<hr />
+<ol start="44" style="list-style-type: decimal">
+<li>A quadratic regression in the original explanatory variable has fitted equation</li>
+</ol>
+<p><span class="math display">\[
+   \hat y
+   =
+   3+2x+x^2.
+   \]</span></p>
+<p>Define</p>
+<p><span class="math display">\[
+   z=x-2.
+   \]</span></p>
+<p>Rewrite the same fitted relationship in the form</p>
+<p><span class="math display">\[
+   \hat y
+   =
+   \gamma_0+\gamma_1z+\gamma_2z^2.
+   \]</span></p>
+<p>For</p>
+<p><span class="math display">\[
+   x=(0,1,2,3)&#39;,
+   \]</span></p>
+<p>construct the raw and centered quadratic design matrices and verify that the two coefficient vectors produce the same fitted values.</p>
+<hr />
+<ol start="45" style="list-style-type: decimal">
+<li>Let <span class="math inline">\(\mathbf{X}\)</span> have full column rank. Consider the constrained least-squares problem</li>
+</ol>
+<p><span class="math display">\[
+   \min_{\boldsymbol{\beta}}
+   \|\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\|_2^2
+   \]</span></p>
+<p>subject to</p>
+<p><span class="math display">\[
+   \mathbf{a}&#39;\boldsymbol{\beta}=c,
+   \qquad
+   \mathbf{a}\neq\mathbf{0}.
+   \]</span></p>
+<p>Using a Lagrange multiplier, derive the constrained solution in terms of the ordinary least-squares estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>. Show that it can be written as</p>
+<p><span class="math display">\[
+   \hat{\boldsymbol{\beta}}_c
+   =
+   \hat{\boldsymbol{\beta}}
+   -
+   (\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{a}
+   \frac{
+   \mathbf{a}&#39;\hat{\boldsymbol{\beta}}-c
+   }{
+   \mathbf{a}&#39;(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{a}
+   }.
+   \]</span></p>
+<hr />
+<ol start="46" style="list-style-type: decimal">
+<li>Suppose</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{X}&#39;\mathbf{X}
+   =
+   \begin{bmatrix}
+   4&amp;0\\
+   0&amp;2
+   \end{bmatrix},
+   \qquad
+   \mathbf{X}&#39;\mathbf{y}
+   =
+   \begin{bmatrix}
+   8\\6
+   \end{bmatrix}.
+   \]</span></p>
+<p>First compute the ordinary least-squares coefficient vector. Then solve the constrained least-squares problem subject to</p>
+<p><span class="math display">\[
+   \beta_0+\beta_1=3.
+   \]</span></p>
+<p>Compare the constrained and unconstrained coefficient vectors.</p>
+<hr />
+<ol start="47" style="list-style-type: decimal">
+<li>Let <span class="math inline">\(\mathbf{X}_0\)</span> and <span class="math inline">\(\mathbf{X}_1\)</span> be full-column-rank design matrices satisfying</li>
+</ol>
+<p><span class="math display">\[
+   \mathcal{C}(\mathbf{X}_0)
+   \subseteq
+   \mathcal{C}(\mathbf{X}_1).
+   \]</span></p>
+<p>Let <span class="math inline">\(\mathbf{H}_0\)</span> and <span class="math inline">\(\mathbf{H}_1\)</span> be their corresponding projection matrices. Prove that</p>
+<p><span class="math display">\[
+   \mathbf{H}_1-\mathbf{H}_0
+   \]</span></p>
+<p>is symmetric and idempotent. Show that it projects onto the part of <span class="math inline">\(\mathcal{C}(\mathbf{X}_1)\)</span> that is orthogonal to <span class="math inline">\(\mathcal{C}(\mathbf{X}_0)\)</span>. Deduce an expression for the reduction in residual sum of squares when moving from the smaller model to the larger model.</p>
+<hr />
+<ol start="48" style="list-style-type: decimal">
+<li>Consider the intercept-only projection matrix</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{H}_0
+   =
+   \frac{1}{3}
+   \begin{bmatrix}
+   1&amp;1&amp;1\\
+   1&amp;1&amp;1\\
+   1&amp;1&amp;1
+   \end{bmatrix},
+   \]</span></p>
+<p>and the projection matrix from a regression with an intercept and the centered explanatory variable <span class="math inline">\((-1,0,1)&#39;\)</span>,</p>
+<p><span class="math display">\[
+   \mathbf{H}_1
+   =
+   \begin{bmatrix}
+   5/6&amp;1/3&amp;-1/6\\
+   1/3&amp;1/3&amp;1/3\\
+   -1/6&amp;1/3&amp;5/6
+   \end{bmatrix}.
+   \]</span></p>
+<p>For</p>
+<p><span class="math display">\[
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   1\\2\\4
+   \end{bmatrix},
+   \]</span></p>
+<p>compute the residual sum of squares under each model. Compute</p>
+<p><span class="math display">\[
+   \mathbf{y}&#39;(\mathbf{H}_1-\mathbf{H}_0)\mathbf{y}
+   \]</span></p>
+<p>and compare it with the reduction in residual sum of squares. Compute <span class="math inline">\(R^2\)</span> for the larger model.</p>
+<hr />
+<ol start="49" style="list-style-type: decimal">
+<li>Let <span class="math inline">\(\mathbf{X}\)</span> have full column rank and let</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{Z}
+   =
+   \mathbf{X}\mathbf{A},
+   \]</span></p>
+<p>where <span class="math inline">\(\mathbf{A}\)</span> is invertible. Although <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> have the same column space and therefore produce the same regression fit, prove that their condition numbers need not be equal.</p>
+<p>In particular, suppose the columns of <span class="math inline">\(\mathbf{X}\)</span> are orthonormal and consider</p>
+<p><span class="math display">\[
+   \mathbf{A}_c
+   =
+   \operatorname{diag}(1,c,\ldots,c).
+   \]</span></p>
+<p>Determine the condition number of</p>
+<p><span class="math display">\[
+   \mathbf{Z}&#39;\mathbf{Z}
+   \]</span></p>
+<p>as a function of <span class="math inline">\(c\)</span>, and show that it can be made arbitrarily large without changing the space of possible fitted values.</p>
+<hr />
+<ol start="50" style="list-style-type: decimal">
+<li>Consider</li>
+</ol>
+<p><span class="math display">\[
+   \mathbf{X}
+   =
+   \begin{bmatrix}
+   1&amp;-1\\
+   1&amp;0\\
+   1&amp;1
+   \end{bmatrix},
+   \qquad
+   \mathbf{Z}
+   =
+   \begin{bmatrix}
+   1&amp;-1000\\
+   1&amp;0\\
+   1&amp;1000
+   \end{bmatrix},
+   \qquad
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   1\\2\\4
+   \end{bmatrix}.
+   \]</span></p>
+<p>Compute <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{Z}&#39;\mathbf{Z}\)</span> and their condition numbers. Fit the regression under both parameterizations and compare the coefficient vectors, fitted values, and residuals. Explain how the two regressions can represent exactly the same fitted relationship while having very different numerical conditioning.</p>
+
 </div>
 </div>
             </section>

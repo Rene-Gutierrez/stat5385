@@ -6747,272 +6747,2216 @@ The table also illustrates the distinction among outliers, leverage, and influen
 
 
 
-## Stability of the Solution
+## Numerical Considerations
 
-The results of the regression can be subject to numerical problems or the impact 
-of changes in the data. In general, the results would depend on the stability 
-of $\bX'\bX$. One way to measure the worst case scenario is the condition number
-of the matrix $\bX' \bX$, denoted $\kappa(\bX' \bX)$, and is equal to:
+The least squares estimate is given by
 
-$$ \kappa(\bX' \bX) = \frac{\lambda_{max}}{\lambda_{min}} $$
-where, $\lambda_{max}$ and $\lambda_{min}$ are the maximum and minimum eigenvalues
-of $\bX' \bX$.
+$$
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by.
+$$
 
-There are some considerations, about the condition number:
+Consequently, the numerical stability of the computation depends in part on the properties of $\bX'\bX$. If $\bX'\bX$ is close to being singular, small numerical changes in the data or computations may produce comparatively large changes in the estimated coefficients.
 
-- The condition number is a measure of the worst case scenario, a bigger condition
-number of a matrix, does not necessarily will be more unstable than a matrix with
-a lower condition number.
-- $\lambda_{max} = \max_i \sigma_i^2$ and $\lambda_{max} = \min_i \sigma_i^2$, where
-$\sigma_i$ are the singular values of $\bX$.
+One way to measure this sensitivity is through the **condition number**. For the symmetric positive definite matrix $\bX'\bX$,
 
-The condition number will be affected by:
+$$
+\kappa(\bX'\bX)
+=
+\frac{\lambda_{\max}}{\lambda_{\min}},
+$$
 
-1. Disparities in the magnitude of the variables.
-2. The level of multicoliniarity.
-3. Influential observations.
+where $\lambda_{\max}$ and $\lambda_{\min}$ are the largest and smallest eigenvalues of $\bX'\bX$.
 
-Since, the condition number is affected by the magnitude of the variables, it is common
-to work with centered and standardized variables when inspecting this issues.
+Since the eigenvalues of $\bX'\bX$ are the squared singular values of $\bX$,
 
-Another approach is to check the determinant of a matrix. A matrix would be in general
-more unstable the close is it's determinant closer to 0. Indeed if the determinant is
-0, then $\bX'\bX$ will not be invertible and the solution
-$$ \hat{\bgb} = \left(\bX'\bX\right)^{-1}\bX' \by$$
-is not applicable. However, just by looking at the determinant is hard to know
-what is close to 0. Consider for example the determinant of a multiple of the identity,
-then:
+$$
+\lambda_{\max}
+=
+\sigma_{\max}^2,
+\qquad
+\lambda_{\min}
+=
+\sigma_{\min}^2,
+$$
 
-$\det(c\bI_n) = c^n \bI$
+and therefore
 
-if $c<1$ this will make the determinant closer to zero. However the matrix $c \bI$
-has condition number of $1$.
+$$
+\kappa(\bX'\bX)
+=
+\left(
+\frac{\sigma_{\max}}{\sigma_{\min}}
+\right)^2
+=
+\kappa(\bX)^2.
+$$
 
-It is better to evaluate the change in the determinant after some normalization
-to avoid this scenarios.
+A large condition number indicates that the least squares computation can be sensitive to perturbations. It is a worst-case measure of sensitivity, so a larger condition number does not necessarily imply that a particular computation will exhibit a larger numerical error.
 
-Consider, for a moment, the standardized case, with estimated coefficients:
+Two important factors can produce a large condition number:
 
-$$ \hat{\bgb}=r_{XX}^{-1}r_{Xy}$$
-then we can see how the determinant the correlation matrix, changes when we remove
-a variable. Without loss of generality, we can assume we remove variable 1. Then, 
-the correlation matrix will be given by:
+1. **Differences in scale:** explanatory variables may have very different magnitudes.
+2. **Near linear dependence:** one or more explanatory variables may be approximately represented as linear combinations of the others.
 
-$$r_{XX} = \left[ \begin{matrix}
-r_{X_2X_2} & r_{X_2x_{1}} \\
-r_{x_{1}X} & r_{x_{1}x_{1}} \\
-\end{matrix} \right]$$
+The second situation is closely related to the multicollinearity considered previously. If the columns of $\bX$ become exactly linearly dependent, then
 
-Then, using the [properties of the determinant](#properties-of-the-determinant)
-of a block matrix, and the results of the 
-[Single Variable Cross-Effects](#single-variable-cross-effects) subsection,
-we have that:
+$$
+\lambda_{\min}=0,
+$$
 
-\begin{align*}
-\det(r_{XX}) 
-  &= \det \left(
-    \left[ \begin{matrix}
-    r_{X_2X_2} & r_{X_2x_{1}} \\
-    r_{x_{1}X} & r_{x_{1}x_{1}} \\
-    \end{matrix} \right]\right) \\
-  &= \det(r_{X_2X_2})\det(r_{x_{1}x_{1}} - r_{X_2x_{1}}r_{X_2X_2}^{-1}r_{x_{1}X_2}) \\
-  &= \det(r_{X_2X_2})\det(r_{x_{1}|X_2}) \\
-  &= \det(r_{X_2X_2})\det(1-R^2_{1}) \\
-  &= \det(r_{X_2X_2})(1-R^2_{1})
-\end{align*}
+so
 
-We can see that the determinant is closer to 0 the more correlated is the first 
-variable to the rest of the variables, that is:
+$$
+\kappa(\bX'\bX)=\infty,
+$$
 
-$$R^2_1 \to 1 \implies \det(r_{XX}) \to 0$$
+and $\bX'\bX$ is not invertible.
 
-In a similar way, assume that we are working with centered values, we can analyze
-what would happen if we remove an observation $X_{i}$. Here we analyze $\bX' \bX$.
-Again, using [properties of the determinant](#properties-of-the-determinant), and results of the 
-[Outliers Identification](#outliers-identification) we have that:
+Standardizing the explanatory variables can help reduce numerical problems caused by differences in scale. However, standardization does not eliminate near linear relationships among the explanatory variables. Thus, a large condition number may remain even after the variables have been standardized.
 
-$$\det(\bX_{(i)}'\bX_{(i)}) = \det(\bX_{(i)}'\bX_{(i)}) \\
-  =\det(\bX'\bX' - X_iX_i') \\
-  =\det(\bX'\bX')\det(1 - X_i(\bX'\bX)^{-1}X_i') \\
-  =\det(\bX'\bX')\det(1 - h_{ii}) \\
-  =\det(\bX'\bX')(1 - h_{ii}) \\$$
+The determinant can also indicate whether a matrix is singular, since
 
-So, the determinant deteriorates the more leverage observation $i$ has.
+$$
+\det(\bX'\bX)=0
+$$
 
-We can see examples of the previous operations with our GDP data.
+when $\bX'\bX$ is not invertible. However, the magnitude of the determinant is not by itself a useful measure of numerical stability because it depends strongly on the scale of the matrix. For example,
 
-```{r condition-number-standarized}
-# Read Data
-dat <- read.csv("Gdp data.csv")
+$$
+\det(c\bI)=c^q,
+$$
 
-# Design Matrix Independent Variables
-X <- as.matrix(dat[, -1])
+for a $q\times q$ identity matrix, while
 
-# Centering
-# Vector of Ones
-v1 <- rep(1, n)
-# Centering Matrix
-C  <- diag(n) - (1/n) * v1 %*% t(v1)
-# Independent Variables Centered
-Xc <- C %*% X
+$$
+\kappa(c\bI)=1
+$$
 
-# Standardizing matrix of X
-DX <- diag(1/sqrt(diag(SXX)))
-# Standardize X
-Xs <- Xc %*% DX
+for every $c>0$. Thus, a determinant can be arbitrarily close to zero even when the matrix is perfectly conditioned.
 
-# Condition numbers
+For this reason, the condition number provides a more interpretable diagnostic of numerical sensitivity than the magnitude of the determinant alone.
 
-print(paste0("Condition number of X'X = ",   round(kappa(t(X) %*% X), 2)))
-print(paste0("Condition number of Xc'Xc = ", round(kappa(t(Xc) %*% Xc), 2)))
-print(paste0("Condition number of Xs'Xs = ", round(kappa(t(Xs) %*% Xs), 2)))
-```
-as we can see the condition number improves as with the centering and the standardization.
-However, this is not necessarily so.
+***
 
-Now we evaluate the effect of each variable on the determinant.
 
-```{r condition-number-correlation}
-P      <- ncol(X)
-vecDet <- numeric(length = P)
-vecR2  <- numeric(length = P)
 
-# Computes
-for(i in 1:P){
-  vecDet[i] <- det(cor(X[, -i]))
-  vecR2[i]  <- summary(lm(Xs[, i] ~ Xs[, -i] - 1))$r.squared
-}
 
-# Formats and Show Info Table
-tab           <- cbind(rep(det(cor(X)), P), vecDet, vecR2)
-colnames(tab) <- c("r_{X'X}", "r_{X_(i)'X_(i)}", "R2")
-rownames(tab) <- colnames(dat)[2:6]
-knitr::kable(tab)
-```
 
-Finally we can evaluate the effects of a new observations depending on the leverage:
 
-```{r condition-number-new-variable}
-# Read Data
-dat <- read.csv("Gdp data.csv")
 
-# Design Matrix Independent Variables
-X <- as.matrix(dat[, -1])
-P <- ncol(X)
-n <- nrow(X)
 
-# Centering
-# Vector of Ones
-v1 <- rep(1, n)
-# Centering Matrix
-C  <- diag(n) - (1/n) * v1 %*% t(v1)
-# Independent Variables Centered
-Xc <- C %*% X
 
-# Standardizing matrix of X
-DX <- diag(1/sqrt(diag(SXX)))
-# Standardize X
-Xs <- Xc %*% DX
 
-# New Observations
-# Very Leveraged Observation
-Xn <- t(rep(3, P))
-# Mildly Leveraged Observation
-Xn <- rbind(Xn, t(rep(1, P)))
-# No Leverage
-Xn <- rbind(Xn, t(rep(0, P)))
 
-# Number of New Observations
-m <- nrow(Xn)
 
-# Computes the Effects of the New Observation
-vecDet <- numeric(length = m)
-vecLev <- numeric(length = m)
-for(i in 1:m){
-  Z         <- rbind(Xs, Xn[i, ])
-  vecDet[i] <- det(t(Z) %*% Z)
-  vecLev[i] <- t(Xn[i, ]) %*% solve(t(Z) %*% Z, Xn[i, ])
-}
 
-# Formats and Show Info Table
-tab           <- cbind(rep(det(t(Xs) %*% Xs), 3), vecDet, vecLev, vecLev * n / P)
-colnames(tab) <- c("det(Xs_(i)'Xs_(i))","det(Xs'Xs)", "Leverage", "Obs. Equivalent")
-rownames(tab) <- c("Big Leverage", "Medium Leverage", "No Leverage")
-knitr::kable(tab)
-```
 
-Here’s your subsection rewritten in a **textbook style** while keeping all equations and notation unchanged. The tone and structure have been refined for clarity, precision, and smooth exposition — suitable for inclusion in a formal regression analysis chapter.
 
----
+
+
+
+
+
+
+
+
+
+
 
 ## Other Approaches to Regression
 
-So far, we have focused on the **Least Squares Estimation (LSE)** framework for linear regression. While LSE provides an elegant analytical solution with well-understood statistical properties, it is by no means the only way to formulate a regression problem.
-
-Alternative formulations arise by changing the **objective function**—the criterion used to determine the “best” coefficients. Each of these approaches yields estimators with distinct properties, often differing substantially from those of the least squares estimator.
-
-In this section, we explore some of these alternatives. Throughout, we will denote by:
-
-* $\hat{\boldsymbol{\beta}}$ — the least squares estimator (LSE) of the coefficients,
-* $\hat{\mathbf{y}}$ — the LSE predictions for the observed data, and
-* $R^2$ — the coefficient of determination, a common measure of model fit.
-
-Each alternative approach will yield its own versions of these quantities, possessing different interpretations and statistical behaviors.
-
----
-
-### Least Absolute Error Regression
-
-Instead of minimizing the sum of squared residuals, we can minimize the **sum of absolute residuals**. This leads to the **Least Absolute Error (LAE)** or **Least Absolute Deviations (LAD)** regression problem:
+Throughout this chapter, we have defined the regression fit using **least squares**. Given the linear model
 
 $$
-\min_{\boldsymbol{\beta}} \sum_{i=1}^n |y_i - \mathbf{x}_i' \boldsymbol{\beta}|
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{e},
 $$
 
-Unlike the least squares estimator, the LAE estimator does not have a closed-form analytical solution. Instead, it must be computed using **numerical optimization methods**.
+the least-squares estimator is obtained by solving
 
-We denote this estimator by $\hat{\boldsymbol{\beta}}_A$.
+$$
+\min_{\boldsymbol{\beta}}
+\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+\|_2^2.
+$$
 
-An appealing property of LAE regression is its **robustness to outliers**. Because it penalizes large deviations linearly rather than quadratically, it tends to be less sensitive to extreme observations than the LSE.
+However, least squares is not the only criterion that can be used to define a regression fit. Different objective functions produce different coefficient estimates and, consequently, different fitted relationships.
 
----
+In this section, we briefly consider three alternatives. Each modifies the least-squares problem in a different way:
+
+$$
+\begin{array}{c|c}
+\text{Method} & \text{Modification}\\
+\hline
+\text{Least Absolute Deviations} & \text{Change the loss function}\\
+\text{Ridge Regression} & \text{Add an }\ell^2\text{ penalty}\\
+\text{Lasso Regression} & \text{Add an }\ell^1\text{ penalty}
+\end{array}
+$$
+
+The purpose is not to study these methods in detail, but to illustrate that the choice of optimization criterion is an important part of defining a regression method.
+
+***
+
+### Least Absolute Deviations Regression
+
+The discussion of outliers and influential observations showed that observations with large residuals can substantially affect a least-squares fit.
+
+One reason is the way least squares penalizes residuals. For observation $i$, least squares contributes
+
+$$
+e_i^2
+$$
+
+to the objective function. Consequently, the penalty grows quadratically with the magnitude of the residual.
+
+An alternative is to penalize the **absolute residual**,
+
+$$
+|e_i|,
+$$
+
+instead.
+
+This gives the **Least Absolute Deviations (LAD)**, also called **Least Absolute Error (LAE)**, regression problem:
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_A
+=
+\underset{\boldsymbol{\beta}}{\operatorname{argmin}}
+\;
+\sum_{i=1}^n
+|y_i-X_i\boldsymbol{\beta}|.
+}
+$$
+
+Equivalently,
+
+$$
+\hat{\boldsymbol{\beta}}_A
+=
+\underset{\boldsymbol{\beta}}{\operatorname{argmin}}
+\;
+\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+\|_1.
+$$
+
+The distinction from least squares is entirely in the loss function:
+
+$$
+\text{Least Squares: } e_i^2,
+\qquad
+\text{LAD: } |e_i|.
+$$
+
+For large $|e_i|$,
+
+$$
+e_i^2
+$$
+
+grows much faster than
+
+$$
+|e_i|.
+$$
+
+Therefore, an observation with a very large residual receives a much larger penalty under least squares than under LAD. In this sense, LAD is less sensitive to observations with extreme residuals.
+
+Unlike ordinary least squares, LAD does not generally produce a closed-form expression analogous to
+
+$$
+(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}.
+$$
+
+Instead, the optimization problem is solved numerically.
+
+***
 
 ### Ridge Regression
 
-Another important modification to the least squares criterion involves adding a **penalty on the size of the coefficients**. This approach, known as **Ridge Regression**, encourages more **parsimonious** (i.e., smaller and smoother) coefficient estimates. The optimization problem is:
+A different modification keeps the squared-error loss but adds a penalty on the magnitude of the regression coefficients.
+
+Recall that our complete design matrix is
 
 $$
-\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}_i'\boldsymbol{\beta})^2 + \lambda \sum_{j=1}^n \beta_j^2
-= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda \boldsymbol{\beta}'\boldsymbol{\beta}
+\mathbf{X}
+=
+\begin{bmatrix}
+\mathbf{1} & \mathbf{X}_*
+\end{bmatrix},
 $$
 
-This problem admits a closed-form solution given by:
+and write
 
 $$
-\hat{\boldsymbol{\beta}}_R = \left(\mathbf{X}'\mathbf{X} + \lambda \mathbf{I} \right)^{-1}\mathbf{X}'\mathbf{y}
+\boldsymbol{\beta}
+=
+\begin{bmatrix}
+\beta_0\\
+\boldsymbol{\beta}_{-0}
+\end{bmatrix},
 $$
 
-A notable feature of ridge regression is that it **always produces a unique solution**, even when the design matrix $\mathbf{X}$ is not of full rank, i.e.
+where
 
 $$
-\text{rank}(\mathbf{X}) < p
+\boldsymbol{\beta}_{-0}
+=
+\begin{bmatrix}
+\beta_1\\
+\vdots\\
+\beta_p
+\end{bmatrix}
 $$
 
-Ridge regression thus addresses issues of **multicollinearity** and **ill-conditioning** in $\mathbf{X}$, albeit at the cost of introducing some bias (defined in the next chapters) in the estimates.
+contains the coefficients associated with the explanatory variables.
 
----
+In Ridge Regression, we solve
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_R
+=
+\underset{\beta_0,\boldsymbol{\beta}_{-0}}
+{\operatorname{argmin}}
+\left\{
+\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+\|_2^2
++
+\lambda
+\|
+\boldsymbol{\beta}_{-0}
+\|_2^2
+\right\},
+}
+$$
+
+where
+
+$$
+\lambda\geq0
+$$
+
+controls the strength of the penalty.
+
+Notice that the intercept $\beta_0$ is **not penalized**.
+
+When $\lambda=0$, the problem reduces to ordinary least squares. As $\lambda$ increases, larger slope coefficients receive an increasingly large penalty, so Ridge Regression tends to shrink the slope estimates toward zero.
+
+To express the problem in matrix form, define
+
+$$
+\mathbf{D}
+=
+\begin{bmatrix}
+0 & \mathbf{0}'\\
+\mathbf{0} & \mathbf{I}_p
+\end{bmatrix}.
+$$
+
+Then
+
+$$
+\boldsymbol{\beta}'
+\mathbf{D}
+\boldsymbol{\beta}
+=
+\boldsymbol{\beta}_{-0}'
+\boldsymbol{\beta}_{-0},
+$$
+
+and the Ridge objective becomes
+
+$$
+Q_R(\boldsymbol{\beta})
+=
+(\mathbf{y}-\mathbf{X}\boldsymbol{\beta})'
+(\mathbf{y}-\mathbf{X}\boldsymbol{\beta})
++
+\lambda
+\boldsymbol{\beta}'
+\mathbf{D}
+\boldsymbol{\beta}.
+$$
+
+Differentiating with respect to $\boldsymbol{\beta}$ gives
+
+\begin{align*}
+\frac{\partial Q_R(\boldsymbol{\beta})}
+{\partial\boldsymbol{\beta}}
+&=
+-2\mathbf{X}'\mathbf{y}
++
+2\mathbf{X}'\mathbf{X}\boldsymbol{\beta}
++
+2\lambda\mathbf{D}\boldsymbol{\beta}.
+\end{align*}
+
+Setting the derivative equal to $\mathbf{0}$,
+
+$$
+\left(
+\mathbf{X}'\mathbf{X}
++
+\lambda\mathbf{D}
+\right)
+\hat{\boldsymbol{\beta}}_R
+=
+\mathbf{X}'\mathbf{y}.
+$$
+
+Therefore,
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_R
+=
+\left(
+\mathbf{X}'\mathbf{X}
++
+\lambda\mathbf{D}
+\right)^{-1}
+\mathbf{X}'\mathbf{y}.
+}
+$$
+
+For $\lambda>0$, the matrix
+
+$$
+\mathbf{X}'\mathbf{X}
++
+\lambda\mathbf{D}
+$$
+
+is positive definite and therefore invertible, even when the explanatory-variable columns of $\mathbf{X}$ are linearly dependent.
+
+To see this, let
+
+$$
+\mathbf{a}
+=
+\begin{bmatrix}
+a_0\\
+\mathbf{a}_{-0}
+\end{bmatrix}
+\neq\mathbf{0}.
+$$
+
+Then
+
+\begin{align*}
+\mathbf{a}'
+\left(
+\mathbf{X}'\mathbf{X}
++
+\lambda\mathbf{D}
+\right)
+\mathbf{a}
+&=
+\mathbf{a}'\mathbf{X}'\mathbf{X}\mathbf{a}
++
+\lambda
+\mathbf{a}'\mathbf{D}\mathbf{a}
+\\
+&=
+\|\mathbf{X}\mathbf{a}\|_2^2
++
+\lambda
+\|\mathbf{a}_{-0}\|_2^2.
+\end{align*}
+
+If $\mathbf{a}_{-0}\neq\mathbf{0}$, the second term is strictly positive. If $\mathbf{a}_{-0}=\mathbf{0}$, then $a_0\neq0$ and
+
+$$
+\mathbf{X}\mathbf{a}
+=
+a_0\mathbf{1}
+\neq\mathbf{0}.
+$$
+
+Thus,
+
+$$
+\mathbf{a}'
+\left(
+\mathbf{X}'\mathbf{X}
++
+\lambda\mathbf{D}
+\right)
+\mathbf{a}
+>0
+$$
+
+for every $\mathbf{a}\neq\mathbf{0}$.
+
+Therefore, Ridge Regression produces a unique coefficient estimate for every $\lambda>0$.
+
+This provides one reason Ridge Regression can be useful when explanatory variables contain strongly overlapping information.
+
+***
 
 ### Lasso Regression
 
-The **Lasso (Least Absolute Shrinkage and Selection Operator)** combines regularization and variable selection in a single framework. It modifies the least squares criterion by penalizing the **sum of the absolute values** of the coefficients:
+Lasso Regression also retains the squared-error loss but replaces the squared-coefficient penalty with an absolute-value penalty.
+
+The **Lasso** optimization problem is
 
 $$
-\min_{\boldsymbol{\beta}} \sum_{i=1}^n (y_i - \mathbf{x}_i'\boldsymbol{\beta})^2 + \lambda \sum_{j=1}^n |\beta_j|
-= (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) + \lambda ||\boldsymbol{\beta}||_1
+\boxed{
+\hat{\boldsymbol{\beta}}_L
+=
+\underset{\beta_0,\boldsymbol{\beta}_{-0}}
+{\operatorname{argmin}}
+\left\{
+\|
+\mathbf{y}
+-
+\mathbf{X}\boldsymbol{\beta}
+\|_2^2
++
+\lambda
+\|
+\boldsymbol{\beta}_{-0}
+\|_1
+\right\},
+}
 $$
 
-where $||\cdot||_1$ denotes the $\ell^1$-norm.
+where
 
-Unlike Ridge Regression, this problem **does not have an analytical solution** and must be solved numerically, typically through iterative algorithms such as **coordinate descent**.
+$$
+\|
+\boldsymbol{\beta}_{-0}
+\|_1
+=
+\sum_{j=1}^p|\beta_j|.
+$$
 
-The Lasso estimator, denoted $\hat{\boldsymbol{\beta}}_L$, has the remarkable property that it can **set some coefficients exactly to zero**, thereby performing **automatic feature selection**. However, its statistical properties differ significantly from both LSE and Ridge estimators.
+As with Ridge Regression, the intercept is not penalized.
+
+The important distinction is the form of the penalty:
+
+$$
+\text{Ridge: }
+\lambda
+\sum_{j=1}^p\beta_j^2,
+$$
+
+while
+
+$$
+\text{Lasso: }
+\lambda
+\sum_{j=1}^p|\beta_j|.
+$$
+
+Both penalties encourage smaller coefficient estimates. However, the $\ell^1$ penalty used by Lasso can produce coefficient estimates that are **exactly zero**.
+
+Therefore,
+
+$$
+\boxed{
+\text{Ridge: shrinkage}
+\qquad\qquad
+\text{Lasso: shrinkage + sparsity}.
+}
+$$
+
+If
+
+$$
+\hat\beta_{L,j}=0,
+$$
+
+then explanatory variable $j$ does not contribute to the fitted linear predictor. Consequently, Lasso can simultaneously fit the regression and remove variables from the fitted model.
+
+Unlike Ridge Regression, the Lasso problem does not generally have a closed-form solution. It is typically solved using numerical optimization methods.
+
+***
+
+### Comparison of Regression Criteria
+
+The methods introduced in this section can be summarized through their optimization problems.
+
+**Least Squares**
+
+$$
+\boxed{
+\min_{\boldsymbol{\beta}}
+\sum_{i=1}^n e_i^2
+}
+$$
+
+**Least Absolute Deviations**
+
+$$
+\boxed{
+\min_{\boldsymbol{\beta}}
+\sum_{i=1}^n|e_i|
+}
+$$
+
+**Ridge Regression**
+
+$$
+\boxed{
+\min_{\beta_0,\boldsymbol{\beta}_{-0}}
+\left\{
+\sum_{i=1}^n e_i^2
++
+\lambda
+\|
+\boldsymbol{\beta}_{-0}
+\|_2^2
+\right\}
+}
+$$
+
+**Lasso Regression**
+
+$$
+\boxed{
+\min_{\beta_0,\boldsymbol{\beta}_{-0}}
+\left\{
+\sum_{i=1}^n e_i^2
++
+\lambda
+\|
+\boldsymbol{\beta}_{-0}
+\|_1
+\right\}.
+}
+$$
+
+Each method retains the same basic idea of constructing a linear predictor,
+
+$$
+\mathbf{X}\boldsymbol{\beta},
+$$
+
+but changes the criterion used to select the coefficients.
+
+Least squares focuses entirely on minimizing squared residuals. LAD changes how residuals are penalized. Ridge and Lasso retain squared residuals but balance the fit against restrictions on the magnitude of the coefficients.
+
+The central lesson is therefore:
+
+$$
+\boxed{
+\text{A regression method is determined not only by its linear predictor,}
+}
+$$
+
+$$
+\boxed{
+\text{but also by the criterion used to fit it.}
+}
+$$
+
+This provides a natural endpoint for our deterministic study of linear regression. In the following chapters, we introduce assumptions on the error terms and study the statistical properties of the estimators and fitted models.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Chapter Synthesis
+
+The central idea of this chapter is that multiple linear regression is not fundamentally a new optimization problem. The least-squares criterion remains
+
+$$
+\min_{\boldsymbol{\beta}}
+\|
+\mathbf{y}-\mathbf{X}\boldsymbol{\beta}
+\|_2^2.
+$$
+
+What changes from simple linear regression is the structure of the design matrix. Once several explanatory variables are included simultaneously, the relationships among the columns of $\mathbf{X}$ become an essential part of the regression problem.
+
+This observation explains much of the progression of the chapter. We began by asking how several explanatory variables can be used jointly to describe or predict a response. The GDP example immediately revealed an important phenomenon: a coefficient obtained from a simple regression can differ substantially from the corresponding coefficient in a multiple regression. A coefficient can become larger, smaller, or even change sign when other explanatory variables are added.
+
+At that point, this behavior was primarily empirical. The remainder of the chapter developed the mathematical structure needed to explain why it occurs.
+
+The least-squares solution
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}
+$$
+
+provided the first answer. Unlike separate simple regressions, multiple regression estimates all coefficients **jointly**. The matrix $\mathbf{X}'\mathbf{X}$ contains information about relationships among the explanatory variables themselves, while $\mathbf{X}'\mathbf{y}$ contains their relationships with the response. Thus, even at the level of the basic least-squares formula, each coefficient is determined by the entire design matrix rather than by one explanatory variable in isolation.
+
+The normal equations sharpened this observation. At the least-squares solution,
+
+$$
+\boxed{
+\mathbf{X}'\hat{\mathbf{e}}=\mathbf{0}.
+}
+$$
+
+This identity is one of the main organizing results of the chapter. It tells us that the residual vector is orthogonal to every column of the design matrix. When an intercept is included, it also implies that the residuals sum to zero and that the fitted values have the same mean as the observed responses. Since the fitted-value vector belongs to the column space of $\mathbf{X}$, we also obtain
+
+$$
+\hat{\mathbf{e}}\perp\hat{\mathbf{y}}.
+$$
+
+These algebraic properties lead directly to the geometric interpretation of least squares. The fitted vector
+
+$$
+\hat{\mathbf{y}}
+=
+\mathbf{H}\mathbf{y}
+$$
+
+is the orthogonal projection of $\mathbf{y}$ onto
+
+$$
+\mathcal{C}(\mathbf{X}),
+$$
+
+the column space of the design matrix. Thus, multiple regression can be understood as choosing, among all vectors that can be formed from the columns of $\mathbf{X}$, the one closest to the observed response vector.
+
+This geometric viewpoint explains several results that may initially appear unrelated.
+
+For example, the sum-of-squares decomposition
+
+$$
+SS_{tot}
+=
+SS_{reg}
++
+SS_{res}
+$$
+
+is simply the Pythagorean theorem applied to orthogonal components of the centered response. Similarly, adding an explanatory variable cannot increase the residual sum of squares because adding a column to $\mathbf{X}$ enlarges, or leaves unchanged, the space of available fitted-value vectors:
+
+$$
+\mathcal{C}(\mathbf{X})
+\subseteq
+\mathcal{C}
+\left(
+\begin{bmatrix}
+\mathbf{X}&\mathbf{z}
+\end{bmatrix}
+\right).
+$$
+
+The expanded model can always reproduce the original fit by assigning coefficient zero to the additional variable. Therefore,
+
+$$
+SS_{res,+}\leq SS_{res},
+$$
+
+which immediately explains why ordinary $R^2$ cannot decrease when explanatory variables are added.
+
+This is also why adjusted $R^2$ was introduced only after ordinary $R^2$ had been understood. The limitation of ordinary $R^2$ is not an accidental property of its formula. It follows directly from the optimization problem. Adjusted $R^2$ modifies the comparison by accounting for the loss of residual degrees of freedom, so that an additional variable must produce a sufficiently large reduction in residual sum of squares before the criterion increases.
+
+The geometric interpretation also clarifies the special role of the intercept. When an intercept is included,
+
+$$
+\mathbf{1}\in\mathcal{C}(\mathbf{X}),
+$$
+
+so the intercept-only model is contained within the full regression model. This containment is what makes the usual centered $R^2$ a natural comparison. Without an intercept, that relationship no longer holds, which is why the zero vector becomes the natural reference for uncentered $R^2$.
+
+***
+
+A second major theme of the chapter is that the **representation of the design matrix can change without changing the fundamental regression problem**.
+
+Centering provides the clearest example. The centering matrix
+
+$$
+\mathbf{C}
+=
+\mathbf{I}
+-
+\frac{1}{n}\mathbf{1}\mathbf{1}'
+=
+\mathbf{I}-\mathbf{H}_0
+$$
+
+removes the component of a vector in the direction of the intercept. Thus, centering is itself a projection operation. This makes the connection between the geometric and covariance-based views of regression explicit.
+
+After centering, the slope estimates can be written as
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_{-0}
+=
+\mathbf{S}_{XX}^{-1}\mathbf{S}_{Xy}.
+}
+$$
+
+This expression reveals the structure that was only implicit in the original least-squares formula. The vector $\mathbf{S}_{Xy}$ measures how the explanatory variables relate to the response, while $\mathbf{S}_{XX}$ describes how the explanatory variables relate to one another.
+
+This distinction is fundamental:
+
+$$
+\boxed{
+\text{multiple-regression coefficients}
+=
+\text{response relationships}
++
+\text{relationships among explanatory variables}.
+}
+$$
+
+The expression should not be interpreted as a literal additive decomposition, but as the conceptual reason that multiple-regression coefficients cannot generally be inferred from pairwise relationships alone.
+
+Standardization carries the same idea one step further. Once differences in measurement scale are removed,
+
+$$
+\hat{\boldsymbol{\beta}}_s
+=
+\mathbf{r}_{XX}^{-1}\mathbf{r}_{Xy}.
+$$
+
+The covariance structure has become a correlation structure, but the essential phenomenon remains unchanged: the coefficient of one variable depends on its relationship with the response **and** on its relationships with the other explanatory variables.
+
+The Variable Cross-Effects section made this dependence explicit. Partitioning the correlation matrix showed mathematically how one group of variables modifies the coefficients associated with another group. In the single-variable case,
+
+$$
+\hat\beta_k^s
+=
+VIF_k
+\left(
+r_{ky}
+-
+\mathbf{r}_{k,-k}
+\tilde{\boldsymbol{\beta}}_{-k}^s
+\right).
+$$
+
+This formula returns us to the question first raised by the comparison between the simple and multiple GDP regressions. The simple-regression relationship $r_{ky}$ is only one component of the full coefficient. The remaining explanatory variables affect the coefficient through their correlations with $\mathbf{x}_k$ and through their own relationships with the response.
+
+The quantity
+
+$$
+VIF_k
+=
+\frac{1}{1-R_k^2}
+$$
+
+provides another view of the same geometry. When $R_k^2$ is large, much of the variation in $\mathbf{x}_k$ can already be represented using the other explanatory variables. There is then relatively little independent variation in $\mathbf{x}_k$ available to distinguish its contribution from those of the other variables.
+
+In the limiting case,
+
+$$
+R_k^2=1,
+$$
+
+one explanatory-variable column is exactly represented by the others. The design matrix loses full column rank, and the usual unique least-squares coefficient vector ceases to exist.
+
+Thus, several topics in the chapter that may initially look separate—
+
+- differences between simple and multiple coefficients,
+- cross-effects,
+- VIF,
+- rank deficiency, and
+- numerical sensitivity—
+
+are all consequences of the same underlying issue: **the relationships among the columns of the design matrix**.
+
+This connection becomes especially clear in the numerical considerations. Near linear dependence does not yet destroy uniqueness, but it makes $\mathbf{X}'\mathbf{X}$ close to singular. The condition number measures the resulting sensitivity. If the smallest singular value of $\mathbf{X}$ approaches zero, then
+
+$$
+\kappa(\mathbf{X}'\mathbf{X})
+=
+\kappa(\mathbf{X})^2
+$$
+
+becomes large.
+
+Standardization can reduce sensitivity caused merely by differences in measurement scale, but it cannot remove genuine near linear dependence. This distinction is important. Standardization changes the representation of the explanatory variables; it does not create new information in the design matrix.
+
+***
+
+The design matrix also organizes another major theme of the chapter, but from the opposite direction.
+
+The previous discussion focused primarily on the **columns** of $\mathbf{X}$. Columns determine the model space and describe how explanatory variables interact with one another.
+
+The study of leverage and influence instead directs attention to the **rows** of $\mathbf{X}$. A row represents the explanatory-variable configuration of one observation.
+
+The hat matrix
+
+$$
+\mathbf{H}
+=
+\mathbf{X}
+(\mathbf{X}'\mathbf{X})^{-1}
+\mathbf{X}'
+$$
+
+connects these two perspectives. Globally, $\mathbf{H}$ is the matrix that projects $\mathbf{y}$ onto the column space of $\mathbf{X}$. Locally, its diagonal entries
+
+$$
+h_{ii}
+$$
+
+measure how unusual individual rows of the design matrix are relative to the entire design.
+
+This leads to an important distinction:
+
+$$
+\boxed{
+\begin{array}{ccl}
+\text{Residual} &\longrightarrow& \text{unusual response relative to the fit},\\[2mm]
+\text{Leverage} &\longrightarrow& \text{unusual explanatory-variable configuration},\\[2mm]
+\text{Influence} &\longrightarrow& \text{effect of the observation on the fitted regression}.
+\end{array}
+}
+$$
+
+The deletion result
+
+$$
+\|
+\hat{\mathbf{y}}_{(i)}
+-
+\hat{\mathbf{y}}
+\|_2^2
+=
+\frac{h_{ii}}{(1-h_{ii})^2}
+\hat e_i^2
+$$
+
+shows how these ideas combine. An observation can be unusual in the explanatory-variable space without substantially changing the fitted regression if its residual is small. Conversely, a large residual does not necessarily imply large influence when leverage is small.
+
+This result is especially important conceptually because it shows that diagnosing a regression cannot be reduced to looking only at residuals or only at explanatory-variable values. Influence is created by the interaction between the two.
+
+***
+
+Seen from this perspective, the progression of the chapter moves from a simple question—
+
+> How do we fit a linear relationship using several explanatory variables?
+
+—to a much broader set of questions:
+
+> What space of fitted values is available to the model?
+
+> How does the structure of the explanatory variables determine the coefficients?
+
+> How does adding or transforming variables change the fit?
+
+> Which observations have the greatest potential to change that fit?
+
+> When is the least-squares solution difficult to identify or compute reliably?
+
+The same objects repeatedly answer these questions:
+
+$$
+\boxed{
+\mathbf{X},
+\qquad
+\mathbf{X}'\mathbf{X},
+\qquad
+\mathbf{H},
+\qquad
+\hat{\mathbf{e}}.
+}
+$$
+
+The design matrix determines the available linear combinations. The cross-product $\mathbf{X}'\mathbf{X}$ describes the geometry and dependence structure of its columns. The hat matrix converts that geometry into fitted values and leverages. The residual vector measures what remains outside the fitted regression space.
+
+This is why the chapter develops from estimation, to properties, to geometry, to covariance and correlation representations, and finally to cross-effects, influence, and numerical considerations. Each stage reveals a different consequence of the same least-squares structure.
+
+***
+
+The final discussion of alternative regression criteria places this structure in a broader context.
+
+Least squares solves
+
+$$
+\min_{\boldsymbol{\beta}}
+\sum_{i=1}^n e_i^2,
+$$
+
+but nothing about a linear predictor requires squared error to be the only possible criterion.
+
+Least Absolute Deviations changes the way residuals are penalized:
+
+$$
+\min_{\boldsymbol{\beta}}
+\sum_{i=1}^n|e_i|.
+$$
+
+This connects directly to the earlier study of influential observations. Because large residuals receive a quadratic penalty under least squares but only a linear penalty under LAD, changing the loss function changes the sensitivity of the fitted relationship to large residuals.
+
+Ridge and Lasso leave the squared-error component in place but modify the objective by penalizing the slope coefficients. These methods connect instead to the earlier discussion of relationships among explanatory variables. Ridge modifies the optimization problem so that a unique coefficient vector can be obtained even when the ordinary least-squares coefficients are not uniquely determined by the design. Lasso goes further by allowing some coefficients to become exactly zero.
+
+Thus, the alternative methods are not disconnected additions at the end of the chapter. They arise naturally from limitations and phenomena that were uncovered while studying least squares itself.
+
+The chapter began by treating least squares as the method used to fit multiple linear regression. By the end, a broader perspective has emerged:
+
+$$
+\boxed{
+\text{linear predictor}
++
+\text{fitting criterion}
++
+\text{design structure}
+\quad\Longrightarrow\quad
+\text{regression method and its behavior}.
+}
+$$
+
+This is perhaps the most useful perspective to retain.
+
+On a second reading of the chapter, the individual results should therefore appear less isolated. The normal equations anticipate the geometric interpretation. The geometric interpretation explains the sum-of-squares decomposition and the behavior of $R^2$. Centering connects the intercept-only projection with covariance representations. Standardization exposes the correlation structure. The correlation structure leads to cross-effects and VIF. Those same relationships among columns reappear as rank and numerical-stability issues. The hat matrix, first introduced to express fitted values, later becomes the basis for leverage and influence. Finally, the limitations revealed by these analyses motivate alternative optimization criteria.
+
+The chapter has therefore developed one mathematical object from several complementary directions. Multiple linear regression is not merely the formula
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y}.
+$$
+
+It is the study of how the **geometry of the design matrix**, the **criterion used to fit the model**, and the **observed response** interact to determine coefficients, predictions, residuals, diagnostics, and the behavior of the fitted regression.
+
+The next stage is to add probabilistic assumptions to this deterministic framework. Those assumptions will allow us to move from describing the behavior of the fitted regression for the observed data to studying the uncertainty of the estimators, predictions, and inferential procedures. The algebra and geometry developed in this chapter will remain the foundation for that analysis.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Exercises
+
+1. Consider a multiple linear regression model with full-column-rank design matrix $\mathbf{X}$ and hat matrix $\mathbf{H}$. Let $\mathbf{z}$ be an additional explanatory-variable vector and define
+
+   $$
+   \mathbf{z}_r
+   =
+   (\mathbf{I}-\mathbf{H})\mathbf{z}.
+   $$
+
+   Let $\hat{\mathbf{e}}$ denote the residual vector from the original model. Prove that if $\mathbf{z}_r\neq\mathbf{0}$, then adding $\mathbf{z}$ to the model leaves the residual sum of squares unchanged if and only if
+
+   $$
+   \mathbf{z}_r'\hat{\mathbf{e}}=0.
+   $$
+
+   Determine separately what happens when $\mathbf{z}_r=\mathbf{0}$.
+
+***
+
+2. Consider
+
+   $$
+   \mathbf{X}
+   =
+   \begin{bmatrix}
+   1&-1&-1\\
+   1&-1& 1\\
+   1& 1&-1\\
+   1& 1& 1
+   \end{bmatrix},
+   \qquad
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   1\\
+   2\\
+   3\\
+   6
+   \end{bmatrix}.
+   $$
+
+   Compute $\mathbf{X}'\mathbf{X}$ and use it to obtain $\hat{\boldsymbol{\beta}}$. Then compute $\hat{\mathbf{y}}$, $\hat{\mathbf{e}}$, $SS_{res}$, $SS_{tot}$, and $R^2$. Verify directly that
+
+   $$
+   \mathbf{X}'\hat{\mathbf{e}}=\mathbf{0}.
+   $$
+
+***
+
+3. Let $\mathbf{X}\in\mathbb{R}^{n\times q}$ have full column rank, and let $\mathbf{A}\in\mathbb{R}^{q\times q}$ be invertible. Define
+
+   $$
+   \mathbf{Z}=\mathbf{X}\mathbf{A}.
+   $$
+
+   Prove that regression using $\mathbf{Z}$ produces exactly the same fitted values and residuals as regression using $\mathbf{X}$. Derive the relationship between the coefficient estimates obtained under the two parameterizations.
+
+***
+
+4. Using the design matrix and response from Exercise 2, define
+
+   $$
+   \mathbf{Z}
+   =
+   \begin{bmatrix}
+   \mathbf{1}&\mathbf{x}_1+\mathbf{x}_2&2\mathbf{x}_2
+   \end{bmatrix},
+   $$
+
+   where $\mathbf{x}_1$ and $\mathbf{x}_2$ are the second and third columns of $\mathbf{X}$.
+
+   Find an invertible matrix $\mathbf{A}$ such that
+
+   $$
+   \mathbf{Z}=\mathbf{X}\mathbf{A}.
+   $$
+
+   Compute the coefficient estimates under the $\mathbf{Z}$ parameterization and verify that the fitted-value vector is unchanged.
+
+***
+
+5. Suppose $\mathbf{X}$ does not have full column rank. Prove that although the coefficient vector minimizing
+
+   $$
+   \|\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\|_2^2
+   $$
+
+   need not be unique, the fitted-value vector is unique. If $\hat{\boldsymbol{\beta}}$ is one least-squares solution, characterize all other least-squares solutions using the null space of $\mathbf{X}$.
+
+***
+
+6. Consider
+
+   $$
+   \mathbf{X}
+   =
+   \begin{bmatrix}
+   1&0&0\\
+   1&1&1\\
+   1&2&2
+   \end{bmatrix},
+   \qquad
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   1\\
+   3\\
+   5
+   \end{bmatrix}.
+   $$
+
+   Determine $\operatorname{rank}(\mathbf{X})$ and find the null space of $\mathbf{X}$. Find at least two different coefficient vectors that minimize the least-squares objective, and characterize the complete set of minimizing coefficient vectors. Compute the fitted values and residuals.
+
+***
+
+7. Let $\mathbf{X}$ be the design matrix of an existing regression and let
+
+   $$
+   \mathbf{z}_r
+   =
+   (\mathbf{I}-\mathbf{H})\mathbf{z},
+   \qquad
+   \mathbf{z}_r\neq\mathbf{0},
+   $$
+
+   for a proposed additional explanatory variable $\mathbf{z}$. Prove that the reduction in residual sum of squares obtained by adding $\mathbf{z}$ is
+
+   $$
+   SS_{res}-SS_{res,+}
+   =
+   \frac{
+   (\mathbf{z}_r'\hat{\mathbf{e}})^2
+   }{
+   \mathbf{z}_r'\mathbf{z}_r
+   }.
+   $$
+
+   Use this result to characterize precisely when adding $\mathbf{z}$ produces a strict increase in $R^2$.
+
+***
+
+8. Suppose that for an existing regression
+
+   $$
+   SS_{res}=10,
+   \qquad
+   SS_{tot}=20,
+   $$
+
+   and that the residualized version of a proposed additional explanatory variable is
+
+   $$
+   \mathbf{z}_r
+   =
+   \begin{bmatrix}
+   1\\-1\\-1\\1
+   \end{bmatrix}.
+   $$
+
+   The current residual vector is
+
+   $$
+   \hat{\mathbf{e}}
+   =
+   \begin{bmatrix}
+   1\\-1\\2\\-2
+   \end{bmatrix}.
+   $$
+
+   Compute the reduction in residual sum of squares produced by adding the variable. Compute the original and expanded $R^2$ values.
+
+***
+
+9. Let
+
+   $$
+   \mathbf{X}
+   =
+   \begin{bmatrix}
+   \mathbf{1}&\mathbf{X}_*
+   \end{bmatrix}
+   $$
+
+   be a full-column-rank design matrix and let
+
+   $$
+   \mathbf{X}_c
+   =
+   \begin{bmatrix}
+   \mathbf{1}&\mathbf{C}\mathbf{X}_*
+   \end{bmatrix}.
+   $$
+
+   Prove, using column spaces, that
+
+   $$
+   \mathcal{C}(\mathbf{X})
+   =
+   \mathcal{C}(\mathbf{X}_c).
+   $$
+
+   Use this result to establish which of the following quantities must remain unchanged after centering the explanatory variables: fitted values, residuals, slope coefficients, intercept, $R^2$, and the hat matrix.
+
+***
+
+10. Consider the data
+
+   $$
+   \mathbf{x}_1
+   =
+   \begin{bmatrix}
+   0\\0\\2\\2
+   \end{bmatrix},
+   \qquad
+   \mathbf{x}_2
+   =
+   \begin{bmatrix}
+   1\\3\\1\\3
+   \end{bmatrix},
+   \qquad
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   1\\2\\3\\6
+   \end{bmatrix}.
+   $$
+
+   Fit the regression with an intercept using the original explanatory variables. Then center both explanatory variables and refit the model. Compare the two slope vectors, the two intercepts, and the two fitted-value vectors.
+
+***
+
+11. Let $s_j=\sqrt{S_{x_jx_j}}$ and $s_y=\sqrt{S_{yy}}$, and let
+
+   $$
+   \mathbf{D}_X
+   =
+   \operatorname{diag}
+   \left(
+   \frac{1}{s_1},\ldots,\frac{1}{s_p}
+   \right).
+   $$
+
+   Derive the relationship between the original slope vector $\hat{\boldsymbol{\beta}}_{-0}$ and the standardized slope vector $\hat{\boldsymbol{\beta}}_s$. Show that
+
+   $$
+   \hat{\boldsymbol{\beta}}_s
+   =
+   \frac{1}{s_y}
+   \mathbf{D}_X^{-1}
+   \hat{\boldsymbol{\beta}}_{-0}.
+   $$
+
+***
+
+12. Suppose
+
+   $$
+   \mathbf{S}_{XX}
+   =
+   \begin{bmatrix}
+   4&2\\
+   2&9
+   \end{bmatrix},
+   \qquad
+   \mathbf{S}_{Xy}
+   =
+   \begin{bmatrix}
+   6\\8
+   \end{bmatrix},
+   \qquad
+   S_{yy}=25.
+   $$
+
+   Compute the original slope coefficients using
+
+   $$
+   \hat{\boldsymbol{\beta}}_{-0}
+   =
+   \mathbf{S}_{XX}^{-1}\mathbf{S}_{Xy}.
+   $$
+
+   Construct $\mathbf{r}_{XX}$ and $\mathbf{r}_{Xy}$, compute the standardized coefficients, and verify numerically the relationship between the original and standardized coefficients.
+
+***
+
+13. For a standardized explanatory variable $\mathbf{x}_k^s$, let $R_k^2$ be obtained from its regression on the remaining standardized explanatory variables, and let
+
+   $$
+   \mathbf{r}_{k,-k}
+   \tilde{\boldsymbol{\beta}}_{-k}^s
+   $$
+
+   denote the corresponding cross-effect. Derive a necessary and sufficient condition for the full multiple-regression coefficient $\hat\beta_k^s$ to equal the simple-regression coefficient
+
+   $$
+   \tilde\beta_k^s=r_{ky}.
+   $$
+
+***
+
+14. Consider two standardized explanatory variables satisfying
+
+   $$
+   r_{12}=0.8,
+   \qquad
+   r_{1y}=0.2,
+   \qquad
+   r_{2y}=0.7.
+   $$
+
+   Compute the two simple-regression coefficients and the two coefficients from the multiple regression. Compute the VIF for each explanatory variable. Compare the sign and magnitude of the simple and multiple coefficients and explain the numerical differences using the relationships among the three variables.
+
+***
+
+15. Consider a regression with two standardized explanatory variables. Starting from
+
+   $$
+   \mathbf{r}_{XX}
+   =
+   \begin{bmatrix}
+   1&r_{12}\\
+   r_{12}&1
+   \end{bmatrix},
+   \qquad
+   \mathbf{r}_{Xy}
+   =
+   \begin{bmatrix}
+   r_{1y}\\
+   r_{2y}
+   \end{bmatrix},
+   $$
+
+   derive explicit formulas for $\hat\beta_1^s$ and $\hat\beta_2^s$. Using your expression for $\hat\beta_1^s$, characterize when its sign differs from the sign of $r_{1y}$.
+
+***
+
+16. Suppose two standardized explanatory variables satisfy
+
+   $$
+   r_{12}=0.5,
+   \qquad
+   r_{1y}=0,
+   \qquad
+   r_{2y}=0.6.
+   $$
+
+   Compute the coefficients from the multiple regression of $\mathbf{y}_s$ on both explanatory variables. Compare the coefficient of $\mathbf{x}_1^s$ with the coefficient obtained from its individual simple regression.
+
+***
+
+17. For standardized explanatory variable $\mathbf{x}_k^s$, prove the equivalence of the following statements:
+
+   $$
+   R_k^2=1,
+   $$
+
+   $$
+   \mathbf{x}_k^s
+   \in
+   \mathcal{C}(\mathbf{X}_{-k}^s),
+   $$
+
+   and the complete standardized explanatory-variable matrix does not have full column rank.
+
+   Explain how these equivalent statements are connected to the behavior of $VIF_k$.
+
+***
+
+18. Consider two standardized explanatory variables with
+
+   $$
+   r_{12}=0.95.
+   $$
+
+   First suppose
+
+   $$
+   r_{1y}=0.60,
+   \qquad
+   r_{2y}=0.50.
+   $$
+
+   Compute the VIF, the condition number of the $2\times2$ predictor correlation matrix, and the two standardized regression coefficients.
+
+   Repeat the coefficient calculation after changing only
+
+   $$
+   r_{2y}=0.50
+   $$
+
+   to
+
+   $$
+   r_{2y}=0.51.
+   $$
+
+   Compare the two sets of coefficients.
+
+***
+
+19. Let $\mathbf{A}$ be a symmetric positive definite $q\times q$ matrix and let $c>0$. Prove that
+
+   $$
+   \kappa(c\mathbf{A})=\kappa(\mathbf{A}),
+   $$
+
+   while
+
+   $$
+   \det(c\mathbf{A})
+   =
+   c^q\det(\mathbf{A}).
+   $$
+
+   Use these results to explain mathematically why the magnitude of the determinant is not an appropriate measure of numerical conditioning.
+
+***
+
+20. Consider
+
+   $$
+   \mathbf{A}
+   =
+   \begin{bmatrix}
+   0.001&0\\
+   0&0.001
+   \end{bmatrix},
+   \qquad
+   \mathbf{B}
+   =
+   \begin{bmatrix}
+   1&0\\
+   0&100
+   \end{bmatrix}.
+   $$
+
+   Compute the determinant and condition number of each matrix. Determine which matrix is better conditioned and compare this conclusion with what would be suggested by comparing only the magnitudes of the determinants.
+
+***
+
+21. Let $\mathbf{X}$ and $\mathbf{Z}$ be two full-column-rank design matrices satisfying
+
+   $$
+   \mathcal{C}(\mathbf{X})
+   =
+   \mathcal{C}(\mathbf{Z}).
+   $$
+
+   Prove that their hat matrices are identical. Deduce that regression using $\mathbf{X}$ or $\mathbf{Z}$ must produce the same fitted values, residuals, residual sum of squares, $R^2$, and leverages for every response vector $\mathbf{y}$.
+
+***
+
+22. Let
+
+   $$
+   \mathbf{u}_1
+   =
+   \frac{1}{\sqrt{3}}
+   \begin{bmatrix}
+   1\\1\\1
+   \end{bmatrix},
+   \qquad
+   \mathbf{u}_2
+   =
+   \frac{1}{\sqrt{2}}
+   \begin{bmatrix}
+   1\\0\\-1
+   \end{bmatrix},
+   $$
+
+   and let
+
+   $$
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   2\\1\\4
+   \end{bmatrix}.
+   $$
+
+   The vectors $\mathbf{u}_1$ and $\mathbf{u}_2$ form an orthonormal basis for the column space of a regression design matrix. Compute the orthogonal projection of $\mathbf{y}$ onto this column space, the residual vector, $SS_{res}$, $SS_{tot}$, and $R^2$. Verify the relevant orthogonality relationships directly.
+
+***
+
+23. For a regression without an intercept, define
+
+   $$
+   R_c^2
+   =
+   1-\frac{SS_{res}}{SS_{tot}}
+   $$
+
+   whenever $SS_{tot}>0$, and recall that
+
+   $$
+   R_{\mathrm{unc}}^2
+   =
+   1-\frac{SS_{res}}{\mathbf{y}'\mathbf{y}}.
+   $$
+
+   Derive necessary and sufficient conditions under which
+
+   $$
+   R_c^2=R_{\mathrm{unc}}^2.
+   $$
+
+***
+
+24. Fit a regression without an intercept to
+
+   $$
+   \mathbf{x}
+   =
+   \begin{bmatrix}
+   1\\2\\3
+   \end{bmatrix},
+   \qquad
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   3\\4\\3
+   \end{bmatrix}.
+   $$
+
+   Compute the least-squares coefficient, fitted values, and residual sum of squares. Then compute both
+
+   $$
+   1-\frac{SS_{res}}{SS_{tot}}
+   $$
+
+   and the uncentered coefficient of determination
+
+   $$
+   R_{\mathrm{unc}}^2.
+   $$
+
+   Compare the two values.
+
+***
+
+25. Consider a model with $p$ explanatory variables and an intercept. An expanded model adds $q$ additional explanatory variables, with both models fitted to the same $n$ observations. Assume both design matrices have full column rank and
+
+   $$
+   n>p+q+1.
+   $$
+
+   Derive a necessary and sufficient condition for the expanded model to have a larger adjusted $R^2$. Express the condition in terms of the reduction
+
+   $$
+   SS_{res}-SS_{res,+}.
+   $$
+
+***
+
+26. A regression with $n=20$ observations and $p=2$ explanatory variables has
+
+   $$
+   SS_{tot}=200,
+   \qquad
+   SS_{res}=100.
+   $$
+
+   A third explanatory variable is added, reducing the residual sum of squares to
+
+   $$
+   SS_{res,+}=96.
+   $$
+
+   Compute $R^2$ and adjusted $R^2$ for both models. Determine which criteria increase after the additional explanatory variable is included.
+
+***
+
+27. Suppose a multiple regression contains an intercept and let
+
+   $$
+   \mathbf{X}_{*,c}
+   $$
+
+   be the centered explanatory-variable matrix. Assume $\mathbf{X}_{*,c}$ has full column rank. Show that the leverage of observation $i$ can be written as
+
+   $$
+   \boxed{
+   h_{ii}
+   =
+   \frac{1}{n}
+   +
+   X_{i,c}
+   \left(
+   \mathbf{X}_{*,c}'\mathbf{X}_{*,c}
+   \right)^{-1}
+   X_{i,c}',
+   }
+   $$
+
+   where $X_{i,c}$ denotes row $i$ of the centered explanatory-variable matrix. Use this representation to explain how centering separates the contribution of the intercept from the contribution of the explanatory-variable configuration.
+
+***
+
+28. Consider five observations with two centered explanatory variables:
+
+   $$
+   \mathbf{X}_{*,c}
+   =
+   \begin{bmatrix}
+   -1&-1\\
+   -1& 1\\
+    0& 0\\
+    1&-1\\
+    1& 1
+   \end{bmatrix}.
+   $$
+
+   The complete design matrix includes an intercept. Compute
+
+   $$
+   \mathbf{X}_{*,c}'\mathbf{X}_{*,c}
+   $$
+
+   and use the centered leverage formula to compute all five leverages. Verify that their sum equals $p+1$.
+
+***
+
+29. Suppose $\mathbf{X}$ has full column rank. Prove that
+
+   $$
+   h_{ii}=1
+   $$
+
+   if and only if deleting observation $i$ causes $\mathbf{X}_{(i)}$ to lose full column rank.
+
+   Your argument should connect the condition $h_{ii}=1$ with whether the $i$th standard basis vector belongs to $\mathcal{C}(\mathbf{X})$.
+
+***
+
+30. Consider
+
+   $$
+   \mathbf{X}
+   =
+   \begin{bmatrix}
+   1&0\\
+   1&0\\
+   1&1
+   \end{bmatrix}.
+   $$
+
+   Compute the hat matrix and all leverages. Determine what happens to the rank of the design matrix after each observation is deleted, and compare your findings with the corresponding leverage values.
+
+***
+
+31. Recall that the squared change in fitted values caused by deleting observation $i$ is
+
+   $$
+   \Delta_i
+   =
+   \frac{h_{ii}}{(1-h_{ii})^2}\hat e_i^2.
+   $$
+
+   For fixed $|\hat e_i|>0$, prove that $\Delta_i$ is strictly increasing as a function of $h_{ii}$ on
+
+   $$
+   0\leq h_{ii}<1.
+   $$
+
+   Explain why this result does not imply that the observation with the largest leverage must be the most influential observation in a dataset.
+
+***
+
+32. For observation $i=3$, suppose the $i$th column of the hat matrix is
+
+   $$
+   \begin{bmatrix}
+   0.25\\
+   -0.25\\
+   0.50\\
+   0.25\\
+   0.25
+   \end{bmatrix},
+   $$
+
+   and suppose
+
+   $$
+   \hat e_i=2.
+   $$
+
+   Compute the change
+
+   $$
+   \hat{\mathbf{y}}_{(i)}-\hat{\mathbf{y}}
+   $$
+
+   produced by deleting observation $i$, and compute its squared norm. Verify the result using
+
+   $$
+   \Delta_i
+   =
+   \frac{h_{ii}}{(1-h_{ii})^2}\hat e_i^2.
+   $$
+
+   A second observation has leverage $0.8$ and residual $0.5$. Compare the influence of the two observations.
+
+***
+
+33. Let
+
+   $$
+   \hat y_{(i),i}
+   $$
+
+   denote the prediction for observation $i$ obtained from the model fitted after observation $i$ is deleted. Using the deleted-observation results from the chapter, derive
+
+   $$
+   y_i-\hat y_{(i),i}
+   =
+   \frac{\hat e_i}{1-h_{ii}}.
+   $$
+
+   Then show that leave-one-out cross-validation for squared prediction error can be computed without fitting $n$ separate models:
+
+   $$
+   CV_{\mathrm{MSE}}
+   =
+   \frac{1}{n}
+   \sum_{i=1}^n
+   \left(
+   \frac{\hat e_i}{1-h_{ii}}
+   \right)^2.
+   $$
+
+***
+
+34. A regression with four observations has residuals
+
+   $$
+   \hat{\mathbf{e}}
+   =
+   \begin{bmatrix}
+   1\\-1\\2\\-2
+   \end{bmatrix}
+   $$
+
+   and
+
+   $$
+   h_{11}=h_{22}=h_{33}=h_{44}=0.5.
+   $$
+
+   Compute the deleted residual for each observation and the leave-one-out mean squared prediction error.
+
+***
+
+35. Prove that high leverage alone does not imply high influence. In particular, consider any full-column-rank design matrix containing an observation with large leverage and choose a response vector satisfying
+
+   $$
+   \mathbf{y}\in\mathcal{C}(\mathbf{X}).
+   $$
+
+   Determine the residuals and the effect of deleting any observation with $h_{ii}<1$. Explain how this provides a general counterexample to the statement that high-leverage observations must be influential.
+
+***
+
+36. Consider the simple-regression design containing an intercept and explanatory-variable values
+
+   $$
+   x=(0,1,2,10)'.
+   $$
+
+   Compute the leverage of the observation with $x=10$. Suppose first that
+
+   $$
+   y_i=1+2x_i
+   $$
+
+   for every observation. Determine the influence of the observation with $x=10$.
+
+   For a second fitted problem with the same design, suppose the residual associated with the observation at $x=10$ is $0.2$. Using its leverage, compute the corresponding value of
+
+   $$
+   \Delta_i
+   =
+   \frac{h_{ii}}{(1-h_{ii})^2}\hat e_i^2.
+   $$
+
+***
+
+37. Ordinary least squares is unchanged, in terms of fitted values, when one explanatory variable is multiplied by a nonzero constant and its coefficient is reparameterized accordingly. Show that Ridge Regression does not generally have this invariance when the same value of $\lambda$ is retained. Explain the source of the difference by comparing the two optimization criteria.
+
+***
+
+38. Consider the centered vectors
+
+   $$
+   \mathbf{x}
+   =
+   \begin{bmatrix}
+   -1\\0\\1
+   \end{bmatrix},
+   \qquad
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   -1\\0\\1
+   \end{bmatrix}.
+   $$
+
+   Fit the regression without an intercept.
+
+   First compute the ordinary least-squares coefficient. Then compute the Ridge coefficient for
+
+   $$
+   \lambda=2.
+   $$
+
+   Now replace $\mathbf{x}$ by
+
+   $$
+   \mathbf{z}=2\mathbf{x}
+   $$
+
+   and fit Ridge Regression again using the same $\lambda=2$. Compare the two Ridge fitted-value vectors.
+
+***
+
+39. Consider an intercept-only regression with observations
+
+   $$
+   -1,\quad0,\quad1,\quad M,
+   \qquad M>1.
+   $$
+
+   For least squares, determine the minimizing intercept as a function of $M$.
+
+   For Least Absolute Deviations, characterize the complete set of intercept values minimizing
+
+   $$
+   \sum_{i=1}^4|y_i-\beta_0|.
+   $$
+
+   Use the two results to compare how the fitted intercepts behave as $M\rightarrow\infty$.
+
+***
+
+40. Consider the intercept-only data
+
+   $$
+   y=(0,1,2,20)'.
+   $$
+
+   Determine the least-squares intercept. Then determine the complete set of intercept values minimizing the Least Absolute Deviations objective
+
+   $$
+   \sum_{i=1}^4|y_i-\beta_0|.
+   $$
+
+   Compute the squared-error and absolute-error objectives at their respective minimizing fits and compare the fitted intercepts.
+
+***
+
+41. Let
+
+   $$
+   Q(\beta)
+   =
+   a(\beta-b)^2+\lambda|\beta|,
+   \qquad
+   a>0,\quad\lambda>0.
+   $$
+
+   This is a one-dimensional version of a Lasso objective. Determine the unique minimizer of $Q(\beta)$ for each of the three cases
+
+   $$
+   b>\frac{\lambda}{2a},
+   \qquad
+   |b|\leq\frac{\lambda}{2a},
+   \qquad
+   b<-\frac{\lambda}{2a}.
+   $$
+
+   Use your result to explain mathematically how an absolute-value penalty can produce a coefficient equal to exactly zero.
+
+***
+
+42. Consider the two objectives
+
+   $$
+   Q_L(\beta)
+   =
+   (\beta-b)^2+4|\beta|
+   $$
+
+   and
+
+   $$
+   Q_R(\beta)
+   =
+   (\beta-b)^2+4\beta^2.
+   $$
+
+   For each objective, determine the minimizing coefficient when
+
+   $$
+   b=3
+   $$
+
+   and when
+
+   $$
+   b=1.
+   $$
+
+   Compare the behavior of the Lasso-type and Ridge-type penalties in the two cases.
+
+***
+
+43. Consider polynomial regression of degree $k$ with design matrix
+
+   $$
+   \mathbf{X}
+   =
+   \begin{bmatrix}
+   \mathbf{1}&\mathbf{x}&\mathbf{x}^{\,2}&\cdots&\mathbf{x}^{\,k}
+   \end{bmatrix}.
+   $$
+
+   Let
+
+   $$
+   z_i=x_i-c
+   $$
+
+   for a fixed constant $c$, and construct the corresponding polynomial design matrix using
+
+   $$
+   1,z,z^2,\ldots,z^k.
+   $$
+
+   Use the binomial expansion to prove that the two design matrices have the same column space. Deduce the consequences for fitted values, residuals, $R^2$, and leverages.
+
+***
+
+44. A quadratic regression in the original explanatory variable has fitted equation
+
+   $$
+   \hat y
+   =
+   3+2x+x^2.
+   $$
+
+   Define
+
+   $$
+   z=x-2.
+   $$
+
+   Rewrite the same fitted relationship in the form
+
+   $$
+   \hat y
+   =
+   \gamma_0+\gamma_1z+\gamma_2z^2.
+   $$
+
+   For
+
+   $$
+   x=(0,1,2,3)',
+   $$
+
+   construct the raw and centered quadratic design matrices and verify that the two coefficient vectors produce the same fitted values.
+
+***
+
+45. Let $\mathbf{X}$ have full column rank. Consider the constrained least-squares problem
+
+   $$
+   \min_{\boldsymbol{\beta}}
+   \|\mathbf{y}-\mathbf{X}\boldsymbol{\beta}\|_2^2
+   $$
+
+   subject to
+
+   $$
+   \mathbf{a}'\boldsymbol{\beta}=c,
+   \qquad
+   \mathbf{a}\neq\mathbf{0}.
+   $$
+
+   Using a Lagrange multiplier, derive the constrained solution in terms of the ordinary least-squares estimator $\hat{\boldsymbol{\beta}}$. Show that it can be written as
+
+   $$
+   \hat{\boldsymbol{\beta}}_c
+   =
+   \hat{\boldsymbol{\beta}}
+   -
+   (\mathbf{X}'\mathbf{X})^{-1}\mathbf{a}
+   \frac{
+   \mathbf{a}'\hat{\boldsymbol{\beta}}-c
+   }{
+   \mathbf{a}'(\mathbf{X}'\mathbf{X})^{-1}\mathbf{a}
+   }.
+   $$
+
+***
+
+46. Suppose
+
+   $$
+   \mathbf{X}'\mathbf{X}
+   =
+   \begin{bmatrix}
+   4&0\\
+   0&2
+   \end{bmatrix},
+   \qquad
+   \mathbf{X}'\mathbf{y}
+   =
+   \begin{bmatrix}
+   8\\6
+   \end{bmatrix}.
+   $$
+
+   First compute the ordinary least-squares coefficient vector. Then solve the constrained least-squares problem subject to
+
+   $$
+   \beta_0+\beta_1=3.
+   $$
+
+   Compare the constrained and unconstrained coefficient vectors.
+
+***
+
+47. Let $\mathbf{X}_0$ and $\mathbf{X}_1$ be full-column-rank design matrices satisfying
+
+   $$
+   \mathcal{C}(\mathbf{X}_0)
+   \subseteq
+   \mathcal{C}(\mathbf{X}_1).
+   $$
+
+   Let $\mathbf{H}_0$ and $\mathbf{H}_1$ be their corresponding projection matrices. Prove that
+
+   $$
+   \mathbf{H}_1-\mathbf{H}_0
+   $$
+
+   is symmetric and idempotent. Show that it projects onto the part of $\mathcal{C}(\mathbf{X}_1)$ that is orthogonal to $\mathcal{C}(\mathbf{X}_0)$. Deduce an expression for the reduction in residual sum of squares when moving from the smaller model to the larger model.
+
+***
+
+48. Consider the intercept-only projection matrix
+
+   $$
+   \mathbf{H}_0
+   =
+   \frac{1}{3}
+   \begin{bmatrix}
+   1&1&1\\
+   1&1&1\\
+   1&1&1
+   \end{bmatrix},
+   $$
+
+   and the projection matrix from a regression with an intercept and the centered explanatory variable $(-1,0,1)'$,
+
+   $$
+   \mathbf{H}_1
+   =
+   \begin{bmatrix}
+   5/6&1/3&-1/6\\
+   1/3&1/3&1/3\\
+   -1/6&1/3&5/6
+   \end{bmatrix}.
+   $$
+
+   For
+
+   $$
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   1\\2\\4
+   \end{bmatrix},
+   $$
+
+   compute the residual sum of squares under each model. Compute
+
+   $$
+   \mathbf{y}'(\mathbf{H}_1-\mathbf{H}_0)\mathbf{y}
+   $$
+
+   and compare it with the reduction in residual sum of squares. Compute $R^2$ for the larger model.
+
+***
+
+49. Let $\mathbf{X}$ have full column rank and let
+
+   $$
+   \mathbf{Z}
+   =
+   \mathbf{X}\mathbf{A},
+   $$
+
+   where $\mathbf{A}$ is invertible. Although $\mathbf{X}$ and $\mathbf{Z}$ have the same column space and therefore produce the same regression fit, prove that their condition numbers need not be equal.
+
+   In particular, suppose the columns of $\mathbf{X}$ are orthonormal and consider
+
+   $$
+   \mathbf{A}_c
+   =
+   \operatorname{diag}(1,c,\ldots,c).
+   $$
+
+   Determine the condition number of
+
+   $$
+   \mathbf{Z}'\mathbf{Z}
+   $$
+
+   as a function of $c$, and show that it can be made arbitrarily large without changing the space of possible fitted values.
+
+***
+
+50. Consider
+
+   $$
+   \mathbf{X}
+   =
+   \begin{bmatrix}
+   1&-1\\
+   1&0\\
+   1&1
+   \end{bmatrix},
+   \qquad
+   \mathbf{Z}
+   =
+   \begin{bmatrix}
+   1&-1000\\
+   1&0\\
+   1&1000
+   \end{bmatrix},
+   \qquad
+   \mathbf{y}
+   =
+   \begin{bmatrix}
+   1\\2\\4
+   \end{bmatrix}.
+   $$
+
+   Compute $\mathbf{X}'\mathbf{X}$ and $\mathbf{Z}'\mathbf{Z}$ and their condition numbers. Fit the regression under both parameterizations and compare the coefficient vectors, fitted values, and residuals. Explain how the two regressions can represent exactly the same fitted relationship while having very different numerical conditioning.

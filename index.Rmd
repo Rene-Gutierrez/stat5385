@@ -40,13 +40,16 @@ Find the github page for the course (with the data sets) here: [Github](https://
   - [Multiple $R^2$](#multiple-r2)
   - [Geometric Interpretation of Multiple Linear Regression](#geometric-interpretation-of-multiple-linear-regression)
 * Lecture 11: [Centered and Standarized Variables](#centered-and-standarized-variables)
-* Class 12: [Variable Cross Effects](#variable-cross-effects)
-* Class 13: Midterm Part 1
-* Class 14: Midterm Part 2
-* Class 15: Topics:
+* Lecture 12: [Variable Cross Effects](#variable-cross-effects)
+* lecture 13: [Outliers, Leverage and Influential Observations Part 1](#outliers-leverage-and-influential-observations)
+* Lecture 14: Midterm 1
+* Lecture 15: Topics
   - Midterm "Review"
-  - [Leverage](#leverage)
-* Class 16: [Influential Observations](#influential-observations)
+  - [Outliers, Leverage and Influential Observations Part 2](#outliers-leverage-and-influential-observations)
+* Lecture 16: Topics:
+  - [Numerical Considerations](#numerical-considerations)
+  - [Other Approaches to Regression](#other-approaches-to-regression)
+  - [Chapter Synthesis](#chapter-synthesis)
 * Class 17: Topics:
   - [Stability of the Solution](#stability-of-the-solution)
   - [Other Approches to Regression](#other-approches-to-regression)

@@ -381,11 +381,14 @@ deleting-one-observation
 change-in-the-fitted-values
 leverage-residuals-and-influence
 example-leverage-and-influence-in-the-gdp-data
-stability-of-the-solution
+numerical-considerations
 other-approaches-to-regression
-least-absolute-error-regression
+least-absolute-deviations-regression
 ridge-regression
 lasso-regression
+comparison-of-regression-criteria
+chapter-synthesis
+exercises-3
 bootstrapping
 introduction-2
 key-points-6
