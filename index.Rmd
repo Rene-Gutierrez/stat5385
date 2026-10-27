@@ -1,9 +1,12 @@
 ---
 title: "Stat 5385/6385"
 output:
-  bookdown::gitbook: default
+  bookdown::gitbook:
+    config:
+      toc:
+        collapse: section
+        scroll_highlight: true
 ---
-
 
 # Stat 5385/6385 Fall 2026
 
