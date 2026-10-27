@@ -4322,109 +4322,43 @@ n-\operatorname{rank}(\mathbf{X}).
 +
 \mathbf{e},
 \]</span></p>
-<p>where <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span> are treated as fixed. Prove directly that</p>
+<p>where <span class="math inline">\(\mathbf{X}\)</span> is fixed and has full column rank. Suppose that</p>
 <p><span class="math display">\[
 \mathbb{E}[\mathbf{e}]
 =
-\mathbf{0}
-\quad\Longleftrightarrow\quad
-\mathbb{E}[\mathbf{y}]
-=
-\mathbf{X}\boldsymbol{\beta}.
+\boldsymbol{\mu}_e,
 \]</span></p>
-<p>Explain why this equivalence gives <span class="math inline">\(\mathbf{X}\boldsymbol{\beta}\)</span> a statistical interpretation that it did not have in the deterministic treatment of least squares.</p></li>
-<li><p>Under the same fixed-design regression model, prove that</p>
-<p><span class="math display">\[
-\mathbb{V}[\mathbf{e}]
-=
-\sigma^2\mathbf{I}
-\quad\Longleftrightarrow\quad
-\mathbb{V}[\mathbf{y}]
-=
-\sigma^2\mathbf{I}.
-\]</span></p>
-<p>Compare this equivalence with the corresponding equivalence involving the means. In particular, explain why adding the fixed vector <span class="math inline">\(\mathbf{X}\boldsymbol{\beta}\)</span> affects the mean but not the covariance matrix.</p></li>
-<li><p>Suppose that <span class="math inline">\(\mathbf{X}\)</span> has full column rank and</p>
+<p>where <span class="math inline">\(\boldsymbol{\mu}_e\)</span> is not necessarily <span class="math inline">\(\mathbf{0}\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Find <span class="math inline">\(\mathbb{E}[\mathbf{y}]\)</span>.</p></li>
+<li><p>Find <span class="math inline">\(\mathbb{E}[\hat{\boldsymbol{\beta}}]\)</span>.</p></li>
+<li><p>Give a necessary and sufficient condition on <span class="math inline">\(\boldsymbol{\mu}_e\)</span> for <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> to remain unbiased.</p></li>
+<li><p>Is <span class="math inline">\(\mathbb{E}[\mathbf{e}]=\mathbf{0}\)</span> necessary for unbiasedness of OLS? Explain.</p></li>
+</ol></li>
+<li><p>Suppose that</p>
 <p><span class="math display">\[
 \mathbb{E}[\mathbf{e}]
 =
-\mathbf{0}.
-\]</span></p>
-<p>Starting from</p>
-<p><span class="math display">\[
-\hat{\boldsymbol{\beta}}
-=
-(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbf{y},
-\]</span></p>
-<p>derive</p>
-<p><span class="math display">\[
-\mathbb{E}
-\left[
-\hat{\boldsymbol{\beta}}
-\right],
+\mathbf{0},
 \qquad
-\mathbb{E}
-\left[
-\hat{\mathbf{y}}
-\right],
-\qquad
-\mathbb{E}
-\left[
-\hat{\mathbf{e}}
-\right].
-\]</span></p>
-<p>For each result, identify exactly where the mean assumption is used.</p></li>
-<li><p>Consider the more general covariance assumption</p>
-<p><span class="math display">\[
 \mathbb{V}[\mathbf{e}]
 =
 \boldsymbol{\Sigma},
 \]</span></p>
-<p>where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is any finite covariance matrix. Treating <span class="math inline">\(\mathbf{X}\)</span> as fixed, derive</p>
-<p><span class="math display">\[
-\mathbb{V}
-\left[
-\hat{\boldsymbol{\beta}}
-\right],
-\qquad
-\mathbb{V}
-\left[
-\hat{\mathbf{y}}
-\right],
-\qquad
-\mathbb{V}
-\left[
-\hat{\mathbf{e}}
-\right]
-\]</span></p>
-<p>in terms of <span class="math inline">\(\boldsymbol{\Sigma}\)</span>. Show that the results from this chapter are obtained as the special case</p>
+<p>where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is an arbitrary covariance matrix.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Derive <span class="math inline">\(\mathbb{V}[\mathbf{y}]\)</span>.</p></li>
+<li><p>Derive <span class="math inline">\(\mathbb{V}[\hat{\boldsymbol{\beta}}]\)</span>.</p></li>
+<li><p>Derive <span class="math inline">\(\mathbb{V}[\hat{\mathbf{y}}]\)</span>.</p></li>
+<li><p>Derive <span class="math inline">\(\mathbb{V}[\hat{\mathbf{e}}]\)</span>.</p></li>
+<li><p>Show how the formulas reduce to the results from this chapter when</p></li>
+</ol>
 <p><span class="math display">\[
 \boldsymbol{\Sigma}
 =
 \sigma^2\mathbf{I}.
 \]</span></p></li>
-<li><p>Under the variance assumption, show that</p>
-<p><span class="math display">\[
-\mathbb{V}[\hat{y}_i]
-=
-\sigma^2h_{ii}
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-\mathbb{V}[\hat{e}_i]
-=
-\sigma^2(1-h_{ii}).
-\]</span></p>
-<p>Hence prove that</p>
-<p><span class="math display">\[
-\mathbb{V}[\hat{y}_i]
-+
-\mathbb{V}[\hat{e}_i]
-=
-\mathbb{V}[y_i].
-\]</span></p>
-<p>Explain how this result gives leverage <span class="math inline">\(h_{ii}\)</span> a probabilistic interpretation in addition to its geometric interpretation.</p></li>
-<li><p>Consider</p>
+<li><p>Consider the design matrix</p>
 <p><span class="math display">\[
 \mathbf{X}
 =
@@ -4432,84 +4366,285 @@ n-\operatorname{rank}(\mathbf{X}).
 1 &amp; -1\\
 1 &amp; 0\\
 1 &amp; 1
-\end{pmatrix}.
+\end{pmatrix}
 \]</span></p>
-<p>Compute <span class="math inline">\(\mathbf{X}&#39;\mathbf{X}\)</span>, <span class="math inline">\((\mathbf{X}&#39;\mathbf{X})^{-1}\)</span>, and the hat matrix <span class="math inline">\(\mathbf{H}\)</span>. Assuming</p>
+<p>and suppose that</p>
 <p><span class="math display">\[
 \mathbb{V}[\mathbf{e}]
 =
-4\mathbf{I},
+9\mathbf{I}.
 \]</span></p>
-<p>compute</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Compute <span class="math inline">\((\mathbf{X}&#39;\mathbf{X})^{-1}\)</span>.</p></li>
+<li><p>Compute <span class="math inline">\(\mathbb{V}[\hat{\boldsymbol{\beta}}]\)</span>.</p></li>
+<li><p>Compute the hat matrix <span class="math inline">\(\mathbf{H}\)</span>.</p></li>
+<li><p>Find <span class="math inline">\(\mathbb{V}[\hat{y}_i]\)</span> and <span class="math inline">\(\mathbb{V}[\hat{e}_i]\)</span> for each observation.</p></li>
+<li><p>Which observations have the largest leverage? Explain how this affects the variability of their fitted values and residuals.</p></li>
+</ol></li>
+<li><p>Suppose that for a particular observation,</p>
 <p><span class="math display">\[
-\mathbb{V}
-\left[
-\hat{\boldsymbol{\beta}}
-\right],
-\qquad
-\mathbb{V}
-\left[
-\hat{\mathbf{y}}
-\right],
-\qquad
-\mathbb{V}
-\left[
-\hat{\mathbf{e}}
-\right].
-\]</span></p>
-<p>Identify the observations with the largest leverage and explain how this is reflected in the variances of their fitted values and residuals.</p></li>
-<li><p>Suppose that</p>
-<p><span class="math display">\[
-\mathbf{X}&#39;\mathbf{X}
+h_{ii}
 =
-\begin{pmatrix}
-5 &amp; 0\\
-0 &amp; 10
-\end{pmatrix}
+0.8,
 \]</span></p>
-<p>and <span class="math inline">\(\sigma^2=20\)</span>.</p>
-<p>Compute the covariance matrix of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>. Then consider the linear combinations</p>
+<p>and <span class="math inline">\(\sigma^2=25\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Compute <span class="math inline">\(\mathbb{V}[y_i]\)</span>.</p></li>
+<li><p>Compute <span class="math inline">\(\mathbb{V}[\hat{y}_i]\)</span>.</p></li>
+<li><p>Compute <span class="math inline">\(\mathbb{V}[\hat{e}_i]\)</span>.</p></li>
+<li><p>Verify that</p></li>
+</ol>
 <p><span class="math display">\[
-\hat{\beta}_0+\hat{\beta}_1
+\mathbb{V}[\hat{y}_i]
++
+\mathbb{V}[\hat{e}_i]
+=
+\mathbb{V}[y_i].
 \]</span></p>
-<p>and</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Repeat parts (b)–(d) for an observation with <span class="math inline">\(h_{jj}=0.2\)</span> and compare the two observations.</li>
+</ol></li>
+<li><p>Use R to investigate the unbiasedness of OLS without assuming Normality.</p>
+<p>Choose a fixed full-column-rank design matrix <span class="math inline">\(\mathbf{X}\)</span> and a coefficient vector <span class="math inline">\(\boldsymbol{\beta}\)</span>. Generate independent errors from a non-Normal distribution satisfying</p>
 <p><span class="math display">\[
-2\hat{\beta}_0-\hat{\beta}_1.
+\mathbb{E}[\mathbf{e}]
+=
+\mathbf{0},
+\qquad
+\mathbb{V}[\mathbf{e}]
+=
+\sigma^2\mathbf{I}.
 \]</span></p>
-<p>Compute their variances and explain how they are obtained from the covariance matrix of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>.</p></li>
-<li><p>Use R to investigate the unbiasedness of OLS without assuming Normality. Fix a full-column-rank design matrix <span class="math inline">\(\mathbf{X}\)</span> and a coefficient vector <span class="math inline">\(\boldsymbol{\beta}\)</span>. Generate independent errors from a centered Uniform distribution with variance <span class="math inline">\(\sigma^2\)</span>, and form</p>
+<p>Generate a large number of datasets from</p>
 <p><span class="math display">\[
 \mathbf{y}
 =
 \mathbf{X}\boldsymbol{\beta}
 +
-\mathbf{e}.
+\mathbf{e}
 \]</span></p>
-<p>Repeat the experiment a large number of times and estimate</p>
+<p>and calculate <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> for each dataset.</p>
+<p>Compare the empirical mean of the estimates with <span class="math inline">\(\boldsymbol{\beta}\)</span> and explain how the simulation illustrates the role of the mean assumption.</p></li>
+<li><p>Under the assumptions</p>
 <p><span class="math display">\[
-\mathbb{E}
+\mathbb{V}[\mathbf{e}]
+=
+\sigma^2\mathbf{I},
+\]</span></p>
+<p>consider</p>
+<p><span class="math display">\[
+\hat{\mathbf{y}}
+=
+\mathbf{H}\mathbf{y},
+\qquad
+\hat{\mathbf{e}}
+=
+(\mathbf{I}-\mathbf{H})\mathbf{y}.
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li>Find</li>
+</ol>
+<p><span class="math display">\[
+\mathbb{C}
 \left[
-\hat{\boldsymbol{\beta}}
+\hat{\mathbf{e}},
+\hat{\mathbf{y}}
 \right].
 \]</span></p>
-<p>Compare the empirical mean of the OLS estimates with <span class="math inline">\(\boldsymbol{\beta}\)</span>. Explain why this simulation is relevant to the assumptions of the chapter.</p></li>
-<li><p>Repeat the previous simulation, but generate errors satisfying</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>Identify the property of <span class="math inline">\(\mathbf{H}\)</span> that makes the result equal to <span class="math inline">\(\mathbf{0}\)</span>.</p></li>
+<li><p>Compare this result with</p></li>
+</ol>
 <p><span class="math display">\[
-\mathbb{E}[e_i]
+\hat{\mathbf{e}}&#39;
+\hat{\mathbf{y}}
 =
-\mu_e
-\neq
 0.
 \]</span></p>
-<p>Investigate empirically the bias of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>. Before running the simulation, derive theoretically</p>
+<p>State clearly which result is deterministic and which result is probabilistic.</p></li>
+<li><p>Suppose that</p>
 <p><span class="math display">\[
-\mathbb{E}
+\mathbf{H}
+=
+\begin{pmatrix}
+3/4 &amp; 1/4 &amp; 1/4 &amp; -1/4\\
+1/4 &amp; 3/4 &amp; -1/4 &amp; 1/4\\
+1/4 &amp; -1/4 &amp; 3/4 &amp; 1/4\\
+-1/4 &amp; 1/4 &amp; 1/4 &amp; 3/4
+\end{pmatrix}
+\]</span></p>
+<p>is the hat matrix of a regression model and <span class="math inline">\(\sigma^2=8\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Determine <span class="math inline">\(\mathbb{V}[\hat{\mathbf{y}}]\)</span>.</p></li>
+<li><p>Determine <span class="math inline">\(\mathbb{V}[\hat{\mathbf{e}}]\)</span>.</p></li>
+<li><p>What is the variance of each residual?</p></li>
+<li><p>Determine the rank of <span class="math inline">\(\mathbf{H}\)</span> from its trace.</p></li>
+<li><p>Determine the dimension of the residual subspace.</p></li>
+</ol></li>
+<li><p>Consider the intercept-only model</p>
+<p><span class="math display">\[
+y_i
+=
+\beta_0
++
+e_i,
+\qquad
+i=1,2,3,
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\mathbb{E}[\mathbf{e}]
+=
+\mathbf{0},
+\qquad
+\mathbb{V}[\mathbf{e}]
+=
+\sigma^2\mathbf{I}.
+\]</span></p>
+<p>Consider the estimators</p>
+<p><span class="math display">\[
+\hat{\beta}_0
+=
+\frac{y_1+y_2+y_3}{3}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\tilde{\beta}_0
+=
+\frac{y_1+y_2}{2}.
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Show that both estimators are linear.</p></li>
+<li><p>Show that both estimators are unbiased.</p></li>
+<li><p>Compute their variances.</p></li>
+<li><p>Which estimator is preferred according to the Gauss–Markov criterion?</p></li>
+</ol></li>
+<li><p>Use R to simulate the setting of Exercise 8.</p>
+<p>Choose values of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\sigma^2\)</span>, generate many independent samples, and calculate both estimators for every sample.</p>
+<p>Compare:</p>
+<p><span class="math display">\[
+\mathbb{E}[\hat{\beta}_0],
+\qquad
+\mathbb{E}[\tilde{\beta}_0],
+\]</span></p>
+<p>their variances, and their MSEs using empirical estimates from the simulation.</p>
+<p>Compare your results with the theoretical conclusions from Exercise 8.</p></li>
+<li><p>Suppose two estimators of</p>
+<p><span class="math display">\[
+\boldsymbol{\beta}
+\in
+\mathbb{R}^2
+\]</span></p>
+<p>have</p>
+<p><span class="math display">\[
+\operatorname{Bias}
+\left(
+\tilde{\boldsymbol{\beta}}_1
+\right)
+=
+\mathbf{0},
+\qquad
+\mathbb{V}
+\left[
+\tilde{\boldsymbol{\beta}}_1
+\right]
+=
+\begin{pmatrix}
+5 &amp; 1\\
+1 &amp; 3
+\end{pmatrix},
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\operatorname{Bias}
+\left(
+\tilde{\boldsymbol{\beta}}_2
+\right)
+=
+\begin{pmatrix}
+1\\
+-1
+\end{pmatrix},
+\qquad
+\mathbb{V}
+\left[
+\tilde{\boldsymbol{\beta}}_2
+\right]
+=
+\begin{pmatrix}
+2 &amp; 0\\
+0 &amp; 2
+\end{pmatrix}.
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Compute the MSE of each estimator.</p></li>
+<li><p>Which estimator has the smaller MSE?</p></li>
+<li><p>Explain why your answer does not contradict the Gauss–Markov theorem.</p></li>
+</ol></li>
+<li><p>Let <span class="math inline">\(\hat{\beta}\)</span> be an unbiased scalar estimator of <span class="math inline">\(\beta\)</span> satisfying</p>
+<p><span class="math display">\[
+\mathbb{V}[\hat{\beta}]
+=
+v.
+\]</span></p>
+<p>Consider the estimator</p>
+<p><span class="math display">\[
+\tilde{\beta}
+=
+c\hat{\beta},
+\]</span></p>
+<p>where <span class="math inline">\(c\)</span> is a constant.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Find the bias of <span class="math inline">\(\tilde{\beta}\)</span>.</p></li>
+<li><p>Find its variance.</p></li>
+<li><p>Show that</p></li>
+</ol>
+<p><span class="math display">\[
+\operatorname{MSE}(\tilde{\beta})
+=
+c^2v
++
+(c-1)^2\beta^2.
+\]</span></p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li><p>Give an example of values of <span class="math inline">\(c\)</span>, <span class="math inline">\(\beta\)</span>, and <span class="math inline">\(v\)</span> for which <span class="math inline">\(\tilde{\beta}\)</span> has smaller MSE than <span class="math inline">\(\hat{\beta}\)</span>.</p></li>
+<li><p>Explain why this does not contradict the BLUE property of OLS.</p></li>
+</ol></li>
+<li><p>Suppose that <span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> is any linear unbiased estimator and that Gauss–Markov gives</p>
+<p><span class="math display">\[
+\mathbb{V}
+\left[
+\tilde{\boldsymbol{\beta}}
+\right]
+-
+\mathbb{V}
 \left[
 \hat{\boldsymbol{\beta}}
 \right]
+\succeq
+\mathbf{0}.
 \]</span></p>
-<p>under this modified error structure. Compare the theoretical bias with the simulation results.</p></li>
-<li><p>Use R to investigate what happens when the errors are uncorrelated but heteroskedastic. For example, generate errors satisfying</p>
+<p>Let <span class="math inline">\(\mathbf{a}\in\mathbb{R}^{p+1}\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Show that</li>
+</ol>
+<p><span class="math display">\[
+\mathbb{V}
+\left[
+\mathbf{a}&#39;\hat{\boldsymbol{\beta}}
+\right]
+\leq
+\mathbb{V}
+\left[
+\mathbf{a}&#39;\tilde{\boldsymbol{\beta}}
+\right].
+\]</span></p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>Explain what this result means when <span class="math inline">\(\mathbf{a}\)</span> selects a single coefficient.</p></li>
+<li><p>Explain what it means when <span class="math inline">\(\mathbf{a}\)</span> defines a contrast involving several coefficients.</p></li>
+</ol></li>
+<li><p>Use R to investigate heteroskedastic errors.</p>
+<p>Fix <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span>, and generate errors satisfying</p>
 <p><span class="math display">\[
 \mathbb{E}[\mathbf{e}]
 =
@@ -4524,329 +4659,104 @@ n-\operatorname{rank}(\mathbf{X}).
 \sigma_1^2,\ldots,\sigma_n^2
 \right),
 \]</span></p>
-<p>with unequal variances.</p>
-<p>Determine empirically whether <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> remains unbiased. Then compare the empirical covariance matrix of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> with</p>
+<p>where the variances are not equal.</p>
+<p>Use repeated simulation to investigate:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>whether <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> remains unbiased;</p></li>
+<li><p>whether its covariance matrix equals</p></li>
+</ol>
 <p><span class="math display">\[
 \sigma^2(\mathbf{X}&#39;\mathbf{X})^{-1}
 \]</span></p>
-<p>for any single choice of <span class="math inline">\(\sigma^2\)</span>. Explain which conclusion from the chapter survives and which one does not.</p></li>
-<li><p>Under the variance assumption, prove that</p>
+<p>for a single value of <span class="math inline">\(\sigma^2\)</span>;</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>which conclusions from the mean and variance assumptions remain valid and which fail.</li>
+</ol></li>
+<li><p>Suppose that <span class="math inline">\(\mathbf{X}\)</span> has rank <span class="math inline">\(r\)</span>. You may use</p>
 <p><span class="math display">\[
-\mathbb{C}
+\mathbb{E}
 \left[
-\hat{\mathbf{e}},
-\hat{\mathbf{y}}
+\hat{\mathbf{e}}
 \right]
 =
 \mathbf{0}
 \]</span></p>
-<p>using only</p>
-<p><span class="math display">\[
-\hat{\mathbf{e}}
-=
-(\mathbf{I}-\mathbf{H})\mathbf{y},
-\qquad
-\hat{\mathbf{y}}
-=
-\mathbf{H}\mathbf{y},
-\]</span></p>
-<p>together with the symmetry and idempotence of <span class="math inline">\(\mathbf{H}\)</span>.</p>
-<p>Explain why this result is not the same statement as</p>
-<p><span class="math display">\[
-\hat{\mathbf{e}}&#39;
-\hat{\mathbf{y}}
-=
-0.
-\]</span></p></li>
-<li><p>Prove that</p>
-<p><span class="math display">\[
-\mathbb{C}
-\left[
-\hat{\mathbf{e}},
-\hat{\boldsymbol{\beta}}
-\right]
-=
-\mathbf{0}.
-\]</span></p>
-<p>Your proof should make explicit use of the identity</p>
-<p><span class="math display">\[
-(\mathbf{I}-\mathbf{H})\mathbf{X}
-=
-\mathbf{0}.
-\]</span></p>
-<p>Explain how this identity connects the projection geometry of least squares to the probabilistic result.</p></li>
-<li><p>Construct two random variables <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> that are uncorrelated but not independent. One possible starting point is to let <span class="math inline">\(U\)</span> have a distribution symmetric around zero and define <span class="math inline">\(V\)</span> as a nonlinear function of <span class="math inline">\(U\)</span>.</p>
-<p>Verify mathematically that</p>
-<p><span class="math display">\[
-\mathbb{C}[U,V]
-=
-0
-\]</span></p>
-<p>while <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> are dependent.</p>
-<p>Explain why this example is relevant to the distinction between the variance assumptions in this chapter and the stronger assumptions introduced later.</p></li>
-<li><p>Let</p>
-<p><span class="math display">\[
-\tilde{\boldsymbol{\beta}}
-=
-\mathbf{A}\mathbf{y}
-\]</span></p>
-<p>be any linear unbiased estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span>, and define</p>
-<p><span class="math display">\[
-\mathbf{D}
-=
-\mathbf{A}
--
-(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;.
-\]</span></p>
-<p>Prove that unbiasedness for every</p>
-<p><span class="math display">\[
-\boldsymbol{\beta}
-\in
-\mathbb{R}^{p+1}
-\]</span></p>
-<p>implies</p>
-<p><span class="math display">\[
-\mathbf{D}\mathbf{X}
-=
-\mathbf{0}.
-\]</span></p>
-<p>Then use this result to prove</p>
-<p><span class="math display">\[
-\mathbb{V}
-\left[
-\tilde{\boldsymbol{\beta}}
-\right]
--
-\mathbb{V}
-\left[
-\hat{\boldsymbol{\beta}}
-\right]
-=
-\sigma^2\mathbf{D}\mathbf{D}&#39;.
-\]</span></p>
-<p>Conclude the Gauss–Markov covariance ordering.</p></li>
-<li><p>Consider the intercept-only model</p>
-<p><span class="math display">\[
-y_i
-=
-\beta_0
-+
-e_i,
-\qquad
-i=1,2,3,
-\]</span></p>
-<p>with</p>
-<p><span class="math display">\[
-\mathbb{E}[\mathbf{e}]
-=
-\mathbf{0},
-\qquad
-\mathbb{V}[\mathbf{e}]
-=
-\sigma^2\mathbf{I}.
-\]</span></p>
-<p>The OLS estimator is</p>
-<p><span class="math display">\[
-\hat{\beta}_0
-=
-\frac{y_1+y_2+y_3}{3}.
-\]</span></p>
-<p>Consider the alternative estimator</p>
-<p><span class="math display">\[
-\tilde{\beta}_0
-=
-\frac{y_1+y_2}{2}.
-\]</span></p>
-<p>Show that both estimators are linear and unbiased. Compute their variances and verify the Gauss–Markov conclusion directly.</p></li>
-<li><p>Use R to simulate the setting from the previous exercise. For a fixed value of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\sigma^2\)</span>, generate many independent datasets and calculate both</p>
-<p><span class="math display">\[
-\hat{\beta}_0
-\]</span></p>
 <p>and</p>
 <p><span class="math display">\[
-\tilde{\beta}_0.
-\]</span></p>
-<p>Estimate their empirical variances and MSEs. Compare the simulation results with the theoretical values obtained in the previous exercise.</p></li>
-<li><p>Let <span class="math inline">\(\tilde{\boldsymbol{\beta}}\)</span> be any estimator of <span class="math inline">\(\boldsymbol{\beta}\)</span> with finite second moments. Starting from</p>
-<p><span class="math display">\[
-\tilde{\boldsymbol{\beta}}
--
-\boldsymbol{\beta}
+\mathbb{V}
+\left[
+\hat{\mathbf{e}}
+\right]
 =
-\tilde{\boldsymbol{\beta}}
--
+\sigma^2(\mathbf{I}-\mathbf{H}).
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li>Show that</li>
+</ol>
+<p><span class="math display">\[
 \mathbb{E}
 \left[
-\tilde{\boldsymbol{\beta}}
+\hat{\mathbf{e}}&#39;
+\hat{\mathbf{e}}
 \right]
-+
-\operatorname{Bias}
-\left(
-\tilde{\boldsymbol{\beta}}
-\right),
-\]</span></p>
-<p>prove the vector bias–variance decomposition</p>
-<p><span class="math display">\[
-\operatorname{MSE}
-\left(
-\tilde{\boldsymbol{\beta}}
-\right)
 =
 \operatorname{tr}
 \left(
 \mathbb{V}
 \left[
-\tilde{\boldsymbol{\beta}}
-\right]
-\right)
-+
-\left\|
-\operatorname{Bias}
-\left(
-\tilde{\boldsymbol{\beta}}
-\right)
-\right\|^2.
-\]</span></p></li>
-<li><p>Two estimators of</p>
-<p><span class="math display">\[
-\boldsymbol{\beta}
-\in
-\mathbb{R}^2
-\]</span></p>
-<p>have the following properties:</p>
-<p><span class="math display">\[
-\operatorname{Bias}
-\left(
-\tilde{\boldsymbol{\beta}}_1
-\right)
-=
-\mathbf{0},
-\qquad
-\mathbb{V}
-\left[
-\tilde{\boldsymbol{\beta}}_1
-\right]
-=
-\begin{pmatrix}
-4 &amp; 0\\
-0 &amp; 4
-\end{pmatrix},
-\]</span></p>
-<p>while</p>
-<p><span class="math display">\[
-\operatorname{Bias}
-\left(
-\tilde{\boldsymbol{\beta}}_2
-\right)
-=
-\begin{pmatrix}
-1\\
-1
-\end{pmatrix},
-\qquad
-\mathbb{V}
-\left[
-\tilde{\boldsymbol{\beta}}_2
-\right]
-=
-\begin{pmatrix}
-2 &amp; 0\\
-0 &amp; 2
-\end{pmatrix}.
-\]</span></p>
-<p>Compute the MSE of both estimators.</p>
-<p>Which estimator has smaller MSE? Explain why this example does not contradict the Gauss–Markov theorem.</p></li>
-<li><p>Using</p>
-<p><span class="math display">\[
-\mathbb{E}
-\left[
 \hat{\mathbf{e}}
 \right]
-=
-\mathbf{0}
-\]</span></p>
-<p>and</p>
-<p><span class="math display">\[
-\mathbb{V}
-\left[
-\hat{\mathbf{e}}
-\right]
-=
-\sigma^2
-(\mathbf{I}-\mathbf{H}),
-\]</span></p>
-<p>derive directly that</p>
-<p><span class="math display">\[
-\mathbb{E}
-\left[
-\hat{\mathbf{e}}&#39;
-\hat{\mathbf{e}}
-\right]
-=
-\sigma^2
-\left(
-n-\operatorname{rank}(\mathbf{X})
 \right).
 \]</span></p>
-<p>Your derivation should explicitly use the trace of the covariance matrix.</p></li>
-<li><p>Prove that</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Hence show that</li>
+</ol>
 <p><span class="math display">\[
-\operatorname{rank}
-(\mathbf{I}-\mathbf{H})
-=
-n-\operatorname{rank}(\mathbf{X}).
-\]</span></p>
-<p>Interpret both sides geometrically.</p>
-<p>Explain why this quantity is the natural residual degrees of freedom and why, for a full-column-rank model with an intercept and <span class="math inline">\(p\)</span> explanatory variables, it becomes</p>
-<p><span class="math display">\[
-n-p-1.
-\]</span></p></li>
-<li><p>A regression model has <span class="math inline">\(n=8\)</span> observations and two explanatory variables in addition to an intercept. The design matrix has full column rank. Suppose that the fitted residual vector is</p>
-<p><span class="math display">\[
+\mathbb{E}
+\left[
+\hat{\mathbf{e}}&#39;
 \hat{\mathbf{e}}
+\right]
 =
-\begin{pmatrix}
-1\\
--1\\
-2\\
--2\\
-1\\
-0\\
--1\\
-0
-\end{pmatrix}.
+\sigma^2(n-r).
 \]</span></p>
-<p>Compute</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Interpret <span class="math inline">\(n-r\)</span> geometrically.</li>
+</ol></li>
+<li><p>A regression model has <span class="math inline">\(n=10\)</span> observations and three explanatory variables in addition to an intercept. Assume that <span class="math inline">\(\mathbf{X}\)</span> has full column rank. The fitted residuals satisfy</p>
 <p><span class="math display">\[
 \hat{\mathbf{e}}&#39;
-\hat{\mathbf{e}},
+\hat{\mathbf{e}}
+=
+24.
 \]</span></p>
-<p>the residual degrees of freedom, and the unbiased estimate <span class="math inline">\(\hat{\sigma}^2\)</span>.</p>
-<p>Compare this estimate with the quantity obtained by dividing the residual sum of squares by <span class="math inline">\(n\)</span>. Explain the source of the difference.</p></li>
-<li><p>Use R to verify empirically the unbiasedness of</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Determine <span class="math inline">\(\operatorname{rank}(\mathbf{X})\)</span>.</p></li>
+<li><p>Determine the residual degrees of freedom.</p></li>
+<li><p>Compute the unbiased estimator <span class="math inline">\(\hat{\sigma}^2\)</span>.</p></li>
+<li><p>Suppose instead that someone estimates <span class="math inline">\(\sigma^2\)</span> using</p></li>
+</ol>
 <p><span class="math display">\[
-\hat{\sigma}^2
+\frac{\hat{\mathbf{e}}&#39;\hat{\mathbf{e}}}{n}.
+\]</span></p>
+<p>Compute this value and explain why the two estimates differ.</p></li>
+<li><p>Let</p>
+<p><span class="math display">\[
+\tilde{\sigma}^2
 =
 \frac{
 \hat{\mathbf{e}}&#39;
 \hat{\mathbf{e}}
-}{
-n-\operatorname{rank}(\mathbf{X})
-}.
+}{n}.
 \]</span></p>
-<p>Use a fixed full-column-rank design matrix and generate errors from a non-Normal distribution satisfying</p>
-<p><span class="math display">\[
-\mathbb{E}[\mathbf{e}]
-=
-\mathbf{0},
-\qquad
-\mathbb{V}[\mathbf{e}]
-=
-\sigma^2\mathbf{I}.
-\]</span></p>
-<p>Repeat the experiment many times and compare the empirical mean of <span class="math inline">\(\hat{\sigma}^2\)</span> with the true <span class="math inline">\(\sigma^2\)</span>.</p>
-<p>Explain why Normality is unnecessary for the result being investigated.</p></li>
-<li><p>In the same simulation setting, compare the estimators</p>
+<p>Suppose that <span class="math inline">\(\mathbf{X}\)</span> has rank <span class="math inline">\(r\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Find <span class="math inline">\(\mathbb{E}[\tilde{\sigma}^2]\)</span>.</p></li>
+<li><p>Find the bias of <span class="math inline">\(\tilde{\sigma}^2\)</span>.</p></li>
+<li><p>Is the estimator positively or negatively biased?</p></li>
+<li><p>Explain why the magnitude of the bias increases as the number of fitted parameters increases relative to <span class="math inline">\(n\)</span>.</p></li>
+</ol></li>
+<li><p>Use R to compare</p>
 <p><span class="math display">\[
 \hat{\sigma}^2
 =
@@ -4857,26 +4767,124 @@ n-\operatorname{rank}(\mathbf{X})
 n-\operatorname{rank}(\mathbf{X})
 }
 \]</span></p>
-<p>and</p>
+<p>with</p>
 <p><span class="math display">\[
 \tilde{\sigma}^2
 =
 \frac{
 \hat{\mathbf{e}}&#39;
 \hat{\mathbf{e}}
-}{
-n
-}.
+}{n}.
 \]</span></p>
-<p>Estimate their biases by simulation. Before simulating, derive the exact expectation of <span class="math inline">\(\tilde{\sigma}^2\)</span> and determine the direction of its bias.</p></li>
-<li><p>Use R to investigate the relationship between leverage and variability. Construct a design matrix containing observations with noticeably different leverages. Under</p>
+<p>Generate errors from a non-Normal distribution satisfying the mean and variance assumptions.</p>
+<p>Estimate the bias of both estimators using repeated simulation and compare the results with the theoretical expectations.</p></li>
+<li><p>Let <span class="math inline">\(\mathbf{H}\)</span> be the hat matrix for a design matrix <span class="math inline">\(\mathbf{X}\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Identify the subspace onto which <span class="math inline">\(\mathbf{H}\)</span> projects.</p></li>
+<li><p>Identify the subspace onto which <span class="math inline">\(\mathbf{I}-\mathbf{H}\)</span> projects.</p></li>
+<li><p>Show that</p></li>
+</ol>
 <p><span class="math display">\[
+\operatorname{rank}(\mathbf{I}-\mathbf{H})
+=
+n-\operatorname{rank}(\mathbf{X}).
+\]</span></p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li><p>Explain why this quantity is called the residual degrees of freedom.</p></li>
+<li><p>For a model containing an intercept and <span class="math inline">\(p\)</span> explanatory variables, give the residual degrees of freedom when <span class="math inline">\(\mathbf{X}\)</span> has full column rank.</p></li>
+</ol></li>
+<li><p>Consider estimators of <span class="math inline">\(\sigma^2\)</span> having the form</p>
+<p><span class="math display">\[
+\tilde{\sigma}^2
+=
+a
+\hat{\mathbf{e}}&#39;
+\hat{\mathbf{e}},
+\]</span></p>
+<p>where <span class="math inline">\(a\)</span> is a constant scalar.</p>
+<p>Suppose that</p>
+<p><span class="math display">\[
+\operatorname{rank}(\mathbf{X})
+=
+r.
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Find <span class="math inline">\(\mathbb{E}[\tilde{\sigma}^2]\)</span>.</p></li>
+<li><p>Determine the value of <span class="math inline">\(a\)</span> that makes the estimator unbiased.</p></li>
+<li><p>Show that this value of <span class="math inline">\(a\)</span> is unique among estimators of this form.</p></li>
+<li><p>Explain why this does not imply that <span class="math inline">\(\hat{\sigma}^2\)</span> is the only possible unbiased estimator of <span class="math inline">\(\sigma^2\)</span>.</p></li>
+</ol></li>
+<li><p>For each of the following situations, state whether OLS is necessarily unbiased. Justify your answer.</p>
+<ol style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><span class="math display">\[
+\mathbb{E}[\mathbf{e}]
+=
+\mathbf{0},
+\qquad
 \mathbb{V}[\mathbf{e}]
 =
-\sigma^2\mathbf{I},
+\sigma^2\mathbf{I}.
 \]</span></p>
-<p>repeatedly generate responses from the same fixed design and record <span class="math inline">\(\hat{y}_i\)</span> and <span class="math inline">\(\hat{e}_i\)</span> for each observation.</p>
-<p>Estimate their variances across simulations and compare them with</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><span class="math display">\[
+\mathbb{E}[\mathbf{e}]
+=
+\mathbf{0},
+\qquad
+\mathbb{V}[\mathbf{e}]
+=
+\boldsymbol{\Sigma}.
+\]</span></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><span class="math display">\[
+\mathbb{E}[\mathbf{e}]
+=
+\boldsymbol{\mu}_e
+\neq
+\mathbf{0},
+\qquad
+\mathbf{X}&#39;\boldsymbol{\mu}_e
+=
+\mathbf{0}.
+\]</span></p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p><span class="math display">\[
+\mathbb{E}[\mathbf{e}]
+=
+\boldsymbol{\mu}_e,
+\qquad
+\mathbf{X}&#39;\boldsymbol{\mu}_e
+\neq
+\mathbf{0}.
+\]</span></p></li>
+<li><p>Use R to investigate the relationship between leverage and variability.</p>
+<p>Construct a fixed design matrix with observations having noticeably different leverage values. Repeatedly generate responses satisfying</p>
+<p><span class="math display">\[
+\mathbb{E}[\mathbf{e}]
+=
+\mathbf{0},
+\qquad
+\mathbb{V}[\mathbf{e}]
+=
+\sigma^2\mathbf{I}.
+\]</span></p>
+<p>For each observation, estimate across simulations</p>
+<p><span class="math display">\[
+\mathbb{V}[\hat{y}_i]
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\mathbb{V}[\hat{e}_i].
+\]</span></p>
+<p>Compare the empirical results with</p>
 <p><span class="math display">\[
 \sigma^2h_{ii}
 \]</span></p>
@@ -4884,26 +4892,29 @@ n
 <p><span class="math display">\[
 \sigma^2(1-h_{ii}).
 \]</span></p>
-<p>Describe how the empirical behavior changes as <span class="math inline">\(h_{ii}\)</span> increases.</p></li>
-<li><p>For each of the following error structures, determine which of the conclusions below are guaranteed to remain valid. Justify every answer mathematically.</p>
-<p>Conclusions:</p>
+<p>Explain how leverage redistributes variability between the fitted and residual components.</p></li>
+<li><p>Let <span class="math inline">\(U\)</span> be a random variable satisfying</p>
 <p><span class="math display">\[
-\mathbb{E}
-\left[
-\hat{\boldsymbol{\beta}}
-\right]
+\mathbb{P}(U=-1)
 =
-\boldsymbol{\beta},
+\mathbb{P}(U=0)
+=
+\mathbb{P}(U=1)
+=
+\frac{1}{3},
 \]</span></p>
+<p>and define</p>
 <p><span class="math display">\[
-\mathbb{V}
-\left[
-\hat{\boldsymbol{\beta}}
-\right]
+V
 =
-\sigma^2
-(\mathbf{X}&#39;\mathbf{X})^{-1},
+U^2.
 \]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Compute <span class="math inline">\(\mathbb{E}[U]\)</span> and <span class="math inline">\(\mathbb{E}[V]\)</span>.</p></li>
+<li><p>Compute <span class="math inline">\(\mathbb{C}[U,V]\)</span>.</p></li>
+<li><p>Are <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> independent? Justify your answer.</p></li>
+<li><p>Explain why this example is relevant to the statement</p></li>
+</ol>
 <p><span class="math display">\[
 \mathbb{C}
 \left[
@@ -4911,37 +4922,126 @@ n
 \hat{\boldsymbol{\beta}}
 \right]
 =
-\mathbf{0},
-\]</span></p>
-<p>the Gauss–Markov BLUE conclusion, and</p>
-<p><span class="math display">\[
-\mathbb{E}
-\left[
-\hat{\sigma}^2
-\right]
-=
-\sigma^2
-\]</span></p>
-<p>for the estimator developed in this chapter.</p>
-<p>Consider the following cases:</p>
-<ol style="list-style-type: lower-alpha">
-<li><p><span class="math inline">\(\mathbb{E}[\mathbf{e}]=\mathbf{0}\)</span> and <span class="math inline">\(\mathbb{V}[\mathbf{e}]=\sigma^2\mathbf{I}\)</span>.</p></li>
-<li><p><span class="math inline">\(\mathbb{E}[\mathbf{e}]\neq\mathbf{0}\)</span> and <span class="math inline">\(\mathbb{V}[\mathbf{e}]=\sigma^2\mathbf{I}\)</span>.</p></li>
-<li><p><span class="math inline">\(\mathbb{E}[\mathbf{e}]=\mathbf{0}\)</span> and</p></li>
-</ol>
+\mathbf{0}.
+\]</span></p></li>
+<li><p>Suppose now that</p>
 <p><span class="math display">\[
 \mathbb{V}[\mathbf{e}]
 =
-\operatorname{diag}
-\left(
-\sigma_1^2,\ldots,\sigma_n^2
-\right),
+\boldsymbol{\Sigma}
 \]</span></p>
-<p>with unequal diagonal entries.</p>
-<ol start="4" style="list-style-type: lower-alpha">
-<li><span class="math inline">\(\mathbb{E}[\mathbf{e}]=\mathbf{0}\)</span> and <span class="math inline">\(\mathbb{V}[\mathbf{e}]=\boldsymbol{\Sigma}\)</span>, where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> has nonzero off-diagonal elements.</li>
+<p>instead of <span class="math inline">\(\sigma^2\mathbf{I}\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Show that</li>
 </ol>
-<p>Use this exercise to identify precisely which conclusions depend on the mean assumption, which depend on the variance assumption, and which require both.</p></li>
+<p><span class="math display">\[
+\mathbb{C}
+\left[
+\hat{\mathbf{e}},
+\hat{\boldsymbol{\beta}}
+\right]
+=
+(\mathbf{I}-\mathbf{H})
+\boldsymbol{\Sigma}
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}.
+\]</span></p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Explain why this expression is zero when</li>
+</ol>
+<p><span class="math display">\[
+\boldsymbol{\Sigma}
+=
+\sigma^2\mathbf{I}.
+\]</span></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><p>Is it necessarily zero for an arbitrary <span class="math inline">\(\boldsymbol{\Sigma}\)</span>? Explain.</p></li>
+<li><p>Identify the geometric identity that produces the zero cross-covariance under the variance assumption.</p></li>
+</ol></li>
+<li><p>Consider the intercept-only model with two observations,</p>
+<p><span class="math display">\[
+\mathbf{X}
+=
+\begin{pmatrix}
+1\\
+1
+\end{pmatrix},
+\]</span></p>
+<p>and suppose</p>
+<p><span class="math display">\[
+\mathbb{V}[\mathbf{e}]
+=
+\begin{pmatrix}
+1 &amp; 0\\
+0 &amp; 4
+\end{pmatrix}.
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Compute the hat matrix <span class="math inline">\(\mathbf{H}\)</span>.</p></li>
+<li><p>Verify that</p></li>
+</ol>
+<p><span class="math display">\[
+\hat{\mathbf{e}}&#39;
+\hat{\mathbf{y}}
+=
+0
+\]</span></p>
+<p>for every possible response vector.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Compute</li>
+</ol>
+<p><span class="math display">\[
+\mathbb{C}
+\left[
+\hat{\mathbf{e}},
+\hat{\mathbf{y}}
+\right].
+\]</span></p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li><p>Is this cross-covariance equal to <span class="math inline">\(\mathbf{0}\)</span>?</p></li>
+<li><p>Explain why this example shows that deterministic orthogonality and zero cross-covariance are different properties.</p></li>
+</ol></li>
+<li><p>Use R to investigate correlated errors.</p>
+<p>Fix a full-column-rank design matrix and generate errors satisfying</p>
+<p><span class="math display">\[
+\mathbb{E}[\mathbf{e}]
+=
+\mathbf{0},
+\]</span></p>
+<p>but with a covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span> having nonzero off-diagonal elements.</p>
+<p>Using repeated simulation:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>investigate whether OLS remains unbiased;</p></li>
+<li><p>estimate the covariance matrix of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>;</p></li>
+<li><p>compare the empirical covariance matrix with both</p></li>
+</ol>
+<p><span class="math display">\[
+\sigma^2(\mathbf{X}&#39;\mathbf{X})^{-1}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\boldsymbol{\Sigma}
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1};
+\]</span></p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>investigate whether</li>
+</ol>
+<p><span class="math display">\[
+\mathbb{C}
+\left[
+\hat{\mathbf{e}},
+\hat{\boldsymbol{\beta}}
+\right]
+=
+\mathbf{0}
+\]</span></p>
+<p>continues to hold;</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>use your results to distinguish the consequences of the mean assumption from those of the variance assumption.</li>
+</ol></li>
 </ol>
 
 </div>

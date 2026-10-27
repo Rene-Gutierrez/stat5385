@@ -4697,12 +4697,6 @@ The algebra and geometry of least squares therefore remain unchanged throughout 
 
 
 
-
-
-
-
-
-
 ## Exercises {#mva-exercises}
 
 1. Consider the regression model
@@ -4715,99 +4709,47 @@ The algebra and geometry of least squares therefore remain unchanged throughout 
    \mathbf{e},
    $$
 
-   where $\mathbf{X}$ and $\boldsymbol{\beta}$ are treated as fixed. Prove directly that
+   where $\mathbf{X}$ is fixed and has full column rank. Suppose that
 
    $$
    \mathbb{E}[\mathbf{e}]
    =
-   \mathbf{0}
-   \quad\Longleftrightarrow\quad
-   \mathbb{E}[\mathbf{y}]
-   =
-   \mathbf{X}\boldsymbol{\beta}.
+   \boldsymbol{\mu}_e,
    $$
 
-   Explain why this equivalence gives $\mathbf{X}\boldsymbol{\beta}$ a statistical interpretation that it did not have in the deterministic treatment of least squares.
+   where $\boldsymbol{\mu}_e$ is not necessarily $\mathbf{0}$.
 
-2. Under the same fixed-design regression model, prove that
+   (a) Find $\mathbb{E}[\mathbf{y}]$.
 
-   $$
-   \mathbb{V}[\mathbf{e}]
-   =
-   \sigma^2\mathbf{I}
-   \quad\Longleftrightarrow\quad
-   \mathbb{V}[\mathbf{y}]
-   =
-   \sigma^2\mathbf{I}.
-   $$
+   (b) Find $\mathbb{E}[\hat{\boldsymbol{\beta}}]$.
 
-   Compare this equivalence with the corresponding equivalence involving the means. In particular, explain why adding the fixed vector $\mathbf{X}\boldsymbol{\beta}$ affects the mean but not the covariance matrix.
+   (c) Give a necessary and sufficient condition on $\boldsymbol{\mu}_e$ for $\hat{\boldsymbol{\beta}}$ to remain unbiased.
 
-3. Suppose that $\mathbf{X}$ has full column rank and
+   (d) Is $\mathbb{E}[\mathbf{e}]=\mathbf{0}$ necessary for unbiasedness of OLS? Explain.
+
+2. Suppose that
 
    $$
    \mathbb{E}[\mathbf{e}]
    =
-   \mathbf{0}.
-   $$
-
-   Starting from
-
-   $$
-   \hat{\boldsymbol{\beta}}
-   =
-   (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y},
-   $$
-
-   derive
-
-   $$
-   \mathbb{E}
-   \left[
-   \hat{\boldsymbol{\beta}}
-   \right],
+   \mathbf{0},
    \qquad
-   \mathbb{E}
-   \left[
-   \hat{\mathbf{y}}
-   \right],
-   \qquad
-   \mathbb{E}
-   \left[
-   \hat{\mathbf{e}}
-   \right].
-   $$
-
-   For each result, identify exactly where the mean assumption is used.
-
-4. Consider the more general covariance assumption
-
-   $$
    \mathbb{V}[\mathbf{e}]
    =
    \boldsymbol{\Sigma},
    $$
 
-   where $\boldsymbol{\Sigma}$ is any finite covariance matrix. Treating $\mathbf{X}$ as fixed, derive
+   where $\boldsymbol{\Sigma}$ is an arbitrary covariance matrix.
 
-   $$
-   \mathbb{V}
-   \left[
-   \hat{\boldsymbol{\beta}}
-   \right],
-   \qquad
-   \mathbb{V}
-   \left[
-   \hat{\mathbf{y}}
-   \right],
-   \qquad
-   \mathbb{V}
-   \left[
-   \hat{\mathbf{e}}
-   \right]
-   $$
+   (a) Derive $\mathbb{V}[\mathbf{y}]$.
 
-   in terms of $\boldsymbol{\Sigma}$. Show that the results from this chapter are obtained as the special case
+   (b) Derive $\mathbb{V}[\hat{\boldsymbol{\beta}}]$.
+
+   (c) Derive $\mathbb{V}[\hat{\mathbf{y}}]$.
+
+   (d) Derive $\mathbb{V}[\hat{\mathbf{e}}]$.
+
+   (e) Show how the formulas reduce to the results from this chapter when
 
    $$
    \boldsymbol{\Sigma}
@@ -4815,23 +4757,53 @@ The algebra and geometry of least squares therefore remain unchanged throughout 
    \sigma^2\mathbf{I}.
    $$
 
-5. Under the variance assumption, show that
+3. Consider the design matrix
 
    $$
-   \mathbb{V}[\hat{y}_i]
+   \mathbf{X}
    =
-   \sigma^2h_{ii}
+   \begin{pmatrix}
+   1 & -1\\
+   1 & 0\\
+   1 & 1
+   \end{pmatrix}
    $$
 
-   and
+   and suppose that
 
    $$
-   \mathbb{V}[\hat{e}_i]
+   \mathbb{V}[\mathbf{e}]
    =
-   \sigma^2(1-h_{ii}).
+   9\mathbf{I}.
    $$
 
-   Hence prove that
+   (a) Compute $(\mathbf{X}'\mathbf{X})^{-1}$.
+
+   (b) Compute $\mathbb{V}[\hat{\boldsymbol{\beta}}]$.
+
+   (c) Compute the hat matrix $\mathbf{H}$.
+
+   (d) Find $\mathbb{V}[\hat{y}_i]$ and $\mathbb{V}[\hat{e}_i]$ for each observation.
+
+   (e) Which observations have the largest leverage? Explain how this affects the variability of their fitted values and residuals.
+
+4. Suppose that for a particular observation,
+
+   $$
+   h_{ii}
+   =
+   0.8,
+   $$
+
+   and $\sigma^2=25$.
+
+   (a) Compute $\mathbb{V}[y_i]$.
+
+   (b) Compute $\mathbb{V}[\hat{y}_i]$.
+
+   (c) Compute $\mathbb{V}[\hat{e}_i]$.
+
+   (d) Verify that
 
    $$
    \mathbb{V}[\hat{y}_i]
@@ -4841,119 +4813,302 @@ The algebra and geometry of least squares therefore remain unchanged throughout 
    \mathbb{V}[y_i].
    $$
 
-   Explain how this result gives leverage $h_{ii}$ a probabilistic interpretation in addition to its geometric interpretation.
+   (e) Repeat parts (b)--(d) for an observation with $h_{jj}=0.2$ and compare the two observations.
 
-6. Consider
+5. Use R to investigate the unbiasedness of OLS without assuming Normality.
+
+   Choose a fixed full-column-rank design matrix $\mathbf{X}$ and a coefficient vector $\boldsymbol{\beta}$. Generate independent errors from a non-Normal distribution satisfying
 
    $$
-   \mathbf{X}
+   \mathbb{E}[\mathbf{e}]
    =
-   \begin{pmatrix}
-   1 & -1\\
-   1 & 0\\
-   1 & 1
-   \end{pmatrix}.
-   $$
-
-   Compute $\mathbf{X}'\mathbf{X}$, $(\mathbf{X}'\mathbf{X})^{-1}$, and the hat matrix $\mathbf{H}$. Assuming
-
-   $$
+   \mathbf{0},
+   \qquad
    \mathbb{V}[\mathbf{e}]
    =
-   4\mathbf{I},
+   \sigma^2\mathbf{I}.
    $$
 
-   compute
-
-   $$
-   \mathbb{V}
-   \left[
-   \hat{\boldsymbol{\beta}}
-   \right],
-   \qquad
-   \mathbb{V}
-   \left[
-   \hat{\mathbf{y}}
-   \right],
-   \qquad
-   \mathbb{V}
-   \left[
-   \hat{\mathbf{e}}
-   \right].
-   $$
-
-   Identify the observations with the largest leverage and explain how this is reflected in the variances of their fitted values and residuals.
-
-7. Suppose that
-
-   $$
-   \mathbf{X}'\mathbf{X}
-   =
-   \begin{pmatrix}
-   5 & 0\\
-   0 & 10
-   \end{pmatrix}
-   $$
-
-   and $\sigma^2=20$.
-
-   Compute the covariance matrix of $\hat{\boldsymbol{\beta}}$. Then consider the linear combinations
-
-   $$
-   \hat{\beta}_0+\hat{\beta}_1
-   $$
-
-   and
-
-   $$
-   2\hat{\beta}_0-\hat{\beta}_1.
-   $$
-
-   Compute their variances and explain how they are obtained from the covariance matrix of $\hat{\boldsymbol{\beta}}$.
-
-8. Use R to investigate the unbiasedness of OLS without assuming Normality. Fix a full-column-rank design matrix $\mathbf{X}$ and a coefficient vector $\boldsymbol{\beta}$. Generate independent errors from a centered Uniform distribution with variance $\sigma^2$, and form
+   Generate a large number of datasets from
 
    $$
    \mathbf{y}
    =
    \mathbf{X}\boldsymbol{\beta}
    +
-   \mathbf{e}.
+   \mathbf{e}
    $$
 
-   Repeat the experiment a large number of times and estimate
+   and calculate $\hat{\boldsymbol{\beta}}$ for each dataset.
+
+   Compare the empirical mean of the estimates with $\boldsymbol{\beta}$ and explain how the simulation illustrates the role of the mean assumption.
+
+6. Under the assumptions
 
    $$
-   \mathbb{E}
+   \mathbb{V}[\mathbf{e}]
+   =
+   \sigma^2\mathbf{I},
+   $$
+
+   consider
+
+   $$
+   \hat{\mathbf{y}}
+   =
+   \mathbf{H}\mathbf{y},
+   \qquad
+   \hat{\mathbf{e}}
+   =
+   (\mathbf{I}-\mathbf{H})\mathbf{y}.
+   $$
+
+   (a) Find
+
+   $$
+   \mathbb{C}
    \left[
-   \hat{\boldsymbol{\beta}}
+   \hat{\mathbf{e}},
+   \hat{\mathbf{y}}
    \right].
    $$
 
-   Compare the empirical mean of the OLS estimates with $\boldsymbol{\beta}$. Explain why this simulation is relevant to the assumptions of the chapter.
+   (b) Identify the property of $\mathbf{H}$ that makes the result equal to $\mathbf{0}$.
 
-9. Repeat the previous simulation, but generate errors satisfying
+   (c) Compare this result with
 
    $$
-   \mathbb{E}[e_i]
+   \hat{\mathbf{e}}'
+   \hat{\mathbf{y}}
    =
-   \mu_e
-   \neq
    0.
    $$
 
-   Investigate empirically the bias of $\hat{\boldsymbol{\beta}}$. Before running the simulation, derive theoretically
+   State clearly which result is deterministic and which result is probabilistic.
+
+7. Suppose that
 
    $$
-   \mathbb{E}
-   \left[
-   \hat{\boldsymbol{\beta}}
-   \right]
+   \mathbf{H}
+   =
+   \begin{pmatrix}
+   3/4 & 1/4 & 1/4 & -1/4\\
+   1/4 & 3/4 & -1/4 & 1/4\\
+   1/4 & -1/4 & 3/4 & 1/4\\
+   -1/4 & 1/4 & 1/4 & 3/4
+   \end{pmatrix}
    $$
 
-   under this modified error structure. Compare the theoretical bias with the simulation results.
+   is the hat matrix of a regression model and $\sigma^2=8$.
 
-10. Use R to investigate what happens when the errors are uncorrelated but heteroskedastic. For example, generate errors satisfying
+   (a) Determine $\mathbb{V}[\hat{\mathbf{y}}]$.
+
+   (b) Determine $\mathbb{V}[\hat{\mathbf{e}}]$.
+
+   (c) What is the variance of each residual?
+
+   (d) Determine the rank of $\mathbf{H}$ from its trace.
+
+   (e) Determine the dimension of the residual subspace.
+
+8. Consider the intercept-only model
+
+   $$
+   y_i
+   =
+   \beta_0
+   +
+   e_i,
+   \qquad
+   i=1,2,3,
+   $$
+
+   where
+
+   $$
+   \mathbb{E}[\mathbf{e}]
+   =
+   \mathbf{0},
+   \qquad
+   \mathbb{V}[\mathbf{e}]
+   =
+   \sigma^2\mathbf{I}.
+   $$
+
+   Consider the estimators
+
+   $$
+   \hat{\beta}_0
+   =
+   \frac{y_1+y_2+y_3}{3}
+   $$
+
+   and
+
+   $$
+   \tilde{\beta}_0
+   =
+   \frac{y_1+y_2}{2}.
+   $$
+
+   (a) Show that both estimators are linear.
+
+   (b) Show that both estimators are unbiased.
+
+   (c) Compute their variances.
+
+   (d) Which estimator is preferred according to the Gauss--Markov criterion?
+
+9. Use R to simulate the setting of Exercise 8.
+
+   Choose values of $\beta_0$ and $\sigma^2$, generate many independent samples, and calculate both estimators for every sample.
+
+   Compare:
+
+   $$
+   \mathbb{E}[\hat{\beta}_0],
+   \qquad
+   \mathbb{E}[\tilde{\beta}_0],
+   $$
+
+   their variances, and their MSEs using empirical estimates from the simulation.
+
+   Compare your results with the theoretical conclusions from Exercise 8.
+
+10. Suppose two estimators of
+
+    $$
+    \boldsymbol{\beta}
+    \in
+    \mathbb{R}^2
+    $$
+
+    have
+
+    $$
+    \operatorname{Bias}
+    \left(
+    \tilde{\boldsymbol{\beta}}_1
+    \right)
+    =
+    \mathbf{0},
+    \qquad
+    \mathbb{V}
+    \left[
+    \tilde{\boldsymbol{\beta}}_1
+    \right]
+    =
+    \begin{pmatrix}
+    5 & 1\\
+    1 & 3
+    \end{pmatrix},
+    $$
+
+    and
+
+    $$
+    \operatorname{Bias}
+    \left(
+    \tilde{\boldsymbol{\beta}}_2
+    \right)
+    =
+    \begin{pmatrix}
+    1\\
+    -1
+    \end{pmatrix},
+    \qquad
+    \mathbb{V}
+    \left[
+    \tilde{\boldsymbol{\beta}}_2
+    \right]
+    =
+    \begin{pmatrix}
+    2 & 0\\
+    0 & 2
+    \end{pmatrix}.
+    $$
+
+    (a) Compute the MSE of each estimator.
+
+    (b) Which estimator has the smaller MSE?
+
+    (c) Explain why your answer does not contradict the Gauss--Markov theorem.
+
+11. Let $\hat{\beta}$ be an unbiased scalar estimator of $\beta$ satisfying
+
+    $$
+    \mathbb{V}[\hat{\beta}]
+    =
+    v.
+    $$
+
+    Consider the estimator
+
+    $$
+    \tilde{\beta}
+    =
+    c\hat{\beta},
+    $$
+
+    where $c$ is a constant.
+
+    (a) Find the bias of $\tilde{\beta}$.
+
+    (b) Find its variance.
+
+    (c) Show that
+
+    $$
+    \operatorname{MSE}(\tilde{\beta})
+    =
+    c^2v
+    +
+    (c-1)^2\beta^2.
+    $$
+
+    (d) Give an example of values of $c$, $\beta$, and $v$ for which $\tilde{\beta}$ has smaller MSE than $\hat{\beta}$.
+
+    (e) Explain why this does not contradict the BLUE property of OLS.
+
+12. Suppose that $\tilde{\boldsymbol{\beta}}$ is any linear unbiased estimator and that Gauss--Markov gives
+
+    $$
+    \mathbb{V}
+    \left[
+    \tilde{\boldsymbol{\beta}}
+    \right]
+    -
+    \mathbb{V}
+    \left[
+    \hat{\boldsymbol{\beta}}
+    \right]
+    \succeq
+    \mathbf{0}.
+    $$
+
+    Let $\mathbf{a}\in\mathbb{R}^{p+1}$.
+
+    (a) Show that
+
+    $$
+    \mathbb{V}
+    \left[
+    \mathbf{a}'\hat{\boldsymbol{\beta}}
+    \right]
+    \leq
+    \mathbb{V}
+    \left[
+    \mathbf{a}'\tilde{\boldsymbol{\beta}}
+    \right].
+    $$
+
+    (b) Explain what this result means when $\mathbf{a}$ selects a single coefficient.
+
+    (c) Explain what it means when $\mathbf{a}$ defines a contrast involving several coefficients.
+
+13. Use R to investigate heteroskedastic errors.
+
+    Fix $\mathbf{X}$ and $\boldsymbol{\beta}$, and generate errors satisfying
 
     $$
     \mathbb{E}[\mathbf{e}]
@@ -4972,411 +5127,121 @@ The algebra and geometry of least squares therefore remain unchanged throughout 
     \right),
     $$
 
-    with unequal variances.
+    where the variances are not equal.
 
-    Determine empirically whether $\hat{\boldsymbol{\beta}}$ remains unbiased. Then compare the empirical covariance matrix of $\hat{\boldsymbol{\beta}}$ with
+    Use repeated simulation to investigate:
+
+    (a) whether $\hat{\boldsymbol{\beta}}$ remains unbiased;
+
+    (b) whether its covariance matrix equals
 
     $$
     \sigma^2(\mathbf{X}'\mathbf{X})^{-1}
     $$
 
-    for any single choice of $\sigma^2$. Explain which conclusion from the chapter survives and which one does not.
+    for a single value of $\sigma^2$;
 
-11. Under the variance assumption, prove that
+    (c) which conclusions from the mean and variance assumptions remain valid and which fail.
+
+14. Suppose that $\mathbf{X}$ has rank $r$. You may use
 
     $$
-    \mathbb{C}
+    \mathbb{E}
     \left[
-    \hat{\mathbf{e}},
-    \hat{\mathbf{y}}
+    \hat{\mathbf{e}}
     \right]
     =
     \mathbf{0}
     $$
 
-    using only
-
-    $$
-    \hat{\mathbf{e}}
-    =
-    (\mathbf{I}-\mathbf{H})\mathbf{y},
-    \qquad
-    \hat{\mathbf{y}}
-    =
-    \mathbf{H}\mathbf{y},
-    $$
-
-    together with the symmetry and idempotence of $\mathbf{H}$.
-
-    Explain why this result is not the same statement as
-
-    $$
-    \hat{\mathbf{e}}'
-    \hat{\mathbf{y}}
-    =
-    0.
-    $$
-
-12. Prove that
-
-    $$
-    \mathbb{C}
-    \left[
-    \hat{\mathbf{e}},
-    \hat{\boldsymbol{\beta}}
-    \right]
-    =
-    \mathbf{0}.
-    $$
-
-    Your proof should make explicit use of the identity
-
-    $$
-    (\mathbf{I}-\mathbf{H})\mathbf{X}
-    =
-    \mathbf{0}.
-    $$
-
-    Explain how this identity connects the projection geometry of least squares to the probabilistic result.
-
-13. Construct two random variables $U$ and $V$ that are uncorrelated but not independent. One possible starting point is to let $U$ have a distribution symmetric around zero and define $V$ as a nonlinear function of $U$.
-
-    Verify mathematically that
-
-    $$
-    \mathbb{C}[U,V]
-    =
-    0
-    $$
-
-    while $U$ and $V$ are dependent.
-
-    Explain why this example is relevant to the distinction between the variance assumptions in this chapter and the stronger assumptions introduced later.
-
-14. Let
-
-    $$
-    \tilde{\boldsymbol{\beta}}
-    =
-    \mathbf{A}\mathbf{y}
-    $$
-
-    be any linear unbiased estimator of $\boldsymbol{\beta}$, and define
-
-    $$
-    \mathbf{D}
-    =
-    \mathbf{A}
-    -
-    (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'.
-    $$
-
-    Prove that unbiasedness for every
-
-    $$
-    \boldsymbol{\beta}
-    \in
-    \mathbb{R}^{p+1}
-    $$
-
-    implies
-
-    $$
-    \mathbf{D}\mathbf{X}
-    =
-    \mathbf{0}.
-    $$
-
-    Then use this result to prove
-
-    $$
-    \mathbb{V}
-    \left[
-    \tilde{\boldsymbol{\beta}}
-    \right]
-    -
-    \mathbb{V}
-    \left[
-    \hat{\boldsymbol{\beta}}
-    \right]
-    =
-    \sigma^2\mathbf{D}\mathbf{D}'.
-    $$
-
-    Conclude the Gauss--Markov covariance ordering.
-
-15. Consider the intercept-only model
-
-    $$
-    y_i
-    =
-    \beta_0
-    +
-    e_i,
-    \qquad
-    i=1,2,3,
-    $$
-
-    with
-
-    $$
-    \mathbb{E}[\mathbf{e}]
-    =
-    \mathbf{0},
-    \qquad
-    \mathbb{V}[\mathbf{e}]
-    =
-    \sigma^2\mathbf{I}.
-    $$
-
-    The OLS estimator is
-
-    $$
-    \hat{\beta}_0
-    =
-    \frac{y_1+y_2+y_3}{3}.
-    $$
-
-    Consider the alternative estimator
-
-    $$
-    \tilde{\beta}_0
-    =
-    \frac{y_1+y_2}{2}.
-    $$
-
-    Show that both estimators are linear and unbiased. Compute their variances and verify the Gauss--Markov conclusion directly.
-
-16. Use R to simulate the setting from the previous exercise. For a fixed value of $\beta_0$ and $\sigma^2$, generate many independent datasets and calculate both
-
-    $$
-    \hat{\beta}_0
-    $$
-
     and
 
     $$
-    \tilde{\beta}_0.
-    $$
-
-    Estimate their empirical variances and MSEs. Compare the simulation results with the theoretical values obtained in the previous exercise.
-
-17. Let $\tilde{\boldsymbol{\beta}}$ be any estimator of $\boldsymbol{\beta}$ with finite second moments. Starting from
-
-    $$
-    \tilde{\boldsymbol{\beta}}
-    -
-    \boldsymbol{\beta}
+    \mathbb{V}
+    \left[
+    \hat{\mathbf{e}}
+    \right]
     =
-    \tilde{\boldsymbol{\beta}}
-    -
+    \sigma^2(\mathbf{I}-\mathbf{H}).
+    $$
+
+    (a) Show that
+
+    $$
     \mathbb{E}
     \left[
-    \tilde{\boldsymbol{\beta}}
+    \hat{\mathbf{e}}'
+    \hat{\mathbf{e}}
     \right]
-    +
-    \operatorname{Bias}
-    \left(
-    \tilde{\boldsymbol{\beta}}
-    \right),
-    $$
-
-    prove the vector bias--variance decomposition
-
-    $$
-    \operatorname{MSE}
-    \left(
-    \tilde{\boldsymbol{\beta}}
-    \right)
     =
     \operatorname{tr}
     \left(
     \mathbb{V}
     \left[
-    \tilde{\boldsymbol{\beta}}
-    \right]
-    \right)
-    +
-    \left\|
-    \operatorname{Bias}
-    \left(
-    \tilde{\boldsymbol{\beta}}
-    \right)
-    \right\|^2.
-    $$
-
-18. Two estimators of
-
-    $$
-    \boldsymbol{\beta}
-    \in
-    \mathbb{R}^2
-    $$
-
-    have the following properties:
-
-    $$
-    \operatorname{Bias}
-    \left(
-    \tilde{\boldsymbol{\beta}}_1
-    \right)
-    =
-    \mathbf{0},
-    \qquad
-    \mathbb{V}
-    \left[
-    \tilde{\boldsymbol{\beta}}_1
-    \right]
-    =
-    \begin{pmatrix}
-    4 & 0\\
-    0 & 4
-    \end{pmatrix},
-    $$
-
-    while
-
-    $$
-    \operatorname{Bias}
-    \left(
-    \tilde{\boldsymbol{\beta}}_2
-    \right)
-    =
-    \begin{pmatrix}
-    1\\
-    1
-    \end{pmatrix},
-    \qquad
-    \mathbb{V}
-    \left[
-    \tilde{\boldsymbol{\beta}}_2
-    \right]
-    =
-    \begin{pmatrix}
-    2 & 0\\
-    0 & 2
-    \end{pmatrix}.
-    $$
-
-    Compute the MSE of both estimators.
-
-    Which estimator has smaller MSE? Explain why this example does not contradict the Gauss--Markov theorem.
-
-19. Using
-
-    $$
-    \mathbb{E}
-    \left[
     \hat{\mathbf{e}}
     \right]
-    =
-    \mathbf{0}
-    $$
-
-    and
-
-    $$
-    \mathbb{V}
-    \left[
-    \hat{\mathbf{e}}
-    \right]
-    =
-    \sigma^2
-    (\mathbf{I}-\mathbf{H}),
-    $$
-
-    derive directly that
-
-    $$
-    \mathbb{E}
-    \left[
-    \hat{\mathbf{e}}'
-    \hat{\mathbf{e}}
-    \right]
-    =
-    \sigma^2
-    \left(
-    n-\operatorname{rank}(\mathbf{X})
     \right).
     $$
 
-    Your derivation should explicitly use the trace of the covariance matrix.
-
-20. Prove that
+    (b) Hence show that
 
     $$
-    \operatorname{rank}
-    (\mathbf{I}-\mathbf{H})
-    =
-    n-\operatorname{rank}(\mathbf{X}).
-    $$
-
-    Interpret both sides geometrically.
-
-    Explain why this quantity is the natural residual degrees of freedom and why, for a full-column-rank model with an intercept and $p$ explanatory variables, it becomes
-
-    $$
-    n-p-1.
-    $$
-
-21. A regression model has $n=8$ observations and two explanatory variables in addition to an intercept. The design matrix has full column rank. Suppose that the fitted residual vector is
-
-    $$
+    \mathbb{E}
+    \left[
+    \hat{\mathbf{e}}'
     \hat{\mathbf{e}}
+    \right]
     =
-    \begin{pmatrix}
-    1\\
-    -1\\
-    2\\
-    -2\\
-    1\\
-    0\\
-    -1\\
-    0
-    \end{pmatrix}.
+    \sigma^2(n-r).
     $$
 
-    Compute
+    (c) Interpret $n-r$ geometrically.
+
+15. A regression model has $n=10$ observations and three explanatory variables in addition to an intercept. Assume that $\mathbf{X}$ has full column rank. The fitted residuals satisfy
 
     $$
     \hat{\mathbf{e}}'
-    \hat{\mathbf{e}},
+    \hat{\mathbf{e}}
+    =
+    24.
     $$
 
-    the residual degrees of freedom, and the unbiased estimate $\hat{\sigma}^2$.
+    (a) Determine $\operatorname{rank}(\mathbf{X})$.
 
-    Compare this estimate with the quantity obtained by dividing the residual sum of squares by $n$. Explain the source of the difference.
+    (b) Determine the residual degrees of freedom.
 
-22. Use R to verify empirically the unbiasedness of
+    (c) Compute the unbiased estimator $\hat{\sigma}^2$.
+
+    (d) Suppose instead that someone estimates $\sigma^2$ using
 
     $$
-    \hat{\sigma}^2
+    \frac{\hat{\mathbf{e}}'\hat{\mathbf{e}}}{n}.
+    $$
+
+    Compute this value and explain why the two estimates differ.
+
+16. Let
+
+    $$
+    \tilde{\sigma}^2
     =
     \frac{
     \hat{\mathbf{e}}'
     \hat{\mathbf{e}}
-    }{
-    n-\operatorname{rank}(\mathbf{X})
-    }.
+    }{n}.
     $$
 
-    Use a fixed full-column-rank design matrix and generate errors from a non-Normal distribution satisfying
+    Suppose that $\mathbf{X}$ has rank $r$.
 
-    $$
-    \mathbb{E}[\mathbf{e}]
-    =
-    \mathbf{0},
-    \qquad
-    \mathbb{V}[\mathbf{e}]
-    =
-    \sigma^2\mathbf{I}.
-    $$
+    (a) Find $\mathbb{E}[\tilde{\sigma}^2]$.
 
-    Repeat the experiment many times and compare the empirical mean of $\hat{\sigma}^2$ with the true $\sigma^2$.
+    (b) Find the bias of $\tilde{\sigma}^2$.
 
-    Explain why Normality is unnecessary for the result being investigated.
+    (c) Is the estimator positively or negatively biased?
 
-23. In the same simulation setting, compare the estimators
+    (d) Explain why the magnitude of the bias increases as the number of fitted parameters increases relative to $n$.
+
+17. Use R to compare
 
     $$
     \hat{\sigma}^2
@@ -5389,7 +5254,7 @@ The algebra and geometry of least squares therefore remain unchanged throughout 
     }
     $$
 
-    and
+    with
 
     $$
     \tilde{\sigma}^2
@@ -5397,24 +5262,138 @@ The algebra and geometry of least squares therefore remain unchanged throughout 
     \frac{
     \hat{\mathbf{e}}'
     \hat{\mathbf{e}}
-    }{
-    n
-    }.
+    }{n}.
     $$
 
-    Estimate their biases by simulation. Before simulating, derive the exact expectation of $\tilde{\sigma}^2$ and determine the direction of its bias.
+    Generate errors from a non-Normal distribution satisfying the mean and variance assumptions.
 
-24. Use R to investigate the relationship between leverage and variability. Construct a design matrix containing observations with noticeably different leverages. Under
+    Estimate the bias of both estimators using repeated simulation and compare the results with the theoretical expectations.
+
+18. Let $\mathbf{H}$ be the hat matrix for a design matrix $\mathbf{X}$.
+
+    (a) Identify the subspace onto which $\mathbf{H}$ projects.
+
+    (b) Identify the subspace onto which $\mathbf{I}-\mathbf{H}$ projects.
+
+    (c) Show that
 
     $$
+    \operatorname{rank}(\mathbf{I}-\mathbf{H})
+    =
+    n-\operatorname{rank}(\mathbf{X}).
+    $$
+
+    (d) Explain why this quantity is called the residual degrees of freedom.
+
+    (e) For a model containing an intercept and $p$ explanatory variables, give the residual degrees of freedom when $\mathbf{X}$ has full column rank.
+
+19. Consider estimators of $\sigma^2$ having the form
+
+    $$
+    \tilde{\sigma}^2
+    =
+    a
+    \hat{\mathbf{e}}'
+    \hat{\mathbf{e}},
+    $$
+
+    where $a$ is a constant scalar.
+
+    Suppose that
+
+    $$
+    \operatorname{rank}(\mathbf{X})
+    =
+    r.
+    $$
+
+    (a) Find $\mathbb{E}[\tilde{\sigma}^2]$.
+
+    (b) Determine the value of $a$ that makes the estimator unbiased.
+
+    (c) Show that this value of $a$ is unique among estimators of this form.
+
+    (d) Explain why this does not imply that $\hat{\sigma}^2$ is the only possible unbiased estimator of $\sigma^2$.
+
+20. For each of the following situations, state whether OLS is necessarily unbiased. Justify your answer.
+
+    (a)
+
+    $$
+    \mathbb{E}[\mathbf{e}]
+    =
+    \mathbf{0},
+    \qquad
     \mathbb{V}[\mathbf{e}]
     =
-    \sigma^2\mathbf{I},
+    \sigma^2\mathbf{I}.
     $$
 
-    repeatedly generate responses from the same fixed design and record $\hat{y}_i$ and $\hat{e}_i$ for each observation.
+    (b)
 
-    Estimate their variances across simulations and compare them with
+    $$
+    \mathbb{E}[\mathbf{e}]
+    =
+    \mathbf{0},
+    \qquad
+    \mathbb{V}[\mathbf{e}]
+    =
+    \boldsymbol{\Sigma}.
+    $$
+
+    (c)
+
+    $$
+    \mathbb{E}[\mathbf{e}]
+    =
+    \boldsymbol{\mu}_e
+    \neq
+    \mathbf{0},
+    \qquad
+    \mathbf{X}'\boldsymbol{\mu}_e
+    =
+    \mathbf{0}.
+    $$
+
+    (d)
+
+    $$
+    \mathbb{E}[\mathbf{e}]
+    =
+    \boldsymbol{\mu}_e,
+    \qquad
+    \mathbf{X}'\boldsymbol{\mu}_e
+    \neq
+    \mathbf{0}.
+    $$
+
+21. Use R to investigate the relationship between leverage and variability.
+
+    Construct a fixed design matrix with observations having noticeably different leverage values. Repeatedly generate responses satisfying
+
+    $$
+    \mathbb{E}[\mathbf{e}]
+    =
+    \mathbf{0},
+    \qquad
+    \mathbb{V}[\mathbf{e}]
+    =
+    \sigma^2\mathbf{I}.
+    $$
+
+    For each observation, estimate across simulations
+
+    $$
+    \mathbb{V}[\hat{y}_i]
+    $$
+
+    and
+
+    $$
+    \mathbb{V}[\hat{e}_i].
+    $$
+
+    Compare the empirical results with
 
     $$
     \sigma^2h_{ii}
@@ -5426,30 +5405,35 @@ The algebra and geometry of least squares therefore remain unchanged throughout 
     \sigma^2(1-h_{ii}).
     $$
 
-    Describe how the empirical behavior changes as $h_{ii}$ increases.
+    Explain how leverage redistributes variability between the fitted and residual components.
 
-25. For each of the following error structures, determine which of the conclusions below are guaranteed to remain valid. Justify every answer mathematically.
-
-    Conclusions:
+22. Let $U$ be a random variable satisfying
 
     $$
-    \mathbb{E}
-    \left[
-    \hat{\boldsymbol{\beta}}
-    \right]
+    \mathbb{P}(U=-1)
     =
-    \boldsymbol{\beta},
+    \mathbb{P}(U=0)
+    =
+    \mathbb{P}(U=1)
+    =
+    \frac{1}{3},
     $$
 
+    and define
+
     $$
-    \mathbb{V}
-    \left[
-    \hat{\boldsymbol{\beta}}
-    \right]
+    V
     =
-    \sigma^2
-    (\mathbf{X}'\mathbf{X})^{-1},
+    U^2.
     $$
+
+    (a) Compute $\mathbb{E}[U]$ and $\mathbb{E}[V]$.
+
+    (b) Compute $\mathbb{C}[U,V]$.
+
+    (c) Are $U$ and $V$ independent? Justify your answer.
+
+    (d) Explain why this example is relevant to the statement
 
     $$
     \mathbb{C}
@@ -5458,41 +5442,141 @@ The algebra and geometry of least squares therefore remain unchanged throughout 
     \hat{\boldsymbol{\beta}}
     \right]
     =
-    \mathbf{0},
+    \mathbf{0}.
     $$
 
-    the Gauss--Markov BLUE conclusion, and
-
-    $$
-    \mathbb{E}
-    \left[
-    \hat{\sigma}^2
-    \right]
-    =
-    \sigma^2
-    $$
-
-    for the estimator developed in this chapter.
-
-    Consider the following cases:
-
-    (a) $\mathbb{E}[\mathbf{e}]=\mathbf{0}$ and $\mathbb{V}[\mathbf{e}]=\sigma^2\mathbf{I}$.
-
-    (b) $\mathbb{E}[\mathbf{e}]\neq\mathbf{0}$ and $\mathbb{V}[\mathbf{e}]=\sigma^2\mathbf{I}$.
-
-    (c) $\mathbb{E}[\mathbf{e}]=\mathbf{0}$ and
+23. Suppose now that
 
     $$
     \mathbb{V}[\mathbf{e}]
     =
-    \operatorname{diag}
-    \left(
-    \sigma_1^2,\ldots,\sigma_n^2
-    \right),
+    \boldsymbol{\Sigma}
     $$
 
-    with unequal diagonal entries.
+    instead of $\sigma^2\mathbf{I}$.
 
-    (d) $\mathbb{E}[\mathbf{e}]=\mathbf{0}$ and $\mathbb{V}[\mathbf{e}]=\boldsymbol{\Sigma}$, where $\boldsymbol{\Sigma}$ has nonzero off-diagonal elements.
+    (a) Show that
 
-    Use this exercise to identify precisely which conclusions depend on the mean assumption, which depend on the variance assumption, and which require both.
+    $$
+    \mathbb{C}
+    \left[
+    \hat{\mathbf{e}},
+    \hat{\boldsymbol{\beta}}
+    \right]
+    =
+    (\mathbf{I}-\mathbf{H})
+    \boldsymbol{\Sigma}
+    \mathbf{X}
+    (\mathbf{X}'\mathbf{X})^{-1}.
+    $$
+
+    (b) Explain why this expression is zero when
+
+    $$
+    \boldsymbol{\Sigma}
+    =
+    \sigma^2\mathbf{I}.
+    $$
+
+    (c) Is it necessarily zero for an arbitrary $\boldsymbol{\Sigma}$? Explain.
+
+    (d) Identify the geometric identity that produces the zero cross-covariance under the variance assumption.
+
+24. Consider the intercept-only model with two observations,
+
+    $$
+    \mathbf{X}
+    =
+    \begin{pmatrix}
+    1\\
+    1
+    \end{pmatrix},
+    $$
+
+    and suppose
+
+    $$
+    \mathbb{V}[\mathbf{e}]
+    =
+    \begin{pmatrix}
+    1 & 0\\
+    0 & 4
+    \end{pmatrix}.
+    $$
+
+    (a) Compute the hat matrix $\mathbf{H}$.
+
+    (b) Verify that
+
+    $$
+    \hat{\mathbf{e}}'
+    \hat{\mathbf{y}}
+    =
+    0
+    $$
+
+    for every possible response vector.
+
+    (c) Compute
+
+    $$
+    \mathbb{C}
+    \left[
+    \hat{\mathbf{e}},
+    \hat{\mathbf{y}}
+    \right].
+    $$
+
+    (d) Is this cross-covariance equal to $\mathbf{0}$?
+
+    (e) Explain why this example shows that deterministic orthogonality and zero cross-covariance are different properties.
+
+25. Use R to investigate correlated errors.
+
+    Fix a full-column-rank design matrix and generate errors satisfying
+
+    $$
+    \mathbb{E}[\mathbf{e}]
+    =
+    \mathbf{0},
+    $$
+
+    but with a covariance matrix $\boldsymbol{\Sigma}$ having nonzero off-diagonal elements.
+
+    Using repeated simulation:
+
+    (a) investigate whether OLS remains unbiased;
+
+    (b) estimate the covariance matrix of $\hat{\boldsymbol{\beta}}$;
+
+    (c) compare the empirical covariance matrix with both
+
+    $$
+    \sigma^2(\mathbf{X}'\mathbf{X})^{-1}
+    $$
+
+    and
+
+    $$
+    (\mathbf{X}'\mathbf{X})^{-1}
+    \mathbf{X}'
+    \boldsymbol{\Sigma}
+    \mathbf{X}
+    (\mathbf{X}'\mathbf{X})^{-1};
+    $$
+
+    (d) investigate whether
+
+    $$
+    \mathbb{C}
+    \left[
+    \hat{\mathbf{e}},
+    \hat{\boldsymbol{\beta}}
+    \right]
+    =
+    \mathbf{0}
+    $$
+
+    continues to hold;
+
+    (e) use your results to distinguish the consequences of the mean assumption from those of the variance assumption.
