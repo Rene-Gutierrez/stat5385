@@ -1,863 +1,4657 @@
-# Normality Assumption
+# Normality Assumption {#normality-assumption}
 
-## Introduction
+## Introduction {#nor-introduction}
 
-Up to this point, we have treated the linear regression model primarily as an **optimization problem**, where the goal was to find parameter estimates that minimize the sum of squared errors. By making only mild assumptions about the error term—such as a zero mean and constant variance—we were able to establish key results like the **Gauss–Markov theorem**, which guarantees that the Ordinary Least Squares (OLS) estimator is the **Best Linear Unbiased Estimator (BLUE)** under those conditions.
-
-We now take a further step by introducing a **distributional assumption** on the error term. Specifically, we assume that the errors follow a **Normal distribution**. This assumption is much stronger than those introduced before, but it provides powerful analytical advantages. In particular, it allows us to:
-
-* Derive the **sampling distributions** of the estimators,
-* Conduct **statistical inference** (e.g., confidence intervals and hypothesis tests),
-* Formulate and maximize the **likelihood function**, leading to **Maximum Likelihood Estimates (MLE)** of the parameters.
-
-Formally, we assume:
+In the previous chapter, we introduced a probabilistic interpretation of the linear regression model
 
 $$
-\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})
+\by=\bX\bgb+\be.
 $$
 
-The Normal distribution is completely characterized by its mean and variance. Therefore, once we know the expected value and variance of an estimator, assuming normality allows us to fully determine its distribution. Since in previous chapters we have already computed the mean and variance of the OLS estimators, the normality assumption now enables us to describe their entire probabilistic behavior.
-
-Furthermore, the assumption of normality allows us to derive the **likelihood function** of the observed data, which serves as the foundation for **Maximum Likelihood Estimation**. This framework not only provides an alternative route to parameter estimation but also forms the basis for many modern extensions of regression analysis, including Bayesian regression and generalized linear models.
-
----
-
-## Maximum Likelihood Estimation
-
-To obtain the maximum likelihood estimates of $\boldsymbol{\beta}$ and $\sigma^2$, we first need the distribution of $\mathbf{y}$. From the regression model
+The design matrix $\bX$ was treated as fixed, the coefficient vector $\bgb$ as an unknown parameter, and the error vector $\be$ as random. We then imposed assumptions on the first two moments of the errors,
 
 $$
-\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{e},
+\dE[\be]=\bzero
 $$
 
-and the assumption $\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})$, we see that $\mathbf{y}$ is simply a **linear transformation** of a multivariate normal random vector. Therefore, $\mathbf{y}$ is also normally distributed, with mean and variance given by:
+and
 
 $$
-\mathbf{y} \sim N(\mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}).
+\dV[\be]=\sigma^2\bI.
 $$
 
-Consequently, the likelihood function of $\boldsymbol{\beta}$ and $\sigma^2$, given $\mathbf{y}$, is:
+These assumptions were sufficient to establish many important statistical properties of the least squares estimators. In particular, we obtained
 
 $$
-\mathcal{L}(\boldsymbol{\beta}, \sigma^2 \mid \mathbf{y}) = N(\mathbf{y} \mid \mathbf{X}\boldsymbol{\beta}, \sigma^2 \mathbf{I}),
+\dE[\hat{\bgb}]
+=
+\bgb
 $$
 
-which, when written explicitly, becomes:
+and
+
+$$
+\dV[\hat{\bgb}]
+=
+\sigma^2(\bX'\bX)^{-1},
+$$
+
+as well as the corresponding expectations and covariance matrices of the fitted values and residuals. We also studied their cross-covariances, established the Gauss--Markov result, and constructed an unbiased estimator of $\sigma^2$ from the residual sum of squares.
+
+None of these results required us to specify the complete probability distribution of the errors. They depended only on assumptions about their mean, variance, and covariance structure.
+
+There are, however, statistical questions that cannot be answered from these moments alone.
+
+For example, suppose that we want to determine how likely it is for an estimated coefficient to differ substantially from its true value. We may want to construct an interval that contains an unknown coefficient with a prescribed probability, determine whether an observed estimate is unusually far from a hypothesized value, or determine how likely a hypothesis test is to detect a particular alternative.
+
+Questions of this type require the **sampling distributions** of the estimators and test statistics, rather than only their expectations and variances.
+
+We will therefore strengthen the assumptions on the error vector. Throughout this chapter, we assume
+
+$$
+\boxed{
+\be\sim N(\bzero,\sigma^2\bI).
+}
+$$
+
+This assumption contains the mean and variance assumptions from the previous chapter,
+
+$$
+\dE[\be]=\bzero,
+\qquad
+\dV[\be]=\sigma^2\bI,
+$$
+
+but provides considerably more information by specifying the complete distribution of $\be$.
+
+It is important to distinguish what changes when this assumption is introduced from what does not.
+
+The least squares estimator remains
+
+$$
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by.
+$$
+
+Normality is not required to derive this estimator. It is also not required for its unbiasedness or for the Gauss--Markov result. Those properties were established previously under weaker assumptions.
+
+What Normality gives us is additional information about the stochastic behavior of the quantities that we have already constructed.
+
+Since
+
+$$
+\by
+=
+\bX\bgb+\be
+$$
+
+and $\bX\bgb$ is non-random,
+
+$$
+\be\sim N(\bzero,\sigma^2\bI)
+$$
+
+is equivalent to 
+$$
+\by
+\sim
+N(\bX\bgb,\sigma^2\bI).
+$$
+
+Many of the quantities developed previously are linear transformations of $\by$. For example,
+
+$$
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by,
+$$
+
+$$
+\hat{\by}
+=
+\bH\by,
+$$
+
+and
+
+$$
+\hat{\be}
+=
+(\bI-\bH)\by.
+$$
+
+Because linear transformations of multivariate Normal random vectors remain multivariate Normal, the expectations and covariance matrices obtained in the previous chapter can now be used to determine the complete distributions of these quantities.
+
+Normality also strengthens some of the relationships that we previously obtained from covariance calculations. For example, we showed that
+
+$$
+\dC[\hat{\be},\hat{\bgb}]
+=
+\bzero
+$$
+
+and
+
+$$
+\dC[\hat{\be},\hat{\by}]
+=
+\bzero.
+$$
+
+Without an additional distributional assumption, zero cross-covariance does not generally imply independence. Under joint Normality, however, it does. This distinction will be essential when we combine the distribution of $\hat{\bgb}$ with the independent estimator $\hat{\sigma}^2$ to obtain Student's $t$ and $F$ distributions.
+
+The first part of this chapter will therefore use Normality to derive the exact sampling distributions of
+
+$$
+\hat{\bgb},
+\qquad
+\hat{\by},
+\qquad
+\hat{\be},
+\qquad
+\hat{\sigma}^2.
+$$
+
+These distributions provide the basis for **interval estimation**. We will construct confidence intervals for regression coefficients and general linear combinations of coefficients, intervals for the expected response, prediction intervals for future observations, and an interval estimator for $\sigma^2$.
+
+The same sampling distributions will then be used for **hypothesis testing**. We will study tests for individual coefficients, the overall regression, and groups of coefficients. In particular, the geometric structure developed in previous chapters will reappear through comparisons of nested regression models and the corresponding reductions in residual variation.
+
+Hypothesis testing studies the behavior of a statistic under a null hypothesis. We will then extend this perspective through **power analysis** by studying the distribution of the same statistics when the null hypothesis is false. This will introduce noncentral $t$ and $F$ distributions and show how the ability to detect an effect depends on its magnitude, the error variability, and the information contained in the regression design.
+
+Thus, Normality allows us to study not only whether a test controls its probability of rejection under a null hypothesis, but also how effectively it can distinguish that null hypothesis from particular alternatives.
+
+Finally, specifying the complete distribution of $\by$ has another consequence that is conceptually distinct from the inferential developments above. Since
+
+$$
+\by
+\sim
+N(\bX\bgb,\sigma^2\bI),
+$$
+
+we can construct a likelihood function for the unknown parameters and estimate them using **Maximum Likelihood Estimation**.
+
+This provides a second route to estimation. Under the Normal linear regression model, Maximum Likelihood Estimation produces the same estimator of $\bgb$ as least squares,
+
+$$
+\hat{\bgb}_{MLE}
+=
+\hat{\bgb}_{OLS},
+$$
+
+but it produces a different estimator of $\sigma^2$ from the unbiased estimator used in classical regression inference. This distinction will illustrate that least squares, unbiased estimation, and maximum likelihood are different estimation principles, even when some of them lead to the same estimator.
+
+The role of the Normality assumption in this chapter can therefore be summarized through three related consequences:
+
+$$
+\boxed{
+\begin{array}{c}
+\text{Normality} \\[4pt]
+\Downarrow \\[4pt]
+\text{Exact sampling distributions} \\[4pt]
+\Downarrow \\[4pt]
+\text{Interval estimation, hypothesis testing, and power}
+\end{array}
+}
+$$
+
+and, separately,
+
+$$
+\boxed{
+\begin{array}{c}
+\text{Normal probability model} \\[4pt]
+\Downarrow \\[4pt]
+\text{Likelihood function} \\[4pt]
+\Downarrow \\[4pt]
+\text{Maximum Likelihood Estimation}.
+\end{array}
+}
+$$
+
+The first sequence develops the inferential consequences of Normality. The second uses the same distributional assumption as an alternative principle for estimation. Together, they show why specifying the complete distribution of the errors substantially expands what can be learned from the linear regression model.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Distribution of the Estimates {#nor-distribution-estimates}
+
+In the previous chapter, we derived the expectations and covariance matrices of the least squares estimators using only assumptions on the first two moments of the errors. In particular, we did not need to specify the complete distribution of the error vector.
+
+We now add the Normality assumption
+
+$$
+\be \sim N(\bzero,\sigma^2\bI).
+$$
+
+Since
+
+$$
+\by=\bX\bgb+\be,
+$$
+
+where $\bX\bgb$ is non-random, it follows immediately that
+
+$$
+\by\sim N(\bX\bgb,\sigma^2\bI).
+$$
+
+The Normality assumption now allows us to go beyond the expectations and covariance matrices derived previously. Since a linear transformation of a multivariate Normal random vector is also multivariate Normal, any quantity that is a linear transformation of $\by$ will have a Normal distribution whose mean and covariance matrix are already available from the previous chapter.
+
+### Distribution of $\hat{\bgb}$, $\hat{\by}$, and $\hat{\be}$ {#nor-distribution-linear-estimates}
+
+The quantities
+
+$$
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by,
+$$
+
+$$
+\hat{\by}
+=
+\bH\by,
+$$
+
+and
+
+$$
+\hat{\be}
+=
+(\bI-\bH)\by
+$$
+
+are all linear transformations of $\by$. Their complete distributions therefore follow directly from Normality together with the expectations and covariance matrices derived previously.
+
+```{proposition, nor-linear-estimates, name="Distribution of the Linear Least Squares Quantities"}
+
+Under the linear regression model
+
+$$
+\by=\bX\bgb+\be,
+$$
+
+where $\bX$ has full column rank and
+
+$$
+\be\sim N(\bzero,\sigma^2\bI),
+$$
+
+the least squares estimator, fitted values, and residuals satisfy
+
+$$
+\hat{\bgb}
+\sim
+N\left(
+\bgb,
+\sigma^2(\bX'\bX)^{-1}
+\right),
+$$
+
+$$
+\hat{\by}
+\sim
+N\left(
+\bX\bgb,
+\sigma^2\bH
+\right),
+$$
+
+and
+
+$$
+\hat{\be}
+\sim
+N\left(
+\bzero,
+\sigma^2(\bI-\bH)
+\right).
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-linear-estimates-proof}
+
+Since
+
+$$
+\by\sim N(\bX\bgb,\sigma^2\bI),
+$$
+
+and $\hat{\bgb}$ is a linear transformation of $\by$, we know that $\hat{\bgb}$ is multivariate Normal. From the previous chapter,
+
+$$
+\dE[\hat{\bgb}]
+=
+\bgb
+$$
+
+and
+
+$$
+\dV[\hat{\bgb}]
+=
+\sigma^2(\bX'\bX)^{-1}.
+$$
+
+Therefore,
+
+$$
+\hat{\bgb}
+\sim
+N\left(
+\bgb,
+\sigma^2(\bX'\bX)^{-1}
+\right).
+$$
+
+Similarly, $\hat{\by}=\bH\by$ is a linear transformation of $\by$. From the previous chapter,
+
+$$
+\dE[\hat{\by}]
+=
+\bX\bgb
+$$
+
+and
+
+$$
+\dV[\hat{\by}]
+=
+\sigma^2\bH.
+$$
+
+Therefore,
+
+$$
+\hat{\by}
+\sim
+N\left(
+\bX\bgb,
+\sigma^2\bH
+\right).
+$$
+
+Finally, $\hat{\be}=(\bI-\bH)\by$ is also a linear transformation of $\by$. We previously showed that
+
+$$
+\dE[\hat{\be}]
+=
+\bzero
+$$
+
+and
+
+$$
+\dV[\hat{\be}]
+=
+\sigma^2(\bI-\bH).
+$$
+
+Therefore,
+
+$$
+\hat{\be}
+\sim
+N\left(
+\bzero,
+\sigma^2(\bI-\bH)
+\right).
+$$
+
+```
+
+</details>
+
+The Normality assumption has therefore converted the moment results from the previous chapter into complete distributional results. For example,
+
+$$
+\dE[\hat{\bgb}]
+=
+\bgb
+$$
+
+and
+
+$$
+\dV[\hat{\bgb}]
+=
+\sigma^2(\bX'\bX)^{-1}
+$$
+
+were already known. Normality now allows us to conclude the stronger result
+
+$$
+\hat{\bgb}
+\sim
+N\left(
+\bgb,
+\sigma^2(\bX'\bX)^{-1}
+\right).
+$$
+
+The covariance matrices of $\hat{\by}$ and $\hat{\be}$ are singular. This is expected from their geometric interpretation. The fitted values are restricted to the column space of $\bX$, while the residuals are restricted to its orthogonal complement. Thus, their distributions are multivariate Normal distributions supported on lower-dimensional subspaces of $\dR^n$.
+
+The estimator $\hat{\sigma}^2$ is different. Recall that
+
+$$
+\hat{\sigma}^2
+=
+\frac{\hat{\be}'\hat{\be}}{n-p-1},
+$$
+
+where $p$ is the number of explanatory variables and the model contains an intercept. Unlike the previous quantities, $\hat{\sigma}^2$ is not a linear transformation of $\by$. Instead, it depends on the quadratic form $\hat{\be}'\hat{\be}$. Its distribution therefore requires a different argument.
+
+### Distribution of $\hat{\sigma}^2$ {#nor-distribution-sigma2}
+
+We begin by expressing the residual sum of squares in terms of the random error vector.
+
+Since
+
+$$
+\hat{\be}
+=
+(\bI-\bH)\by,
+$$
+
+we have
 
 \begin{align*}
-  \cL(\bgb, \sigma^2 | \by )
-    &= (2 \pi)^{-\frac{n}{2}} |\sigma^2 \bI|^{-\frac{1}{2}} \exp\left\{ -\frac{1}{2}(\by - \bX \bgb)'(\sigma^2 \bI)^{-1}(\by - \bX \bgb) \right\}    \\
-    &= (2 \pi)^{-\frac{n}{2}} (\sigma^2)^{-\frac{n}{2}} |\bI| \exp\left\{ -\frac{1}{2}(\by - \bX \bgb)'\frac{\bI}{\sigma^2}(\by - \bX \bgb) \right\} \\
-    &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\by - \bX \bgb)'(\by - \bX \bgb) \right\}                                   \\
-    &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\by - \bX \bgb)'(\by - \bX \bgb) \right\}                                   \\
-    &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\by - \bX \bgb)'(\by - \bX \bgb) \right\}                                   \\
+\hat{\be}
+  &= (\bI-\bH)(\bX\bgb+\be)
+    && \text{since $\by=\bX\bgb+\be$} \\
+  &= (\bI-\bH)\bX\bgb+(\bI-\bH)\be \\
+  &= \bzero+(\bI-\bH)\be
+    && \text{since $\bH\bX=\bX$} \\
+  &= (\bI-\bH)\be.
 \end{align*}
 
----
-
-### Decomposition of the Quadratic Form
-
-Recall that in the previous chapter we showed the following decomposition:
-
-$$
-(\mathbf{y} - \mathbb{E}[\mathbf{y}])'(\mathbf{y} - \mathbb{E}[\mathbf{y}])
-= \hat{\mathbf{e}}'\hat{\mathbf{e}} + (\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}])'(\hat{\mathbf{y}} - \mathbb{E}[\hat{\mathbf{y}}]),
-$$
-
-which implies that
-
-$$
-(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})'(\mathbf{y} - \mathbf{X}\boldsymbol{\beta})
-= \hat{\mathbf{e}}'\hat{\mathbf{e}} + (\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})' \mathbf{X}'\mathbf{X} (\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}).
-$$
-
-Substituting this into the likelihood function gives:
+Therefore,
 
 \begin{align*}
-  \cL(\bgb, \sigma^2 | \by )
-    &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{1}{2 \sigma^2}(\by - \bX \bgb)'(\by - \bX \bgb) \right\}                                                      \\
-    &= (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ -\frac{\hat{\be}'\hat{\be}}{2 \sigma^2} -\frac{(\hat{\bgb} - \bgb)'\bX \bX( \hat{\bgb} - \bgb)}{2 \sigma^2} \right\} \\
+\hat{\be}'\hat{\be}
+  &= \be'(\bI-\bH)'(\bI-\bH)\be \\
+  &= \be'(\bI-\bH)(\bI-\bH)\be
+    && \text{since $(\bI-\bH)$ is symmetric} \\
+  &= \be'(\bI-\bH)\be
+    && \text{since $(\bI-\bH)$ is idempotent}.
 \end{align*}
 
-This expression is convenient for optimization. Notice that, for any fixed $\sigma^2$, the likelihood is maximized with respect to $\boldsymbol{\beta}$ when $\boldsymbol{\beta} = \hat{\boldsymbol{\beta}}$, since that value nullifies the second exponential term. Therefore, the MLE for $\boldsymbol{\beta}$ coincides with the OLS estimator.
-
----
-
-### Estimation of $\sigma^2$
-
-Once we have $\boldsymbol{\beta} = \hat{\boldsymbol{\beta}}$, the likelihood simplifies to a function of $\sigma^2$ only:
-
-$$ \cL(\sigma^2 | \by, \bgb = \hat{\bgb}) = (2 \pi \sigma^2)^{-\frac{n}{2}} \exp\left\{ \frac{\hat{\mathbf{e}}'\hat{\mathbf{e}}}{2\sigma^2} \right\}  $$
-
-Taking logs gives the **log-likelihood function**:
+Now define
 
 $$
-\ell(\sigma^2 \mid \mathbf{y}, \boldsymbol{\beta} = \hat{\boldsymbol{\beta}})
-= -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{\hat{\mathbf{e}}'\hat{\mathbf{e}}}{2\sigma^2}.
+\bz
+=
+\frac{\be}{\sigma}.
 $$
 
-Differentiating with respect to $\sigma^2$ and setting the derivative equal to zero yields:
+Since
 
 $$
-\tilde{\sigma}^2 = \frac{\hat{\mathbf{e}}'\hat{\mathbf{e}}}{n}.
+\be\sim N(\bzero,\sigma^2\bI),
 $$
 
-A second derivative check confirms that this value indeed maximizes the log-likelihood. Thus, $\tilde{\sigma}^2$ is the **maximum likelihood estimator** of $\sigma^2$.
-
----
-
-### Remarks on Bias and Practical Use
-
-It is important to note that $\tilde{\sigma}^2$ is **biased** as an estimator of $\sigma^2$. In contrast, the usual OLS variance estimator
+we have
 
 $$
-\hat{\sigma}^2 = \frac{\hat{\mathbf{e}}'\hat{\mathbf{e}}}{n - p}
+\bz\sim N(\bzero,\bI).
 $$
-
-is unbiased under the Gauss–Markov assumptions. Both estimators are useful: $\tilde{\sigma}^2$ arises naturally in likelihood-based methods and is convenient for theoretical developments, while $\hat{\sigma}^2$ is preferred for unbiased estimation and inferential procedures.
-
-In the following sections, we will build on these results to derive the exact **sampling distributions** of the OLS estimators and the basis for hypothesis testing within the classical linear model framework.
-
----
-
-## Distribution of the Estimates
-
-In the previous chapters, we derived the mean and variance of the least squares estimators under the assumption of normally distributed errors. We now go further and obtain their **sampling distributions**, which fully characterize the stochastic behavior of these estimators.
-This is possible because, under normality, any linear combination of normally distributed random variables is itself normal. Since most of our estimators are linear functions of the observed data, their distributions are readily available.
-
-### Distribution of $\hat{\bgb}$, $\hat{\by}$, and $\hat{\be}$
-
-The least squares estimators $\hat{\bgb}$, $\hat{\by}$, and $\hat{\be}$ are all linear transformations of the response vector $\by$. Therefore, they are normally distributed, and the corresponding mean and variance expressions derived earlier allow us to determine their full distributions. Specifically, we have:
-
-$$
-\hat{\bgb}, \quad \hat{\by}, \quad \hat{\be}
-$$
-
-and their respective distributions are given by:
-
-$$
-\hat{\bgb} \sim N(\bgb, \sigma^2 (\bX'\bX)^{-1})
-$$
-
-$$
-\hat{\by} \sim N(\bX \bgb, \sigma^2 \bH)
-$$
-
-$$
-\hat{\be} \sim N(\bzero, \sigma^2 (\bI - \bH))
-$$
-
-These results reveal that both fitted values and residuals are multivariate normal, each with a distinct covariance structure determined by the projection matrices $\bH$ and $\bI - \bH$. The matrix $\bH$ projects $\by$ onto the column space of $\bX$, while $(\bI - \bH)$ projects it onto its orthogonal complement.
-
-Note that the estimator of the error variance, $\hat{\sigma}^2$, is **not** a linear function of $\by$, so its distribution must be derived differently.
-
----
-
-### Distribution of $\hat{\sigma}^2$
-
-The estimator $\hat{\sigma}^2$ measures the variability of the residuals around the fitted model. Its distribution is central to many inferential procedures, such as constructing confidence intervals and hypothesis tests for the regression coefficients.
-However, because $\hat{\sigma}^2$ involves the quadratic form $\hat{\be}'\hat{\be}$, its derivation is more involved. We will obtain its distribution in three steps:
-
-1. Express $\frac{\hat{\be}'\hat{\be}}{\sigma^2}$ as a **quadratic form** of a standard normal vector with an idempotent matrix.
-2. Show that such a quadratic form follows a **chi-squared distribution** with degrees of freedom equal to the rank of the idempotent matrix.
-3. Relate this result to the distribution of $\hat{\sigma}^2$ itself.
-
----
-
-#### Step 1: Expressing $\frac{\hat{\be}'\hat{\be}}{\sigma^2}$ as a Quadratic Form
-
-We begin by rewriting the residual vector in terms of the error vector $\be$:
-
-\begin{align*}
-  (\bI - \bH) \by
-    &= (\bI - \bH) (\bX \bgb + \be)                    && \text{since $\by = \bX \bgb + \be$}  \\
-    &= \bI \bX \bgb - \bH \bX \bgb + \bI \be - \bH \be                                         \\
-    &= \bX \bgb - \bX \bgb + \be - \bH \be             && \text{since $\bH \bX = \bX$}         \\
-    &= \be - \bH \be                                                                           \\
-    &= (\bI - \bH) \be                                                                         \\
-\end{align*}
-
-Then:
-
-\begin{align*}
-  \by' (\bI - \bH) \by
-    &= \by' (\bI - \bH) (\bI - \bH) \by  && \text{since $(\bI - \bH)$ is idempotent}         \\
-    &= \be' (\bI - \bH) (\bI - \bH) \be  && \text{since $(\bI - \bH) \by = (\bI - \bH) \be$} \\
-    &= \be' (\bI - \bH) \be              && \text{since $(\bI - \bH)$ is idempotent}         \\
-\end{align*}
 
 Thus,
 
 \begin{align*}
-  \frac{\hat{\be}'\hat{\be}}{\sigma^2}
-    &= \frac{\by' (\bI - \bH) \by}{\sigma^2}  && \text{since $\hat{\be}'\hat{\be} = \by' (\bI - \bH) \by$}  \\
-    &= \frac{\be' (\bI - \bH) \be}{\sigma^2}  && \text{since $\be' (\bI - \bH) \be = \by' (\bI - \bH) \by$} \\
-    &= \frac{\be}{\sqrt{\sigma^2}}' (\bI - \bH) \frac{\be}{\sqrt{\sigma^2}}                                 \\
+\frac{\hat{\be}'\hat{\be}}{\sigma^2}
+  &= \frac{\be'(\bI-\bH)\be}{\sigma^2} \\
+  &= \left(\frac{\be}{\sigma}\right)'
+     (\bI-\bH)
+     \left(\frac{\be}{\sigma}\right) \\
+  &= \bz'(\bI-\bH)\bz.
 \end{align*}
 
-Finally, because $\frac{\be}{\sqrt{\sigma^2}}$ is a scaled version of the normal vector $\be$, it remains normally distributed with zero mean and identity covariance:
+The distribution of $\hat{\sigma}^2$ therefore reduces to determining the distribution of a quadratic form involving a standard multivariate Normal vector and a symmetric idempotent matrix.
+
+```{proposition, nor-normal-quadratic-form, name="Normal Quadratic Form with a Symmetric Idempotent Matrix"}
+
+Let
 
 $$
-\dE\left[\frac{\be}{\sqrt{\sigma^2}}\right] = \bzero, \qquad
-\dV\left[\frac{\be}{\sqrt{\sigma^2}}\right] = \bI
+\bz\sim N(\bzero,\bI)
 $$
+
+with $\bz\in\dR^n$, and let $\bM\in\dR^{n\times n}$ be a symmetric idempotent matrix of rank $m$. Then
+
+$$
+\bz'\bM\bz
+\sim
+\chi^2_m.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-normal-quadratic-form-proof}
+
+Since $\bM$ is symmetric, it has the spectral decomposition
+
+$$
+\bM
+=
+\bV\bgS\bV',
+$$
+
+where $\bV$ is an orthogonal matrix and $\bgS$ is a diagonal matrix containing the eigenvalues of $\bM$.
+
+Since $\bM$ is idempotent,
+
+$$
+\bM^2=\bM.
+$$
+
+Therefore, if $\lambda$ is an eigenvalue of $\bM$, then
+
+$$
+\lambda^2=\lambda,
+$$
+
+which implies
+
+$$
+\lambda\in\{0,1\}.
+$$
+
+Since
+
+$$
+\operatorname{rank}(\bM)=m,
+$$
+
+exactly $m$ eigenvalues are equal to $1$, while the remaining $n-m$ eigenvalues are equal to $0$. Without loss of generality, we can write
+
+$$
+\bgS
+=
+\operatorname{diag}
+(
+\underbrace{1,\ldots,1}_{m},
+\underbrace{0,\ldots,0}_{n-m}
+).
+$$
+
+Now define
+
+$$
+\bw=\bV'\bz.
+$$
+
+Since $\bw$ is a linear transformation of the multivariate Normal vector $\bz$, it is also multivariate Normal. Its mean is
+
+$$
+\dE[\bw]
+=
+\dE[\bV'\bz]
+=
+\bV'\dE[\bz]
+=
+\bzero,
+$$
+
+and its covariance matrix is
+
+\begin{align*}
+\dV[\bw]
+  &= \bV'\dV[\bz]\bV \\
+  &= \bV'\bI\bV \\
+  &= \bV'\bV \\
+  &= \bI.
+\end{align*}
+
+Therefore,
+
+$$
+\bw\sim N(\bzero,\bI).
+$$
+
+In particular, the components
+
+$$
+w_1,\ldots,w_n
+$$
+
+are independent standard Normal random variables.
+
+We can now rewrite the quadratic form as
+
+\begin{align*}
+\bz'\bM\bz
+  &= \bz'(\bV\bgS\bV')\bz
+    && \text{using the spectral decomposition of $\bM$} \\
+  &= (\bV'\bz)'\bgS(\bV'\bz) \\
+  &= \bw'\bgS\bw
+    && \text{since $\bw=\bV'\bz$} \\
+  &= \sum_{i=1}^n[\bgS]_{ii}w_i^2 \\
+  &= \sum_{i=1}^m w_i^2
+    && \text{since exactly $m$ diagonal entries of $\bgS$ are equal to $1$}.
+\end{align*}
+
+Since $w_1,\ldots,w_m$ are independent standard Normal random variables,
+
+$$
+\sum_{i=1}^m w_i^2
+\sim
+\chi^2_m
+$$
+
+by the definition of the chi-squared distribution. Therefore,
+
+$$
+\bz'\bM\bz
+\sim
+\chi^2_m.
+$$
+
+```
+
+</details>
+
+This proposition connects the geometry of projection matrices with the chi-squared distribution. A symmetric idempotent matrix retains the components of $\bz$ lying in a particular subspace. Its rank determines the dimension of that subspace and, consequently, the number of independent squared standard Normal components appearing in the quadratic form.
+
+We can now apply this result to the residual sum of squares.
+
+```{proposition, nor-distribution-sigma2-prop, name="Distribution of the Residual Variance Estimator"}
+
+Consider the linear regression model
+
+$$
+\by=\bX\bgb+\be,
+$$
+
+where $\bX$ has full column rank, the model contains $p$ explanatory variables and an intercept, and
+
+$$
+\be\sim N(\bzero,\sigma^2\bI).
+$$
+  
+Then,
+
+$$
+\frac{\hat{\be}'\hat{\be}}{\sigma^2}
+\sim
+\chi^2_{n-p-1}.
+$$
+
+Equivalently,
+
+$$
+\frac{(n-p-1)\hat{\sigma}^2}{\sigma^2}
+\sim
+\chi^2_{n-p-1},
+$$
+
+and therefore
+
+$$
+\hat{\sigma}^2
+\sim
+\frac{\sigma^2}{n-p-1}
+\chi^2_{n-p-1}.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-distribution-sigma2-proof}
+
+We have already shown that
+
+$$
+\frac{\hat{\be}'\hat{\be}}{\sigma^2}
+=
+\bz'(\bI-\bH)\bz,
+$$
+
+where
+
+$$
+\bz\sim N(\bzero,\bI).
+$$
+
+The matrix $\bI-\bH$ is symmetric and idempotent. Furthermore,
+
+\begin{align*}
+\operatorname{rank}(\bI-\bH)
+  &= n-\operatorname{rank}(\bH) \\
+  &= n-\operatorname{rank}(\bX) \\
+  &= n-(p+1) \\
+  &= n-p-1.
+\end{align*}
+
+Therefore, by Proposition \@ref(prp:nor-normal-quadratic-form),
+
+$$
+\frac{\hat{\be}'\hat{\be}}{\sigma^2}
+\sim
+\chi^2_{n-p-1}.
+$$
+
+Since
+
+$$
+\hat{\sigma}^2
+=
+\frac{\hat{\be}'\hat{\be}}{n-p-1},
+$$
+
+we have
+
+\begin{align*}
+\frac{(n-p-1)\hat{\sigma}^2}{\sigma^2}
+  &= \frac{\hat{\be}'\hat{\be}}{\sigma^2} \\
+  &\sim \chi^2_{n-p-1}.
+\end{align*}
+
+Equivalently,
+
+$$
+\hat{\sigma}^2
+\sim
+\frac{\sigma^2}{n-p-1}\chi^2_{n-p-1}.
+$$
+
+```
+
+</details>
+
+The appearance of $n-p-1$ is not arbitrary. Recall that
+
+$$
+\operatorname{rank}(\bI-\bH)=n-p-1.
+$$
+
+Thus, the residual degrees of freedom are exactly the dimension of the residual subspace. The chi-squared distribution arises because, under Normality, the residual sum of squares can be represented as the sum of squares of $n-p-1$ independent standard Normal components.
+
+This result gives considerably more information than the result obtained in the previous chapter. There we showed only that
+
+$$
+\dE[\hat{\sigma}^2]=\sigma^2.
+$$
+
+Normality now determines the complete distribution of $\hat{\sigma}^2$.
+
+### Independence of the Least Squares Components {#nor-independence-components}
+
+The previous chapter also established that the residuals are uncorrelated with both the fitted values and the estimated coefficients:
+
+$$
+\dC[\hat{\be},\hat{\by}]
+=
+\bzero
+$$
+
+and
+
+$$
+\dC[\hat{\be},\hat{\bgb}]
+=
+\bzero.
+$$
+
+Without further assumptions, these results do not imply independence. Two random quantities can be uncorrelated and still be dependent.
+
+Normality changes this conclusion. Since $\hat{\be}$, $\hat{\by}$, and $\hat{\bgb}$ are all linear transformations of the Normal vector $\by$, the corresponding pairs are jointly Normal. For jointly Normal random vectors, zero cross-covariance implies independence.
+
+```{proposition, nor-independence-components-prop, name="Independence of Residuals from Fitted Values and Coefficient Estimates"}
+
+Under the Normal linear regression model,
+
+$$
+\hat{\be}
+\perp
+\hat{\by}
+$$
+
+and
+
+$$
+\hat{\be}
+\perp
+\hat{\bgb}.
+$$
+
+Consequently,
+
+$$
+\hat{\sigma}^2
+\perp
+\hat{\bgb}.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-independence-components-proof}
+
+Since $\hat{\be}$ and $\hat{\by}$ are both linear transformations of the multivariate Normal vector $\by$, they are jointly multivariate Normal.
+
+From the previous chapter,
+
+$$
+\dC[\hat{\be},\hat{\by}]
+=
+\bzero.
+$$
+
+Therefore, joint Normality and zero cross-covariance imply
+
+$$
+\hat{\be}
+\perp
+\hat{\by}.
+$$
+
+Similarly, $\hat{\be}$ and $\hat{\bgb}$ are jointly Normal because both are linear transformations of $\by$. We previously showed that
+
+$$
+\dC[\hat{\be},\hat{\bgb}]
+=
+\bzero.
+$$
+
+Therefore,
+
+$$
+\hat{\be}
+\perp
+\hat{\bgb}.
+$$
+
+Finally,
+
+$$
+\hat{\sigma}^2
+=
+\frac{\hat{\be}'\hat{\be}}{n-p-1}
+$$
+
+is a function only of $\hat{\be}$. Since $\hat{\be}$ and $\hat{\bgb}$ are independent, any function of $\hat{\be}$ is also independent of $\hat{\bgb}$. Hence,
+
+$$
+\hat{\sigma}^2
+\perp
+\hat{\bgb}.
+$$
+
+```
+
+</details>
+
+This last result will be particularly important for inference. We now have two distinct pieces of information about the coefficient estimator:
+
+$$
+\hat{\bgb}
+\sim
+N\left(
+\bgb,
+\sigma^2(\bX'\bX)^{-1}
+\right)
+$$
+
+and
+
+$$
+\frac{(n-p-1)\hat{\sigma}^2}{\sigma^2}
+\sim
+\chi^2_{n-p-1},
+$$
+
+with
+
+$$
+\hat{\bgb}
+\perp
+\hat{\sigma}^2.
+$$
+
+The first result describes the variation in the estimated coefficients when $\sigma^2$ is known. The second provides a random estimate of the unknown $\sigma^2$. Their independence will allow these two results to be combined to obtain Student's $t$ distributions, which will provide the basis for interval estimation and hypothesis testing in the following sections.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Interval Estimation {#nor-interval-estimation}
+
+In the previous section, we obtained the sampling distributions of the least squares estimators. These distributions describe how the estimators would vary across repeated realizations of the regression model.
+
+A point estimator provides a single estimate of an unknown parameter. For example,
+
+$$
+\hat{\beta}_j
+$$
+
+provides a point estimate of $\beta_j$. However, the fact that an estimator is random means that different realizations of the response vector generally produce different estimates. A point estimate by itself does not describe this uncertainty.
+
+The sampling distributions derived previously allow us to construct **interval estimators**. Before the data are observed, the endpoints of an interval estimator are random. We will construct these intervals so that they contain the unknown quantity of interest with a specified probability.
+
+After the data are observed, the resulting interval is fixed. At that point, the unknown parameter either belongs to the interval or it does not. The confidence level describes the proportion of intervals constructed in this way that would contain the true parameter under repeated realizations of the model.
+
+We begin by establishing notation for the distributional quantiles that will be used throughout interval estimation and hypothesis testing.
+
+### Quantile Notation {#nor-quantile-notation}
+
+```{definition, nor-quantiles, name="Upper-Tail Distribution Quantiles"}
+
+For $\alpha\in(0,1)$, we use upper-tail quantiles defined by
+
+$$
+\mathbb{P}(Z\geq z_\alpha)=\alpha,
+\qquad
+Z\sim N(0,1),
+$$
+
+$$
+\mathbb{P}(T\geq t_{\nu,\alpha})=\alpha,
+\qquad
+T\sim t_\nu,
+$$
+
+$$
+\mathbb{P}(W\geq \chi^2_{\nu,\alpha})=\alpha,
+\qquad
+W\sim\chi^2_\nu,
+$$
+
+and
+
+$$
+\mathbb{P}(F\geq f_{q,\nu,\alpha})=\alpha,
+\qquad
+F\sim F_{q,\nu}.
+$$
+
+```
+
+These quantiles are fixed values determined by the corresponding distribution, its degrees of freedom when applicable, and the upper-tail probability $\alpha$.
+
+For example, since the $t$ distribution is symmetric,
+
+$$
+\mathbb{P}
+\left(
+-t_{\nu,\alpha/2}
+\leq T
+\leq
+t_{\nu,\alpha/2}
+\right)
+=
+1-\alpha.
+$$
+
+Thus, throughout the chapter, $\alpha$ will denote the total probability outside a two-sided confidence interval, while $1-\alpha$ will denote its confidence level.
+
+### Linear Combinations of the Regression Coefficients {#nor-linear-combinations}
+
+Many quantities of interest in linear regression can be expressed as linear combinations of the regression coefficients. Suppose that the model contains $p$ explanatory variables and an intercept, so that
+
+$$
+\bgb\in\mathbb{R}^{p+1}.
+$$
+
+For a fixed nonzero vector
+
+$$
+\ba\in\mathbb{R}^{p+1},
+$$
+
+consider the quantity
+
+$$
+\ba'\bgb.
+$$
+
+Different choices of $\ba$ will allow us to study an individual coefficient, the expected response at a new predictor vector, or other linear combinations of the regression coefficients.
+
+From the distribution derived previously,
+
+$$
+\hat{\bgb}
+\sim
+N\left(
+\bgb,
+\sigma^2(\bX'\bX)^{-1}
+\right).
+$$
+
+Therefore,
+
+$$
+\ba'\hat{\bgb}
+\sim
+N\left(
+\ba'\bgb,
+\sigma^2\ba'(\bX'\bX)^{-1}\ba
+\right).
+$$
+
+If $\sigma^2$ were known, we could immediately standardize this quantity using its true standard deviation. However, $\sigma^2$ is unknown. The previous section showed that it can be estimated independently of $\hat{\bgb}$, and this leads to the Student's $t$ distribution.
+
+```{proposition, nor-linear-combination-t, name="Student's t Distribution for a Linear Combination"}
+
+Consider the linear regression model
+
+$$
+\by=\bX\bgb+\be,
+$$
+
+where $\bX$ has full column rank, the model contains $p$ explanatory variables and an intercept, and
+
+$$
+\be\sim N(\bzero,\sigma^2\bI).
+$$
+
+Let
+
+$$
+\nu=n-p-1
+$$
+
+denote the residual degrees of freedom. For any fixed nonzero vector $\ba\in\mathbb{R}^{p+1}$,
+
+$$
+T_{\ba}
+=
+\frac{
+\ba'\hat{\bgb}-\ba'\bgb
+}{
+\hat{\sigma}
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+}
+$$
+
+satisfies
+
+$$
+T_{\ba}\sim t_\nu.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-linear-combination-t-proof}
+
+Since
+
+$$
+\hat{\bgb}
+\sim
+N\left(
+\bgb,
+\sigma^2(\bX'\bX)^{-1}
+\right),
+$$
+
+we have
+
+$$
+\ba'\hat{\bgb}
+\sim
+N\left(
+\ba'\bgb,
+\sigma^2\ba'(\bX'\bX)^{-1}\ba
+\right).
+$$
+
+Therefore,
+
+$$
+Z_{\ba}
+=
+\frac{
+\ba'\hat{\bgb}-\ba'\bgb
+}{
+\sigma
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+}
+\sim N(0,1).
+$$
+
+From the distribution of the residual variance estimator,
+
+$$
+\frac{\nu\hat{\sigma}^2}{\sigma^2}
+=
+\frac{\hat{\be}'\hat{\be}}{\sigma^2}
+\sim
+\chi^2_\nu.
+$$
+
+Let
+
+$$
+W
+=
+\frac{\nu\hat{\sigma}^2}{\sigma^2}.
+$$
+
+Then
+
+$$
+W\sim\chi^2_\nu.
+$$
+
+Furthermore, $\hat{\bgb}$ and $\hat{\sigma}^2$ are independent. Therefore, $Z_{\ba}$ and $W$ are independent.
+
+We can now write
+
+\begin{align*}
+T_{\ba}
+&=
+\frac{
+\ba'\hat{\bgb}-\ba'\bgb
+}{
+\hat{\sigma}
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+} \\
+&=
+\frac{
+\frac{
+\ba'\hat{\bgb}-\ba'\bgb
+}{
+\sigma
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+}
+}{
+\sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}
+} \\
+&=
+\frac{
+Z_{\ba}
+}{
+\sqrt{\frac{W}{\nu}}
+}.
+\end{align*}
+
+Since $Z_{\ba}\sim N(0,1)$, $W\sim\chi^2_\nu$, and $Z_{\ba}$ and $W$ are independent, the definition of the Student's $t$ distribution gives
+
+$$
+T_{\ba}\sim t_\nu.
+$$
+
+```
+
+</details>
+
+This result is important because the unknown $\sigma^2$ has disappeared from the distribution of $T_{\ba}$. The statistic depends only on observable quantities and the unknown linear combination $\ba'\bgb$ that we want to estimate.
+
+We can now use this result to construct a confidence interval.
+
+```{proposition, nor-linear-combination-ci, name="Confidence Interval for a Linear Combination"}
+
+Under the assumptions of Proposition \@ref(prp:nor-linear-combination-t), a $(1-\alpha)$ confidence interval for $\ba'\bgb$ is
+
+$$
+\left(
+\ba'\hat{\bgb}
+-
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+},
+\;
+\ba'\hat{\bgb}
++
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+\right),
+$$
+
+where
+
+$$
+\nu=n-p-1.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-linear-combination-ci-proof}
+
+Since
+
+$$
+T_{\ba}\sim t_\nu,
+$$
+
+and $t_{\nu,\alpha/2}$ is the upper-tail $\alpha/2$ quantile,
+
+\begin{align*}
+\mathbb{P}
+\left(
+-t_{\nu,\alpha/2}
+\leq
+T_{\ba}
+\leq
+t_{\nu,\alpha/2}
+\right)
+&=
+1-\alpha \\
+%
+\implies
+\mathbb{P}
+\left(
+-t_{\nu,\alpha/2}
+\leq
+\frac{
+\ba'\hat{\bgb}-\ba'\bgb
+}{
+\hat{\sigma}
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+}
+\leq
+t_{\nu,\alpha/2}
+\right)
+&=
+1-\alpha \\
+%
+\implies
+\mathbb{P}
+\left(
+-t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+\leq
+\ba'\hat{\bgb}-\ba'\bgb
+\right. \qquad &\\
+\left.
+\leq
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+\right)
+&=
+1-\alpha \\
+%
+\implies
+\mathbb{P}
+\left(
+\ba'\hat{\bgb}
+-
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+\leq
+\ba'\bgb
+\right. \qquad &\\
+\left.
+\leq
+\ba'\hat{\bgb}
++
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+\right)
+&=
+1-\alpha.
+\end{align*}
+
+Therefore, the corresponding random interval contains $\ba'\bgb$ with probability $1-\alpha$.
+
+```
+
+</details>
+
+The proposition provides a general interval-estimation result. Several important confidence intervals in linear regression follow simply by choosing an appropriate vector $\ba$.
+
+### Confidence Intervals for Individual Coefficients {#nor-coefficient-ci}
+
+To obtain a confidence interval for a particular coefficient $\beta_j$, let $\ba$ be the vector whose $j$-th entry is equal to $1$ and whose remaining entries are equal to $0$. Then
+
+$$
+\ba'\bgb=\beta_j
+$$
+
+and
+
+$$
+\ba'\hat{\bgb}=\hat{\beta}_j.
+$$
+
+Furthermore,
+
+$$
+\ba'(\bX'\bX)^{-1}\ba
+=
+[(\bX'\bX)^{-1}]_{jj}.
+$$
+
+Therefore, a $(1-\alpha)$ confidence interval for $\beta_j$ is
+
+$$
+\boxed{
+\left(
+\hat{\beta}_j
+-
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+},
+\;
+\hat{\beta}_j
++
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+\right),
+}
+$$
+
+where
+
+$$
+\nu=n-p-1.
+$$
+
+The width of this interval depends on two different sources of uncertainty. The quantity $\hat{\sigma}^2$ estimates the variability in the errors, while
+
+$$
+[(\bX'\bX)^{-1}]_{jj}
+$$
+
+depends on the geometry of the explanatory variables. Thus, the relationships among the explanatory variables that affected the variability of the OLS estimator in the previous chapter also directly affect the precision of the corresponding confidence intervals.
+
+### Confidence Interval for the Expected Response {#nor-mean-response-ci}
+
+Suppose that we are interested in the expected response associated with a fixed predictor vector
+
+$$
+\bx_{\mathrm{new}}\in\mathbb{R}^{p+1},
+$$
+
+where $\bx_{\mathrm{new}}$ includes the intercept entry.
+
+Under the regression model,
+
+$$
+\mu_{\mathrm{new}}
+=
+\mathbb{E}[y_{\mathrm{new}}]
+=
+\bx_{\mathrm{new}}'\bgb.
+$$
+
+Its natural estimator is
+
+$$
+\hat{\mu}_{\mathrm{new}}
+=
+\bx_{\mathrm{new}}'\hat{\bgb}.
+$$
+
+This is another linear combination of $\bgb$. Therefore, we can apply the previous proposition using
+
+$$
+\ba=\bx_{\mathrm{new}}.
+$$
+
+A $(1-\alpha)$ confidence interval for the expected response is
+
+$$
+\boxed{
+\left(
+\bx_{\mathrm{new}}'\hat{\bgb}
+-
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+},
+\;
+\bx_{\mathrm{new}}'\hat{\bgb}
++
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+}
+\right).
+}
+$$
+
+This interval quantifies uncertainty about the **mean response**
+
+$$
+\bx_{\mathrm{new}}'\bgb.
+$$
+
+It does not quantify uncertainty about a future individual response. A future observation contains an additional random error that is not present when estimating the mean response.
+
+### Prediction Interval for a New Observation {#nor-prediction-interval}
+
+Suppose now that a new observation is generated at the predictor vector $\bx_{\mathrm{new}}$ according to
+
+$$
+y_{\mathrm{new}}
+=
+\bx_{\mathrm{new}}'\bgb
++
+e_{\mathrm{new}},
+$$
+
+where
+
+$$
+e_{\mathrm{new}}\sim N(0,\sigma^2)
+$$
+
+and $e_{\mathrm{new}}$ is independent of the errors used to fit the regression model.
+
+The natural prediction of $y_{\mathrm{new}}$ is
+
+$$
+\hat{y}_{\mathrm{new}}
+=
+\bx_{\mathrm{new}}'\hat{\bgb}.
+$$
+
+The prediction error is
+
+\begin{align*}
+y_{\mathrm{new}}
+-
+\hat{y}_{\mathrm{new}}
+&=
+\bx_{\mathrm{new}}'\bgb
++
+e_{\mathrm{new}}
+-
+\bx_{\mathrm{new}}'\hat{\bgb} \\
+&=
+e_{\mathrm{new}}
+-
+\bx_{\mathrm{new}}'
+(\hat{\bgb}-\bgb).
+\end{align*}
+
+The two terms on the right are independent. Therefore,
+
+\begin{align*}
+\mathbb{V}
+\left[
+y_{\mathrm{new}}
+-
+\hat{y}_{\mathrm{new}}
+\right]
+&=
+\mathbb{V}[e_{\mathrm{new}}]
++
+\mathbb{V}
+\left[
+\bx_{\mathrm{new}}'
+(\hat{\bgb}-\bgb)
+\right] \\
+&=
+\sigma^2
++
+\sigma^2
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}} \\
+&=
+\sigma^2
+\left(
+1+
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+\right).
+\end{align*}
+
+```{proposition, nor-prediction-interval-prop, name="Prediction Interval for a New Observation"}
+
+Consider the Normal linear regression model with $\bX$ of full column rank, $p$ explanatory variables and an intercept. Suppose that
+
+$$
+y_{\mathrm{new}}
+=
+\bx_{\mathrm{new}}'\bgb+e_{\mathrm{new}},
+$$
+
+where
+
+$$
+e_{\mathrm{new}}\sim N(0,\sigma^2)
+$$
+
+and $e_{\mathrm{new}}$ is independent of the data used to fit the model.
+
+Then
+
+$$
+\frac{
+y_{\mathrm{new}}
+-
+\bx_{\mathrm{new}}'\hat{\bgb}
+}{
+\hat{\sigma}
+\sqrt{
+1+
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+}
+}
+\sim
+t_\nu,
+$$
+
+where
+
+$$
+\nu=n-p-1.
+$$
+
+Consequently, a $(1-\alpha)$ prediction interval for $y_{\mathrm{new}}$ is
+
+$$
+\boxed{
+\left(
+\bx_{\mathrm{new}}'\hat{\bgb}
+-
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+1+
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+},
+\;
+\bx_{\mathrm{new}}'\hat{\bgb}
++
+t_{\nu,\alpha/2}
+\hat{\sigma}
+\sqrt{
+1+
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+}
+\right).
+}
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-prediction-interval-proof}
+
+Since $\hat{\bgb}$ is multivariate Normal and $e_{\mathrm{new}}$ is an independent Normal random variable,
+
+$$
+y_{\mathrm{new}}
+-
+\bx_{\mathrm{new}}'\hat{\bgb}
+$$
+
+is normally distributed.
+
+Its expectation is
+
+\begin{align*}
+\mathbb{E}
+\left[
+y_{\mathrm{new}}
+-
+\bx_{\mathrm{new}}'\hat{\bgb}
+\right]
+&=
+\bx_{\mathrm{new}}'\bgb
+-
+\bx_{\mathrm{new}}'\mathbb{E}[\hat{\bgb}]
++
+\mathbb{E}[e_{\mathrm{new}}] \\
+&=
+0.
+\end{align*}
+
+Its variance is
+
+$$
+\sigma^2
+\left(
+1+
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+\right).
+$$
+
+Therefore,
+
+$$
+Z_{\mathrm{new}}
+=
+\frac{
+y_{\mathrm{new}}
+-
+\bx_{\mathrm{new}}'\hat{\bgb}
+}{
+\sigma
+\sqrt{
+1+
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+}
+}
+\sim N(0,1).
+$$
+
+Furthermore,
+
+$$
+\frac{\nu\hat{\sigma}^2}{\sigma^2}
+\sim
+\chi^2_\nu.
+$$
+
+The new error $e_{\mathrm{new}}$ is independent of the data used to construct $\hat{\sigma}^2$, and $\hat{\bgb}$ is independent of $\hat{\sigma}^2$. Therefore, $Z_{\mathrm{new}}$ and $\hat{\sigma}^2$ are independent.
+
+It follows that
+
+$$
+\frac{
+Z_{\mathrm{new}}
+}{
+\sqrt{
+\frac{\nu\hat{\sigma}^2/\sigma^2}{\nu}
+}
+}
+=
+\frac{
+y_{\mathrm{new}}
+-
+\bx_{\mathrm{new}}'\hat{\bgb}
+}{
+\hat{\sigma}
+\sqrt{
+1+
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+}
+}
+\sim
+t_\nu.
+$$
+
+Using the upper-tail quantile $t_{\nu,\alpha/2}$ and proceeding as in the confidence interval for a linear combination gives the stated prediction interval.
+
+```
+
+</details>
+
+The distinction between the confidence interval for the mean response and the prediction interval is important. Both intervals are centered at
+
+$$
+\bx_{\mathrm{new}}'\hat{\bgb},
+$$
+
+but their estimated variances are different:
+
+$$
+\hat{\sigma}^2
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+$$
+
+for estimation of the mean response, and
+
+$$
+\hat{\sigma}^2
+\left(
+1+
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+\right)
+$$
+
+for prediction of a new observation.
+
+The additional $1$ represents the variability of the new error $e_{\mathrm{new}}$. Therefore, for the same $\bx_{\mathrm{new}}$ and confidence level, the prediction interval is wider than the confidence interval for the mean response.
+
+### Confidence Interval for $\sigma^2$ {#nor-sigma2-ci}
+
+The chi-squared distribution obtained in the previous section also allows us to construct an interval estimator for the error variance itself.
+
+Recall that
+
+$$
+\frac{\nu\hat{\sigma}^2}{\sigma^2}
+\sim
+\chi^2_\nu,
+$$
+
+where
+
+$$
+\nu=n-p-1.
+$$
+
+Using the upper-tail quantile notation introduced earlier,
+
+$$
+\mathbb{P}
+\left(
+\chi^2_{\nu,1-\alpha/2}
+\leq
+\frac{\nu\hat{\sigma}^2}{\sigma^2}
+\leq
+\chi^2_{\nu,\alpha/2}
+\right)
+=
+1-\alpha.
+$$
+
+Solving the inequalities for $\sigma^2$ gives
+
+\begin{align*}
+\mathbb{P}
+\left(
+\chi^2_{\nu,1-\alpha/2}
+\leq
+\frac{\nu\hat{\sigma}^2}{\sigma^2}
+\leq
+\chi^2_{\nu,\alpha/2}
+\right)
+&=
+1-\alpha \\
+%
+\implies
+\mathbb{P}
+\left(
+\frac{\nu\hat{\sigma}^2}
+{\chi^2_{\nu,\alpha/2}}
+\leq
+\sigma^2
+\leq
+\frac{\nu\hat{\sigma}^2}
+{\chi^2_{\nu,1-\alpha/2}}
+\right)
+&=
+1-\alpha.
+\end{align*}
+
+Therefore, a $(1-\alpha)$ confidence interval for $\sigma^2$ is
+
+$$
+\boxed{
+\left(
+\frac{\nu\hat{\sigma}^2}
+{\chi^2_{\nu,\alpha/2}},
+\;
+\frac{\nu\hat{\sigma}^2}
+{\chi^2_{\nu,1-\alpha/2}}
+\right).
+}
+$$
+
+Unlike the confidence intervals for linear combinations of $\bgb$, this interval is generally not symmetric around $\hat{\sigma}^2$. This follows from the asymmetry of the chi-squared distribution.
+
+The interval estimators developed in this section all arise from the same general strategy. We begin with a statistic whose sampling distribution is known and whose distribution does not depend on unknown quantities after appropriate standardization. We then use distributional quantiles to obtain a probability statement and solve that statement for the unknown quantity of interest.
+
+The same sampling distributions will be used in the next section from a different perspective. Rather than constructing a range of plausible parameter values, we will assume a particular parameter value under a null hypothesis and determine whether the observed data are consistent with that assumption.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Hypothesis Testing {#nor-hypothesis-testing}
+
+The sampling distributions derived in the previous sections allow us to address another inferential question. Instead of constructing a range of plausible values for an unknown parameter, suppose that we want to evaluate a particular statement about the regression model.
+
+We will approach hypothesis testing using an **implausibility framework**. We begin by specifying a null hypothesis, denoted by $\cH_0$, and temporarily assume that it is true. We then construct a statistic whose sampling distribution is known conditional on $\cH_0$.
+
+After observing the data, we compare the observed value of the statistic with its distribution under the null hypothesis. If the observed value would be unusually extreme conditional on $\cH_0$, this provides evidence against the null hypothesis.
+
+Throughout this section, notation such as
+
+$$
+\dP(A\mid\cH_0)
+$$
+
+will denote the probability of the event $A$ calculated using the sampling distribution implied by the null hypothesis. This notation does not mean that $\cH_0$ is being treated as a random event. Instead, it emphasizes that the relevant probability distribution is obtained by assuming that the parameter restrictions specified by $\cH_0$ are true.
+
+This reasoning leads to the concept of a $p$-value.
+
+```{definition, nor-p-value, name="p-value"}
+
+The $p$-value is the probability, computed conditional on the null hypothesis, of obtaining a value of the test statistic at least as extreme as the value observed in the data, where the meaning of "extreme" is determined by the alternative hypothesis.
+
+Thus, if $T^*$ denotes the observed value of a test statistic $T$, the $p$-value has the general form
+
+$$
+\dP
+\left(
+T\text{ is at least as extreme as }T^*
+\mid
+\cH_0
+\right).
+$$
+
+```
+
+A small $p$-value indicates that the observed statistic would be unusual under the sampling distribution implied by $\cH_0$. Given a significance level $\alpha$, we reject $\cH_0$ when
+
+$$
+p\text{-value}\leq\alpha.
+$$
+
+Otherwise, we do not reject $\cH_0$.
+
+Notice that
+
+$$
+\dP(\text{data as or more extreme}\mid\cH_0)
+$$
+
+is not the same quantity as
+
+$$
+\dP(\cH_0\mid\text{data}).
+$$
+
+The hypothesis-testing framework developed here concerns the first probability.
+
+Many important hypothesis tests in linear regression can be understood as comparisons between two **nested regression models**. We will first develop this general result and then use it to construct tests for the overall regression and for groups of explanatory variables.
+
+### Comparing Nested Regression Models {#nor-nested-regression-tests}
+
+Suppose that we have a full regression model with design matrix $\bX_F$ and a reduced regression model with design matrix $\bX_R$, where
+
+$$
+\mathcal{C}(\bX_R)
+\subseteq
+\mathcal{C}(\bX_F).
+$$
+
+Thus, every response pattern that can be represented by the reduced model can also be represented by the full model.
+
+Let
+
+$$
+\bH_F
+=
+\bX_F(\bX_F'\bX_F)^{-1}\bX_F'
+$$
+
+and
+
+$$
+\bH_R
+=
+\bX_R(\bX_R'\bX_R)^{-1}\bX_R'
+$$
+
+be the corresponding projection matrices, assuming both design matrices have full column rank.
+
+The residual sums of squares are
+
+$$
+SS_{res,F}
+=
+\by'(\bI-\bH_F)\by
+$$
+
+and
+
+$$
+SS_{res,R}
+=
+\by'(\bI-\bH_R)\by.
+$$
+
+Since the full model contains all the directions available to the reduced model, fitting the full model cannot increase the residual sum of squares. The quantity
+
+$$
+SS_{res,R}-SS_{res,F}
+$$
+
+therefore measures the reduction in residual variation obtained by moving from the reduced model to the full model.
+
+The following proposition determines the distribution of this reduction conditional on the null hypothesis that the reduced model is sufficient.
+
+```{proposition, nor-nested-f-test, name="F Test for Nested Regression Models"}
+
+Consider the Normal linear regression model
+
+$$
+\by=\boldsymbol{\mu}+\be,
+$$
+
+where
+
+$$
+\be\sim N(\bzero,\sigma^2\bI).
+$$
+
+Let $\bX_F$ and $\bX_R$ be full-column-rank design matrices satisfying
+
+$$
+\mathcal{C}(\bX_R)
+\subseteq
+\mathcal{C}(\bX_F),
+$$
+
+with corresponding projection matrices $\bH_F$ and $\bH_R$. Let
+
+$$
+r_F=\operatorname{rank}(\bX_F),
+\qquad
+r_R=\operatorname{rank}(\bX_R),
+$$
+
+and define
+
+$$
+q=r_F-r_R,
+\qquad
+\nu=n-r_F.
+$$
+
+Under the null hypothesis
+
+$$
+\cH_0:
+\boldsymbol{\mu}\in\mathcal{C}(\bX_R),
+$$
+
+the statistic
+
+$$
+F
+=
+\frac{
+\frac{SS_{res,R}-SS_{res,F}}{q}
+}{
+\frac{SS_{res,F}}{\nu}
+}
+$$
+
+satisfies
+
+$$
+F\mid\cH_0
+\sim
+F_{q,\nu}.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-nested-f-test-proof}
+
+We begin by studying the relationship between the two projection matrices.
+
+Since
+
+$$
+\mathcal{C}(\bX_R)
+\subseteq
+\mathcal{C}(\bX_F),
+$$
+
+every vector in $\mathcal{C}(\bX_R)$ is unchanged when projected onto $\mathcal{C}(\bX_F)$. Therefore,
+
+$$
+\bH_F\bH_R=\bH_R.
+$$
+
+Taking transposes and using the symmetry of both projection matrices,
+
+\begin{align*}
+(\bH_F\bH_R)'
+&=
+\bH_R'\bH_F' \\
+&=
+\bH_R\bH_F
+\end{align*}
+
+and
+
+$$
+(\bH_F\bH_R)'
+=
+\bH_R'.
+$$
+
+Therefore,
+
+$$
+\bH_R\bH_F
+=
+\bH_R.
+$$
+
+Now consider
+
+$$
+\bH_F-\bH_R.
+$$
+
+Since both matrices are symmetric, their difference is symmetric. Furthermore,
+
+\begin{align*}
+(\bH_F-\bH_R)^2
+&=
+\bH_F\bH_F
+-
+\bH_F\bH_R
+-
+\bH_R\bH_F
++
+\bH_R\bH_R \\
+&=
+\bH_F
+-
+\bH_R
+-
+\bH_R
++
+\bH_R
+&&
+\text{since $\bH_F$ and $\bH_R$ are idempotent} \\
+&=
+\bH_F-\bH_R.
+\end{align*}
+
+Thus, $\bH_F-\bH_R$ is symmetric and idempotent.
+
+Its rank can be obtained from its trace:
+
+\begin{align*}
+\operatorname{rank}(\bH_F-\bH_R)
+&=
+\operatorname{tr}(\bH_F-\bH_R)
+&&
+\text{since $\bH_F-\bH_R$ is idempotent} \\
+&=
+\operatorname{tr}(\bH_F)
+-
+\operatorname{tr}(\bH_R) \\
+&=
+r_F-r_R \\
+&=
+q.
+\end{align*}
+
+Next,
+
+\begin{align*}
+SS_{res,R}-SS_{res,F}
+&=
+\by'(\bI-\bH_R)\by
+-
+\by'(\bI-\bH_F)\by \\
+&=
+\by'
+\left[
+(\bI-\bH_R)-(\bI-\bH_F)
+\right]
+\by \\
+&=
+\by'(\bH_F-\bH_R)\by.
+\end{align*}
+
+Conditional on $\cH_0$,
+
+$$
+\boldsymbol{\mu}\in\mathcal{C}(\bX_R).
+$$
+
+Therefore,
+
+$$
+\bH_R\boldsymbol{\mu}
+=
+\boldsymbol{\mu}
+$$
+
+and
+
+$$
+\bH_F\boldsymbol{\mu}
+=
+\boldsymbol{\mu}.
+$$
+
+It follows that
+
+$$
+(\bH_F-\bH_R)\boldsymbol{\mu}
+=
+\bzero.
+$$
+
+Since
+
+$$
+\by=\boldsymbol{\mu}+\be,
+$$
+
+we obtain, conditional on $\cH_0$,
+
+\begin{align*}
+(\bH_F-\bH_R)\by
+&=
+(\bH_F-\bH_R)
+(\boldsymbol{\mu}+\be) \\
+&=
+(\bH_F-\bH_R)\boldsymbol{\mu}
++
+(\bH_F-\bH_R)\be \\
+&=
+(\bH_F-\bH_R)\be.
+\end{align*}
+
+Consequently,
+
+$$
+SS_{res,R}-SS_{res,F}
+=
+\be'(\bH_F-\bH_R)\be
+\qquad
+\text{under $\cH_0$}.
+$$
+
+Since
+
+$$
+\frac{\be}{\sigma}
+\sim
+N(\bzero,\bI),
+$$
+
+and $\bH_F-\bH_R$ is symmetric and idempotent with rank $q$, Proposition \@ref(prp:nor-normal-quadratic-form) gives
+
+$$
+\left.
+\frac{
+SS_{res,R}-SS_{res,F}
+}{
+\sigma^2
+}
+\right|
+\cH_0
+\sim
+\chi^2_q.
+$$
+
+Similarly,
+
+$$
+(\bI-\bH_F)\boldsymbol{\mu}
+=
+\bzero
+$$
+
+under $\cH_0$, and $\bI-\bH_F$ is symmetric and idempotent with rank
+
+$$
+n-r_F=\nu.
+$$
+
+Therefore,
+
+$$
+\left.
+\frac{SS_{res,F}}{\sigma^2}
+\right|
+\cH_0
+\sim
+\chi^2_\nu.
+$$
+
+It remains to establish independence. Consider
+
+$$
+(\bH_F-\bH_R)\by
+$$
+
+and
+
+$$
+(\bI-\bH_F)\by.
+$$
+
+Their cross-covariance is
+
+\begin{align*}
+\dC[
+(\bH_F-\bH_R)\by,
+(\bI-\bH_F)\by
+]
+&=
+(\bH_F-\bH_R)
+\dV[\by]
+(\bI-\bH_F) \\
+&=
+\sigma^2
+(\bH_F-\bH_R)
+(\bI-\bH_F) \\
+&=
+\bzero.
+\end{align*}
+
+Both vectors are jointly Normal because they are linear transformations of $\by$. Therefore, they are independent.
+
+Consequently,
+
+$$
+SS_{res,R}-SS_{res,F}
+$$
+
+and
+
+$$
+SS_{res,F}
+$$
+
+are independent.
+
+We have therefore established, conditional on $\cH_0$,
+
+$$
+\frac{
+SS_{res,R}-SS_{res,F}
+}{
+\sigma^2
+}
+\sim
+\chi^2_q,
+$$
+
+$$
+\frac{
+SS_{res,F}
+}{
+\sigma^2
+}
+\sim
+\chi^2_\nu,
+$$
+
+with the two quantities independent. Hence,
+
+\begin{align*}
+F
+&=
+\frac{
+\frac{SS_{res,R}-SS_{res,F}}{q}
+}{
+\frac{SS_{res,F}}{\nu}
+} \\
+&=
+\frac{
+\frac{1}{q}
+\frac{SS_{res,R}-SS_{res,F}}{\sigma^2}
+}{
+\frac{1}{\nu}
+\frac{SS_{res,F}}{\sigma^2}
+} \\
+&\sim
+\frac{
+\chi^2_q/q
+}{
+\chi^2_\nu/\nu
+} \\
+&\sim
+F_{q,\nu},
+\end{align*}
+
+conditional on $\cH_0$.
+
+```
+
+</details>
+
+The numerator measures the improvement in fit obtained by moving from the reduced model to the full model. The denominator estimates the error variance using the residual variation remaining in the full model.
+
+Thus, the $F$ statistic compares
+
+$$
+\text{variation explained by the additional model components}
+$$
+
+with
+
+$$
+\text{unexplained variation remaining in the full model}.
+$$
+
+Conditional on $\cH_0$, the additional directions in the full model represent no systematic component of the mean. Any improvement in fit produced by them is therefore attributable to random variation. An unusually large improvement provides evidence against $\cH_0$.
+
+### Testing the Overall Regression {#nor-overall-regression-test}
+
+We can now apply the nested-model result to test whether the explanatory variables collectively contribute to the regression model.
+
+Recall that
+
+$$
+\bX
+=
+[\bones\;\bX_*],
+$$
+
+where $\bX_*$ contains the $p$ explanatory variables. The coefficient vector is
+
+$$
+\bgb
+=
+(\beta_0,\beta_1,\ldots,\beta_p)'.
+$$
+
+The null hypothesis is
+
+$$
+\cH_0:
+\beta_1=\cdots=\beta_p=0.
+$$
+
+Conditional on $\cH_0$,
+
+$$
+\dE[\by]
+=
+\beta_0\bones.
+$$
+
+Thus, the reduced model is the intercept-only model.
+
+Its projection matrix is
+
+$$
+\bH_0
+=
+\bones(\bones'\bones)^{-1}\bones'.
+$$
+
+The residual sum of squares for the reduced model is
+
+$$
+\by'(\bI-\bH_0)\by
+=
+SS_{tot},
+$$
+
+while for the full model,
+
+$$
+SS_{res}
+=
+\by'(\bI-\bH)\by.
+$$
+
+Therefore,
+
+\begin{align*}
+SS_{tot}-SS_{res}
+&=
+\by'(\bI-\bH_0)\by
+-
+\by'(\bI-\bH)\by \\
+&=
+\by'(\bH-\bH_0)\by \\
+&=
+SS_{reg}.
+\end{align*}
+
+The full model has rank $p+1$, while the intercept-only model has rank $1$. Thus,
+
+$$
+q=p
+$$
+
+and
+
+$$
+\nu=n-p-1.
+$$
+
+```{proposition, nor-overall-f-test, name="Overall Regression F Test"}
+
+Consider the Normal linear regression model
+
+$$
+\by=\bX\bgb+\be,
+$$
+
+where
+
+$$
+\bX=[\bones\;\bX_*]
+$$
+
+has full column rank, $\bX_*$ contains $p$ explanatory variables, and
+
+$$
+\be\sim N(\bzero,\sigma^2\bI).
+$$
+
+Under
+
+$$
+\cH_0:
+\beta_1=\cdots=\beta_p=0,
+$$
+
+the statistic
+
+$$
+F_{\mathrm{overall}}
+=
+\frac{
+SS_{reg}/p
+}{
+SS_{res}/(n-p-1)
+}
+$$
+
+satisfies
+
+$$
+F_{\mathrm{overall}}
+\mid
+\cH_0
+\sim
+F_{p,n-p-1}.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-overall-f-test-proof}
+
+Conditional on $\cH_0$, the reduced model is the intercept-only model, whose column space is
+
+$$
+\mathcal{C}(\bones).
+$$
+
+Since
+
+$$
+\mathcal{C}(\bones)
+\subseteq
+\mathcal{C}(\bX),
+$$
+
+the two models are nested.
+
+Furthermore,
+
+$$
+SS_{res,R}=SS_{tot},
+$$
+
+$$
+SS_{res,F}=SS_{res},
+$$
+
+and
+
+$$
+SS_{res,R}-SS_{res,F}=SS_{reg}.
+$$
+
+The difference in ranks is
+
+$$
+q=(p+1)-1=p,
+$$
+
+and the residual degrees of freedom are
+
+$$
+\nu=n-p-1.
+$$
+
+Therefore, Proposition \@ref(prp:nor-nested-f-test) gives
+
+$$
+F_{\mathrm{overall}}
+\mid
+\cH_0
+\sim
+F_{p,n-p-1}.
+$$
+
+```
+
+</details>
+
+Once the data are observed, let
+
+$$
+F_{\mathrm{overall}}^*
+$$
+
+denote the observed value. Since large values provide evidence against the intercept-only model, the $p$-value is
+
+$$
+\boxed{
+\dP
+\left(
+F_{\mathrm{overall}}
+\geq
+F_{\mathrm{overall}}^*
+\mid
+\cH_0
+\right).
+}
+$$
+
+At significance level $\alpha$, we reject $\cH_0$ when
+
+$$
+F_{\mathrm{overall}}^*
+\geq
+f_{p,n-p-1,\alpha}.
+$$
+
+### Testing a Single Regression Coefficient {#nor-single-coefficient-test}
+
+We may want to determine whether a particular explanatory variable contributes to the regression after accounting for the other variables already included in the model.
+
+For the coefficient $\beta_j$, consider
+
+$$
+\cH_0:
+\beta_j=0
+$$
+
+against
+
+$$
+\cH_1:
+\beta_j\neq0.
+$$
+
+There are two useful ways to understand this test.
+
+The first uses the sampling distribution of the coefficient estimator directly. The second treats the test as a comparison between two nested regression models. These approaches lead to exactly the same test.
+
+#### Direct Approach Using the $t$ Distribution {#nor-single-coefficient-direct}
+
+```{proposition, nor-single-coefficient-t-test, name="t Test for a Single Regression Coefficient"}
+
+Consider the Normal linear regression model
+
+$$
+\by=\bX\bgb+\be,
+$$
+
+where $\bX$ has full column rank, the model contains $p$ explanatory variables and an intercept, and
+
+$$
+\be\sim N(\bzero,\sigma^2\bI).
+$$
+
+Under
+
+$$
+\cH_0:
+\beta_j=0,
+$$
+
+the statistic
+
+$$
+T_j
+=
+\frac{
+\hat{\beta}_j
+}{
+\hat{\sigma}
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}
+$$
+
+satisfies
+
+$$
+T_j
+\mid
+\cH_0
+\sim
+t_{n-p-1}.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-single-coefficient-t-test-proof}
+
+Let $\ba$ be the vector with a $1$ in the position corresponding to $\beta_j$ and zeros elsewhere. Then
+
+$$
+\ba'\bgb
+=
+\beta_j
+$$
+
+and
+
+$$
+\ba'\hat{\bgb}
+=
+\hat{\beta}_j.
+$$
+
+From Proposition \@ref(prp:nor-linear-combination-t),
+
+$$
+\frac{
+\hat{\beta}_j-\beta_j
+}{
+\hat{\sigma}
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}
+\sim
+t_{n-p-1}.
+$$
+
+Conditional on $\cH_0$,
+
+$$
+\beta_j=0.
+$$
+
+Therefore,
+
+$$
+T_j
+=
+\frac{
+\hat{\beta}_j
+}{
+\hat{\sigma}
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}
+\mid
+\cH_0
+\sim
+t_{n-p-1}.
+$$
+
+```
+
+</details>
+
+Once the data are observed, let $T_j^*$ denote the observed value.
+
+Since the alternative is two-sided, values sufficiently far from zero in either direction provide evidence against $\cH_0$. The $p$-value is therefore
+
+$$
+\boxed{
+2\dP
+\left(
+T_j
+\geq
+|T_j^*|
+\mid
+\cH_0
+\right),
+}
+$$
+
+where the probability is evaluated using the $t_{n-p-1}$ distribution.
+
+Equivalently, we reject at significance level $\alpha$ when
+
+$$
+|T_j^*|
+\geq
+t_{n-p-1,\alpha/2}.
+$$
+
+#### Nested-Model Interpretation {#nor-single-coefficient-nested}
+
+The same hypothesis can also be interpreted geometrically as a comparison between two nested regression models.
+
+Write the complete design matrix as
+
+$$
+\bX
+=
+[\bx_j\;\bX_{-j}],
+$$
+
+where $\bx_j$ is the column associated with $\beta_j$ and $\bX_{-j}$ contains all remaining columns of the design matrix, including the intercept.
+
+The full model is
+
+$$
+\by
+=
+\bx_j\beta_j
++
+\bX_{-j}\bgb_{-j}
++
+\be.
+$$
+
+Under
+
+$$
+\cH_0:
+\beta_j=0,
+$$
+
+the model reduces to
+
+$$
+\by
+=
+\bX_{-j}\bgb_{-j}
++
+\be.
+$$
+
+Thus, testing a single coefficient is also a nested-model comparison in which the full model contains exactly one additional direction.
+
+Let
+
+$$
+\bH_{-j}
+$$
+
+denote the projection matrix onto $\mathcal{C}(\bX_{-j})$, and define
+
+$$
+\bM_{-j}
+=
+\bI-\bH_{-j}.
+$$
+
+The vector
+
+$$
+\bz_j
+=
+\bM_{-j}\bx_j
+$$
+
+is the component of $\bx_j$ that cannot be explained by the remaining columns of the design matrix.
+
+Because $\bX$ has full column rank,
+
+$$
+\bz_j\neq\bzero.
+$$
+
+Furthermore,
+
+$$
+\bz_j
+\perp
+\mathcal{C}(\bX_{-j}).
+$$
+
+Since
+
+$$
+\bx_j
+=
+\bH_{-j}\bx_j+\bz_j,
+$$
+
+adding $\bx_j$ to the reduced model adds exactly the new direction generated by $\bz_j$. Consequently,
+
+$$
+\mathcal{C}(\bX)
+=
+\mathcal{C}(\bX_{-j})
+\oplus
+\operatorname{span}(\bz_j).
+$$
+
+Therefore,
+
+$$
+\bH-\bH_{-j}
+=
+\bz_j(\bz_j'\bz_j)^{-1}\bz_j'.
+$$
+
+This matrix projects onto the single additional direction contributed by $\bx_j$ after accounting for all the other explanatory variables.
+
+The reduction in residual sum of squares obtained by adding $\bx_j$ is
+
+\begin{align*}
+SS_{res,-j}-SS_{res}
+&=
+\by'(\bH-\bH_{-j})\by \\
+&=
+\by'
+\bz_j(\bz_j'\bz_j)^{-1}\bz_j'
+\by \\
+&=
+\frac{
+(\bz_j'\by)^2
+}{
+\bz_j'\bz_j
+}.
+\end{align*}
+
+We can connect this quantity directly to $\hat{\beta}_j$.
+
+Since the least squares residual is orthogonal to every column of $\bX$, it is also orthogonal to $\bz_j\in\mathcal{C}(\bX)$. Thus,
+
+\begin{align*}
+0
+&=
+\bz_j'\hat{\be} \\
+&=
+\bz_j'
+\left(
+\by
+-
+\bx_j\hat{\beta}_j
+-
+\bX_{-j}\hat{\bgb}_{-j}
+\right) \\
+&=
+\bz_j'\by
+-
+\hat{\beta}_j\bz_j'\bx_j
+&&
+\text{since $\bz_j'\bX_{-j}=\bzero$}.
+\end{align*}
+
+Also,
+
+\begin{align*}
+\bz_j'\bx_j
+&=
+\bz_j'
+(\bH_{-j}\bx_j+\bz_j) \\
+&=
+\bz_j'\bz_j
+&&
+\text{since $\bz_j\perp\mathcal{C}(\bX_{-j})$}.
+\end{align*}
+
+Therefore,
+
+$$
+\hat{\beta}_j
+=
+\frac{
+\bz_j'\by
+}{
+\bz_j'\bz_j
+}.
+$$
+
+It follows that
+
+\begin{align*}
+SS_{res,-j}-SS_{res}
+&=
+\frac{
+(\bz_j'\by)^2
+}{
+\bz_j'\bz_j
+} \\
+&=
+\hat{\beta}_j^2
+(\bz_j'\bz_j).
+\end{align*}
+
+We also know that
+
+$$
+\dV[\hat{\beta}_j]
+=
+\sigma^2
+[(\bX'\bX)^{-1}]_{jj}.
+$$
+
+From
+
+$$
+\hat{\beta}_j
+=
+\frac{\bz_j'\by}{\bz_j'\bz_j},
+$$
+
+we can compute
+
+\begin{align*}
+\dV[\hat{\beta}_j]
+&=
+\frac{
+\bz_j'\dV[\by]\bz_j
+}{
+(\bz_j'\bz_j)^2
+} \\
+&=
+\frac{
+\sigma^2\bz_j'\bz_j
+}{
+(\bz_j'\bz_j)^2
+} \\
+&=
+\frac{\sigma^2}{\bz_j'\bz_j}.
+\end{align*}
+
+Therefore,
+
+$$
+[(\bX'\bX)^{-1}]_{jj}
+=
+\frac{1}{\bz_j'\bz_j}.
+$$
+
+Substituting this result,
+
+$$
+SS_{res,-j}-SS_{res}
+=
+\frac{
+\hat{\beta}_j^2
+}{
+[(\bX'\bX)^{-1}]_{jj}
+}.
+$$
+
+The nested-model $F$ statistic is therefore
+
+\begin{align*}
+F_j
+&=
+\frac{
+SS_{res,-j}-SS_{res}
+}{
+SS_{res}/(n-p-1)
+} \\
+&=
+\frac{
+\frac{\hat{\beta}_j^2}
+{[(\bX'\bX)^{-1}]_{jj}}
+}{
+\hat{\sigma}^2
+} \\
+&=
+\frac{
+\hat{\beta}_j^2
+}{
+\hat{\sigma}^2
+[(\bX'\bX)^{-1}]_{jj}
+} \\
+&=
+T_j^2.
+\end{align*}
+
+Thus,
+
+$$
+\boxed{
+F_j=T_j^2.
+}
+$$
+
+Conditional on $\cH_0$, the nested-model result gives
+
+$$
+F_j\mid\cH_0
+\sim
+F_{1,n-p-1},
+$$
+
+while the direct approach gives
+
+$$
+T_j\mid\cH_0
+\sim
+t_{n-p-1}.
+$$
+
+These results are consistent because the square of a Student $t$ random variable with $\nu$ degrees of freedom follows an $F$ distribution with $1$ and $\nu$ degrees of freedom:
+
+$$
+T_j^2
+\mid
+\cH_0
+\sim
+F_{1,n-p-1}.
+$$
+
+The two approaches therefore produce exactly the same test.
+
+The direct $t$ approach focuses on the estimated coefficient relative to its standard error:
+
+$$
+\frac{\text{estimated coefficient}}
+{\text{estimated standard deviation of the coefficient}}.
+$$
+
+The nested-model approach focuses on the reduction in residual variation produced by adding that explanatory variable:
+
+$$
+\frac{
+\text{improvement in fit from adding the variable}
+}{
+\text{remaining residual variation}
+}.
+$$
+
+The equality
+
+$$
+F_j=T_j^2
+$$
+
+shows that these are two representations of the same underlying information.
+
+In particular, the two-sided $t$-test and the one-variable partial $F$-test produce the same $p$-value:
+
+$$
+\dP
+\left(
+F_j\geq (T_j^*)^2
+\mid
+\cH_0
+\right)
+=
+\dP
+\left(
+|T_j|\geq|T_j^*|
+\mid
+\cH_0
+\right).
+$$
+
+This also clarifies what it means to test whether a single explanatory variable contributes to the model. The question is not whether $\bx_j$ is related to the response in isolation. Rather, it is whether the component of $\bx_j$ that cannot already be represented by the remaining explanatory variables contributes additional information about the mean response.
+
+### Testing a Subgroup of Regression Coefficients {#nor-subgroup-test}
+
+The overall regression test considers all explanatory variables simultaneously, while the individual coefficient test considers one additional direction. Between these cases, we may want to test whether a group of explanatory variables contributes to the model after accounting for the remaining variables.
+
+Suppose
+
+$$
+\bX
+=
+[\bX_1\;\bX_2],
+$$
+
+where $\bX_1$ contains the $k$ explanatory variables to be tested and $\bX_2$ contains the remaining variables, including the intercept.
+
+Partition
+
+$$
+\bgb
+=
+\begin{pmatrix}
+\bgb_1\\
+\bgb_2
+\end{pmatrix}.
+$$
+
+The full model is
+
+$$
+\by
+=
+\bX_1\bgb_1
++
+\bX_2\bgb_2
++
+\be.
+$$
+
+We test
+
+$$
+\cH_0:
+\bgb_1=\bzero.
+$$
+
+Conditional on $\cH_0$,
+
+$$
+\dE[\by]
+=
+\bX_2\bgb_2.
+$$
+
+Thus, the reduced model contains only $\bX_2$.
+
+Let
+
+$$
+\bH_2
+=
+\bX_2(\bX_2'\bX_2)^{-1}\bX_2'
+$$
+
+and
+
+$$
+SS_{res,2}
+=
+\by'(\bI-\bH_2)\by.
+$$
+
+The improvement from adding $\bX_1$ is
+
+\begin{align*}
+SS_{res,2}-SS_{res}
+&=
+\by'(\bI-\bH_2)\by
+-
+\by'(\bI-\bH)\by \\
+&=
+\by'(\bH-\bH_2)\by.
+\end{align*}
+
+```{proposition, nor-subgroup-f-test, name="Partial F Test for a Subgroup of Regression Coefficients"}
+
+Consider the Normal linear regression model
+
+$$
+\by
+=
+\bX_1\bgb_1
++
+\bX_2\bgb_2
++
+\be,
+$$
+
+where
+
+$$
+\bX=[\bX_1\;\bX_2]
+$$
+
+has full column rank, $\bX_1$ contains $k$ explanatory variables, the complete model contains $p$ explanatory variables and an intercept, and
+
+$$
+\be\sim N(\bzero,\sigma^2\bI).
+$$
+
+Under
+
+$$
+\cH_0:
+\bgb_1=\bzero,
+$$
+
+the statistic
+
+$$
+F_{\bgb_1=\bzero}
+=
+\frac{
+(SS_{res,2}-SS_{res})/k
+}{
+SS_{res}/(n-p-1)
+}
+$$
+
+satisfies
+
+$$
+F_{\bgb_1=\bzero}
+\mid
+\cH_0
+\sim
+F_{k,n-p-1}.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-subgroup-f-test-proof}
+
+Conditional on $\cH_0$,
+
+$$
+\dE[\by]
+=
+\bX_2\bgb_2.
+$$
+
+Thus, the reduced model has design matrix $\bX_2$, while the full model has design matrix
+
+$$
+\bX=[\bX_1\;\bX_2].
+$$
+
+Since
+
+$$
+\mathcal{C}(\bX_2)
+\subseteq
+\mathcal{C}(\bX),
+$$
+
+the models are nested.
+
+The difference between their residual sums of squares is
+
+$$
+SS_{res,2}-SS_{res}.
+$$
+
+Since the full model contains $k$ additional linearly independent columns,
+
+$$
+q=k.
+$$
+
+The complete design matrix has rank $p+1$, so
+
+$$
+\nu=n-p-1.
+$$
+
+Applying Proposition \@ref(prp:nor-nested-f-test),
+
+$$
+F_{\bgb_1=\bzero}
+\mid
+\cH_0
+\sim
+F_{k,n-p-1}.
+$$
+
+```
+
+</details>
+
+Once the data are observed, let
+
+$$
+F_{\bgb_1=\bzero}^*
+$$
+
+denote the observed value. The $p$-value is
+
+$$
+\boxed{
+\dP
+\left(
+F_{\bgb_1=\bzero}
+\geq
+F_{\bgb_1=\bzero}^*
+\mid
+\cH_0
+\right).
+}
+$$
+
+At significance level $\alpha$, we reject $\cH_0$ when
+
+$$
+F_{\bgb_1=\bzero}^*
+\geq
+f_{k,n-p-1,\alpha}.
+$$
+
+The overall regression test, the single-coefficient test, and the subgroup test can therefore all be understood through the same nested-model structure.
+
+For the overall regression,
+
+$$
+\text{reduced model}
+=
+\text{intercept only}.
+$$
+
+For a single coefficient,
+
+$$
+\text{reduced model}
+=
+\text{full model with one explanatory variable removed}.
+$$
+
+For a subgroup,
+
+$$
+\text{reduced model}
+=
+\text{full model with the tested group removed}.
+$$
+
+In every case, the null hypothesis specifies that the reduced model is sufficient to represent the mean response. The test asks whether the improvement obtained by enlarging the model is unusually large conditional on that assumption.
+
+Thus, the common question behind these tests is
+
+$$
+\boxed{
+\text{Is the improvement produced by the additional model components too large to be plausibly attributed to random variation under }\cH_0\text{?}
+}
+$$
+
+The Normality assumption allows this question to be answered exactly through the $t$ and $F$ sampling distributions.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Power Analysis {#nor-power-analysis}
+
+In the previous section, we constructed hypothesis tests by first assuming that a null hypothesis $\cH_0$ is true and then determining the sampling distribution of a test statistic conditional on that assumption.
+
+For example, for a particular regression coefficient we obtained
+
+$$
+T_j\mid\cH_0
+\sim
+t_{n-p-1},
+$$
+
+while for a subgroup of $k$ coefficients we obtained
+
+$$
+F_{\bgb_1=\bzero}\mid\cH_0
+\sim
+F_{k,n-p-1}.
+$$
+
+These distributions allowed us to choose rejection regions with a prescribed probability of rejecting the null hypothesis when the null hypothesis is true.
+
+However, once a hypothesis test has been constructed, another question naturally arises:
+
+> If the null hypothesis is false, how likely is the test to detect that it is false?
+
+This question is answered through the **power** of a hypothesis test.
+
+### Type I Error, Type II Error, and Power {#nor-power-errors}
+
+Consider a test of
+
+$$
+\cH_0
+$$
+
+against an alternative
+
+$$
+\cH_1.
+$$
+
+There are two possible decisions: reject $\cH_0$ or do not reject $\cH_0$. Since the true parameter values are unknown, either decision can be correct or incorrect.
+
+A **Type I error** occurs when we reject $\cH_0$ even though $\cH_0$ is true. The significance level $\alpha$ controls the probability of this error:
+
+$$
+\dP
+\left(
+\text{reject }\cH_0
+\mid
+\cH_0
+\right)
+=
+\alpha.
+$$
+
+A **Type II error** occurs when we do not reject $\cH_0$ even though a particular alternative is true. If $\theta$ denotes a parameter value under the alternative, we can write the probability of a Type II error as
+
+$$
+\beta_{\mathrm{II}}(\theta)
+=
+\dP
+\left(
+\text{do not reject }\cH_0
+\mid
+\theta
+\right).
+$$
+
+The corresponding power is the probability that the test correctly rejects the null hypothesis under that alternative.
+
+```{definition, nor-power-definition, name="Power of a Hypothesis Test"}
+
+Let $\theta$ denote a particular parameter value under the alternative hypothesis. The power of a hypothesis test at $\theta$ is
+
+$$
+\pi(\theta)
+=
+\dP
+\left(
+\text{reject }\cH_0
+\mid
+\theta
+\right).
+$$
+
+Equivalently,
+
+$$
+\pi(\theta)
+=
+1-\beta_{\mathrm{II}}(\theta).
+$$
+
+```
+
+Thus, the significance level and the power answer different conditional probability questions:
+
+$$
+\alpha
+=
+\dP
+\left(
+\text{reject }\cH_0
+\mid
+\cH_0
+\right),
+$$
+
+while
+
+$$
+\pi(\theta)
+=
+\dP
+\left(
+\text{reject }\cH_0
+\mid
+\theta
+\right)
+$$
+
+for a specified alternative $\theta$.
+
+The rejection region itself does not change between these calculations. What changes is the distribution of the test statistic. The rejection region is constructed using the distribution under $\cH_0$, while power is calculated using the distribution under the alternative.
+
+To determine power in the Normal linear regression model, we therefore need to understand how the $t$ and $F$ statistics behave when the null hypothesis is false.
+
+### Noncentral $t$ and $F$ Distributions {#nor-noncentral-distributions}
+
+The central $t$ and $F$ distributions used for hypothesis testing are particular cases of more general distributions.
+
+```{definition, nor-noncentral-t, name="Noncentral t Distribution"}
+
+Suppose that
+
+$$
+Z\sim N(\delta,1)
+$$
+
+and
+
+$$
+W\sim\chi^2_\nu
+$$
+
+are independent. Then
+
+$$
+T
+=
+\frac{Z}{\sqrt{W/\nu}}
+$$
+
+has a **noncentral Student's $t$ distribution** with $\nu$ degrees of freedom and noncentrality parameter $\delta$. We denote this by
+
+$$
+T\sim t_\nu(\delta).
+$$
+
+When
+
+$$
+\delta=0,
+$$
+
+the noncentral $t$ distribution reduces to the usual central Student's $t$ distribution:
+
+$$
+t_\nu(0)=t_\nu.
+$$
+
+```
+
+The same idea extends to the $F$ distribution.
+
+```{definition, nor-noncentral-f, name="Noncentral F Distribution"}
+
+Suppose that
+
+$$
+U\sim\chi^2_q(\lambda)
+$$
+
+has a noncentral chi-squared distribution with $q$ degrees of freedom and noncentrality parameter $\lambda$, and suppose that
+
+$$
+W\sim\chi^2_\nu
+$$
+
+is independent of $U$. Then
+
+$$
+F
+=
+\frac{U/q}{W/\nu}
+$$
+
+has a **noncentral $F$ distribution** with $q$ and $\nu$ degrees of freedom and noncentrality parameter $\lambda$. We denote this by
+
+$$
+F\sim F_{q,\nu}(\lambda).
+$$
+
+When
+
+$$
+\lambda=0,
+$$
+
+the noncentral $F$ distribution reduces to the usual central $F$ distribution:
+
+$$
+F_{q,\nu}(0)=F_{q,\nu}.
+$$
+
+```
+
+The noncentrality parameters $\delta$ and $\lambda$ measure how far the true model is from the corresponding null hypothesis, relative to the variability in the model.
+
+We can now use these distributions to compute the power of the regression tests developed previously.
+
+### Power for Testing a Single Regression Coefficient {#nor-power-single-coefficient}
+
+Consider again the two-sided test
+
+$$
+\cH_0:
+\beta_j=0
+$$
+
+against
+
+$$
+\cH_1:
+\beta_j\neq0.
+$$
+
+The test statistic is
+
+$$
+T_j
+=
+\frac{
+\hat{\beta}_j
+}{
+\hat{\sigma}
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}.
+$$
+
+Under the null hypothesis,
+
+$$
+T_j\mid\cH_0
+\sim
+t_\nu,
+$$
+
+where
+
+$$
+\nu=n-p-1.
+$$
+
+At significance level $\alpha$, the rejection region is
+
+$$
+|T_j|
+\geq
+t_{\nu,\alpha/2}.
+$$
+
+The rejection region is determined entirely from the distribution under $\cH_0$. To calculate power, however, suppose that the true coefficient is some particular value
+
+$$
+\beta_j=\theta,
+\qquad
+\theta\neq0.
+$$
+
+The distribution of $T_j$ changes.
+
+```{proposition, nor-power-single-t, name="Distribution of the t Statistic Under an Alternative"}
+
+Consider the Normal linear regression model
+
+$$
+\by=\bX\bgb+\be,
+$$
+
+where $\bX$ has full column rank, the model contains $p$ explanatory variables and an intercept, and
+
+$$
+\be\sim N(\bzero,\sigma^2\bI).
+$$
+
+For the statistic
+
+$$
+T_j
+=
+\frac{
+\hat{\beta}_j
+}{
+\hat{\sigma}
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+},
+$$
+
+if
+
+$$
+\beta_j=\theta,
+$$
+
+then
+
+$$
+T_j
+\mid
+\beta_j=\theta
+\sim
+t_\nu(\delta_j),
+$$
+
+where
+
+$$
+\nu=n-p-1
+$$
+
+and
+
+$$
+\boxed{
+\delta_j
+=
+\frac{
+\theta
+}{
+\sigma
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}.
+}
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-power-single-t-proof}
+
+From the sampling distribution of the least squares estimator,
+
+$$
+\hat{\beta}_j
+\sim
+N
+\left(
+\beta_j,
+\sigma^2[(\bX'\bX)^{-1}]_{jj}
+\right).
+$$
+
+Therefore, conditional on
+
+$$
+\beta_j=\theta,
+$$
+
+we have
+
+$$
+\frac{
+\hat{\beta}_j
+}{
+\sigma
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}
+\sim
+N
+\left(
+\frac{
+\theta
+}{
+\sigma
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+},
+1
+\right).
+$$
+
+Define
+
+$$
+\delta_j
+=
+\frac{
+\theta
+}{
+\sigma
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}.
+$$
+
+Then
+
+$$
+Z_j
+=
+\frac{
+\hat{\beta}_j
+}{
+\sigma
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}
+\sim
+N(\delta_j,1).
+$$
+
+Furthermore,
+
+$$
+\frac{\nu\hat{\sigma}^2}{\sigma^2}
+\sim
+\chi^2_\nu,
+$$
+
+and $\hat{\beta}_j$ and $\hat{\sigma}^2$ are independent.
+
+Therefore,
+
+\begin{align*}
+T_j
+&=
+\frac{
+\hat{\beta}_j
+}{
+\hat{\sigma}
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+} \\
+&=
+\frac{
+\frac{
+\hat{\beta}_j
+}{
+\sigma
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}
+}{
+\sqrt{
+\frac{\hat{\sigma}^2}{\sigma^2}
+}
+} \\
+&=
+\frac{
+Z_j
+}{
+\sqrt{
+\frac{
+\nu\hat{\sigma}^2/\sigma^2
+}{
+\nu
+}
+}
+}.
+\end{align*}
+
+The numerator is $N(\delta_j,1)$, the quantity in the denominator is obtained from an independent $\chi^2_\nu$ random variable, and therefore
+
+$$
+T_j
+\mid
+\beta_j=\theta
+\sim
+t_\nu(\delta_j).
+$$
+
+```
+
+</details>
+
+The power of the two-sided test at $\beta_j=\theta$ is therefore the probability that a noncentral $t$ random variable falls in the rejection region:
+
+$$
+\boxed{
+\pi_j(\theta)
+=
+\dP
+\left(
+|T_j|
+\geq
+t_{\nu,\alpha/2}
+\mid
+\beta_j=\theta
+\right).
+}
+$$
+
+Equivalently,
+
+\begin{align*}
+\pi_j(\theta)
+&=
+\dP
+\left(
+T_j
+\leq
+-t_{\nu,\alpha/2}
+\mid
+\beta_j=\theta
+\right) \\
+&\quad+
+\dP
+\left(
+T_j
+\geq
+t_{\nu,\alpha/2}
+\mid
+\beta_j=\theta
+\right).
+\end{align*}
+
+When
+
+$$
+\theta=0,
+$$
+
+we have
+
+$$
+\delta_j=0.
+$$
+
+The noncentral $t$ distribution then becomes the central $t$ distribution, and
+
+$$
+\pi_j(0)
+=
+\alpha.
+$$
+
+This is precisely the probability of a Type I error.
+
+As $\theta$ moves away from zero, the distribution of the test statistic moves away from the distribution specified by the null hypothesis. Consequently, it becomes more likely for $T_j$ to fall in the rejection region.
+
+The noncentrality parameter
+
+$$
+|\delta_j|
+=
+\frac{
+|\theta|
+}{
+\sigma
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}
+$$
+
+provides a useful interpretation of power.
+
+Power increases when the magnitude of the alternative coefficient increases relative to the uncertainty with which that coefficient can be estimated. A larger error standard deviation $\sigma$ makes the effect more difficult to detect. The design matrix also plays an important role through
+
+$$
+[(\bX'\bX)^{-1}]_{jj}.
+$$
+
+Recall that
+
+$$
+\dV[\hat{\beta}_j]
+=
+\sigma^2
+[(\bX'\bX)^{-1}]_{jj}.
+$$
+
+Thus, properties of the explanatory variables that increase the variance of $\hat{\beta}_j$ also decrease the magnitude of the noncentrality parameter and therefore decrease the ability of the test to distinguish $\beta_j=\theta$ from $\beta_j=0$.
+
+In particular, the effects of cross-correlation among explanatory variables that we studied previously affect not only the precision of coefficient estimates and the width of confidence intervals, but also the power of hypothesis tests.
+
+### Power for Testing a Subgroup of Regression Coefficients {#nor-power-subgroup}
+
+Now consider the partitioned regression model
+
+$$
+\by
+=
+\bX_1\bgb_1
++
+\bX_2\bgb_2
++
+\be,
+$$
+
+where $\bX_1$ contains the $k$ explanatory variables to be tested and $\bX_2$ contains the remaining variables, including the intercept.
+
+We test
+
+$$
+\cH_0:
+\bgb_1=\bzero.
+$$
+
+The partial $F$ statistic is
+
+$$
+F_{\bgb_1=\bzero}
+=
+\frac{
+(SS_{res,2}-SS_{res})/k
+}{
+SS_{res}/\nu
+},
+$$
+
+where
+
+$$
+\nu=n-p-1.
+$$
+
+Under the null hypothesis,
+
+$$
+F_{\bgb_1=\bzero}
+\mid
+\cH_0
+\sim
+F_{k,\nu}.
+$$
+
+At significance level $\alpha$, we reject when
+
+$$
+F_{\bgb_1=\bzero}
+\geq
+f_{k,\nu,\alpha}.
+$$
+
+Suppose now that the true value of $\bgb_1$ is
+
+$$
+\bgb_1=\boldsymbol{\theta},
+$$
+
+where
+
+$$
+\boldsymbol{\theta}\neq\bzero.
+$$
+
+To determine the distribution of the statistic under this alternative, recall that
+
+$$
+SS_{res,2}-SS_{res}
+=
+\by'(\bH-\bH_2)\by.
+$$
+
+Unlike under the null hypothesis, the projection
+
+$$
+(\bH-\bH_2)\dE[\by]
+$$
+
+is now generally nonzero. Consequently, the numerator no longer follows a central chi-squared distribution.
+
+Let
+
+$$
+\bM_2
+=
+\bI-\bH_2.
+$$
+
+The matrix $\bM_2$ removes from a vector the component that can already be represented by the reduced model. Therefore,
+
+$$
+\bM_2\bX_1\boldsymbol{\theta}
+$$
+
+represents the portion of the mean contribution from the variables being tested that cannot be represented by the variables retained in the reduced model.
+
+```{proposition, nor-power-subgroup-f, name="Distribution of the Partial F Statistic Under an Alternative"}
+
+Consider the Normal linear regression model
+
+$$
+\by
+=
+\bX_1\bgb_1
++
+\bX_2\bgb_2
++
+\be,
+$$
+
+where
+
+$$
+\bX=[\bX_1\;\bX_2]
+$$
+
+has full column rank, $\bX_1$ contains $k$ explanatory variables, the complete model contains $p$ explanatory variables and an intercept, and
+
+$$
+\be\sim N(\bzero,\sigma^2\bI).
+$$
+
+If
+
+$$
+\bgb_1=\boldsymbol{\theta},
+$$
+
+then
+
+$$
+F_{\bgb_1=\bzero}
+\mid
+\bgb_1=\boldsymbol{\theta}
+\sim
+F_{k,\nu}(\lambda),
+$$
+
+where
+
+$$
+\nu=n-p-1
+$$
+
+and
+
+$$
+\boxed{
+\lambda
+=
+\frac{
+\boldsymbol{\theta}'
+\bX_1'
+(\bI-\bH_2)
+\bX_1
+\boldsymbol{\theta}
+}{
+\sigma^2
+}.
+}
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-power-subgroup-f-proof}
+
+Let
+
+$$
+\bA=\bH-\bH_2.
+$$
+
+From the previous section, $\bA$ is symmetric and idempotent with rank $k$.
+
+The numerator of the partial $F$ statistic satisfies
+
+$$
+SS_{res,2}-SS_{res}
+=
+\by'\bA\by.
+$$
+
+Under the alternative
+
+$$
+\bgb_1=\boldsymbol{\theta},
+$$
+
+the mean of $\by$ is
+
+$$
+\boldsymbol{\mu}
+=
+\bX_1\boldsymbol{\theta}
++
+\bX_2\bgb_2.
+$$
+
+Since
+
+$$
+\bA\bX_2
+=
+\bzero,
+$$
+
+we have
+
+\begin{align*}
+\bA\boldsymbol{\mu}
+&=
+\bA
+(
+\bX_1\boldsymbol{\theta}
++
+\bX_2\bgb_2
+) \\
+&=
+\bA\bX_1\boldsymbol{\theta}.
+\end{align*}
+
+Furthermore,
+
+\begin{align*}
+\bA\bX_1
+&=
+(\bH-\bH_2)\bX_1 \\
+&=
+\bX_1-\bH_2\bX_1 \\
+&=
+(\bI-\bH_2)\bX_1.
+\end{align*}
+
+Therefore,
+
+$$
+\bA\boldsymbol{\mu}
+=
+(\bI-\bH_2)
+\bX_1\boldsymbol{\theta}.
+$$
+
+Since $\by$ is multivariate Normal, the quadratic form
+
+$$
+\frac{\by'\bA\by}{\sigma^2}
+$$
+
+has a noncentral chi-squared distribution with $k$ degrees of freedom and noncentrality parameter
+
+$$
+\lambda
+=
+\frac{
+\boldsymbol{\mu}'\bA\boldsymbol{\mu}
+}{
+\sigma^2
+}.
+$$
+
+Using the previous identities,
+
+\begin{align*}
+\boldsymbol{\mu}'\bA\boldsymbol{\mu}
+&=
+\boldsymbol{\theta}'
+\bX_1'
+(\bI-\bH_2)
+\bX_1
+\boldsymbol{\theta}.
+\end{align*}
 
 Hence,
 
 $$
-\frac{\be}{\sqrt{\sigma^2}} \sim N(\bzero, \bI)
+\frac{
+SS_{res,2}-SS_{res}
+}{
+\sigma^2
+}
+\mid
+\bgb_1=\boldsymbol{\theta}
+\sim
+\chi^2_k(\lambda),
 $$
 
-This vector is known as a **standard multivariate normal**, completing Step 1.
-
----
-
-#### Step 2: The Chi-Squared Distribution of a Quadratic Form
-
-Let $\bz \in \mathbb{R}^n$ be a standard multivariate normal vector and $\bM \in \mathbb{R}^{n \times n}$ an idempotent matrix of rank $m$. We now show that:
+where
 
 $$
-\bz' \bM \bz \sim \chi^2_m
+\lambda
+=
+\frac{
+\boldsymbol{\theta}'
+\bX_1'
+(\bI-\bH_2)
+\bX_1
+\boldsymbol{\theta}
+}{
+\sigma^2
+}.
 $$
 
-To prove this, we use the spectral decomposition of $\bM$:
+The residual sum of squares from the full model still satisfies
 
 $$
-\bM = \bV \bgS \bV'
+\frac{SS_{res}}{\sigma^2}
+\sim
+\chi^2_\nu,
 $$
 
-where $\bV$ is an orthonormal matrix and $\bgS$ is diagonal. Since $\bM$ is idempotent, the diagonal of $\bgS$ consists of $m$ ones and $n-m$ zeros. Without loss of generality, we
-can assume that the first $m$ entries of the diagonal are equal to $1$ and the 
-next entries equal to $0$.
+where
 
-Then, first note that $\bV' \bz$ is a linear combination of a normal distribution.
-We will show, that $\bV' \bz \in \dR^{n}$ is also standard normal.
+$$
+\nu=n-p-1.
+$$
 
-Note that:
+Furthermore,
 
-$$ \dE[\bV' \bz] =  \bV' \dE[\bz] = \bV' \bzero = \bzero$$
-$$ \dV[\bV' \bz] =  \bV' \dV[\bz] \bV = \bV' \bI \bV = \bV' \bV = \bI$$
+$$
+SS_{res,2}-SS_{res}
+$$
 
-Then $\bV' \bz$ is also standard normal. Let's name $\bw = \bV' \bz$, then each of
-the components $w_1,\ldots,w_n$ of $\bw$ are independent univariate standard normally
-distributed.
+and
 
-Then
+$$
+SS_{res}
+$$
+
+are independent.
+
+Therefore,
 
 \begin{align*}
-  \bz' \bM \bz
-    &= \bz' (\bV \bgS \bV') \bz       && \text{using the spectral decomposition of $\bM$}         \\
-    &= (\bV' \bz)' \bgS (\bV' \bz)                                                                \\
-    &= \bw' \bgS \bw                  && \text{since $\bw = \bV' \bz$}                            \\
-    &= \sum_{i=1}^n [\bgS]_{ii} w_i^2                                                             \\
-    &= \sum_{i=1}^{m} w_i^2           && \text{since only the first $m$ entries are equal to $1$} \\
-    &\sim \chi^2_m                    && \text{by definition of the $\chi^2$ distribution}        \\
-\end{align*} 
+F_{\bgb_1=\bzero}
+&=
+\frac{
+(SS_{res,2}-SS_{res})/k
+}{
+SS_{res}/\nu
+} \\
+&\sim
+\frac{
+\chi^2_k(\lambda)/k
+}{
+\chi^2_\nu/\nu
+} \\
+&\sim
+F_{k,\nu}(\lambda).
+\end{align*}
 
-This fundamental result connects linear algebra and probability theory and is essential to statistical inference in linear regression.
-
----
-
-#### Step 3: Distribution of $\hat{\sigma}^2$
-
-Combining the results from Steps 1 and 2, we conclude that:
-
-$$
-\frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \chi^2_{n-p}
-$$
-
-since the idempotent matrix $(\bI - \bH)$ has rank $n-p$. Therefore:
-
-$$
-\hat{\sigma}^2 = \frac{\hat{\be}'\hat{\be}}{n-p}
-= \frac{\sigma^2}{n-p}\frac{\hat{\be}'\hat{\be}}{\sigma^2}
-\sim \frac{\sigma^2}{n-p}\chi^2_{n-p}
-$$
-
-This result shows that the estimator of $\sigma^2$ is scaled chi-squared distributed, a fact that will be crucial when constructing confidence intervals and hypothesis tests.
-
----
-
-### Independence of $\hat{\be}$ and $\hat{\by}$
-
-Previously, we showed that $\hat{\be}$ and $\hat{\by}$ are uncorrelated:
-
-$$
-\dC[\hat{\be}, \hat{\by}] = \bzero
-$$
-
-However, uncorrelatedness does not necessarily imply independence. In general, two random variables can have zero covariance and still exhibit nonlinear dependence.
-
-Under the **normality assumption**, this distinction disappears: if two normally distributed vectors are uncorrelated, they are also independent. Since both $\hat{\be}$ and $\hat{\by}$ are linear combinations of the normal vector $\by$, they are jointly normal. Therefore, the absence of correlation between them implies that they are independent:
-
-* $\hat{\be}$ depends only on $(\bI - \bH)\by$, the projection onto the residual space.
-* $\hat{\by}$ depends only on $\bH\by$, the projection onto the column space of $\bX$.
-
-These two subspaces are orthogonal, and under normality, orthogonality implies statistical independence. Consequently, any statistic that is a function of $\hat{\be}$ (such as $\hat{\sigma}^2$) is independent of any statistic that is a function of $\hat{\by}$ (such as $\hat{\bgb}$).
-
-This independence property plays a pivotal role in classical regression inference, as it underlies the derivation of $t$ and $F$ distributions for hypothesis testing.
-
----
-
-## Interval Estimation
-
-So far, we have derived **point estimates** for several parameters of interest—namely the regression coefficients $\bgb$, the errors $\be$, and the residual variance $\hat{\sigma}^2$.
-While point estimates provide single “best guesses” of the true parameters, they do not convey how much uncertainty is associated with these estimates.
-
-However, since we have already obtained the **sampling distributions** of these estimators, we can now use this probabilistic information to construct **interval estimators**, which express a range of plausible values for the unknown parameters, given the observed data.
-
----
-
-### Quantile notation
-
-```{definition, quantiles, name="Notation: Specific Distribution Quantiles"}
-The $\alpha$ quantiles for the standard normal, $t$, $\chi^2$ and $F$ distribution are denoted by:
-  $$ z_{\alpha}        \quad \ni \dP(Z \geq z_{\alpha})        = \alpha \land Z\sim N(0,1) $$
-  $$ t_{k,\alpha}      \quad \ni \dP(T \geq t_{k,\alpha})      = \alpha \land T\sim  t_{k}$$
-  $$ chi^2_{k,\alpha}  \quad \ni \dP(W \geq chi^2_{k,\alpha})  = \alpha \land W\sim \chi^2_{k} $$
-  $$ f_{k_1,k_2\alpha} \quad \ni \dP(F \geq f_{k_1,k_2\alpha}) = \alpha \land F\sim F_{k_1,k_2} $$
 ```
 
-we will use this quantiles for for confidence interval building and hypothesis testing. It is important to not that this are known values depending only on the parameters of the distribution to which they relate to and the tail probability $\alpha$. In the next sections, the tail probability will be related to the confidence and significance levels. 
+</details>
 
----
+The power against the particular alternative
 
-### Confidence Intervals for the Coefficients
-
-Recall that under the classical linear model assumptions, the ordinary least squares estimator satisfies
-
-$$ \hat{\bgb} \sim N(\bgb, \sigma^2 (\bX'\bX)^{-1}) $$
-
-This result implies that each individual coefficient estimator $\hat{\beta}_i$ follows a univariate normal distribution:
-
-$$ \hat{\beta}_i \sim N(\beta_i, \sigma^2 [(\bX'\bX)^{-1}])_{ii}) $$
-
-The quantity
-
-$$ \sigma^2_{\beta_i} =  \sigma^2 [(\bX'\bX)^{-1}]_{ii} $$
-
-represents the **variance** of $\hat{\beta}_i$, which depends both on the noise variance $\sigma^2$ and on the geometry of the design matrix $\bX$.
-
-Thus, we can rewrite the distribution as
-
-$$ \hat{\beta}_i \sim N \left(\beta_i, \sigma^2_{\beta_i} \right) $$
-
-Since $\sigma^2$ is unknown, this distribution cannot be used directly for inference.
-To overcome this, we first standardize the estimator by subtracting its mean and dividing by its true standard deviation:
-
-$$ t^0_{\beta_i}=\frac{\hat{\beta}_i - \beta_i}{\sqrt{\sigma^2_{\beta_i}}} $$
-
-This standardized statistic follows the **standard normal distribution**, as confirmed by the derivations of its mean and variance. However, it still involves the unknown $\sigma^2$.
-
-Therefore, we replace $\sigma^2$ with its unbiased estimator $\hat{\sigma}^2$ to form
-
-$$ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} $$
-
-where $\hat{\sigma}^2_{\beta_i} = \hat{\sigma}^2 [(\bX'\bX)^{-1}]_{ii}$, so $t_{\beta_i}$
-doesn't depend on $\sigma^2$. Let's compute the distribution of this quantity,
-first lets re-write the statistic as follows:
-
-$$ t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} 
-  = \frac{\sqrt{\frac{1}{\sigma^2}}}{\sqrt{\frac{1}{\sigma^2}}}\frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2[(\bX'\bX)^{-1}]_{ii}}}   
-  = \frac{\frac{\left(\hat{\beta}_i - \beta_i\right)}{\sqrt{\sigma^2[(\bX'\bX)^{-1}]_{ii}}}}{ \sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}}   
-  = \frac{\frac{\left(\hat{\beta}_i - \beta_i\right)}{\sqrt{\sigma^2_{\beta_i}}}}{            \sqrt{\frac{(n-p)\frac{\hat{\sigma}^2}{\sigma^2}}{n-p}}}
-  = \frac{t^0_{\beta_i}}{ \sqrt{\frac{\frac{\hat{\be}'\hat{\be}}{\sigma^2}}{n-p}}}$$
-
-Now, we know $t^0_{\beta_i}$ is standard normal distributed, and from 
-[the distribution of $\hat{\sigma}^2$](#distribution-of-hatsigma2-step-3) we 
-have that:
-
-$$ \frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \chi^2_{n-p} $$
-and from 
-[the independence of $\hat{\bgb}$ and $\hat{\be}$](#independence-of-hatmathbfe-and-hatmathbfy)
-we have that any function of both variables is independent, in particular
-
-$$ t^0_{\beta_i} \quad \text{and} \quad \frac{\hat{\be}'\hat{\be}}{\sigma^2} $$
-are independent. Therefore the ratio $t_{\beta_i}$ follows a **Student’s $t$ distribution** with $n - p$ degrees of freedom:
-
-$$ t_{\beta_i} \sim t_{n-p} $$
-
-This fundamental result enables us to construct confidence intervals for each regression coefficient.
-Now, let $t \sim t_m$ a random variable with a $t$ distribution with $m$ degrees
-of freedom. Then call:
-
-$$ t_m\left(a\right) \quad \text{such that} \quad \dP\left(t\leq t_m\left(a\right) \right) = a$$
-for any $a\in[0,1]$
-
-Then, we have that:
-
-\begin{align*}
-\dP 
-  &\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq t_{\beta_i} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha  
-    && \text{since the $t$ distribution is symmetric} \\
-  &\implies \dP\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha
-    && \text{since the $t_{\beta_i} = \frac{\hat{\beta}_i - \beta_i}{\sqrt{\hat{\sigma}^2_{\beta_i}}}$} \\
-  &\implies \dP\left( -t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \hat{\beta}_i - \beta_i \leq t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
-  &\implies \dP\left( -t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \beta_i - \hat{\beta}_i \leq t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
-  &\implies \dP\left( \hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \leq \beta_i \leq \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) = \alpha \\
-\end{align*}
-
-So
-
-$$ \left(\hat{\beta}_i - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}}, \hat{\beta}_i + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\beta_i}} \right) $$
-
-This **random interval** depends on the sample through $\hat{\beta}_i$ and $\hat{\sigma}^2_{\beta_i}$ and contains the true parameter $\beta_i$ with probability $\alpha$.
-Once data are observed, the interval becomes fixed, and while it either includes or excludes $\beta_i$, the confidence level reflects the long-run frequency with which such intervals contain the true value under repeated sampling.
-
----
-
-### Confidence Intervals for the Expected Mean of a New Observation $\bx_{new}$
-
-In many applications, the researcher is not only interested in the regression coefficients themselves but also in the **expected value of the response** for a new vector of predictors $\bx_{new}$.
-
-The expected response is given by
-
-$$ \dE[y_{new}] = \bx_{new}' \bgb $$
-
-and its natural estimator is
-
-$$ \bx_{new}' \hat{\bgb} $$
-
-Since $\hat{\bgb}$ is normally distributed, this linear combination is also normal with
-
-$$ \bx_{new}' \hat{\bgb} \sim N \left(\bx_{new}' \bgb, \sigma^2 \bx_{new}' (\bX' \bX)^{-1} \bx_{new} \right)  $$
-
-Replacing $\sigma^2$ with $\hat{\sigma}^2$ and applying the same reasoning as before, we obtain the statistic
-
-$$ t_{\bx_{new}'\bgb} = \frac{\bx_{new}'\hat{\bgb} - \bx_{new}'\bgb}{\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}}}=\frac{\frac{\bx_{new}'\hat{\bgb} - \bx_{new}'\bgb}{\sqrt{\sigma^2_{\bx_{new}'\bgb}}}}{\sqrt{\frac{\frac{\hat{\be}'\hat{\be}}{\sigma^2}}{n-p}}} \sim \chi^2_{n-p} $$
-where $\hat{\sigma}^2_{\bx_{new}'\bgb} = \hat{\sigma}^2 \bx_{new}' (\bX' \bX)^{-1} \bx_{new}$.
-This quantity is distributed as a $t$ with $n-p$ degrees of freedom since:
-
-$$\frac{\bx_{new}'\hat{\bgb} - \bx_{new}'\bgb}{\sqrt{\sigma^2_{\bx_{new}'\bgb}}} \sim N(0, 1)$$
-$$ \frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \chi^2_{n-p}$$
-and this random variables are independent since one is a function of $\hat{\bgb}$
-and the other a function of $\hat{\be}$.
-
-Then we can conclude that:
-
-\begin{align*}
-\dP 
-  &\left( -t_{n-p}\left(\frac{\alpha}{2}\right) \leq t_{\bx_{new}'\bgb} \leq t_{n-p}\left(\frac{\alpha}{2}\right) \right) = \alpha  \\
-  &\implies \dP\left( \bx_{new}'\hat{\bgb} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}} \leq \bx_{new}'\bgb \leq \bx_{new}'\hat{\bgb} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}} \right) = \alpha \\
-\end{align*}
-
-so, the random interval is given by:
-
-$$ \left( \bx_{new}'\hat{\bgb} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}} , \bx_{new}'\hat{\bgb} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\bx_{new}'\bgb}} \right) $$
-is a random interval that captures $\bx_{new}'\bgb$ with probability $\alpha$.
-
-
-This interval quantifies uncertainty about the **mean response** at $\bx_{new}$, not about an individual observation, which would require adding the variance of the random error term.
-
----
-
-### Confidence Intervals for Linear Combinations of $\bgb$
-
-A particularly elegant aspect of the linear model is that it allows inference on **any linear combination** of the coefficients.
-Consider a vector $\ba \in \mathbb{R}^p$ and the parameter of interest $\ba' \bgb$.
-
-This formulation encompasses several important special cases:
-
-* $\ba = (0, \ldots, 0, 1, 0, \ldots, 0)$ yields $\ba' \bgb = \beta_i$, the $i$-th coefficient;
-* $\ba = \bx_{new}$ yields $\ba' \bgb = \bx_{new}' \bgb$, the expected mean at a new data point.
-
-Since $\ba' \hat{\bgb}$ is a linear combination of normally distributed estimators, it follows that
-
-$$ \ba' \hat{\bgb} \sim N(\ba' \bgb, \sigma^2 \ba' (\bX'\bX)^{-1} \ba) $$
-
-and replacing $\sigma^2$ by its estimator leads to a $t_{n-p}$ distribution for the corresponding standardized statistic.
-Therefore, the general form of a $(1 - \alpha)$ confidence interval for any linear combination is
-
-$$ \left( \ba'\hat{\bgb} - t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\ba'\bgb}} , \ba'\hat{\bgb} + t_{n-p}\left(\frac{\alpha}{2}\right)\sqrt{\hat{\sigma}^2_{\ba'\bgb}} \right) $$
-
-where $\hat{\sigma}^2_{\ba'\bgb} = \hat{\sigma}^2 \ba' (\bX' \bX)^{-1} \ba$.
-
-This result unifies the previous confidence intervals into a single, compact framework and highlights the power and flexibility of the linear model for statistical inference.
-
----
-
-
-## Hypothesis Testing
-
-We will approach hypothesis testing using an implausibility framework. 
-This involves formulating a null hypothesis, $H_0$, and assuming it to be true.
-Next, we calculate a test statistic that follows a specific distribution under 
-the null hypothesis. By comparing the observed value of the statistic to this 
-distribution, we assess how plausible it is to observe such a value if $H_0$ is true.
-
-
-### Testing for the Overall Regression
-
-For this hypothesis, we will use the notation of:
-
-$$ \bX^* = [\bones \bX] \quad \text{and} \quad \bgb^* = [\beta_0, \bgb]' \in \dR^{p}$$
-that is, the $*$ indicates all the independent variables. With $\bX$ of full rank.
-
-Our first test is to see if the Linear Regression framework is useful at all.
-That is, we want to test $\cH_0: \bgb = \bzero$. Before designing our test 
-statistic we will show the following auxiliary results:
-
-1. $SS_{reg} = \by'(\bH - \bH_0)\by$.
-2. $\bH \bH_0 = \bH_0 \bH = \bH_0$.
-3. $(\bH - \bH_0)$ is idempotent.
-4. $\by'(\bH - \bH_0)\by$ and $\by'(\bI - \bH)\by$ are independent.
-5. Under the null hypothesis $\cH_0: \bgb = \bzero$, $\frac{\by'(\bH - \bH_0)\by}{\sigma^2}$
-is distributed like a $\chi^2_{p-1}$.
-
-For auxiliary result 1, we have that:
-
-\begin{align*}
-SS_{tot} 
-  &= SS_{reg} + SS_{res} \\
-  &\implies \by'(\bI - \bH_0)\by = SS_{reg} + \by'(\bI - \bH)\by && \text{since $SS_{tot} = \by'(\bI - \bH)\by$ and $SS_{res} = \by'(\bI - \bH)\by$.} \\
-  &\implies SS_{reg} = \by'(\bI - \bH_0)\by - \by'(\bI - \bH)\by &&                                                                                   \\
-  &\implies SS_{reg} = \by'(\bI - \bH_0 - \bI + \bH)\by          &&                                                                                   \\
-  &\implies SS_{reg} = \by'(\bH - \bH_0)\by                      &&                                                                                   \\
-\end{align*}
-
-For auxiliary result 2, we have that:
-
-Both $\bH$ and $\bH0$ are symmetric, then $\bH \bH_0 = \bH_0 \bH$, and:
-
-\begin{align*}
-  \bH \bH_0 = \bH \bones (\bones' \bones)^{-1} \bones' &&                                     \\
-  \bH \bH_0 = \bones (\bones' \bones)^{-1} \bones'     && \text{since $\bH \bones = \bones$.} \\
-  \bH \bH_0 = \bH_0                                    &&                                     \\
-\end{align*}
-
-For auxiliary result 3, we have that:
-
-\begin{align*}
-  (\bH - \bH_0)(\bH - \bH_0) 
-    &= \bH \bH - \bH \bH_0 - \bH_0 \bH + \bH_0 \bH_0 &&                                                \\
-    &= \bH - \bH \bH_0 - \bH_0 \bH + \bH_0           && \text{since $\bH_0$ and $\bH$ are idempotent.} \\
-    &= \bH - \bH_0 - \bH_0 + \bH_0                   && \text{since $\bH \bH_0 = \bH_0 \bH = \bH_0$.}  \\
-    &= \bH - \bH_0                                   &&                                                \\
-\end{align*}
-
-so, $(\bH - \bH_0)$ is idempotent.
-
-For auxiliary result 4, first we have that:
-
-\begin{align*}
-  \dC[(\bH - \bH_0) \by, (\bI - \bH) \by]
-    &= (\bH - \bH_0) \dC[\by,\by] (\bI - \bH)        \\
-    &= (\bH - \bH_0) \dV[\by] (\bI - \bH)            \\
-    &= \sigma^2 (\bH - \bH_0) (\bI - \bH)            \\
-    &= \sigma^2 (\bH - \bH_0  - \bH \bH + \bH_0 \bH) \\
-    &= \sigma^2 (\bH - \bH_0  - \bH + \bH_0 \bH)     && \text{since $\bH$ is idempotent.} \\
-    &= \sigma^2 (\bH - \bH_0  - \bH + \bH_0)         && \text{since $\bH_0 \bH = \bH_0$.} \\
-    &= \sigma^2 \bzero                               &&                                   \\
-    &= \bzero                                        &&                                   \\
-\end{align*}
-
-This tells us that $(\bH - \bH_0)\by$ and $(\bI - \bH)\by$ are uncorrelated. Now,
-since $(\bH - \bH_0)\by$ and $(\bI - \bH)\by$ are normally distributed, then 
-zero correlation implies independence. Then, any function of this 2 quantities 
-are independent. Note that:
-
-\begin{align*}
-  \by'(\bH - \bH_0)\by 
-    &= \by'(\bH - \bH_0)(\bH - \bH_0)(\bH - \bH_0)\by && \text{since $(\bH - \bH_0)$ is idempotent.}
-\end{align*}
-
-Then, $\by'(\bH - \bH_0)\by$ is a quadratic function of $(\bH - \bH_0)\by$. Similarly,
-$\by'(\bH - \bH)\by$ is a quadratic function of $(\bH - \bH)\by$. Therefore, 
-$\by'(\bH - \bH_0)\by$ and $\by'(\bH - \bH)\by$ are independent.
-
-For result 5, we have that:
-
-\begin{align*}
-  (\bH - \bH_0)\by 
-    &= (\bH - \bH_0)(\bX^* \bgb^* + \be) && \text{since $\by = \bX \bgb + \be$.} \\
-    &= (\bH - \bH_0)([\bones \bX] [\beta_0, \bgb]' + \be)                && \text{since $\bX^* = [\bones \bX] \quad \text{and} \quad \bgb^* = [\beta_0, \bgb]'$.} \\
-    &= (\bH - \bH_0)(\bones\beta_0 + \bX\bgb + \be) &&  \\
-    &= (\bH - \bH_0)(\bones\beta_0) + (\bH - \bH_0)(\bX\bgb + \be) &&  \\
-    &= (\bH \bones - \bH_0 \bones)\beta_0 + (\bH - \bH_0)(\bX\bgb + \be) &&  \\
-    &= (\bones - \bones)\beta_0 + (\bH - \bH_0)(\bX\bgb + \be) &&  \\
-    &= (\bH - \bH_0)(\bX\bgb + \be) &&  \\
-    &= (\bH - \bH_0)\be                                                  && \text{iff $\cH_0: \bgb = \bzero$ for any full rank $\bX$.}
-\end{align*}
-
-That is, for any full rank $\bX$, we have that:
-
-$$ (\bH - \bH_0)\by  = (\bH - \bH_0)\be \iff \cH_0: \bgb = \bzero$$
-
-Then:
-
-\begin{align*}
-  \be \sim N(0, \sigma^2 \bI)
-    &\implies \be'(\bH - \bH_0)\be \sim \sigma^2 \chi^2_{p-1}                                   && \text{since $(\bH - \bH_0)$ is idempotent of rank $p-1$}. \\
-    &\implies \frac{\be'(\bH - \bH_0)\be}{\sigma^2} \sim \chi^2_{p-1}                           &&                                                           \\
-    &\implies \frac{\be'(\bH - \bH_0)(\bH - \bH_0)(\bH - \bH_0)\be}{\sigma^2} \sim \chi^2_{p-1} && \text{since $(\bH - \bH_0)$ is idempotent}.               \\
-    &\implies \frac{\by'(\bH - \bH_0)(\bH - \bH_0)(\bH - \bH_0)\by}{\sigma^2} \sim \chi^2_{p-1} && \text{iff the null hypothesis holds}.                     \\
-    &\implies \frac{\by'(\bH - \bH_0)\by}{\sigma^2} \sim \chi^2_{p-1}                           && \text{since $(\bH - \bH_0)$ is idempotent}.               \\
-\end{align*}
-
-That is:
-
-$$ \frac{\by'(\bH - \bH_0)\by}{\sigma^2} \sim \chi^2_{p-1} \iff \cH_0: \bgb = \bzero$$
-
-With this results, we propose the following statistic:
-
-$$ F_{\bgb = 0} = \frac{\frac{SS_{reg}}{p-1}}{\frac{SS_{res}}{n-p}} $$
-
-and we will show that, this statistic is distributed like an $F_{p-1,n-p}$ only
-under the null hypothesis.
-
-\begin{align*}
-  F_{\bgb = 0} 
-    &= \frac{\frac{SS_{reg}}{p-1}}{\frac{SS_{res}}{n-p}}                                                           &&                                                                                                   \\
-    &= \frac{\frac{\by'(\bH - \bH_0)\by}{p-1}}{\frac{\by'(\bI - \bH)\by}{n-p}}                                     && \text{since $SS_{reg} = \by'(\bH - \bH_0)\by$ and $SS_{res}=\by'(\bI - \bH)\by$}                  \\
-    &= \frac{\frac{\by'(\bH - \bH_0)\by}{\sigma^2}\frac{1}{p-1}}{\frac{\by'(\bI - \bH)\by}{\sigma^2}\frac{1}{n-p}} &&                                                                                                   \\
-    &\sim \frac{\frac{\chi^2_{p-1}}{p-1}}{\frac{\chi^2_{n-p}}{n-p}}                                                && \text{since $\frac{\by'(\bH - \bH_0)\by}{\sigma^2} \sim \chi^2_{p-1}$ under the null hypothesis.} \\
-    &\sim F_{p-1,n-p}                                                                                              && \text{since $\by'(\bH - \bH_0)\by$ and $\by'(\bH - \bH)\by$ are independent.}
-\end{align*}
-
-So, once we observe the value of this statistic, we can contrast it with respect
-respect to this distribution. Call $F^*_{\bgb = 0}$ the observed value, and consider
-a random variable $F \sim F_{p-1,n-p}$, then we can see what would be the
-probability of observing the value of the statistic (or a more extreme value).
-
-$$ \dP(F \geq F^*_{\bgb = 0}) $$
-depending on how small or big is this probability, we can reject or not reject the
-null hypothesis. This value is a called a p-value.
-
-### Testing if one variable is not relevant
-
-We can test if a particular variable is not relevant for the regression. That is,
-$\cH_0: \beta_i = 0$. We will use the same strategy, that is, we will build a 
-test statistic that has a certain distribution only under the null hypothesis.
-
-For this hypothesis we propose the following test statistic:
-
-$$ t_{\beta_i = 0} = \frac{\hat{\beta}_i}{\sqrt{\hat{\sigma}^2 [(\bX \bX)^{-1}]_{ii}}} $$
-First note that:
-
-\begin{align*}
-\hat{\bgb} \sim N \left(\bgb, \sigma^2(\bX \bX)^{-1}\right)
-  &\implies \hat{\beta}_i \sim H(\beta_i, \sigma^2 [(\bX \bX)^{-1}]_{ii})                                                                              \\
-  &\implies \frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}} \sim N \left(\frac{\beta_i}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}, 1 \right) \\
-  &\implies \frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}} \sim N \left( 0, 1 \right) &&  \iff \cH_0: \beta_i = 0                         \\
-\end{align*}
-
-Then we have:
-
-$$$$
-
-\begin{align*}
-t_{\beta_i = 0} 
-  &= \frac{\hat{\beta}_i}{\sqrt{\hat{\sigma}^2 [(\bX \bX)^{-1}]_{ii}}} \\
-  &= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}}{\frac{\sqrt{\hat{\sigma}^2 [(\bX \bX)^{-1}]_{ii}}}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}} \\
-  &= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}}{\sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}}                                                    \\
-  &= \frac{\frac{\hat{\beta}_i }{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}}{\sqrt{\frac{\hat{\be}'\hat{\be}}{\sigma^2}\frac{1}{n-p}}}                                  && \text{since $\hat{\sigma}^2 = \frac{\hat{\be}\hat{\be}}{n-p}$} \\
-  &\sim \frac{N \left(\frac{\beta_i}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}}, 1 \right)}{\sqrt{\frac{\chi^2_{n-p}}{n-p}}}                                            && \text{since $\frac{\hat{\beta}_i}{\sqrt{\sigma^2 [(\bX \bX)^{-1}]_{ii}}} \sim N \left( 0, 1 \right)$ and $\frac{\hat{\be}'\hat{\be}}{\sigma^2} \sim \chi^2_{n-p}$} \\
-  &\sim \frac{N \left(0, 1 \right)}{\sqrt{\frac{\chi^2_{n-p}}{n-p}}}                                                                                                && \iff \cH_0: \beta_i = 0  \\
-  &\sim t_{n-p}                                                                                                                                                     && \text{since $\hat{\beta}_i$ and $\hat{\sigma}^2$ are independent}.  \\
-\end{align*}
-
-Then, under the null hypothesis we have that:
-
-$$ t_{\beta_i = 0} \sim  t_{n-p}$$
-So, if we call $t_{\beta_i = 0}^*$ the observed value of $t_{\beta_i = 0}$, and
-if we let $t$ be distributed as $t_{n-p}$, we can compute:
-
-$$ \dP(t \geq |t_{\beta_i = 0}^*|) $$
-and depending on the value, we can reject or accept the null hypothesis.
-
-### Testing if a Subgroup of the Variables is Relevant
-
-For this test, we can assume without loss of generality, that the variables we 
-want to see if it is relevant are the first $k$. So we can divide the design 
-matrix as:
-
-$$ \bX = [\bX_1 \bX_2] $$
-where the variables to test are in $\bX_1$ and the rest of the variables are in
-$\bX_2$ (including possibly the intercept). And similarly we have $\bgb = [\bgb_1 \bgb_2]'$.
-
-This test is similar to the first test once we express it accordingly. We will 
-consider two linear regressions. One including all variables and one excluding 
-the variables to be tested indexed by $2$. With this we can build the following 
-test statistics:
-
-$$ F_{\bgb_1=\bzero} = \frac{\frac{SS_{res,2} - SS_{res}}{k}}{\frac{SS_{res}}{n-p}} $$
-Then note the following:
-
-\begin{align*}
-  SS_{res,2} - SS_{res}
-    &= \by'(\bI - \bH_2)\by - \by'(\bI - \bH) \by \\
-    &= \by'(\bI - \bH_2 - \bI + \bH) \by          \\
-    &= \by'(\bH - \bH_2) \by                      \\
-\end{align*}
-
-Again, we will see that $(\bH - \bH_2)$ is idempotent and $(\bH - \bH_2)\by = (\bH - \bH_2)\be$
-only under the null hypothesis.
-
-First, let us see that $(\bH - \bH_2)$ is idempotent. First note that:
-
-$$ \bH \bH_2 = \bH_2 \bH = \bH_2$$
-since $\bH_2$ is the projection matrix of the columns of $\bX_2$ a subspace of the
-columns of $\bX$. Then:
-
-\begin{align*}
-  (\bH - \bH_2)(\bH - \bH_2)
-    &= \bH \bH - \bH_2 \bH - \bH \bH_2 + \bH_2 \bH_2 \\
-    &= \bH - \bH_2 \bH - \bH \bH_2 + \bH_2           && \text{since $\bH_2$ and $\bH$ are idempotent}. \\
-    &= \bH - \bH_2 - \bH_2 + \bH_2                   && \text{since $\bH \bH_2 = \bH_2 \bH = \bH_2$}.  \\
-    &= \bH - \bH_2                                   &&                                                \\
-\end{align*}
-
-then $(\bH - \bH_2)$ is idempotent.
-
-Now let us see that $(\bH - \bH_2)\by = (\bH - \bH_2)\be$ under the null hypothesis.
-First, let us note that:
-
-$$ \bH \bX_2 = \bX_2 $$
-since space generated by $\bX_2$ is a subspace of the space generated by $\bX$,
-since $\bX$ contains the columns of $\bX_2$. And we also note that:
-
-$$ \bH_2 \bX_2 = \bX_2 $$
-since $\bH_2$ is the projection matrix of the space generated by the columns of
-$\bX_2$. We note that this results can be proven algebraically.
-
-Then:
-
-\begin{align*}
-  (\bH - \bH_2)\by
-    &= (\bH - \bH_2)(\bX \bgb + \be)                                      \\
-    &= (\bH - \bH_2)([\bX_1 \bX_2] [\bgb_1' \bgb_2']' + \be)              \\
-    &= (\bH - \bH_2)(\bX_1 \bgb_1 \bX_2 \bgb_2 + \be)                     \\
-    &= (\bH - \bH_2)(\bX_2 \bgb_2) + (\bH - \bH_2)(\bX_1 \bgb_1 + \be)    \\
-    &= (\bH \bX_2 - \bH_2\bX_2)\bgb_2 + (\bH - \bH_2)(\bX_1 \bgb_1 + \be) \\
-    &= (\bX_2 - \bX_2)\bgb_2 + (\bH - \bH_2)(\bX_1 \bgb_1 + \be)          && \text{since $\bH \bX_1 = \bX_1$ and $\bH_1 \bX_1 = \bX_1$} \\
-    &= (\bH - \bH_2)(\bX_1 \bgb_1 + \be)                                  &&                                                            \\
-    &= (\bH - \bH_2)\be                                                   && \iff \cH_0: \bgb_1 = \bzero \\
-\end{align*}
-
-So, if $\bX_1$ is full rank, then we have that:
-
-$$ (\bH - \bH_2)\by = (\bH - \bH_2)\be \iff \cH_0: \bgb_1 = \bzero $$
-
-Then we can proceed to see what is the distribution of our test statistic under 
-the null hypothesis.
-
-\begin{align*}
-  F_{\bgb_1=\bzero} 
-    &= \frac{\frac{SS_{res,2} - SS_{res}}{k}}{\frac{SS_{res}}{n-p}}                                                                          &&                                                                                                   \\
-    &= \frac{\frac{\by'(\bH - \bH_2)\by}{k}}{\frac{\by'(\bI - \bH)\by}{n-p}}                                                                 && \text{since $SS_{res,2} - SS_{res} = \by'(\bH - \bH_2)\by$ and $SS_{res}=\by'(\bI - \bH)\by$}     \\
-    &= \frac{\frac{\by'(\bH - \bH_2)\by}{\sigma^2}\frac{1}{k}}{\frac{\by'(\bI - \bH)\by}{\sigma^2}\frac{1}{n-p}}                             &&                                                                                                   \\
-    &= \frac{\frac{\by'(\bH - \bH_2)(\bH - \bH_2)(\bH - \bH_2)\by}{\sigma^2}\frac{1}{k}}{\frac{\by'(\bI - \bH)\by}{\sigma^2}\frac{1}{n-p}}   && \text{snce $(\bH - \bH_2)$ is idempotent}.                                                        \\
-    &= \frac{\frac{\be'(\bH - \bH_2)(\bH - \bH_2)(\bH - \bH_2)\be}{\sigma^2}\frac{1}{k}}{\frac{\by'(\bI - \bH)\by}{\sigma^2}\frac{1}{n-p}}   && \iff  \cH_0: \bgb_1 = \bzero                                                                      \\
-    &= \frac{\frac{\be'(\bH - \bH_2)\be}{\sigma^2}\frac{1}{k}}{\frac{\by'(\bI - \bH)\by}{\sigma^2}\frac{1}{n-p}}                             && \text{since $(\bH - \bH_2)$ is idempotent}.                                                       \\
-    &\sim \frac{\frac{\chi^2_{k}}{k}}{\frac{\chi^2_{n-p}}{n-p}}                                                                              && \text{since $(\bH - \bH_2)$ is idempotent and $\frac{\be}{\sqrt{\sigma^2}} \sim N(0, \bI)$}.      \\
-    &\sim F_{k,n-p}                                                                                                                          && 
-\end{align*}
-
-So, before we observe the data, $F_{\bgb_1=\bzero}$ has a $F_{k,n-p}$ distribution.
-Then, once we observe the data, call $F_{\bgb_1=\bzero}^*$ the observed value of
-the statistic, and let $F$ be distributed as an $F_{k,n-p}$, we can compute:
-
-$$ \dP(F \geq F_{\bgb_1=\bzero}^*) $$
-and reject the null hypothesis if this probability is small and not reject if 
-this probability is small.
-
-Below is a **textbook-style introduction to power analysis in the context of multiple linear regression**, consistent with the level and tone of graduate coursework in applied linear models. No equations have been altered if you later integrate this into your existing notes.
-
----
-
-## Power Analysis
-
-Power analysis in multiple linear regression extends the general principles of hypothesis testing to the setting where several predictors jointly explain variability in a response variable. Because many inferential questions in regression involve testing whether one or more regression coefficients differ from zero, power analysis provides a framework for assessing how sensitive these tests are to detecting true effects of practical importance. It also informs decisions about sample size, model specification, and the expected precision of future studies.
-
-Recall the multiple linear regression model
 $$
-\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{e},
-$$
-with $\mathbf{e} \sim N(\mathbf{0}, \sigma^2 \mathbf{I})$. In this framework, power analysis concerns the probability of rejecting a null hypothesis about one or more components of $\boldsymbol{\beta}$ under specific alternatives.
-
-### Power for Testing a Single Coefficient
-
-A common hypothesis test asks whether a particular predictor has any linear association with the response, controlling for the other predictors:
-$$
-H_0: \beta_j = 0
-\qquad\text{vs.}\qquad
-H_1: \beta_j \neq 0.
+\bgb_1=\boldsymbol{\theta}
 $$
 
-The usual test statistic takes the form
+is therefore
+
 $$
-t_{\beta_j} = \frac{\hat{\beta}_j - \beta_j}{\sqrt{\hat{\sigma}^2_{\beta_j}}},
+\boxed{
+\pi(\boldsymbol{\theta})
+=
+\dP
+\left(
+F_{\bgb_1=\bzero}
+\geq
+f_{k,\nu,\alpha}
+\mid
+\bgb_1=\boldsymbol{\theta}
+\right),
+}
 $$
-which, under the null hypothesis, follows a $t$ distribution with $n - p$ degrees of freedom.
 
-Given a significance level $\alpha$, we have chosen a rejection region given by:
+where
 
-Under an alternative $\beta_j = \theta_1 \neq 0$, the statistic follows a **noncentral $t$ distribution**, whose noncentrality parameter depends on:
-
-* the magnitude of the effect $\beta_j$,
-* the sampling variability of $\hat{\beta}_j$ (involving $(\mathbf{X}'\mathbf{X})^{-1}$),
-* the error variance $\sigma^2$, and
-* the sample size.
-
-In particular the noncentrality parameter is given by:
-
-$$ \mu_{\beta_j} = \frac{\beta_j}{\sqrt{\sigma^2 [(\bX'\bX)]_{jj}}} $$
-
-If $R$ is the rejection region for the two-sided test, then the power at $\beta_j = \theta_1$ is
 $$
-\pi(\theta_1) = \mathbb{P}(t_{\beta_j} \in R \mid \beta_j = \theta_1),
+F_{\bgb_1=\bzero}
+\mid
+\bgb_1=\boldsymbol{\theta}
+\sim
+F_{k,\nu}(\lambda).
 $$
-which increases with larger sample sizes, larger effect sizes, smaller noise variance, and designs that reduce the variance of $\hat{\beta}_j$. The structure of the design matrix therefore plays a crucial role: multicollinearity inflates $\hat{\sigma}^2_{\beta_j}$ and can dramatically reduce power.
 
-### Power for Testing Multiple Coefficients (Partial F-Tests)
+When
 
-Many inferential questions in regression concern the joint contribution of several predictors. For example,
 $$
-H_0: \beta_{j_1} = \beta_{j_2} = \cdots = \beta_{j_k} = 0
-\quad\text{versus}\quad
-H_1:\ \text{at least one }\beta_{j_r} \neq 0,
+\boldsymbol{\theta}=\bzero,
 $$
-is evaluated using a partial F-test. The test statistic is of the form
+
+the noncentrality parameter becomes
+
 $$
-F = \frac{\left(\text{SSR}_{\text{full}} - \text{SSR}_{\text{reduced}}\right)/k}{\hat{\sigma}^2},
+\lambda=0,
 $$
-which follows an $F_{k,; n-p}$ distribution under $H_0$. Under an alternative model in which the set of coefficients differs from zero, the statistic follows a **noncentral $F$ distribution**, with noncentrality parameter
+
+so the noncentral $F$ distribution reduces to the central $F$ distribution and
+
 $$
-\lambda = \frac{(\mathbf{C}\boldsymbol{\beta})' \left[\mathbf{C}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{C}'\right]^{-1} (\mathbf{C}\boldsymbol{\beta})}{\sigma^2},
+\pi(\bzero)=\alpha.
 $$
-where $\mathbf{C}$ selects the coefficients under test.
 
-The power for the partial F-test is then
+The noncentrality parameter again provides a useful interpretation of power:
+
 $$
-\pi(\lambda) = \mathbb{P}(F > F_{k,; n-p}(1 - \alpha) \mid \lambda),
+\lambda
+=
+\frac{
+\boldsymbol{\theta}'
+\bX_1'
+(\bI-\bH_2)
+\bX_1
+\boldsymbol{\theta}
+}{
+\sigma^2
+}.
 $$
-where $F_{k,; n-p}(1-\alpha)$ is the $(1-\alpha)$ quantile of the central $F$ distribution. In this setting, the noncentrality parameter encodes the joint effect size of the tested predictors. The power increases with:
 
-* larger joint effect sizes,
-* lower error variance,
-* larger sample sizes, and
-* predictor configurations that reduce multicollinearity.
+The matrix
 
-### The Role of the Design Matrix
+$$
+\bI-\bH_2
+$$
 
-Unlike simpler settings such as one-sample or two-sample tests, power in multiple regression depends critically on the geometry of the predictors. The matrix $(\mathbf{X}'\mathbf{X})^{-1}$ directly determines how much information the data provide about each coefficient and about linear combinations of coefficients. As a consequence:
+removes from the tested explanatory variables the components that can already be represented by the variables in the reduced model. Therefore,
 
-* highly correlated predictors inflate variances and reduce power,
-* balanced and orthogonal designs maximize power, and
-* adding irrelevant predictors can decrease power for testing the important ones.
+$$
+\bX_1'
+(\bI-\bH_2)
+\bX_1
+$$
 
-Thus, power analysis in regression provides insight not only into sample size requirements but also into the effect of model specification and predictor structure.
+measures the amount of information about the tested effects that remains after accounting for the other explanatory variables.
 
-### Practical Applications
+Consequently, power is high when the tested coefficients produce a large component of the mean response that cannot already be explained by the reduced model, relative to the error variance.
 
-Power analysis in multiple linear regression is essential in the following contexts:
+The overall regression $F$ test is a special case of this result. In that case, $\bX_1=\bX_*$ contains all $p$ explanatory variables and $\bX_2=\bones$ contains only the intercept. Therefore, the power of the overall regression test can be obtained from the same noncentral $F$ framework.
 
-* **Experimental design:** Determining the sample size needed to detect expected effects.
-* **Study planning with observational data:** Evaluating whether available data can reasonably support planned inferences.
-* **Model assessment:** Understanding how collinearity or the inclusion of unnecessary predictors affects inferential strength.
-* **Interpretation of non-significant results:** Distinguishing between evidence supporting the null hypothesis and insufficient statistical sensitivity.
+### Power and the Regression Design {#nor-power-design}
 
-In summary, power analysis for multiple linear regression extends classical power concepts to a multivariate linear setting, where the design matrix, error variance, and effect size structure collectively determine the sensitivity of hypothesis tests. This framework is fundamental for constructing well-designed studies and for obtaining reliable inferential conclusions about the regression coefficients.
+The power calculations above show that power in multiple linear regression is determined by more than the numerical size of a regression coefficient.
+
+For a single coefficient, the relevant noncentrality parameter is
+
+$$
+\delta_j
+=
+\frac{
+\beta_j
+}{
+\sigma
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+}.
+$$
+
+For a subgroup of coefficients, it is
+
+$$
+\lambda
+=
+\frac{
+\bgb_1'
+\bX_1'
+(\bI-\bH_2)
+\bX_1
+\bgb_1
+}{
+\sigma^2
+}.
+$$
+
+In both cases, power is determined by the relationship among three components:
+
+$$
+\boxed{
+\text{effect magnitude},
+\qquad
+\text{error variability},
+\qquad
+\text{information supplied by the design}.
+}
+$$
+
+This connects power directly with several ideas studied earlier in the course. The design matrix determines the variance of the least squares estimators, and the same geometry therefore determines how easily departures from a null hypothesis can be detected.
+
+A test may have low power because the true effect is small, because the errors are highly variable, or because the configuration of the explanatory variables makes the effect difficult to estimate separately from the other effects.
+
+Sample size also affects these quantities because collecting additional observations changes the information contained in the design matrix. This creates an important practical question:
+
+> How many observations are required to obtain a desired probability of detecting an effect of a specified magnitude?
+
+That question reverses the power calculation. Instead of taking the design and sample size as given and computing the resulting power, we specify a desired power and determine what sample size or design would be required to achieve it.
+
+We will return to this question in the Applications chapter, where power will be used as a tool for study planning and sample-size determination.
+
+***
 
 
 
@@ -875,3 +4669,1758 @@ In summary, power analysis for multiple linear regression extends classical powe
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Maximum Likelihood Estimation {#nor-maximum-likelihood}
+
+Throughout the course, we have estimated the regression coefficients using the least squares criterion. Starting from the optimization problem
+
+$$
+\min_{\bgb}
+(\by-\bX\bgb)'(\by-\bX\bgb),
+$$
+
+we obtained the Ordinary Least Squares estimator
+
+$$
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by.
+$$
+
+This construction did not require a probability distribution for the errors. Later assumptions about the mean and variance of the errors allowed us to study properties such as unbiasedness, variance, and the Gauss--Markov result, while the Normality assumption allowed us to obtain exact sampling distributions and perform statistical inference.
+
+The Normality assumption also provides a different approach to estimation.
+
+Once a complete probability distribution for the observed response has been specified, we can ask which values of the unknown parameters make the observed data most likely under the assumed model. This leads to **Maximum Likelihood Estimation**.
+
+Under the Normal linear regression model,
+
+$$
+\by
+=
+\bX\bgb+\be,
+$$
+
+where
+
+$$
+\be
+\sim
+N(\bzero,\sigma^2\bI),
+$$
+
+we have
+
+$$
+\by
+\sim
+N(\bX\bgb,\sigma^2\bI).
+$$
+
+Therefore, for an observed response vector $\by$, the likelihood function of $\bgb$ and $\sigma^2$ is
+
+\begin{align*}
+\cL(\bgb,\sigma^2\mid\by)
+&=
+(2\pi)^{-\frac{n}{2}}
+|\sigma^2\bI|^{-\frac12}
+\exp
+\left\{
+-\frac12
+(\by-\bX\bgb)'
+(\sigma^2\bI)^{-1}
+(\by-\bX\bgb)
+\right\} \\
+&=
+(2\pi)^{-\frac{n}{2}}
+(\sigma^2)^{-\frac{n}{2}}
+\exp
+\left\{
+-\frac{1}{2\sigma^2}
+(\by-\bX\bgb)'
+(\by-\bX\bgb)
+\right\} \\
+&=
+(2\pi\sigma^2)^{-\frac{n}{2}}
+\exp
+\left\{
+-\frac{1}{2\sigma^2}
+(\by-\bX\bgb)'
+(\by-\bX\bgb)
+\right\}.
+\end{align*}
+
+The likelihood contains the same quadratic quantity that appeared in the least squares problem. We will first determine what this implies for estimation of $\bgb$, and then estimate $\sigma^2$.
+
+### Maximum Likelihood Estimation of $\bgb$ {#nor-mle-beta}
+
+```{proposition, nor-mle-beta, name="Maximum Likelihood Estimator of the Regression Coefficients"}
+
+Consider the Normal linear regression model
+
+$$
+\by=\bX\bgb+\be,
+$$
+
+where $\bX$ has full column rank and
+
+$$
+\be\sim N(\bzero,\sigma^2\bI).
+$$
+
+Then the maximum likelihood estimator of $\bgb$ is
+
+$$
+\hat{\bgb}_{MLE}
+=
+(\bX'\bX)^{-1}\bX'\by
+=
+\hat{\bgb}.
+$$
+
+Thus, the maximum likelihood estimator of $\bgb$ coincides with the Ordinary Least Squares estimator.
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-mle-beta-proof}
+
+For fixed $\sigma^2$, the likelihood is
+
+$$
+\cL(\bgb,\sigma^2\mid\by)
+=
+(2\pi\sigma^2)^{-\frac{n}{2}}
+\exp
+\left\{
+-\frac{1}{2\sigma^2}
+(\by-\bX\bgb)'
+(\by-\bX\bgb)
+\right\}.
+$$
+
+Recall the decomposition
+
+\begin{align*}
+(\by-\bX\bgb)'
+(\by-\bX\bgb)
+&=
+(\by-\bX\hat{\bgb}+\bX\hat{\bgb}-\bX\bgb)'
+(\by-\bX\hat{\bgb}+\bX\hat{\bgb}-\bX\bgb) \\
+&=
+\hat{\be}'\hat{\be}
++
+2\hat{\be}'\bX(\hat{\bgb}-\bgb)
++
+(\hat{\bgb}-\bgb)'
+\bX'\bX
+(\hat{\bgb}-\bgb) \\
+&=
+\hat{\be}'\hat{\be}
++
+(\hat{\bgb}-\bgb)'
+\bX'\bX
+(\hat{\bgb}-\bgb)
+&&
+\text{since $\hat{\be}'\bX=\bzero'$}.
+\end{align*}
+
+Therefore,
+
+\begin{align*}
+\cL(\bgb,\sigma^2\mid\by)
+&=
+(2\pi\sigma^2)^{-\frac{n}{2}}
+\exp
+\left\{
+-\frac{1}{2\sigma^2}
+\left[
+\hat{\be}'\hat{\be}
++
+(\hat{\bgb}-\bgb)'
+\bX'\bX
+(\hat{\bgb}-\bgb)
+\right]
+\right\}.
+\end{align*}
+
+For fixed $\sigma^2$, the quantities
+
+$$
+(2\pi\sigma^2)^{-\frac{n}{2}}
+$$
+
+and
+
+$$
+\hat{\be}'\hat{\be}
+$$
+
+do not depend on $\bgb$.
+
+Since $\bX$ has full column rank, $\bX'\bX$ is positive definite. Hence,
+
+$$
+(\hat{\bgb}-\bgb)'
+\bX'\bX
+(\hat{\bgb}-\bgb)
+\geq0,
+$$
+
+with equality if and only if
+
+$$
+\bgb=\hat{\bgb}.
+$$
+
+Since this quantity enters the likelihood with a negative sign, the likelihood is maximized when
+
+$$
+\bgb=\hat{\bgb}.
+$$
+
+Therefore,
+
+$$
+\hat{\bgb}_{MLE}
+=
+\hat{\bgb}
+=
+(\bX'\bX)^{-1}\bX'\by.
+$$
+
+```
+
+</details>
+
+This result provides a second route to the estimator already obtained through least squares. The two approaches begin from different criteria:
+
+$$
+\text{Least Squares}
+\quad\longrightarrow\quad
+\text{minimize squared discrepancies},
+$$
+
+while
+
+$$
+\text{Maximum Likelihood}
+\quad\longrightarrow\quad
+\text{maximize the likelihood of the observed response}.
+$$
+
+Under the Normal linear regression model, they lead to the same estimator of $\bgb$.
+
+This does not mean that Normality is required to obtain the OLS estimator, its unbiasedness, or the Gauss--Markov result. Rather, Normality supplies an additional interpretation of the estimator through the likelihood.
+
+### Maximum Likelihood Estimation of $\sigma^2$ {#nor-mle-sigma2}
+
+Once the likelihood has been maximized with respect to $\bgb$, we can evaluate it at
+
+$$
+\bgb=\hat{\bgb}
+$$
+
+and maximize the resulting expression with respect to $\sigma^2$.
+
+```{proposition, nor-mle-sigma2, name="Maximum Likelihood Estimator of the Error Variance"}
+
+Consider the Normal linear regression model
+
+$$
+\by=\bX\bgb+\be,
+$$
+
+where $\bX$ has full column rank and
+
+$$
+\be\sim N(\bzero,\sigma^2\bI).
+$$
+
+Then the maximum likelihood estimator of $\sigma^2$ is
+
+$$
+\tilde{\sigma}^2
+=
+\frac{\hat{\be}'\hat{\be}}{n}.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-mle-sigma2-proof}
+
+Substituting
+
+$$
+\bgb=\hat{\bgb}
+$$
+
+into the likelihood gives
+
+$$
+\cL(\hat{\bgb},\sigma^2\mid\by)
+=
+(2\pi\sigma^2)^{-\frac{n}{2}}
+\exp
+\left\{
+-\frac{\hat{\be}'\hat{\be}}{2\sigma^2}
+\right\}.
+$$
+
+Since the logarithm is strictly increasing, maximizing the likelihood is equivalent to maximizing the log-likelihood:
+
+\begin{align*}
+\ell(\hat{\bgb},\sigma^2\mid\by)
+&=
+-\frac{n}{2}\log(2\pi)
+-\frac{n}{2}\log(\sigma^2)
+-\frac{\hat{\be}'\hat{\be}}{2\sigma^2}.
+\end{align*}
+
+Differentiating with respect to $\sigma^2$,
+
+\begin{align*}
+\frac{\partial}
+{\partial\sigma^2}
+\ell(\hat{\bgb},\sigma^2\mid\by)
+&=
+-\frac{n}{2\sigma^2}
++
+\frac{\hat{\be}'\hat{\be}}
+{2(\sigma^2)^2}.
+\end{align*}
+
+Setting the derivative equal to zero,
+
+\begin{align*}
+-\frac{n}{2\sigma^2}
++
+\frac{\hat{\be}'\hat{\be}}
+{2(\sigma^2)^2}
+&=
+0 \\
+&\implies
+-n\sigma^2+\hat{\be}'\hat{\be}
+=
+0 \\
+&\implies
+\sigma^2
+=
+\frac{\hat{\be}'\hat{\be}}{n}.
+\end{align*}
+
+The second derivative is
+
+$$
+\frac{\partial^2}
+{\partial(\sigma^2)^2}
+\ell(\hat{\bgb},\sigma^2\mid\by)
+=
+\frac{n}{2(\sigma^2)^2}
+-
+\frac{\hat{\be}'\hat{\be}}
+{(\sigma^2)^3}.
+$$
+
+At
+
+$$
+\tilde{\sigma}^2
+=
+\frac{\hat{\be}'\hat{\be}}{n},
+$$
+
+we have
+
+\begin{align*}
+\left.
+\frac{\partial^2}
+{\partial(\sigma^2)^2}
+\ell(\hat{\bgb},\sigma^2\mid\by)
+\right|_{\sigma^2=\tilde{\sigma}^2}
+&=
+-\frac{n}{2(\tilde{\sigma}^2)^2} \\
+&<
+0.
+\end{align*}
+
+Therefore,
+
+$$
+\tilde{\sigma}^2
+=
+\frac{\hat{\be}'\hat{\be}}{n}
+$$
+
+maximizes the likelihood.
+
+```
+
+</details>
+
+Unlike the regression coefficient estimator, the maximum likelihood estimator of $\sigma^2$ is not the same as the unbiased estimator developed previously. This distinction is worth examining.
+
+### Maximum Likelihood and Unbiased Estimation of $\sigma^2$ {#nor-mle-bias}
+
+Recall that the unbiased estimator of the error variance is
+
+$$
+\hat{\sigma}^2
+=
+\frac{\hat{\be}'\hat{\be}}{n-p-1}.
+$$
+
+The maximum likelihood estimator instead uses the denominator $n$:
+
+$$
+\tilde{\sigma}^2
+=
+\frac{\hat{\be}'\hat{\be}}{n}.
+$$
+
+The difference arises because maximum likelihood and unbiasedness are different estimation criteria.
+
+```{proposition, nor-mle-sigma2-bias, name="Bias of the Maximum Likelihood Estimator of the Error Variance"}
+
+Under the Normal linear regression model with $p$ explanatory variables and an intercept,
+
+$$
+\dE[\tilde{\sigma}^2]
+=
+\frac{n-p-1}{n}\sigma^2.
+$$
+
+Therefore,
+
+$$
+\operatorname{Bias}(\tilde{\sigma}^2)
+=
+-\frac{p+1}{n}\sigma^2,
+$$
+
+and the maximum likelihood estimator of $\sigma^2$ is biased downward.
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, nor-mle-sigma2-bias-proof}
+
+From the previous chapter,
+
+$$
+\dE[\hat{\be}'\hat{\be}]
+=
+\sigma^2(n-p-1).
+$$
+
+Therefore,
+
+\begin{align*}
+\dE[\tilde{\sigma}^2]
+&=
+\dE
+\left[
+\frac{\hat{\be}'\hat{\be}}{n}
+\right] \\
+&=
+\frac{1}{n}
+\dE[\hat{\be}'\hat{\be}] \\
+&=
+\frac{n-p-1}{n}\sigma^2.
+\end{align*}
+
+Hence,
+
+\begin{align*}
+\operatorname{Bias}(\tilde{\sigma}^2)
+&=
+\dE[\tilde{\sigma}^2]-\sigma^2 \\
+&=
+\frac{n-p-1}{n}\sigma^2-\sigma^2 \\
+&=
+-\frac{p+1}{n}\sigma^2.
+\end{align*}
+
+```
+
+</details>
+
+Thus, Maximum Likelihood Estimation and the estimation approach developed in the previous chapter agree for the regression coefficients but not for the error variance:
+
+$$
+\boxed{
+\hat{\bgb}_{MLE}
+=
+\hat{\bgb}_{OLS},
+}
+$$
+
+while
+
+$$
+\boxed{
+\tilde{\sigma}^2_{MLE}
+=
+\frac{\hat{\be}'\hat{\be}}{n}
+\neq
+\frac{\hat{\be}'\hat{\be}}{n-p-1}
+=
+\hat{\sigma}^2_{\mathrm{unbiased}}.
+}
+$$
+
+There is no contradiction between these results. Maximum likelihood chooses the parameter values that maximize the likelihood of the observed data, whereas unbiased estimation requires the expectation of an estimator to equal the corresponding parameter. Neither criterion implies the other.
+
+The inferential results developed earlier in this chapter used
+
+$$
+\hat{\sigma}^2
+=
+\frac{\hat{\be}'\hat{\be}}{n-p-1},
+$$
+
+together with
+
+$$
+\frac{(n-p-1)\hat{\sigma}^2}{\sigma^2}
+\sim
+\chi^2_{n-p-1}.
+$$
+
+Those results therefore remain unchanged by the fact that the maximum likelihood estimator of $\sigma^2$ uses a different denominator.
+
+Maximum Likelihood Estimation gives us another perspective on the role of the Normality assumption. Normality not only provides the exact distributions needed for inference; by specifying the complete distribution of the response, it also allows estimation to be formulated through the likelihood. For the regression coefficients this leads back to the least squares solution, while for the error variance it illustrates that different estimation principles need not produce the same estimator.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Chapter Synthesis {#nor-synthesis}
+
+The central purpose of this chapter was to understand what additional information becomes available when the assumptions on the regression errors are strengthened from assumptions about their first two moments to a complete probability distribution.
+
+In the previous chapter, the assumptions
+
+$$
+\dE[\be]=\bzero
+$$
+
+and
+
+$$
+\dV[\be]=\sigma^2\bI
+$$
+
+were sufficient to establish important properties of the least squares estimators. In particular, they allowed us to study unbiasedness, variances and covariances, the Gauss--Markov result, and unbiased estimation of $\sigma^2$.
+
+The additional assumption introduced in this chapter was
+
+$$
+\boxed{
+\be\sim N(\bzero,\sigma^2\bI).
+}
+$$
+
+This assumption does not change the least squares estimator and is not required for the results established under the weaker mean and variance assumptions. Instead, it provides the additional distributional information needed for exact finite-sample inference.
+
+As developed in Section \@ref(nor-distribution-estimates), Normality implies
+
+$$
+\by
+\sim
+N(\bX\bgb,\sigma^2\bI).
+$$
+
+Because the least squares estimator, fitted values, and residuals are linear transformations of $\by$, their complete distributions follow from the moment results obtained previously:
+
+$$
+\hat{\bgb}
+\sim
+N\left(
+\bgb,
+\sigma^2(\bX'\bX)^{-1}
+\right),
+$$
+
+$$
+\hat{\by}
+\sim
+N\left(
+\bX\bgb,
+\sigma^2\bH
+\right),
+$$
+
+and
+
+$$
+\hat{\be}
+\sim
+N\left(
+\bzero,
+\sigma^2(\bI-\bH)
+\right).
+$$
+
+The estimator of the error variance required a different argument because it is based on the quadratic form
+
+$$
+\hat{\be}'\hat{\be}.
+$$
+
+The geometry developed in the earlier regression chapters becomes especially important here. Since $\bI-\bH$ is the projection onto the residual subspace and has rank
+
+$$
+n-p-1,
+$$
+
+Normality implies
+
+$$
+\frac{\hat{\be}'\hat{\be}}{\sigma^2}
+\sim
+\chi^2_{n-p-1}.
+$$
+
+Equivalently,
+
+$$
+\frac{(n-p-1)\hat{\sigma}^2}{\sigma^2}
+\sim
+\chi^2_{n-p-1}.
+$$
+
+Thus, the residual degrees of freedom are not merely an algebraic correction in the denominator of $\hat{\sigma}^2$. They correspond to the dimension of the subspace in which the residual vector is allowed to vary.
+
+Normality also strengthens the covariance results obtained previously. In particular,
+
+$$
+\dC[\hat{\be},\hat{\bgb}]
+=
+\bzero
+$$
+
+alone does not imply independence. Under joint Normality, however,
+
+$$
+\hat{\be}
+\perp
+\hat{\bgb},
+$$
+
+and consequently
+
+$$
+\hat{\sigma}^2
+\perp
+\hat{\bgb}.
+$$
+
+This independence is one of the key results of the chapter. It allows the Normal distribution of coefficient estimators to be combined with the independent chi-squared distribution used to estimate $\sigma^2$. The result is the Student's $t$ distribution that underlies much of classical regression inference.
+
+In Section \@ref(nor-interval-estimation), this idea was applied first to a general linear combination
+
+$$
+\ba'\bgb.
+$$
+
+The statistic
+
+$$
+\frac{
+\ba'\hat{\bgb}-\ba'\bgb
+}{
+\hat{\sigma}
+\sqrt{
+\ba'(\bX'\bX)^{-1}\ba
+}
+}
+$$
+
+has a Student's $t$ distribution with
+
+$$
+n-p-1
+$$
+
+degrees of freedom. Individual coefficient intervals and intervals for the expected response are particular cases of this general result.
+
+The prediction interval required an additional source of uncertainty. Estimating the mean response at $\bx_{\mathrm{new}}$ involves uncertainty only through estimation of
+
+$$
+\bx_{\mathrm{new}}'\bgb,
+$$
+
+whereas predicting a future observation also requires accounting for the new error
+
+$$
+e_{\mathrm{new}}.
+$$
+
+This produces the additional $1$ in
+
+$$
+\hat{\sigma}^2
+\left[
+1+
+\bx_{\mathrm{new}}'
+(\bX'\bX)^{-1}
+\bx_{\mathrm{new}}
+\right].
+$$
+
+Thus, the distinction between confidence intervals for the mean response and prediction intervals is a direct consequence of the distinction between uncertainty about an unknown mean and randomness in a future observation.
+
+The same distributions were used from a different perspective in Section \@ref(nor-hypothesis-testing). A hypothesis test begins by assuming a null hypothesis and determining the distribution of a statistic conditional on that assumption. The $p$-value then measures how extreme the observed statistic would be under the distribution implied by the null hypothesis.
+
+For regression models, many tests can be understood through comparisons of nested models. If
+
+$$
+\mathcal{C}(\bX_R)
+\subseteq
+\mathcal{C}(\bX_F),
+$$
+
+then the quantity
+
+$$
+SS_{res,R}-SS_{res,F}
+$$
+
+measures the additional variation explained by enlarging the reduced model to the full model.
+
+Under the null hypothesis that the reduced model is sufficient,
+
+$$
+\frac{
+(SS_{res,R}-SS_{res,F})/q
+}{
+SS_{res,F}/\nu
+}
+\sim
+F_{q,\nu}.
+$$
+
+This single construction gives the overall regression test and tests of groups of regression coefficients.
+
+The test of an individual coefficient can be viewed in two equivalent ways. The direct approach compares the estimated coefficient with its estimated standard deviation through a $t$ statistic. The nested-model approach compares the full model with a model in which that explanatory variable has been removed. These two approaches satisfy
+
+$$
+F_j=T_j^2.
+$$
+
+This equality connects the coefficient-based and geometric interpretations of hypothesis testing. Testing whether $\beta_j=0$ is equivalent to asking whether the component of $\bx_j$ that cannot already be represented by the remaining explanatory variables produces a sufficiently large reduction in residual variation.
+
+Section \@ref(nor-power-analysis) extended the hypothesis-testing framework beyond the null hypothesis. The rejection region of a test is determined using its distribution under $\cH_0$, but power asks for
+
+$$
+\dP
+\left(
+\text{reject }\cH_0
+\mid
+\text{a specified alternative}
+\right).
+$$
+
+Under alternatives, the central $t$ and $F$ distributions become noncentral distributions. For a single coefficient, the relevant noncentrality parameter is
+
+$$
+\delta_j
+=
+\frac{
+\beta_j
+}{
+\sigma
+\sqrt{
+[(\bX'\bX)^{-1}]_{jj}
+}
+},
+$$
+
+while for a group of coefficients,
+
+$$
+\lambda
+=
+\frac{
+\bgb_1'
+\bX_1'
+(\bI-\bH_2)
+\bX_1
+\bgb_1
+}{
+\sigma^2
+}.
+$$
+
+These expressions show that power is determined by more than the magnitude of an effect. It also depends on the error variability and on the geometry of the design matrix. The same properties of the explanatory variables that determine the precision of least squares estimation therefore also determine how easily a true effect can be detected.
+
+This connection will become particularly important in the Applications chapter, where the direction of the power calculation will be reversed. Rather than treating the design and sample size as fixed and computing power, we will consider how a desired level of power can inform sample-size and study-design decisions.
+
+Finally, Section \@ref(nor-maximum-likelihood) used the Normality assumption in a conceptually different way. Once the complete distribution
+
+$$
+\by
+\sim
+N(\bX\bgb,\sigma^2\bI)
+$$
+
+is specified, it becomes possible to construct a likelihood function and estimate the parameters by Maximum Likelihood Estimation.
+
+For the regression coefficients,
+
+$$
+\hat{\bgb}_{MLE}
+=
+\hat{\bgb}_{OLS}.
+$$
+
+Thus, least squares and Maximum Likelihood Estimation lead to the same coefficient estimator under the Normal model, even though they begin from different principles.
+
+The same agreement does not hold for estimation of $\sigma^2$:
+
+$$
+\tilde{\sigma}^2_{MLE}
+=
+\frac{\hat{\be}'\hat{\be}}{n},
+$$
+
+whereas the unbiased estimator used throughout the inferential development is
+
+$$
+\hat{\sigma}^2
+=
+\frac{\hat{\be}'\hat{\be}}{n-p-1}.
+$$
+
+This distinction emphasizes that maximum likelihood and unbiasedness are different estimation criteria. The fact that the two approaches agree for $\bgb$ does not imply that they must agree for every parameter.
+
+The conceptual progression of this chapter can therefore be summarized as
+
+$$
+\boxed{
+\begin{array}{c}
+\be\sim N(\bzero,\sigma^2\bI)
+\\[6pt]
+\Downarrow
+\\[6pt]
+\text{Normal distributions for linear transformations}
+\\[6pt]
++
+\\[6pt]
+\text{chi-squared distributions for projection-based quadratic forms}
+\\[6pt]
++
+\\[6pt]
+\text{independence from joint Normality}
+\\[6pt]
+\Downarrow
+\\[6pt]
+t\text{ and }F\text{ distributions}
+\\[6pt]
+\Downarrow
+\\[6pt]
+\text{interval estimation and hypothesis testing}
+\\[6pt]
+\Downarrow
+\\[6pt]
+\text{noncentral }t\text{ and }F\text{ distributions}
+\\[6pt]
+\Downarrow
+\\[6pt]
+\text{power}.
+\end{array}
+}
+$$
+
+At the same time,
+
+$$
+\boxed{
+\begin{array}{c}
+\by\sim N(\bX\bgb,\sigma^2\bI)
+\\[6pt]
+\Downarrow
+\\[6pt]
+\text{likelihood}
+\\[6pt]
+\Downarrow
+\\[6pt]
+\text{Maximum Likelihood Estimation}.
+\end{array}
+}
+$$
+
+These two branches summarize the main role of the Normality assumption. It converts the moment-based statistical analysis of the previous chapter into a complete finite-sample inferential framework, while also providing a likelihood-based approach to estimation.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Exercises {#nor-exercises}
+
+1. Let $\ba\in\mathbb{R}^{p+1}$ be a fixed nonzero vector and consider the hypothesis
+
+   $$
+   \cH_0:
+   \ba'\bgb=c
+   $$
+
+   against
+
+   $$
+   \cH_1:
+   \ba'\bgb\neq c,
+   $$
+
+   where $c$ is a specified constant.
+
+   (a) Derive a test statistic for this hypothesis and show that, conditional on $\cH_0$,
+
+   $$
+   T
+   =
+   \frac{
+   \ba'\hat{\bgb}-c
+   }{
+   \hat{\sigma}
+   \sqrt{
+   \ba'(\bX'\bX)^{-1}\ba
+   }
+   }
+   \sim
+   t_{n-p-1}.
+   $$
+
+   (b) Derive the rejection region for a test with significance level $\alpha$.
+
+   (c) Consider the $(1-\alpha)$ confidence interval for $\ba'\bgb$ developed in this chapter. Prove that
+
+   $$
+   \cH_0:\ba'\bgb=c
+   $$
+
+   is rejected by the two-sided test if and only if $c$ does not belong to this confidence interval.
+
+   (d) Now consider
+
+   $$
+   \cH_1:
+   \ba'\bgb>c.
+   $$
+
+   Derive the corresponding rejection region and $p$-value.
+
+   (e) Explain why the confidence-interval equivalence from part (c) does not hold in exactly the same form for this one-sided test.
+
+2. Two studies use the same Normal linear regression model with two explanatory variables and an intercept. Both have $n=30$ observations and $\sigma=2$, but their designs differ.
+
+   For Study A,
+
+   $$
+   (\bX_A'\bX_A)^{-1}
+   =
+   \begin{pmatrix}
+   1/30 & 0 & 0\\
+   0 & 0.05 & 0\\
+   0 & 0 & 0.20
+   \end{pmatrix},
+   $$
+
+   while for Study B,
+
+   $$
+   (\bX_B'\bX_B)^{-1}
+   =
+   \begin{pmatrix}
+   1/30 & 0 & 0\\
+   0 & 0.10 & 0.08\\
+   0 & 0.08 & 0.10
+   \end{pmatrix}.
+   $$
+
+   (a) Compare the variances of $\hat{\beta}_1$ and $\hat{\beta}_2$ between the two studies.
+
+   (b) Find the correlation between $\hat{\beta}_1$ and $\hat{\beta}_2$ in each study.
+
+   (c) Suppose that the true value of $\beta_1$ is $0.5$. Compute the noncentrality parameter for testing
+
+   $$
+   \cH_0:\beta_1=0
+   $$
+
+   in each study.
+
+   (d) Use the noncentral $t$ distribution to calculate the exact power of the two-sided test at significance level $\alpha=0.05$ for each design.
+
+   (e) Repeat parts (c)--(d) for $\beta_2=0.5$.
+
+   (f) Which design is preferable? Explain why there is not necessarily a single answer to this question without specifying which inferential objective is most important.
+
+3. Use R to investigate the distributions developed in Section \@ref(nor-distribution-estimates).
+
+   Choose a fixed full-column-rank design matrix $\bX$ with an intercept and two explanatory variables. Fix $\bgb$ and $\sigma^2$, and repeatedly generate
+
+   $$
+   \by=\bX\bgb+\be,
+   \qquad
+   \be\sim N(\bzero,\sigma^2\bI).
+   $$
+
+   For each simulated dataset calculate:
+
+   $$
+   Z_j
+   =
+   \frac{
+   \hat{\beta}_j-\beta_j
+   }{
+   \sigma
+   \sqrt{[(\bX'\bX)^{-1}]_{jj}}
+   },
+   $$
+
+   $$
+   T_j
+   =
+   \frac{
+   \hat{\beta}_j-\beta_j
+   }{
+   \hat{\sigma}
+   \sqrt{[(\bX'\bX)^{-1}]_{jj}}
+   },
+   $$
+
+   and
+
+   $$
+   Q
+   =
+   \frac{
+   (n-p-1)\hat{\sigma}^2
+   }{
+   \sigma^2
+   }.
+   $$
+
+   (a) Compare the empirical distribution of $Z_j$ with $N(0,1)$.
+
+   (b) Compare the empirical distribution of $T_j$ with $t_{n-p-1}$.
+
+   (c) Compare the empirical distribution of $Q$ with $\chi^2_{n-p-1}$.
+
+   (d) Investigate empirically the relationship between $\hat{\beta}_j$ and $\hat{\sigma}^2$.
+
+   (e) Repeat the experiment using independent, centered, and appropriately scaled non-Normal errors, such as a $t_3$ distribution or a centered exponential distribution.
+
+   (f) Identify which properties appear to remain valid without Normality and which exact distributional conclusions fail. Explain your observations using the distinction between the assumptions from the previous chapter and those from this chapter.
+
+4. Suppose that after fitting the regression model, we will observe $m$ new responses at the same fixed predictor vector $\bx_{\mathrm{new}}$:
+
+   $$
+   y_{\mathrm{new},r}
+   =
+   \bx_{\mathrm{new}}'\bgb
+   +
+   e_{\mathrm{new},r},
+   \qquad
+   r=1,\ldots,m,
+   $$
+
+   where the new errors are mutually independent and independent of the original data, with
+
+   $$
+   e_{\mathrm{new},r}
+   \sim
+   N(0,\sigma^2).
+   $$
+
+   Define
+
+   $$
+   \bar{y}_{\mathrm{new}}
+   =
+   \frac{1}{m}
+   \sum_{r=1}^m
+   y_{\mathrm{new},r}.
+   $$
+
+   (a) Show that the natural predictor of $\bar{y}_{\mathrm{new}}$ is
+
+   $$
+   \bx_{\mathrm{new}}'\hat{\bgb}.
+   $$
+
+   (b) Derive
+
+   $$
+   \mathbb{V}
+   \left[
+   \bar{y}_{\mathrm{new}}
+   -
+   \bx_{\mathrm{new}}'\hat{\bgb}
+   \right].
+   $$
+
+   (c) Derive a $(1-\alpha)$ prediction interval for $\bar{y}_{\mathrm{new}}$.
+
+   (d) Show what happens to this interval as
+
+   $$
+   m\rightarrow\infty.
+   $$
+
+   (e) Explain why the limiting interval is related to the confidence interval for the expected response rather than the prediction interval for one new observation.
+
+5. Let
+
+   $$
+   \nu=n-p-1.
+   $$
+
+   Recall that the maximum likelihood estimator of $\sigma^2$ is
+
+   $$
+   \tilde{\sigma}^2
+   =
+   \frac{\hat{\be}'\hat{\be}}{n},
+   $$
+
+   whereas the unbiased estimator is
+
+   $$
+   \hat{\sigma}^2
+   =
+   \frac{\hat{\be}'\hat{\be}}{\nu}.
+   $$
+
+   (a) Use the chi-squared distribution of the residual sum of squares to derive the complete distribution of $\tilde{\sigma}^2$.
+
+   (b) Derive
+
+   $$
+   \mathbb{V}[\tilde{\sigma}^2].
+   $$
+
+   (c) Derive
+
+   $$
+   \operatorname{MSE}(\tilde{\sigma}^2).
+   $$
+
+   (d) Derive the variance and MSE of $\hat{\sigma}^2$.
+
+   (e) For $n=30$ and $p=4$, compare the two MSEs.
+
+   (f) Determine the condition on $n$ and $p$ under which the MLE has smaller MSE than the unbiased estimator.
+
+   (g) Explain why it is possible for a biased estimator to have smaller MSE.
+
+6. Consider a dataset with $n=60$ observations and the following nested regression models:
+
+   $$
+   \begin{array}{c|c|c}
+   \text{Model} & \text{Explanatory variables} & SS_{res}\\
+   \hline
+   M_0 & \text{Intercept only} & 900\\
+   M_1 & x_1,x_2 & 510\\
+   M_2 & x_1,x_2,x_3 & 470\\
+   M_3 & x_1,x_2,x_3,x_4,x_5 & 420
+   \end{array}
+   $$
+
+   Assume the Normal linear regression model and full column rank for each design.
+
+   (a) Test whether the complete model $M_3$ provides evidence of an overall regression relationship.
+
+   (b) Test whether $x_4$ and $x_5$ jointly improve the model after $x_1,x_2,x_3$ have already been included.
+
+   (c) Test whether adding $x_3$ improves $M_1$.
+
+   (d) Suppose that you want to test whether $x_3$ contributes after controlling for $x_1,x_2,x_4,x_5$. Explain why the information in the table is insufficient to perform this test.
+
+   (e) Which additional residual sum of squares would you need?
+
+   (f) Explain why the test in part (c) and the test described in part (d) answer different questions even though both concern $x_3$.
+
+7. Suppose that
+
+   $$
+   \bX
+   =
+   [\bones\;\bx_1\;\cdots\;\bx_p],
+   $$
+
+   where the explanatory-variable columns satisfy
+
+   $$
+   \bones'\bx_j=0
+   $$
+
+   for every $j$, and
+
+   $$
+   \bx_j'\bx_k=0
+   $$
+
+   whenever $j\neq k$.
+
+   Thus, the explanatory variables are centered and mutually orthogonal.
+
+   (a) Describe the structure of $\bX'\bX$.
+
+   (b) Derive a simplified expression for each slope estimator $\hat{\beta}_j$.
+
+   (c) Show that
+
+   $$
+   \dC[\hat{\beta}_j,\hat{\beta}_k]=0
+   $$
+
+   for $j\neq k$.
+
+   (d) Under the Normality assumption, what stronger conclusion follows from part (c)?
+
+   (e) Show that the regression sum of squares can be decomposed as
+
+   $$
+   SS_{reg}
+   =
+   \sum_{j=1}^p
+   \hat{\beta}_j^2
+   \bx_j'\bx_j.
+   $$
+
+   (f) Interpret this decomposition geometrically.
+
+   (g) Explain why this particularly simple decomposition generally disappears when the explanatory variables are not mutually orthogonal.
+
+8. Use R to investigate the effect of multicollinearity on power.
+
+   Generate two explanatory variables with approximately standard Normal marginal distributions and correlations
+
+   $$
+   \rho
+   =
+   0,\;0.5,\;0.9,\;0.99.
+   $$
+
+   For each value of $\rho$, construct one fixed design matrix with an intercept and use the model
+
+   $$
+   \by
+   =
+   \beta_0\mathbf{1}
+   +
+   \beta_1\bx_1
+   +
+   \beta_2\bx_2
+   +
+   \be.
+   $$
+
+   Choose fixed nonzero values of $\beta_1$ and $\beta_2$ and a fixed $\sigma^2$.
+
+   (a) For each design, calculate
+
+   $$
+   [(\bX'\bX)^{-1}]_{11}
+   $$
+
+   and the corresponding theoretical noncentrality parameter for testing
+
+   $$
+   \cH_0:\beta_1=0.
+   $$
+
+   (b) Compute the exact theoretical power using the noncentral $t$ distribution.
+
+   (c) Keeping each design fixed, repeatedly simulate new response vectors and estimate the empirical rejection probability.
+
+   (d) Compare theoretical and empirical power.
+
+   (e) Explain why increasing the correlation between predictors can reduce power even though $n$, $\beta_1$, and $\sigma^2$ have not changed.
+
+   (f) Investigate whether the effect is symmetric for $\beta_1$ and $\beta_2$ in your particular designs. Explain why it need not be.
+
+9. The tests developed in this chapter considered individual coefficients and groups of coefficients equal to zero. A more general hypothesis can be written as
+
+   $$
+   \cH_0:
+   \bC\bgb=\bd,
+   $$
+
+   where $\bC\in\mathbb{R}^{q\times(p+1)}$ has rank $q$ and $\bd\in\mathbb{R}^q$ is fixed.
+
+   (a) Derive the distribution of
+
+   $$
+   \bC\hat{\bgb}.
+   $$
+
+   (b) Under $\cH_0$, show that
+
+   $$
+   \frac{
+   (\bC\hat{\bgb}-\bd)'
+   \left[
+   \bC(\bX'\bX)^{-1}\bC'
+   \right]^{-1}
+   (\bC\hat{\bgb}-\bd)
+   }{
+   \sigma^2
+   }
+   \sim
+   \chi^2_q.
+   $$
+
+   You may use an appropriate linear transformation of a multivariate Normal random vector.
+
+   (c) Use the independence of $\hat{\bgb}$ and $\hat{\sigma}^2$ to show that
+
+   $$
+   F
+   =
+   \frac{
+   \frac{1}{q}
+   (\bC\hat{\bgb}-\bd)'
+   \left[
+   \bC(\bX'\bX)^{-1}\bC'
+   \right]^{-1}
+   (\bC\hat{\bgb}-\bd)
+   }{
+   \hat{\sigma}^2
+   }
+   $$
+
+   satisfies
+
+   $$
+   F\mid\cH_0
+   \sim
+   F_{q,n-p-1}.
+   $$
+
+   (d) Show that when $q=1$, the statistic in part (c) is the square of the corresponding $t$ statistic.
+
+   (e) Show how the overall regression test and the test of a subgroup of coefficients can be expressed as special cases by choosing $\bC$ and $\bd$ appropriately.
+
+10. Consider a simple linear regression with an intercept and one explanatory variable. Let
+
+  $$
+    \bar{x}
+    =
+    \frac{1}{n}\sum_{i=1}^n x_i
+    $$
+
+    and
+
+    $$
+    S_{xx}
+    =
+    \sum_{i=1}^n(x_i-\bar{x})^2.
+    $$
+
+    For
+
+    $$
+    \bx_{\mathrm{new}}
+    =
+    \begin{pmatrix}
+    1\\
+    x_{\mathrm{new}}
+    \end{pmatrix},
+    $$
+
+    prove that
+
+    $$
+    \bx_{\mathrm{new}}'
+    (\bX'\bX)^{-1}
+    \bx_{\mathrm{new}}
+    =
+    \frac{1}{n}
+    +
+    \frac{
+    (x_{\mathrm{new}}-\bar{x})^2
+    }{
+    S_{xx}
+    }.
+    $$
+
+    (a) Use this result to determine where the confidence interval for the expected response is narrowest.
+
+    (b) Determine where the prediction interval for a new observation is narrowest.
+
+    (c) Explain mathematically why both intervals become wider as $x_{\mathrm{new}}$ moves away from the center of the observed explanatory variables.
+
+    (d) Consider
+
+    $$
+    x=(0,1,2,3,4).
+    $$
+
+    Compare the standard-error factors for $x_{\mathrm{new}}=2$ and $x_{\mathrm{new}}=6$.
+
+    (e) Explain how this calculation illustrates the increased uncertainty associated with extrapolation.
+
+11. Use R to compare confidence intervals for the expected response with prediction intervals.
+
+    Choose a fixed design matrix, $\bgb$, and $\sigma^2$. Select two new predictor vectors:
+
+    $$
+    \bx_A
+    $$
+
+    located near the center of the observed predictor configuration, and
+
+    $$
+    \bx_B
+    $$
+
+    located substantially farther from it.
+
+    For each simulated training dataset:
+
+    1. construct a $95\%$ confidence interval for the expected response at both predictor vectors;
+    2. construct a $95\%$ prediction interval at both predictor vectors;
+    3. independently generate one future observation at each predictor vector.
+
+    Across many simulations:
+
+    (a) estimate the coverage probability of the mean-response confidence intervals for the true quantities
+
+    $$
+    \bx_A'\bgb
+    \qquad\text{and}\qquad
+    \bx_B'\bgb;
+    $$
+
+    (b) estimate the coverage probability of the prediction intervals for the future observations;
+
+    (c) incorrectly use the mean-response confidence intervals to predict the future observations and estimate the resulting coverage;
+
+    (d) compare the average widths of the intervals at $\bx_A$ and $\bx_B$;
+
+    (e) explain all of the observed differences using the variance formulas developed in this chapter.
+
+12. Recall that for testing
+
+    $$
+    \cH_0:
+    \bgb_1=\bzero
+    $$
+
+    in the partitioned model
+
+    $$
+    \by
+    =
+    \bX_1\bgb_1
+    +
+    \bX_2\bgb_2
+    +
+    \be,
+    $$
+
+    the noncentrality parameter under
+
+    $$
+    \bgb_1=\boldsymbol{\theta}
+    $$
+
+    is
+
+    $$
+    \lambda
+    =
+    \frac{
+    \boldsymbol{\theta}'
+    \bX_1'
+    (\bI-\bH_2)
+    \bX_1
+    \boldsymbol{\theta}
+    }{
+    \sigma^2
+    }.
+    $$
+
+    (a) Use the symmetry and idempotence of $\bI-\bH_2$ to show that
+
+    $$
+    \lambda
+    =
+    \frac{
+    \left\|
+    (\bI-\bH_2)\bX_1\boldsymbol{\theta}
+    \right\|^2
+    }{
+    \sigma^2
+    }.
+    $$
+
+    (b) Interpret this expression geometrically.
+
+    (c) Assuming that
+
+    $$
+    [\bX_1\;\bX_2]
+    $$
+
+    has full column rank, show that
+
+    $$
+    \lambda=0
+    $$
+
+    if and only if
+
+    $$
+    \boldsymbol{\theta}=\bzero.
+    $$
+
+    (d) Let $\bA$ be an invertible $k\times k$ matrix and define a new parameterization
+
+    $$
+    \bX_1^*
+    =
+    \bX_1\bA,
+    \qquad
+    \boldsymbol{\theta}^*
+    =
+    \bA^{-1}\boldsymbol{\theta}.
+    $$
+
+    Show that the noncentrality parameter does not change.
+
+    (e) Explain why part (d) shows that power depends on the mean contribution represented by the tested subspace rather than on the particular coordinate system used to describe that subspace.
+
+13. Two Normal regression models are fitted to the same $n=50$ observations.
+
+    Model A contains an intercept and $p_A=2$ explanatory variables, while Model B contains an intercept and $p_B=8$ explanatory variables. Suppose that both models produce
+
+    $$
+    SS_{res}=200.
+    $$
+
+    (a) Compute the maximum likelihood estimate of $\sigma^2$ under each model.
+
+    (b) Compute the unbiased estimate of $\sigma^2$ under each model.
+
+    (c) Explain why the two maximum likelihood estimates are identical even though the models contain different numbers of parameters.
+
+    (d) Explain why the unbiased estimators are different.
+
+    (e) At their respective coefficient MLEs, compare the maximized likelihoods of the two models.
+
+    (f) Suppose instead that Model B has a slightly smaller residual sum of squares than Model A. Explain why adding explanatory variables cannot increase the minimum residual sum of squares.
+
+    (g) What does this example suggest about the difference between choosing parameter values within a fixed model and comparing models of different complexity?
+
+14. The independence result
+
+    $$
+    \hat{\bgb}
+    \perp
+    \hat{\sigma}^2
+    $$
+
+    depends importantly on Normality. This exercise constructs a counterexample under the weaker assumptions from the previous chapter.
+
+    Consider the intercept-only model with $n=2$,
+
+    $$
+    y_i
+    =
+    \beta_0+e_i,
+    $$
+
+    where $e_1$ and $e_2$ are independent and
+
+    $$
+    \dP(e_i=\sigma)
+    =
+    \dP(e_i=-\sigma)
+    =
+    \frac12.
+    $$
+
+    (a) Verify that
+
+    $$
+    \dE[\be]=\bzero
+    $$
+
+    and
+
+    $$
+    \dV[\be]=\sigma^2\bI.
+    $$
+
+    Thus, the mean and variance assumptions from the previous chapter hold.
+
+    (b) Enumerate the four possible values of $(e_1,e_2)$ and calculate $\hat{\beta}_0$ and $\hat{\sigma}^2$ for each outcome.
+
+    (c) Verify directly that both $\hat{\beta}_0$ and $\hat{\sigma}^2$ are unbiased.
+
+    (d) Show that $\hat{\beta}_0$ and $\hat{\sigma}^2$ are not independent.
+
+    (e) What happens to the usual $t$ statistic when $\hat{\sigma}^2=0$?
+
+    (f) Explain why this example does not contradict any result from the previous chapter but demonstrates why the Normality assumption is important for the exact inferential theory developed in this chapter.
+
+15. Use R to investigate the distribution of $p$-values and its relationship with power.
+
+    Fix a full-column-rank design matrix and consider testing
+
+    $$
+    \cH_0:
+    \beta_j=0
+    $$
+
+    against
+
+    $$
+    \cH_1:
+    \beta_j\neq0.
+    $$
+
+    First generate many datasets under
+
+    $$
+    \beta_j=0.
+    $$
+
+    For each dataset, compute the two-sided $p$-value.
+
+    (a) Plot the empirical distribution of the $p$-values. What distribution do you expect under $\cH_0$?
+
+    (b) For several values of $\alpha$, calculate the proportion of simulated $p$-values satisfying
+
+    $$
+    p\text{-value}\leq\alpha.
+    $$
+
+    Relate these proportions to the Type I error probability.
+
+    Now repeat the experiment for several alternatives
+
+    $$
+    \beta_j
+    =
+    \theta,
+    $$
+
+    including both positive and negative values of $\theta$.
+
+    (c) Describe how the distribution of the $p$-values changes as $|\theta|$ increases.
+
+    (d) For each value of $\theta$, estimate
+
+    $$
+    \dP
+    \left(
+    p\text{-value}\leq\alpha
+    \mid
+    \beta_j=\theta
+    \right).
+    $$
+
+    Interpret this probability.
+
+    (e) Calculate the exact theoretical power from the appropriate noncentral $t$ distribution and compare it with the simulation.
+
+    (f) Plot empirical and theoretical power as functions of $\theta$.
+
+    (g) For the two-sided test, investigate whether the power curve is symmetric around $\theta=0$. Explain your result using the noncentrality parameter.
+
+***

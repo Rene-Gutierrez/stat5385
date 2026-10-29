@@ -60,10 +60,10 @@ Find the github page for the course (with the data sets) here: [Github](https://
   - [Numerical Considerations](#numerical-considerations)
   - [Other Approaches to Regression](#other-approaches-to-regression)
   - [Chapter Synthesis](#chapter-synthesis)
-* Class 17: Topics:
+* Lecture 17: Topics:
   - [Stability of the Solution](#stability-of-the-solution)
   - [Other Approches to Regression](#other-approches-to-regression)
-  - [Bootstrapping](#bootstrapping)
+  - [MLR Synthesis](#chapter-synthesis)
   
 
 ## Course Overview
