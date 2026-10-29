@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Beyond the Classical Regression Assumptions | Stat 5385/6385</title>
+  <meta name="description" content="9 Beyond the Classical Regression Assumptions | Stat 5385/6385" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Beyond the Classical Regression Assumptions | Stat 5385/6385" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Beyond the Classical Regression Assumptions | Stat 5385/6385" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="normality-assumption.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Stat 5385/6385 Fall 2026</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#calendar"><i class="fa fa-check"></i><b>1.1</b> Calendar</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="index.html"><a href="index.html#important-dates"><i class="fa fa-check"></i><b>1.1.1</b> Important Dates</a></li>
+<li class="chapter" data-level="1.1.2" data-path="index.html"><a href="index.html#class-schedule"><i class="fa fa-check"></i><b>1.1.2</b> Class Schedule</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#course-overview"><i class="fa fa-check"></i><b>1.2</b> Course Overview</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#part-i-linear-regression-for-prediction"><i class="fa fa-check"></i><b>1.3</b> Part I — Linear Regression for Prediction</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#mathematical-prerequisites"><i class="fa fa-check"></i><b>1.3.1</b> Mathematical Prerequisites</a></li>
+<li class="chapter" data-level="1.3.2" data-path="index.html"><a href="index.html#introduction-to-linear-regression"><i class="fa fa-check"></i><b>1.3.2</b> Introduction to Linear Regression</a></li>
+<li class="chapter" data-level="1.3.3" data-path="index.html"><a href="index.html#ind-simple-linear-regression"><i class="fa fa-check"></i><b>1.3.3</b> Simple Linear Regression</a></li>
+<li class="chapter" data-level="1.3.4" data-path="index.html"><a href="index.html#ind-polynomial-regression"><i class="fa fa-check"></i><b>1.3.4</b> Polynomial Regression</a></li>
+<li class="chapter" data-level="1.3.5" data-path="index.html"><a href="index.html#ind-multiple-linear-regression"><i class="fa fa-check"></i><b>1.3.5</b> Multiple Linear Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#part-ii-linear-regression-as-a-statistical-model"><i class="fa fa-check"></i><b>1.4</b> Part II — Linear Regression as a Statistical Model</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="index.html"><a href="index.html#bootstrapping-and-the-introduction-of-uncertainty"><i class="fa fa-check"></i><b>1.4.1</b> Bootstrapping and the Introduction of Uncertainty</a></li>
+<li class="chapter" data-level="1.4.2" data-path="index.html"><a href="index.html#mean-and-variance-assumptions"><i class="fa fa-check"></i><b>1.4.2</b> Mean and Variance Assumptions</a></li>
+<li class="chapter" data-level="1.4.3" data-path="index.html"><a href="index.html#the-normality-assumption-and-statistical-inference"><i class="fa fa-check"></i><b>1.4.3</b> The Normality Assumption and Statistical Inference</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#part-iii-applications-of-the-linear-regression-framework"><i class="fa fa-check"></i><b>1.5</b> Part III — Applications of the Linear Regression Framework</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="index.html"><a href="index.html#analysis-of-variance-and-analysis-of-covariance"><i class="fa fa-check"></i><b>1.5.1</b> Analysis of Variance and Analysis of Covariance</a></li>
+<li class="chapter" data-level="1.5.2" data-path="index.html"><a href="index.html#experimental-design"><i class="fa fa-check"></i><b>1.5.2</b> Experimental Design</a></li>
+<li class="chapter" data-level="1.5.3" data-path="index.html"><a href="index.html#instrumental-variables"><i class="fa fa-check"></i><b>1.5.3</b> Instrumental Variables</a></li>
+<li class="chapter" data-level="1.5.4" data-path="index.html"><a href="index.html#a-unified-view-of-applications"><i class="fa fa-check"></i><b>1.5.4</b> A Unified View of Applications</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="index.html"><a href="index.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="prerequisites.html"><a href="prerequisites.html"><i class="fa fa-check"></i><b>2</b> Prerequisites</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="prerequisites.html"><a href="prerequisites.html#general-math"><i class="fa fa-check"></i><b>2.1</b> General Math</a></li>
+<li class="chapter" data-level="2.2" data-path="prerequisites.html"><a href="prerequisites.html#linear-algebra"><i class="fa fa-check"></i><b>2.2</b> Linear Algebra</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="prerequisites.html"><a href="prerequisites.html#zero-matrix"><i class="fa fa-check"></i><b>2.2.1</b> Zero Matrix</a></li>
+<li class="chapter" data-level="2.2.2" data-path="prerequisites.html"><a href="prerequisites.html#linear-independence"><i class="fa fa-check"></i><b>2.2.2</b> Linear Independence</a></li>
+<li class="chapter" data-level="2.2.3" data-path="prerequisites.html"><a href="prerequisites.html#column-space-of-a-matrix"><i class="fa fa-check"></i><b>2.2.3</b> Column Space of a Matrix</a></li>
+<li class="chapter" data-level="2.2.4" data-path="prerequisites.html"><a href="prerequisites.html#rank-of-a-matrix"><i class="fa fa-check"></i><b>2.2.4</b> Rank of a Matrix</a></li>
+<li class="chapter" data-level="2.2.5" data-path="prerequisites.html"><a href="prerequisites.html#full-rank-matrix"><i class="fa fa-check"></i><b>2.2.5</b> Full Rank Matrix</a></li>
+<li class="chapter" data-level="2.2.6" data-path="prerequisites.html"><a href="prerequisites.html#inverse-matrix"><i class="fa fa-check"></i><b>2.2.6</b> Inverse Matrix</a></li>
+<li class="chapter" data-level="2.2.7" data-path="prerequisites.html"><a href="prerequisites.html#positive-definite-matrix"><i class="fa fa-check"></i><b>2.2.7</b> Positive Definite Matrix</a></li>
+<li class="chapter" data-level="2.2.8" data-path="prerequisites.html"><a href="prerequisites.html#singular-value-decomposition"><i class="fa fa-check"></i><b>2.2.8</b> Singular Value Decomposition</a></li>
+<li class="chapter" data-level="2.2.9" data-path="prerequisites.html"><a href="prerequisites.html#eigendecomposition"><i class="fa fa-check"></i><b>2.2.9</b> Eigendecomposition</a></li>
+<li class="chapter" data-level="2.2.10" data-path="prerequisites.html"><a href="prerequisites.html#idempotent-matrix"><i class="fa fa-check"></i><b>2.2.10</b> Idempotent Matrix</a></li>
+<li class="chapter" data-level="2.2.11" data-path="prerequisites.html"><a href="prerequisites.html#determinant-of-a-matrix"><i class="fa fa-check"></i><b>2.2.11</b> Determinant of a Matrix</a></li>
+<li class="chapter" data-level="2.2.12" data-path="prerequisites.html"><a href="prerequisites.html#trace-of-a-matrix"><i class="fa fa-check"></i><b>2.2.12</b> Trace of a Matrix</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="prerequisites.html"><a href="prerequisites.html#calculus"><i class="fa fa-check"></i><b>2.3</b> Calculus</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="prerequisites.html"><a href="prerequisites.html#gradient"><i class="fa fa-check"></i><b>2.3.1</b> Gradient</a></li>
+<li class="chapter" data-level="2.3.2" data-path="prerequisites.html"><a href="prerequisites.html#hessian-matrix"><i class="fa fa-check"></i><b>2.3.2</b> Hessian Matrix</a></li>
+<li class="chapter" data-level="2.3.3" data-path="prerequisites.html"><a href="prerequisites.html#pre-cal-hes-applications"><i class="fa fa-check"></i><b>2.3.3</b> Applications:</a></li>
+<li class="chapter" data-level="2.3.4" data-path="prerequisites.html"><a href="prerequisites.html#matrix-calculus"><i class="fa fa-check"></i><b>2.3.4</b> Matrix Calculus</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="prerequisites.html"><a href="prerequisites.html#probability"><i class="fa fa-check"></i><b>2.4</b> Probability</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="prerequisites.html"><a href="prerequisites.html#expected-value"><i class="fa fa-check"></i><b>2.4.1</b> Expected Value</a></li>
+<li class="chapter" data-level="2.4.2" data-path="prerequisites.html"><a href="prerequisites.html#variance"><i class="fa fa-check"></i><b>2.4.2</b> Variance</a></li>
+<li class="chapter" data-level="2.4.3" data-path="prerequisites.html"><a href="prerequisites.html#cross-covariance-matrix"><i class="fa fa-check"></i><b>2.4.3</b> Cross-Covariance Matrix</a></li>
+<li class="chapter" data-level="2.4.4" data-path="prerequisites.html"><a href="prerequisites.html#multivariate-normal-distribution"><i class="fa fa-check"></i><b>2.4.4</b> Multivariate Normal Distribution</a></li>
+<li class="chapter" data-level="2.4.5" data-path="prerequisites.html"><a href="prerequisites.html#t-distribution"><i class="fa fa-check"></i><b>2.4.5</b> <span class="math inline">\(t\)</span> Distribution</a></li>
+<li class="chapter" data-level="2.4.6" data-path="prerequisites.html"><a href="prerequisites.html#chi2-distribution"><i class="fa fa-check"></i><b>2.4.6</b> <span class="math inline">\(\chi^2\)</span> Distribution</a></li>
+<li class="chapter" data-level="2.4.7" data-path="prerequisites.html"><a href="prerequisites.html#f-distribution"><i class="fa fa-check"></i><b>2.4.7</b> <span class="math inline">\(F\)</span> Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="prerequisites.html"><a href="prerequisites.html#statistics"><i class="fa fa-check"></i><b>2.5</b> Statistics</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="prerequisites.html"><a href="prerequisites.html#bias-of-an-estimator"><i class="fa fa-check"></i><b>2.5.1</b> Bias of an Estimator</a></li>
+<li class="chapter" data-level="2.5.2" data-path="prerequisites.html"><a href="prerequisites.html#unbiased-estimator"><i class="fa fa-check"></i><b>2.5.2</b> Unbiased Estimator</a></li>
+<li class="chapter" data-level="2.5.3" data-path="prerequisites.html"><a href="prerequisites.html#mean-square-error-of-an-estimator"><i class="fa fa-check"></i><b>2.5.3</b> Mean Square Error of an Estimator</a></li>
+<li class="chapter" data-level="2.5.4" data-path="prerequisites.html"><a href="prerequisites.html#interval-estimation"><i class="fa fa-check"></i><b>2.5.4</b> Interval Estimation</a></li>
+<li class="chapter" data-level="2.5.5" data-path="prerequisites.html"><a href="prerequisites.html#hypothesis-testing"><i class="fa fa-check"></i><b>2.5.5</b> Hypothesis Testing</a></li>
+<li class="chapter" data-level="2.5.6" data-path="prerequisites.html"><a href="prerequisites.html#power-analysis"><i class="fa fa-check"></i><b>2.5.6</b> Power Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>3</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="introduction.html"><a href="introduction.html#objectives-of-linear-regression"><i class="fa fa-check"></i><b>3.1</b> Objectives of Linear Regression</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction.html"><a href="introduction.html#examples-1"><i class="fa fa-check"></i><b>3.2</b> Examples</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="introduction.html"><a href="introduction.html#ad-spending"><i class="fa fa-check"></i><b>3.2.1</b> Ad Spending</a></li>
+<li class="chapter" data-level="3.2.2" data-path="introduction.html"><a href="introduction.html#wine-example"><i class="fa fa-check"></i><b>3.2.2</b> Wine and Life Expectancy</a></li>
+<li class="chapter" data-level="3.2.3" data-path="introduction.html"><a href="introduction.html#burger-demand"><i class="fa fa-check"></i><b>3.2.3</b> Burger Demand</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="introduction.html"><a href="introduction.html#intro-to-slr"><i class="fa fa-check"></i><b>3.3</b> Intro to SLR</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="introduction.html"><a href="introduction.html#a-path-not-taken"><i class="fa fa-check"></i><b>3.3.1</b> A Path Not Taken</a></li>
+<li class="chapter" data-level="3.3.2" data-path="introduction.html"><a href="introduction.html#slr-model"><i class="fa fa-check"></i><b>3.3.2</b> SLR Model</a></li>
+<li class="chapter" data-level="3.3.3" data-path="introduction.html"><a href="introduction.html#possible-optimization-problems"><i class="fa fa-check"></i><b>3.3.3</b> Possible Optimization Problems</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="introduction.html"><a href="introduction.html#exercises"><i class="fa fa-check"></i><b>3.4</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="introduction.html"><a href="introduction.html#exercise-1-changing-the-intercept"><i class="fa fa-check"></i><b>3.4.1</b> Exercise 1: Changing the Intercept</a></li>
+<li class="chapter" data-level="3.4.2" data-path="introduction.html"><a href="introduction.html#exercise-2-changing-the-slope"><i class="fa fa-check"></i><b>3.4.2</b> Exercise 2: Changing the Slope</a></li>
+<li class="chapter" data-level="3.4.3" data-path="introduction.html"><a href="introduction.html#exercise-3-different-intercepts-and-slopes"><i class="fa fa-check"></i><b>3.4.3</b> Exercise 3: Different Intercepts and Slopes</a></li>
+<li class="chapter" data-level="3.4.4" data-path="introduction.html"><a href="introduction.html#exercise-4-increasing-the-amount-of-noise"><i class="fa fa-check"></i><b>3.4.4</b> Exercise 4: Increasing the Amount of Noise</a></li>
+<li class="chapter" data-level="3.4.5" data-path="introduction.html"><a href="introduction.html#exercise-5-no-relationship"><i class="fa fa-check"></i><b>3.4.5</b> Exercise 5: No Relationship</a></li>
+<li class="chapter" data-level="3.4.6" data-path="introduction.html"><a href="introduction.html#exercise-6-a-quadratic-relationship"><i class="fa fa-check"></i><b>3.4.6</b> Exercise 6: A Quadratic Relationship</a></li>
+<li class="chapter" data-level="3.4.7" data-path="introduction.html"><a href="introduction.html#exercise-7-diminishing-returns"><i class="fa fa-check"></i><b>3.4.7</b> Exercise 7: Diminishing Returns</a></li>
+<li class="chapter" data-level="3.4.8" data-path="introduction.html"><a href="introduction.html#exercise-8-a-relationship-that-changes"><i class="fa fa-check"></i><b>3.4.8</b> Exercise 8: A Relationship That Changes</a></li>
+<li class="chapter" data-level="3.4.9" data-path="introduction.html"><a href="introduction.html#exercise-9-saturation"><i class="fa fa-check"></i><b>3.4.9</b> Exercise 9: Saturation</a></li>
+<li class="chapter" data-level="3.4.10" data-path="introduction.html"><a href="introduction.html#exercise-10-the-effect-of-an-outlier"><i class="fa fa-check"></i><b>3.4.10</b> Exercise 10: The Effect of an Outlier</a></li>
+<li class="chapter" data-level="3.4.11" data-path="introduction.html"><a href="introduction.html#exercise-11-restricted-range"><i class="fa fa-check"></i><b>3.4.11</b> Exercise 11: Restricted Range</a></li>
+<li class="chapter" data-level="3.4.12" data-path="introduction.html"><a href="introduction.html#exercise-12-extrapolation"><i class="fa fa-check"></i><b>3.4.12</b> Exercise 12: Extrapolation</a></li>
+<li class="chapter" data-level="3.4.13" data-path="introduction.html"><a href="introduction.html#exercise-13-positive-responses-and-impossible-predictions"><i class="fa fa-check"></i><b>3.4.13</b> Exercise 13: Positive Responses and Impossible Predictions</a></li>
+<li class="chapter" data-level="3.4.14" data-path="introduction.html"><a href="introduction.html#exercise-14-two-different-groups"><i class="fa fa-check"></i><b>3.4.14</b> Exercise 14: Two Different Groups</a></li>
+<li class="chapter" data-level="3.4.15" data-path="introduction.html"><a href="introduction.html#exercise-15-collecting-your-own-data"><i class="fa fa-check"></i><b>3.4.15</b> Exercise 15: Collecting Your Own Data</a></li>
+<li class="chapter" data-level="3.4.16" data-path="introduction.html"><a href="introduction.html#exercise-16-control-versus-description"><i class="fa fa-check"></i><b>3.4.16</b> Exercise 16: Control Versus Description</a></li>
+<li class="chapter" data-level="3.4.17" data-path="introduction.html"><a href="introduction.html#exercise-17-same-linear-model-different-data"><i class="fa fa-check"></i><b>3.4.17</b> Exercise 17: Same Linear Model, Different Data</a></li>
+<li class="chapter" data-level="3.4.18" data-path="introduction.html"><a href="introduction.html#exercise-18-build-a-dataset-where-a-line-is-misleading"><i class="fa fa-check"></i><b>3.4.18</b> Exercise 18: Build a Dataset Where a Line Is Misleading</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#least-squares-estimation"><i class="fa fa-check"></i><b>4.1</b> Least Squares Estimation</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#computational-properties-of-least-squares"><i class="fa fa-check"></i><b>4.1.1</b> Computational Properties of Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitted-values-and-residuals"><i class="fa fa-check"></i><b>4.2</b> Fitted Values and Residuals</a></li>
+<li class="chapter" data-level="4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#properties-of-the-estimates"><i class="fa fa-check"></i><b>4.3</b> Properties of the Estimates</a></li>
+<li class="chapter" data-level="4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centering-and-standardizing-the-data"><i class="fa fa-check"></i><b>4.4</b> Centering and Standardizing the Data</a></li>
+<li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centering-and-standarizing-in-slr"><i class="fa fa-check"></i><b>4.5</b> Centering and Standarizing in SLR</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centered-explanatory-variable"><i class="fa fa-check"></i><b>4.5.1</b> Centered Explanatory Variable</a></li>
+<li class="chapter" data-level="4.5.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#both-variables-centered"><i class="fa fa-check"></i><b>4.5.2</b> Both Variables Centered</a></li>
+<li class="chapter" data-level="4.5.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#both-variables-standardized"><i class="fa fa-check"></i><b>4.5.3</b> Both variables Standardized</a></li>
+<li class="chapter" data-level="4.5.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-of-centering-and-standarizing-in-slr"><i class="fa fa-check"></i><b>4.5.4</b> Summary of Centering and Standarizing in SLR</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#coefficient-of-determination"><i class="fa fa-check"></i><b>4.6</b> Coefficient of Determination</a></li>
+<li class="chapter" data-level="4.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#residual-analysis"><i class="fa fa-check"></i><b>4.7</b> Residual Analysis</a>
+<ul>
+<li class="chapter" data-level="4.7.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#non-linear-regression-function"><i class="fa fa-check"></i><b>4.7.1</b> Non-linear regression function</a></li>
+<li class="chapter" data-level="4.7.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#changing-residual-spread"><i class="fa fa-check"></i><b>4.7.2</b> Changing Residual Spread</a></li>
+<li class="chapter" data-level="4.7.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#outliers"><i class="fa fa-check"></i><b>4.7.3</b> Outliers</a></li>
+<li class="chapter" data-level="4.7.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#variables-ommitted"><i class="fa fa-check"></i><b>4.7.4</b> Variables Ommitted</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#cross-validation"><i class="fa fa-check"></i><b>4.8</b> Cross-Validation</a>
+<ul>
+<li class="chapter" data-level="4.8.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#validation-error"><i class="fa fa-check"></i><b>4.8.1</b> Validation Error</a></li>
+<li class="chapter" data-level="4.8.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#holdout-validation"><i class="fa fa-check"></i><b>4.8.2</b> Holdout Validation</a></li>
+<li class="chapter" data-level="4.8.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#k-fold-cross-validation"><i class="fa fa-check"></i><b>4.8.3</b> K-Fold Cross-Validation</a></li>
+<li class="chapter" data-level="4.8.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#other-cross-validation-procedures"><i class="fa fa-check"></i><b>4.8.4</b> Other Cross-Validation Procedures</a></li>
+<li class="chapter" data-level="4.8.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#cross-validation-example"><i class="fa fa-check"></i><b>4.8.5</b> Cross Validation Example</a></li>
+<li class="chapter" data-level="4.8.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-2"><i class="fa fa-check"></i><b>4.8.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4.9" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weighted-least-squares"><i class="fa fa-check"></i><b>4.9</b> Weighted Least Squares</a>
+<ul>
+<li class="chapter" data-level="4.9.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weighted-quantities"><i class="fa fa-check"></i><b>4.9.1</b> Weighted Quantities</a></li>
+<li class="chapter" data-level="4.9.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#solution-to-wls"><i class="fa fa-check"></i><b>4.9.2</b> Solution to WLS</a></li>
+<li class="chapter" data-level="4.9.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weighted-normal-equations"><i class="fa fa-check"></i><b>4.9.3</b> Weighted Normal Equations</a></li>
+<li class="chapter" data-level="4.9.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#choice-of-weights"><i class="fa fa-check"></i><b>4.9.4</b> Choice of Weights</a></li>
+<li class="chapter" data-level="4.9.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#role-of-weighted-least-squares"><i class="fa fa-check"></i><b>4.9.5</b> Role of Weighted Least Squares</a></li>
+</ul></li>
+<li class="chapter" data-level="4.10" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-in-matrix-form"><i class="fa fa-check"></i><b>4.10</b> Model in Matrix Form</a>
+<ul>
+<li class="chapter" data-level="4.10.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weighted-least-squares-in-matrix-form"><i class="fa fa-check"></i><b>4.10.1</b> Weighted Least Squares in Matrix Form</a></li>
+</ul></li>
+<li class="chapter" data-level="4.11" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-1"><i class="fa fa-check"></i><b>4.11</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="4.11.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#least-squares-estimation-1"><i class="fa fa-check"></i><b>4.11.1</b> Least Squares Estimation</a></li>
+<li class="chapter" data-level="4.11.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#fitted-values-and-residuals-1"><i class="fa fa-check"></i><b>4.11.2</b> Fitted Values and Residuals</a></li>
+<li class="chapter" data-level="4.11.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#centering-and-standardizing"><i class="fa fa-check"></i><b>4.11.3</b> Centering and Standardizing</a></li>
+<li class="chapter" data-level="4.11.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#coefficient-of-determination-1"><i class="fa fa-check"></i><b>4.11.4</b> Coefficient of Determination</a></li>
+<li class="chapter" data-level="4.11.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#residual-analysis-1"><i class="fa fa-check"></i><b>4.11.5</b> Residual Analysis</a></li>
+<li class="chapter" data-level="4.11.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#cross-validation-1"><i class="fa fa-check"></i><b>4.11.6</b> Cross-Validation</a></li>
+<li class="chapter" data-level="4.11.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#weighted-least-squares-1"><i class="fa fa-check"></i><b>4.11.7</b> Weighted Least Squares</a></li>
+<li class="chapter" data-level="4.11.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#matrix-form"><i class="fa fa-check"></i><b>4.11.8</b> Matrix Form</a></li>
+<li class="chapter" data-level="4.11.9" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#comprehensive-exercise"><i class="fa fa-check"></i><b>4.11.9</b> Comprehensive Exercise</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="polynomial-regression.html"><a href="polynomial-regression.html"><i class="fa fa-check"></i><b>5</b> Polynomial Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#motivation"><i class="fa fa-check"></i><b>5.1</b> Motivation</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#taylor-polynomials-and-polynomial-regression"><i class="fa fa-check"></i><b>5.1.1</b> Taylor Polynomials and Polynomial Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="polynomial-regression.html"><a href="polynomial-regression.html#polynomial-regression-as-a-linear-model"><i class="fa fa-check"></i><b>5.2</b> Polynomial Regression as a Linear Model</a></li>
+<li class="chapter" data-level="5.3" data-path="polynomial-regression.html"><a href="polynomial-regression.html#centering-and-reparameterization"><i class="fa fa-check"></i><b>5.3</b> Centering and Reparameterization</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#why-center-at-the-sample-mean"><i class="fa fa-check"></i><b>5.3.1</b> Why Center at the Sample Mean?</a></li>
+<li class="chapter" data-level="5.3.2" data-path="polynomial-regression.html"><a href="polynomial-regression.html#example-9"><i class="fa fa-check"></i><b>5.3.2</b> Example</a></li>
+<li class="chapter" data-level="5.3.3" data-path="polynomial-regression.html"><a href="polynomial-regression.html#polynomial-cross-validation-example"><i class="fa fa-check"></i><b>5.3.3</b> Polynomial Cross-Validation Example</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercises-2"><i class="fa fa-check"></i><b>5.4</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-1-linear-in-the-coefficients"><i class="fa fa-check"></i><b>5.4.1</b> Exercise 1 — Linear in the Coefficients</a></li>
+<li class="chapter" data-level="5.4.2" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-2-constructing-the-polynomial-design-matrix"><i class="fa fa-check"></i><b>5.4.2</b> Exercise 2 — Constructing the Polynomial Design Matrix</a></li>
+<li class="chapter" data-level="5.4.3" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-3-quadratic-least-squares"><i class="fa fa-check"></i><b>5.4.3</b> Exercise 3 — Quadratic Least Squares</a></li>
+<li class="chapter" data-level="5.4.4" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-4-from-a-centered-quadratic-to-an-uncentered-quadratic"><i class="fa fa-check"></i><b>5.4.4</b> Exercise 4 — From a Centered Quadratic to an Uncentered Quadratic</a></li>
+<li class="chapter" data-level="5.4.5" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-5-from-an-uncentered-quadratic-to-a-centered-quadratic"><i class="fa fa-check"></i><b>5.4.5</b> Exercise 5 — From an Uncentered Quadratic to a Centered Quadratic</a></li>
+<li class="chapter" data-level="5.4.6" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-6-numerical-reparameterization"><i class="fa fa-check"></i><b>5.4.6</b> Exercise 6 — Numerical Reparameterization</a></li>
+<li class="chapter" data-level="5.4.7" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-7-column-spaces-and-centering"><i class="fa fa-check"></i><b>5.4.7</b> Exercise 7 — Column Spaces and Centering</a></li>
+<li class="chapter" data-level="5.4.8" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-8-why-center-at-the-mean"><i class="fa fa-check"></i><b>5.4.8</b> Exercise 8 — Why Center at the Mean?</a></li>
+<li class="chapter" data-level="5.4.9" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-9-interpretation-of-the-centered-intercept"><i class="fa fa-check"></i><b>5.4.9</b> Exercise 9 — Interpretation of the Centered Intercept</a></li>
+<li class="chapter" data-level="5.4.10" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-10-taylor-approximation-versus-polynomial-regression"><i class="fa fa-check"></i><b>5.4.10</b> Exercise 10 — Taylor Approximation versus Polynomial Regression</a></li>
+<li class="chapter" data-level="5.4.11" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-11-centering-in-r"><i class="fa fa-check"></i><b>5.4.11</b> Exercise 11 — Centering in R</a></li>
+<li class="chapter" data-level="5.4.12" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-12-correlation-between-polynomial-terms"><i class="fa fa-check"></i><b>5.4.12</b> Exercise 12 — Correlation Between Polynomial Terms</a></li>
+<li class="chapter" data-level="5.4.13" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-13-interpolation-and-extrapolation"><i class="fa fa-check"></i><b>5.4.13</b> Exercise 13 — Interpolation and Extrapolation</a></li>
+<li class="chapter" data-level="5.4.14" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-14-polynomial-degree-and-model-flexibility"><i class="fa fa-check"></i><b>5.4.14</b> Exercise 14 — Polynomial Degree and Model Flexibility</a></li>
+<li class="chapter" data-level="5.4.15" data-path="polynomial-regression.html"><a href="polynomial-regression.html#exercise-15-centering-without-an-intercept"><i class="fa fa-check"></i><b>5.4.15</b> Exercise 15: Centering Without an Intercept</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html"><i class="fa fa-check"></i><b>6</b> Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#introduction-1"><i class="fa fa-check"></i><b>6.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#the-general-model"><i class="fa fa-check"></i><b>6.1.1</b> The General Model</a></li>
+<li class="chapter" data-level="6.1.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#interpretation-and-objectives"><i class="fa fa-check"></i><b>6.1.2</b> Interpretation and Objectives</a></li>
+<li class="chapter" data-level="6.1.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#applications-and-context"><i class="fa fa-check"></i><b>6.1.3</b> Applications and Context</a></li>
+<li class="chapter" data-level="6.1.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#connection-to-polynomial-regression"><i class="fa fa-check"></i><b>6.1.4</b> Connection to Polynomial Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#example-modeling-gdp"><i class="fa fa-check"></i><b>6.2</b> Example: Modeling GDP</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#simple-regressions"><i class="fa fa-check"></i><b>6.2.1</b> Simple Regressions</a></li>
+<li class="chapter" data-level="6.2.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#multiple-regression"><i class="fa fa-check"></i><b>6.2.2</b> Multiple Regression</a></li>
+<li class="chapter" data-level="6.2.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#summary-3"><i class="fa fa-check"></i><b>6.2.3</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#least-squares-estimation-2"><i class="fa fa-check"></i><b>6.3</b> Least Squares Estimation</a></li>
+<li class="chapter" data-level="6.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#properties-of-the-estimates-1"><i class="fa fa-check"></i><b>6.4</b> Properties of the Estimates</a></li>
+<li class="chapter" data-level="6.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#multiple-r2"><i class="fa fa-check"></i><b>6.5</b> Multiple <span class="math inline">\(R^2\)</span></a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#the-intercept-only-model"><i class="fa fa-check"></i><b>6.5.1</b> The Intercept-Only Model</a></li>
+<li class="chapter" data-level="6.5.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#sums-of-squares-in-matrix-form"><i class="fa fa-check"></i><b>6.5.2</b> Sums of Squares in Matrix Form</a></li>
+<li class="chapter" data-level="6.5.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#range-of-multiple-r2"><i class="fa fa-check"></i><b>6.5.3</b> Range of Multiple <span class="math inline">\(R^2\)</span></a></li>
+<li class="chapter" data-level="6.5.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#adding-an-explanatory-variable"><i class="fa fa-check"></i><b>6.5.4</b> Adding an Explanatory Variable</a></li>
+<li class="chapter" data-level="6.5.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#connection-to-the-geometric-interpretation"><i class="fa fa-check"></i><b>6.5.5</b> Connection to the Geometric Interpretation</a></li>
+<li class="chapter" data-level="6.5.6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#uncentered-r2-regression-without-an-intercept"><i class="fa fa-check"></i><b>6.5.6</b> Uncentered <span class="math inline">\(R^2\)</span>: Regression Without an Intercept</a></li>
+<li class="chapter" data-level="6.5.7" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#adjusted-r2"><i class="fa fa-check"></i><b>6.5.7</b> Adjusted <span class="math inline">\(R^2\)</span></a></li>
+<li class="chapter" data-level="6.5.8" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#summary-4"><i class="fa fa-check"></i><b>6.5.8</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#geometric-interpretation-of-multiple-linear-regression"><i class="fa fa-check"></i><b>6.6</b> Geometric Interpretation of Multiple Linear Regression</a></li>
+<li class="chapter" data-level="6.7" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#centered-and-standardized-variables"><i class="fa fa-check"></i><b>6.7</b> Centered and Standardized Variables</a>
+<ul>
+<li class="chapter" data-level="6.7.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#centered-variables"><i class="fa fa-check"></i><b>6.7.1</b> Centered Variables</a></li>
+<li class="chapter" data-level="6.7.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#sample-covariance"><i class="fa fa-check"></i><b>6.7.2</b> Sample Covariance</a></li>
+<li class="chapter" data-level="6.7.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#least-squares-coefficients-in-covariance-form"><i class="fa fa-check"></i><b>6.7.3</b> Least-Squares Coefficients in Covariance Form</a></li>
+<li class="chapter" data-level="6.7.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#the-intercept-and-the-effect-of-centering"><i class="fa fa-check"></i><b>6.7.4</b> The Intercept and the Effect of Centering</a></li>
+<li class="chapter" data-level="6.7.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#standardized-variables"><i class="fa fa-check"></i><b>6.7.5</b> Standardized Variables</a></li>
+<li class="chapter" data-level="6.7.6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#sample-correlation-matrix"><i class="fa fa-check"></i><b>6.7.6</b> Sample Correlation Matrix</a></li>
+<li class="chapter" data-level="6.7.7" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#regression-with-standardized-variables"><i class="fa fa-check"></i><b>6.7.7</b> Regression with Standardized Variables</a></li>
+<li class="chapter" data-level="6.7.8" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#example-gdp-data"><i class="fa fa-check"></i><b>6.7.8</b> Example: GDP Data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.8" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#variable-cross-effects"><i class="fa fa-check"></i><b>6.8</b> Variable Cross-Effects</a>
+<ul>
+<li class="chapter" data-level="6.8.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#block-correlation-representation"><i class="fa fa-check"></i><b>6.8.1</b> Block Correlation Representation</a></li>
+<li class="chapter" data-level="6.8.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#coefficients-for-one-group-after-accounting-for-the-other"><i class="fa fa-check"></i><b>6.8.2</b> Coefficients for One Group After Accounting for the Other</a></li>
+<li class="chapter" data-level="6.8.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#full-model-versus-group-only-models"><i class="fa fa-check"></i><b>6.8.3</b> Full Model Versus Group-Only Models</a></li>
+<li class="chapter" data-level="6.8.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#single-variable-cross-effects"><i class="fa fa-check"></i><b>6.8.4</b> Single Variable Cross-Effects</a></li>
+<li class="chapter" data-level="6.8.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#single-variable-coefficient-formula"><i class="fa fa-check"></i><b>6.8.5</b> Single Variable Coefficient Formula</a></li>
+<li class="chapter" data-level="6.8.6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#generalization-to-any-explanatory-variable"><i class="fa fa-check"></i><b>6.8.6</b> Generalization to Any Explanatory Variable</a></li>
+</ul></li>
+<li class="chapter" data-level="6.9" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#outliers-leverage-and-influential-observations"><i class="fa fa-check"></i><b>6.9</b> Outliers, Leverage, and Influential Observations</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#leverage"><i class="fa fa-check"></i><b>6.9.1</b> Leverage</a></li>
+<li class="chapter" data-level="6.9.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#entries-of-the-hat-matrix"><i class="fa fa-check"></i><b>6.9.2</b> Entries of the Hat Matrix</a></li>
+<li class="chapter" data-level="6.9.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#influential-observations"><i class="fa fa-check"></i><b>6.9.3</b> Influential Observations</a></li>
+<li class="chapter" data-level="6.9.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#deleting-one-observation"><i class="fa fa-check"></i><b>6.9.4</b> Deleting One Observation</a></li>
+<li class="chapter" data-level="6.9.5" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#change-in-the-fitted-values"><i class="fa fa-check"></i><b>6.9.5</b> Change in the Fitted Values</a></li>
+<li class="chapter" data-level="6.9.6" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#leverage-residuals-and-influence"><i class="fa fa-check"></i><b>6.9.6</b> Leverage, Residuals, and Influence</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#numerical-considerations"><i class="fa fa-check"></i><b>6.10</b> Numerical Considerations</a></li>
+<li class="chapter" data-level="6.11" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#other-approaches-to-regression"><i class="fa fa-check"></i><b>6.11</b> Other Approaches to Regression</a>
+<ul>
+<li class="chapter" data-level="6.11.1" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#least-absolute-deviations-regression"><i class="fa fa-check"></i><b>6.11.1</b> Least Absolute Deviations Regression</a></li>
+<li class="chapter" data-level="6.11.2" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#ridge-regression"><i class="fa fa-check"></i><b>6.11.2</b> Ridge Regression</a></li>
+<li class="chapter" data-level="6.11.3" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#lasso-regression"><i class="fa fa-check"></i><b>6.11.3</b> Lasso Regression</a></li>
+<li class="chapter" data-level="6.11.4" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#comparison-of-regression-criteria"><i class="fa fa-check"></i><b>6.11.4</b> Comparison of Regression Criteria</a></li>
+</ul></li>
+<li class="chapter" data-level="6.12" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#chapter-synthesis"><i class="fa fa-check"></i><b>6.12</b> Chapter Synthesis</a></li>
+<li class="chapter" data-level="6.13" data-path="multiple-linear-regression.html"><a href="multiple-linear-regression.html#exercises-3"><i class="fa fa-check"></i><b>6.13</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html"><i class="fa fa-check"></i><b>7</b> Mean and Varaince Assumptions</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mva-introduction"><i class="fa fa-check"></i><b>7.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mva-data-generating-mechanism"><i class="fa fa-check"></i><b>7.1.1</b> A More Complete Data-Generating Mechanism</a></li>
+<li class="chapter" data-level="7.1.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mva-reduced-regression-model"><i class="fa fa-check"></i><b>7.1.2</b> The Reduced Regression Model</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mva-mean-assumptions"><i class="fa fa-check"></i><b>7.2</b> Mean Assumptions</a></li>
+<li class="chapter" data-level="7.3" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mva-variance-assumptions"><i class="fa fa-check"></i><b>7.3</b> Variance Assumptions</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mva-cross-covariances"><i class="fa fa-check"></i><b>7.3.1</b> Cross-Covariances of Least-Squares Quantities</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mva-gauss-markov"><i class="fa fa-check"></i><b>7.4</b> Gauss–Markov Theorem</a></li>
+<li class="chapter" data-level="7.5" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mva-estimate-sigma2"><i class="fa fa-check"></i><b>7.5</b> Estimation of <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="7.6" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mva-synthesis"><i class="fa fa-check"></i><b>7.6</b> Synthesis</a></li>
+<li class="chapter" data-level="7.7" data-path="mean-and-varaince-assumptions.html"><a href="mean-and-varaince-assumptions.html#mva-exercises"><i class="fa fa-check"></i><b>7.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="normality-assumption.html"><a href="normality-assumption.html"><i class="fa fa-check"></i><b>8</b> Normality Assumption</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-introduction"><i class="fa fa-check"></i><b>8.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.2" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-distribution-estimates"><i class="fa fa-check"></i><b>8.2</b> Distribution of the Estimates</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-distribution-linear-estimates"><i class="fa fa-check"></i><b>8.2.1</b> Distribution of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\hat{\mathbf{y}}\)</span>, and <span class="math inline">\(\hat{\mathbf{e}}\)</span></a></li>
+<li class="chapter" data-level="8.2.2" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-distribution-sigma2"><i class="fa fa-check"></i><b>8.2.2</b> Distribution of <span class="math inline">\(\hat{\sigma}^2\)</span></a></li>
+<li class="chapter" data-level="8.2.3" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-independence-components"><i class="fa fa-check"></i><b>8.2.3</b> Independence of the Least Squares Components</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-interval-estimation"><i class="fa fa-check"></i><b>8.3</b> Interval Estimation</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-quantile-notation"><i class="fa fa-check"></i><b>8.3.1</b> Quantile Notation</a></li>
+<li class="chapter" data-level="8.3.2" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-linear-combinations"><i class="fa fa-check"></i><b>8.3.2</b> Linear Combinations of the Regression Coefficients</a></li>
+<li class="chapter" data-level="8.3.3" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-coefficient-ci"><i class="fa fa-check"></i><b>8.3.3</b> Confidence Intervals for Individual Coefficients</a></li>
+<li class="chapter" data-level="8.3.4" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-mean-response-ci"><i class="fa fa-check"></i><b>8.3.4</b> Confidence Interval for the Expected Response</a></li>
+<li class="chapter" data-level="8.3.5" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-prediction-interval"><i class="fa fa-check"></i><b>8.3.5</b> Prediction Interval for a New Observation</a></li>
+<li class="chapter" data-level="8.3.6" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-sigma2-ci"><i class="fa fa-check"></i><b>8.3.6</b> Confidence Interval for <span class="math inline">\(\sigma^2\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-hypothesis-testing"><i class="fa fa-check"></i><b>8.4</b> Hypothesis Testing</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-nested-regression-tests"><i class="fa fa-check"></i><b>8.4.1</b> Comparing Nested Regression Models</a></li>
+<li class="chapter" data-level="8.4.2" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-overall-regression-test"><i class="fa fa-check"></i><b>8.4.2</b> Testing the Overall Regression</a></li>
+<li class="chapter" data-level="8.4.3" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-single-coefficient-test"><i class="fa fa-check"></i><b>8.4.3</b> Testing a Single Regression Coefficient</a></li>
+<li class="chapter" data-level="8.4.4" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-subgroup-test"><i class="fa fa-check"></i><b>8.4.4</b> Testing a Subgroup of Regression Coefficients</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-power-analysis"><i class="fa fa-check"></i><b>8.5</b> Power Analysis</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-power-errors"><i class="fa fa-check"></i><b>8.5.1</b> Type I Error, Type II Error, and Power</a></li>
+<li class="chapter" data-level="8.5.2" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-noncentral-distributions"><i class="fa fa-check"></i><b>8.5.2</b> Noncentral <span class="math inline">\(t\)</span> and <span class="math inline">\(F\)</span> Distributions</a></li>
+<li class="chapter" data-level="8.5.3" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-power-single-coefficient"><i class="fa fa-check"></i><b>8.5.3</b> Power for Testing a Single Regression Coefficient</a></li>
+<li class="chapter" data-level="8.5.4" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-power-subgroup"><i class="fa fa-check"></i><b>8.5.4</b> Power for Testing a Subgroup of Regression Coefficients</a></li>
+<li class="chapter" data-level="8.5.5" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-power-design"><i class="fa fa-check"></i><b>8.5.5</b> Power and the Regression Design</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-maximum-likelihood"><i class="fa fa-check"></i><b>8.6</b> Maximum Likelihood Estimation</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-mle-beta"><i class="fa fa-check"></i><b>8.6.1</b> Maximum Likelihood Estimation of <span class="math inline">\(\boldsymbol{\beta}\)</span></a></li>
+<li class="chapter" data-level="8.6.2" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-mle-sigma2"><i class="fa fa-check"></i><b>8.6.2</b> Maximum Likelihood Estimation of <span class="math inline">\(\sigma^2\)</span></a></li>
+<li class="chapter" data-level="8.6.3" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-mle-bias"><i class="fa fa-check"></i><b>8.6.3</b> Maximum Likelihood and Unbiased Estimation of <span class="math inline">\(\sigma^2\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-synthesis"><i class="fa fa-check"></i><b>8.7</b> Chapter Synthesis</a></li>
+<li class="chapter" data-level="8.8" data-path="normality-assumption.html"><a href="normality-assumption.html#nor-exercises"><i class="fa fa-check"></i><b>8.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="beyond-the-classical-regression-assumptions.html"><a href="beyond-the-classical-regression-assumptions.html"><i class="fa fa-check"></i><b>9</b> Beyond the Classical Regression Assumptions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="beyond-the-classical-regression-assumptions.html"><a href="beyond-the-classical-regression-assumptions.html#bca-introduction"><i class="fa fa-check"></i><b>9.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="beyond-the-classical-regression-assumptions.html"><a href="beyond-the-classical-regression-assumptions.html#the-role-of-the-mean-assumption"><i class="fa fa-check"></i><b>9.1.1</b> The Role of the Mean Assumption</a></li>
+<li class="chapter" data-level="9.1.2" data-path="beyond-the-classical-regression-assumptions.html"><a href="beyond-the-classical-regression-assumptions.html#the-role-of-the-variance-assumptions"><i class="fa fa-check"></i><b>9.1.2</b> The Role of the Variance Assumptions</a></li>
+<li class="chapter" data-level="9.1.3" data-path="beyond-the-classical-regression-assumptions.html"><a href="beyond-the-classical-regression-assumptions.html#the-role-of-the-normality-assumption"><i class="fa fa-check"></i><b>9.1.3</b> The Role of the Normality Assumption</a></li>
+<li class="chapter" data-level="9.1.4" data-path="beyond-the-classical-regression-assumptions.html"><a href="beyond-the-classical-regression-assumptions.html#organization-of-the-chapter"><i class="fa fa-check"></i><b>9.1.4</b> Organization of the Chapter</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Stat 5385/6385</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="beyond-the-classical-regression-assumptions" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">9</span> Beyond the Classical Regression Assumptions<a href="beyond-the-classical-regression-assumptions.html#beyond-the-classical-regression-assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="bca-introduction" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Introduction<a href="beyond-the-classical-regression-assumptions.html#bca-introduction" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the previous chapters, we studied the statistical properties of the least-squares estimator under a series of assumptions about the data-generating mechanism.</p>
+<p>We began with the linear regression model</p>
+<p><span class="math display">\[
+\mathbf{y}=\mathbf{X}\boldsymbol{\beta}+\mathbf{e},
+\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\beta}\)</span> represents the unknown parameters of the model and <span class="math inline">\(\mathbf{e}\)</span> represents the contribution of unobserved factors and other sources of variation.</p>
+<p>The least-squares estimator is</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbf{y},
+\]</span></p>
+<p>provided that <span class="math inline">\(\mathbf{X}\)</span> has full column rank.</p>
+<p>This estimator was originally obtained by minimizing the residual sum of squares, without making any probabilistic assumptions about the observations. However, once we interpreted the regression equation as a statistical model for the data-generating mechanism, additional assumptions became necessary to establish the statistical properties of the estimator.</p>
+<p>In Chapter 6, we introduced assumptions concerning the mean and covariance structure of the errors. These allowed us to study the expectation and variance of the least-squares estimator and establish the Gauss–Markov theorem.</p>
+<p>In Chapter 8, we introduced the normality assumption, which allowed us to derive exact sampling distributions and construct confidence intervals and hypothesis tests.</p>
+<p>These assumptions, however, are not merely technical conditions. They impose restrictions on the data-generating mechanism, and there is no guarantee that they will be satisfied in a particular application.</p>
+<p>This raises an important question:</p>
+<p><strong>What happens to the conclusions obtained in the previous chapters when some of these assumptions are not satisfied?</strong></p>
+<p>The answer depends on which assumptions are violated and which statistical properties we wish to study.</p>
+<hr />
+<div id="the-role-of-the-mean-assumption" class="section level3 hasAnchor" number="9.1.1">
+<h3><span class="header-section-number">9.1.1</span> The Role of the Mean Assumption<a href="beyond-the-classical-regression-assumptions.html#the-role-of-the-mean-assumption" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Recall that the least-squares estimator can be expressed as</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}
+=
+\boldsymbol{\beta}
++
+(\mathbf{X}&#39;\mathbf{X})^{-1}\mathbf{X}&#39;\mathbf{e}.
+\]</span></p>
+<p>Conditional on the design matrix, its expectation is therefore</p>
+<p><span class="math display">\[
+\mathbb{E}[\hat{\boldsymbol{\beta}}\mid\mathbf{X}]
+=
+\boldsymbol{\beta}
++
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;\mathbb{E}[\mathbf{e}\mid\mathbf{X}].
+\]</span></p>
+<p>The zero conditional mean assumption,</p>
+<p><span class="math display">\[
+\mathbb{E}[\mathbf{e}\mid\mathbf{X}]=\mathbf{0},
+\]</span></p>
+<p>is sufficient to guarantee that the least-squares estimator is conditionally unbiased.</p>
+<p>If this assumption is violated, the estimator may be biased. Furthermore, increasing the sample size does not necessarily eliminate this bias.</p>
+<p>To understand how such violations can arise, recall the more complete data-generating mechanism introduced in Chapter 6:</p>
+<p><span class="math display">\[
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{Z}\boldsymbol{\gamma}
++
+\mathbf{u},
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{Z}\)</span> contains explanatory variables that are not observed and <span class="math inline">\(\mathbf{u}\)</span> represents additional discrepancies.</p>
+<p>When these unobserved contributions are combined into the regression error,</p>
+<p><span class="math display">\[
+\mathbf{e}
+=
+\mathbf{Z}\boldsymbol{\gamma}
++
+\mathbf{u},
+\]</span></p>
+<p>the conditional mean of the error depends on the relationship between the observed explanatory variables and the omitted components.</p>
+<p>In particular, if the omitted variables are associated with the observed explanatory variables, the zero conditional mean assumption may fail.</p>
+<p>This motivates our first question:</p>
+<p><strong>Can we estimate the parameters of a data-generating mechanism when the observed explanatory variables are associated with the regression errors?</strong></p>
+<p>We will examine the consequences of omitted explanatory variables, the role of randomization, and the use of instrumental variables as an alternative approach to estimation.</p>
+<hr />
+</div>
+<div id="the-role-of-the-variance-assumptions" class="section level3 hasAnchor" number="9.1.2">
+<h3><span class="header-section-number">9.1.2</span> The Role of the Variance Assumptions<a href="beyond-the-classical-regression-assumptions.html#the-role-of-the-variance-assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The assumptions concerning the variance of the errors serve a different purpose.</p>
+<p>Recall that, under the zero conditional mean assumption, the conditional covariance matrix of the least-squares estimator is</p>
+<p><span class="math display">\[
+\mathbb{V}[\hat{\boldsymbol{\beta}}\mid\mathbf{X}]
+=
+(\mathbf{X}&#39;\mathbf{X})^{-1}
+\mathbf{X}&#39;
+\mathbb{V}[\mathbf{e}\mid\mathbf{X}]
+\mathbf{X}
+(\mathbf{X}&#39;\mathbf{X})^{-1}.
+\]</span></p>
+<p>Under the classical covariance assumption,</p>
+<p><span class="math display">\[
+\mathbb{V}[\mathbf{e}\mid\mathbf{X}]
+=
+\sigma^2\mathbf{I},
+\]</span></p>
+<p>this expression simplifies to</p>
+<p><span class="math display">\[
+\mathbb{V}[\hat{\boldsymbol{\beta}}\mid\mathbf{X}]
+=
+\sigma^2(\mathbf{X}&#39;\mathbf{X})^{-1}.
+\]</span></p>
+<p>This result was central to our study of estimator precision and the Gauss–Markov theorem.</p>
+<p>However, the errors may have different variances across observations, or they may be correlated with one another. In either case, their covariance matrix will generally differ from <span class="math inline">\(\sigma^2\mathbf{I}\)</span>.</p>
+<p>Importantly, a violation of the covariance assumption does not necessarily make the least-squares estimator biased. If the zero conditional mean assumption continues to hold, conditional unbiasedness is preserved.</p>
+<p>Nevertheless, the covariance matrix of the estimator changes, and the conventional formulas for its standard errors may no longer be valid. Furthermore, least squares may no longer be the most efficient linear unbiased estimator.</p>
+<p>This motivates our second question:</p>
+<p><strong>Can we obtain valid estimates of uncertainty, or construct more efficient estimators, when the errors do not have constant variance or are correlated?</strong></p>
+<p>We will consider more general covariance structures, weighted least squares, and methods for estimating the covariance matrix of the least-squares estimator without assuming constant error variance.</p>
+<hr />
+</div>
+<div id="the-role-of-the-normality-assumption" class="section level3 hasAnchor" number="9.1.3">
+<h3><span class="header-section-number">9.1.3</span> The Role of the Normality Assumption<a href="beyond-the-classical-regression-assumptions.html#the-role-of-the-normality-assumption" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In Chapter 8, we assumed that</p>
+<p><span class="math display">\[
+\mathbf{e}\mid\mathbf{X}
+\sim
+N(\mathbf{0},\sigma^2\mathbf{I}).
+\]</span></p>
+<p>Because the least-squares estimator is a linear transformation of the response vector, this assumption allowed us to obtain its exact conditional distribution:</p>
+<p><span class="math display">\[
+\hat{\boldsymbol{\beta}}\mid\mathbf{X}
+\sim
+N\left(
+\boldsymbol{\beta},
+\sigma^2(\mathbf{X}&#39;\mathbf{X})^{-1}
+\right).
+\]</span></p>
+<p>Together with the distribution of the residual sum of squares, this result provided the foundation for the confidence intervals and hypothesis tests developed in that chapter.</p>
+<p>However, the normality assumption is considerably stronger than the assumptions needed to establish the expectation and variance of the least-squares estimator.</p>
+<p>If the errors are not normally distributed, the least-squares estimator may still be unbiased and have the same covariance matrix, provided that the corresponding mean and variance assumptions remain satisfied.</p>
+<p>What we lose, in general, is the exact normal distribution of the estimator and the associated finite-sample distributions used for inference.</p>
+<p>This raises our third question:</p>
+<p><strong>Can we construct confidence intervals and hypothesis tests without assuming that the errors follow a normal distribution?</strong></p>
+<p>To answer this question, we will study the behavior of the least-squares estimator as the sample size increases.</p>
+<p>Under appropriate conditions, the estimator may converge to the true parameter vector, and its sampling distribution may approach a normal distribution even when the errors themselves are not normally distributed.</p>
+<p>These results provide the foundation for asymptotic inference.</p>
+<hr />
+</div>
+<div id="organization-of-the-chapter" class="section level3 hasAnchor" number="9.1.4">
+<h3><span class="header-section-number">9.1.4</span> Organization of the Chapter<a href="beyond-the-classical-regression-assumptions.html#organization-of-the-chapter" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The chapter is organized around the consequences of weakening the assumptions used in the previous chapters.</p>
+<p>We begin by examining violations of the mean assumption, focusing on omitted explanatory variables, randomization, and instrumental variables.</p>
+<p>We then consider more general error covariance structures and their consequences for least-squares estimation. This leads to weighted least squares and methods for estimating uncertainty under heteroscedasticity.</p>
+<p>Finally, we introduce asymptotic results that allow us to study consistency and conduct approximate inference without requiring normally distributed errors.</p>
+<p>Throughout the chapter, we will distinguish among four properties of an estimator:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Unbiasedness:</strong> Whether its expectation equals the parameter being estimated.</li>
+<li><strong>Consistency:</strong> Whether it approaches the true parameter as the sample size increases.</li>
+<li><strong>Efficiency:</strong> How its variance compares with that of alternative estimators.</li>
+<li><strong>Inferential validity:</strong> Whether confidence intervals and hypothesis tests have their intended statistical properties.</li>
+</ol>
+<p>These properties depend on different assumptions. Consequently, a violation of one assumption does not necessarily invalidate all the conclusions established under the classical regression model.</p>
+<p>The objective of this chapter is to identify which conclusions remain valid, which must be modified, and which alternative estimation or inference procedures become necessary when the classical assumptions are weakened.</p>
+<hr />
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="normality-assumption.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "section",
+    "scroll_highlight": true
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

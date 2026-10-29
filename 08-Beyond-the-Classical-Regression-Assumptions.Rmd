@@ -1,0 +1,221 @@
+# Beyond the Classical Regression Assumptions
+
+## Introduction {#bca-introduction}
+
+In the previous chapters, we studied the statistical properties of the least-squares estimator under a series of assumptions about the data-generating mechanism.
+
+We began with the linear regression model
+
+$$
+\mathbf{y}=\mathbf{X}\boldsymbol{\beta}+\mathbf{e},
+$$
+
+where $\boldsymbol{\beta}$ represents the unknown parameters of the model and $\mathbf{e}$ represents the contribution of unobserved factors and other sources of variation.
+
+The least-squares estimator is
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{y},
+$$
+
+provided that $\mathbf{X}$ has full column rank.
+
+This estimator was originally obtained by minimizing the residual sum of squares, without making any probabilistic assumptions about the observations. However, once we interpreted the regression equation as a statistical model for the data-generating mechanism, additional assumptions became necessary to establish the statistical properties of the estimator.
+
+In Chapter 6, we introduced assumptions concerning the mean and covariance structure of the errors. These allowed us to study the expectation and variance of the least-squares estimator and establish the Gauss--Markov theorem.
+
+In Chapter 8, we introduced the normality assumption, which allowed us to derive exact sampling distributions and construct confidence intervals and hypothesis tests.
+
+These assumptions, however, are not merely technical conditions. They impose restrictions on the data-generating mechanism, and there is no guarantee that they will be satisfied in a particular application.
+
+This raises an important question:
+
+**What happens to the conclusions obtained in the previous chapters when some of these assumptions are not satisfied?**
+
+The answer depends on which assumptions are violated and which statistical properties we wish to study.
+
+***
+
+### The Role of the Mean Assumption
+
+Recall that the least-squares estimator can be expressed as
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+\boldsymbol{\beta}
++
+(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{e}.
+$$
+
+Conditional on the design matrix, its expectation is therefore
+
+$$
+\mathbb{E}[\hat{\boldsymbol{\beta}}\mid\mathbf{X}]
+=
+\boldsymbol{\beta}
++
+(\mathbf{X}'\mathbf{X})^{-1}
+\mathbf{X}'\mathbb{E}[\mathbf{e}\mid\mathbf{X}].
+$$
+
+The zero conditional mean assumption,
+
+$$
+\mathbb{E}[\mathbf{e}\mid\mathbf{X}]=\mathbf{0},
+$$
+
+is sufficient to guarantee that the least-squares estimator is conditionally unbiased.
+
+If this assumption is violated, the estimator may be biased. Furthermore, increasing the sample size does not necessarily eliminate this bias.
+
+To understand how such violations can arise, recall the more complete data-generating mechanism introduced in Chapter 6:
+
+$$
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{Z}\boldsymbol{\gamma}
++
+\mathbf{u},
+$$
+
+where $\mathbf{Z}$ contains explanatory variables that are not observed and $\mathbf{u}$ represents additional discrepancies.
+
+When these unobserved contributions are combined into the regression error,
+
+$$
+\mathbf{e}
+=
+\mathbf{Z}\boldsymbol{\gamma}
++
+\mathbf{u},
+$$
+
+the conditional mean of the error depends on the relationship between the observed explanatory variables and the omitted components.
+
+In particular, if the omitted variables are associated with the observed explanatory variables, the zero conditional mean assumption may fail.
+
+This motivates our first question:
+
+**Can we estimate the parameters of a data-generating mechanism when the observed explanatory variables are associated with the regression errors?**
+
+We will examine the consequences of omitted explanatory variables, the role of randomization, and the use of instrumental variables as an alternative approach to estimation.
+
+***
+
+### The Role of the Variance Assumptions
+
+The assumptions concerning the variance of the errors serve a different purpose.
+
+Recall that, under the zero conditional mean assumption, the conditional covariance matrix of the least-squares estimator is
+
+$$
+\mathbb{V}[\hat{\boldsymbol{\beta}}\mid\mathbf{X}]
+=
+(\mathbf{X}'\mathbf{X})^{-1}
+\mathbf{X}'
+\mathbb{V}[\mathbf{e}\mid\mathbf{X}]
+\mathbf{X}
+(\mathbf{X}'\mathbf{X})^{-1}.
+$$
+
+Under the classical covariance assumption,
+
+$$
+\mathbb{V}[\mathbf{e}\mid\mathbf{X}]
+=
+\sigma^2\mathbf{I},
+$$
+
+this expression simplifies to
+
+$$
+\mathbb{V}[\hat{\boldsymbol{\beta}}\mid\mathbf{X}]
+=
+\sigma^2(\mathbf{X}'\mathbf{X})^{-1}.
+$$
+
+This result was central to our study of estimator precision and the Gauss--Markov theorem.
+
+However, the errors may have different variances across observations, or they may be correlated with one another. In either case, their covariance matrix will generally differ from $\sigma^2\mathbf{I}$.
+
+Importantly, a violation of the covariance assumption does not necessarily make the least-squares estimator biased. If the zero conditional mean assumption continues to hold, conditional unbiasedness is preserved.
+
+Nevertheless, the covariance matrix of the estimator changes, and the conventional formulas for its standard errors may no longer be valid. Furthermore, least squares may no longer be the most efficient linear unbiased estimator.
+
+This motivates our second question:
+
+**Can we obtain valid estimates of uncertainty, or construct more efficient estimators, when the errors do not have constant variance or are correlated?**
+
+We will consider more general covariance structures, weighted least squares, and methods for estimating the covariance matrix of the least-squares estimator without assuming constant error variance.
+
+***
+
+### The Role of the Normality Assumption
+
+In Chapter 8, we assumed that
+
+$$
+\mathbf{e}\mid\mathbf{X}
+\sim
+N(\mathbf{0},\sigma^2\mathbf{I}).
+$$
+
+Because the least-squares estimator is a linear transformation of the response vector, this assumption allowed us to obtain its exact conditional distribution:
+
+$$
+\hat{\boldsymbol{\beta}}\mid\mathbf{X}
+\sim
+N\left(
+\boldsymbol{\beta},
+\sigma^2(\mathbf{X}'\mathbf{X})^{-1}
+\right).
+$$
+
+Together with the distribution of the residual sum of squares, this result provided the foundation for the confidence intervals and hypothesis tests developed in that chapter.
+
+However, the normality assumption is considerably stronger than the assumptions needed to establish the expectation and variance of the least-squares estimator.
+
+If the errors are not normally distributed, the least-squares estimator may still be unbiased and have the same covariance matrix, provided that the corresponding mean and variance assumptions remain satisfied.
+
+What we lose, in general, is the exact normal distribution of the estimator and the associated finite-sample distributions used for inference.
+
+This raises our third question:
+
+**Can we construct confidence intervals and hypothesis tests without assuming that the errors follow a normal distribution?**
+
+To answer this question, we will study the behavior of the least-squares estimator as the sample size increases.
+
+Under appropriate conditions, the estimator may converge to the true parameter vector, and its sampling distribution may approach a normal distribution even when the errors themselves are not normally distributed.
+
+These results provide the foundation for asymptotic inference.
+
+***
+
+### Organization of the Chapter
+
+The chapter is organized around the consequences of weakening the assumptions used in the previous chapters.
+
+We begin by examining violations of the mean assumption, focusing on omitted explanatory variables, randomization, and instrumental variables.
+
+We then consider more general error covariance structures and their consequences for least-squares estimation. This leads to weighted least squares and methods for estimating uncertainty under heteroscedasticity.
+
+Finally, we introduce asymptotic results that allow us to study consistency and conduct approximate inference without requiring normally distributed errors.
+
+Throughout the chapter, we will distinguish among four properties of an estimator:
+
+1. **Unbiasedness:** Whether its expectation equals the parameter being estimated.
+2. **Consistency:** Whether it approaches the true parameter as the sample size increases.
+3. **Efficiency:** How its variance compares with that of alternative estimators.
+4. **Inferential validity:** Whether confidence intervals and hypothesis tests have their intended statistical properties.
+
+These properties depend on different assumptions. Consequently, a violation of one assumption does not necessarily invalidate all the conclusions established under the classical regression model.
+
+The objective of this chapter is to identify which conclusions remain valid, which must be modified, and which alternative estimation or inference procedures become necessary when the classical assumptions are weakened.
+
+***
+

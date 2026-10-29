@@ -5648,33 +5648,33 @@ These two branches summarize the main role of the Normality assumption. It conve
 
 ## Exercises {#nor-exercises}
 
-1. Let $\ba\in\mathbb{R}^{p+1}$ be a fixed nonzero vector and consider the hypothesis
+1. Let $\mathbf{a}\in\mathbb{R}^{p+1}$ be a fixed nonzero vector and consider the hypothesis
 
    $$
-   \cH_0:
-   \ba'\bgb=c
+   \mathcal{H}_0:
+   \mathbf{a}'\boldsymbol{\beta}=c
    $$
 
    against
 
    $$
-   \cH_1:
-   \ba'\bgb\neq c,
+   \mathcal{H}_1:
+   \mathbf{a}'\boldsymbol{\beta}\neq c,
    $$
 
    where $c$ is a specified constant.
 
-   (a) Derive a test statistic for this hypothesis and show that, conditional on $\cH_0$,
+   (a) Derive a test statistic for this hypothesis and show that, conditional on $\mathcal{H}_0$,
 
    $$
    T
    =
    \frac{
-   \ba'\hat{\bgb}-c
+   \mathbf{a}'\hat{\boldsymbol{\beta}}-c
    }{
    \hat{\sigma}
    \sqrt{
-   \ba'(\bX'\bX)^{-1}\ba
+   \mathbf{a}'(\mathbf{X}'\mathbf{X})^{-1}\mathbf{a}
    }
    }
    \sim
@@ -5683,10 +5683,11 @@ These two branches summarize the main role of the Normality assumption. It conve
 
    (b) Derive the rejection region for a test with significance level $\alpha$.
 
-   (c) Consider the $(1-\alpha)$ confidence interval for $\ba'\bgb$ developed in this chapter. Prove that
+   (c) Consider the $(1-\alpha)$ confidence interval for $\mathbf{a}'\boldsymbol{\beta}$ developed in this chapter. Prove that
 
    $$
-   \cH_0:\ba'\bgb=c
+   \mathcal{H}_0:
+   \mathbf{a}'\boldsymbol{\beta}=c
    $$
 
    is rejected by the two-sided test if and only if $c$ does not belong to this confidence interval.
@@ -5694,8 +5695,8 @@ These two branches summarize the main role of the Normality assumption. It conve
    (d) Now consider
 
    $$
-   \cH_1:
-   \ba'\bgb>c.
+   \mathcal{H}_1:
+   \mathbf{a}'\boldsymbol{\beta}>c.
    $$
 
    Derive the corresponding rejection region and $p$-value.
@@ -5707,7 +5708,7 @@ These two branches summarize the main role of the Normality assumption. It conve
    For Study A,
 
    $$
-   (\bX_A'\bX_A)^{-1}
+   (\mathbf{X}_A'\mathbf{X}_A)^{-1}
    =
    \begin{pmatrix}
    1/30 & 0 & 0\\
@@ -5719,7 +5720,7 @@ These two branches summarize the main role of the Normality assumption. It conve
    while for Study B,
 
    $$
-   (\bX_B'\bX_B)^{-1}
+   (\mathbf{X}_B'\mathbf{X}_B)^{-1}
    =
    \begin{pmatrix}
    1/30 & 0 & 0\\
@@ -5735,7 +5736,7 @@ These two branches summarize the main role of the Normality assumption. It conve
    (c) Suppose that the true value of $\beta_1$ is $0.5$. Compute the noncentrality parameter for testing
 
    $$
-   \cH_0:\beta_1=0
+   \mathcal{H}_0:\beta_1=0
    $$
 
    in each study.
@@ -5748,15 +5749,21 @@ These two branches summarize the main role of the Normality assumption. It conve
 
 3. Use R to investigate the distributions developed in Section \@ref(nor-distribution-estimates).
 
-   Choose a fixed full-column-rank design matrix $\bX$ with an intercept and two explanatory variables. Fix $\bgb$ and $\sigma^2$, and repeatedly generate
+   Choose a fixed full-column-rank design matrix $\mathbf{X}$ with an intercept and two explanatory variables. Fix $\boldsymbol{\beta}$ and $\sigma^2$, and repeatedly generate
 
    $$
-   \by=\bX\bgb+\be,
+   \mathbf{y}
+   =
+   \mathbf{X}\boldsymbol{\beta}
+   +
+   \mathbf{e},
    \qquad
-   \be\sim N(\bzero,\sigma^2\bI).
+   \mathbf{e}
+   \sim
+   N(\mathbf{0},\sigma^2\mathbf{I}).
    $$
 
-   For each simulated dataset calculate:
+   For each simulated dataset calculate
 
    $$
    Z_j
@@ -5765,7 +5772,9 @@ These two branches summarize the main role of the Normality assumption. It conve
    \hat{\beta}_j-\beta_j
    }{
    \sigma
-   \sqrt{[(\bX'\bX)^{-1}]_{jj}}
+   \sqrt{
+   [(\mathbf{X}'\mathbf{X})^{-1}]_{jj}
+   }
    },
    $$
 
@@ -5776,7 +5785,9 @@ These two branches summarize the main role of the Normality assumption. It conve
    \hat{\beta}_j-\beta_j
    }{
    \hat{\sigma}
-   \sqrt{[(\bX'\bX)^{-1}]_{jj}}
+   \sqrt{
+   [(\mathbf{X}'\mathbf{X})^{-1}]_{jj}
+   }
    },
    $$
 
@@ -5804,12 +5815,12 @@ These two branches summarize the main role of the Normality assumption. It conve
 
    (f) Identify which properties appear to remain valid without Normality and which exact distributional conclusions fail. Explain your observations using the distinction between the assumptions from the previous chapter and those from this chapter.
 
-4. Suppose that after fitting the regression model, we will observe $m$ new responses at the same fixed predictor vector $\bx_{\mathrm{new}}$:
+4. Suppose that after fitting the regression model, we will observe $m$ new responses at the same fixed predictor vector $\mathbf{x}_{\mathrm{new}}$:
 
    $$
    y_{\mathrm{new},r}
    =
-   \bx_{\mathrm{new}}'\bgb
+   \mathbf{x}_{\mathrm{new}}'\boldsymbol{\beta}
    +
    e_{\mathrm{new},r},
    \qquad
@@ -5837,7 +5848,8 @@ These two branches summarize the main role of the Normality assumption. It conve
    (a) Show that the natural predictor of $\bar{y}_{\mathrm{new}}$ is
 
    $$
-   \bx_{\mathrm{new}}'\hat{\bgb}.
+   \mathbf{x}_{\mathrm{new}}'
+   \hat{\boldsymbol{\beta}}.
    $$
 
    (b) Derive
@@ -5847,7 +5859,8 @@ These two branches summarize the main role of the Normality assumption. It conve
    \left[
    \bar{y}_{\mathrm{new}}
    -
-   \bx_{\mathrm{new}}'\hat{\bgb}
+   \mathbf{x}_{\mathrm{new}}'
+   \hat{\boldsymbol{\beta}}
    \right].
    $$
 
@@ -5872,7 +5885,12 @@ These two branches summarize the main role of the Normality assumption. It conve
    $$
    \tilde{\sigma}^2
    =
-   \frac{\hat{\be}'\hat{\be}}{n},
+   \frac{
+   \hat{\mathbf{e}}'
+   \hat{\mathbf{e}}
+   }{
+   n
+   },
    $$
 
    whereas the unbiased estimator is
@@ -5880,7 +5898,12 @@ These two branches summarize the main role of the Normality assumption. It conve
    $$
    \hat{\sigma}^2
    =
-   \frac{\hat{\be}'\hat{\be}}{\nu}.
+   \frac{
+   \hat{\mathbf{e}}'
+   \hat{\mathbf{e}}
+   }{
+   \nu
+   }.
    $$
 
    (a) Use the chi-squared distribution of the residual sum of squares to derive the complete distribution of $\tilde{\sigma}^2$.
@@ -5935,35 +5958,41 @@ These two branches summarize the main role of the Normality assumption. It conve
 7. Suppose that
 
    $$
-   \bX
+   \mathbf{X}
    =
-   [\bones\;\bx_1\;\cdots\;\bx_p],
+   [\mathbf{1}\;\mathbf{x}_1\;\cdots\;\mathbf{x}_p],
    $$
 
    where the explanatory-variable columns satisfy
 
    $$
-   \bones'\bx_j=0
+   \mathbf{1}'\mathbf{x}_j=0
    $$
 
    for every $j$, and
 
    $$
-   \bx_j'\bx_k=0
+   \mathbf{x}_j'\mathbf{x}_k=0
    $$
 
    whenever $j\neq k$.
 
    Thus, the explanatory variables are centered and mutually orthogonal.
 
-   (a) Describe the structure of $\bX'\bX$.
+   (a) Describe the structure of $\mathbf{X}'\mathbf{X}$.
 
    (b) Derive a simplified expression for each slope estimator $\hat{\beta}_j$.
 
    (c) Show that
 
    $$
-   \dC[\hat{\beta}_j,\hat{\beta}_k]=0
+   \mathbb{C}
+   [
+   \hat{\beta}_j,
+   \hat{\beta}_k
+   ]
+   =
+   0
    $$
 
    for $j\neq k$.
@@ -5977,7 +6006,7 @@ These two branches summarize the main role of the Normality assumption. It conve
    =
    \sum_{j=1}^p
    \hat{\beta}_j^2
-   \bx_j'\bx_j.
+   \mathbf{x}_j'\mathbf{x}_j.
    $$
 
    (f) Interpret this decomposition geometrically.
@@ -5997,15 +6026,15 @@ These two branches summarize the main role of the Normality assumption. It conve
    For each value of $\rho$, construct one fixed design matrix with an intercept and use the model
 
    $$
-   \by
+   \mathbf{y}
    =
    \beta_0\mathbf{1}
    +
-   \beta_1\bx_1
+   \beta_1\mathbf{x}_1
    +
-   \beta_2\bx_2
+   \beta_2\mathbf{x}_2
    +
-   \be.
+   \mathbf{e}.
    $$
 
    Choose fixed nonzero values of $\beta_1$ and $\beta_2$ and a fixed $\sigma^2$.
@@ -6013,13 +6042,13 @@ These two branches summarize the main role of the Normality assumption. It conve
    (a) For each design, calculate
 
    $$
-   [(\bX'\bX)^{-1}]_{11}
+   [(\mathbf{X}'\mathbf{X})^{-1}]_{11}
    $$
 
    and the corresponding theoretical noncentrality parameter for testing
 
    $$
-   \cH_0:\beta_1=0.
+   \mathcal{H}_0:\beta_1=0.
    $$
 
    (b) Compute the exact theoretical power using the noncentral $t$ distribution.
@@ -6035,27 +6064,40 @@ These two branches summarize the main role of the Normality assumption. It conve
 9. The tests developed in this chapter considered individual coefficients and groups of coefficients equal to zero. A more general hypothesis can be written as
 
    $$
-   \cH_0:
-   \bC\bgb=\bd,
+   \mathcal{H}_0:
+   \mathbf{C}\boldsymbol{\beta}
+   =
+   \mathbf{d},
    $$
 
-   where $\bC\in\mathbb{R}^{q\times(p+1)}$ has rank $q$ and $\bd\in\mathbb{R}^q$ is fixed.
+   where
+
+   $$
+   \mathbf{C}
+   \in
+   \mathbb{R}^{q\times(p+1)}
+   $$
+
+   has rank $q$ and $\mathbf{d}\in\mathbb{R}^q$ is fixed.
 
    (a) Derive the distribution of
 
    $$
-   \bC\hat{\bgb}.
+   \mathbf{C}
+   \hat{\boldsymbol{\beta}}.
    $$
 
-   (b) Under $\cH_0$, show that
+   (b) Under $\mathcal{H}_0$, show that
 
    $$
    \frac{
-   (\bC\hat{\bgb}-\bd)'
+   (\mathbf{C}\hat{\boldsymbol{\beta}}-\mathbf{d})'
    \left[
-   \bC(\bX'\bX)^{-1}\bC'
+   \mathbf{C}
+   (\mathbf{X}'\mathbf{X})^{-1}
+   \mathbf{C}'
    \right]^{-1}
-   (\bC\hat{\bgb}-\bd)
+   (\mathbf{C}\hat{\boldsymbol{\beta}}-\mathbf{d})
    }{
    \sigma^2
    }
@@ -6065,18 +6107,20 @@ These two branches summarize the main role of the Normality assumption. It conve
 
    You may use an appropriate linear transformation of a multivariate Normal random vector.
 
-   (c) Use the independence of $\hat{\bgb}$ and $\hat{\sigma}^2$ to show that
+   (c) Use the independence of $\hat{\boldsymbol{\beta}}$ and $\hat{\sigma}^2$ to show that
 
    $$
    F
    =
    \frac{
    \frac{1}{q}
-   (\bC\hat{\bgb}-\bd)'
+   (\mathbf{C}\hat{\boldsymbol{\beta}}-\mathbf{d})'
    \left[
-   \bC(\bX'\bX)^{-1}\bC'
+   \mathbf{C}
+   (\mathbf{X}'\mathbf{X})^{-1}
+   \mathbf{C}'
    \right]^{-1}
-   (\bC\hat{\bgb}-\bd)
+   (\mathbf{C}\hat{\boldsymbol{\beta}}-\mathbf{d})
    }{
    \hat{\sigma}^2
    }
@@ -6085,342 +6129,355 @@ These two branches summarize the main role of the Normality assumption. It conve
    satisfies
 
    $$
-   F\mid\cH_0
+   F\mid\mathcal{H}_0
    \sim
    F_{q,n-p-1}.
    $$
 
    (d) Show that when $q=1$, the statistic in part (c) is the square of the corresponding $t$ statistic.
 
-   (e) Show how the overall regression test and the test of a subgroup of coefficients can be expressed as special cases by choosing $\bC$ and $\bd$ appropriately.
+   (e) Show how the overall regression test and the test of a subgroup of coefficients can be expressed as special cases by choosing $\mathbf{C}$ and $\mathbf{d}$ appropriately.
 
 10. Consider a simple linear regression with an intercept and one explanatory variable. Let
 
+$$
+  \bar{x}
+  =
+  \frac{1}{n}
+  \sum_{i=1}^n x_i
+$$
+
+and
+
+$$
+  S_{xx}
+  =
+  \sum_{i=1}^n
+  (x_i-\bar{x})^2.
   $$
-    \bar{x}
-    =
-    \frac{1}{n}\sum_{i=1}^n x_i
-    $$
 
-    and
+For
 
-    $$
-    S_{xx}
-    =
-    \sum_{i=1}^n(x_i-\bar{x})^2.
-    $$
+  $$
+  \mathbf{x}_{\mathrm{new}}
+  =
+  \begin{pmatrix}
+  1\\
+  x_{\mathrm{new}}
+  \end{pmatrix},
+  $$
 
-    For
+prove that
 
-    $$
-    \bx_{\mathrm{new}}
-    =
-    \begin{pmatrix}
-    1\\
-    x_{\mathrm{new}}
-    \end{pmatrix},
-    $$
+  $$
+  \mathbf{x}_{\mathrm{new}}'
+  (\mathbf{X}'\mathbf{X})^{-1}
+  \mathbf{x}_{\mathrm{new}}
+  =
+  \frac{1}{n}
+  +
+  \frac{
+  (x_{\mathrm{new}}-\bar{x})^2
+  }{
+  S_{xx}
+  }.
+  $$
 
-    prove that
+  (a) Use this result to determine where the confidence interval for the expected response is narrowest.
 
-    $$
-    \bx_{\mathrm{new}}'
-    (\bX'\bX)^{-1}
-    \bx_{\mathrm{new}}
-    =
-    \frac{1}{n}
-    +
-    \frac{
-    (x_{\mathrm{new}}-\bar{x})^2
-    }{
-    S_{xx}
-    }.
-    $$
+  (b) Determine where the prediction interval for a new observation is narrowest.
 
-    (a) Use this result to determine where the confidence interval for the expected response is narrowest.
+  (c) Explain mathematically why both intervals become wider as $x_{\mathrm{new}}$ moves away from the center of the observed explanatory variables.
 
-    (b) Determine where the prediction interval for a new observation is narrowest.
+  (d) Consider
 
-    (c) Explain mathematically why both intervals become wider as $x_{\mathrm{new}}$ moves away from the center of the observed explanatory variables.
+  $$
+  x=(0,1,2,3,4).
+  $$
 
-    (d) Consider
+  Compare the standard-error factors for $x_{\mathrm{new}}=2$ and $x_{\mathrm{new}}=6$.
 
-    $$
-    x=(0,1,2,3,4).
-    $$
-
-    Compare the standard-error factors for $x_{\mathrm{new}}=2$ and $x_{\mathrm{new}}=6$.
-
-    (e) Explain how this calculation illustrates the increased uncertainty associated with extrapolation.
+  (e) Explain how this calculation illustrates the increased uncertainty associated with extrapolation.
 
 11. Use R to compare confidence intervals for the expected response with prediction intervals.
 
-    Choose a fixed design matrix, $\bgb$, and $\sigma^2$. Select two new predictor vectors:
+  Choose a fixed design matrix, $\boldsymbol{\beta}$, and $\sigma^2$. Select two new predictor vectors:
 
-    $$
-    \bx_A
-    $$
+  $$
+  \mathbf{x}_A
+  $$
 
-    located near the center of the observed predictor configuration, and
+  located near the center of the observed predictor configuration, and
 
-    $$
-    \bx_B
-    $$
+  $$
+  \mathbf{x}_B
+  $$
 
-    located substantially farther from it.
+  located substantially farther from it.
 
-    For each simulated training dataset:
+  For each simulated training dataset:
 
-    1. construct a $95\%$ confidence interval for the expected response at both predictor vectors;
-    2. construct a $95\%$ prediction interval at both predictor vectors;
-    3. independently generate one future observation at each predictor vector.
+  1. construct a $95\%$ confidence interval for the expected response at both predictor vectors;
+  2. construct a $95\%$ prediction interval at both predictor vectors;
+  3. independently generate one future observation at each predictor vector.
 
-    Across many simulations:
+  Across many simulations:
 
-    (a) estimate the coverage probability of the mean-response confidence intervals for the true quantities
+  (a) estimate the coverage probability of the mean-response confidence intervals for
 
-    $$
-    \bx_A'\bgb
-    \qquad\text{and}\qquad
-    \bx_B'\bgb;
-    $$
+  $$
+  \mathbf{x}_A'\boldsymbol{\beta}
+  \qquad\text{and}\qquad
+  \mathbf{x}_B'\boldsymbol{\beta};
+  $$
 
-    (b) estimate the coverage probability of the prediction intervals for the future observations;
+  (b) estimate the coverage probability of the prediction intervals for the future observations;
 
-    (c) incorrectly use the mean-response confidence intervals to predict the future observations and estimate the resulting coverage;
+  (c) incorrectly use the mean-response confidence intervals to predict the future observations and estimate the resulting coverage;
 
-    (d) compare the average widths of the intervals at $\bx_A$ and $\bx_B$;
+  (d) compare the average widths of the intervals at $\mathbf{x}_A$ and $\mathbf{x}_B$;
 
-    (e) explain all of the observed differences using the variance formulas developed in this chapter.
+  (e) explain all of the observed differences using the variance formulas developed in this chapter.
 
 12. Recall that for testing
 
-    $$
-    \cH_0:
-    \bgb_1=\bzero
-    $$
+  $$
+  \mathcal{H}_0:
+  \boldsymbol{\beta}_1
+  =
+  \mathbf{0}
+  $$
 
-    in the partitioned model
+  in the partitioned model
 
-    $$
-    \by
-    =
-    \bX_1\bgb_1
-    +
-    \bX_2\bgb_2
-    +
-    \be,
-    $$
+  $$
+  \mathbf{y}
+  =
+  \mathbf{X}_1\boldsymbol{\beta}_1
+  +
+  \mathbf{X}_2\boldsymbol{\beta}_2
+  +
+  \mathbf{e},
+  $$
 
-    the noncentrality parameter under
+  the noncentrality parameter under
 
-    $$
-    \bgb_1=\boldsymbol{\theta}
-    $$
+  $$
+  \boldsymbol{\beta}_1
+  =
+  \boldsymbol{\theta}
+  $$
 
-    is
+  is
 
-    $$
-    \lambda
-    =
-    \frac{
-    \boldsymbol{\theta}'
-    \bX_1'
-    (\bI-\bH_2)
-    \bX_1
-    \boldsymbol{\theta}
-    }{
-    \sigma^2
-    }.
-    $$
+  $$
+  \lambda
+  =
+  \frac{
+  \boldsymbol{\theta}'
+  \mathbf{X}_1'
+  (\mathbf{I}-\mathbf{H}_2)
+  \mathbf{X}_1
+  \boldsymbol{\theta}
+  }{
+  \sigma^2
+  }.
+  $$
 
-    (a) Use the symmetry and idempotence of $\bI-\bH_2$ to show that
+  (a) Use the symmetry and idempotence of $\mathbf{I}-\mathbf{H}_2$ to show that
 
-    $$
-    \lambda
-    =
-    \frac{
-    \left\|
-    (\bI-\bH_2)\bX_1\boldsymbol{\theta}
-    \right\|^2
-    }{
-    \sigma^2
-    }.
-    $$
+  $$
+  \lambda
+  =
+  \frac{
+  \left\|
+  (\mathbf{I}-\mathbf{H}_2)
+  \mathbf{X}_1
+  \boldsymbol{\theta}
+  \right\|^2
+  }{
+  \sigma^2
+  }.
+  $$
 
-    (b) Interpret this expression geometrically.
+  (b) Interpret this expression geometrically.
 
-    (c) Assuming that
+  (c) Assuming that
 
-    $$
-    [\bX_1\;\bX_2]
-    $$
+  $$
+  [\mathbf{X}_1\;\mathbf{X}_2]
+  $$
 
-    has full column rank, show that
+  has full column rank, show that
 
-    $$
-    \lambda=0
-    $$
+  $$
+  \lambda=0
+  $$
 
-    if and only if
+  if and only if
 
-    $$
-    \boldsymbol{\theta}=\bzero.
-    $$
+  $$
+  \boldsymbol{\theta}
+  =
+  \mathbf{0}.
+  $$
 
-    (d) Let $\bA$ be an invertible $k\times k$ matrix and define a new parameterization
+  (d) Let $\mathbf{A}$ be an invertible $k\times k$ matrix and define a new parameterization
 
-    $$
-    \bX_1^*
-    =
-    \bX_1\bA,
-    \qquad
-    \boldsymbol{\theta}^*
-    =
-    \bA^{-1}\boldsymbol{\theta}.
-    $$
+  $$
+  \mathbf{X}_1^*
+  =
+  \mathbf{X}_1\mathbf{A},
+  \qquad
+  \boldsymbol{\theta}^*
+  =
+  \mathbf{A}^{-1}
+  \boldsymbol{\theta}.
+  $$
 
-    Show that the noncentrality parameter does not change.
+  Show that the noncentrality parameter does not change.
 
-    (e) Explain why part (d) shows that power depends on the mean contribution represented by the tested subspace rather than on the particular coordinate system used to describe that subspace.
+  (e) Explain why part (d) shows that power depends on the mean contribution represented by the tested subspace rather than on the particular coordinate system used to describe that subspace.
 
 13. Two Normal regression models are fitted to the same $n=50$ observations.
 
-    Model A contains an intercept and $p_A=2$ explanatory variables, while Model B contains an intercept and $p_B=8$ explanatory variables. Suppose that both models produce
+  Model A contains an intercept and $p_A=2$ explanatory variables, while Model B contains an intercept and $p_B=8$ explanatory variables. Suppose that both models produce
 
-    $$
-    SS_{res}=200.
-    $$
+  $$
+  SS_{res}=200.
+  $$
 
-    (a) Compute the maximum likelihood estimate of $\sigma^2$ under each model.
+  (a) Compute the maximum likelihood estimate of $\sigma^2$ under each model.
 
-    (b) Compute the unbiased estimate of $\sigma^2$ under each model.
+  (b) Compute the unbiased estimate of $\sigma^2$ under each model.
 
-    (c) Explain why the two maximum likelihood estimates are identical even though the models contain different numbers of parameters.
+  (c) Explain why the two maximum likelihood estimates are identical even though the models contain different numbers of parameters.
 
-    (d) Explain why the unbiased estimators are different.
+  (d) Explain why the unbiased estimators are different.
 
-    (e) At their respective coefficient MLEs, compare the maximized likelihoods of the two models.
+  (e) At their respective coefficient MLEs, compare the maximized likelihoods of the two models.
 
-    (f) Suppose instead that Model B has a slightly smaller residual sum of squares than Model A. Explain why adding explanatory variables cannot increase the minimum residual sum of squares.
+  (f) Suppose instead that Model B has a slightly smaller residual sum of squares than Model A. Explain why adding explanatory variables cannot increase the minimum residual sum of squares.
 
-    (g) What does this example suggest about the difference between choosing parameter values within a fixed model and comparing models of different complexity?
+  (g) What does this example suggest about the difference between choosing parameter values within a fixed model and comparing models of different complexity?
 
 14. The independence result
 
-    $$
-    \hat{\bgb}
-    \perp
-    \hat{\sigma}^2
-    $$
+  $$
+  \hat{\boldsymbol{\beta}}
+  \perp
+  \hat{\sigma}^2
+  $$
 
-    depends importantly on Normality. This exercise constructs a counterexample under the weaker assumptions from the previous chapter.
+  depends importantly on Normality. This exercise constructs a counterexample under the weaker assumptions from the previous chapter.
 
-    Consider the intercept-only model with $n=2$,
+  Consider the intercept-only model with $n=2$,
 
-    $$
-    y_i
-    =
-    \beta_0+e_i,
-    $$
+  $$
+  y_i
+  =
+  \beta_0+e_i,
+  $$
 
-    where $e_1$ and $e_2$ are independent and
+  where $e_1$ and $e_2$ are independent and
 
-    $$
-    \dP(e_i=\sigma)
-    =
-    \dP(e_i=-\sigma)
-    =
-    \frac12.
-    $$
+  $$
+  \mathbb{P}(e_i=\sigma)
+  =
+  \mathbb{P}(e_i=-\sigma)
+  =
+  \frac12.
+  $$
 
-    (a) Verify that
+  (a) Verify that
 
-    $$
-    \dE[\be]=\bzero
-    $$
+  $$
+  \mathbb{E}[\mathbf{e}]
+  =
+  \mathbf{0}
+  $$
 
-    and
+  and
 
-    $$
-    \dV[\be]=\sigma^2\bI.
-    $$
+  $$
+  \mathbb{V}[\mathbf{e}]
+  =
+  \sigma^2\mathbf{I}.
+  $$
 
-    Thus, the mean and variance assumptions from the previous chapter hold.
+  Thus, the mean and variance assumptions from the previous chapter hold.
 
-    (b) Enumerate the four possible values of $(e_1,e_2)$ and calculate $\hat{\beta}_0$ and $\hat{\sigma}^2$ for each outcome.
+  (b) Enumerate the four possible values of $(e_1,e_2)$ and calculate $\hat{\beta}_0$ and $\hat{\sigma}^2$ for each outcome.
 
-    (c) Verify directly that both $\hat{\beta}_0$ and $\hat{\sigma}^2$ are unbiased.
+  (c) Verify directly that both $\hat{\beta}_0$ and $\hat{\sigma}^2$ are unbiased.
 
-    (d) Show that $\hat{\beta}_0$ and $\hat{\sigma}^2$ are not independent.
+  (d) Show that $\hat{\beta}_0$ and $\hat{\sigma}^2$ are not independent.
 
-    (e) What happens to the usual $t$ statistic when $\hat{\sigma}^2=0$?
+  (e) What happens to the usual $t$ statistic when $\hat{\sigma}^2=0$?
 
-    (f) Explain why this example does not contradict any result from the previous chapter but demonstrates why the Normality assumption is important for the exact inferential theory developed in this chapter.
+  (f) Explain why this example does not contradict any result from the previous chapter but demonstrates why the Normality assumption is important for the exact inferential theory developed in this chapter.
 
 15. Use R to investigate the distribution of $p$-values and its relationship with power.
 
-    Fix a full-column-rank design matrix and consider testing
+  Fix a full-column-rank design matrix and consider testing
 
-    $$
-    \cH_0:
-    \beta_j=0
-    $$
+  $$
+  \mathcal{H}_0:
+  \beta_j=0
+  $$
 
-    against
+  against
 
-    $$
-    \cH_1:
-    \beta_j\neq0.
-    $$
+  $$
+  \mathcal{H}_1:
+  \beta_j\neq0.
+  $$
 
-    First generate many datasets under
+  First generate many datasets under
 
-    $$
-    \beta_j=0.
-    $$
+  $$
+  \beta_j=0.
+  $$
 
-    For each dataset, compute the two-sided $p$-value.
+  For each dataset, compute the two-sided $p$-value.
 
-    (a) Plot the empirical distribution of the $p$-values. What distribution do you expect under $\cH_0$?
+  (a) Plot the empirical distribution of the $p$-values. What distribution do you expect under $\mathcal{H}_0$?
 
-    (b) For several values of $\alpha$, calculate the proportion of simulated $p$-values satisfying
+  (b) For several values of $\alpha$, calculate the proportion of simulated $p$-values satisfying
 
-    $$
-    p\text{-value}\leq\alpha.
-    $$
+  $$
+  p\text{-value}\leq\alpha.
+  $$
 
-    Relate these proportions to the Type I error probability.
+  Relate these proportions to the Type I error probability.
 
-    Now repeat the experiment for several alternatives
+  Now repeat the experiment for several alternatives
 
-    $$
-    \beta_j
-    =
-    \theta,
-    $$
+  $$
+  \beta_j=\theta,
+  $$
 
-    including both positive and negative values of $\theta$.
+  including both positive and negative values of $\theta$.
 
-    (c) Describe how the distribution of the $p$-values changes as $|\theta|$ increases.
+  (c) Describe how the distribution of the $p$-values changes as $|\theta|$ increases.
 
-    (d) For each value of $\theta$, estimate
+  (d) For each value of $\theta$, estimate
 
-    $$
-    \dP
-    \left(
-    p\text{-value}\leq\alpha
-    \mid
-    \beta_j=\theta
-    \right).
-    $$
+  $$
+  \mathbb{P}
+  \left(
+  p\text{-value}\leq\alpha
+  \mid
+  \beta_j=\theta
+  \right).
+  $$
 
-    Interpret this probability.
+  Interpret this probability.
 
-    (e) Calculate the exact theoretical power from the appropriate noncentral $t$ distribution and compare it with the simulation.
+  (e) Calculate the exact theoretical power from the appropriate noncentral $t$ distribution and compare it with the simulation.
 
-    (f) Plot empirical and theoretical power as functions of $\theta$.
+  (f) Plot empirical and theoretical power as functions of $\theta$.
 
-    (g) For the two-sided test, investigate whether the power curve is symmetric around $\theta=0$. Explain your result using the noncentrality parameter.
+  (g) For the two-sided test, investigate whether the power curve is symmetric around $\theta=0$. Explain your result using the noncentrality parameter.
 
 ***
