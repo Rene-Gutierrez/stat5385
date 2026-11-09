@@ -1,0 +1,1744 @@
+# Asymptotic Properties of Least Squares
+
+## Introduction {#asy-introduction}
+
+In Chapters 7 and 8, we studied the statistical properties of least squares under different assumptions about the data-generating mechanism.
+
+Recall the linear regression model
+
+$$
+\mathbf{y}
+=
+\mathbf{X}\boldsymbol{\beta}
++
+\mathbf{e},
+$$
+
+where $\mathbf{X}$ is a fixed design matrix, $\boldsymbol{\beta}$ is the unknown coefficient vector, and $\mathbf{e}$ represents the regression errors.
+
+Under the mean assumption
+
+$$
+\mathbb{E}[\mathbf{e}]=\mathbf{0},
+$$
+
+we established that the least-squares estimator is unbiased:
+
+$$
+\mathbb{E}[\hat{\boldsymbol{\beta}}]
+=
+\boldsymbol{\beta}.
+$$
+
+Under the additional variance assumption
+
+$$
+\mathbb{V}[\mathbf{e}]
+=
+\sigma^2\mathbf{I},
+$$
+
+we obtained
+
+$$
+\mathbb{V}[\hat{\boldsymbol{\beta}}]
+=
+\sigma^2(\mathbf{X}'\mathbf{X})^{-1}.
+$$
+
+Finally, in Chapter 8, we introduced normally distributed errors, allowing us to derive exact sampling distributions and develop statistical inference.
+
+However, these results concern the behavior of estimators for a given sample size.
+
+In this chapter, we introduce a different perspective by studying what happens as the number of observations increases.
+
+For example, we would expect that increasing the sample size generally allows us to estimate the unknown coefficients more accurately.
+
+However, this raises several questions:
+
+- Under what conditions does the least-squares estimator approach the true coefficient vector as the sample size increases?
+- Does the distribution of the estimator become approximately normal, even when the regression errors are not normally distributed?
+- Can we use this approximate distribution to conduct statistical inference?
+
+These questions motivate the study of **asymptotic properties**.
+
+The central idea is to investigate the behavior of estimators as the sample size approaches infinity.
+
+We will continue treating the explanatory variables as fixed. Consequently, we do not need to introduce a probability distribution for the design matrix.
+
+Instead, we will study a sequence of fixed designs and determine which conditions on these designs and the regression errors are sufficient to establish the desired results.
+
+We will also briefly discuss how random sampling mechanisms can motivate these convergence conditions, without changing the fixed-design framework used in the formal derivations.
+
+***
+
+## A Sequence of Fixed Designs {#asy-fixed-designs}
+
+To study the behavior of an estimator as the sample size increases, we must consider a sequence of regression problems.
+
+For each sample size $n$, suppose that
+
+$$
+\boxed{
+\mathbf{y}_n
+=
+\mathbf{X}_n\boldsymbol{\beta}
++
+\mathbf{e}_n,
+}
+$$
+
+where:
+
+- $\mathbf{X}_n$ is a fixed $n\times p$ design matrix with full column rank.
+- $\boldsymbol{\beta}$ is a $p$-dimensional coefficient vector that does not change with $n$.
+- $\mathbf{e}_n$ is an $n$-dimensional random error vector.
+
+We will assume that the number of coefficients $p$ is fixed as the sample size increases.
+
+The design matrices may represent an increasing number of observations from a particular study, or different designs corresponding to different sample sizes.
+
+In either case, the matrices $\mathbf{X}_n$ are treated as nonrandom.
+
+Following the notation introduced for multiple regression, let $X_{i,n}$ denote the $i$th **row** of $\mathbf{X}_n$, so that $X_{i,n}\in\mathbb{R}^{1\times p}$. Its transpose $X_{i,n}'$ is a column vector. We retain the additional subscript $n$ because the design may change with the sample size.
+
+The least-squares estimator for sample size $n$ is
+
+$$
+\hat{\boldsymbol{\beta}}_n
+=
+(\mathbf{X}_n'\mathbf{X}_n)^{-1}
+\mathbf{X}_n'\mathbf{y}_n.
+$$
+
+Substituting the regression model,
+
+$$
+\begin{aligned}
+\hat{\boldsymbol{\beta}}_n
+&=
+(\mathbf{X}_n'\mathbf{X}_n)^{-1}
+\mathbf{X}_n'
+(\mathbf{X}_n\boldsymbol{\beta}+\mathbf{e}_n)
+\\
+&=
+\boldsymbol{\beta}
++
+(\mathbf{X}_n'\mathbf{X}_n)^{-1}
+\mathbf{X}_n'\mathbf{e}_n.
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta}
+=
+(\mathbf{X}_n'\mathbf{X}_n)^{-1}
+\mathbf{X}_n'\mathbf{e}_n.
+}
+$$
+
+This identity holds for every sample size.
+
+To study its asymptotic behavior, multiply the matrix $\mathbf{X}_n'\mathbf{X}_n$ and the vector $\mathbf{X}_n'\mathbf{e}_n$ by $1/n$:
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta}
+=
+\left(
+\frac{\mathbf{X}_n'\mathbf{X}_n}{n}
+\right)^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right).
+}
+$$
+
+This representation separates the estimation error into two components.
+
+The first depends entirely on the design matrix. The second depends on the relationship between the fixed explanatory variables and the random errors.
+
+We will study the limiting behavior of these components separately.
+
+***
+
+### The Limiting Design Matrix {#asy-limiting-design}
+
+Define
+
+$$
+\mathbf{Q}_n
+=
+\frac{\mathbf{X}_n'\mathbf{X}_n}{n}.
+$$
+
+The matrix $\mathbf{Q}_n$ summarizes the information contributed by the design, normalized by the sample size.
+
+For example, in simple linear regression with an intercept,
+
+$$
+\mathbf{X}_n
+=
+\begin{pmatrix}
+1 & x_1\\
+\vdots & \vdots\\
+1 & x_n
+\end{pmatrix},
+$$
+
+we have
+
+$$
+\mathbf{Q}_n
+=
+\begin{pmatrix}
+1 & \bar{x}_n\\
+\bar{x}_n & \frac{1}{n}\sum_{i=1}^n x_i^2
+\end{pmatrix}.
+$$
+
+Even though the explanatory variables are fixed, these quantities may change as additional observations are included.
+
+A useful condition is that
+
+$$
+\boxed{
+\mathbf{Q}_n
+\longrightarrow
+\mathbf{Q},
+}
+$$
+
+where $\mathbf{Q}$ is a positive-definite matrix.
+
+Because $\mathbf{Q}_n$ is nonrandom, this is ordinary matrix convergence.
+
+The positive-definiteness requirement ensures that the limiting design contains sufficient information to distinguish the coefficients.
+
+In particular, $\mathbf{Q}$ is invertible, and continuity of matrix inversion (Proposition \@ref(prp:asy-continuous-sequences)) gives
+
+$$
+\mathbf{Q}_n^{-1}
+\longrightarrow
+\mathbf{Q}^{-1}.
+$$
+
+This condition will play an important role throughout the chapter.
+
+Notice that we are not requiring the explanatory variables to have a probability distribution. We only require the normalized cross-product matrix of the observed designs to approach a suitable limit.
+
+***
+
+## Consistency of Least Squares {#asy-consistency}
+
+We begin by investigating whether the least-squares estimator approaches the coefficient vector $\boldsymbol{\beta}$ as the sample size increases.
+
+This property is called consistency.
+
+```{definition, asy-consistency, name="Consistency"}
+
+An estimator $\hat{\boldsymbol{\beta}}_n$ is consistent for $\boldsymbol{\beta}$ if
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_n
+\xrightarrow{p}
+\boldsymbol{\beta}
+}
+$$
+
+as $n\rightarrow\infty$.
+
+Equivalently, for every $\varepsilon>0$,
+
+$$
+\mathbb{P}\left(
+\left\|
+\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta}
+\right\|>\varepsilon
+\right)
+\longrightarrow0.
+$$
+
+```
+
+Consistency means that, as the sample size increases, the probability of obtaining an estimate substantially different from the true coefficient vector approaches zero.
+
+This is different from unbiasedness.
+
+An estimator is unbiased if
+
+$$
+\mathbb{E}[\hat{\boldsymbol{\beta}}_n]
+=
+\boldsymbol{\beta},
+$$
+
+for a particular sample size.
+
+Consistency instead concerns the behavior of the estimator as the sample size increases.
+
+Consequently, unbiasedness alone does not guarantee consistency, and consistency does not require an estimator to be unbiased for every finite sample size.
+
+***
+
+### Conditions for Consistency {#asy-consistency-conditions}
+
+Recall that
+
+$$
+\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta}
+=
+\mathbf{Q}_n^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right).
+$$
+
+Suppose that
+
+$$
+\mathbf{Q}_n\longrightarrow\mathbf{Q},
+$$
+
+where $\mathbf{Q}$ is positive definite.
+
+Then, by Proposition \@ref(prp:asy-continuous-sequences),
+
+$$
+\mathbf{Q}_n^{-1}
+\longrightarrow\mathbf{Q}^{-1}.
+$$
+
+Therefore, if
+
+$$
+\boxed{
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\xrightarrow{p}
+\mathbf{0},
+}
+$$
+
+the continuous mapping theorem (Proposition \@ref(prp:asy-continuous-mapping)) gives
+
+$$
+\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta}
+\xrightarrow{p}
+\mathbf{0}.
+$$
+
+Thus,
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_n
+\xrightarrow{p}
+\boldsymbol{\beta}.
+}
+$$
+
+The important question is whether the assumptions already introduced in Chapter 7 are sufficient to establish this convergence.
+
+We will show that they are, provided the design satisfies the preceding limiting condition.
+
+```{proposition, asy-ols-consistency, name="Consistency of Least Squares Under the Mean and Variance Assumptions"}
+
+Consider the sequence of fixed-design regression models
+
+$$
+\mathbf{y}_n
+=
+\mathbf{X}_n\boldsymbol{\beta}
++
+\mathbf{e}_n.
+$$
+
+Suppose that
+
+$$
+\mathbb{E}[\mathbf{e}_n]
+=
+\mathbf{0},
+$$
+
+and
+
+$$
+\mathbb{V}[\mathbf{e}_n]
+=
+\sigma^2\mathbf{I},
+$$
+
+where $0<\sigma^2<\infty$ does not depend on $n$.
+
+Furthermore, suppose that
+
+$$
+\frac{\mathbf{X}_n'\mathbf{X}_n}{n}
+\longrightarrow
+\mathbf{Q},
+$$
+
+where $\mathbf{Q}$ is positive definite.
+
+Then
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_n
+\xrightarrow{p}
+\boldsymbol{\beta}.
+}
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, asy-ols-consistency-proof}
+
+Recall that
+
+$$
+\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta}
+=
+\mathbf{Q}_n^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right).
+$$
+
+By the mean assumption,
+
+$$
+\begin{aligned}
+\mathbb{E}\left[
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right]
+&=
+\frac{\mathbf{X}_n'}{n}
+\mathbb{E}[\mathbf{e}_n]
+\\
+&=
+\mathbf{0}.
+\end{aligned}
+$$
+
+Similarly, by the variance assumption,
+
+$$
+\begin{aligned}
+\mathbb{V}\left[
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right]
+&=
+\frac{1}{n^2}
+\mathbf{X}_n'
+\mathbb{V}[\mathbf{e}_n]
+\mathbf{X}_n
+\\
+&=
+\frac{\sigma^2}{n^2}
+\mathbf{X}_n'\mathbf{X}_n
+\\
+&=
+\frac{\sigma^2}{n}
+\mathbf{Q}_n.
+\end{aligned}
+$$
+
+Because $\mathbf{Q}_n\rightarrow\mathbf{Q}$,
+
+$$
+\frac{\sigma^2}{n}\mathbf{Q}_n
+\longrightarrow
+\mathbf{0}.
+$$
+
+Therefore,
+
+$$
+\begin{aligned}
+\mathbb{E}\left[
+\left\|
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right\|^2
+\right]
+&=
+\operatorname{tr}\left(
+\mathbb{V}\left[
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right]
+\right)
+\\
+&=
+\frac{\sigma^2}{n}
+\operatorname{tr}(\mathbf{Q}_n)
+\\
+&\longrightarrow0.
+\end{aligned}
+$$
+
+By Proposition \@ref(prp:asy-mean-square-convergence) (*A Sufficient Condition for Convergence in Probability*), applied to the random vector $\mathbf{X}_n'\mathbf{e}_n/n$,
+
+$$
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\xrightarrow{p}
+\mathbf{0}.
+$$
+
+Furthermore,
+
+$$
+\mathbf{Q}_n^{-1}
+\longrightarrow
+\mathbf{Q}^{-1},
+$$
+
+by continuity of matrix inversion (Proposition \@ref(prp:asy-continuous-sequences)), since $\mathbf{Q}$ is positive definite.
+
+Combining these results using Proposition \@ref(prp:asy-continuous-mapping),
+
+$$
+\begin{aligned}
+\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta}
+&=
+\mathbf{Q}_n^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right)
+\\
+&\xrightarrow{p}
+\mathbf{Q}^{-1}\mathbf{0}
+\\
+&=
+\mathbf{0}.
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+\hat{\boldsymbol{\beta}}_n
+\xrightarrow{p}
+\boldsymbol{\beta}.
+$$
+
+```
+
+</details>
+
+The proposition establishes consistency under the mean and variance assumptions introduced in Chapter 7, together with a condition on the sequence of design matrices.
+
+Notice that we did not assume that the regression errors are normally distributed.
+
+Furthermore, the result did not require the errors to be independent. The covariance assumption
+
+$$
+\mathbb{V}[\mathbf{e}_n]
+=
+\sigma^2\mathbf{I}
+$$
+
+is sufficient for the argument.
+
+This is an important distinction. The conditions needed for consistency may be weaker than those needed to establish an asymptotic distribution.
+
+***
+
+### The Role of the Mean Assumption {#asy-consistency-mean}
+
+The preceding proposition provides sufficient conditions for consistency, but these conditions are not necessary.
+
+Recall that the estimation error satisfies
+
+$$
+\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta}
+=
+\mathbf{Q}_n^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right).
+$$
+
+Under the limiting design condition, consistency is equivalent to
+
+$$
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\xrightarrow{p}
+\mathbf{0}.
+$$
+
+Thus, consistency does not require every error to have expectation zero.
+
+It requires the combined contribution of the errors to the coefficient estimates to disappear as the sample size increases.
+
+This observation will become important when we later investigate the consequences of relaxing the mean assumption.
+
+For now, we will retain the assumptions from Chapter 7 and proceed to investigate the distribution of the estimation error.
+
+***
+
+## Asymptotic Normality {#asy-asymptotic-normality}
+
+We have established that the least-squares estimator approaches $\boldsymbol{\beta}$ as the sample size increases.
+
+However, consistency does not describe the distribution of the estimation error.
+
+Recall that Chapter 8 established the exact normal distribution
+
+$$
+\hat{\boldsymbol{\beta}}_n
+\sim
+N\left(
+\boldsymbol{\beta},
+\sigma^2(\mathbf{X}_n'\mathbf{X}_n)^{-1}
+\right)
+$$
+
+under the assumption of normally distributed regression errors.
+
+What happens when the errors are not normally distributed?
+
+We can investigate this question by examining the same estimation-error identity.
+
+Recall that
+
+$$
+\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta}
+=
+\mathbf{Q}_n^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right).
+$$
+
+Multiplying by $\sqrt{n}$ gives
+
+$$
+\boxed{
+\sqrt{n}
+(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+=
+\mathbf{Q}_n^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{\sqrt{n}}
+\right).
+}
+$$
+
+This is again an exact algebraic identity.
+
+The difference is that we have now multiplied the estimation error by $\sqrt{n}$.
+
+This normalization is useful because the variance of the estimator decreases at a rate proportional to $1/n$.
+
+Indeed, under the variance assumption,
+
+$$
+\begin{aligned}
+\mathbb{V}\left[
+\sqrt{n}
+(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+\right]
+&=
+n\sigma^2
+(\mathbf{X}_n'\mathbf{X}_n)^{-1}
+\\
+&=
+\sigma^2\mathbf{Q}_n^{-1}.
+\end{aligned}
+$$
+
+Therefore, if
+
+$$
+\mathbf{Q}_n\longrightarrow\mathbf{Q},
+$$
+
+then
+
+$$
+\mathbb{V}\left[
+\sqrt{n}
+(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+\right]
+\longrightarrow
+\sigma^2\mathbf{Q}^{-1}.
+$$
+
+The variance of the normalized estimation error approaches a nonzero limit.
+
+This suggests that the distribution of the normalized estimator may also approach a nondegenerate limiting distribution.
+
+However, convergence of the covariance matrix alone does not establish convergence in distribution.
+
+We need an additional argument.
+
+***
+
+### The Central Limit Theorem for the Estimation Error {#asy-ols-clt}
+
+Recall that $X_{i,n}$ denotes the $i$th row of $\mathbf{X}_n$.
+
+Then
+
+$$
+\frac{\mathbf{X}_n'\mathbf{e}_n}{\sqrt{n}}
+=
+\frac{1}{\sqrt{n}}
+\sum_{i=1}^n
+X_{i,n}'e_{i,n}.
+$$
+
+Thus, the second component in the normalized estimation-error expression is a sum of random vectors.
+
+This suggests using a central limit theorem (see Section \@ref(asy-central-limit-tools)).
+
+In particular, suppose that
+
+$$
+\boxed{
+\frac{1}{\sqrt{n}}
+\sum_{i=1}^n
+X_{i,n}'e_{i,n}
+\xrightarrow{d}
+N(\mathbf{0},\mathbf{S}),
+}
+$$
+
+where $\mathbf{S}$ is a finite covariance matrix.
+
+This is a convergence condition on the weighted sum of the regression errors.
+
+It does not require the individual errors to be normally distributed.
+
+Different assumptions on the errors and the design may be used to establish this central limit theorem.
+
+We can now derive the asymptotic distribution of the least-squares estimator.
+
+```{proposition, asy-ols-asymptotic-normality, name="Asymptotic Normality of Least Squares"}
+
+Consider the sequence of fixed-design regression models
+
+$$
+\mathbf{y}_n
+=
+\mathbf{X}_n\boldsymbol{\beta}
++
+\mathbf{e}_n.
+$$
+
+Suppose that
+
+$$
+\frac{\mathbf{X}_n'\mathbf{X}_n}{n}
+\longrightarrow
+\mathbf{Q},
+$$
+
+where $\mathbf{Q}$ is positive definite.
+
+Furthermore, suppose that
+
+$$
+\frac{\mathbf{X}_n'\mathbf{e}_n}{\sqrt{n}}
+\xrightarrow{d}
+N(\mathbf{0},\mathbf{S}),
+$$
+
+where $\mathbf{S}$ is finite and nonnegative definite.
+
+Then
+
+$$
+\boxed{
+\sqrt{n}
+(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+\xrightarrow{d}
+N\left(
+\mathbf{0},
+\mathbf{Q}^{-1}
+\mathbf{S}
+\mathbf{Q}^{-1}
+\right).
+}
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, asy-ols-asymptotic-normality-proof}
+
+Recall that
+
+$$
+\sqrt{n}
+(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+=
+\mathbf{Q}_n^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{\sqrt{n}}
+\right).
+$$
+
+By assumption,
+
+$$
+\mathbf{Q}_n\longrightarrow\mathbf{Q}.
+$$
+
+Because $\mathbf{Q}$ is positive definite, Proposition \@ref(prp:asy-continuous-sequences) gives
+
+$$
+\mathbf{Q}_n^{-1}
+\longrightarrow
+\mathbf{Q}^{-1}.
+$$
+
+Furthermore,
+
+$$
+\frac{\mathbf{X}_n'\mathbf{e}_n}{\sqrt{n}}
+\xrightarrow{d}
+N(\mathbf{0},\mathbf{S}).
+$$
+
+By Slutsky's theorem (Proposition \@ref(prp:asy-slutsky)),
+
+$$
+\begin{aligned}
+&
+\mathbf{Q}_n^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{\sqrt{n}}
+\right)
+\\
+&\xrightarrow{d}
+\mathbf{Q}^{-1}\mathbf{v},
+\end{aligned}
+$$
+
+where
+
+$$
+\mathbf{v}\sim N(\mathbf{0},\mathbf{S}).
+$$
+
+Since a linear transformation of a multivariate normal random vector is also multivariate normal,
+
+$$
+\mathbf{Q}^{-1}\mathbf{v}
+\sim
+N\left(
+\mathbf{0},
+\mathbf{Q}^{-1}
+\mathbf{S}
+(\mathbf{Q}^{-1})'
+\right).
+$$
+
+Because $\mathbf{Q}$ is symmetric and positive definite, its inverse is symmetric.
+
+Therefore,
+
+$$
+\boxed{
+\sqrt{n}
+(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+\xrightarrow{d}
+N\left(
+\mathbf{0},
+\mathbf{Q}^{-1}
+\mathbf{S}
+\mathbf{Q}^{-1}
+\right).
+}
+$$
+
+```
+
+</details>
+
+The proposition establishes asymptotic normality under a condition on the limiting distribution of the weighted error sum.
+
+The argument itself does not require independent errors, identical distributions, or constant variance.
+
+These assumptions may be useful for establishing the central limit theorem, but they are not part of the algebraic derivation.
+
+In the classical variance setting, the limiting covariance of the weighted errors may take the form
+
+$$
+\mathbf{S}=\sigma^2\mathbf{Q}.
+$$
+
+When this holds, the asymptotic covariance simplifies to $\sigma^2\mathbf{Q}^{-1}$, matching the covariance structure derived in Chapter 7. However, the classical variance assumptions alone do not guarantee the required central limit theorem. We will treat the convergence in distribution of the weighted error sum as an explicit assumption, leaving the conditions that establish particular central limit theorems outside the scope of this chapter.
+
+***
+
+## Asymptotic Statistical Inference {#asy-asymptotic-inference}
+
+The preceding results provide a way to approximate the distribution of the least-squares estimator without assuming normally distributed regression errors.
+
+For the statistical inference developed below, consider the special case in which the weighted error sum satisfies the central limit theorem with
+
+$$
+\mathbf{S}=\sigma^2\mathbf{Q},
+\qquad 0<\sigma^2<\infty.
+$$
+
+Then Proposition \@ref(prp:asy-ols-asymptotic-normality) gives
+
+$$
+\boxed{
+\sqrt{n}
+(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+\xrightarrow{d}
+N(\mathbf{0},\sigma^2\mathbf{Q}^{-1}).
+}
+$$
+
+This special case is compatible with the classical variance assumptions, but the limiting normal distribution is an additional requirement. The covariance assumption alone does not imply it.
+
+For a sufficiently large sample size, this suggests the approximation
+
+$$
+\hat{\boldsymbol{\beta}}_n
+\approx
+N\left(
+\boldsymbol{\beta},
+\frac{\sigma^2}{n}\mathbf{Q}^{-1}
+\right).
+$$
+
+Because
+
+$$
+\mathbf{Q}_n^{-1}
+\longrightarrow
+\mathbf{Q}^{-1},
+$$
+
+we can use the observed fixed-design matrix to obtain the familiar large-sample approximation
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_n
+\approx
+N\left(
+\boldsymbol{\beta},
+\sigma^2(\mathbf{X}_n'\mathbf{X}_n)^{-1}
+\right).
+}
+$$
+
+Notice that the covariance expression is identical to the one derived in Chapter 7.
+
+The difference lies in the justification for the distribution.
+
+Under normally distributed errors, the distribution obtained in Chapter 8 is exact for every sample size.
+
+Under the present assumptions, normality is a limiting result and provides an approximation for sufficiently large samples.
+
+***
+
+### Estimating the Error Variance {#asy-estimating-variance}
+
+To use the asymptotic distribution for inference, we need an estimator of $\sigma^2$.
+
+Recall from Chapter 7 that
+
+$$
+\hat{\sigma}_n^2
+=
+\frac{
+\hat{\mathbf{e}}_n'\hat{\mathbf{e}}_n
+}{
+n-p
+},
+$$
+
+where
+
+$$
+\hat{\mathbf{e}}_n
+=
+\mathbf{y}_n
+-
+\mathbf{X}_n\hat{\boldsymbol{\beta}}_n.
+$$
+
+Under the mean and variance assumptions from Chapter 7, this estimator is unbiased.
+
+However, for asymptotic inference, we also need it to be consistent.
+
+Recall that
+
+$$
+\hat{\mathbf{e}}_n
+=
+(\mathbf{I}-\mathbf{H}_n)\mathbf{e}_n,
+$$
+
+where
+
+$$
+\mathbf{H}_n
+=
+\mathbf{X}_n
+(\mathbf{X}_n'\mathbf{X}_n)^{-1}
+\mathbf{X}_n'.
+$$
+
+Since $\mathbf{H}_n$ is symmetric and idempotent,
+
+$$
+\begin{aligned}
+\hat{\mathbf{e}}_n'\hat{\mathbf{e}}_n
+&=
+\mathbf{e}_n'
+(\mathbf{I}-\mathbf{H}_n)
+\mathbf{e}_n
+\\
+&=
+\mathbf{e}_n'\mathbf{e}_n
+-
+\mathbf{e}_n'\mathbf{H}_n\mathbf{e}_n.
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+\boxed{
+\hat{\sigma}_n^2
+=
+\frac{n}{n-p}
+\left(
+\frac{\mathbf{e}_n'\mathbf{e}_n}{n}
+-
+\frac{\mathbf{e}_n'\mathbf{H}_n\mathbf{e}_n}{n}
+\right).
+}
+$$
+
+This decomposition allows us to investigate the limiting behavior of the variance estimator.
+
+```{proposition, asy-variance-consistency, name="Consistency of the Error Variance Estimator"}
+
+Consider the fixed-design regression model
+
+$$
+\mathbf{y}_n
+=
+\mathbf{X}_n\boldsymbol{\beta}
++
+\mathbf{e}_n,
+$$
+
+where $\mathbf{X}_n$ has full column rank and $p$ is fixed.
+
+Suppose that
+
+$$
+\mathbb{E}[\mathbf{e}_n]=\mathbf{0},
+$$
+
+$$
+\mathbb{V}[\mathbf{e}_n]=\sigma^2\mathbf{I},
+$$
+
+and
+
+$$
+\frac{1}{n}
+\sum_{i=1}^n e_{i,n}^2
+\xrightarrow{p}
+\sigma^2.
+$$
+
+Then
+
+$$
+\boxed{
+\hat{\sigma}_n^2
+\xrightarrow{p}
+\sigma^2.
+}
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, asy-variance-consistency-proof}
+
+We have
+
+$$
+\hat{\sigma}_n^2
+=
+\frac{n}{n-p}
+\left(
+\frac{\mathbf{e}_n'\mathbf{e}_n}{n}
+-
+\frac{\mathbf{e}_n'\mathbf{H}_n\mathbf{e}_n}{n}
+\right).
+$$
+
+By assumption,
+
+$$
+\frac{\mathbf{e}_n'\mathbf{e}_n}{n}
+\xrightarrow{p}
+\sigma^2.
+$$
+
+Consider the second term.
+
+Because $\mathbf{H}_n$ is an orthogonal projection matrix,
+
+$$
+\mathbf{e}_n'\mathbf{H}_n\mathbf{e}_n
+\geq0.
+$$
+
+Furthermore,
+
+$$
+\begin{aligned}
+\mathbb{E}[
+\mathbf{e}_n'\mathbf{H}_n\mathbf{e}_n
+]
+&=
+\operatorname{tr}\left(
+\mathbf{H}_n
+\mathbb{E}[\mathbf{e}_n\mathbf{e}_n']
+\right)
+\\
+&=
+\sigma^2\operatorname{tr}(\mathbf{H}_n)
+\\
+&=
+\sigma^2p.
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+\mathbb{E}\left[
+\frac{
+\mathbf{e}_n'\mathbf{H}_n\mathbf{e}_n
+}{n}
+\right]
+=
+\frac{\sigma^2p}{n}
+\longrightarrow0.
+$$
+
+Because $\mathbf{e}_n'\mathbf{H}_n\mathbf{e}_n/n$ is nonnegative and its expectation approaches zero, Markov's inequality (recalled in Section \@ref(asy-prerequisites)) implies
+
+$$
+\frac{\mathbf{e}_n'\mathbf{H}_n\mathbf{e}_n}{n}
+\xrightarrow{p}0.
+$$
+
+Finally, because $p$ is fixed,
+
+$$
+\frac{n}{n-p}\longrightarrow1.
+$$
+
+Combining these results,
+
+$$
+\begin{aligned}
+\hat{\sigma}_n^2
+&=
+\frac{n}{n-p}
+\left(
+\frac{\mathbf{e}_n'\mathbf{e}_n}{n}
+-
+\frac{\mathbf{e}_n'\mathbf{H}_n\mathbf{e}_n}{n}
+\right)
+\\
+&\xrightarrow{p}
+1(\sigma^2-0)
+\\
+&=
+\sigma^2.
+\end{aligned}
+$$
+
+```
+
+</details>
+
+The proposition establishes consistency of the usual error variance estimator under a condition on the average squared errors.
+
+For example, this condition follows from a law of large numbers when the errors are independent, have common variance $\sigma^2$, and their fourth moments are uniformly bounded.
+
+Thus, when the required convergence of the average squared errors holds, the usual estimator of $\sigma^2$ is consistent and can be used in the asymptotic inference developed below.
+
+***
+
+### From Exact Student's $t$ Inference to Asymptotic Normal Inference {#asy-exact-vs-asymptotic}
+
+In Chapter 8, the normality assumption provided more than an exact normal distribution for the least-squares estimator. It also allowed us to establish independence between the estimated coefficients and the residual variance estimator.
+
+Recall that
+
+$$
+\hat{\boldsymbol{\beta}}_n
+=
+\boldsymbol{\beta}
++
+(\mathbf{X}_n'\mathbf{X}_n)^{-1}\mathbf{X}_n'\mathbf{e}_n,
+$$
+
+and
+
+$$
+\hat{\mathbf{e}}_n
+=(\mathbf{I}-\mathbf{H}_n)\mathbf{e}_n.
+$$
+
+Under the classical variance assumption,
+
+$$
+\begin{aligned}
+\mathbb{C}[\hat{\boldsymbol{\beta}}_n,\hat{\mathbf{e}}_n]
+&=
+(\mathbf{X}_n'\mathbf{X}_n)^{-1}
+\mathbf{X}_n'\mathbb{V}[\mathbf{e}_n]
+(\mathbf{I}-\mathbf{H}_n)
+\\
+&=
+\sigma^2(\mathbf{X}_n'\mathbf{X}_n)^{-1}
+\mathbf{X}_n'(\mathbf{I}-\mathbf{H}_n)
+\\
+&=\mathbf{0}.
+\end{aligned}
+$$
+
+This zero covariance holds without normality. However, it does not generally imply independence.
+
+When the errors are jointly normal, $\hat{\boldsymbol{\beta}}_n$ and $\hat{\mathbf{e}}_n$ are jointly normal linear transformations of the error vector. In this case, zero covariance implies independence. Since $\hat{\sigma}_n^2$ is a function of the residual vector,
+
+$$
+\hat{\boldsymbol{\beta}}_n
+\quad\text{and}\quad
+\hat{\sigma}_n^2
+$$
+
+are also independent. Together with the exact chi-square distribution
+
+$$
+\frac{(n-p)\hat{\sigma}_n^2}{\sigma^2}
+\sim\chi^2_{n-p},
+$$
+
+this produces the exact Student's $t$ distribution for the usual standardized coefficient estimator.
+
+Without normally distributed errors, neither independence nor the chi-square distribution is guaranteed. Nevertheless, asymptotic inference can still be justified.
+
+Suppose that
+
+$$
+\sqrt{n}
+(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+\xrightarrow{d}
+N(\mathbf{0},\sigma^2\mathbf{Q}^{-1}),
+$$
+
+and
+
+$$
+\hat{\sigma}_n^2\xrightarrow{p}\sigma^2.
+$$
+
+For any fixed, nonzero vector $\mathbf{c}$, define
+
+$$
+Z_n
+=
+\frac{
+\sqrt{n}\,\mathbf{c}'(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+}{
+\sigma\sqrt{\mathbf{c}'\mathbf{Q}_n^{-1}\mathbf{c}}
+}.
+$$
+
+By Proposition \@ref(prp:asy-ols-asymptotic-normality) and the convergence of $\mathbf{Q}_n^{-1}$,
+
+$$
+Z_n\xrightarrow{d}N(0,1).
+$$
+
+By Proposition \@ref(prp:asy-variance-consistency) and the continuous mapping theorem (Proposition \@ref(prp:asy-continuous-mapping)),
+
+$$
+\frac{\sigma}{\hat{\sigma}_n}\xrightarrow{p}1.
+$$
+
+Therefore, the studentized statistic can be written as
+
+$$
+\begin{aligned}
+T_n
+&=
+\frac{
+\mathbf{c}'(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+}{
+\hat{\sigma}_n\sqrt{\mathbf{c}'(\mathbf{X}_n'\mathbf{X}_n)^{-1}\mathbf{c}}
+}
+\\
+&=
+Z_n\frac{\sigma}{\hat{\sigma}_n}
+\xrightarrow{d}N(0,1),
+\end{aligned}
+$$
+
+where the last step follows from Slutsky's theorem (Proposition \@ref(prp:asy-slutsky)).
+
+**The important distinction is that Slutsky's theorem (Proposition \@ref(prp:asy-slutsky)) does not require independence between $Z_n$ and $\hat{\sigma}_n$.** It only requires the first factor to converge in distribution and the second to converge in probability to a constant.
+
+In fact, without normality, the properly scaled fluctuations of $\hat{\boldsymbol{\beta}}_n$ and $\hat{\sigma}_n^2$ need not be asymptotically independent. Fortunately, this stronger result is unnecessary for the statistical inference developed here.
+
+***
+
+### Confidence Intervals and Hypothesis Tests {#asy-asymptotic-intervals}
+
+We have shown that, under asymptotic normality and consistency of the error variance estimator, for a fixed nonzero vector $\mathbf{c}$,
+
+$$
+\boxed{
+\frac{
+\mathbf{c}'(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+}{
+\hat{\sigma}_n
+\sqrt{\mathbf{c}'(\mathbf{X}_n'\mathbf{X}_n)^{-1}\mathbf{c}}
+}
+\xrightarrow{d}N(0,1).
+}
+$$
+
+Choosing $\mathbf{c}$ to select the $j$th coefficient gives
+
+$$
+\frac{
+\hat{\beta}_{j,n}-\beta_j
+}{
+\hat{\sigma}_n
+\sqrt{[(\mathbf{X}_n'\mathbf{X}_n)^{-1}]_{jj}}
+}
+\xrightarrow{d}N(0,1).
+$$
+
+Consequently, an approximate confidence interval for $\beta_j$ with confidence level $1-\delta$ is
+
+$$
+\boxed{
+\hat{\beta}_{j,n}
+\pm
+z_{1-\delta/2}
+\hat{\sigma}_n
+\sqrt{[(\mathbf{X}_n'\mathbf{X}_n)^{-1}]_{jj}}.
+}
+$$
+
+Similarly, for testing
+
+$$
+H_0:\beta_j=\beta_{j,0},
+$$
+
+the statistic
+
+$$
+\boxed{
+T_n
+=
+\frac{
+\hat{\beta}_{j,n}-\beta_{j,0}
+}{
+\hat{\sigma}_n
+\sqrt{[(\mathbf{X}_n'\mathbf{X}_n)^{-1}]_{jj}}
+}
+}
+$$
+
+has an asymptotic standard normal distribution under the null hypothesis. This gives approximate rejection regions and $p$-values using standard normal probabilities.
+
+The statistic has the same algebraic form as the one studied in Chapter 8. Under normally distributed errors, it follows an exact Student's $t$ distribution with $n-p$ degrees of freedom. Without normality, its finite-sample distribution need not be Student's $t$, even though its limiting distribution is standard normal.
+
+Notice also that, with $p$ fixed,
+
+$$
+t_{n-p}\xrightarrow{d}N(0,1).
+$$
+
+Thus, the exact normal-theory results and the asymptotic results become increasingly similar as the sample size increases, although the assumptions justifying them are different.
+
+The asymptotic confidence intervals have coverage probabilities approaching the nominal confidence level. They do not necessarily achieve exact coverage for a particular finite sample size.
+
+***
+
+## Example: An Increasing Fixed Design {#asy-fixed-design-example}
+
+To illustrate the preceding results, consider simple linear regression with an intercept:
+
+$$
+y_i
+=
+\beta_0+\beta_1x_i+e_i,
+$$
+
+where the explanatory variables are fixed at
+
+$$
+x_i=\frac{i}{n},
+\qquad
+i=1,\ldots,n.
+$$
+
+Thus, for each sample size, the explanatory variables are equally spaced over the interval $(0,1]$.
+
+Here $x_i$ denotes the scalar explanatory-variable value, while $X_{i,n}=(1,x_i)$ denotes the entire $i$th row of the design matrix.
+
+The design matrix is
+
+$$
+\mathbf{X}_n
+=
+\begin{pmatrix}
+1 & 1/n\\
+1 & 2/n\\
+\vdots & \vdots\\
+1 & 1
+\end{pmatrix}.
+$$
+
+The normalized cross-product matrix is
+
+$$
+\mathbf{Q}_n
+=
+\frac{\mathbf{X}_n'\mathbf{X}_n}{n}
+=
+\begin{pmatrix}
+1 &
+\frac{1}{n}\sum_{i=1}^n x_i
+\\
+\frac{1}{n}\sum_{i=1}^n x_i &
+\frac{1}{n}\sum_{i=1}^n x_i^2
+\end{pmatrix}.
+$$
+
+Using the familiar formulas
+
+$$
+\sum_{i=1}^n i
+=
+\frac{n(n+1)}{2},
+$$
+
+and
+
+$$
+\sum_{i=1}^n i^2
+=
+\frac{n(n+1)(2n+1)}{6},
+$$
+
+we obtain
+
+$$
+\frac{1}{n}\sum_{i=1}^n x_i
+=
+\frac{n+1}{2n}
+\longrightarrow\frac12,
+$$
+
+and
+
+$$
+\frac{1}{n}\sum_{i=1}^n x_i^2
+=
+\frac{(n+1)(2n+1)}{6n^2}
+\longrightarrow\frac13.
+$$
+
+Therefore,
+
+$$
+\boxed{
+\mathbf{Q}_n
+\longrightarrow
+\mathbf{Q}
+=
+\begin{pmatrix}
+1 & 1/2\\
+1/2 & 1/3
+\end{pmatrix}.
+}
+$$
+
+Because
+
+$$
+\det(\mathbf{Q})
+=
+\frac13-\frac14
+=
+\frac1{12}>0,
+$$
+
+the matrix $\mathbf{Q}$ is positive definite.
+
+Since $0<x_i\leq1$, the explanatory-variable vectors are uniformly bounded. In this setting, a weighted central limit theorem can often be justified for error distributions with sufficiently controlled moments.
+
+For the example, suppose that the errors have mean zero and constant variance $\sigma^2$, and that the weighted error sum satisfies
+
+$$
+\frac{\mathbf{X}_n'\mathbf{e}_n}{\sqrt{n}}
+\xrightarrow{d}
+N(\mathbf{0},\sigma^2\mathbf{Q}).
+$$
+
+Then the preceding asymptotic normality proposition gives the limiting distribution of the least-squares estimator.
+
+Therefore,
+
+$$
+\sqrt{n}
+\begin{pmatrix}
+\hat{\beta}_{0,n}-\beta_0\\
+\hat{\beta}_{1,n}-\beta_1
+\end{pmatrix}
+\xrightarrow{d}
+N(
+\mathbf{0},
+\sigma^2\mathbf{Q}^{-1}
+).
+$$
+
+Since
+
+$$
+\mathbf{Q}^{-1}
+=
+\begin{pmatrix}
+4 & -6\\
+-6 & 12
+\end{pmatrix},
+$$
+
+we obtain
+
+$$
+\boxed{
+\sqrt{n}
+\begin{pmatrix}
+\hat{\beta}_{0,n}-\beta_0\\
+\hat{\beta}_{1,n}-\beta_1
+\end{pmatrix}
+\xrightarrow{d}
+N\left(
+\mathbf{0},
+\sigma^2
+\begin{pmatrix}
+4 & -6\\
+-6 & 12
+\end{pmatrix}
+\right).
+}
+$$
+
+In particular,
+
+$$
+\boxed{
+\sqrt{n}
+(\hat{\beta}_{1,n}-\beta_1)
+\xrightarrow{d}
+N(0,12\sigma^2).
+}
+$$
+
+Thus, for large sample sizes, the slope estimator has an approximate normal distribution with variance
+
+$$
+\frac{12\sigma^2}{n}.
+$$
+
+This result holds even when the individual errors are not normally distributed.
+
+The example illustrates how a deterministic sequence of explanatory-variable values can satisfy the conditions required for asymptotic inference.
+
+No stochastic model for the explanatory variables was needed.
+
+***
+
+## A Stochastic Interpretation of the Convergence Conditions {#asy-random-design-interpretation}
+
+Throughout the chapter, the design matrices have been treated as fixed. This allowed us to establish results using conditions directly on the sequence $\mathbf{X}_n$ and the regression errors, without specifying a probability distribution for the explanatory variables.
+
+Nevertheless, in many applications the explanatory variables arise from a random mechanism. This can provide an intuitive justification for the convergence conditions used in the chapter.
+
+For example, suppose that the observed explanatory-variable rows $X_1,X_2,\ldots$ are generated independently from the same distribution, with finite second moments. Let $X$ denote a generic random row having this distribution. Under an appropriate law of large numbers (see Section \@ref(asy-convergence-probability)),
+
+$$
+\frac{1}{n}\sum_{i=1}^n X_i'X_i
+\xrightarrow{p}
+\mathbb{E}[X'X].
+$$
+
+Thus, if $\mathbb{E}[X'X]$ is positive definite, the random-design analogue of our limiting design condition arises naturally. Unlike the fixed-design case, the convergence is now in probability rather than ordinary matrix convergence.
+
+Similarly, if the observed pairs $(X_i,e_i)$ are independent and identically distributed, have suitable finite moments, and satisfy
+
+$$
+\mathbb{E}[X'e]=\mathbf{0},
+$$
+
+then a law of large numbers can imply
+
+$$
+\frac{1}{n}\sum_{i=1}^n X_i'e_i
+\xrightarrow{p}\mathbf{0}.
+$$
+
+Under additional conditions, a central limit theorem may also establish a limiting normal distribution for the normalized sum of these products. The same algebraic expression for the least-squares estimator can then be used to derive consistency and asymptotic normality.
+
+These observations explain why the convergence assumptions in this chapter are plausible in many studies involving random sampling. However, introducing random explanatory variables also requires specifying their joint distribution with the errors, and the corresponding asymptotic arguments must account for this additional randomness.
+
+We will not develop that more general framework here. The fixed-design results already provide the mathematical tools needed for the subsequent chapters, while the stochastic interpretation offers a connection to other common data-generating mechanisms.
+
+***
+
+## Synthesis {#asy-synthesis}
+
+In this chapter, we extended the statistical properties of least squares developed in Chapters 7 and 8 by investigating the behavior of the estimator as the sample size increases.
+
+Throughout the development, the explanatory variables remained fixed. We introduced a sequence of design matrices rather than a probability distribution for the explanatory variables.
+
+The main mathematical starting point was the exact identity
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta}
+=
+\left(
+\frac{\mathbf{X}_n'\mathbf{X}_n}{n}
+\right)^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\right).
+}
+$$
+
+This expression reveals that the behavior of the least-squares estimator depends on the design matrix and the combined contribution of the regression errors.
+
+### Consistency
+
+We first established that, under the limiting design condition
+
+$$
+\frac{\mathbf{X}_n'\mathbf{X}_n}{n}
+\longrightarrow
+\mathbf{Q},
+$$
+
+where $\mathbf{Q}$ is positive definite, consistency follows if
+
+$$
+\frac{\mathbf{X}_n'\mathbf{e}_n}{n}
+\xrightarrow{p}
+\mathbf{0}.
+$$
+
+We showed that the mean and variance assumptions from Chapter 7 are sufficient to establish this convergence.
+
+Thus, consistency does not require normally distributed errors.
+
+It requires the effects of the regression errors on the coefficient estimates to disappear as the sample size increases.
+
+### Asymptotic Normality
+
+We then investigated the distribution of the estimation error.
+
+By multiplying the estimation error by $\sqrt{n}$, we obtained
+
+$$
+\boxed{
+\sqrt{n}
+(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+=
+\left(
+\frac{\mathbf{X}_n'\mathbf{X}_n}{n}
+\right)^{-1}
+\left(
+\frac{\mathbf{X}_n'\mathbf{e}_n}{\sqrt{n}}
+\right).
+}
+$$
+
+This expression allowed us to establish asymptotic normality when the normalized weighted sum of the errors satisfies a central limit theorem.
+
+In general, if the weighted error sum converges in distribution to $N(\mathbf{0},\mathbf{S})$, then
+
+$$
+\boxed{
+\sqrt{n}(\hat{\boldsymbol{\beta}}_n-\boldsymbol{\beta})
+\xrightarrow{d}
+N(\mathbf{0},\mathbf{Q}^{-1}\mathbf{S}\mathbf{Q}^{-1}).
+}
+$$
+
+When $\mathbf{S}=\sigma^2\mathbf{Q}$, this simplifies to the familiar covariance structure from Chapter 7.
+
+The normal distribution therefore arises as a limiting approximation, even when the individual errors are not normally distributed.
+
+This result connects directly to the normality assumption introduced in Chapter 8, but provides a different justification for using normal distributions in regression inference.
+
+### Statistical Inference
+
+Finally, we established that the usual estimator of the error variance is consistent under appropriate conditions.
+
+This allowed us to replace the unknown variance with its estimate and derive approximately standard normal test statistics using Slutsky's theorem (Proposition \@ref(prp:asy-slutsky)). Unlike the exact Student's $t$ derivation in Chapter 8, this does not require independence between the coefficient estimator and the estimated variance.
+
+The resulting confidence intervals and hypothesis tests have the same general forms as those introduced in Chapter 8, but their validity is asymptotic rather than exact.
+
+The distinction between the two approaches is important:
+
+- Exact normal-theory inference relies on assumptions sufficient to establish finite-sample sampling distributions.
+- Asymptotic inference relies on conditions sufficient to establish limiting distributions as the sample size increases.
+
+These approaches are complementary rather than competing.
+
+### Connection to Random Designs and the Following Chapters
+
+We also discussed how familiar random sampling mechanisms can motivate the empirical moment convergence conditions, while retaining the fixed-design framework for the formal results.
+
+The asymptotic results also provide tools for investigating what happens when the classical regression assumptions are relaxed.
+
+For example, the consistency of least squares depends on the convergence of the normalized estimation error, while asymptotic normality depends on the limiting distribution of its weighted error sum.
+
+These conditions can sometimes be established even when the variance or mean assumptions from Chapter 7 do not hold in their original forms.
+
+In the following chapters, we will investigate these possibilities.
+
+First, we will study the consequences of relaxing the constant-variance assumption, focusing on heteroscedasticity and its implications for the covariance matrix and statistical inference.
+
+We will then study what happens when the mean assumption fails and whether alternative estimation methods, including instrumental variables, can recover the coefficients of the data-generating mechanism.
+
+The general lesson of this chapter is that **the assumptions needed to establish a particular statistical property should be distinguished from assumptions that merely provide a convenient way to derive it**.
+
+Asymptotic theory allows us to investigate these distinctions while retaining the linear regression framework developed in the previous chapters.

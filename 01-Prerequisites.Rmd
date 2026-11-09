@@ -981,6 +981,43 @@ a_{n1} & a_{n2} & \cdots & a_{nn}
 = 2 \bA
 $$
 
+### Continuous Functions and Convergent Sequences {#asy-continuity-sequences}
+
+```{proposition, asy-continuous-sequences, name="Continuity and Convergence of Sequences"}
+
+Let $\{a_n\}$ be a sequence satisfying
+
+$$
+a_n\longrightarrow a.
+$$
+
+Suppose that $g$ is a function continuous at $a$.
+
+Then
+
+$$
+\boxed{
+g(a_n)\longrightarrow g(a).
+}
+$$
+
+More generally, if $\{\mathbf{a}_n\}$ is a sequence of vectors satisfying
+
+$$
+\mathbf{a}_n\longrightarrow\mathbf{a},
+$$
+
+and $g$ is a function continuous at $\mathbf{a}$, then
+
+$$
+\boxed{
+g(\mathbf{a}_n)\longrightarrow g(\mathbf{a}).
+}
+$$
+
+```
+
+***
 
 
 ## Probability
@@ -1299,6 +1336,654 @@ $$
 3. **Hypothesis Testing:** The F-distribution appears in tests of equality of variances (Levene’s test or Bartlett’s test).
 
 The F-distribution is essential in statistics for comparing variances and testing model adequacy, making it a cornerstone of many inferential procedures.
+
+***
+
+### Inequalities
+
+```{proposition, asy-markov-inequality, name="Markov's Inequality"}
+
+Let $y$ be a nonnegative random variable such that $\mathbb{E}[y]<\infty$.
+
+Then, for every $a>0$,
+
+$$
+\boxed{
+\mathbb{P}(y\geq a)
+\leq
+\frac{\mathbb{E}[y]}{a}.
+}
+$$
+
+```
+
+```{proposition, asy-chebyshev-inequality, name="Chebyshev's Inequality"}
+
+Let $y$ be a random variable with finite mean $\mu=\mathbb{E}[y]$ and finite variance $\sigma^2=\mathbb{V}[y]$.
+
+Then, for every $\varepsilon>0$,
+
+$$
+\boxed{
+\mathbb{P}(|y-\mu|\geq\varepsilon)
+\leq
+\frac{\sigma^2}{\varepsilon^2}.
+}
+$$
+
+```
+
+### Convergence of Random Variables {#asy-prerequisites}
+
+#### Convergence in Probability {#asy-convergence-probability}
+
+Consider a sequence of random variables $y_1,y_2,\ldots$ and a constant $a$.
+
+Intuitively, we say that $y_n$ converges in probability to $a$ if, as $n$ increases, the probability that $y_n$ differs substantially from $a$ approaches zero.
+
+```{definition, asy-convergence-probability-definition, name="Convergence in Probability"}
+
+A sequence of random variables $y_n$ converges in probability to a constant $a$ if, for every $\varepsilon>0$,
+
+$$
+\boxed{
+\mathbb{P}(|y_n-a|>\varepsilon)
+\longrightarrow0
+}
+$$
+
+as $n\rightarrow\infty$.
+
+We write
+
+$$
+\boxed{
+y_n\xrightarrow{p}a.
+}
+$$
+
+```
+
+This definition allows us to formalize the idea that a random variable becomes increasingly concentrated around a particular value.
+
+For example, suppose that $y_1,y_2,\ldots$ are independent random variables satisfying
+
+$$
+\mathbb{E}[y_i]=\mu,
+\qquad
+\mathbb{V}[y_i]=\sigma^2.
+$$
+
+Consider their sample mean,
+
+$$
+\bar{y}_n
+=
+\frac{1}{n}\sum_{i=1}^n y_i.
+$$
+
+We have
+
+$$
+\mathbb{E}[\bar{y}_n]=\mu
+$$
+
+and
+
+$$
+\mathbb{V}[\bar{y}_n]
+=
+\frac{\sigma^2}{n}.
+$$
+
+By Chebyshev's inequality,
+
+$$
+\begin{aligned}
+\mathbb{P}(
+|\bar{y}_n-\mu|>\varepsilon
+)
+&\leq
+\frac{\mathbb{V}[\bar{y}_n]}{\varepsilon^2}
+\\
+&=
+\frac{\sigma^2}{n\varepsilon^2}
+\\
+&\longrightarrow0.
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+\boxed{
+\bar{y}_n\xrightarrow{p}\mu.
+}
+$$
+
+This is an example of a law of large numbers.
+
+The argument illustrates how convergence in probability can be established using expectations and variances.
+
+In particular, if the expectation of a random variable approaches a constant while its variance approaches zero, the random variable converges in probability to that constant.
+
+More generally, we have the following useful result.
+
+```{proposition, asy-mean-square-convergence, name="A Sufficient Condition for Convergence in Probability"}
+
+Suppose that a sequence of random variables $y_n$ satisfies
+
+$$
+\mathbb{E}[(y_n-a)^2]
+\longrightarrow0
+$$
+
+for some constant $a$.
+
+Then
+
+$$
+y_n\xrightarrow{p}a.
+$$
+
+```
+
+<details><summary><span style="color:green">Proof</span></summary>
+
+```{proof, asy-mean-square-convergence-proof}
+
+For any $\varepsilon>0$, Markov's inequality gives
+
+$$
+\begin{aligned}
+\mathbb{P}(|y_n-a|>\varepsilon)
+&=
+\mathbb{P}((y_n-a)^2>\varepsilon^2)
+\\
+&\leq
+\frac{\mathbb{E}[(y_n-a)^2]}{\varepsilon^2}
+\\
+&\longrightarrow0.
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+y_n\xrightarrow{p}a.
+$$
+
+```
+
+</details>
+
+We will also use convergence in probability for random vectors.
+
+For a sequence of random vectors $\mathbf{y}_n$ and a constant vector $\mathbf{a}$, we write
+
+$$
+\mathbf{y}_n\xrightarrow{p}\mathbf{a}
+$$
+
+if, for every $\varepsilon>0$,
+
+$$
+\mathbb{P}(
+\|\mathbf{y}_n-\mathbf{a}\|>\varepsilon
+)
+\longrightarrow0.
+$$
+
+In particular, the preceding proposition extends to random vectors by replacing squared differences with squared norms.
+
+This will allow us to establish convergence of the weighted error vectors appearing in the least-squares estimator.
+
+***
+
+#### Convergence in Distribution {#asy-convergence-distribution}
+
+Convergence in probability describes how closely a random variable approaches a particular value.
+
+However, in statistical inference, we are often interested in the distribution of a random variable rather than its proximity to a fixed constant.
+
+For example, even when an estimator converges in probability to its parameter, we may want to understand the distribution of its estimation error.
+
+This motivates convergence in distribution.
+
+```{definition, asy-convergence-distribution-definition, name="Convergence in Distribution"}
+
+Let $y_n$ be a sequence of random variables with cumulative distribution functions $F_n$, and let $y$ be a random variable with cumulative distribution function $F$.
+
+We say that $y_n$ converges in distribution to $y$ if
+
+$$
+\boxed{
+F_n(t)\longrightarrow F(t)
+}
+$$
+
+at every point $t$ where $F$ is continuous.
+
+We write
+
+$$
+\boxed{
+y_n\xrightarrow{d}y.
+}
+$$
+
+```
+
+Notice that this definition concerns the convergence of probability distributions.
+
+It does not require the random variables themselves to approach the same realized value.
+
+For example, suppose that
+
+$$
+y_n\sim N\left(\mu,\frac{\sigma^2}{n}\right).
+$$
+
+Then
+
+$$
+y_n\xrightarrow{p}\mu.
+$$
+
+However, consider the standardized variable
+
+$$
+z_n
+=
+\frac{\sqrt{n}(y_n-\mu)}{\sigma}.
+$$
+
+Its distribution is
+
+$$
+z_n\sim N(0,1)
+$$
+
+for every $n$.
+
+Therefore,
+
+$$
+z_n\xrightarrow{d}z,
+\qquad
+z\sim N(0,1).
+$$
+
+In this example, the original random variable becomes concentrated around $\mu$, while its standardized deviation has a nondegenerate limiting distribution.
+
+This distinction is fundamental for asymptotic statistical inference.
+
+***
+
+#### Relationship Between the Two Types of Convergence {#asy-convergence-relationship}
+
+Convergence in probability and convergence in distribution are related, but they are not equivalent in general.
+
+In particular,
+
+$$
+\boxed{
+y_n\xrightarrow{p}y
+\quad\Longrightarrow\quad
+y_n\xrightarrow{d}y.
+}
+$$
+
+The converse does not generally hold.
+
+However, when the limiting random variable is a constant, the two forms of convergence are equivalent:
+
+$$
+\boxed{
+y_n\xrightarrow{d}a
+\quad\iff\quad
+y_n\xrightarrow{p}a.
+}
+$$
+
+This distinction is useful because consistency is generally formulated using convergence in probability, while asymptotic normality is formulated using convergence in distribution.
+
+We will also need to manipulate sequences that converge. The following results provide the mathematical tools required for these operations.
+
+***
+
+#### The Continuous Mapping Theorem {#asy-continuous-mapping}
+
+Suppose that a sequence of random variables converges in probability to a constant.
+
+We may want to apply a function to these variables and determine whether the transformed sequence also converges.
+
+For example, if a sequence of positive random variables converges to a positive constant, we would expect their reciprocals to converge to the reciprocal of that constant.
+
+This is formalized by the continuous mapping theorem.
+
+```{proposition, asy-continuous-mapping, name="Continuous Mapping Theorem"}
+
+Let $g$ be a function that is continuous at $a$.
+
+If
+
+$$
+y_n\xrightarrow{p}a,
+$$
+
+then
+
+$$
+\boxed{
+g(y_n)\xrightarrow{p}g(a).
+}
+$$
+
+Similarly, if
+
+$$
+y_n\xrightarrow{d}y
+$$
+
+and $g$ is continuous at every value in a set having probability one under the distribution of $y$, then
+
+$$
+\boxed{
+g(y_n)\xrightarrow{d}g(y).
+}
+$$
+
+```
+
+The theorem extends to random vectors and functions of several variables.
+
+In particular, it allows us to combine convergent sequences using addition, multiplication, and division, provided the limiting denominator is nonzero.
+
+We will also use the result for matrices.
+
+Suppose that $\mathbf{A}_n$ is a sequence of random square matrices satisfying
+
+$$
+\mathbf{A}_n\xrightarrow{p}\mathbf{A},
+$$
+
+where $\mathbf{A}$ is a fixed invertible matrix.
+
+Because matrix inversion is continuous at invertible matrices,
+
+$$
+\boxed{
+\mathbf{A}_n^{-1}
+\xrightarrow{p}
+\mathbf{A}^{-1}.
+}
+$$
+
+Here and throughout the chapter, convergence of matrices means convergence of their entries, or equivalently convergence under a matrix norm in fixed dimensions.
+
+The inversion result applies whenever the sample matrices are invertible, and convergence to a nonsingular matrix guarantees that the probability of invertibility approaches one.
+
+This result will be particularly important because the least-squares estimator contains the inverse of the matrix $\mathbf{X}_n'\mathbf{X}_n$.
+
+For deterministic matrix sequences, the same conclusion follows from ordinary continuity without involving probability.
+
+***
+
+#### Slutsky's Theorem {#asy-slutsky}
+
+In asymptotic statistics, we frequently encounter products of random quantities, where one component converges to a constant and another converges in distribution.
+
+For example, a standardized estimator may contain an estimated variance in its denominator.
+
+Slutsky's theorem allows us to determine the limiting distribution of such expressions.
+
+```{proposition, asy-slutsky, name="Slutsky's Theorem"}
+
+Suppose that
+
+$$
+y_n\xrightarrow{d}y
+$$
+
+and
+
+$$
+z_n\xrightarrow{p}a,
+$$
+
+where $a$ is a constant.
+
+Then
+
+$$
+y_n+z_n\xrightarrow{d}y+a,
+$$
+
+and
+
+$$
+y_nz_n\xrightarrow{d}ay.
+$$
+
+If $a\neq0$, then
+
+$$
+\boxed{
+\frac{y_n}{z_n}
+\xrightarrow{d}
+\frac{y}{a}.
+}
+$$
+
+```
+
+The result also applies to random vectors and matrices of fixed dimensions.
+
+For example, suppose that
+
+$$
+\mathbf{A}_n\xrightarrow{p}\mathbf{A},
+$$
+
+where $\mathbf{A}$ is a fixed matrix, and
+
+$$
+\mathbf{y}_n\xrightarrow{d}\mathbf{y}.
+$$
+
+Then
+
+$$
+\boxed{
+\mathbf{A}_n\mathbf{y}_n
+\xrightarrow{d}
+\mathbf{A}\mathbf{y}.
+}
+$$
+
+No independence between $\mathbf{A}_n$ and $\mathbf{y}_n$ is required.
+
+This result will be used to derive the asymptotic distribution of least squares.
+
+It will also allow us to replace unknown population quantities, such as the error variance, with consistent estimators when constructing approximate confidence intervals and hypothesis tests.
+
+***
+
+#### Central Limit Theorems {#asy-central-limit-tools}
+
+The preceding results allow us to manipulate convergent sequences, but they do not by themselves establish that a sum of random variables approaches a normal distribution.
+
+For this purpose, we use central limit theorems.
+
+Recall that the classical central limit theorem states that, under independent and identically distributed sampling with finite variance,
+
+$$
+\boxed{
+\frac{1}{\sqrt{n}}
+\sum_{i=1}^n(y_i-\mu)
+\xrightarrow{d}
+N(0,\sigma^2),
+}
+$$
+
+where
+
+$$
+\mu=\mathbb{E}[y_i],
+\qquad
+\sigma^2=\mathbb{V}[y_i].
+$$
+
+However, in fixed-design regression, we will encounter weighted sums of errors of the form
+
+$$
+\frac{1}{\sqrt{n}}
+\sum_{i=1}^n
+\mathbf{x}_{i,n}e_{i,n}.
+$$
+
+Even when the regression errors have identical distributions, the terms in this sum need not have identical distributions because the explanatory-variable vectors may differ.
+
+Consequently, we need a central limit theorem that allows independent but non-identically distributed random variables.
+
+One useful result is the Lyapunov central limit theorem.
+
+```{proposition, asy-lyapunov, name="Lyapunov Central Limit Theorem"}
+
+For each $n$, let
+
+$$
+\xi_{1,n},\ldots,\xi_{n,n}
+$$
+
+be independent random variables satisfying
+
+$$
+\mathbb{E}[\xi_{i,n}]=0.
+$$
+
+Define
+
+$$
+s_n^2
+=
+\sum_{i=1}^n\mathbb{V}[\xi_{i,n}],
+$$
+
+and suppose that $s_n^2>0$.
+
+If there exists $\delta>0$ such that
+
+$$
+\boxed{
+\frac{1}{s_n^{2+\delta}}
+\sum_{i=1}^n
+\mathbb{E}[|\xi_{i,n}|^{2+\delta}]
+\longrightarrow0,
+}
+$$
+
+then
+
+$$
+\boxed{
+\frac{1}{s_n}
+\sum_{i=1}^n\xi_{i,n}
+\xrightarrow{d}
+N(0,1).
+}
+$$
+
+```
+
+The Lyapunov condition ensures that the contributions of individual terms are sufficiently small relative to the variability of the entire sum.
+
+For our purposes, it will be convenient to take $\delta=2$, corresponding to fourth moments.
+
+We will use this result to provide sufficient conditions for asymptotic normality under independent regression errors.
+
+Finally, to obtain a limiting distribution for a random vector, we will use the Cramér--Wold theorem.
+
+```{proposition, asy-cramer-wold, name="Cramér--Wold Theorem"}
+
+Let $\mathbf{y}_n$ and $\mathbf{y}$ be random vectors of the same fixed dimension.
+
+Then
+
+$$
+\boxed{
+\mathbf{y}_n\xrightarrow{d}\mathbf{y}
+}
+$$
+
+if and only if, for every fixed vector $\mathbf{a}$ of the appropriate dimension,
+
+$$
+\boxed{
+\mathbf{a}'\mathbf{y}_n
+\xrightarrow{d}
+\mathbf{a}'\mathbf{y}.
+}
+$$
+
+```
+
+This result allows us to establish multivariate asymptotic normality by studying scalar linear combinations of a random vector.
+
+In particular, if for every fixed vector $\mathbf{a}$,
+
+$$
+\mathbf{a}'\mathbf{y}_n
+\xrightarrow{d}
+N(0,\mathbf{a}'\mathbf{S}\mathbf{a}),
+$$
+
+where $\mathbf{S}$ is a fixed nonnegative-definite matrix, then
+
+$$
+\boxed{
+\mathbf{y}_n
+\xrightarrow{d}
+N(\mathbf{0},\mathbf{S}).
+}
+$$
+
+This will provide the connection between the scalar central limit theorem and the multivariate limiting distribution of the least-squares estimator.
+
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Statistics
